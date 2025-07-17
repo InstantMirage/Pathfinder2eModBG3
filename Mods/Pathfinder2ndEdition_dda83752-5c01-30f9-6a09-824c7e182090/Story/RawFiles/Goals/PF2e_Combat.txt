@@ -1,0 +1,566 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_HuntPrey((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(CHARACTER)NULL_00000000-0000-0000-0000-000000000000);
+DB_WardensBoon((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(CHARACTER)NULL_00000000-0000-0000-0000-000000000000);
+
+DB_WardensBoonType("HuntPreyPrecisionUnlock","WARDENS_BOON_PRECISION");
+DB_WardensBoonType("HuntPreyOutwitUnlock","WARDENS_BOON_OUTWIT");
+DB_WardensBoonType("HuntPreyFlurryUnlock","WARDENS_BOON_FLURRY");
+
+DB_SummonMinion((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(CHARACTER)NULL_00000000-0000-0000-0000-000000000000);
+DB_SummonFamiliar((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(CHARACTER)NULL_00000000-0000-0000-0000-000000000000);
+
+DB_FamiliarPassive("PerceptionIncrease","PerceptionIncrease");
+DB_FamiliarPassive("PerceptionIncrease2","PerceptionIncrease2");
+DB_FamiliarPassive("ACExpert","ACExpert");
+DB_FamiliarPassive("ACMaster","ACMaster");
+DB_FamiliarPassive("FortitudeExpert","FortitudeExpert");
+DB_FamiliarPassive("ReflexExpert","ReflexExpert");
+DB_FamiliarPassive("WillExpert","WillExpert");
+DB_FamiliarPassive("WitchFamiliar","Familiar_Tough");
+DB_FamiliarPassive("PhaseFamiliar","Ethereal");
+DB_FamiliarPassive("ClingingIce","Familiar_Iceproof");
+
+DB_InterruptUseSpellOnFamiliar("Interrupt_FreezingRime","Target_FreezingRime");
+DB_HexStatus("EvilEye","FAMILIAR_AURA_EVIL",1.0);
+DB_HexStatus("NudgeFate","FAMILIAR_AURA",1.0);
+DB_HexStatus("StokeTheHeart","FAMILIAR_AURA",1.0);
+DB_HexStatus("ShroudOfNight","STALKING_NIGHT",1.0);
+DB_HexStatus("WildingWord","SEE_INVISIBILITY_SEEK",0.0);
+DB_HexStatus("DiscernSecrets","FLOWING_SCRIPT",1.0);
+
+
+DB_FollowUpOffhand_Spell("Target_TwinFeint");
+DB_FollowUpOffhand_Spell("Target_TwinTakedownStrike");
+
+DB_FollowUpAttack_Spell("Projectile_HuntedShot");
+DB_FollowUpAttack_Creature((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(GUIDSTRING)NULL_00000000-0000-0000-0000-000000000000);
+DB_CompositionAura("COURAGE_LINGER_AURA","CourageousAnthem");
+DB_CompositionAura("CourageForteAura2","CourageForte2");
+DB_CompositionAura("CourageForteAura3","CourageForte3");
+DB_CompositionAura("SongOfStrengthLingering","SongOfStrengthStatus");
+DB_CompositionAura("StrengthForteAura2","StrengthForte2");
+DB_CompositionAura("StrengthForteAura3","StrengthForte3");
+DB_CompositionAura("RallyingLingering","RallyingAnthemStatus");
+DB_CompositionAura("RallyingForteAura2","RallyingForte2");
+DB_CompositionAura("RallyingForteAura3","RallyingForte3");
+DB_CompositionAura("TRIPLE_TIME_LINGERING","TRIPLE_TIME");
+
+DB_ActiveComposition((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(CHARACTER)NULL_00000000-0000-0000-0000-000000000000,"");
+DB_CurrentlyComposing((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,"");
+DB_HarmonizeCurrentlyComposing((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,"");
+KBSECTION
+//REGION Ranger-specific features
+
+//REGION Hunt prey uniqueness
+
+//When using Hunt Prey, check for old prey and remove its status & DB entry
+IF
+UsingSpellOnTarget((CHARACTER)_Hunter,(CHARACTER)_Prey,"Target_HuntPrey",_,_,_)
+AND
+NOT DB_HuntPrey(_Hunter,_Prey)
+AND
+DB_HuntPrey(_Hunter,(CHARACTER)_OldPrey)
+THEN
+ApplyStatus(_OldPrey, "CLEAR_HUNT_PREY", 1.0, 1, _Hunter );
+//Remove all Warden's Boon targets - they'll be automatically assigned in the next step
+RemoveStatus(_OldPrey,"WARDENS_BOON_PREY");
+NOT DB_HuntPrey(_Hunter,_OldPrey);
+
+//Add targets to database
+IF
+StatusApplied((CHARACTER)_Prey, "HUNT_PREY", (CHARACTER)_Hunter, _)
+AND
+NOT DB_HuntPrey(_Hunter,_Prey)
+THEN
+DB_HuntPrey(_Hunter,_Prey);
+PROC_AssignWardensBoonPrey();
+
+//Remove from DB after losing status
+IF
+StatusRemoved((CHARACTER)_Prey, "HUNT_PREY", _, _)
+AND
+NOT HasAppliedStatus(_Prey, "HUNT_PREY", 1)
+AND
+DB_HuntPrey((CHARACTER)_OldHunter,_Prey)
+THEN
+NOT DB_HuntPrey(_OldHunter,_Prey);
+
+//END_REGION
+
+//REGION Warden's Boon
+
+PROC
+PROC_AddWardensBoonToPet((CHARACTER)_Minion,(CHARACTER)_Summoner)
+AND
+HasPassive(_Minion,"HuntersMark_RangerCompanion",1)
+THEN
+ApplyStatus(_Minion, "WARDENS_BOON", 1.0, 1, _Summoner );
+
+IF
+StatusApplied((CHARACTER)_Ally, "WARDENS_BOON", (CHARACTER)_Warden, _)
+AND
+DB_WardensBoonType((STRING)_Passive,(STRING)_Status)
+AND
+HasPassive(_Warden,_Passive,1)
+THEN
+ApplyStatus(_Ally, _Status, 1.0, 1, _Warden );
+DB_WardensBoon(_Warden,_Ally);
+PROC_InitializeWardensBoonPrey(_Warden,_Ally);
+
+//Get current Hunt Prey and also tie it to the ally
+PROC
+PROC_InitializeWardensBoonPrey((CHARACTER)_Warden,(CHARACTER)_Ally)
+AND
+DB_HuntPrey(_Warden,(CHARACTER)_Prey)
+THEN
+ApplyStatus(_Prey,"WARDENS_BOON_PREY",1.0,1,_Ally);
+
+//Apply Warden's Boon to all creatures in intersecting DBs
+PROC
+PROC_AssignWardensBoonPrey()
+AND
+DB_WardensBoon((CHARACTER)_Warden,(CHARACTER)_Ally)
+AND
+DB_HuntPrey(_Warden,(CHARACTER)_Prey)
+THEN
+ApplyStatus(_Prey,"WARDENS_BOON_PREY",1.0,1,_Ally);
+
+//Remove prey from Warden's Boon DB if they leave the Hunt Prey DB
+PROC
+PROC_RemoveFromWardensBoon((CHARACTER)_OldHunter,(CHARACTER)_Prey)
+AND
+DB_WardensBoon(_OldHunter,(CHARACTER)_OldAlly)
+THEN
+NOT DB_WardensBoon(_OldHunter,_OldAlly);
+
+//Remove from DB after losing status - it's only one turn, so a lot safer
+IF
+StatusRemoved((CHARACTER)_Ally, "WARDENS_BOON", _, _)
+AND
+DB_WardensBoon((CHARACTER)_OldHunter,_Ally)
+THEN
+NOT DB_WardensBoon(_OldHunter,_Ally);
+
+//END_REGION
+//END_REGION
+
+//REGION Minion actions
+
+//Add to database
+IF
+StatusApplied((CHARACTER)_Minion, "MINION_AWAITING", _, _)
+AND
+CharacterGetOwner(_Minion,(CHARACTER)_Summoner)
+AND
+DB_PartyMembers(_Summoner)
+AND
+NOT DB_SummonMinion(_Summoner,_Minion)
+THEN
+DB_SummonMinion(_Summoner,_Minion);
+//ApplyStatus(_Minion,"SHARE_SUMMONER_INITIATIVE",-1,1,_Summoner);
+ApplyStatus(_Summoner,"MINION_OWNER",1.0,1);
+PROC_AddWardensBoonToPet(_Minion,_Summoner);
+
+//Consume action
+IF
+StatusApplied((CHARACTER)_Minion, "MINION_READY", _, _)
+AND
+CharacterGetOwner(_Minion,(CHARACTER)_Summoner)
+AND
+NOT HasAppliedStatus(_Minion,"MINION_STUCK",1)
+THEN
+UseSpell(_Summoner,"Target_CommandMinion",_Minion,_Minion,1);
+
+//Clear from DB after receiving orders
+IF
+StatusRemoved((CHARACTER)_Minion, "MINION_AWAITING", _, _)
+AND
+DB_SummonMinion((CHARACTER)_OldSummoner,_Minion)
+THEN
+NOT DB_SummonMinion(_OldSummoner,_Minion);
+
+//Cannot command if stuck
+IF
+StatusApplied((CHARACTER)_Summoner, "MINION_OWNER_STUCK", _, _)
+AND
+DB_SummonMinion(_Summoner,(CHARACTER)_Minion)
+THEN
+ApplyStatus(_Minion,"MINION_STUCK",1.0,1);
+
+//Remove stuck status when recovering
+IF
+StatusRemoved((CHARACTER)_Summoner, "MINION_OWNER_STUCK", _, _)
+AND
+DB_SummonMinion(_Summoner,(CHARACTER)_Minion)
+THEN
+RemoveStatus(_Minion,"MINION_STUCK");
+
+
+//Re-summon companion on level up for non-rangers, adapted from GLO_Spells
+IF
+LeveledUp(_Player)
+AND
+DB_Players(_Player)
+AND
+NOT IsTagged(_Player, (TAG)RANGER_37a733c1-a862-4157-b92a-9cff46232c6a, 1)
+AND
+GetLevel(_Player, _Level)
+AND
+DB_GLO_Spells_RangersCompanion_LevelChange(_Level)
+AND
+DB_PlayerSummons(_Summon)
+AND
+CharacterGetOwner(_Summon, _Player)
+AND
+DB_GLO_Spells_RangersCompanion_Spell(_Status, _Spell)
+AND
+HasActiveStatus(_Summon, _Status, 1)
+AND
+GetPosition(_Summon, _X, _Y, _Z)
+AND
+GetDistanceToPosition(_Player, _X, _Y, _Z, _Dist)
+AND
+HasLineOfSight(_Player, _Summon, _CanTargetSummon)
+THEN
+PROC_GLO_Spells_Resummon(_Player, _Spell, _X, _Y, _Z, _Dist, _CanTargetSummon);
+
+//END_REGION
+
+//REGION Familiar & Witch
+
+//Add upon summon
+IF
+StatusApplied((CHARACTER)_Familiar, "IS_FAMILIAR", _, _)
+AND
+CharacterGetOwner(_Familiar,(CHARACTER)_Summoner)
+AND
+DB_PartyMembers(_Summoner)
+AND
+NOT DB_SummonFamiliar(_Summoner,_Familiar)
+THEN
+DB_SummonFamiliar(_Summoner,_Familiar);
+PROC_InitFamiliarPassives(_Summoner,_Familiar);
+
+//Remove upon death
+IF
+Died(_Familiar)
+AND
+DB_SummonFamiliar((CHARACTER)_Summoner,_Familiar)
+THEN
+NOT DB_SummonFamiliar(_Summoner,_Familiar);
+
+//Add any buffs based on passives
+PROC
+PROC_InitFamiliarPassives((CHARACTER)_Summoner,(CHARACTER)_Familiar)
+AND
+DB_FamiliarPassive((STRING)_SourcePassive,(STRING)_TargetPassive)
+AND
+HasPassive(_Summoner,_SourcePassive,1)
+AND
+NOT HasPassive(_Familiar,_TargetPassive,1)
+THEN
+AddPassive(_Familiar,_TargetPassive);
+
+//Update on level up
+IF
+LeveledUp(_Player)
+AND
+DB_Players(_Player)
+AND
+DB_SummonFamiliar(_Player,(CHARACTER)_Familiar)
+THEN
+PROC_InitFamiliarPassives(_Player,_Familiar);
+
+//Add familiar aura on casting hex
+IF
+StatusApplied((CHARACTER)_Summoner,"WITCH_HEX",_,_)
+AND
+DB_SummonFamiliar(_Summoner,(CHARACTER)_Familiar)
+AND
+DB_HexStatus((STRING)_Passive,(STRING)_Status,(REAL)_Duration)
+AND
+HasPassive(_Summoner,_Passive,1)
+THEN
+ApplyStatus(_Familiar,_Status,_Duration,1,_Summoner);
+
+//Certain hex-enabled abilities affect all creatures near the familiar
+IF
+ReactionInterruptUsed((CHARACTER)_Summoner,(STRING)_Interrupt,_)
+AND
+DB_InterruptUseSpellOnFamiliar(_Interrupt,(STRING)_Spell)
+AND
+DB_SummonFamiliar(_Summoner,(CHARACTER)_Familiar)
+THEN
+UseSpell(_Summoner,_Spell,_Familiar,_Familiar,1);
+
+//END_REGION
+
+//REGION Make multiple attacks on the same target, MAP applies to each
+
+// Standard attacks
+IF
+UsingSpellOnTarget((CHARACTER)_Char,(GUIDSTRING)_Target,(STRING)_Spell,_,_,_)
+AND
+DB_FollowUpAttack_Spell(_Spell)
+THEN
+ApplyStatus(_Char,"FOLLOW_UP_ATTACK",1.0);
+DB_FollowUpAttack_Creature(_Char,_Target);
+
+//Using a DB to get better timing
+IF
+CastedSpell((CHARACTER)_Char,(STRING)_Spell,_,_,_)
+AND
+DB_FollowUpAttack_Spell(_Spell)
+AND
+DB_FollowUpAttack_Creature(_Char,(GUIDSTRING)_Target)
+THEN
+Attack(_Char,_Target,0);
+NOT DB_FollowUpAttack_Creature(_Char,_Target);
+
+
+//Off-hand attacks (requires interrupt)
+IF
+UsingSpellOnTarget((CHARACTER)_Char,(GUIDSTRING)_Target,(STRING)_Spell,_,_,_)
+AND
+DB_FollowUpOffhand_Spell(_Spell)
+THEN
+DB_FollowUpAttack_Creature(_Char,_Target);
+
+//Attack must have finished for reaction to be available
+IF
+CastedSpell((CHARACTER)_Char,(STRING)_Spell,_,_,_)
+AND
+DB_FollowUpOffhand_Spell(_Spell)
+AND
+DB_FollowUpAttack_Creature(_Char,(GUIDSTRING)_Target)
+THEN
+ApplyStatus(_Target,"FOLLOW_UP_OFFHAND_TARGET",1.0,1,_Char);
+NOT DB_FollowUpAttack_Creature(_Char,_Target);
+
+//END_REGION
+
+//REGION Bard-specific features
+
+//REGION Track self status on bard
+
+//Add to slot on apply
+IF
+StatusApplied((CHARACTER)_Char,(STRING)_Status,(CHARACTER)_Bard,_)
+AND
+_Char == _Bard
+AND
+QRY_IsCompositionStatus(_Status)
+AND
+QRY_NonDuplicateComposition(_Bard,_Status)
+AND
+NOT QRY_UseHarmonizeSlot(_Bard,_Status)
+THEN
+NOT DB_CurrentlyComposing(_Bard,_Status);
+PROC_RemovePastCompositionOwner(_Bard,_Status);
+DB_CurrentlyComposing(_Bard,_Status);
+
+//Remove previous entries
+PROC
+PROC_RemovePastCompositionOwner((CHARACTER)_Bard,(STRING)_Status)
+AND
+DB_CurrentlyComposing(_Bard,(STRING)_OldStatus)
+AND
+_Status != _OldStatus
+THEN
+RemoveStatus(_Bard,_OldStatus,_Bard);
+NOT DB_CurrentlyComposing(_Bard,_OldStatus);
+PROC_RemoveAlliesFromComposition(_Bard,_OldStatus);
+
+//Remove from DB if not upgraded into a lingering composition
+IF
+StatusRemoved((CHARACTER)_Char,(STRING)_Status,_,_)
+AND
+DB_CurrentlyComposing(_Char,_Status)
+THEN
+NOT DB_CurrentlyComposing(_Char,_Status);
+
+//Remove non-aura statuses from allies
+PROC
+PROC_RemoveAlliesFromComposition((CHARACTER)_Bard,(STRING)_Status)
+AND
+DB_ActiveComposition(_Bard,(CHARACTER)_Ally,_Status)
+AND
+NOT QRY_IsCompositionUpgraded(_Bard,_Status)
+THEN
+RemoveStatus(_Ally,_Status,_Bard);
+
+//END_REGION
+
+//REGION Track harmonize
+
+IF
+StatusApplied((CHARACTER)_Char,(STRING)_Status,(CHARACTER)_Bard,_)
+AND
+_Char == _Bard
+AND
+QRY_IsCompositionStatus(_Status)
+AND
+QRY_NonDuplicateComposition(_Bard,_Status)
+AND
+QRY_UseHarmonizeSlot(_Bard,_Status)
+THEN
+NOT DB_HarmonizeCurrentlyComposing(_Bard,_Status);
+PROC_RemovePastHarmonizeOwner(_Bard,_Status);
+DB_HarmonizeCurrentlyComposing(_Bard,_Status);
+
+PROC
+PROC_RemovePastHarmonizeOwner((CHARACTER)_Bard,(STRING)_Status)
+AND
+DB_HarmonizeCurrentlyComposing(_Bard,(STRING)_OldStatus)
+AND
+_Status != _OldStatus
+THEN
+RemoveStatus(_Bard,_OldStatus,_Bard);
+NOT DB_HarmonizeCurrentlyComposing(_Bard,_OldStatus);
+PROC_RemoveAlliesFromComposition(_Bard,_OldStatus);
+
+IF
+StatusRemoved((CHARACTER)_Char,(STRING)_Status,_,_)
+AND
+DB_HarmonizeCurrentlyComposing(_Char,_Status)
+THEN
+NOT DB_HarmonizeCurrentlyComposing(_Char,_Status);
+
+//END_REGION
+
+//REGION Queries
+
+QRY
+QRY_IsCompositionStatus((STRING)_Status)
+AND
+DB_CompositionAura((STRING)_Aura,_Status)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_IsCompositionStatus((STRING)_Aura)
+AND
+DB_CompositionAura(_Aura,(STRING)_Status)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_IsCompositionStatus((STRING)_Status)
+AND
+_Status == "DIRGE_OF_DOOM"
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_IsCompositionUpgraded((CHARACTER)_Char,(STRING)_Status)
+AND
+DB_CompositionAura((STRING)_Aura,_Status)
+AND
+HasActiveStatus(_Char,_Aura,1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_NonDuplicateComposition((CHARACTER)_Char,(STRING)_Status)
+AND
+NOT DB_CurrentlyComposing(_Char,_Status)
+AND
+NOT DB_HarmonizeCurrentlyComposing(_Char,_Status)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_UseHarmonizeSlot((CHARACTER)_Char,(STRING)_Status)
+AND
+HasActiveStatus(_Char,"HarmonizeStatus",1)
+AND
+QRY_HarmonizeEmptyOrUpgradable(_Char,_Status)
+AND
+NOT QRY_CompositionUpgradable(_Char,_Status)
+THEN
+DB_NOOP(1);
+
+//Harmonize is empty
+QRY
+QRY_HarmonizeEmptyOrUpgradable((CHARACTER)_Char,(STRING)_Status)
+AND
+NOT QRY_HarmonizeFull(_Char)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_HarmonizeFull((CHARACTER)_Char)
+AND
+DB_HarmonizeCurrentlyComposing(_Char,(STRING)_OldStatus)
+AND
+_OldStatus != ""
+THEN
+DB_NOOP(1);
+
+//Harmonize can be given lingering status
+QRY
+QRY_HarmonizeEmptyOrUpgradable((CHARACTER)_Char,(STRING)_Aura)
+AND
+DB_CompositionAura(_Aura,(STRING)_Status)
+AND
+DB_HarmonizeCurrentlyComposing(_Char,_Status)
+THEN
+DB_NOOP(1);
+
+//Non-harmonize is full
+QRY
+QRY_HarmonizeEmptyOrUpgradable((CHARACTER)_Char,(STRING)_Status)
+AND
+DB_CurrentlyComposing(_Char,(STRING)_OldStatus)
+AND
+_OldStatus != ""
+THEN
+DB_NOOP(1);
+
+//Non-harmonize can be given lingering status
+QRY
+QRY_CompositionUpgradable((CHARACTER)_Char,(STRING)_Aura)
+AND
+DB_CompositionAura(_Aura,(STRING)_Status)
+AND
+DB_CurrentlyComposing(_Char,_Status)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Track non-aura statuses on others
+IF
+StatusApplied((CHARACTER)_Char,(STRING)_Status,(CHARACTER)_Bard,_)
+AND
+_Char != _Bard
+AND
+DB_CompositionAura((STRING)_Aura,_Status)
+AND
+NOT HasActiveStatus(_Bard,_Aura,1)
+AND
+NOT DB_ActiveComposition(_Bard,_Char,_Status)
+THEN
+DB_ActiveComposition(_Bard,_Char,_Status);
+
+//Remove from DB
+IF
+StatusRemoved((CHARACTER)_Char,(STRING)_Status,_,_)
+AND
+DB_ActiveComposition((CHARACTER)_Bard,_Char,_Status)
+THEN
+NOT DB_ActiveComposition(_Bard,_Char,_Status);
+//END_REGION
+
+//Counter performance is a composition
+IF
+ReactionInterruptUsed((CHARACTER)_Bard,"Interrupt_CounterPerformance", _)
+THEN
+PROC_RemovePastCompositionOwner(_Bard,"INTERRUPT_COUNTERPERFORMANCE");
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
