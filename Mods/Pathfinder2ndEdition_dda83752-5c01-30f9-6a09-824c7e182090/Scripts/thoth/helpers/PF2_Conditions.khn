@@ -414,6 +414,12 @@ function DivineCastigation(target)
 	return HasPassive('DivineCastigation',context.Source) & Enemy() & is_evil
 end
 
+function CrisisOfFaithable()
+	local target = context.Target
+	-- Target must cast be able to divine spells, Monk ones count for this
+	return HasPassive('NPC_Divine',target) | HasPassive('Tradition_Divine',target) | QiSpellsInitiate(target)
+end
+
 --Fighter
 
 function ClassDC(source)
@@ -502,8 +508,9 @@ function StanceSpell()
 	return SpellId('Shout_CraneStance') | SpellId('Shout_DragonStance') | SpellId('Shout_MountainStance') | SpellId('Shout_TigerStance') | SpellId('Shout_WolfStance') | SpellId('Shout_MonasticArcherStance') | SpellId('Shout_CobraStance') | SpellId('Shout_ClingingShadowsStance') | SpellId('Shout_IronbloodStance') | SpellId('Shout_TangledForestStance') | SpellId('Shout_WildWindsStance') | SpellId('Shout_PointBlankStance') | SpellId('Shout_RicochetStance') | SpellId('Shout_DuelingStance') | SpellId('Shout_ParagonsGuardStance')
 end
 
-function QiSpellsInitiate()
-	return (HasPassive('InnerUpheaval',context.Source) | HasPassive('QiRush',context.Source))
+function QiSpellsInitiate(source)
+	local source = context.Source or source
+	return (HasPassive('InnerUpheaval',source) | HasPassive('QiRush',source))
 end
 
 --Ranger
@@ -816,13 +823,13 @@ function SaveCritMiss(save_type)
 	-- Basic critical conversion prevents damage on a miss
 	if save_type then
 		local target = context.Target
-		if save_type == 'Fort' & HasPassive('CritConvert_Juggernaut',target) then
+		if save_type == 'Fort' & (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)) then
 			return ConditionResult(false)
-		elseif save_type == 'Reflex' & HasPassive('CritConvert_Evasion',target) then
+		elseif save_type == 'Reflex' & (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)) then
 			return ConditionResult(false)
-		elseif save_type == 'Fear' & (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target)) then
+		elseif save_type == 'Fear' & (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)) then
 			return ConditionResult(false)
-		elseif save_type == 'Will' & HasPassive('CritConvert_Resolve',target) then
+		elseif save_type == 'Will' & (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)) then
 			return ConditionResult(false)
 		end
     end

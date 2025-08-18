@@ -1628,6 +1628,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="a2bf3dd9-5dec-457a-bd61-736f2ef19f73" />
         <field name="Passives" type="StringTableFieldDefinition" value="ForceDragonRageBoost" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasPassive('DragonBreathRage',context.source)):UnlockSpell(Zone_DragonsRageBreathForce);Tag(VFX_RAGE);Attribute(ForceMainhandAlternativeEquipBones);IF(SpellId('Target_FuriousFinish')):CharacterWeaponDamage(RAGE_DRAGON_FORCE.Duration);" />
+        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="4b36da49-5e25-4d05-ae10-88cc211a47eb" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1637,6 +1638,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="a2bf3dd9-5dec-457a-bd61-736f2ef19f73" />
         <field name="Passives" type="StringTableFieldDefinition" value="PsychicDragonRageBoost" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(VFX_RAGE);Attribute(ForceMainhandAlternativeEquipBones);IF(HasPassive('DragonBreathRage',context.source)):UnlockSpell(Zone_DragonsRageBreathPsychic);IF(SpellId('Target_FuriousFinish')):CharacterWeaponDamage(RAGE_DRAGON_PSYCHIC.Duration);" />
+        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="4b36da49-5e25-4d05-ae10-88cc211a47eb" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1645,6 +1647,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="RAGE_DRAGON_RADIANT" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="a2bf3dd9-5dec-457a-bd61-736f2ef19f73" />
         <field name="Passives" type="StringTableFieldDefinition" value="RadiantRageBoost;" />
+        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="4b36da49-5e25-4d05-ae10-88cc211a47eb" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1675,7 +1678,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="RAGE_SPIRIT" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="855fb809-8a50-44a1-98fc-911b67ed0f33" />
         <field name="Passives" type="StringTableFieldDefinition" value="SpiritRageBoosts" />
-        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="4b36da49-5e25-4d05-ae10-88cc211a47eb" />
+        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="c431c898-3eac-4985-bd3c-e1d6e76b5d11" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="30fd26c7-1a1e-4328-9a9a-38c0f55be597" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(VFX_RAGE);Attribute(ForceMainhandAlternativeEquipBones);IF(SpellId('Target_FuriousFinish')):CharacterWeaponDamage(RAGE_SPIRIT.Duration);" />
       </fields>
@@ -1792,10 +1795,13 @@
         <field name="Name" type="NameTableFieldDefinition" value="FollowUpStatus" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h46d71318ge0beg5109g441eg104d532b6b6e" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h18fb5af2g8f56g5277gc094g6d66a9b33686" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Action_SweepingAttack" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Flurry" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage;OnMove" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="BACKSWING" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(SpellId('Target_FollowUpAssault'),ModifyIconGlow());IF(SpellId('Target_FollowUpAssault') and HasNoTags({'CIRC_BON_1ATTACK','CIRC_BON_2ATTACK'},context.Source)):RollBonus(Attack,1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2294,7 +2300,7 @@
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Gold" enumeration_type_name="FormatStringColor" version="1" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="9" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF( DistanceToTargetLessThan(4.5) or HasStatus('EXPAND_AURA',context.Source) ):ApplyStatus(CHAMPION_AURA_STATUS)" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF( DistanceToTargetLessThan(4.5) or HasStatus('EXPAND_AURA',context.Source) ):ApplyStatus(CHAMPION_AURA_STATUS); IF( HasPassive('AuraOfCouragePathfinder',context.Source) and Ally() and DistanceToTargetLessThan(4.5) or HasStatus('EXPAND_AURA',context.Source) ):ApplyStatus(AURA_OF_COURAGE_BUFF)" />
         <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems;ShouldCheckLOS;AIIgnoreOnSelf" enumeration_type_name="AuraFlags" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartRound" enumeration_type_name="TickType" version="1" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF( Combat() and Player() ):ApplyStatus(CHAMPION_AURA_VFX,100,-1)" />
@@ -2453,6 +2459,18 @@
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_BON_2AC)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="eeaac353-3c9f-4dd5-a189-a34c7ceddd3b" />
+        <field name="Name" type="NameTableFieldDefinition" value="AURA_OF_COURAGE_BUFF" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5a33a3a2-2fd9-486a-b7a3-d88c23c43c94" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha76f2206g6ff8ga75bgd1f0g274a85440108" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('FRIGHTENED')):SetStatusDuration(FRIGHTENED,-1,Add); IF(HasStatus('FRIGHTENED')):ApplyStatus(PASSIVE_TRUE_STRIKE,100,0)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -9392,7 +9410,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he0edcaa7g6876g7203g8dc0g9a4c4d72760d" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="ChannelElements_Air" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ca600bf6-3845-44d5-a9dc-b327661babb8" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="82450c75-2049-4078-b8fb-dd55f2415dfd" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
@@ -9403,7 +9421,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h73311cc9gf84agf92ag3100ga2dd7ede9c97" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="ChannelElements_Earth" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ca600bf6-3845-44d5-a9dc-b327661babb8" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="61c2c508-e909-4de6-bfa0-39023b9c0a10" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
@@ -9415,7 +9433,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="ChannelElements_Fire" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasPassive('BurningJet',context.Source)):UnlockSpell(Rush_BurningJet_Level1);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ca600bf6-3845-44d5-a9dc-b327661babb8" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="0c68361f-5f2a-4325-b273-e15784fb0bbb" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
@@ -9426,7 +9444,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6b70efefg6519g08bbg7006g8b6346f1dc18" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="ChannelElements_Water" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ca600bf6-3845-44d5-a9dc-b327661babb8" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="715c7070-5394-4ef2-9732-ee2796deada0" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
@@ -9437,7 +9455,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h73c1a212gd74fg9829g39cbgdaeeb0af7db3" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="ChannelElements_Wood" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ca600bf6-3845-44d5-a9dc-b327661babb8" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="b86bb2aa-f917-472c-9d02-ff479c1a4bfd" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
@@ -9448,7 +9466,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h33c27d37gb204g501ag3976g001f59b112ba" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="ChannelElements_Metal" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ca600bf6-3845-44d5-a9dc-b327661babb8" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="6a79a286-8314-4537-80c6-d1d02bae4423" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
@@ -9462,6 +9480,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="ChannelingStatus" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ca600bf6-3845-44d5-a9dc-b327661babb8" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
