@@ -233,7 +233,7 @@ end
 --Barbarian
 
 function RageSpell()
-	return SpellId('Shout_Rage') | SpellId('Shout_AnimalRage') | SpellId('Shout_FuryRage') | SpellId('Shout_BludgeoningDragonRage') | SpellId('Shout_PoisonDragonRage') | SpellId('Shout_FireDragonRage') | SpellId('Shout_ForceDragonRage') | SpellId('Shout_PsychicDragonRage') | SpellId('Shout_GiantRage') | SpellId('Shout_Rage_Frenzy') | SpellId('Shout_Rage_Totem_Bear') | SpellId('Shout_Rage_Boar')
+	return SpellId('Shout_Rage') | SpellId('Shout_AnimalRage') | SpellId('Shout_FuryRage') | SpellId('Shout_BludgeoningDragonRage') | SpellId('Shout_PoisonDragonRage') | SpellId('Shout_FireDragonRage') | SpellId('Shout_ForceDragonRage') | SpellId('Shout_PsychicDragonRage') | SpellId('Shout_GiantRage') | SpellId('Shout_Rage_Fire') | SpellId('Shout_Rage_Water') | SpellId('Shout_Rage_Air')| SpellId('Shout_Rage_Earth')| SpellId('Shout_Rage_Wood') | SpellId('Shout_Rage_Metal') | SpellId('Shout_Rage_') | SpellId('Shout_Rage_Frenzy') | SpellId('Shout_Rage_Totem_Bear') | SpellId('Shout_Rage_Boar')
 end
 
 -- Fix for redefined armor
@@ -324,24 +324,26 @@ end
 function HealLive(size)
 	local source = context.Source
 	local target = context.Target
+	local has_feat = HasPassive('HealingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHeal',source))
 	local heal_living = ~( Tagged('UNDEAD',target) | DivineCastigation(target) )
 
 	if size == 10 then
-		return HasPassive('HealingHands',source) & heal_living
+		return has_feat & heal_living
 	else
-		return ~HasPassive('HealingHands',source) & heal_living
+		return ~has_feat & heal_living
 	end
 end
 
 function HealVoid(size)
 	local source = context.Source
 	local target = context.Target
+	local has_feat = HasPassive('HealingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHeal',source))
 	local heal_undead = Tagged('UNDEAD',target) & ~DivineCastigation(target)
 	
 	if size == 10 then
-		return HasPassive('HealingHands',source) & damage_undead
+		return has_feat & damage_undead
 	else
-		return ~HasPassive('HealingHands',source) & damage_undead
+		return ~has_feat & damage_undead
 	end
 end
 
@@ -353,24 +355,26 @@ end
 function HarmLive(size)
 	local source = context.Source
 	local target = context.Target
+	local has_feat = HasPassive('HarmingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHarm',source))
 	local damage_living = ( ~Tagged('UNDEAD',target) | DivineCastigation(target) )
 	
 	if size == 10 then
-		return HasPassive('HarmingHands',source) & damage_living
+		return has_feat & damage_living
 	else
-		return ~HasPassive('HarmingHands',source) & damage_living
+		return ~has_feat & damage_living
 	end
 end
 
 function HarmVoid(size)
 	local source = context.Source
 	local target = context.Target
+	local has_feat = HasPassive('HarmingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHarm',source))
 	local heal_undead = Tagged('UNDEAD',target) & ~DivineCastigation(target)
 	
 	if size == 10 then
-		return HasPassive('HarmingHands',source) & heal_undead
+		return has_feat & heal_undead
 	else
-		return ~HasPassive('HarmingHands',source) & heal_undead
+		return ~has_feat & heal_undead
 	end
 end
 
