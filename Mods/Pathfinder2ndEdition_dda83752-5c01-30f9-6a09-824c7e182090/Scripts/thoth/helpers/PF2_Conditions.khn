@@ -120,7 +120,7 @@ function TrainedArmor() --Proficient or unarmored
     | armor.ArmorType == ArmorType.BreastPlate
     | armor.ArmorType == ArmorType.HalfPlate 
 
-	return HasProficiency('HeavyArmor',context.Source) or (HasProficiency('LightArmor',context.Source) & hasLightArmor) or (HasProficiency('MediumArmor',context.Source) & hasMediumArmor)
+	return HasProficiency('HeavyArmor',context.Source) | (HasProficiency('LightArmor',context.Source) & hasLightArmor) | (HasProficiency('MediumArmor',context.Source) & hasMediumArmor)
 end
 
 function TrainedSkill() --Proficient
@@ -233,7 +233,7 @@ end
 --Barbarian
 
 function RageSpell()
-	return SpellId('Shout_Rage') | SpellId('Shout_AnimalRage') | SpellId('Shout_FuryRage') | SpellId('Shout_BludgeoningDragonRage') | SpellId('Shout_PoisonDragonRage') | SpellId('Shout_FireDragonRage') | SpellId('Shout_ForceDragonRage') | SpellId('Shout_PsychicDragonRage') | SpellId('Shout_GiantRage') | SpellId('Shout_Rage_Frenzy') | SpellId('Shout_Rage_Totem_Bear') | SpellId('Shout_Rage_Boar')
+	return SpellId('Shout_Rage') | SpellId('Shout_AnimalRage') | SpellId('Shout_FuryRage') | SpellId('Shout_BludgeoningDragonRage') | SpellId('Shout_PoisonDragonRage') | SpellId('Shout_FireDragonRage') | SpellId('Shout_ForceDragonRage') | SpellId('Shout_PsychicDragonRage') | SpellId('Shout_GiantRage') | SpellId('Shout_Rage_Fire') | SpellId('Shout_Rage_Water') | SpellId('Shout_Rage_Air')| SpellId('Shout_Rage_Earth')| SpellId('Shout_Rage_Wood') | SpellId('Shout_Rage_Metal') | SpellId('Shout_Rage_') | SpellId('Shout_Rage_Frenzy') | SpellId('Shout_Rage_Totem_Bear') | SpellId('Shout_Rage_Boar')
 end
 
 -- Fix for redefined armor
@@ -242,6 +242,15 @@ function HasHeavyArmor(entity)
     local armor = GetActiveArmor(entity)
     return IsOfProficiencyGroup("HeavyArmor", armor)
 end
+
+function HasFreeHand()
+	local unarmed = IsOffHandSlotEmpty() | Unarmed() | HasPassive('Block_NonUnarmedStrike')
+	local twohand = HasWeaponProperty(WeaponProperties.Twohanded,GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand))
+	local offhand = IsOffHandSlotEmpty() & ~(HasShieldEquipped()|twohand)
+	local result = (unarmed & offhand).Result
+	return ConditionResult(result,{ConditionError('FreeHand')})
+end
+	
 --Bard
 
 function HasMartialExtendableComposition(source)
@@ -324,24 +333,26 @@ end
 function HealLive(size)
 	local source = context.Source
 	local target = context.Target
+	local has_feat = HasPassive('HealingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHeal',source))
 	local heal_living = ~( Tagged('UNDEAD',target) | DivineCastigation(target) )
 
 	if size == 10 then
-		return HasPassive('HealingHands',source) & heal_living
+		return has_feat & heal_living
 	else
-		return ~HasPassive('HealingHands',source) & heal_living
+		return ~has_feat & heal_living
 	end
 end
 
 function HealVoid(size)
 	local source = context.Source
 	local target = context.Target
+	local has_feat = HasPassive('HealingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHeal',source))
 	local heal_undead = Tagged('UNDEAD',target) & ~DivineCastigation(target)
 	
 	if size == 10 then
-		return HasPassive('HealingHands',source) & damage_undead
+		return has_feat & damage_undead
 	else
-		return ~HasPassive('HealingHands',source) & damage_undead
+		return ~has_feat & damage_undead
 	end
 end
 
@@ -353,24 +364,26 @@ end
 function HarmLive(size)
 	local source = context.Source
 	local target = context.Target
+	local has_feat = HasPassive('HarmingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHarm',source))
 	local damage_living = ( ~Tagged('UNDEAD',target) | DivineCastigation(target) )
 	
 	if size == 10 then
-		return HasPassive('HarmingHands',source) & damage_living
+		return has_feat & damage_living
 	else
-		return ~HasPassive('HarmingHands',source) & damage_living
+		return ~has_feat & damage_living
 	end
 end
 
 function HarmVoid(size)
 	local source = context.Source
 	local target = context.Target
+	local has_feat = HasPassive('HarmingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHarm',source))
 	local heal_undead = Tagged('UNDEAD',target) & ~DivineCastigation(target)
 	
 	if size == 10 then
-		return HasPassive('HarmingHands',source) & heal_undead
+		return has_feat & heal_undead
 	else
-		return ~HasPassive('HarmingHands',source) & heal_undead
+		return ~has_feat & heal_undead
 	end
 end
 
@@ -379,7 +392,7 @@ function SapLife()
 end
 
 function HealSavingThrow()
-    if not CanTargetHeal().Result then
+    if CanTargetHeal().Result then
         st = ~SavingThrow(Ability.Constitution,SourceSpellDC())
         return ConditionResult(st.Result,{},{},st.Chance)
     end
@@ -387,7 +400,7 @@ function HealSavingThrow()
 end
 
 function HarmSavingThrow()
-    if not CanTargetHarm().Result then
+    if CanTargetHarm().Result then
         st = ~SavingThrow(Ability.Constitution,SourceSpellDC())
         return ConditionResult(st.Result,{},{},st.Chance)
     end
@@ -412,6 +425,12 @@ function DivineCastigation(target)
 	local is_evil = ( UndeadOrFiend(target) | HasAnyTags({'PALADIN_BLOCK_OATHBREAK','ALIGN_EVIL','BRANDED'},target) )
 	
 	return HasPassive('DivineCastigation',context.Source) & Enemy() & is_evil
+end
+
+function CrisisOfFaithable()
+	local target = context.Target
+	-- Target must cast be able to divine spells, Monk ones count for this
+	return HasPassive('NPC_Divine',target) | HasPassive('Tradition_Divine',target) | QiSpellsInitiate(target)
 end
 
 --Fighter
@@ -447,7 +466,7 @@ end
 
 function HeavyArmorSpeed(value)
 	if context.Source == nil then return ConditionResult(false) end
-	return ~(ConditionResult(context.Source.Strength >= value) & HasPassive('UnburdenedIron',context.Source)) & ~ArmorMovementPenalty(value)
+	return ~(ConditionResult(context.Source.Strength >= value) & HasPassive('UnburdenedIron',context.Source)) & ~ArmorSpeed(value)
 end
 
 function ExactingStrikeFX()
@@ -502,8 +521,9 @@ function StanceSpell()
 	return SpellId('Shout_CraneStance') | SpellId('Shout_DragonStance') | SpellId('Shout_MountainStance') | SpellId('Shout_TigerStance') | SpellId('Shout_WolfStance') | SpellId('Shout_MonasticArcherStance') | SpellId('Shout_CobraStance') | SpellId('Shout_ClingingShadowsStance') | SpellId('Shout_IronbloodStance') | SpellId('Shout_TangledForestStance') | SpellId('Shout_WildWindsStance') | SpellId('Shout_PointBlankStance') | SpellId('Shout_RicochetStance') | SpellId('Shout_DuelingStance') | SpellId('Shout_ParagonsGuardStance')
 end
 
-function QiSpellsInitiate()
-	return (HasPassive('InnerUpheaval',context.Source) | HasPassive('QiRush',context.Source))
+function QiSpellsInitiate(source)
+	local source = context.Source or source
+	return (HasPassive('InnerUpheaval',source) | HasPassive('QiRush',source))
 end
 
 --Ranger
@@ -749,6 +769,171 @@ function PoltergeistSustainSpell()
 	return SpellId('Target_PerniciousPoltergeist_Rank4_Recast') | SpellId('Target_PerniciousPoltergeist_Rank4_Recast_Negative') | SpellId('Shout_Poltergeist_Sustain_Force') | SpellId('Shout_Poltergeist_Sustain_Fear') | SpellId('Target_PerniciousPoltergeist_Rank6_Recast') | SpellId('Target_PerniciousPoltergeist_Rank6_Recast_Negative') | SpellId('Shout_Poltergeist_Sustain_Force_6') | SpellId('Shout_Poltergeist_Sustain_Fear_6')
 end
 
+-- Kineticist
+
+function CanCastImpulse(element,noncombat,free)
+	-- Can't cast without a free hand
+	if not HasFreeHand().Result then
+		return ConditionResult(false,{ConditionError("FreeHand")})
+	end
+	
+	-- right elements
+	local gate = ElementalGate(element)
+	local instinct = ElementalInstinct(element)
+	local add_element = HasPassive('AddElement_Barbarian')
+	
+	local element_invalid = ~( gate | instinct | add_element )
+	
+	if element_invalid.Result then
+		return ConditionResult(false,{ConditionError("FreeHand")})
+	end
+	
+	-- Can't cast while raging, except as an elemental Barbarian of that type
+	if (HasStatus('RAGE_MUTE') & ~instinct).Result then
+		return ConditionResult(false,{ConditionError("HasNotConcentration")})
+	end
+	
+	noncombat = noncombat or false
+	free = free or false
+	-- Utility impulses should be castable outside of combat
+	local is_noncombat = ~Combat() & ConditionResult(noncombat)
+	-- Can be cast for free with full-class Channel Elements
+	-- Only checked at the start of a turn, so dismissing elements in exploration mode grays it out
+	local is_free = (HasPassive('ChannelElementsFree') | ClassLevelHigherOrEqualThan(1,'Kineticist')) & ConditionResult(free)
+	
+	return HasStatus('ChannelingStatus') | is_free | is_noncombat
+end
+
+function CanCastHybridImpulse(element1,element2,noncombat)
+	noncombat = false or noncombat
+	-- Can't cast without a free hand
+	if not HasFreeHand().Result then
+		return ConditionResult(false,{ConditionError("FreeHand")})
+	end
+	
+	-- right elements
+	local gate_and = ElementalGate(element1) & ElementalGate(element2)
+	local gate_or = ElementalGate(element1) | ElementalGate(element2)
+	local instinct_or = ElementalInstinct(element1) & ElementalInstinct(element2)
+	local add_element = HasPassive('AddElement_Barbarian') & (gate_or|instinct_or) --Stricter, must retain the original element
+	local overlap = HasPassive('ElementalOverlap') & (IsSingleGate(element1)|IsSingleGate(element2))
+	
+	local element_invalid = ~( gate_and | add_element | overlap )
+	
+	if element_invalid.Result then
+		return ConditionResult(false,{ConditionError("HasNotConcentration")})
+	end
+	
+	-- Can't cast while raging, except as an elemental Barbarian of that type
+	if (HasStatus('RAGE_MUTE') & ~instinct_or).Result then
+		return ConditionResult(false)
+	end
+	
+	noncombat = noncombat or false
+	free = free or false
+	-- Utility impulses should be castable outside of combat
+	local is_noncombat = ~Combat() & ConditionResult(noncombat)
+	-- Can be cast for free with full-class Channel Elements
+	local is_free = (HasPassive('ChannelElementsFree') | ClassLevelHigherOrEqualThan(1,'Kineticist')) & ConditionResult(free)
+	
+	return HasStatus('ChannelingStatus') | is_free | is_noncombat
+end
+
+-- Concatenation didn't work so using a lookup
+function ElementalGate(element)
+	if element == 'Fire' then
+		return HasPassive('FireGate')
+	elseif element == 'Water' then
+		return HasPassive('WaterGate')
+	elseif element == 'Air' then
+		return HasPassive('AirGate')
+	elseif element == 'Earth' then
+		return HasPassive('EarthGate')
+	elseif element == 'Wood' then
+		return HasPassive('WoodGate')
+	elseif element == 'Metal' then
+		return HasPassive('MetalGate')
+	else
+		return ConditionResult(false)
+	end
+end
+
+function ElementalInstinct(element)
+	if element == 'Fire' then
+		return HasPassive('ElemBarbFire')
+	elseif element == 'Water' then
+		return HasPassive('ElemBarbWater')
+	elseif element == 'Air' then
+		return HasPassive('ElemBarbAir')
+	elseif element == 'Earth' then
+		return HasPassive('ElemBarbEarth')
+	elseif element == 'Wood' then
+		return HasPassive('ElemBarbWood')
+	elseif element == 'Metal' then
+		return HasPassive('ElemBarbMetal')
+	else
+		return ConditionResult(false)
+	end
+end
+
+function IsSingleGate(element)
+	if element == 'Fire' then
+		return ~HasPassive('WaterGate') & ~HasPassive('AirGate') & ~HasPassive('EarthGate') & ~HasPassive('WoodGate') & ~HasPassive('MetalGate')
+	elseif element == 'Water' then
+		return ~HasPassive('FireGate') & ~HasPassive('AirGate') & ~HasPassive('EarthGate') & ~HasPassive('WoodGate') & ~HasPassive('MetalGate')
+	elseif element == 'Air' then
+		return ~HasPassive('FireGate') & ~HasPassive('WaterGate') & ~HasPassive('EarthGate') & ~HasPassive('WoodGate') & ~HasPassive('MetalGate')
+	elseif element == 'Earth' then
+		return ~HasPassive('FireGate') & ~HasPassive('WaterGate') & ~HasPassive('AirGate') & ~HasPassive('WoodGate') & ~HasPassive('MetalGate')
+	elseif element == 'Wood' then
+		return ~HasPassive('FireGate') & ~HasPassive('WaterGate') & ~HasPassive('AirGate') & ~HasPassive('EarthGate') & ~HasPassive('MetalGate')
+	elseif element == 'Metal' then
+		return ~HasPassive('FireGate') & ~HasPassive('WaterGate') & ~HasPassive('AirGate') & ~HasPassive('EarthGate') & ~HasPassive('WoodGate')
+	else
+		return ConditionResult(false)
+	end
+end
+
+function IsKineticistFree()
+-- Can be a free action with Channel Elements
+	local fire_blast = SpellId('Target_ElementalBlast_Fire_Fire') | SpellId('Target_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Projectile_ElementalBlast_Fire_Cold')
+	
+	local water_blast = SpellId('Target_ElementalBlast_Water_Bludgeoning') | SpellId('Target_ElementalBlast_Water_Cold') | SpellId('Target_ElementalBlast_Water_Acid') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning') | SpellId('Projectile_ElementalBlast_Water_Cold') | SpellId('Projectile_ElementalBlast_Water_Acid')
+	
+	local air_blast = SpellId('Target_ElementalBlast_Air_Electric') | SpellId('Target_ElementalBlast_Air_Slashing') | SpellId('Target_ElementalBlast_Air_Cold') | SpellId('Projectile_ElementalBlast_Air_Electric') | SpellId('Projectile_ElementalBlast_Air_Slashing') | SpellId('Projectile_ElementalBlast_Air_Cold')
+	
+	local earth_blast = SpellId('Target_ElementalBlast_Earth_Bludgeoning') | SpellId('Target_ElementalBlast_Earth_Piercing') | SpellId('Target_ElementalBlast_Earth_Poison') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning') | SpellId('Projectile_ElementalBlast_Earth_Piercing') | SpellId('Projectile_ElementalBlast_Earth_Poison')
+	
+	local wood_blast = SpellId('Target_ElementalBlast_Wood_Bludgeoning') | SpellId('Target_ElementalBlast_Wood_Vitality') | SpellId('Target_ElementalBlast_Wood_Poison') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning') | SpellId('Projectile_ElementalBlast_Wood_Vitality') | SpellId('Projectile_ElementalBlast_Wood_Poison')
+	
+	local metal_blast = SpellId('Target_ElementalBlast_Metal_Piercing') | SpellId('Target_ElementalBlast_Metal_Slashing') | SpellId('Target_ElementalBlast_Metal_Lightning') | SpellId('Projectile_ElementalBlast_Metal_Piercing') | SpellId('Projectile_ElementalBlast_Metal_Slashing') | SpellId('Projectile_ElementalBlast_Metal_Lightning')
+	
+	local stance = SpellId('Shout_RavelOfThorns') | SpellId('Shout_ThermalNimbusFire') | SpellId('Shout_ThermalNimbusCold')
+	
+	return fire_blast | water_blast | air_blast | earth_blast | wood_blast | metal_blast |  stance
+end
+
+function ImprovedElementalBlastD6()
+	local fire_blast = SpellId('Target_ElementalBlast_Fire_Dedi') | SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Projectile_ElementalBlast_Fire_Fire_2Action') | SpellId('Projectile_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Cold_2Action')
+	
+	local air_blast = SpellId('Target_ElementalBlast_Air_Dedi') | SpellId('Projectile_ElementalBlast_Air_Electric') | SpellId('Projectile_ElementalBlast_Air_Electric_2Action') | SpellId('Projectile_ElementalBlast_Air_Slashing') | SpellId('Projectile_ElementalBlast_Air_Slashing_2Action') | SpellId('Projectile_ElementalBlast_Air_Cold') | SpellId('Projectile_ElementalBlast_Air_Cold_2Action')
+	
+	return fire_blast | air_blast 
+end
+
+function ImprovedElementalBlastD8()
+	
+	local water_blast = SpellId('Target_ElementalBlast_Metal_Dedi') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Water_Cold') | SpellId('Projectile_ElementalBlast_Water_Cold_2Action') | SpellId('Projectile_ElementalBlast_Water_Acid') | SpellId('Projectile_ElementalBlast_Water_Acid_2Action')
+	
+	local earth_blast = SpellId('Target_ElementalBlast_Earth_Dedi') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Earth_Piercing') | SpellId('Projectile_ElementalBlast_Earth_Piercing_2Action') | SpellId('Projectile_ElementalBlast_Earth_Poison') | SpellId('Projectile_ElementalBlast_Earth_Poison_2Action')
+	
+	local wood_blast = SpellId('Target_ElementalBlast_Wood_Dedi') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Wood_Vitality') | SpellId('Projectile_ElementalBlast_Wood_Vitality_2Action') | SpellId('Projectile_ElementalBlast_Wood_Poison') | SpellId('Projectile_ElementalBlast_Wood_Poison_2Action')
+	
+	local metal_blast = SpellId('Target_ElementalBlast_Metal_Dedi') | SpellId('Projectile_ElementalBlast_Metal_Piercing_Dedi') | SpellId('Projectile_ElementalBlast_Metal_Piercing_2Action_Dedi') | SpellId('Projectile_ElementalBlast_Metal_Slashing_Dedi') | SpellId('Projectile_ElementalBlast_Metal_Slashing_2Action_Dedi') | SpellId('Projectile_ElementalBlast_Metal_Lightning_Dedi') | SpellId('Projectile_ElementalBlast_Metal_Lightning_2Action_Dedi')
+	
+	return water_blast | earth_blast | wood_blast | metal_blast
+end
+
 --Incap - treats DC as 10 higher
 
 function IncapDC(dc,target,source)
@@ -799,19 +984,34 @@ end
 
 -- Critical hits for non-attack spells
 
-function SaveCrit(threshold)
+function SaveCrit(save_type)
     local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
     local thresholdtotal = 10 + total
-    if difficulty >= thresholdtotal then
+	
+	if difficulty >= thresholdtotal then
         return ConditionResult(difficulty > total)
     end
     return ConditionResult(false)
 end
 
-function SaveCritMiss(threshold)
+function SaveCritMiss(save_type)
     local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
     local thresholdtotal = total - 10
-    if difficulty < thresholdtotal then
+	
+	-- Basic critical conversion prevents damage on a miss
+	if save_type then
+		local target = context.Target
+		if save_type == 'Fort' & (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)) then
+			return ConditionResult(true)
+		elseif save_type == 'Reflex' & (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)) then
+			return ConditionResult(true)
+		elseif save_type == 'Fear' & (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)) then
+			return ConditionResult(true)
+		elseif save_type == 'Will' & (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)) then
+			return ConditionResult(true)
+		end
+    end
+	if difficulty < thresholdtotal then
         return ConditionResult(difficulty < total)
     end
     return ConditionResult(false)
@@ -856,10 +1056,7 @@ function IsWeaponDamageDieD12(weapon)
 	local weapon = weapon or context.Source
 	return IsWeaponOfProficiencyGroup('Mauls|Greataxes|Greatswords', weapon)
 end
--- Can be a free action with Channel Elements
-function IsKineticistFree()
-	return SpellId('Shout_RavelOfThorns') | SpellId('Shout_ThermalNimbusFire') | SpellId('Shout_ThermalNimbusCold') | SpellId('Target_ElementalBlast_Air_Electric') | SpellId('Target_ElementalBlast_Air_Slashing') | SpellId('Target_ElementalBlast_Air_Cold') | SpellId('Target_ElementalBlast_Earth_Bludgeoning') | SpellId('Target_ElementalBlast_Earth_Piercing') | SpellId('Target_ElementalBlast_Earth_Poison') | SpellId('Target_ElementalBlast_Fire_Fire') | SpellId('Target_ElementalBlast_Fire_Cold') | SpellId('Target_ElementalBlast_Metal_Piercing') | SpellId('Target_ElementalBlast_Metal_Slashing') | SpellId('Target_ElementalBlast_Metal_Lightning') | SpellId('Target_ElementalBlast_Water_Bludgeoning') | SpellId('Target_ElementalBlast_Water_Cold') | SpellId('Target_ElementalBlast_Water_Acid') | SpellId('Target_ElementalBlast_Wood_Bludgeoning') | SpellId('Target_ElementalBlast_Wood_Vitality') | SpellId('Target_ElementalBlast_Wood_Poison') | SpellId('Projectile_ElementalBlast_Air_Electric') | SpellId('Projectile_ElementalBlast_Air_Slashing') | SpellId('Projectile_ElementalBlast_Air_Cold') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning') | SpellId('Projectile_ElementalBlast_Earth_Piercing') | SpellId('Projectile_ElementalBlast_Earth_Poison') | SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Projectile_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Metal_Piercing') | SpellId('Projectile_ElementalBlast_Metal_Slashing') | SpellId('Projectile_ElementalBlast_Metal_Lightning') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning') | SpellId('Projectile_ElementalBlast_Water_Cold') | SpellId('Projectile_ElementalBlast_Water_Acid') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning') | SpellId('Projectile_ElementalBlast_Wood_Vitality') | SpellId('Projectile_ElementalBlast_Wood_Poison')
-end
+
 function CheckCriticalTen(max, entity)
     local entity = entity or context.Target
     local max = max or 0
