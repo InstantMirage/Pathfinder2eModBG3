@@ -244,7 +244,11 @@ function HasHeavyArmor(entity)
 end
 
 function HasFreeHand()
-	return IsOffHandSlotEmpty() | Unarmed() | HasPassive('Block_NonUnarmedStrike') | ~(HasShieldEquipped()|WieldingWeapon('Twohanded', false, false))
+	local unarmed = IsOffHandSlotEmpty() | Unarmed() | HasPassive('Block_NonUnarmedStrike')
+	local twohand = HasWeaponProperty(WeaponProperties.Twohanded,GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand))
+	local offhand = IsOffHandSlotEmpty() & ~(HasShieldEquipped()|twohand)
+	local result = (unarmed & offhand).Result
+	return ConditionResult(result,{ConditionError('FreeHand')})
 end
 	
 --Bard
@@ -770,7 +774,7 @@ end
 function CanCastImpulse(element,noncombat,free)
 	-- Can't cast without a free hand
 	if not HasFreeHand().Result then
-		return ConditionResult(false)
+		return ConditionResult(false,{ConditionError("FreeHand")})
 	end
 	
 	-- right elements
@@ -781,32 +785,30 @@ function CanCastImpulse(element,noncombat,free)
 	local element_invalid = ~( gate | instinct | add_element )
 	
 	if element_invalid.Result then
-		return ConditionResult(false)
+		return ConditionResult(false,{ConditionError("FreeHand")})
 	end
 	
 	-- Can't cast while raging, except as an elemental Barbarian of that type
 	if (HasStatus('RAGE_MUTE') & ~instinct).Result then
-		return ConditionResult(false)
+		return ConditionResult(false,{ConditionError("HasNotConcentration")})
 	end
 	
-	if HasStatus('ChannelingStatus').Result then
-		-- Is currently channeling elements
-		return ConditionResult(true)
-	elseif noncombat and not Combat().Result then
-		-- Utility impulses should be castable outside of combat
-		return ConditionResult(true)
-	elseif free and HasPassive('ChannelElementsFree').Result then
-		-- Can be cast for free with full-class Channel Elements
-		-- Somewhat buggy, can't be used after lowering aura
-		return ConditionResult(true)
-	end
+	noncombat = noncombat or false
+	free = free or false
+	-- Utility impulses should be castable outside of combat
+	local is_noncombat = ~Combat() & ConditionResult(noncombat)
+	-- Can be cast for free with full-class Channel Elements
+	-- Only checked at the start of a turn, so dismissing elements in exploration mode grays it out
+	local is_free = (HasPassive('ChannelElementsFree') | ClassLevelHigherOrEqualThan(1,'Kineticist')) & ConditionResult(free)
+	
+	return HasStatus('ChannelingStatus') | is_free | is_noncombat
 end
 
 function CanCastHybridImpulse(element1,element2,noncombat)
 	noncombat = false or noncombat
 	-- Can't cast without a free hand
 	if not HasFreeHand().Result then
-		return ConditionResult(false)
+		return ConditionResult(false,{ConditionError("FreeHand")})
 	end
 	
 	-- right elements
@@ -819,7 +821,7 @@ function CanCastHybridImpulse(element1,element2,noncombat)
 	local element_invalid = ~( gate_and | add_element | overlap )
 	
 	if element_invalid.Result then
-		return ConditionResult(false)
+		return ConditionResult(false,{ConditionError("HasNotConcentration")})
 	end
 	
 	-- Can't cast while raging, except as an elemental Barbarian of that type
@@ -827,16 +829,14 @@ function CanCastHybridImpulse(element1,element2,noncombat)
 		return ConditionResult(false)
 	end
 	
-	if HasStatus('ChannelingStatus').Result then
-		-- Is currently channeling elements
-		return ConditionResult(true)
-	elseif noncombat and not Combat().Result then
-		-- Utility impulses should be castable outside of combat
-		return ConditionResult(true)
-	elseif free and HasPassive('ChannelElementsFree').Result then
-		-- Can be cast for free with full-class Channel Elements
-		return ConditionResult(true)
-	end
+	noncombat = noncombat or false
+	free = free or false
+	-- Utility impulses should be castable outside of combat
+	local is_noncombat = ~Combat() & ConditionResult(noncombat)
+	-- Can be cast for free with full-class Channel Elements
+	local is_free = (HasPassive('ChannelElementsFree') | ClassLevelHigherOrEqualThan(1,'Kineticist')) & ConditionResult(free)
+	
+	return HasStatus('ChannelingStatus') | is_free | is_noncombat
 end
 
 -- Concatenation didn't work so using a lookup
