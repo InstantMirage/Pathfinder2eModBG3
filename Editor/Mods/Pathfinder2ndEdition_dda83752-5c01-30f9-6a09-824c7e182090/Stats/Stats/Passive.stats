@@ -1236,7 +1236,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha364f837g476eg220bge0a7gddbc596e9cea" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Mag_SelfImmolation" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(DistanceToTargetGreaterThan(3)):Disadvantage(AttackTarget); UnlockSpellVariant(HasSpellFlag(SpellFlags.Spell) and not (HasUseCosts('SpellSlot') or HasUseCosts('KiPoint')),ModifySpellFlags(Spell,0));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(DistanceToTargetGreaterThan(3)):Disadvantage(AttackTarget);" />
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="BoostConditions" type="StringTableFieldDefinition" value="HasStatus('SG_Rage');" />
       </fields>
@@ -8620,7 +8620,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="c38aa464-ba4d-4dab-b458-08130d26879c" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h51fd7fabgc05fg4ba9g6dcfg8b8e6524cce0" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h469175a2g8c52g1939gb285g9cfdf4f6f2e9" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(HasUseCosts('ActionPoint') and HasStringInSpellRoll('Spell')),ModifyUseCosts(Add,ActionPoint,1,0),ModifyIconGlow());IF(Character() and not Self() and not Summon() and not HasAnyTags({'UNDEAD', 'CONSTRUCT', 'CREATURE_SPORE_SERVANT'}) and not HasAnyStatus({'SG_Polymorph','HAG_DISGUISE','HAG_DISGUISE_PIG','HAG_DISGUISE_SHEEP'}) and not IsImmuneToStatus('KNOCKED_OUT') and HasStringInSpellRoll('Spell')):NonLethal();" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(HasUseCosts('ActionPoint') and HasStringInSpellRoll('Spell'),ModifyUseCosts(Add,ActionPoint,1,0),ModifyIconGlow());IF(Character() and not Self() and not Summon() and not HasAnyTags({'UNDEAD', 'CONSTRUCT', 'CREATURE_SPORE_SERVANT'}) and not HasAnyStatus({'SG_Polymorph','HAG_DISGUISE','HAG_DISGUISE_PIG','HAG_DISGUISE_SHEEP'}) and not IsImmuneToStatus('KNOCKED_OUT') and HasStringInSpellRoll('Spell')):NonLethal();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9341,6 +9341,141 @@
         <field name="Name" type="NameTableFieldDefinition" value="TotemSpirit_Elk_Rage_Boosts_2" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="8270457c-9608-4454-97b6-7845552bb825" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(Ability, Strength);Advantage(SavingThrow, Strength);Resistance(Slashing, Resistant);Resistance(Piercing, Resistant);Resistance(Bludgeoning, Resistant);IF(IsAttackType(AttackType.MeleeWeaponAttack)): CharacterWeaponDamage(LevelMapValue(RageDamage));IF(IsAttackType(AttackType.MeleeOffHandWeaponAttack)):CharacterWeaponDamage(LevelMapValue(RageDamage));EntityThrowDamage(3);CharacterUnarmedDamage(LevelMapValue(RageDamage));FallDamageMultiplier(0.5);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b7fa914f-ba80-4564-a099-65a2027f4989" />
+        <field name="Name" type="NameTableFieldDefinition" value="MagicResistance" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h91781f63g77deg6ddfgef1dgb271b7cd75ff" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h45de2889ga8fag0e07g98c8g4ba2be9a4ed1" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasSpellFlag(SpellFlags.Spell)):RollBonus(SavingThrow,1,Dexterity);IF(HasSpellFlag(SpellFlags.Spell)):RollBonus(SavingThrow,1,Wisdom);IF(HasSpellFlag(SpellFlags.Spell)):RollBonus(SavingThrow,1,Constitution);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Generic_Magical" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7dd6c17e-4d66-4b8a-b9db-b8f5c5738feb" />
+        <field name="Name" type="NameTableFieldDefinition" value="Confusion_CraniumRat" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hba6c9ba1g552cg8d43ge981gdfd57ae72125" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h58e9a60agb352gc8a0g9b0fg9cda8a9d394d" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_Confused" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamaged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="TotalDamageDoneGreaterThan(0)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not SavingThrow(Ability.Wisdom, 13, false, false, context.Source)):ApplyStatus(SWAP,CONFUSION,100,2)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="917fc476-7ff6-44e3-9023-04333187d041" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEN_RaidingParty_GoblinCaptain_Gloves_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd0a98a0agdc22g2c80gb4d4g91cbb245b98e" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h0248c837g6142gca8dg7688gcf75634a27a4" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('BRANDED',context.Source)):ApplyStatus(BANE,100,2,,,,not SavingThrow(Ability.Wisdom,11))" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsWeaponAttack() and Character() and not Item()" />
+        <field name="TooltipSave" type="StringTableFieldDefinition" value="Wisdom" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="1d4" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e5d6ec57-e007-427e-bb02-4193c01f2c71" />
+        <field name="Name" type="NameTableFieldDefinition" value="GOB_Torturer_Spear_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h65eedea6gea49g31cbgec1dgaacbf5049da6" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he6a363b2g3dc1ge5d3g0deag293904e00b3e" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="AttackedWithPassiveSourceWeapon()" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GOB_TORTURED,100,2,,,,not SavingThrow(Ability.Wisdom,10))" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="TooltipSave" type="StringTableFieldDefinition" value="Wisdom" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c70ba83d-98f9-4a5b-b5ef-68ceaa72f55d" />
+        <field name="Name" type="NameTableFieldDefinition" value="ALCH_Oil_Bane_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb9dc1d6dgf019g8135g6424gb48e9f61bfc1" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="AttackedWithPassiveSourceWeapon()" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not SavingThrow(Ability.Wisdom, 11)):ApplyStatus(ALCH_OIL_BANE_CONDITION,100,2)" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcf94fb3ag6a09g147fg1a2agfbaaca164032" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b8c9fc7e-3470-4ebb-b224-c2b8c3a46205" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEN_TunnelStaff_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb2e88fe0g740bg926fgf8f6g78f17e6797a6" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb096e5f2gb915g0d7ag33e9gea519fa05859" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not SavingThrow(Ability.Constitution, 12)):ApplyStatus(ENSNARING_STRIKE,100, 2)" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="AttackedWithPassiveSourceWeapon() and not Tagged('BEAST') and not Tagged('PLANT') and not Self()" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="700dec7b-5a6e-43e0-8582-b6e8ec074963" />
+        <field name="Name" type="NameTableFieldDefinition" value="GOB_LostBalance_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0c204221g0f7bgbe8dg64adg98c0a4cc8160" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdba49d9cgca55gc1c8gc841ge3beb99a42f2" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE,100,1);RemoveStatus(GOB_LOSTBALANCE)" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttacked" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, 8) and not Self();" />
+        <field name="TooltipSave" type="StringTableFieldDefinition" value="Dexterity" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0ce9d39e-bd0d-4c45-88f4-c27c0c1a7e3f" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_RavenFamiliar_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hafe71f32g98e7g1a7cg1337g828fe06f5a5b" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamaged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsKillingBlow() and not Self() and Character() and Enemy() and not SavingThrow(Ability.Constitution, 13,AdvantageOnRestrained(),DisadvantageOnRestrained(), context.Source);" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF, ENSNARING_STRIKE,100, 3)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="adac6395-537a-4aa8-999f-690106fecb49" />
+        <field name="Name" type="NameTableFieldDefinition" value="Scar_Sirocco_Gur" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6d922204g801fgc982gc6c9g9bb47d89f091" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hff34bbf0gff52gf918g60cbge5e5d039e7b9" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not Dead() and HasHPPercentageWithoutTemporaryHPLessThan(90, context.Source)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE,100,2,,,,not SavingThrow(Ability.Constitution,14))" />
+        <field name="TooltipSave" type="StringTableFieldDefinition" value="Constitution" />
+        <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_Intent_Control" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="33aca5c3-61a8-434a-9e25-f7f49c0eb7a5" />
+        <field name="Name" type="NameTableFieldDefinition" value="VineBlight_VineBody" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5d6273f4gcb58g5d86gef5bg4135b0c1f57b" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h24c57815gcaabgbabcg52f3g3c33ea719952" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttacked" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeAttack() and HasDamageEffectFlag(DamageFlags.Hit)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not SavingThrow(Ability.Constitution, 13, false, false, context.Source)):ApplyStatus(SWAP,ENSNARED_VINES,100,2)" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Generic_Nature" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="46331b1d-cd64-4ed0-a95b-dd37841c62e2" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_OfDefense_Gloves_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h305a4e11g56cdg2d57g5085gf3e2cda37aa7" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf1956ad4g2340g376ag1ba3gebf8136edd86" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AC(1);RollBonus(SavingThrow,1,Dexterity);RollBonus(SavingThrow,1,Wisdom);RollBonus(SavingThrow,2,Constitution);" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="not WearingArmor(context.Source);" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnEquip;OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="1" />
       </fields>
     </stat_object>
   </stat_objects>

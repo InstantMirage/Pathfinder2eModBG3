@@ -2434,7 +2434,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="b11ef9b9-a959-4494-bc06-802266aebe76" />
         <field name="Name" type="NameTableFieldDefinition" value="SpiritShields" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he801d2d0g8a47g2a07gc77bgfa226a95bd53" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h616aa868g18c1gded8g7b80ge6299d66fc8a" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h616aa868g18c1gded8g7b80ge6299d66fc8a" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(Cause.LevelMapValue(H2D4),Force)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_ShieldOfFaith" />
         <field name="Passives" type="StringTableFieldDefinition" value="SpiritShieldPassive" />
@@ -10876,6 +10876,46 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsRangedSpellAttack(),ModifyTargetRadius(Override,32));" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="443e8ec5-8785-4ba6-a604-f7726a1b0bb3" />
+        <field name="Name" type="NameTableFieldDefinition" value="BLACK_TENTACLES" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb28e4287ga59bgf69fgd339gf0264ba5ae12" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4d84a29fg33dbgea48gb257g7d36321ec36f" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(3d6,Bludgeoning)" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_EvardsBlackTentacles" />
+        <field name="StackId" type="StringTableFieldDefinition" value="BLACK_TENTACLES" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="EXHAUSTED" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AttackTarget);Disadvantage(AttackRoll);ActionResourceBlock(Movement);Disadvantage(SavingThrow,Dexterity);Attribute(Grounded)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Restrained;SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="TooltipSave" type="StringTableFieldDefinition" value="Dexterity" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC(12))" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="DealDamage(3d6,Bludgeoning,Magical);RemoveStatus(SELF,SANCTUARY);RemoveStatus(SELF,SANCTUARY_TRANQUILITY);" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="ApplyStatus(BLACK_TENTACLES_TECHNICAL,100,1)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SELF,SANCTUARY);RemoveStatus(SELF,SANCTUARY_TRANQUILITY);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="46cd70fb-da10-4203-8ff4-6078b3c9baae" />
+        <field name="Name" type="NameTableFieldDefinition" value="WHIRLWIND_CHECK" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd12293a5gfcbbgccdcg86eege3c203e16568" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb96d35f5gd470g17edg872cg33bf5d4f54a9" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="WHIRLWIND_RESTRAIN" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Constitution, 15)" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(WHIRLWIND_RESTRAINED,100,1)" />
+        <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Constitution, 15)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(WHIRLWIND_RESTRAINED,100,1)" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Dazed" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Monster_Djinni_Whirlwind" />
       </fields>
     </stat_object>
   </stat_objects>

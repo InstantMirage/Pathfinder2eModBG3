@@ -1752,5 +1752,49 @@
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(DISENGAGE_USESTEP,100,1);" />
       </fields>
     </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7f9f278a-3b60-4c7c-b61f-a18a606d4a37" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_GatheredSwarm_Bee_Knockback" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0aefb4cfgff54gac67g10a9gcf3f8f984034" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Generic_Tactical" />
+        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnCastHit" enumeration_type_name="InterruptContext" version="1" />
+        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Self" enumeration_type_name="InterruptContextScope" version="1" />
+        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Source,context.Observer) and not Self() and (IsWeaponAttack() or IsMeleeAttack() or IsUnarmedAttack() or HasStringInSpellRoll('Attack')) and not IsKillingBlow() and IsHit() and Character() and not AnyEntityIsItem() and not HasStatus('GATHERED_SWARM_USED',context.Source);" />
+        <field name="Roll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC(10,context.Observer,Ability.Wisdom))" />
+        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_TARGET,BEE_KNOCKBACK,100,1)" />
+        <field name="Stack" type="StringTableFieldDefinition" value="SwarmKeeper" />
+        <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
+        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2557fd91g5a2ag0949g5a13g64d8b0ac58bb" version="1" />
+        <field name="Cost" type="StringTableFieldDefinition" value="SwarmCharge:1" />
+        <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_TARGET,BEE_MISS_VFX,100,0)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(5)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c0ba6c46-c7ed-48eb-8060-0ecdd197e035" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_GatheredSwarm_Bee_Prone" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7f9f278a-3b60-4c7c-b61f-a18a606d4a37" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hba621ef5gcd7fg8c3cge7feg6c500f4f7168" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdaa9a1b3g958cg8c7agaf8agd84ad1402c27" version="1" />
+        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_TARGET,BEE_ATTACK_VFX,100,0);ApplyStatus(OBSERVER_TARGET,PRONE,100,1)" />
+        <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_TARGET,BEE_MISS_VFX,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ea43c226-286b-4b46-8e3b-ca06a0655ffe" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_GatheredSwarm_Jellyfish_Disarmed" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="eb13a334-aba5-445f-b706-4df9c5b6b39a" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfc7635ccg802dg853dg437bg3128f8cccdd7" version="1" />
+        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_TARGET,JELLYFISH_ATTACK_VFX,100,0);ApplyStatus(OBSERVER_TARGET,SHOCKED,100,1);ApplyStatus(OBSERVER_TARGET,DISARMED,100,1);" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdb169ac3gaab8gcdd7g096dgee800c26f2fd" version="1" />
+        <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_TARGET,JELLYFISH_MISS_VFX,100,0)" />
+        <field name="Roll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC(10,context.Observer,Ability.Wisdom))" />
+      </fields>
+    </stat_object>
   </stat_objects>
 </stats>
