@@ -454,14 +454,19 @@ function ClassDC(source)
 	return base + expertise - stat_pen
 end
 
-function ArmorCheck()
-	local strength10 = HasPassive('Armor_Strength_10',context.Source) & ConditionResult(context.Source.Strength >= 10)
-	local strength12 = HasPassive('Armor_Strength_12',context.Source) & ConditionResult(context.Source.Strength >= 12)
-	local strength14 = HasPassive('Armor_Strength_14',context.Source) & ConditionResult(context.Source.Strength >= 14)
-	local strength16 = HasPassive('Armor_Strength_16',context.Source) & ConditionResult(context.Source.Strength >= 16)
-	local strength18 = HasPassive('Armor_Strength_18',context.Source) & ConditionResult(context.Source.Strength >= 18)
-	
-	return ~(strength10 | strength12 | strength14 | strength16 | strength18)
+function ArmorCheck(value)
+	if context.Source == nil then return ConditionResult(false) end
+	return ConditionResult(context.Source.Strength < value) & ~HasSpellFlag(SpellFlags.Attack)
+end
+
+function ArmorSpeed(value)
+	if context.Source == nil then return ConditionResult(false) end
+	return ~(ConditionResult(context.Source.Strength >= value) | HasPassive('UnburdenedIron',context.Source))
+end
+
+function HeavyArmorSpeed(value)
+	if context.Source == nil then return ConditionResult(false) end
+	return ~(ConditionResult(context.Source.Strength >= value) & HasPassive('UnburdenedIron',context.Source)) & ~ArmorSpeed(value)
 end
 
 function ExactingStrikeFX()
@@ -908,6 +913,16 @@ function IsKineticistFree()
 	return fire_blast | water_blast | air_blast | earth_blast | wood_blast | metal_blast |  stance
 end
 
+function IsMeleeWeaponInfusion()
+-- Can be adjusted with Weapon Infusion
+	return SpellId('Target_ElementalBlast_Fire_Fire') | SpellId('Target_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Target_ElementalBlast_Fire_Fire_2Action') | SpellId('Target_ElementalBlast_Fire_Cold_2Action') | SpellId('Target_ElementalBlast_Water_Bludgeoning') | SpellId('Target_ElementalBlast_Water_Cold') | SpellId('Target_ElementalBlast_Water_Acid') | SpellId('Target_ElementalBlast_Water_Bludgeoning_2Action') | SpellId('Target_ElementalBlast_Water_Cold_2Action') | SpellId('Target_ElementalBlast_Water_Acid_2Action') | SpellId('Target_ElementalBlast_Air_Electric') | SpellId('Target_ElementalBlast_Air_Slashing') | SpellId('Target_ElementalBlast_Air_Cold') | SpellId('Target_ElementalBlast_Air_Electric_2Action') | SpellId('Target_ElementalBlast_Air_Slashing_2Action') | SpellId('Target_ElementalBlast_Air_Cold_2Action') | SpellId('Target_ElementalBlast_Earth_Bludgeoning') | SpellId('Target_ElementalBlast_Earth_Piercing') | SpellId('Target_ElementalBlast_Earth_Poison') | SpellId('Target_ElementalBlast_Earth_Bludgeoning_2Action') | SpellId('Target_ElementalBlast_Earth_Piercing_2Action') | SpellId('Target_ElementalBlast_Earth_Poison_2Action') | SpellId('Target_ElementalBlast_Wood_Bludgeoning') | SpellId('Target_ElementalBlast_Wood_Vitality') | SpellId('Target_ElementalBlast_Wood_Poison') | SpellId('Target_ElementalBlast_Wood_Bludgeoning_2Action') | SpellId('Target_ElementalBlast_Wood_Vitality_2Action') | SpellId('Target_ElementalBlast_Wood_Poison_2Action') | SpellId('Target_ElementalBlast_Metal_Piercing') | SpellId('Target_ElementalBlast_Metal_Slashing') | SpellId('Target_ElementalBlast_Metal_Lightning') | SpellId('Target_ElementalBlast_Metal_Piercing_2Action') | SpellId('Target_ElementalBlast_Metal_Slashing_2Action') | SpellId('Target_ElementalBlast_Metal_Lightning_2Action')
+end
+
+function IsRangedWeaponInfusion()
+-- Can be adjusted with Weapon Infusion
+	return SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Projectile_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Fire_2Action') | SpellId('Projectile_ElementalBlast_Fire_Cold_2Action') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning') | SpellId('Projectile_ElementalBlast_Water_Cold') | SpellId('Projectile_ElementalBlast_Water_Acid') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Water_Cold_2Action') | SpellId('Projectile_ElementalBlast_Water_Acid_2Action') | SpellId('Projectile_ElementalBlast_Air_Electric') | SpellId('Projectile_ElementalBlast_Air_Slashing') | SpellId('Projectile_ElementalBlast_Air_Cold') | SpellId('Projectile_ElementalBlast_Air_Electric_2Action') | SpellId('Projectile_ElementalBlast_Air_Slashing_2Action') | SpellId('Projectile_ElementalBlast_Air_Cold_2Action') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning') | SpellId('Projectile_ElementalBlast_Earth_Piercing') | SpellId('Projectile_ElementalBlast_Earth_Poison') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Earth_Piercing_2Action') | SpellId('Projectile_ElementalBlast_Earth_Poison_2Action') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning') | SpellId('Projectile_ElementalBlast_Wood_Vitality') | SpellId('Projectile_ElementalBlast_Wood_Poison') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Wood_Vitality_2Action') | SpellId('Projectile_ElementalBlast_Wood_Poison_2Action') | SpellId('Projectile_ElementalBlast_Metal_Piercing') | SpellId('Projectile_ElementalBlast_Metal_Slashing') | SpellId('Projectile_ElementalBlast_Metal_Lightning') | SpellId('Projectile_ElementalBlast_Metal_Piercing_2Action') | SpellId('Projectile_ElementalBlast_Metal_Slashing_2Action') | SpellId('Projectile_ElementalBlast_Metal_Lightning_2Action')
+end
+
 function ImprovedElementalBlastD6()
 	local fire_blast = SpellId('Target_ElementalBlast_Fire_Dedi') | SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Projectile_ElementalBlast_Fire_Fire_2Action') | SpellId('Projectile_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Cold_2Action')
 	
@@ -992,21 +1007,21 @@ end
 function SaveCritMiss(save_type)
     local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
     local thresholdtotal = total - 10
-    
-    -- Basic critical conversion prevents damage on a miss
-    if save_type then
-        local target = context.Target
-        if save_type == 'Fort' and (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)).Result then
-            return ConditionResult(true)
-        elseif save_type == 'Reflex' and (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)).Result then
-            return ConditionResult(true)
-        elseif save_type == 'Fear' and (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
-            return ConditionResult(true)
-        elseif save_type == 'Will' and (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
-            return ConditionResult(true)
-        end
+	
+	-- Basic critical conversion prevents damage on a miss
+	if save_type then
+		local target = context.Target
+		if save_type == 'Fort' & (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)) then
+			return ConditionResult(true)
+		elseif save_type == 'Reflex' & (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)) then
+			return ConditionResult(true)
+		elseif save_type == 'Fear' & (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)) then
+			return ConditionResult(true)
+		elseif save_type == 'Will' & (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)) then
+			return ConditionResult(true)
+		end
     end
-    if difficulty < thresholdtotal then
+	if difficulty < thresholdtotal then
         return ConditionResult(difficulty < total)
     end
     return ConditionResult(false)
