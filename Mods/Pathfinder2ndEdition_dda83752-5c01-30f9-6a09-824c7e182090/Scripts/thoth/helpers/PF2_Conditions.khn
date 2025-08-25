@@ -1007,21 +1007,21 @@ end
 function SaveCritMiss(save_type)
     local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
     local thresholdtotal = total - 10
-	
-	-- Basic critical conversion prevents damage on a miss
-	if save_type then
-		local target = context.Target
-		if save_type == 'Fort' & (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)) then
-			return ConditionResult(true)
-		elseif save_type == 'Reflex' & (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)) then
-			return ConditionResult(true)
-		elseif save_type == 'Fear' & (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)) then
-			return ConditionResult(true)
-		elseif save_type == 'Will' & (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)) then
-			return ConditionResult(true)
-		end
+    
+    -- Basic critical conversion prevents damage on a miss
+    if save_type then
+        local target = context.Target
+        if save_type == 'Fort' and (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)).Result then
+            return ConditionResult(true)
+        elseif save_type == 'Reflex' and (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)).Result then
+            return ConditionResult(true)
+        elseif save_type == 'Fear' and (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
+            return ConditionResult(true)
+        elseif save_type == 'Will' and (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
+            return ConditionResult(true)
+        end
     end
-	if difficulty < thresholdtotal then
+    if difficulty < thresholdtotal then
         return ConditionResult(difficulty < total)
     end
     return ConditionResult(false)
