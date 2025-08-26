@@ -9665,6 +9665,7 @@
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnEquip;OnStatusRemoved" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="10e29e97-31af-400f-8520-71fbed87d2aa" />
+        <field name="Passives" type="StringTableFieldDefinition" value="Trait_Bulwark" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9933,7 +9934,7 @@
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="3" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="StatusId('ChannelingStatus')" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9966,8 +9967,8 @@
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="3" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and ( not HasPassive('SafeElements',context.Source) or Enemy())):ApplyStatus(ThermalNimbusAura_Fire_Damage,100,-1);" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved" enumeration_type_name="StatusEvent" version="1" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and Enemy()):ApplyStatus(ThermalNimbusAura_Fire_Damage,100,-1);" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasStatus('ThermalNimbusAura_Fire')" />
       </fields>
@@ -10022,7 +10023,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="ThermalNimbusAura_Cold_Auras" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="7fc592a7-0f0f-42ca-aace-9a4e1a7fd85a" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbf1a3fc5gf3e4g18d0gd77fgdd8d9067d20d" version="1" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and (not HasPassive('SafeElements',context.Source) or Enemy())):ApplyStatus(ThermalNimbusAura_Cold_Damage,100,-1);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and Enemy():ApplyStatus(ThermalNimbusAura_Cold_Damage,100,-1);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasStatus('ThermalNimbusAura_Cold')" />
       </fields>
     </stat_object>
