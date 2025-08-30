@@ -315,7 +315,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="TadpoleSuperPower_ReflectiveShell" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttacked" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('AmuletImplementBonus',context.Source) and HasStatus('Exploited',context.Target)" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="AC(2);RollBonus(SavingThrow,2,Dexterity);RollBonus(SavingThrow,2,Constitution);RollBonus(SavingThrow,2,Wisdom)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,StatusBonus2Saves,100,1);ApplyStatus(SELF,StatusBonus2AC,100,1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -344,11 +344,11 @@
         <field name="UUID" type="IdTableFieldDefinition" value="f8f42309-f3d0-4e9a-b35c-d7c0510ef2ac" />
         <field name="Name" type="NameTableFieldDefinition" value="IntensifyLantern" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf6c8ed5cgfb94gf62eg9f4bg4637d98fa23e" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1ee1d37dgdaf5g564dga881g79d6fbe6a076" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1ee1d37dgdaf5g564dga881g79d6fbe6a076" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_MagicWeapon" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('WeaponImplementBonus',context.Source) and HasStatus('Exploited',context.Target)" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RollBonus(Attack,2)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('LanternImplementBonus',context.Source) and HasStatus('Exploited',context.Target);" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FAERIE_FIRE,100,1);RemoveStatus(BLUR)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -359,8 +359,8 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7507c882g1498gb5b7g970dgef4eb08c8b96" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Illusion_DisguiseSelf" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttacked" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('AmuletImplementBonus',context.Source) and HasStatus('Exploited',context.Target)" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="AC(2);RollBonus(SavingThrow,2,Dexterity);RollBonus(SavingThrow,2,Constitution);RollBonus(SavingThrow,2,Wisdom)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('MirrorImplementBonus',context.Source) and HasStatus('Exploited',context.Target);" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,BLUR,100,1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -405,7 +405,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_MagicWeapon" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('WeaponImplementBonus',context.Source) and HasStatus('Exploited',context.Target)" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RollBonus(Attack,2)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,StatusBonus2Attack,100,1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -465,7 +465,25 @@
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Paladin_DreadfulAspect" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttacked" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('BellInitiateInterruptSpell') or SpellId('BellInitiateInterruptStrike')" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RollBonus(SavingThrow,-2,Dexterity);RollBonus(SavingThrow,-2,Constitution);RollBonus(SavingThrow,-2,Wisdom)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(StatusPenalty2Saves,100,1)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a9a0ca1a-ec12-4a60-bf88-cecce911e799" />
+        <field name="Name" type="NameTableFieldDefinition" value="RemoveArmorKineticist" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_RemoveKineticArmor);IF(HasStatus('MetalCarapaceStatus',context.Source)):UnlockSpell(Shout_MetalRaiseShield);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="11658410-9886-4140-824f-ccb0404942a1" />
+        <field name="Name" type="NameTableFieldDefinition" value="BackswingInfusion" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hebd9609bgbbbeg14d7g0af7g21de401a4eaf" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3bf2d1f6gca48g961cg38ddga20a032eb0f9" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeWeaponInfusion() and IsMiss();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,BackswingBonus,100,1)" />
       </fields>
     </stat_object>
   </stat_objects>

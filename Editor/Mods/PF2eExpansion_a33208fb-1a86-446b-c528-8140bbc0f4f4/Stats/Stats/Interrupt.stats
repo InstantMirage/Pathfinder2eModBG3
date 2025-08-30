@@ -9,7 +9,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcfd27d6fg99aag29cdg31degfedd49550e3e" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4e2eea1egfa25g9dccg7bd2g70f784817fb8" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and Ally(context.Target,context.Observer) and HasStatus('Exploited',context.Target,context.Observer) and not AnyEntityIsItem()" />
-        <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,-(LevelMapValue(CharacterLevel)+2));IF(HasPassive('AmuletAdept'),context.Observer):ApplyStatus(OBSERVER_OBSERVER,AmuletAdeptStatus,100,1)" />
+        <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,-(LevelMapValue(CharacterLevel)+2));IF(HasPassive('AmuletAdept',context.Observer)):ApplyStatus(OBSERVER_OBSERVER,AmuletAdeptStatus,100,1);" />
         <field name="EnableCondition" type="StringTableFieldDefinition" value="IsOffHandSlotEmpty() and not (HasShieldEquipped() or WieldingWeapon('Twohanded', false, false)) and (not HasAnyStatus({'SG_Polymorph','SG_Blinded'}) or Tagged('MINDFLAYER') or HasStatus('SG_Disguise'))" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved;OnInventoryChanged" enumeration_type_name="StatsFunctorContext" version="1" />
       </fields>
@@ -96,7 +96,7 @@
         <field name="Properties" type="StringTableFieldDefinition" value=";" />
         <field name="Roll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeWeaponAttack,false,false,context.Source,context.SourcePosition,context.Observer,context.ObserverPosition)" />
         <field name="Success" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType); ExecuteWeaponFunctors(MainHand)" />
-        <field name="Failure" type="StringTableFieldDefinition" value="IF(HasPassive(OBSERVER_OBSERVER,'WeaponAdept')):DealDamage(1,MainMeleeWeaponType);IF(HasPassive(OBSERVER_OBSERVER,'WeaponAdept')): ExecuteWeaponFunctors(MainHand)" />
+        <field name="Failure" type="StringTableFieldDefinition" value="IF(HasPassive(OBSERVER_OBSERVER,'WeaponAdept')):DealDamage(1,MainMeleeWeaponDamageType);IF(HasPassive(OBSERVER_OBSERVER,'WeaponAdept')): ExecuteWeaponFunctors(MainHand);" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled;Ask" enumeration_type_name="InterruptDefaultValue" version="1" />
       </fields>
     </stat_object>

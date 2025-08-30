@@ -6046,7 +6046,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="c7b0aca5-5c1c-4112-8b47-7dcf9b6aada8" />
         <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Status_Aura_Rank4" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5cdefd5a-7823-4a9f-b4fd-2d694067acf1" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(AnimatedAssault_Status_Aura_Rank4);IF(IsCurrentTurnInCombat(GetOwner(context.Source)) or not Combat()):ApplyStatus(ANIMATED_ASSAULT)" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(AnimatedAssault_Status_Rank4);IF(IsCurrentTurnInCombat(GetOwner(context.Source)) or not Combat()):ApplyStatus(ANIMATED_ASSAULT)" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d10,Bludgeoning)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('AnimatedAssault_Owner_Rank4',GetOwner())):RemoveStatus(AnimatedAssault_Status_Aura_Rank4)" />
       </fields>
@@ -6068,7 +6068,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="7b440585-a42f-42b9-b25e-e9e5c1897fed" />
         <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Status_Aura_Rank6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5cdefd5a-7823-4a9f-b4fd-2d694067acf1" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(AnimatedAssault_Status_Aura_Rank6);IF(IsCurrentTurnInCombat(GetOwner(context.Source)) or not Combat()):ApplyStatus(ANIMATED_ASSAULT)" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(AnimatedAssault_Status_Rank6);IF(IsCurrentTurnInCombat(GetOwner(context.Source)) or not Combat()):ApplyStatus(ANIMATED_ASSAULT)" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(3d10,Bludgeoning)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('AnimatedAssault_Owner_Rank6',GetOwner())):RemoveStatus(AnimatedAssault_Status_Aura_Rank6)" />
       </fields>
@@ -9860,6 +9860,8 @@
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="WearingArmor(context.Source)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnEquip;OnStatusRemoved" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="e5fc8f24-6939-4a5d-b627-27cf45040265" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
+        <field name="Passives" type="StringTableFieldDefinition" value="RemoveArmorKineticist" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9873,9 +9875,10 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="ACOverrideFormula(15,true);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="WearingArmor(context.Source)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnEquip;OnStatusRemoved" enumeration_type_name="StatusEvent" version="1" />
-        <field name="Passives" type="StringTableFieldDefinition" value="ShieldBlock;" />
+        <field name="Passives" type="StringTableFieldDefinition" value="ShieldBlock;RemoveArmorKineticist;" />
         <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="0c3f3375-681f-4253-9432-24450007e464" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="698752b6-55fb-4448-8bb6-f7fdb510ac93" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9939,6 +9942,23 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="99e944fc-9c63-419b-80d0-918a0bf32978" />
+        <field name="Name" type="NameTableFieldDefinition" value="SelfAirShroud" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he1c06b7fg7294g2213gb2c8g11a774e11277" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h60e55287g1a80g71eag2eaage0b35b255361" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_EnhancedArlourClass" />
+        <field name="StackId" type="StringTableFieldDefinition" value="CIRCUMSTANCE_BONUS_AC" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AC(1)" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="StatusId('ChannelingStatus')" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="ApplyToDead;DisableOverhead;IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="63ca741a-21e8-4d85-bbcf-d62cf9852545" />
         <field name="Name" type="NameTableFieldDefinition" value="ThermalNimbusAura_Fire" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hee933a34ge3bdg4a4bg6ceegead2c26bfc5c" version="1" />
@@ -9967,7 +9987,7 @@
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="3" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and Enemy()):ApplyStatus(ThermalNimbusAura_Fire_Damage,100,-1);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(Enemy()):ApplyStatus(ThermalNimbusAura_Fire_Damage,100,-1);" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasStatus('ThermalNimbusAura_Fire')" />
@@ -10011,7 +10031,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="STANCE" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="3" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and not Enemy()):ApplyStatus(ThermalNimbusAura_Cold_Resistance,100,-1);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Enemy()):ApplyStatus(ThermalNimbusAura_Cold_Resistance,100,-1);" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndRound" enumeration_type_name="TickType" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="a340c5c1-6432-47a1-8623-9616b1093430" />
@@ -10023,7 +10043,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="ThermalNimbusAura_Cold_Auras" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="7fc592a7-0f0f-42ca-aace-9a4e1a7fd85a" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbf1a3fc5gf3e4g18d0gd77fgdd8d9067d20d" version="1" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and Enemy():ApplyStatus(ThermalNimbusAura_Cold_Damage,100,-1);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(Enemy()):ApplyStatus(ThermalNimbusAura_Cold_Damage,100,-1);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasStatus('ThermalNimbusAura_Cold')" />
       </fields>
     </stat_object>
@@ -10245,7 +10265,6 @@
         <field name="StackId" type="StringTableFieldDefinition" value="Overflow" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="ForceOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SELF,ChannelElementsStatusAir);&#xD;&#xA;RemoveStatus(SELF,ChannelElementsStatusEarth);&#xD;&#xA;RemoveStatus(SELF,ChannelElementsStatusFire);&#xD;&#xA;RemoveStatus(SELF,ChannelElementsStatusWater);&#xD;&#xA;RemoveStatus(SELF,ChannelElementsStatusMetal);&#xD;&#xA;RemoveStatus(SELF,ChannelElementsStatusWood);&#xD;&#xA;RemoveStatus(SELF,ChannelingStatus);&#xD;&#xA;RemoveStatus(SELF,ThermalNimbusAura_Fire);&#xD;&#xA;RemoveStatus(SELF,ThermalNimbusAura_Cold);&#xD;&#xA;RemoveStatus(SELF,RavelOfThorns_Aura);&#xD;&#xA;RemoveStatus(SELF,RavelOfThorns_DamageAura);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10793,7 +10812,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="WeaponInfusion" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeSpellAttack() and HasStatus('MAP_PENALTY_2ND',context.Source)):RollBonus(MeleeSpellAttack,1);IF(IsMeleeSpellAttack() and HasStatus('MAP_PENALTY_3RD',context.Source)):RollBonus(MeleeSpellAttack,2);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeWeaponInfusion() and HasStatus('MAP_PENALTY_2ND',context.Source)):RollBonus(MeleeSpellAttack,1);IF(IsMeleeWeaponInfusion() and HasStatus('MAP_PENALTY_3RD',context.Source)):RollBonus(MeleeSpellAttack,2);" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
@@ -10807,6 +10826,8 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he32ab8f0gbaaeg749ag83d6g75002015ef32" version="1" />
+        <field name="Passives" type="StringTableFieldDefinition" value="BackswingInfusion;" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10819,7 +10840,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="WeaponInfusion" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeSpellAttack() and HasStatus('MAP_PENALTY_2ND',context.Source) and not HasStatus('MAP_PENALTY_3RD',context.Source)):DamageBonus(LevelMapValue(ForcefulInfusion));IF(IsMeleeSpellAttack() and HasStatus('MAP_PENALTY_3RD',context.Source)):DamageBonus(LevelMapValue(ForcefulInfusion_2));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeWeaponInfusion() and HasStatus('MAP_PENALTY_2ND',context.Source) and not HasStatus('MAP_PENALTY_3RD',context.Source)):DamageBonus(LevelMapValue(ForcefulInfusion));IF(IsMeleeWeaponInfusion() and HasStatus('MAP_PENALTY_3RD',context.Source)):DamageBonus(LevelMapValue(ForcefulInfusion_2));" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
@@ -10833,7 +10854,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="WeaponInfusion" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant( IsMeleeSpellAttack() and TargetRadiusGreaterThan(0) and TargetRadiusGreaterThan(1.5),ModifyTargetRadius(Override,3),ModifySpellFlags(Melee,0));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsMeleeWeaponInfusion() and TargetRadiusGreaterThan(0) and TargetRadiusGreaterThan(1.5),ModifyTargetRadius(Override,3),ModifySpellFlags(Melee,0));" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
@@ -10847,7 +10868,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="WeaponInfusion" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsRangedSpellAttack(),ModifyTargetRadius(Override,6));IF(IsRangedSpellAttack()):DamageBonus(StrengthModifier);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsRangedWeaponInfusion(),ModifyTargetRadius(Override,6));IF(IsRangedWeaponInfusion()):DamageBonus(StrengthModifier);" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
@@ -10861,7 +10882,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="WeaponInfusion" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsRangedSpellAttack(),ModifyTargetRadius(Override,16));IF(IsRangedSpellAttack()):DamageBonus((StrengthModifier)/2);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsRangedWeaponInfusion(),ModifyTargetRadius(Override,16));IF(IsRangedWeaponInfusion()):DamageBonus((StrengthModifier)/2);" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
@@ -10875,7 +10896,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="WeaponInfusion" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsRangedSpellAttack(),ModifyTargetRadius(Override,32));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsRangedWeaponInfusion(),ModifyTargetRadius(Override,32));" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>

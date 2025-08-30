@@ -3448,7 +3448,7 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="f0fc3adc-db50-4a8d-bd30-904902cbefbd" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="766d4d52-d6a1-4efd-b37b-bd1496718e49" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Slashing" enumeration_type_name="Damage Type" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Air')" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Air') and HasStatus('ChannelingStatus',context.Source);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3513,7 +3513,7 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="bfe351bd-a007-4302-bb7a-9d2e98ecb3b6" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="53412dd1-8066-4860-a2ae-b27e77bfdab5" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Fire" enumeration_type_name="Damage Type" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire')" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and HasStatus('ChannelingStatus',context.Source);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Ally();" />
       </fields>
     </stat_object>
@@ -3556,8 +3556,8 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="352cd7c1-9c40-41fe-94bf-57f094f0fe83" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="f76bd260-d059-4c93-8b69-3983a0e65fb9" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Piercing" enumeration_type_name="Damage Type" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood')" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:IF(HasStatus('WOOD_JUNCTION',context.Source)):ApplyStatus(SELF,WoodTempJunction);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood') and HasStatus('ChannelingStatus',context.Source);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:IF(HasStatus('WOOD_JUNCTION',context.Source)):ApplyStatus(SELF,WoodTempJunction);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3597,7 +3597,7 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="908ed6d0-9bbc-4979-9f91-59652b5586d6" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="fcd2026b-2cac-4eb3-a0f2-cbbb54dd248c" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Piercing" enumeration_type_name="Damage Type" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Metal')" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Metal') and HasStatus('ChannelingStatus',context.Source);" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:IF(HasStatus('METAL_JUNCTION',context.Source)):ApplyStatus(SELF,MetalJunctionStatus);" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Damage_LightningBolt_L5" />
       </fields>
@@ -3655,7 +3655,7 @@
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="6fcb2601-f2c6-4693-ab16-1e0dd940b918" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="b8c25c1d-5b8a-43c7-9f58-b67695fcfeca" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="7d30207d-4c3f-4f01-8e50-aaff803e1992" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Water')" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Water') and HasStatus('ChannelingStatus',context.Source);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3663,7 +3663,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="6043ef61-ddb0-4618-a78d-086ccb35f8c5" />
         <field name="Name" type="NameTableFieldDefinition" value="BlazingWave" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Evocation" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:SurfaceChange(Melt);TARGET:IF(Item()):ApplyStatus(BURNING,100,2);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:SurfaceChange(Melt);TARGET:IF(Item()):ApplyStatus(BURNING,100,2);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);" />
         <field name="SurfaceType" type="EnumerationTableFieldDefinition" value="Sentinel" enumeration_type_name="Surface Type" version="1" />
         <field name="SurfaceLifetime" type="IntegerTableFieldDefinition" value="0" />
         <field name="SurfaceGrowStep" type="IntegerTableFieldDefinition" value="5" />
@@ -3696,7 +3696,7 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="5438d3f5-6041-432d-9708-be99fac223ae" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="a4786ee9-eb7c-4d0d-aaa9-9a637d9eaeaf" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Fire" enumeration_type_name="Damage Type" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire')" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and HasStatus('ChannelingStatus',context.Source);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3730,7 +3730,7 @@
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="3ff87abf-1ea1-4c32-aadf-c822d74c7dc0,,;,,;5e7e63e1-0e69-46e7-ade7-fe3dadcc9184,,;e9ad50df-e7f1-43a0-b782-4c08f92b0f5a,,;d8925ce4-d6d9-400c-92f5-ad772ef7f178,,;,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Damage" enumeration_type_name="VerbalIntent" version="1" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood')" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood') and HasStatus('ChannelingStatus',context.Source);" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="2af907e1-127c-4c83-a117-af18f211c59d" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="9c6f07ae-dd92-4e02-aa30-730644cd0d1d" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="154802bd-3dae-4bdc-9889-4addfdc0ca57" />
