@@ -233,7 +233,7 @@ end
 --Barbarian
 
 function RageSpell()
-	return SpellId('Shout_Rage') | SpellId('Shout_AnimalRage') | SpellId('Shout_FuryRage') | SpellId('Shout_BludgeoningDragonRage') | SpellId('Shout_PoisonDragonRage') | SpellId('Shout_FireDragonRage') | SpellId('Shout_ForceDragonRage') | SpellId('Shout_PsychicDragonRage') | SpellId('Shout_GiantRage') | SpellId('Shout_Rage_Fire') | SpellId('Shout_Rage_Water') | SpellId('Shout_Rage_Air')| SpellId('Shout_Rage_Earth')| SpellId('Shout_Rage_Wood') | SpellId('Shout_Rage_Metal') | SpellId('Shout_Rage_') | SpellId('Shout_Rage_Frenzy') | SpellId('Shout_Rage_Totem_Bear') | SpellId('Shout_Rage_Boar')
+	return SpellId('Shout_Rage') | SpellId('Shout_AnimalRage') | SpellId('Shout_FuryRage') | SpellId('Shout_BludgeoningDragonRage') | SpellId('Shout_PoisonDragonRage') | SpellId('Shout_FireDragonRage') | SpellId('Shout_ForceDragonRage') | SpellId('Shout_PsychicDragonRage') | SpellId('Shout_GiantRage') | SpellId('Shout_Rage_Fire') | SpellId('Shout_Rage_Water') | SpellId('Shout_Rage_Air')| SpellId('Shout_Rage_Earth')| SpellId('Shout_Rage_Wood') | SpellId('Shout_Rage_Metal') | SpellId('Shout_Rage_') | SpellId('Shout_Rage_Frenzy') | SpellId('Shout_Rage_Totem_Bear') | SpellId('Shout_Rage_Boar') | SpellId('Shout_RadiantDragonRage')
 end
 
 -- Fix for redefined armor
@@ -246,7 +246,7 @@ end
 function HasFreeHand()
 	local unarmed = IsOffHandSlotEmpty() | Unarmed() | HasPassive('Block_NonUnarmedStrike')
 	local twohand = HasWeaponProperty(WeaponProperties.Twohanded,GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand))
-	local offhand = IsOffHandSlotEmpty() & ~(HasShieldEquipped()|twohand)
+	local offhand = (IsOffHandSlotEmpty() & ~(HasShieldEquipped()|twohand)) | (Unarmed() & HasShieldEquipped())
 	local result = (unarmed & offhand).Result
 	return ConditionResult(result,{ConditionError('FreeHand')})
 end
