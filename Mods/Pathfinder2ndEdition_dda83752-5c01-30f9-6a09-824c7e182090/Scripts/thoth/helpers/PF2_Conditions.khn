@@ -207,11 +207,11 @@ function CalculateMAP()
 end
 
 function AgileMAP()
-	return HasWeaponProperty(WeaponProperties.Light, context.AttackWeapon) or AgileUnarmedSpell()
+	return HasWeaponProperty(WeaponProperties.Light, context.AttackWeapon) | AgileUnarmedSpell()
 end
 
 function AgileUnarmedSpell()
-	local standard = SpellId('Target_UnarmedAttack') | SpellId('Target_IronFist')
+	local standard = SpellId('Target_UnarmedAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist')
 	local animal_instinct = SpellId('Target_AnimalSecondarySlashing') | SpellId('Target_AnimalSecondaryFrog')
 	local monk = SpellId('Target_CraneWing') | SpellId('Target_TigerClaw') | SpellId('Target_CobraFang') | SpellId('Target_WolfJaw') | SpellId('Target_ClingingShadowStance') | SpellId('Target_IronSweep') | SpellId('Target_WindCrash')
 	local witch = SpellId('Target_EldritchNails') | SpellId('Target_LivingHair') | SpellId('Target_SympatheticStrike_Nails') | SpellId('Target_SympatheticStrike_Hair')
@@ -347,7 +347,7 @@ function HealVoid(size)
 	local source = context.Source
 	local target = context.Target
 	local has_feat = HasPassive('HealingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHeal',source))
-	local heal_undead = Tagged('UNDEAD',target) & ~DivineCastigation(target)
+	local damage_undead = Tagged('UNDEAD',target) & ~DivineCastigation(target)
 	
 	if size == 10 then
 		return has_feat & damage_undead
@@ -429,7 +429,7 @@ end
 
 function CrisisOfFaithable()
 	local target = context.Target
-	-- Target must cast be able to divine spells, Monk ones count for this
+	-- Target must be able to cast divine spells, Monk ones count for this
 	return HasPassive('NPC_Divine',target) | HasPassive('Tradition_Divine',target) | QiSpellsInitiate(target)
 end
 
@@ -452,6 +452,167 @@ function ClassDC(source)
 	end
 	
 	return base + expertise - stat_pen
+end
+
+function FortitudeDC()
+	target = context.Target
+	local base = 10 + GetModifier(target.Constitution)
+	local prof = target.ProficiencyBonus
+	local circ_bon = 0
+	local item_bon = 0
+	local stat_bon = 0
+	local circ_pen = 0
+	local item_pen = 0
+	local stat_pen = 0
+	
+	if HasPassive('FortitudeMaster',target).Result then
+		prof = 6
+	elseif HasPassive('FortitudeExpert',target).Result then
+		prof = 4
+	end
+	
+	if HasAnyTags({'CIRC_BON_2SAVES'}).Result then
+		circ_bon = 2
+	elseif HasAnyTags({'CIRC_BON_1FORT'}).Result then
+		circ_bon = 1
+	end
+	
+	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2FORT'}).Result then
+		item_bon = 2
+	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1FORT'}).Result then
+		item_bon = 1
+	end
+	
+	if HasAnyTags({'STAT_BON_2SAVES'}).Result then
+		stat_bon = 2
+	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+		stat_bon = 1
+	end
+	
+	--Circ pen
+	
+	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
+		item_pen = 2
+	elseif HasAnyTags({'ITEM_PEN_1SAVES'}).Result then
+		item_pen = 1
+	end
+	
+	if HasAnyTags({'STAT_PEN_2SAVES'}).Result then
+		stat_pen = 2
+	elseif HasAnyTags({'STAT_PEN_1SAVES'}).Result then
+		stat_pen = 1
+	end
+	
+	return base + prof + circ_bon + item_bon + stat_bon - circ_pen - item_pen - stat_pen
+end
+
+function ReflexDC()
+	target = context.Target
+	local base = 10 + GetModifier(target.Dexterity)
+	local prof = target.ProficiencyBonus
+	local circ_bon = 0
+	local item_bon = 0
+	local stat_bon = 0
+	local circ_pen = 0
+	local item_pen = 0
+	local stat_pen = 0
+	
+	if HasPassive('ReflexMaster',target).Result then
+		prof = 6
+	elseif HasPassive('ReflexExpert',target).Result then
+		prof = 4
+	end
+	
+	if HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_2REFLEX'}).Result then
+		circ_bon = 2
+	end
+	
+	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2REFLEX'}).Result then
+		item_bon = 2
+	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1REFLEX'}).Result then
+		item_bon = 1
+	end
+	
+	if HasAnyTags({'STAT_BON_2SAVES'}).Result then
+		stat_bon = 2
+	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+		stat_bon = 1
+	end
+	
+	--Circ pen
+	
+	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
+		item_pen = 2
+	elseif HasAnyTags({'ITEM_PEN_1SAVES'}).Result then
+		item_pen = 1
+	end
+	
+	if HasAnyTags({'STAT_PEN_2SAVES', 'STAT_PEN_2REFLEX'}).Result then
+		stat_pen = 2
+	elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1REFLEX'}).Result then
+		stat_pen = 1
+	end
+	
+	return base + prof + circ_bon + item_bon + stat_bon - circ_pen - item_pen - stat_pen
+end
+
+function WillDC()
+	target = context.Target
+	local base = 10 + GetModifier(target.Wisdom)
+	local prof = target.ProficiencyBonus
+	local circ_bon = 0
+	local item_bon = 0
+	local stat_bon = 0
+	local circ_pen = 0
+	local item_pen = 0
+	local stat_pen = 0
+	
+	if HasPassive('WillMaster',target).Result then
+		prof = 6
+	elseif HasPassive('WillExpert',target).Result then
+		prof = 4
+	end
+	
+	if HasAnyTags({'CIRC_BON_2SAVES'}).Result then
+		circ_bon = 2
+	end
+	
+	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2WILL'}).Result then
+		item_bon = 2
+	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1WILL'}).Result then
+		item_bon = 1
+	end
+	
+	if HasAnyTags({'STAT_BON_2SAVES', 'STAT_BON_2WILL'}).Result then
+		stat_bon = 2
+	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+		stat_bon = 1
+	end
+	
+	--Circ pen
+	
+	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
+		item_pen = 2
+	elseif HasAnyTags({'ITEM_PEN_1SAVES', 'ITEM_PEN_1WILL'}).Result then
+		item_pen = 1
+	end
+	
+	if HasAnyTags({'STAT_PEN_2SAVES', 'STAT_PEN_2WILL'}).Result then
+		stat_pen = 2
+	elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1WILL'}).Result then
+		stat_pen = 1
+	end
+	
+	return base + prof + circ_bon + item_bon + stat_bon - circ_pen - item_pen - stat_pen
+end
+
+function ShoveCheck()
+    local result = Dead() | Item() | Ally()
+    if not result.Result then
+        local skillCheck = SkillCheck(Skill.Athletics,FortitudeDC())
+        return ConditionResult(skillCheck.Result,{},{},skillCheck.Chance)
+    end
+    return result
 end
 
 function ArmorCheck()
