@@ -20,6 +20,8 @@ DB_StackingBonus("CIRC_PEN_ATTACK",2.0,"CircumstancePenalty2Attack",(TAG)CIRC_PE
 DB_StackingBonus("CIRC_PEN_AC",1.0,"CircumstancePenalty1AC",(TAG)CIRC_PEN_1AC_873746ec-3a05-4943-892d-af24f41853b7);
 DB_StackingBonus("CIRC_PEN_AC",2.0,"CircumstancePenalty2AC",(TAG)CIRC_PEN_2AC_6fc9a2c2-5ca5-4527-85d0-f43bc3af68ac);
 
+DB_StackingBonus("CIRC_PEN_SPEEDS",10.0,"CircumstancePenaltySpeed10",(TAG)CIRC_PEN_SPEED_10_64a37104-815a-4883-844e-96602c8064c6);
+
 //Item bonuses
 
 DB_StackingBonus("ITEM_BON_AC",1.0,"ItemBonus1AC",(TAG)ITEM_BON_1AC_0a4f3df8-d690-4074-8ac9-78a8902697a3);
@@ -62,6 +64,11 @@ DB_StackingBonus("STAT_BON_WILL",2.0,"StatusBonus2WillSaves",(TAG)STAT_BON_2WILL
 
 DB_StackingBonus("STAT_BON_SKILLS",1.0,"StatusBonus1Skills",(TAG)STAT_BON_1SKILLS_9406c1c2-c713-4b6b-ba77-4a61b64afa92);
 
+DB_StackingBonus("STAT_BON_SPEEDS",5.0,"StatusBonusSpeed05",(TAG)STAT_BON_SPEED_05_e7ff6809-3cf3-4814-a409-43438a897f20);
+DB_StackingBonus("STAT_BON_SPEEDS",10.0,"StatusBonusSpeed10",(TAG)STAT_BON_SPEED_10_a8dd9004-c366-4917-8094-53aa5127bfc3);
+DB_StackingBonus("STAT_BON_SPEEDS",15.0,"StatusBonusSpeed15",(TAG)STAT_BON_SPEED_15_b1531c77-49ff-467a-ab98-b3940726fecd);
+DB_StackingBonus("STAT_BON_SPEEDS",20.0,"StatusBonusSpeed20",(TAG)STAT_BON_SPEED_20_5109b16a-c4ba-452f-b81b-2b727458faca);
+
 //Status penalties
 DB_StackingBonus("STAT_PEN_ATTACK",1.0,"StatusPenalty1Attack",(TAG)STAT_PEN_1ATTACK_3a8e9193-177c-4f7a-bd24-5fe4253d4a00);
 DB_StackingBonus("STAT_PEN_ATTACK",2.0,"StatusPenalty2Attack",(TAG)STAT_PEN_2ATTACK_b327c748-6773-4f0f-b687-3f0a72e42ef0);
@@ -82,6 +89,9 @@ DB_StackingBonus("STAT_PEN_REFLEX",2.0,"StatusPenalty2ReflexSaves",(TAG)STAT_PEN
 
 DB_StackingBonus("STAT_PEN_WILL",1.0,"StatusPenalty1WillSaves",(TAG)STAT_PEN_1WILL_c6afd5bf-6d65-46d5-990b-900563dfbe84);
 DB_StackingBonus("STAT_PEN_WILL",2.0,"StatusPenalty2WillSaves",(TAG)STAT_PEN_2WILL_7c828408-27fe-4d42-92da-bbb00c0cb04d);
+
+DB_StackingBonus("STAT_PEN_SPEEDS",5.0,"StatusPenaltySpeed05",(TAG)STAT_PEN_SPEED_05_456739d0-b834-4bb9-809b-8be3aa834f7d);
+DB_StackingBonus("STAT_PEN_SPEEDS",10.0,"StatusPenaltySpeed10",(TAG)STAT_PEN_SPEED_10_43369494-f889-4621-b828-fe2ab1f5931d);
 
 //Resistance
 DB_ExpectedResistance("",(CHARACTER)NULL_00000000-0000-0000-0000-000000000000,1);
@@ -396,6 +406,28 @@ AND
 DB_StackingBonus((STRING)_Type,(REAL)_Value,(STRING)_Status,_Tag)
 THEN
 RemoveStatus(_Char, _Status );
+
+//END_REGION
+
+//REGION Tag raging characters with speed boosts if they have Furious Feet
+
+IF
+StatusApplied((CHARACTER)_Char,(STRING)_Status,_,_)
+AND
+HasPassive(_Char,"FuriousFeet",1)
+AND
+IsStatusFromGroup(_Status, "SG_Rage", 1)
+THEN
+SetTag(_Char, (TAG)STAT_BON_SPEED_10_a8dd9004-c366-4917-8094-53aa5127bfc3);
+
+IF
+StatusRemoved((CHARACTER)_Char,(STRING)_Status,_,_)
+AND
+HasPassive(_Char,"FuriousFeet",1)
+AND
+IsStatusFromGroup(_Status, "SG_Rage", 1)
+THEN
+ClearTag(_Char, (TAG)STAT_BON_SPEED_10_a8dd9004-c366-4917-8094-53aa5127bfc3);
 
 //END_REGION
 
