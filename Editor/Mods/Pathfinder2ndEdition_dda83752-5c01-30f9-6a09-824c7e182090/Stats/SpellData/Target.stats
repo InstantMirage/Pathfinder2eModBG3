@@ -961,7 +961,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="DemoralizePerformance" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="510a8860-272f-4ac2-889d-efdf4a58f4c3" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="9" />
-        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Performance,context.Target.GetPassiveSkill(Skill.Perception));" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Performance,WillDC());" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc56e99ecg5bbcgdbdbg05c8g4551d34c1c55" version="1" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="9313094a-bae2-454f-9701-f920d0e8e98d,,;,,;463e2894-de95-4ad2-a991-a265e210af8c,,;b57f0afb-706f-4c04-9fb4-413a2a5baa8f,,;808fdfab-2e6c-472e-b3c4-19ce4a719d9d,,;,,;ea745d30-eb87-447f-b190-c81298e27d9c,,;,,;,," />
@@ -1265,11 +1265,11 @@
         <field name="Name" type="NameTableFieldDefinition" value="IntimidatingStrike" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(FRIGHTENED,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(not IsCritical())ApplyStatus(FRIGHTENED,100,1);IF(IsCritical())ApplyStatus(FRIGHTENED,100,2);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_MenacingAttack_Melee" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0082fb69g8ca5g1697g7a2cg3b8e69323402" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h372d6f24ga9b9ga84fg2116ge4bb3393ac86" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h372d6f24ga9b9ga84fg2116ge4bb3393ac86" version="2" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType); " />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(FRIGHTENED,100,1)" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_MenacingAttack" />
@@ -9259,11 +9259,11 @@
         <field name="UUID" type="IdTableFieldDefinition" value="de7dbbcf-e2bc-41a6-a6f2-aba56c38d934" />
         <field name="Name" type="NameTableFieldDefinition" value="SlyDisarm" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="681e9ae8-5e47-4cb1-924d-3f4ce4ae8868" />
-        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.SleightOfHand,context.Target.GetPassiveSkill(Skill.Acrobatics));" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.SleightOfHand,ReflexDC());" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsCritical()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);ApplyStatus(FEINT_ONCE,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf78885b4g863cg11e3ge05cgdc1b0a580cd2" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf91c2050gdc78g0b1bg3133gb9990d70ca7f" version="1" />
-        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="h6df80d83g0065g2e01g84e3ga82c4a2c2293" version="1" />
+        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="h6df80d83g0065g2e01g84e3ga82c4a2c2293" version="2" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(FEINT_ONCE, 100, 1);ApplyStatus(HINDERED,100,1)" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value=";" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="WieldingFinesseWeaponInSpecificHand(context.Source,false);" />
@@ -9672,7 +9672,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="4bea986b-3f0f-42a5-a681-90e50de4d326" />
         <field name="Name" type="NameTableFieldDefinition" value="DivineTap" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="2b4dcefd-3a65-4a59-9e21-0f89a57f117d" />
-        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Religion,context.Target.GetPassiveSkill(Skill.Athletics));" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Religion,FortitudeDC());" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbe42e1dbg7c6dg9ecbgd0ddgf6f08f62cc09" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h29229d34gae75g303fg8e32g394ffdc36c37" version="1" />
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Vocal_Component_Stop" />
@@ -9693,7 +9693,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="474dfcdf-baaa-439e-9ad6-a53d5dda2bea" />
         <field name="Name" type="NameTableFieldDefinition" value="PrimalTap" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="fb0099d2-b1d9-4c62-8810-6a9c78c09170" />
-        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Nature,context.Target.GetPassiveSkill(Skill.Perception));" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Nature,WillDC());" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h410c11b6g8b7cgd51cgdb19g4726fd44e22e" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h75dcf9e0g7371g8190g7facg3460b08b9417" version="1" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
