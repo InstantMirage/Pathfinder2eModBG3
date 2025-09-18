@@ -177,8 +177,8 @@
         <field name="EnableCondition" type="StringTableFieldDefinition" value="(HasStatus('CHAMPION_AURA') or not Combat()) and not HasAnyStatus({'SG_Polymorph','SG_Blinded'}) or Tagged('MINDFLAYER') or HasStatus('SG_Disguise');" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstPercent(DiceType.d4,2)" />
-        <field name="Success" type="StringTableFieldDefinition" value="DealDamage(OBSERVER_SOURCE,LevelMapValue(IronCommandDamage), Psychic)" />
-        <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,PRONE,100,2);" />
+        <field name="Success" type="StringTableFieldDefinition" value="DealDamage(OBSERVER_TARGET,LevelMapValue(IronCommandDamage), Psychic);" />
+        <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_TARGET,PRONE,100,2);" />
         <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,PASSIVE_BANE,100,0);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(IronCommandDamage), Psychic,,,,ad727a13-c6f0-4b5b-aefd-aac79c6ed46e)" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1);" />
@@ -231,7 +231,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="720399d3-a3a1-4b30-a4c0-b69f0e443236" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf7180688g676egae92ga9cdg6082a61c1f5b" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="haf68b7f0g0a06g8644gba02gb1ba7e35429e" version="2" />
-        <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,-(LevelMapValue(CharacterLevel)+2));ApplyStatus(OBSERVER_TARGET,WAR_GODS_BLESSING,100,0);IF(HasPassive('BrilliantFlash',context.Observer)):ApplyStatus(OFF_BALANCED,100,1);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,-(LevelMapValue(CharacterLevel)+2));ApplyStatus(OBSERVER_TARGET,WAR_GODS_BLESSING,100,0);IF(HasPassive('BrilliantFlash',context.Observer)):ApplyStatus(OBSERVER_TARGET,OFF_BALANCED,100,1);" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_DivineAllegiance" />
       </fields>
     </stat_object>
@@ -1412,9 +1412,9 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="f92318d8-df5e-4638-9acf-d0251afc609c" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h54f635c8ga5bdge771g87b8gd8485cc8aa4a" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf8e6d915g806cg693fgbaf7ga0c0ca7aa754" version="1" />
-        <field name="Success" type="StringTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(4)):ApplyStatus(IronCommandPersistent_Rank1,100,10);IF(CharacterLevelGreaterThan(4) and not CharacterLevelGreaterThan(8)):ApplyStatus(IronCommandPersistent_Rank2,100,10);IF(CharacterLevelGreaterThan(8) and not CharacterLevelGreaterThan(11)):ApplyStatus(IronCommandPersistent_Rank3,100,10);IF(CharacterLevelGreaterThan(11) and not CharacterLevelGreaterThan(12)):ApplyStatus(IronCommandPersistent_Rank4,100,10);" />
+        <field name="Success" type="StringTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(4)):ApplyStatus(OBSERVER_TARGET,IronCommandPersistent_Rank1,100,10);IF(CharacterLevelGreaterThan(4) and not CharacterLevelGreaterThan(8)):ApplyStatus(OBSERVER_TARGET,IronCommandPersistent_Rank2,100,10);IF(CharacterLevelGreaterThan(8) and not CharacterLevelGreaterThan(11)):ApplyStatus(OBSERVER_TARGET,IronCommandPersistent_Rank3,100,10);IF(CharacterLevelGreaterThan(11) and not CharacterLevelGreaterThan(12)):ApplyStatus(OBSERVER_TARGET,IronCommandPersistent_Rank4,100,10);" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(IronCommandPersistent_Rank1,100,1);" />
-        <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,2);" />
+        <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_TARGET,PRONE,100,2);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
