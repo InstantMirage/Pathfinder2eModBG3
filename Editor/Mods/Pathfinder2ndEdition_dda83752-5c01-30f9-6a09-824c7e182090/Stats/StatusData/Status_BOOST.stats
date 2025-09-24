@@ -1060,6 +1060,7 @@
         <field name="SoundLoop" type="StringTableFieldDefinition" value="NONE" />
         <field name="SoundStop" type="StringTableFieldDefinition" value="NONE" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="256f6bd9-1d6b-4d76-9e79-a4a3b5a367a9" />
+        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="ae569a16-41db-43ee-94cf-770e101841cd" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1127,8 +1128,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="d8319277-8b6a-4ba6-a8b7-7048965e2416" />
         <field name="Name" type="NameTableFieldDefinition" value="DEBUG_CAST_STRIDE" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Dash_Bonus" />
-        <field name="SoundStart" type="StringTableFieldDefinition" value="Action_Cast_Dash" />
-        <field name="SoundStop" type="StringTableFieldDefinition" value="Action_Impact_Dash" />
+        <field name="SoundStart" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_IGNORE:ApplyStatus(STRIDE,100,1); AI_IGNORE:IF( not HasStatus('HASTE_ATTACK') ):UseActionResource(ActionPoint, 1); AI_IGNORE:IF( HasStatus('HASTE_ATTACK') ):UseActionResource(BonusActionPoint, 1);AI_IGNORE:RemoveStatus(HASTE_ATTACK);AI_IGNORE:RemoveStatus(HASTE_ATTACK_EMERGENCY);" />
         <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="806a170b-c567-4481-bb56-56871d8aaf5f" />
@@ -11381,6 +11381,25 @@
         <field name="StackId" type="StringTableFieldDefinition" value="UND_MYCONIDAMULET_GOOD" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Skill(Persuasion, 2)" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="23c78d59-7a25-46d2-aebb-bde9b7b2c532" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="df32f06b-d1e8-4e39-8573-fe45d5559b60" />
+        <field name="Name" type="NameTableFieldDefinition" value="PRONE_PF2" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he16dfc03g4c6fg8e03gf33ag8f851642c5ff" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h72dddfd7gb764g495cg1bfdg56278508996f" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Prone" />
+        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="White" enumeration_type_name="FormatStringColor" version="1" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="KO" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="KO" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="UseLyingPickingState" type="EnumerationTableFieldDefinition" value="Yes" enumeration_type_name="YesNo" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(OFF_GUARD);DetectDisturbancesBlock(false);RollBonus(Attack,-2);AI_IGNORE:ActionResourceBlock(Movement);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoredByImmobilized;InitiateCombat;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SNEAKING);RemoveStatus(SLEEP);RemoveStatus(SG_Sleeping); AI_ONLY:ApplyStatus(AI_HELPER_HUNTERSMARK,100,1)" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(TurnBased()):ApplyStatus(DEBUG_RESET_MOVE); AI_IGNORE:IF(RemoveCause(StatusRemoveCause.Condition) and TurnBased() and not HasPassive('Athlete_StandUp')):UseActionResource(ActionPoint, 0, 0); AI_ONLY:ApplyStatus(AI_HELPER_PRONE,100,2)" />
+        <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Condition;SG_Prone;SG_Unconscious;SG_Helpable_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnMove" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
   </stat_objects>
