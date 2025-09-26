@@ -14,7 +14,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="fbc9d819-a124-40dc-ac06-1c244b6003bd" />
         <field name="Name" type="NameTableFieldDefinition" value="SkillActions" />
-        <field name="ContainerSpells" type="StringTableFieldDefinition" value="Target_Shove_Linked;Target_Grapple;Target_Trip;Target_Disarm;Target_Demoralize;Target_Feint" />
+        <field name="ContainerSpells" type="StringTableFieldDefinition" value="Target_Shove_Linked;Target_Grapple;Target_Trip;Target_Disarm;Target_DirtyTrick_Vicious;Target_Feint;" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_Intent_Utility" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbc53afd3g2f71gbcdeg3df8g5a8fb849b8fe" version="1" />
         <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="CursorMode" version="1" />
@@ -62,16 +62,17 @@
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(Grappled,100,2)" />
         <field name="CycleConditions" type="StringTableFieldDefinition" value="not Grounded()" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
-        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;CombatLogSetSingleLineRoll;IsLinkedSpellContainer;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;CombatLogSetSingleLineRoll;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
         <field name="HitEffect" type="GuidObjectTableFieldDefinition" value="7e45a98e-d336-400e-bd34-7832ad8012b1" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
         <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Peaceful" enumeration_type_name="SpellAnimationIntentType" version="1" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_SkillActions" />
         <field name="CastSound" type="StringTableFieldDefinition" value="CrSpell_Cast_Meazel_Garrote" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="f13da615-33ae-412e-8314-4ac4fc560dbf,,;c1df9aea-8be9-4de3-bcbc-4e4c1e44dc37,,;722df2d7-7898-4b0b-b930-5a850b55ccf0,,;a693a7c3-e7e7-4edb-98dd-db5fd700663f,,;f28943e2-f5e6-4133-80ef-8c7c4f628920,,;35f5cba8-3706-46d5-9a1e-2def9ba22473,,;a6ff21b9-291e-44c8-bf87-8de3703c5e97,,;,,;,," />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value=";" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasFreeHand();" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SLEEP);RemoveStatus(SLEEPING);RemoveStatus(SG_Sleeping);AI_Only:ApplyStatus(AI_HELPER_DEBUFF,100,3);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not HasStatus('Grappled') and not Self() and CanShoveWeight() and IsMovable() and not Grounded() and not Tagged('GASEOUS_FORM') and not (not Player(context.Source) and Combat(context.Source) and Character() and not (Enemy() or HasStatus('SG_Unconscious'))) and not Tagged('CANT_SHOVE_THROW');" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -80,7 +81,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Trip" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="71a1860f-95ef-4b18-b8d8-9394adcfe37a" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,ReflexDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);IF(IsCritical()):DealDamage(1d6,Bludgeoning);IF(HasPassive('TheHarderTheyFall',context.Source)):DealDamage(1d6,Bludgeoning);IF(IsCritical() and HasPassive('TheHarderTheyFall',context.Source)):DealDamage(LevelMapValue(SneakAttack),Bludgeoning);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);IF(IsCritical()):DealDamage(1d6,Bludgeoning);IF(HasPassive('TheHarderTheyFall',context.Source)):DealDamage(1d6,Bludgeoning);IF(IsCritical() and HasPassive('TheHarderTheyFall',context.Source)):DealDamage(LevelMapValue(SneakAttack),Bludgeoning);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Trip" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h74c1d4beg7d7ag1187ga161gbbfe154dfb6a" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h34fdb843g1703gf48ege2e4g3413d2ba3432" version="1" />
@@ -89,13 +90,14 @@
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;CombatLogSetSingleLineRoll;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1)" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
         <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Peaceful" enumeration_type_name="SpellAnimationIntentType" version="1" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_SkillActions" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Topple" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="d11b68a0-5c5c-430f-a033-90ab91e04525,,;8c5b6452-a6eb-44f3-8830-f8e1a06678ba,,;412f122d-0773-4a08-bf1c-65749e543fb6,,;87c14b90-fb0a-4cd3-8364-b38c3204dae4,,;082f9ee1-a009-4234-9fb5-412d3afba640,,;dced792c-ab29-450c-b9ec-d0c291c6c022,,;6ed4de9e-ba7a-452c-8fc0-f28980ceac0a,,;,,;,," />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value=";" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and (not HasStatus('PRONE_PF2') or not HasStatus('PRONE')) and CanShoveWeight() and IsMovable() and not Grounded() and not Tagged('GASEOUS_FORM') and not (not Player(context.Source) and Combat(context.Source) and Character() and not (Enemy() or HasStatus('SG_Unconscious'))) and not Tagged('CANT_SHOVE_THROW');" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SLEEP);RemoveStatus(SLEEPING);RemoveStatus(SG_Sleeping);AI_Only:ApplyStatus(AI_HELPER_DEBUFF,100,3);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -143,6 +145,8 @@
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="SpellSheathing" version="1" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Charisma" enumeration_type_name="AbilityFlags" version="1" />
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Rogue_Disarm" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_Only:ApplyStatus(AI_HELPER_HUNTERSMARK,100,1);AI_Only:ApplyStatus(AI_HELPER_VOW_OF_ENMITY,100,1);" />
+        <field name="SpellSoundMagnitude" type="EnumerationTableFieldDefinition" value="Small" enumeration_type_name="SpellSoundMagnitude" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -166,8 +170,8 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="d11b68a0-5c5c-430f-a033-90ab91e04525,,;8c5b6452-a6eb-44f3-8830-f8e1a06678ba,,;412f122d-0773-4a08-bf1c-65749e543fb6,,;87c14b90-fb0a-4cd3-8364-b38c3204dae4,,;082f9ee1-a009-4234-9fb5-412d3afba640,,;dced792c-ab29-450c-b9ec-d0c291c6c022,,;6ed4de9e-ba7a-452c-8fc0-f28980ceac0a,,;,,;,," />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Debuff" enumeration_type_name="VerbalIntent" version="1" />
-        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsAttack;IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
-        <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="Shove" enumeration_type_name="SpellActionType" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="SpellActionType" version="1" />
         <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="2f3cf899-3a58-4471-8804-5df322318918" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="09da17b5-7435-41e9-9728-05d4729bafa9" />
@@ -177,6 +181,155 @@
         <field name="TargetSound" type="StringTableFieldDefinition" value="Impact_Rogue_Disarm" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="SpellSheathing" version="1" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_Only:ApplyStatus(AI_HELPER_DEBUFF,100,1);" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="PhysicalDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="SpellSoundMagnitude" type="EnumerationTableFieldDefinition" value="Small" enumeration_type_name="SpellSoundMagnitude" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e753cc29-30b7-422d-8781-2ea2393afe1b" />
+        <field name="Name" type="NameTableFieldDefinition" value="EscapeGrapple_Container" />
+        <field name="ContainerSpells" type="StringTableFieldDefinition" value="Target_EscapeGrapple_Athletics;Target_EscapeGrapple_Acrobatics;Target_EscapeGrapple_UnarmedAttack;" />
+        <field name="TargetCeiling" type="StringTableFieldDefinition" value="0" />
+        <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="2" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('Grappled');" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_UncannyDodge" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h07a26580gf137g764dg33eag4d5c6d6d5b54" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h66f30f28gbceag8e83g0144g72f43a4226dd" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="RemoveStatus(Grappled);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Loop" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Shove" />
+        <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="CursorMode" version="1" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Character() and Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="0319ca29-4024-4649-9278-3c1f20c5f023,,;a71e11ca-95ab-463d-a4bf-fe8094126b61,,;352c3a89-f99c-4472-8424-58c0ffb15e55,,;a57fc614-ed20-4574-936b-bdcc6cebd36a,,;b24b3f23-6d3a-43ce-ae3a-abfb44d26082,,;200ab854-a989-4a6a-8ac9-4b20aecaccda,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsLinkedSpellContainer" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="Dismiss" enumeration_type_name="SpellActionType" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="PhysicalDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="c512042e-a04f-4a02-af7a-16f30e11ed95" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="3fdf3e73-59a3-4518-9521-35f40374d048" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="5d8c64e3-f9ff-4ee0-b0b6-2a081c7244a8" />
+        <field name="SpellSoundMagnitude" type="EnumerationTableFieldDefinition" value="Small" enumeration_type_name="SpellSoundMagnitude" version="1" />
+        <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Sheathed" enumeration_type_name="SpellSheathing" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6c54f547-bd4d-4895-b85e-4fa963ffcc42" />
+        <field name="Name" type="NameTableFieldDefinition" value="EscapeGrapple_Athletics" />
+        <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_EscapeGrapple_Container" />
+        <field name="TargetCeiling" type="StringTableFieldDefinition" value="0" />
+        <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="2" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('Grappled');" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,ReflexDC());" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RemoveStatus(SELF,Grappled);RemoveStatus(GRAPPLED_SOURCE);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and HasStatus('GRAPPLED_SOURCE');" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Shove" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="haeaf1acbg2554gbfc2g81e0gc966394ba0a0" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hef8f0ee4gd92cgb580gede4gbb0736c2e848" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="RemoveStatus(Grappled);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Loop" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Shove" />
+        <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="CursorMode" version="1" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Character() and Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="0319ca29-4024-4649-9278-3c1f20c5f023,,;a71e11ca-95ab-463d-a4bf-fe8094126b61,,;352c3a89-f99c-4472-8424-58c0ffb15e55,,;a57fc614-ed20-4574-936b-bdcc6cebd36a,,;b24b3f23-6d3a-43ce-ae3a-abfb44d26082,,;200ab854-a989-4a6a-8ac9-4b20aecaccda,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="Dismiss" enumeration_type_name="SpellActionType" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="PhysicalDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="c512042e-a04f-4a02-af7a-16f30e11ed95" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="3fdf3e73-59a3-4518-9521-35f40374d048" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="5d8c64e3-f9ff-4ee0-b0b6-2a081c7244a8" />
+        <field name="SpellSoundMagnitude" type="EnumerationTableFieldDefinition" value="Small" enumeration_type_name="SpellSoundMagnitude" version="1" />
+        <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Sheathed" enumeration_type_name="SpellSheathing" version="1" />
+        <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="45cff24a-305f-442e-b2d8-ddc30b061e6c" />
+        <field name="Name" type="NameTableFieldDefinition" value="EscapeGrapple_Acrobatics" />
+        <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_EscapeGrapple_Container" />
+        <field name="TargetCeiling" type="StringTableFieldDefinition" value="0" />
+        <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="2" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('Grappled');" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Acrobatics,ReflexDC());" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RemoveStatus(SELF,Grappled);RemoveStatus(GRAPPLED_SOURCE);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and HasStatus('GRAPPLED_SOURCE');" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Enchantment_CommandDrop" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h86bcc3b7g4957g6890g88deg02926df22823" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha111b4b6g0a9fg4978g9a53g96ded7ac2299" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="RemoveStatus(Grappled);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Loop" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Shove" />
+        <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="CursorMode" version="1" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Character() and Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="0319ca29-4024-4649-9278-3c1f20c5f023,,;a71e11ca-95ab-463d-a4bf-fe8094126b61,,;352c3a89-f99c-4472-8424-58c0ffb15e55,,;a57fc614-ed20-4574-936b-bdcc6cebd36a,,;b24b3f23-6d3a-43ce-ae3a-abfb44d26082,,;200ab854-a989-4a6a-8ac9-4b20aecaccda,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="Dismiss" enumeration_type_name="SpellActionType" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="PhysicalDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="c512042e-a04f-4a02-af7a-16f30e11ed95" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="3fdf3e73-59a3-4518-9521-35f40374d048" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="5d8c64e3-f9ff-4ee0-b0b6-2a081c7244a8" />
+        <field name="SpellSoundMagnitude" type="EnumerationTableFieldDefinition" value="Small" enumeration_type_name="SpellSoundMagnitude" version="1" />
+        <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Sheathed" enumeration_type_name="SpellSheathing" version="1" />
+        <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Dexterity" enumeration_type_name="AbilityFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a2465040-385f-4c39-ae47-55a02e95e4ef" />
+        <field name="Name" type="NameTableFieldDefinition" value="EscapeGrapple_UnarmedAttack" />
+        <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_EscapeGrapple_Container" />
+        <field name="TargetCeiling" type="StringTableFieldDefinition" value="0" />
+        <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="2" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('Grappled');" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeUnarmedAttack)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RemoveStatus(SELF,Grappled);RemoveStatus(GRAPPLED_SOURCE);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and HasStatus('GRAPPLED_SOURCE');" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Crab_CripplingPinch" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5b55f76egca8ag3406g3ee8g51c5e1d9b841" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd8e86b9bg0f69g86bdg86fag441453f1a58b" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="RemoveStatus(Grappled);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Loop" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Shove" />
+        <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="CursorMode" version="1" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Character() and Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="0319ca29-4024-4649-9278-3c1f20c5f023,,;a71e11ca-95ab-463d-a4bf-fe8094126b61,,;352c3a89-f99c-4472-8424-58c0ffb15e55,,;a57fc614-ed20-4574-936b-bdcc6cebd36a,,;b24b3f23-6d3a-43ce-ae3a-abfb44d26082,,;200ab854-a989-4a6a-8ac9-4b20aecaccda,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="Dismiss" enumeration_type_name="SpellActionType" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="PhysicalDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="c512042e-a04f-4a02-af7a-16f30e11ed95" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="3fdf3e73-59a3-4518-9521-35f40374d048" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="5d8c64e3-f9ff-4ee0-b0b6-2a081c7244a8" />
+        <field name="SpellSoundMagnitude" type="EnumerationTableFieldDefinition" value="Small" enumeration_type_name="SpellSoundMagnitude" version="1" />
+        <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Sheathed" enumeration_type_name="SpellSheathing" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -201,22 +354,68 @@
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent;IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_SkillActions" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_IntimidatingPresence" />
-        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="ff78157b-f004-4813-b6d7-83744a7a56e4,,;,,;6bac9e6f-c3c6-489f-8d39-2df012b3e40b,,;aec7ed45-2dec-4ee6-b5dc-6403a87a1aad,,;34da5af5-71b6-4278-9cc0-d5266ca98876,,;,,;32eb3c27-cd2c-49c1-a6c6-b21b2cccf050,,;,,;,," />
-        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="79cab826-6ec4-4512-837f-278d0fc94394" />
-        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="ef16a07e-b3c5-4146-9f01-015c2b4bc565" />
-        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="115cdcd0-6afe-4db2-9d48-b6582febb136" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(DemoralizeImmune,100,100)" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="ff78157b-f004-4813-b6d7-83744a7a56e4,,;,,;ebc9253d-d2b2-4657-b8c1-df334c6047b1,,;3aa138db-f6d7-495b-a34f-281b1d71fbc9,,;34da5af5-71b6-4278-9cc0-d5266ca98876,,;,,;32eb3c27-cd2c-49c1-a6c6-b21b2cccf050,,;,,;,," />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="15f05cf9-02e4-45df-83ce-fd82b04a7fa1" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="77e698a6-412f-43db-be9e-68e9a6f3afa7" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="4fb18d5c-33c6-4ee9-b8ea-22f0923a32f7" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(DemoralizeImmune,100,100);AI_Only:ApplyStatus(AI_HELPER_DEBUFF,100,3);" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="not HasStatus('RAGE_MUTE') or HasPassive('RagingIntimidation');" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Charisma" enumeration_type_name="AbilityFlags" version="1" />
-        <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Rogue_ViciousMockery" />
-        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Rogue_ViciousMockery" />
-        <field name="TargetSound" type="StringTableFieldDefinition" value="Impact_Rogue_ViciousMockery" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Vocal_Component_PrepareViciousMockery" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_Psychic_ViciousMockery_L1to3" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Damage_Psychic_ViciousMockery_L1to3" />
         <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalDamage_Psychic" enumeration_type_name="HitAnimationType" version="1" />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Debuff" enumeration_type_name="VerbalIntent" version="1" />
-        <field name="VocalComponentSound" type="StringTableFieldDefinition" value="Vocal_Component_Stop" />
+        <field name="VocalComponentSound" type="StringTableFieldDefinition" value="Vocal_Component_ViciousMockery" />
         <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="h59f0c354g2b41ge0a1g9898g1f75afca23fd" version="1" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Wisdom" />
+        <field name="BeamEffect" type="GuidObjectTableFieldDefinition" value="2c70ac69-71bf-4fef-b82d-caea934e102e" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1798e677-9428-43f8-a29d-e78c51926a2a" />
+        <field name="Name" type="NameTableFieldDefinition" value="DirtyTrick_Vicious" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="ff31b0b2-53f7-4147-adba-c3e63dbe62f9" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbb5767fcg06b6g0ac7gcec6gf22841a2550e" version="1" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="ff78157b-f004-4813-b6d7-83744a7a56e4,,;,,;ebc9253d-d2b2-4657-b8c1-df334c6047b1,,;3aa138db-f6d7-495b-a34f-281b1d71fbc9,,;34da5af5-71b6-4278-9cc0-d5266ca98876,,;,,;32eb3c27-cd2c-49c1-a6c6-b21b2cccf050,,;,,;,," />
+        <field name="SpellStyleGroup" type="EnumerationTableFieldDefinition" value="Class" enumeration_type_name="SpellStyleGroup" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="79cab826-6ec4-4512-837f-278d0fc94394" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="6f7d94a8-e808-49ec-b7be-3a1f02a51df7" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="57593949-e63b-4b31-8b3b-5039ed5ed1cf" />
+        <field name="BeamEffect" type="GuidObjectTableFieldDefinition" value="0da84949-2469-439b-b28e-06e7b33a52b1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_IntimidatingPresence" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Rogue_ViciousMockery" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Rogue_ViciousMockery" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Impact_Rogue_ViciousMockery" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsCritical()):ApplyStatus(FRIGHTENED,100,2);ApplyStatus(FRIGHTENED,100,1);" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(FRIGHTENED,100,1)" />
+        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="ha7356dc2g69f6g0e3cg7be3ge0b58f868645" version="1" />
+        <field name="Level" type="IntegerTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="SpellSchool" version="1" />
+        <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_SkillActions" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(DemoralizeImmune,100,100);AI_Only:ApplyStatus(AI_HELPER_DEBUFF,100,3);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="9" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="not HasStatus('RAGE_MUTE') or HasPassive('RagingIntimidation');" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Intimidation,WillDC());" />
+        <field name="SpellFail" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not HasStatus('DemoralizeImmune',context.Target,context.Source) and Character() and not Ally()" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9385f7d6gbc59ga155g3f3bg85654c009b57" version="1" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Debuff" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent;IsHarmful;ImmediateCast" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Charisma" enumeration_type_name="AbilityFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="683ba68d-0bc0-4d14-8f50-b3dd1a7d2ac2" />
+        <field name="Name" type="NameTableFieldDefinition" value="New_Stat_2" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="ff31b0b2-53f7-4147-adba-c3e63dbe62f9" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -228,7 +427,7 @@
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent;IsHarmful;Temporary" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value=";" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="18" />
-        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="ff78157b-f004-4813-b6d7-83744a7a56e4,,;,,;af73cecb-e6e2-432e-bb91-aa14769b9f84,,;b68f8e77-c0fb-4b1c-b9aa-5bb585e7f182,,;34da5af5-71b6-4278-9cc0-d5266ca98876,,;,,;32eb3c27-cd2c-49c1-a6c6-b21b2cccf050,,;,,;,," />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="ff78157b-f004-4813-b6d7-83744a7a56e4,,;,,;ebc9253d-d2b2-4657-b8c1-df334c6047b1,,;3aa138db-f6d7-495b-a34f-281b1d71fbc9,,;34da5af5-71b6-4278-9cc0-d5266ca98876,,;,,;32eb3c27-cd2c-49c1-a6c6-b21b2cccf050,,;,,;,," />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -246,7 +445,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="8066eb6b-500e-4ea8-b48b-58ece9c544aa" />
         <field name="Name" type="NameTableFieldDefinition" value="BattleMedicine" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="694bfca3-e80e-42b7-9910-2f8df4da6734" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(HEALER_HEALED,100,-1)" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(HEALER_HEALED,100,-1);" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Medicine,15);" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8);IF(IsCritical()):RegainHitPoints(2d8);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Enemy() and not HasStatus('HEALER_HEALED',context.Target,context.Source)" />
@@ -856,13 +1055,13 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('SG_Rage');" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,ReflexDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1);ApplyStatus(OFFBALANCE,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFFBALANCE,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="AmountOfTargets" type="StringTableFieldDefinition" value="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Topple" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1015c268gbbc7ge258gc87fg1a6145ab02a5" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5776200agd101g6ac7g9696g7a1965d592d9" version="1" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,ReflexDC())" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1);ApplyStatus(OFFBALANCE,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFFBALANCE,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Sweep" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Action_Impact_SweepingAttack" />
         <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="CursorMode" version="1" />
@@ -1392,7 +1591,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="6d7dff78-bf2c-4ba7-a092-7f191758a7c6" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('CrashingSlam',context.Source) and Character() and not SavingThrow(Ability.Dexterity, ClassDC())):ApplyStatus(PRONE,100,1);IF(HasPassive('CrashingSlam',context.Source)):ApplyStatus(PRONE,100,1);ApplyStatus(OFF_BALANCED,100,1);DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('CrashingSlam',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d12, MainMeleeWeaponDamageType);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('CrashingSlam',context.Source) and Character() and not SavingThrow(Ability.Dexterity, ClassDC())):ApplyStatus(PRONE_PF2,100,-1);IF(HasPassive('CrashingSlam',context.Source)):ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFF_BALANCED,100,1);DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('CrashingSlam',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d12, MainMeleeWeaponDamageType);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4d7921fbg4e25gc81bg895bg6289f3b848c9" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc6f33e7bgfcfcg8e57g4b9agd0106d0915a6" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType)" />
@@ -1403,6 +1602,7 @@
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="37f17e67-ede8-4447-9df3-03406c4ce257" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType);GROUND:ExecuteWeaponFunctors(MainHand);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1748,7 +1948,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="57405768-fa9c-41e6-b530-d0912b5de972" />
         <field name="Name" type="NameTableFieldDefinition" value="WolfDrag" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="29f19df2-ab34-4619-a4fb-4fc4c766f2eb" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsCritical()):DealDamage(LevelMapValue(FatalD12Unarmed)+StrengthModifier, Piercing, Magical);IF(IsHit() and not IsCritical()):DealDamage(LevelMapValue(D8Unarmed)+StrengthModifier, Piercing, Magical);ApplyStatus(PRONE,100,1);ApplyStatus(OFF_BALANCED,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsCritical()):DealDamage(LevelMapValue(FatalD12Unarmed)+StrengthModifier, Piercing, Magical);IF(IsHit() and not IsCritical()):DealDamage(LevelMapValue(D8Unarmed)+StrengthModifier, Piercing, Magical);ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFF_BALANCED,100,1);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self()" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="c7438204-9e84-4eee-91b4-c3289fbda0b7,,;,,;4595e579-0b44-498f-8eb4-26375b9fe9fb,,;4fe5d677-2411-4e63-bfa1-bb449f7c6942,,;36a98c4d-bab0-4302-ae78-d7a75c3bb9e4,,;,,;688653ba-7032-4d40-ac02-ce8b3af93516,,;,,;,," />
@@ -1759,7 +1959,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="9817cf58-aef9-459d-aef1-b664c4024261" />
         <field name="Name" type="NameTableFieldDefinition" value="OpenHandTechnique_Knock" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(UnarmedDamage , Bludgeoning, Magical);Cast2[DealDamage(UnarmedDamage , Bludgeoning, Magical)];IF(not SavingThrow(Ability.Dexterity, ManeuverSaveDC())):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(UnarmedDamage , Bludgeoning, Magical);Cast2[DealDamage(UnarmedDamage , Bludgeoning, Magical)];IF(not SavingThrow(Ability.Dexterity, ManeuverSaveDC())):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Monk_OpenHandTechnique_Knock" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf355cdcfgf918ge517g3b69ga7417b9d702b" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hddb4c5adg0715g4e9fg65bege9fea55289bc" version="1" />
@@ -1767,7 +1967,7 @@
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsHarmful;DisableBlood" enumeration_type_name="SpellFlagList" version="1" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="287b9102-acaf-40dc-bdd0-0eb0fa05e922" />
         <field name="ContainerSpells" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1)" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="85386181-e9ec-4996-a1dd-7f09f3013189" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="208b02ef-5847-493d-94b8-a901691979ef" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="82b8aad9-5031-41f8-a871-dc55eb52af88" />
@@ -2012,7 +2212,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="e208464f-f272-4bd8-a035-54fb296f3bb6" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_MixedManeuver" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1);ApplyStatus(OFFBALANCE,100,1);IF(not HasStatus('MIXED_MANEUVER', context.Source)):ApplyStatus(SELF,MIXED_MANEUVER,100,1);IF(Character() and HasPassive('StunningBlows',context.Source) and not HasStatus('StunningBlowsImmune',context.Target) and not SavingThrow(Ability.Constitution, ClassDC())):ApplyStatus(STUNNED1,100,1);IF(HasPassive('StunningBlows',context.Source)):ApplyStatus(StunningBlowsImmune,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFFBALANCE,100,1);IF(not HasStatus('MIXED_MANEUVER', context.Source)):ApplyStatus(SELF,MIXED_MANEUVER,100,1);IF(Character() and HasPassive('StunningBlows',context.Source) and not HasStatus('StunningBlowsImmune',context.Target) and not SavingThrow(Ability.Constitution, ClassDC())):ApplyStatus(STUNNED1,100,1);IF(HasPassive('StunningBlows',context.Source)):ApplyStatus(StunningBlowsImmune,100,1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(not HasStatus('MIXED_MANEUVER', context.Source)):ApplyStatus(SELF,MIXED_MANEUVER,100,1)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Monk_OpenHandTechnique_Knock" />
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Vocal_Component_Monk_Damage" />
@@ -4205,7 +4405,6 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="283a0edb-8bb4-40ce-ad48-d0931371b457" />
         <field name="Name" type="NameTableFieldDefinition" value="Invisibility_4" />
-        <field name="Using" type="BaseClassTableFieldDefinition" value="eeec6dd8-fae5-4aaa-bb20-f59654031897" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="1.5" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:4" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_Invisibility" />
@@ -4217,6 +4416,24 @@
         <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_IGNORE:ApplyStatus(GREATER_INVISIBILITY,100,10);AI_ONLY:ApplyStatus(GREATER_INVISIBILITY,100,10)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9dbc45b2gdc14g6dd2g53e6ga4ae17962a9d" version="1" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(GREATER_INVISIBILITY,100,10)" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Illusion" enumeration_type_name="SpellSchool" version="1" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not HasStatus('FAERIE_FIRE')  and not IsImmuneToStatus('SG_Invisible')" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Illusion_Invisibility" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h265e73c1gb4c3g3056gd449gd86d6c693a01" version="1" />
+        <field name="TooltipUpcastDescription" type="GuidObjectTableFieldDefinition" value="6ff1780a-855a-414c-a8bf-811251537206" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="184019c7-770a-4594-a7dd-ec616fe940fd" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Utility_Invisibility_L1to3" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Utility_Invisibility_L1to3" />
+        <field name="VocalComponentSound" type="StringTableFieldDefinition" value="Vocal_Component_Invisibility" />
+        <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Cast" enumeration_type_name="CursorMode" version="1" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="dd86aa43-8189-4d9f-9a5c-454b5fe4a197,,;,,;94ad1609-9862-499a-8337-5e6a7d9487f9,,;8373f3da-2368-4a51-98b1-146ec3586660,,;cc5b0caf-3ed1-4711-a50d-11dc3f1fdc6a,,;,,;1715b877-4512-472e-9bd0-fd568a112e90,,;4156d364-d2c0-4a01-908c-3552f78f434d,,;6f0a29b6-0ae8-4ebf-a1e4-8069c4a6ad16,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalNonDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="SpellPrepareCost" type="IntegerTableFieldDefinition" value="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="7121a488-7c9a-4ba1-a585-f79aaa77e97c" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="4f8e353e-c04e-45c3-880b-d10885fd091f" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="68b1219a-ccc2-4b29-bb42-b18996de3b4d" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6915,6 +7132,7 @@
         <field name="CastSound" type="StringTableFieldDefinition" value="CrSpell_Cast_DarkVineTentacle_Burrow" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="DontChange" enumeration_type_name="SpellSheathing" version="1" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="18" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -11248,6 +11466,7 @@
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="23e86239-d81d-4bad-b618-8d12a2a9258a" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="bd2fc245-5645-452f-a2cd-d158b751bbe4" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="a0aee53a-d702-4901-9bb3-7cf08e214346" />
+        <field name="PowerLevel" type="IntegerTableFieldDefinition" value="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -11307,7 +11526,7 @@
         <field name="ContainerSpells" type="StringTableFieldDefinition" value="Target_GravitationalPull_Action1;Target_GravitationalPull_Action2;Target_GravitationalPull_Action3" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="9" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="Force(-3, OriginToEntity, Neutral, false, true);IF(SaveCrit()):ApplyStatus(PRONE,100,1);IF(SaveCrit()):ApplyStatus(OFFBALANCE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="Force(-3, OriginToEntity, Neutral, false, true);IF(SaveCrit()):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit()):ApplyStatus(OFFBALANCE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_OttosIrresistibleDance" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc8cc2c3bg8dedg1954gc0adgccba0b1f7637" version="1" />
@@ -11350,7 +11569,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="08e88afc-59de-463d-ad57-a437353feeb2" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_GravitationalPull_Base" />
         <field name="ContainerSpells" type="StringTableFieldDefinition" value=";" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="Force(-6, OriginToEntity, Neutral, false, true);IF(SaveCrit()):ApplyStatus(PRONE,100,1);IF(SaveCrit()):ApplyStatus(OFFBALANCE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="Force(-6, OriginToEntity, Neutral, false, true);IF(SaveCrit()):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit()):ApplyStatus(OFFBALANCE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2ca04870g19f0g92ccgd7feg5d6906e1ddde" version="1" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:1" />
       </fields>
@@ -11648,7 +11867,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Sleep_4" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="6f7a690f-5c9c-4054-86d1-e0d14a287fed" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):ApplyStatus(SLEEP_DEEP,100,1);IF(SaveCrit()):ApplyStatus(SLEEP_DEEP,100,10);" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(SLEEP_DEEP,100,10);ApplyStatus(PRONE,100,10);ApplyStatus(DISARM,100,10);" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(SLEEP_DEEP,100,10);ApplyStatus(PRONE_PF2,100,-10);ApplyStatus(DISARM,100,10);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:4" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="4" />
       </fields>
@@ -11824,7 +12043,7 @@
         <field name="Level" type="IntegerTableFieldDefinition" value="1" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_FlourishingFlora_Rank1" />
         <field name="ContainerSpells" type="StringTableFieldDefinition" value=";" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(2d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((2d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(2d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((2d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((2d4)/2,Bludgeoning,Magical);" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha7203d35g1035g265fgb4b7g9f42daf7e1ad" version="1" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent;HasSomaticComponent;IsSpell;IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
@@ -11882,7 +12101,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Roots_Rank2" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="606b3d3f-9bf1-4a16-b5ec-1e6490a8f097" />
         <field name="Level" type="IntegerTableFieldDefinition" value="2" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(4d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((4d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(4d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((4d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((4d4)/2,Bludgeoning,Magical);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:2" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_Roots_Rank1" />
@@ -11939,7 +12158,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Roots_Rank3" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="606b3d3f-9bf1-4a16-b5ec-1e6490a8f097" />
         <field name="Level" type="IntegerTableFieldDefinition" value="3" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((6d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((6d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((6d4)/2,Bludgeoning,Magical);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:3" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_Roots_Rank1" />
@@ -11996,7 +12215,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Roots_Rank4" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="606b3d3f-9bf1-4a16-b5ec-1e6490a8f097" />
         <field name="Level" type="IntegerTableFieldDefinition" value="4" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(8d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((8d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(8d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((8d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((8d4)/2,Bludgeoning,Magical);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:4" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_Roots_Rank1" />
@@ -12053,7 +12272,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Roots_Rank5" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="606b3d3f-9bf1-4a16-b5ec-1e6490a8f097" />
         <field name="Level" type="IntegerTableFieldDefinition" value="5" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(10d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((10d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(10d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((10d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((10d4)/2,Bludgeoning,Magical);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:5" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_Roots_Rank1" />
@@ -12110,7 +12329,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Roots_Rank6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="606b3d3f-9bf1-4a16-b5ec-1e6490a8f097" />
         <field name="Level" type="IntegerTableFieldDefinition" value="6" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(12d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((12d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(12d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((12d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((12d4)/2,Bludgeoning,Magical);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:6" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_Roots_Rank1" />
@@ -20675,7 +20894,7 @@
         <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="1.5" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeSpellAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier,Bludgeoning,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier+StrengthModifier,Bludgeoning,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier,Bludgeoning,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier+StrengthModifier,Bludgeoning,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_SpiritualWeapon_Maul" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h01a8245fg5e02gd035g2bd3g566eb9a809c2" version="1" />
@@ -20703,7 +20922,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="c8cd5a12-93fe-42a7-ac73-9cea49238250" />
         <field name="Name" type="NameTableFieldDefinition" value="ElementalBlast_Earth_Bludgeoning_2Action" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="cee203ad-759f-4040-b7ca-3ffab48cb5ec" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Bludgeoning,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+ConstitutionModifier+StrengthModifier+StrengthModifier,Bludgeoning,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Bludgeoning,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+ConstitutionModifier+StrengthModifier+StrengthModifier,Bludgeoning,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_SpiritualWeapon_Maul" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h16e8ccaeg70a5gfcd6g5cdeg98332fa21aa3" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Bludgeoning);" />
@@ -20720,7 +20939,7 @@
         <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="1.5" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeSpellAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier,Piercing,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier+StrengthModifier,Piercing,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier,Piercing,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier+StrengthModifier,Piercing,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_SpiritualWeapon_Spear" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha1165872gee2agfa31g39c9g72d1996e482c" version="1" />
@@ -20748,7 +20967,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="670a1156-0b9d-40bc-99c8-1bc9ce60a931" />
         <field name="Name" type="NameTableFieldDefinition" value="ElementalBlast_Earth_Piercing_2Action" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="765bba23-cc4f-4499-83e2-947cd95931e9" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Piercing,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+ConstitutionModifier+StrengthModifier+StrengthModifier,Piercing,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Piercing,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+ConstitutionModifier+StrengthModifier+StrengthModifier,Piercing,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_SpiritualWeapon_Spear" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1ef666c6gc875g3b97gfeabg0af5d1adc61c" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Piercing);" />
@@ -20777,7 +20996,7 @@
         <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="1.5" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeSpellAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier,Poison,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier+StrengthModifier,Poison,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier,Poison,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+StrengthModifier+StrengthModifier,Poison,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Necromancy_Contagion_FilthFever" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he356a036g7e88gcfd6g8dbfgc68b2fba51d9" version="1" />
@@ -20805,7 +21024,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="be006e5e-3a93-4af3-8073-8b278cc65c80" />
         <field name="Name" type="NameTableFieldDefinition" value="ElementalBlast_Earth_Poison_2Action" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="b2dcbee0-979f-44ac-ac84-8bcb1892d42a" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Poison,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+ConstitutionModifier+StrengthModifier+StrengthModifier,Poison,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Poison,Magical);IF(IsCritical()):DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+ConstitutionModifier+StrengthModifier+StrengthModifier,Poison,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Earth',context.Source)):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Necromancy_Contagion_FilthFever" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha04f6bfdg90dag9ab3g4781g0595f5aff45b" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D8AoeCantrip)+ConstitutionModifier+StrengthModifier,Poison);" />
@@ -22186,7 +22405,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="9c73a80d-09d3-4eed-9c87-1a92ec9fb513" />
         <field name="Name" type="NameTableFieldDefinition" value="Multiattack_FleshGolem" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="1c37bcfe-3a2b-430e-a09b-94b9fb9edcc6" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(4d8+UnarmedMeleeAbilityModifier,Bludgeoning);IF(HasStatus('SHA_NECROMANCER_FLESH_BERSERK',context.Source) and not SavingThrow(Ability.Constitution,SourceSpellDC())):ApplyStatus(PRONE,100,1);Cast2[DealDamage(4d8+UnarmedMeleeAbilityModifier,Bludgeoning)];IF(HasStatus('SHA_NECROMANCER_FLESH_BERSERK',context.Source) and not SavingThrow(Ability.Constitution,SourceSpellDC())):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(4d8+UnarmedMeleeAbilityModifier,Bludgeoning);IF(HasStatus('SHA_NECROMANCER_FLESH_BERSERK',context.Source) and not SavingThrow(Ability.Constitution,SourceSpellDC())):ApplyStatus(PRONE_PF2,100,-1);Cast2[DealDamage(4d8+UnarmedMeleeAbilityModifier,Bludgeoning)];IF(HasStatus('SHA_NECROMANCER_FLESH_BERSERK',context.Source) and not SavingThrow(Ability.Constitution,SourceSpellDC())):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="5a870161-2954-4533-9bee-4fe58a695a63" />
         <field name="HitEffect" type="GuidObjectTableFieldDefinition" value="05acde93-f986-4029-908c-cca1a4499112" />
@@ -22206,7 +22425,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="3a061f73-280d-49e4-9e86-a76d885e30f5" />
         <field name="Name" type="NameTableFieldDefinition" value="Multiattack_FleshGolem_EasyMode" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="9c73a80d-09d3-4eed-9c87-1a92ec9fb513" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(2d6+UnarmedMeleeAbilityModifier,Bludgeoning);IF(HasStatus('SHA_NECROMANCER_FLESH_BERSERK',context.Source) and not SavingThrow(Ability.Constitution,SourceSpellDC())):ApplyStatus(PRONE,100,1);Cast2[DealDamage(2d6+UnarmedMeleeAbilityModifier,Bludgeoning)];IF(HasStatus('SHA_NECROMANCER_FLESH_BERSERK',context.Source) and not SavingThrow(Ability.Constitution,SourceSpellDC())):ApplyStatus(PRONE,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(2d6+UnarmedMeleeAbilityModifier,Bludgeoning);IF(HasStatus('SHA_NECROMANCER_FLESH_BERSERK',context.Source) and not SavingThrow(Ability.Constitution,SourceSpellDC())):ApplyStatus(PRONE_PF2,100,-1);Cast2[DealDamage(2d6+UnarmedMeleeAbilityModifier,Bludgeoning)];IF(HasStatus('SHA_NECROMANCER_FLESH_BERSERK',context.Source) and not SavingThrow(Ability.Constitution,SourceSpellDC())):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d6+UnarmedMeleeAbilityModifier,Bludgeoning);DealDamage(2d6+UnarmedMeleeAbilityModifier,Bludgeoning);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(2d6+UnarmedMeleeAbilityModifier,Bludgeoning);DealDamage(2d6+UnarmedMeleeAbilityModifier,Bludgeoning)" />
       </fields>
@@ -24721,13 +24940,13 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanUseWeaponActions() and IsProficientWithEquippedWeapon();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('CrashingSlam',context.Source) and Character() and not SavingThrow(Ability.Dexterity, ClassDC())):ApplyStatus(PRONE,100,1);IF(HasPassive('CrashingSlam',context.Source)):ApplyStatus(PRONE,100,1);ApplyStatus(OFF_BALANCED,100,1);DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('CrashingSlam',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d12, MainMeleeWeaponDamageType);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('CrashingSlam',context.Source) and Character() and not SavingThrow(Ability.Dexterity, ClassDC())):ApplyStatus(PRONE_PF2,100,-1);IF(HasPassive('CrashingSlam',context.Source)):ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFF_BALANCED,100,1);DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('CrashingSlam',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d12, MainMeleeWeaponDamageType);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and not HasStatus('SG_Prone')" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h71f7e78bgb18ag7a0dgfc8bgf1c6c4bafef7" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc0d94106g1c7ag584ega4b3g62482b61401e" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType)" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Dexterity" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1)" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
         <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="CursorMode" version="1" />
         <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
         <field name="AlternativeCastTextEvents" type="StringTableFieldDefinition" value="CastOffhand" />
@@ -26086,7 +26305,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="086225f2-812a-42ed-b309-09be748e78db" />
         <field name="Name" type="NameTableFieldDefinition" value="Slam_AdamantineGolem" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="cb2e2d55-aef5-4d96-a881-7b5d5da09203" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(4d8+UnarmedMeleeAbilityModifier, Bludgeoning);IF(not SavingThrow(Ability.Constitution, SourceSpellDC())):ApplyStatus(PRONE,100,2);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(4d8+UnarmedMeleeAbilityModifier, Bludgeoning);IF(not SavingThrow(Ability.Constitution, SourceSpellDC())):ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Slam" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h447142a6g8725gbb6fg8b66gaee2fe27562c" version="1" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not (HasStatus('UND_ADMANTINEGOLEM_TAUNT_HELPER',context.Source) and not HasStatus('UND_ADMANTINEGOLEM_TAUNT',context.Target))" />
@@ -26097,7 +26316,7 @@
         <field name="TargetSound" type="StringTableFieldDefinition" value="CrSpell_Impact_SlamAdamantine" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(4d8+UnarmedMeleeAbilityModifier, Bludgeoning)" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="MeleeUnarmedAttack;Constitution" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,2)" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="3.0" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="1" />
         <field name="AoEConditions" type="StringTableFieldDefinition" value="not Self()" />
@@ -26118,7 +26337,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Multiattack_Owlbear" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="1c37bcfe-3a2b-430e-a09b-94b9fb9edcc6" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="6d444cbe-28c7-4f69-9409-9b4871851d9b,,;ebd0529b-057e-491f-b124-acfed054728b,,;eeca2c0a-5f81-411e-aad8-b72362322900,,;2b6afcc6-c9c1-4dc1-9904-88bebecb892f,,;,,;e6d40932-427f-4699-a0de-66f124d905b1,,;0b07883a-08b8-43b6-ac18-84dc9e84ff50,,;,,;,," />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(2d8+UnarmedMeleeAbilityModifier,Slashing);Cast2[DealDamage(1d10+UnarmedMeleeAbilityModifier,Piercing);IF(not SavingThrow(Ability.Constitution, SourceSpellDC())):ApplyStatus(PRONE,100,2);IF(TargetSizeEqualOrSmaller(Size.Medium)):Force(1.5)];" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(2d8+UnarmedMeleeAbilityModifier,Slashing);Cast2[DealDamage(1d10+UnarmedMeleeAbilityModifier,Piercing);IF(not SavingThrow(Ability.Constitution, SourceSpellDC())):ApplyStatus(PRONE_PF2,100,-1);IF(TargetSizeEqualOrSmaller(Size.Medium)):Force(1.5)];" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h51d733cbgdb1agcd5ege96bg443ede8aaa8b" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(1.5)" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(2d8+UnarmedMeleeAbilityModifier,Slashing); DealDamage(1d10+UnarmedMeleeAbilityModifier,Piercing)" />
@@ -26197,7 +26416,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Bash" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC())" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Bash" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd0d1e948g9aceg63e7g59cfgb163b22ab5da" version="1" />
@@ -26218,7 +26437,7 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="468f6e0e-222f-4ea6-8572-10ff14f2c422" />
         <field name="DualWieldingSpellAnimation" type="CastAnimationsTableFieldDefinition" value="1d832b0a-ccfe-4ca7-8426-10200306921c,,;c1df9aea-8be9-4de3-bcbc-4e4c1e44dc37,,;722df2d7-7898-4b0b-b930-5a850b55ccf0,,;a693a7c3-e7e7-4edb-98dd-db5fd700663f,,;cbe217f4-bca8-46c0-bb22-c846b18e13a1,,;35f5cba8-3706-46d5-9a1e-2def9ba22473,,;,,;,,;,," />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Constitution" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE,100,1)" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="SpellSheathing" version="1" />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Control" enumeration_type_name="VerbalIntent" version="1" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="PhysicalDamage" enumeration_type_name="HitAnimationType" version="1" />
@@ -26235,6 +26454,7 @@
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerShortRestPerItem" enumeration_type_name="CooldownType" version="1" />
         <field name="HitCosts" type="StringTableFieldDefinition" value="BonusActionPoint:1" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);DealDamage(2d6, Thunder,Magical);ApplyStatus(PRONE_THUNDEROUS_SMITE, 100, 1, , , ,not SavingThrow(Ability.Constitution, SourceSpellDC()));" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -26290,7 +26510,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e8edecb6-f6ad-410e-8bc3-557664a61a08" />
         <field name="Name" type="NameTableFieldDefinition" value="Legendary_ShieldBlow_Riposte" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="194be420-5a76-4794-bc27-c27e036413bd" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(2d4, Force);ApplyStatus(PRONE,100,1)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(2d4, Force);ApplyStatus(PRONE_PF2,100,-1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage(1d4, Force)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha70d962dg54a0g2637ga78cgf9a24fc1f4db" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he97ce659g005agb0e1g1f65gfd16390c0728" version="1" />
@@ -26327,7 +26547,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="947bcc96-3a9c-431c-b985-c9e05e59774c" />
         <field name="Name" type="NameTableFieldDefinition" value="MAG_WeaponAction_GiantSubjugation" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="63fc400c-7a69-4979-9b90-e9b4354b8185" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon+ProficiencyBonus, MainMeleeWeaponDamageType);IF(SizeEqualOrGreater(Size.Large)):DealDamage(2d6, MainMeleeWeaponDamageType);IF(SizeEqualOrGreater(Size.Large) and Character()):ApplyStatus(PRONE,100,2, , , ,not SavingThrow(Ability.Constitution, ManeuverSaveDC()+2));ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon+ProficiencyBonus, MainMeleeWeaponDamageType);IF(SizeEqualOrGreater(Size.Large)):DealDamage(2d6, MainMeleeWeaponDamageType);IF(SizeEqualOrGreater(Size.Large) and Character()):ApplyStatus(PRONE_PF2,100,-1, , , ,not SavingThrow(Ability.Constitution, ManeuverSaveDC()+2));ExecuteWeaponFunctors(MainHand);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Mag_GiantSubjugation" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcc47aa6ag41c7g3bd9g810eg961607b07ca2" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcc94a9d5gf7f8g22f8g2796g51909f1026b7" version="1" />
@@ -26547,6 +26767,34 @@
         <field name="Name" type="NameTableFieldDefinition" value="UND_MyconidAmulet_Good_override" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="fc0f5190-9430-47e1-bd80-3b1fb0baa49b" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h768c4d8eg437egccc2gad58g06a61312a4ab" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e38549b5-0d0b-40c1-a46d-7a4cdb92e490" />
+        <field name="Name" type="NameTableFieldDefinition" value="Help" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SG_Sleeping);RemoveStatus(SG_Helpable_Condition);RemoveStatus(BURNING);RemoveStatus(SG_Prone);RemoveStatus(SG_Restrained);RemoveStatus(PRONE);RemoveStatus(PRONE_PF2);RemoveStatus(SLEEPING);RemoveStatus(SLEEP);RemoveStatus(ENSNARING_STRIKE);RemoveStatus(WEB);IF(IsDowned()):RegainHitPoints(1);RemoveStatus(HYPNOTIC_PATTERN);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="1.5" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and (not Enemy() or Player()) and HasHelpableCondition()" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Help" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h29dfbb3cgae6eg2193g811dgbba6c6fde7bd" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4439d17cgde03g8ad9g3882gbd31c5daeda3" version="1" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="5e57443f-284e-47b2-915e-5b6417db269c,,;,,;e404fe07-9d44-433d-be31-b05d7e5d907f,c7f76fb4-9775-4c4c-8179-3f08a2e18c78,e24fddf7-6ad6-4bd1-831e-4bcc76d6906b;,,;5bcdefbb-2194-46c2-ac77-0b2d8472a5f7,,;,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="Help" enumeration_type_name="SpellActionType" version="1" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Help" />
+        <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Peaceful" enumeration_type_name="SpellAnimationIntentType" version="1" />
+        <field name="DualWieldingSpellAnimation" type="CastAnimationsTableFieldDefinition" value="5e57443f-284e-47b2-915e-5b6417db269c,,;,,;e404fe07-9d44-433d-be31-b05d7e5d907f,c7f76fb4-9775-4c4c-8179-3f08a2e18c78,e24fddf7-6ad6-4bd1-831e-4bcc76d6906b;d172e037-7041-4352-9a20-5f4b185f9ef1,,;5bcdefbb-2194-46c2-ac77-0b2d8472a5f7,,;,,;,,;,,;,," />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Action_Impact_Help" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="810a605a-8a5f-4f67-8407-505267f0b1f2" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="0f7dfee5-ad45-4cc4-908c-06f6bd06acab" />
+        <field name="SpellAnimationType" type="EnumerationTableFieldDefinition" value="Assisting" enumeration_type_name="SpellAnimationType" version="1" />
+        <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Sheathed" enumeration_type_name="SpellSheathing" version="1" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Loop" />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
       </fields>
     </stat_object>
   </stat_objects>
