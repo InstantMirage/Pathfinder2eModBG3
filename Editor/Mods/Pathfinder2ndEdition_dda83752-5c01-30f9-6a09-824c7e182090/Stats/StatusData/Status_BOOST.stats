@@ -75,7 +75,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAP_PENALTY_3RD" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="7f2a0ac0-dbb2-4771-8640-c3a272c7f0bf" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdf07cfbagb2a2g69e5g7b6fg7d7bea381275" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not AgileMAP()):RollBonus(Attack, -10);IF(AgileMAP()):RollBonus(Attack, -8);IF(HasSpellFlag(SpellFlags.Attack)):RollBonus(SkillCheck, -8);UnlockSpellVariant(HasStringInSpellRoll('Attack') or (HasStringInSpellRoll('Check') and HasSpellFlag(SpellFlags.Attack)),ModifyTooltipDescription());AI_Only:Disadvantage(AttackRoll);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not AgileMAP()):RollBonus(Attack, -10);IF(AgileMAP()):RollBonus(Attack, -8);IF(HasSpellFlag(SpellFlags.Attack)):RollBonus(SkillCheck, -8);UnlockSpellVariant(HasStringInSpellRoll('Attack') or (HasStringInSpellRoll('Check') and HasSpellFlag(SpellFlags.Attack)),ModifyTooltipDescription());AI_ONLY:Disadvantage(AttackRoll);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -95,7 +95,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2d5b6f1dgb550g7bafg14ebg889fdadec513" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_DarkveilPrecision" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(OFF_GUARD)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AI_IGNORE:Tag(OFF_GUARD);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="CIRCUMSTANCE_PENALTY_AC" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StatusAnimationType" version="1" />
@@ -1194,7 +1194,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Poisoned" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Poison" enumeration_type_name="FormatStringColor" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="POISONED" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_1ATTACK)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AI_IGNORE:Tag(STAT_PEN_1ATTACK);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="SoundLoop" type="StringTableFieldDefinition" value="Misc_Status_Poison_MO" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Surface;SG_Poisoned;SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
@@ -1270,7 +1270,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="ENSNARED" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Tag(OFF_GUARD);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);AI_IGNORE:Tag(OFF_GUARD);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GARROTE_VFX, 100, -1)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GARROTE_VFX);RemoveStatus(Grappled);" />
@@ -11405,7 +11405,7 @@
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="KO" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="KO" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="UseLyingPickingState" type="EnumerationTableFieldDefinition" value="Yes" enumeration_type_name="YesNo" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(OFF_GUARD);DetectDisturbancesBlock(false);RollBonus(Attack,-2);AI_IGNORE:ActionResourceBlock(Movement);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AI_IGNORE:Tag(OFF_GUARD);DetectDisturbancesBlock(false);RollBonus(Attack,-2);AI_IGNORE:ActionResourceBlock(Movement);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoredByImmobilized;InitiateCombat;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SNEAKING);RemoveStatus(SLEEP);RemoveStatus(SG_Sleeping); AI_ONLY:ApplyStatus(AI_HELPER_HUNTERSMARK,100,1)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(TurnBased()):ApplyStatus(DEBUG_RESET_MOVE); AI_IGNORE:IF(RemoveCause(StatusRemoveCause.Condition) and TurnBased() and not HasPassive('Athlete_StandUp')):UseActionResource(ActionPoint, 0, 0); AI_ONLY:ApplyStatus(AI_HELPER_PRONE,100,2)" />

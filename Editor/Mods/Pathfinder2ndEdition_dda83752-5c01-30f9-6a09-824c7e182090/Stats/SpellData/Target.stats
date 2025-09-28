@@ -24,6 +24,7 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf8fa9cfdga94bg4bdagf4fdge96e7bb65c9f" version="1" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="ShoveCheck();" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="not Tagged('INTELLECT_DEVOURER');" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -70,9 +71,9 @@
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_SkillActions" />
         <field name="CastSound" type="StringTableFieldDefinition" value="CrSpell_Cast_Meazel_Garrote" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="f13da615-33ae-412e-8314-4ac4fc560dbf,,;c1df9aea-8be9-4de3-bcbc-4e4c1e44dc37,,;722df2d7-7898-4b0b-b930-5a850b55ccf0,,;a693a7c3-e7e7-4edb-98dd-db5fd700663f,,;f28943e2-f5e6-4133-80ef-8c7c4f628920,,;35f5cba8-3706-46d5-9a1e-2def9ba22473,,;a6ff21b9-291e-44c8-bf87-8de3703c5e97,,;,,;,," />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasFreeHand();" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasFreeHand() and not Tagged('INTELLECT_DEVOURER');" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SLEEP);RemoveStatus(SLEEPING);RemoveStatus(SG_Sleeping);AI_ONLY:IF(not WieldingWeapon('Ammunition'), context.Source):ApplyStatus(AI_HELPER_DEBUFF,100,3);AI_ONLY:IF(not WieldingWeapon('Ammunition'), context.Source):ApplyStatus(AI_HELPER_DIFFICULTTERRAIN,100,1);AI_ONLY:IF(WieldingWeapon('Ammunition'), context.Source):DealDamage(SELF,1000,Force);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SLEEP);RemoveStatus(SLEEPING);RemoveStatus(SG_Sleeping);AI_ONLY:IF(HasStatus('FLANKED') and (FightingStyle_Dueling() or Unarmed()):ApplyStatus(AI_HELPER_DEBUFF,100,3);AI_ONLY:IF(HasStatus('FLANKED') and (FightingStyle_Dueling() or Unarmed()):ApplyStatus(AI_HELPER_DIFFICULTTERRAIN,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not HasStatus('Grappled') and not Self() and CanShoveWeight() and IsMovable() and not Grounded() and not Tagged('GASEOUS_FORM') and not (not Player(context.Source) and Combat(context.Source) and Character() and not (Enemy() or HasStatus('SG_Unconscious'))) and not Tagged('CANT_SHOVE_THROW');" />
         <field name="RechargeValues" type="StringTableFieldDefinition" value="1-3" />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Debuff" enumeration_type_name="VerbalIntent" version="1" />
@@ -100,10 +101,11 @@
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="d11b68a0-5c5c-430f-a033-90ab91e04525,,;8c5b6452-a6eb-44f3-8830-f8e1a06678ba,,;412f122d-0773-4a08-bf1c-65749e543fb6,,;87c14b90-fb0a-4cd3-8364-b38c3204dae4,,;082f9ee1-a009-4234-9fb5-412d3afba640,,;dced792c-ab29-450c-b9ec-d0c291c6c022,,;6ed4de9e-ba7a-452c-8fc0-f28980ceac0a,,;,,;,," />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not HasStatus('PRONE_PF2') and not HasStatus('PRONE') and CanShoveWeight() and IsMovable() and not Grounded() and not Tagged('GASEOUS_FORM') and not (not Player(context.Source) and Combat(context.Source) and Character() and not (Enemy() or HasStatus('SG_Unconscious'))) and not Tagged('CANT_SHOVE_THROW');" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SLEEP);RemoveStatus(SLEEPING);RemoveStatus(SG_Sleeping);AI_ONLY:IF(not WieldingWeapon('Ammunition'), context.Source):ApplyStatus(AI_HELPER_DEBUFF,100,4);AI_ONLY:IF(not WieldingWeapon('Ammunition'), context.Source):ApplyStatus(AI_HELPER_DIFFICULTTERRAIN,100,1);AI_ONLY:IF(WieldingWeapon('Ammunition'), context.Source):DealDamage(SELF,1000,Force);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SLEEP);RemoveStatus(SLEEPING);RemoveStatus(SG_Sleeping);AI_ONLY:IF(HasStatus('FLANKED') and (FightingStyle_Dueling() or Unarmed()):ApplyStatus(AI_HELPER_DEBUFF,100,4);AI_ONLY:IF(HasStatus('FLANKED') and (FightingStyle_Dueling() or Unarmed()):ApplyStatus(AI_HELPER_DIFFICULTTERRAIN,100,1);" />
         <field name="RechargeValues" type="StringTableFieldDefinition" value="1-3" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="4fcd1f5a-58dd-4649-b20b-b7d4152c1ddd" />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Debuff" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="not Tagged('INTELLECT_DEVOURER');" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -365,7 +367,7 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="77e698a6-412f-43db-be9e-68e9a6f3afa7" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="4fb18d5c-33c6-4ee9-b8ea-22f0923a32f7" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(DemoralizeImmune,100,100);" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="not Tagged('BEAST') and not HasStatus('RAGE_MUTE') or HasPassive('RagingIntimidation');" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="not Tagged('BEAST') and not Tagged('INTELLECT_DEVOURER') and not HasStatus('RAGE_MUTE') or HasPassive('RagingIntimidation');" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Charisma" enumeration_type_name="AbilityFlags" version="1" />
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Vocal_Component_PrepareViciousMockery" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_Psychic_ViciousMockery_L1to3" />
@@ -406,7 +408,7 @@
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_SkillActions" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(DemoralizeImmune,100,100);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="9" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="not Tagged('BEAST') and not HasStatus('RAGE_MUTE') or HasPassive('RagingIntimidation');" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="not Tagged('BEAST') and not Tagged('INTELLECT_DEVOURER') and not HasStatus('RAGE_MUTE') or HasPassive('RagingIntimidation');" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Intimidation,WillDC());" />
         <field name="SpellFail" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not HasStatus('DemoralizeImmune',context.Target,context.Source) and Character() and not Ally() and not HasStatus('FRIGHTENED');" />
@@ -448,7 +450,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="694bfca3-e80e-42b7-9910-2f8df4da6734" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(HEALER_HEALED,100,-1);" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Medicine,15);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8);IF(IsCritical()):RegainHitPoints(2d8);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8);IF(IsCritical()):RegainHitPoints(2d8);AI_ONLY:RegainHitPoints(2d8);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Enemy() and not HasStatus('HEALER_HEALED',context.Target,context.Source)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Skill_Fighter_SecondWind" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfa19d710gf7a7g1f15g2742gd799c71c6f45" version="1" />
