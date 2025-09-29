@@ -12,7 +12,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="be2ddd2f-6515-4b5c-aab5-e241280f7a52" />
         <field name="Name" type="NameTableFieldDefinition" value="Dismiss_Self" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(UNSUMMON_ACTIVE,100,-1);Unsummon()" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(UNSUMMON_ACTIVE,100,-1);Unsummon();" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Self()" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h449fcceagdbdcg3700g81d5g6eccda7f7b07" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h82fe8485g574cg9d8agd648g75498a20017d" version="1" />
@@ -31,7 +31,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="e0fd05f4-0b0d-4663-beec-21d2b5de7928" />
         <field name="Name" type="NameTableFieldDefinition" value="Dash" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(HasStatus('DASH_STACKED')):ApplyStatus(DASH_STACKED_2,100,1);IF(not HasStatus('DASH_STACKED_2') and HasStatus('DASH')):ApplyStatus(DASH_STACKED,100,1); AI_IGNORE:IF(not HasDashStatus() and (HasStatus('STRIDE') or HasStatus('DEBUG_RESET_MOVE')) ):ApplyStatus(DASH,100,1);AI_IGNORE:IF(not HasDashStatus() and not HasStatus('DEBUG_RESET_MOVE') ):ApplyStatus(STRIDE,100,1); AI_ONLY:IF(not HasStatus('DASH_STACKED_2') and not HasStatus('DASH_STACKED') and not HasStatus('DASH')):ApplyStatus(DASH,100,1)" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(HasStatus('DASH_STACKED')):ApplyStatus(DASH_STACKED_2,100,1);IF(not HasStatus('DASH_STACKED_2') and HasStatus('DASH')):ApplyStatus(DASH_STACKED,100,1);AI_IGNORE:IF(not HasDashStatus() and (HasStatus('STRIDE') or HasStatus('DEBUG_RESET_MOVE')) ):ApplyStatus(DASH,100,1);AI_IGNORE:IF(not HasDashStatus() and not HasStatus('DEBUG_RESET_MOVE') ):ApplyStatus(STRIDE,100,1);AI_ONLY:IF(not HasStatus('DASH_STACKED_2') and not HasStatus('DASH_STACKED') and not HasStatus('DASH')):ApplyStatus(DASH,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Self()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Dash" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h406305d5g3ccagbb27g5863g0946ef257b5d" version="2" />
@@ -41,7 +41,7 @@
         <field name="CastSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="5e57443f-284e-47b2-915e-5b6417db269c,,;925779e7-8bf6-4d56-8c4d-42c3bc01c60c,,;50398f4e-dd82-4d6a-ad43-aedd578543d9,,;1c343e00-7e6c-4f53-b588-074a3cdb9c7d,,;5bcdefbb-2194-46c2-ac77-0b2d8472a5f7,,;,,;5fdb66be-7506-411a-a7ea-c4783288aac8,,;,,;,," />
-        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IgnoreSilence;Stealth;Invisible;NoCameraMove;HasSomaticComponent;ImmediateCast" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IgnoreSilence;NoCameraMove;HasSomaticComponent;ImmediateCast;Invisible;Stealth;IsSpell" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="Shove" enumeration_type_name="SpellActionType" version="1" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(DASH,100,1)" />
         <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
@@ -59,20 +59,23 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="bfda5604-e577-475d-a2aa-01d4a8e08353" />
         <field name="Name" type="NameTableFieldDefinition" value="Stand_PF2" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(PRONE_PF2);AI_Only:ApplyStatus(AI_HELPER_BUFF_MASSIVE,100,10);AI_Only:ApplyStatus(AI_HELPER_BLADEWARD,100,10);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_IGNORE:RemoveStatus(PRONE_PF2);AI_ONLY:IF(HasStatus('FLANKED') and HasStatus('PRONE_PF2')):ApplyStatus(SELF,AI_HELPER_BUFF_MASSIVE,100,3);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Self()" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Athlete_StandUp" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h104301e0ga91fg0706g7c04g4fe9e26c9edc" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc1e90a05gb0d8g8887gebffg57d8cfd6fa5a" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc1e90a05gb0d8g8887gebffg57d8cfd6fa5a" version="2" />
         <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Cast" enumeration_type_name="CursorMode" version="1" />
         <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
-        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
-        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="5e57443f-284e-47b2-915e-5b6417db269c,,;925779e7-8bf6-4d56-8c4d-42c3bc01c60c,,;50398f4e-dd82-4d6a-ad43-aedd578543d9,,;1c343e00-7e6c-4f53-b588-074a3cdb9c7d,,;5bcdefbb-2194-46c2-ac77-0b2d8472a5f7,,;,,;5fdb66be-7506-411a-a7ea-c4783288aac8,,;,,;,," />
-        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
-        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IgnoreSilence;Stealth;Invisible;NoCameraMove;HasSomaticComponent;ImmediateCast" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1;" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value=",,;,,;f49c1788-7819-481f-9b83-2344d708e682,,;8ee67630-f1c7-441d-aaf6-fa4633c890da,,;f8fe2e89-2313-48f7-963c-0907b6306fd1,,;,,;5abe3725-c152-42de-98c8-0dbf872e1ff2,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Buff" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IgnoreSilence;NoCameraMove;HasSomaticComponent;IsSpell" enumeration_type_name="SpellFlagList" version="1" />
         <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('PRONE_PF2')" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('PRONE_PF2') and not HasStatus('Grappled');" />
         <field name="CinematicArenaFlags" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="CinematicArenaFlags" version="1" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Jump" />
+        <field name="SpellSoundMagnitude" type="EnumerationTableFieldDefinition" value="Small" enumeration_type_name="SpellSoundMagnitude" version="1" />
+        <field name="Sheathing" type="EnumerationTableFieldDefinition" value="DontChange" enumeration_type_name="SpellSheathing" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -94,6 +97,7 @@
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="not Immobilized()" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
         <field name="SpellSoundMagnitude" type="EnumerationTableFieldDefinition" value="Small" enumeration_type_name="SpellSoundMagnitude" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IgnoreSilence;NoCameraMove;HasSomaticComponent;ImmediateCast;IsSpell" enumeration_type_name="SpellFlagList" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -119,6 +123,7 @@
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="not Immobilized() and not (HasStatus('SG_DifficultTerrain') and not HasPassive('FeatherStep'))" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
         <field name="TargetSound" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="RechargeValues" type="StringTableFieldDefinition" value="1-2" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -135,6 +140,7 @@
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
         <field name="TargetSound" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="RechargeValues" type="StringTableFieldDefinition" value="1-2" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
