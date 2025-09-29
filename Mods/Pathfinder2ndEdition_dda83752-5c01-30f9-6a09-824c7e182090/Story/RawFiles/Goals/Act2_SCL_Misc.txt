@@ -1,0 +1,739 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Voicebarks
+DB_OneShot_VoiceBarkTrigger(S_SCL_RoadToPlainsVBTrigger_e63ef986-8c63-4d13-bf24-8b99fe3e1aa7, (VOICEBARKRESOURCE)PLA_General_VB_RoadToPlains_56dfe3ff-68bb-f66a-cc1f-059865403e02, "GlobalIgnoreFailure");
+DB_OneShot_VoiceBarkTrigger(S_TWN_EntryHalsinVBTrigger_d6d032a8-81c8-44ea-964f-04ca0f48a346, (VOICEBARKRESOURCE)TWN_Entry_Halsin_VB_c84ddd15-c2c4-9768-864b-9eec198ba9fb, "Global");
+DB_OneShot_VoiceBarkTrigger(S_HAV_HalsinVBTrigger_6a63c004-581e-43ad-8f01-6fae22b4a36c, (VOICEBARKRESOURCE)HAV_EnteringHaven_VB_Halsin_4ac1b853-d778-12d6-1a89-6aec6e0dfeb0, "Global");
+DB_OneShot_VoiceBarkTrigger(S_HAV_EnteringHaven_MoonshieldVBTrigger_7cb5f342-96db-48c7-95e1-98a1e439d03b, (VOICEBARKRESOURCE)HAV_EnteringHaven_VB_Moonshield_e7b5450d-0c48-c997-62ac-88f09e7b1dd2, "Global");
+DB_OneShot_VoiceBarkTrigger(S_SCL_Misc_VBTrigger_DeadDruids_66047002-b3de-4956-8359-44a33408e3c2, (VOICEBARKRESOURCE)SCL_Misc_VB_DeadDruids_56c44e91-fcb6-cf58-df5f-3ef11d3c7856, "GlobalIgnoreFailure");
+DB_OneShot_VoiceBarkTrigger(S_SCL_Misc_VBTrigger_Graveyard_7ba54ac3-c462-4775-83c5-aba19d11ebc0, (VOICEBARKRESOURCE)SCL_Misc_VB_Graveyard_982e11f7-fad3-f122-4253-94ec285738d5, "GlobalIgnoreFailure");
+DB_OneShot_VoiceBarkTrigger(S_SCL_Misc_VBTrigger_ShadowlandsDevastation_d0574c96-d812-40e5-aa8f-75645a59f1da, (VOICEBARKRESOURCE)SCL_Misc_VB_ShadowlandDevastation_f75b1615-9c4c-26dc-78f8-6a423a2596bb, "GlobalIgnoreFailure");
+//END_REGION
+
+//REGION Signpost
+
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_Signpost_000_95c29458-1ab4-4d74-9070-f78a49de101e, (DIALOGRESOURCE)SCL_General_AD_Signpost_0375012c-5471-0a04-d642-a4f2eff1b10e);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_MountainPassSignpost_7fd3482d-72a1-4f69-9cb1-1c40138513c6, (DIALOGRESOURCE)SCL_General_AD_MountainPassSignpost_5631e64e-d930-2305-be88-f6a4ade08e9b);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_Signpost_BeforeTown_1f12b41a-be8b-4971-80ca-adc8eb2c89f3, (DIALOGRESOURCE)SCL_Signpost_AD_BeforeTown_75cc111d-48b8-2e15-fcd6-c132e717a831);
+
+//END_REGION
+
+//REGION Shadowcurse States
+SetFlag((FLAG)SCL_ShadowCurse_State_Default_13a8d7f3-9942-4c8c-9428-b4af0b433994,NULL_00000000-0000-0000-0000-000000000000,0,1);
+//END_REGION
+//REGION Dead gith
+DB_GLO_CharacterCorpseDialog(S_SCL_DeadGithExplorer_001_228e2f85-358d-4747-8dc0-df7f198f1c68, SCL_GithCreche_GithExplorer_Dead_615c3681-366c-d2be-993b-4486c26b51ce);
+
+//END_REGION
+
+//REGION Skeptical Robber //Yes, I found out that it's spelled Sceptical but it was too late. Consider it a pun on Skeleton. Also, pretty sure we're using American English spellings where appropriate anyway
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_SkepticalRobber_Tombstone_c1ca9d3e-0b2b-4c32-8990-fe8955bf3b4f, (DIALOGRESOURCE)SCL_SkepticalRobber_AD_ReadTombstone_3bfdaf8a-0238-c95e-ec6a-c176833022b4);
+
+//This checks have a custom PAD when revealed, so the systemic ones are blocked
+DB_PerceptionSkillCheckADBlocked((ITEM)S_SCL_SkepticalRobber_TrunkHole_85f9b25a-8e9d-4c01-9fc4-d557ff61b8e6);
+DB_PerceptionSkillCheckADBlocked(S_SCL_SkepticalRobber_Footprints_a4aabac7-6297-4a41-9d07-899dc8e36d67);
+
+DB_HasItemEvent((ITEM)S_SCL_SkepticalRobber_WifesRing_bd1d4654-d29e-420d-8bfa-ded0d89bb6ed, (FLAG)SCL_SkepticalRobber_State_HasRing_bdde9e08-b1d1-42dc-8786-6c202d475ba4);
+
+PROC_TriggerRegisterForPlayers(S_SCL_SkepticalRobber_GraveRevealTrigger_ac23041b-9e6e-4c4e-81fd-8a7f9309e82e);
+
+//END_REGION
+
+//REGION Shadow Birds
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird01_b3bad6c3-e220-45d7-be27-15f591e74d2d,0);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird02_519e0f51-bd61-4ada-be37-e47057c13973,200);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird03_08732480-5270-441b-8c86-ea73a05e00a7,400);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird04_9743aa16-f4c9-4230-8483-8d1671bfe0ea,600);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird05_0d53af5c-9564-4348-a60c-b54b9bac190a,800);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird06_a1b7ad7d-42f4-46cc-ad67-8a5182602d58,1000);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird07_e2c5dfd4-4fd9-44b6-b604-4865304b85cd,1200);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird08_e65b73cd-b447-4b3e-8880-4e5cd8d21723,1400);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird09_a7c4e422-8a6e-4e83-9abc-60d7fc65544d,1600);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird10_04ea7782-2b12-4501-941d-269812313664,1800);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird11_c1e46322-6fda-4d49-8f28-bd5ee6007cdc,2000);
+DB_SCL_ShadowBird_Birds((CHARACTER)S_SCL_ShadowBirds_Bird12_7c1f5bc7-32ae-4748-b2de-f8017f46539e,2200);
+
+PROC_LoopEffect(VFX_Script_Dead_Shadow_Bird_01_fe7ee1b4-e3bc-ecc0-93fb-60274976cec8, S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, "SCL_ShadowBirds_WarningEffect", "SCL_Main_A", "");
+
+DB_KnowledgeCheckTrigger_AD("SCL_ShadowBird", S_SCL_ShadowBirds_NearCorpse_24c1344b-37a0-4ea2-98e1-2bb8ffde8559, "Investigation", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)SCL_ShadowBirds_PAD_Approach_b9a2149c-d1e4-cfb4-a9e9-bcf2848a4758, (FLAG)SCL_ShadowBird_State_Identified_5380c5d6-052c-92e7-7127-f4bf58508f88);
+
+DB_KnowledgeSkillcheck_TargetOverride(S_SCL_ShadowBirds_NearCorpse_24c1344b-37a0-4ea2-98e1-2bb8ffde8559, S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07);
+
+//END_REGION
+
+//REGION Meazels ambush
+DB_AmbushTrigger((TRIGGER)S_SCL_MaezelsAmbush_3b6f0e16-4075-46b1-b7bb-09feb85177ec, (TRIGGER)S_SCL_MeazelsAmbush_Perception_58801057-a325-4efc-b5f9-e65789a89bd4, (DIFFICULTYCLASS)Act2_Hard_91fb3598-dd68-4fa8-a306-2c7284709b08);
+DB_AmbushTrigger_Ambusher((TRIGGER)S_SCL_MaezelsAmbush_3b6f0e16-4075-46b1-b7bb-09feb85177ec, (CHARACTER)S_SCL_Meazel_01_c4936e8e-d71d-4ae5-a19e-32aba944c5ce, 1);
+DB_AmbushTrigger_Ambusher((TRIGGER)S_SCL_MaezelsAmbush_3b6f0e16-4075-46b1-b7bb-09feb85177ec, (CHARACTER)S_SCL_Meazel_02_64be77ae-d3cc-4749-bee3-bea030d8a091, 1);
+DB_AmbushTrigger_Ambusher((TRIGGER)S_SCL_MaezelsAmbush_3b6f0e16-4075-46b1-b7bb-09feb85177ec, (CHARACTER)S_SCL_Meazel_03_49dd9085-95c9-43f9-8e07-56d44cf1836a, 1);
+DB_AmbushTrigger_Ambusher((TRIGGER)S_SCL_MaezelsAmbush_3b6f0e16-4075-46b1-b7bb-09feb85177ec, (CHARACTER)S_SCL_Meazel_04_adfbe45b-9376-4957-bf07-ef5ab7a00e22, 1);
+//END_REGION
+
+//REGION Plant Blights ambushing DB
+// Blight Combat 1
+DB_AmbushTrigger((TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d, (TRIGGER)S_SCL_BlightCombat1_DetectTrigger_1bab2cb6-7098-4392-bf6b-a5b4652b47fe, (DIFFICULTYCLASS)Act2_NearlyImpossible_52918812-bc1c-43b5-881a-58443902f5fa);
+DB_AmbushTrigger_CustomAmbushStatus((TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d,"SCL_PLANTBLIGHT_AMBUSH");
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat1_Needle_01_43051ff7-40fe-46f2-8e1a-c1532b5f1623, (TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat1_Needle_02_d840e4a4-05d1-43d0-a938-5ea976c48262, (TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat1_Needle_03_2195ef75-14f8-4e69-8a0b-71a7d7493216, (TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat1_Needle_04_8dff6b5d-9d75-47c0-ba9d-b31fbc5eb5e9, (TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat1_Needle_05_d2c5a43c-f278-45b1-8f4d-27157d76b765, (TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat1_Needle_06_0bcfc8c4-2798-4005-a4ab-30a5ad20b830, (TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat1_Vine_01_f91a6e92-f2b2-45b0-a172-aa60bfa39c30, (TRIGGER)S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d);
+
+// Blight Combat 2
+DB_AmbushTrigger((TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932, (TRIGGER)S_SCL_BlightCombat2_DetectTrigger_5d48345d-8a6a-47dd-80ce-176f4e12b48d, (DIFFICULTYCLASS)Act2_NearlyImpossible_52918812-bc1c-43b5-881a-58443902f5fa);
+DB_AmbushTrigger_CustomAmbushStatus((TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932,"SCL_PLANTBLIGHT_AMBUSH");
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat2_Needle_01_9e6c42bf-4ef4-4f27-ab4a-6ba7c52fa97a, (TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat2_Needle_02_f5d31e3f-7804-4020-b9c0-cfb291f0d242, (TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat2_Needle_03_987774f2-4a8a-40b4-887b-5b64b40efa27, (TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat2_Needle_04_d65712bb-4317-4d6e-a6f6-3d13ee8adfd4, (TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat2_Needle_05_0a01fa15-4bf5-4e50-9800-658f3d0b3821, (TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat2_Needle_06_3a982645-3723-4ee4-99de-f9d47cb66889, (TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat2_Vine_01_5925c045-cbc4-4c34-90e6-79009fa72b7c, (TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat2_Vine_02_9c848069-3680-4362-88b3-9d4b40673cb0, (TRIGGER)S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+
+// Blight Combat 3
+DB_AmbushTrigger((TRIGGER)S_SCL_BlightCombat3_AmbushTrigger_56e30fd5-abd1-49a7-ae4b-e053d4cdc2f8, (TRIGGER)S_SCL_BlightCombat3_DetectTrigger_2cab2d1d-f96e-44e6-a4e9-d25d3d6c3044, (DIFFICULTYCLASS)Act2_NearlyImpossible_52918812-bc1c-43b5-881a-58443902f5fa);
+DB_AmbushTrigger_CustomAmbushStatus((TRIGGER)S_SCL_BlightCombat3_AmbushTrigger_56e30fd5-abd1-49a7-ae4b-e053d4cdc2f8,"SCL_PLANTBLIGHT_AMBUSH");
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat3_Needle_01_b9199eb2-91b1-44fb-9982-eb1e7c83f356, (TRIGGER)S_SCL_BlightCombat3_AmbushTrigger_56e30fd5-abd1-49a7-ae4b-e053d4cdc2f8);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat3_Needle_02_788dd578-e083-4fe1-b3d6-c2e92cd24376, (TRIGGER)S_SCL_BlightCombat3_AmbushTrigger_56e30fd5-abd1-49a7-ae4b-e053d4cdc2f8);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat3_Needle_03_c0e74c46-4d3f-4f58-93f6-5ec7fcf1fa04, (TRIGGER)S_SCL_BlightCombat3_AmbushTrigger_56e30fd5-abd1-49a7-ae4b-e053d4cdc2f8);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat3_Vine_01_16edd9bb-85f3-40f0-a06c-43823d35764f, (TRIGGER)S_SCL_BlightCombat3_AmbushTrigger_56e30fd5-abd1-49a7-ae4b-e053d4cdc2f8);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat3_Vine_02_d74936d8-29e2-47c2-97be-2a28e2494e53, (TRIGGER)S_SCL_BlightCombat3_AmbushTrigger_56e30fd5-abd1-49a7-ae4b-e053d4cdc2f8);
+DB_SCL_Misc_PlantBlights_Ambushing((CHARACTER)S_SCL_BlightCombat3_Vine_03_6195aa5c-1625-4aab-b5bb-e42eeb37a18b, (TRIGGER)S_SCL_BlightCombat3_AmbushTrigger_56e30fd5-abd1-49a7-ae4b-e053d4cdc2f8);
+
+SetFlag((FLAG)SCL_BlightCreature_State_Ambushing_f7cf8aa4-0029-43ca-8862-e5512cb4c467, S_SCL_BlightCombat2_Mound_01_1b294fe0-f1a1-4e81-9d4c-8d86bbda7d2b);
+//END_REGION
+
+//REGION Plundered Caravan
+DB_KnowledgeCheckTrigger_AD("SCL_PlunderedCaravan_Ox", (TRIGGER)S_SCL_PlunderedCaravan_FindOxTrigger_0b90f5e8-e409-4463-8f73-595ae2e54586, "Survival", (DIFFICULTYCLASS)Act2_VeryEasy_9d1f2171-fef1-4c03-9e83-523485174c46, (DIALOGRESOURCE)SCL_PlunderedCaravan_PAD_InvestigatedOx_6b98b48f-de2d-95c6-182a-796010952562, (FLAG)SCL_PlunderedCaravan_State_PassedOxInvestigation_e933502d-8440-8b2e-e071-158f80e614d9);
+
+//DB_SCL_PlunderedCaravan_CharacterCounterparts((CHARACTER)_Tiefling, (CHARACTER)_DeathPos)
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Ox", (CHARACTER)S_DEN_Gatekeeper_847717b3-82eb-45a7-b875-78665c12ce9a, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_Gatekeeper_2c3f30d1-45b9-4395-97b8-901af4b87ffc);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_Griefling_7ce0afc2-e8f2-4f2e-82d8-27df98acc3d8, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_Griefling_b0499bc2-66c0-478d-8d38-ff44c3110fc0);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_GrieflingFriend_c3334ee5-38dc-4197-aacc-4aa55803ff52, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_GrieflingFriend_88a7337d-6577-469f-b653-05c23a39848a);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_Protester_001_bd673fe3-983d-4aee-b73b-6ba6217e8a20, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_Protester_001_3e0ff9d9-ba70-4267-ae73-9f5a78f2b514);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_Protester_002_5ba86ab9-b36e-468a-a0ac-0439c0ec205a, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_Protester_002_112a71c8-98f9-474d-99ae-0ac17e136fbf);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_Protester_003_650d1cdc-fff6-49f0-aaa2-0a10bcf89abf, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_Protester_003_582dd7f0-ba92-4669-9c11-81dafd88995a);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_Tiefling_004_c9562174-44af-4ffa-9e5e-da58538f23d8, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_Tiefling_004_8425b379-cd07-4076-8bd8-831eef1b1317);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_TieflingRefugee_004_bc4c4282-86b0-4330-9df8-246ed0a704a2, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_TieflingRefugee_004_4a583108-6d59-411c-a07e-d06864e91fab);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_Trainer_02025646-347a-4235-aef7-e46b7c94b435, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_Trainer_b32bbaba-e759-422e-bbaa-3381540373a6);
+DB_SCL_PlunderedCaravan_CorpsePositions("SCL_PlunderedCaravan_Caravan", (CHARACTER)S_DEN_Tiefling_008_03b6fae4-d250-4ce9-9a01-19cb427deb17, (TRIGGER)S_SCL_PlunderedCaravan_DeadTiefling_Tiefling_008_8fee6f3b-8958-4ca5-8d4d-3e90f632ccf2);
+
+DB_SCL_PlunderedCaravan_OnStageEntities("SCL_PlunderedCaravan_Ox", S_SCL_PlunderedCaravan_Journal_3e1b584e-d89e-4806-9e96-122e225e6023);
+DB_SCL_PlunderedCaravan_OnStageEntities("SCL_PlunderedCaravan_Ox", S_SCL_PlunderedCaravan_Torch_000_19117299-2557-4517-a91a-831441a1e4c1);
+
+DB_SCL_PlunderedCaravan_OnStageEntities("SCL_PlunderedCaravan_Caravan", S_SCL_PlunderedCaravan_Torch_001_4e552d2f-f30c-4d70-b952-df6ca3ce60d8);
+DB_SCL_PlunderedCaravan_OnStageEntities("SCL_PlunderedCaravan_Caravan", S_SCL_PlunderedCaravan_Torch_002_74dcdeb4-4488-432d-9175-f574882b27ae);
+DB_SCL_PlunderedCaravan_OnStageEntities("SCL_PlunderedCaravan_Caravan", S_SCL_PlunderedCaravan_Torch_003_68028ece-69ee-4dae-9b62-b97d4a324446);
+DB_SCL_PlunderedCaravan_OnStageEntities("SCL_PlunderedCaravan_Caravan", S_SCL_PlunderedCaravan_Shackles_d44bc4e1-6bc4-4f5d-b788-2771ad7acf89);
+DB_SCL_PlunderedCaravan_OnStageEntities("SCL_PlunderedCaravan_Caravan", S_SCL_PlunderedCaravan_DeadCultist_0901178a-3c74-41de-8fb5-67c7ecdbeec1);
+
+PROC_SCL_PlunderedCaravan_Init();
+//END_REGION
+
+//REGION Harper's Duty
+DB_GLO_CharacterCorpseDialog((CHARACTER)S_SCL_HarpersDuty_DeadHarper_000_3bdf3c08-b85c-4eae-8e8d-0d9456b9f7a1, (DIALOGRESOURCE)SCL_HarpersDuty_DeadHarper_bac24e34-a05d-b661-7388-66d49635b286);
+//END_REGION
+
+//REGION Dead Cursed Animal
+PROC_TriggerRegisterForPlayers((TRIGGER)S_SCL_DeadCursedAnimal_ADTrigger_ebe8a01e-4568-463f-9689-89fc65f87316);
+//END_REGION
+
+//REGION Siege Remains
+DB_KnowledgeCheckTrigger_AD("SCL_SiegeRemains_HistoryCheck", (TRIGGER)S_SCL_SiegeRemains_HistoryCheckTrigger_cdf9a21b-118f-4fef-b95d-cc1af4886c7a, "Religion", (DIFFICULTYCLASS)Act2_Medium_89f0acd4-346f-479d-8b7a-1a3eb5382f6d, (DIALOGRESOURCE)SCL_SiegeRemains_AD_HistoryCheck_47a714ef-4be7-b5da-0148-9d683d089afe, (FLAG)SCL_SiegeRemains_State_PassedHistoryCheck_6b036f53-d502-7414-d66d-033d86df4dae);
+//END_REGION
+
+//REGION Emerald Skeletons
+
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton1_19e06153-b42b-4019-9af9-a5cdf5609e02,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton2_4dafdd11-add0-45cf-a1b6-ff31b54359c0,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton3_ec91b345-3a8b-40fa-b012-a5662fa6071d,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton4_5c9ca9d1-cc69-4604-9f8d-e476ffa5e12f,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton5_10b52d68-6a6f-449e-9ba3-b7917345100c,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton6_ac99ca32-d289-4815-9fa8-14e53380732c,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton7_31c5b0d3-c761-4b67-976e-50943e132a97,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton8_80bf1cc0-350c-4844-b060-366780ae4459,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton9_57275a57-6b2e-4730-b8ca-e8e0791ab03b,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton10_b940fb4e-f458-4948-b4f2-44805b48ceed,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton11_b7bd8c93-2b91-4e40-b2df-f5ffb430d58d,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton12_cb486b9a-33df-4fda-9273-1993e82f7d73,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton13_92e027a4-31c5-494f-9abf-6b7a6c144fde,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton14_d633018d-f4e0-43a1-b06f-5619d823a9b6,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_EmeraldSkeleton15_6e40facd-09fb-40a9-a4ea-17e7759514e1,(DIALOGRESOURCE)SCL_RuinedBattlefield_AD_EmeraldEnclaveFallen_51c69e65-78cb-fd30-416e-4e7e0f794f70);
+
+//END_REGION
+
+//REGION Combat Groups
+// Used for background goal Act2_Outlander_ThreeCombatEncountersSCL
+// Blight ambush combat 1
+DB_GLO_DefeatCounter_AllPermaDefeatedGlobalFlag("SCL_CombatGroups_BlightCombat1", (FLAG)SCL_CombatGroups_State_BlightCombat1_AllPermadefeated_5ae14a1f-2b75-477e-9ce1-8aa0bfe3e27e);
+DB_GLO_DefeatCounter(S_SCL_BlightCombat1_Needle_01_43051ff7-40fe-46f2-8e1a-c1532b5f1623, "SCL_CombatGroups_BlightCombat1");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat1_Needle_06_0bcfc8c4-2798-4005-a4ab-30a5ad20b830, "SCL_CombatGroups_BlightCombat1");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat1_Needle_03_2195ef75-14f8-4e69-8a0b-71a7d7493216, "SCL_CombatGroups_BlightCombat1");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat1_Needle_04_8dff6b5d-9d75-47c0-ba9d-b31fbc5eb5e9, "SCL_CombatGroups_BlightCombat1");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat1_Needle_05_d2c5a43c-f278-45b1-8f4d-27157d76b765, "SCL_CombatGroups_BlightCombat1");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat1_Needle_02_d840e4a4-05d1-43d0-a938-5ea976c48262, "SCL_CombatGroups_BlightCombat1");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat1_Vine_01_f91a6e92-f2b2-45b0-a172-aa60bfa39c30, "SCL_CombatGroups_BlightCombat1");
+
+
+// Blight ambush combat 2
+DB_GLO_DefeatCounter_AllPermaDefeatedGlobalFlag("SCL_CombatGroups_BlightCombat2", (FLAG)SCL_CombatGroups_State_BlightCombat2_AllPermadefeated_85ebf0da-6918-44bb-853e-ecca27a33db7);
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Mound_01_1b294fe0-f1a1-4e81-9d4c-8d86bbda7d2b, "SCL_CombatGroups_BlightCombat2");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Needle_05_0a01fa15-4bf5-4e50-9800-658f3d0b3821, "SCL_CombatGroups_BlightCombat2");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Needle_06_3a982645-3723-4ee4-99de-f9d47cb66889, "SCL_CombatGroups_BlightCombat2");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Vine_01_5925c045-cbc4-4c34-90e6-79009fa72b7c, "SCL_CombatGroups_BlightCombat2");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Vine_02_9c848069-3680-4362-88b3-9d4b40673cb0, "SCL_CombatGroups_BlightCombat2");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Needle_03_987774f2-4a8a-40b4-887b-5b64b40efa27, "SCL_CombatGroups_BlightCombat2");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Needle_01_9e6c42bf-4ef4-4f27-ab4a-6ba7c52fa97a, "SCL_CombatGroups_BlightCombat2");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Needle_04_d65712bb-4317-4d6e-a6f6-3d13ee8adfd4, "SCL_CombatGroups_BlightCombat2");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat2_Needle_02_f5d31e3f-7804-4020-b9c0-cfb291f0d242, "SCL_CombatGroups_BlightCombat2");
+
+
+// Blight ambush combat 3
+DB_GLO_DefeatCounter_AllPermaDefeatedGlobalFlag("SCL_CombatGroups_BlightCombat3", (FLAG)SCL_CombatGroups_State_BlightCombat3_AllPermadefeated_ab6d28c2-b516-422a-8547-fc972d2a09d3);
+DB_GLO_DefeatCounter(S_SCL_BlightCombat3_Needle_01_b9199eb2-91b1-44fb-9982-eb1e7c83f356, "SCL_CombatGroups_BlightCombat3");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat3_Vine_01_16edd9bb-85f3-40f0-a06c-43823d35764f, "SCL_CombatGroups_BlightCombat3");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat3_Needle_02_788dd578-e083-4fe1-b3d6-c2e92cd24376, "SCL_CombatGroups_BlightCombat3");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat3_Vine_03_6195aa5c-1625-4aab-b5bb-e42eeb37a18b, "SCL_CombatGroups_BlightCombat3");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat3_Needle_03_c0e74c46-4d3f-4f58-93f6-5ec7fcf1fa04, "SCL_CombatGroups_BlightCombat3");
+DB_GLO_DefeatCounter(S_SCL_BlightCombat3_Vine_02_d74936d8-29e2-47c2-97be-2a28e2494e53, "SCL_CombatGroups_BlightCombat3");
+
+
+// Shadowbirds
+DB_GLO_DefeatCounter_AllPermaDefeatedGlobalFlag("SCL_CombatGroups_ShadowBirds", SCL_CombatGroups_State_ShadowBirds_AllPermadefeated_005d34cc-d0c0-4bf8-b3fd-7f83219c581a);
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird12_7c1f5bc7-32ae-4748-b2de-f8017f46539e, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird10_04ea7782-2b12-4501-941d-269812313664, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird03_08732480-5270-441b-8c86-ea73a05e00a7, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird05_0d53af5c-9564-4348-a60c-b54b9bac190a, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird02_519e0f51-bd61-4ada-be37-e47057c13973, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird04_9743aa16-f4c9-4230-8483-8d1671bfe0ea, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird06_a1b7ad7d-42f4-46cc-ad67-8a5182602d58, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird09_a7c4e422-8a6e-4e83-9abc-60d7fc65544d, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird11_c1e46322-6fda-4d49-8f28-bd5ee6007cdc, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird01_b3bad6c3-e220-45d7-be27-15f591e74d2d, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird07_e2c5dfd4-4fd9-44b6-b604-4865304b85cd, "SCL_CombatGroups_ShadowBirds");
+DB_GLO_DefeatCounter(S_SCL_ShadowBirds_Bird08_e65b73cd-b447-4b3e-8880-4e5cd8d21723, "SCL_CombatGroups_ShadowBirds");
+
+
+//Meazels
+DB_GLO_DefeatCounter_AllPermaDefeatedGlobalFlag("SCL_CombatGroups_Meazels", (FLAG)SCL_CombatGroups_State_Meazels_AllPermadefeated_f9e5a895-bc50-46d2-94de-38910fcf12b5);
+DB_GLO_DefeatCounter(S_SCL_Meazel_01_c4936e8e-d71d-4ae5-a19e-32aba944c5ce, "SCL_CombatGroups_Meazels");
+DB_GLO_DefeatCounter(S_SCL_Meazel_03_49dd9085-95c9-43f9-8e07-56d44cf1836a, "SCL_CombatGroups_Meazels");
+DB_GLO_DefeatCounter(S_SCL_Meazel_02_64be77ae-d3cc-4749-bee3-bea030d8a091, "SCL_CombatGroups_Meazels");
+DB_GLO_DefeatCounter(S_SCL_Meazel_04_adfbe45b-9376-4957-bf07-ef5ab7a00e22, "SCL_CombatGroups_Meazels");
+
+
+// KuoToas
+DB_GLO_DefeatCounter_AllPermaDefeatedGlobalFlag("SCL_CombatGroups_KuoToas", (FLAG)SCL_CombatGroups_State_KuoToas_AllPermadefeated_c13733df-bd3d-4d9c-b0af-4ce404e47541);
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_12_cceac3bb-08ba-4226-ad6b-6bff72c96b36, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_11_1544060f-0538-4e22-8dfc-18147a067eae, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_08_1f8eb891-48eb-4804-8ae2-e495c19ed8f8, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_06_4a99ee81-35bd-4a20-bcd7-36dfb2bbbf80, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_01_506a0ac8-f9f5-4679-a94d-7d1ad6abd173, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_07_80d5c307-054d-4240-8e08-f52ef24a799b, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_02_81cead3c-d55e-4a1c-bfdd-7758a532c9fd, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_03_61122493-13f4-49f8-8441-76260c8d57fa, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_09_83a1863c-2188-4c98-93be-c6437a532332, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_05_767879dc-4e7a-4d1a-98f3-029ce28752e5, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_10_78978ec1-6e8b-436a-9df6-81e4fdf53f5c, "SCL_CombatGroups_KuoToas");
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_04_ff24c261-fe97-4451-a79a-04cdf16bc016, "SCL_CombatGroups_KuoToas");
+PROC_SCL_Misc_CheckKuotoaFight_Hardcore();
+
+//Harper scout shadows
+// Check for SCL_HarperScouts_State_ShadowsDefeated
+//END_REGION
+
+//REGION Various narrator ADs
+
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_RuinedBattleground_LostGoods_39103882-2e1f-4933-9034-2a6b7e8bb07c,SCL_RuinedBattlefield_AD_LostGoods_b7d0db02-797d-feb7-ccee-5999b75ace7a);
+
+//END_REGION
+
+PROC_RegisterWorldGossipTrigger(S_PartyBanterTrigger_SCL_FishermenHut_bf54f921-a510-4796-88df-f16fb7fe4ff8);
+PROC_RegisterWorldGossipTrigger(S_PartyBanterTrigger_SCL_Forest_c3aba634-738e-4329-9420-4606cb2a06a7);
+DB_WorldGossip_RegionTrigger(S_PartyBanterTrigger_SCL_FishermenHut_bf54f921-a510-4796-88df-f16fb7fe4ff8, BANTERREGION_SCL_FishermenHut_990b8842-5b26-4738-9fe3-48010ea2c2fa);
+DB_WorldGossip_RegionTrigger((TRIGGER)S_PartyBanterTrigger_SCL_Forest_c3aba634-738e-4329-9420-4606cb2a06a7, BANTERREGION_SCL_Forest_9d791baf-5526-4f27-99ec-37a93cd21112);
+
+//REGION Replace mines
+PROC_SetOnStage((ITEM)PUZ_GEN_Trap_Mine_A_Copper_A_000_a8a7d6c3-0656-4f32-8d9d-5d6a8cdcd460, 0);
+PROC_SetOnStage((ITEM)PUZ_GEN_Trap_Mine_A_Copper_A_001_9f956431-232f-45aa-9f1d-68dac2b4e7c5, 0);
+PROC_SetOnStage((ITEM)PUZ_GEN_Trap_Mine_A_Copper_A_002_c8dc38d6-914b-40e8-8a9c-dd5a0ef84c93, 0);
+PROC_SetOnStage((ITEM)PUZ_GEN_Tripwire_C_000_86a911e3-09bf-43f7-80ba-a34d3200b853, 0);
+//END_REGION
+
+PROC_SetOnStage(DEC_GEN_WaterPump_A_000_c7a1ab8b-6921-445c-8e81-033791d22c88, 0);
+KBSECTION
+//REGION States 
+IF
+FlagSet((FLAG)SCL_ShadowCurse_State_CurseLifted_af78af4a-48b2-46a8-be6f-f25dfa579471,NULL_00000000-0000-0000-0000-000000000000,_)
+THEN
+ClearFlag((FLAG)SCL_ShadowCurse_State_Default_13a8d7f3-9942-4c8c-9428-b4af0b433994,NULL_00000000-0000-0000-0000-000000000000,0,1);
+
+IF
+FlagSet((FLAG)SCL_ShadowCurse_State_Default_13a8d7f3-9942-4c8c-9428-b4af0b433994,NULL_00000000-0000-0000-0000-000000000000,_)
+THEN
+ClearFlag((FLAG)SCL_ShadowCurse_State_CurseLifted_af78af4a-48b2-46a8-be6f-f25dfa579471,NULL_00000000-0000-0000-0000-000000000000,0,1);
+//END_REGION
+
+IF
+EnteredCombat(S_SCL_BlightCombat2_Mound_01_1b294fe0-f1a1-4e81-9d4c-8d86bbda7d2b, _)
+AND
+DB_AmbushTrigger(S_SCL_BlightCombat1_AmbushTrigger_1ead9d72-5169-4f3f-907f-702be7c98b6d, _, _)
+THEN
+PROC_CancelAmbush(S_SCL_BlightCombat2_AmbushTrigger_a071e764-c2dc-4429-b762-adee843de932);
+
+
+//REGION Skeptical Robber
+PROC
+PROC_HiddenPerceptionCheckSucceeded(_Player, _, (ITEM)S_SCL_SkepticalRobber_TrunkHole_85f9b25a-8e9d-4c01-9fc4-d557ff61b8e6)
+AND
+QRY_OnlyOnce("SCL_SkepticalRobber_DiscoverBurrow")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)SCL_SkepticalRobber_PAD_DiscoverBurrow_3f8df27b-ab77-71b2-45b1-b709b01f188b, _Player);
+
+PROC
+PROC_HiddenPerceptionCheckSucceeded(_Player, _, S_SCL_SkepticalRobber_Footprints_a4aabac7-6297-4a41-9d07-899dc8e36d67)
+AND
+QRY_OnlyOnce("SCL_SkepticalRobber_DiscoverFootprints")
+AND
+DB_GlobalFlag((FLAG)SCL_SkepticalRobber_Knows_GraveRobbed_370534ad-1d77-456f-81fc-da37485f7ac5)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)SCL_SkepticalRobber_PAD_FoundFootprints_5581f7f3-5397-b43e-9b16-b693c8459a29, _Player);
+
+PROC
+PROC_HiddenPerceptionCheckSucceeded(_Player, _, S_SCL_SkepticalRobber_Footprints_a4aabac7-6297-4a41-9d07-899dc8e36d67)
+THEN
+SetFlag((FLAG)SCL_SkepticalRobber_State_FoundFootprints_7bcca833-7c00-40a9-bb05-6d1483db18f0,NULL_00000000-0000-0000-0000-000000000000,0);
+
+IF
+EnteredTrigger(_Player,S_SCL_SkepticalRobber_GraveRevealTrigger_ac23041b-9e6e-4c4e-81fd-8a7f9309e82e)
+THEN
+SetEntityEvent((ITEM)S_SCL_SkepticalRobber_Grave_ebc38f3c-6638-4394-8ea5-f77d65578919, "StoryReveal");
+PROC_TriggerUnregisterForPlayers(S_SCL_SkepticalRobber_GraveRevealTrigger_ac23041b-9e6e-4c4e-81fd-8a7f9309e82e);
+
+IF
+UseFinished(_Player,(ITEM)S_SCL_SkepticalRobber_Grave_ebc38f3c-6638-4394-8ea5-f77d65578919, 1)
+AND
+QRY_OnlyOnce("SCL_SkepticalRobber_DiscoverGrave")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)SCL_SkepticalRobber_PAD_DiscoverGrave_6315f08e-e62f-cd4b-1411-88d9ed926569, _Player);
+
+//Tracks who has read the tombstone, used later on for variation on a PAD
+IF
+UseFinished(_Player, S_SCL_SkepticalRobber_Tombstone_c1ca9d3e-0b2b-4c32-8990-fe8955bf3b4f, 1)
+AND
+NOT DB_GlobalFlag((FLAG)SCL_SkepticalRobber_Knows_WifesName_fc5df368-6a2c-48d6-bfc4-d4d785e8e593)
+THEN
+SetFlag(SCL_SkepticalRobber_Knows_WifesName_fc5df368-6a2c-48d6-bfc4-d4d785e8e593);
+
+//When the ring is obtained by the party for the first time, sets a global Knows flag
+IF
+FlagSet(SCL_SkepticalRobber_State_HasRing_bdde9e08-b1d1-42dc-8786-6c202d475ba4, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag((FLAG)SCL_SkepticalRobber_Knows_WifesRing_25e662e8-298c-4115-8ca0-e61545aed619)
+THEN
+SetFlag(SCL_SkepticalRobber_Knows_WifesRing_25e662e8-298c-4115-8ca0-e61545aed619, NULL_00000000-0000-0000-0000-000000000000);
+ClearFlag(SCL_SkepticalRobber_State_TombstoneVariation_1029a9bc-3dcb-4e12-b0fe-e39cf7d39dc1, NULL_00000000-0000-0000-0000-000000000000);
+
+//Sets a flag checked in  AD_ReadTombstone, playing a different node the first time you interact with the tombstone after reading the letter.
+//The flag is cleared when the node plays, or when the player finds the ring - then the initial AD node is played on future interactions with the tombstone.
+IF
+GameBookInterfaceClosed(S_SCL_SkepticalRobber_RobbersNote_eba3981d-173b-4396-8ab5-8d35da355cec, _)
+AND
+NOT DB_GlobalFlag((FLAG)SCL_SkepticalRobber_Knows_WifesRing_25e662e8-298c-4115-8ca0-e61545aed619)
+AND
+QRY_OnlyOnce("SCL_SkepticalRobber_FirstTimeReadingLetter")
+THEN
+SetFlag(SCL_SkepticalRobber_State_TombstoneVariation_1029a9bc-3dcb-4e12-b0fe-e39cf7d39dc1, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+GameBookInterfaceClosed(S_SCL_SkepticalRobber_RobbersNote_eba3981d-173b-4396-8ab5-8d35da355cec, _Player)
+AND
+DB_GlobalFlag((FLAG)SCL_SkepticalRobber_Knows_WifesRing_25e662e8-298c-4115-8ca0-e61545aed619)
+AND
+QRY_OnlyOnce("SCL_SkepticalRobber_ReadNoteKnowsRing")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)SCL_SkepticalRobber_PAD_ReadRobbersNote_999819ca-f574-ab1c-e983-ecb544d86fcb, _Player);
+
+//Plays the AD if you've read the Tombstone but haven't found the ring yet.
+IF
+GameBookInterfaceClosed(S_SCL_SkepticalRobber_RobbersNote_eba3981d-173b-4396-8ab5-8d35da355cec, _Player)
+AND
+NOT DB_GlobalFlag((FLAG)SCL_SkepticalRobber_Knows_WifesRing_25e662e8-298c-4115-8ca0-e61545aed619)
+AND
+DB_GlobalFlag((FLAG)SCL_SkepticalRobber_Knows_WifesName_fc5df368-6a2c-48d6-bfc4-d4d785e8e593)
+AND
+QRY_OnlyOnce("SCL_SkepticalRobber_ReadNoteKnowsName")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)SCL_SkepticalRobber_PAD_ReadRobbersNote_999819ca-f574-ab1c-e983-ecb544d86fcb, _Player);
+
+IF
+GameBookInterfaceClosed(S_SCL_SkepticalRobber_RobbersNote_eba3981d-173b-4396-8ab5-8d35da355cec, _Player)
+THEN
+PROC_ShowMarker(_Player,"SCL_SkepticalRobber");
+
+//END_REGION
+
+//REGION Shadow Birds
+
+IF
+DB_SCL_ShadowBird_Birds(_Bird, _)
+THEN
+SetOnStage(_Bird, 0);
+
+IF
+DB_SCL_ShadowBird_Birds(_Bird, _)
+AND
+DB_PermaDefeated(_Bird)
+THEN
+PROC_StopLoopEffect(_Bird, "SCL_ShadowBirds");
+
+PROC
+PROC_BlockLootCorpse(_Player, S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07)
+AND
+NOT DB_OnlyOnce("SCL_ShadowBirds")
+THEN
+PROC_StopLoopEffect((CHARACTER)S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, "SCL_ShadowBirds_WarningEffect");
+
+PROC
+PROC_BlockLootCorpse(_Player, S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07)
+AND
+NOT DB_OnlyOnce("SCL_ShadowBirds")
+THEN
+PROC_Ambush_SetPlayersSurprised(_Player);
+PROC_SCL_SurpriseNearbyHarpers(_Player);
+DB_CustomLootCorpseResponse(_Player, S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, 0);
+
+PROC
+PROC_BlockLootCorpse(_Player, S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07)
+AND
+QRY_OnlyOnce("SCL_ShadowBirds")
+AND
+DB_SCL_ShadowBird_Birds(_Char, _Timer)
+THEN
+ObjectTimerLaunch(_Char, "SCL_ShadowBird_BirdsSpawn", _Timer, 0);
+
+IF
+AttackedBy(S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, _, _, _, _, _, _)
+AND
+QRY_OnlyOnce("SCL_ShadowBirds")
+AND
+DB_SCL_ShadowBird_Birds(_Char, _Timer)
+THEN
+ObjectTimerLaunch(_Char, "SCL_ShadowBird_BirdsSpawn", _Timer, 0);
+
+IF
+OnThrown(S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, _, _, _, _, _, _)
+AND
+QRY_OnlyOnce("SCL_ShadowBirds")
+AND
+DB_SCL_ShadowBird_Birds(_Char, _Timer)
+THEN
+ObjectTimerLaunch(_Char, "SCL_ShadowBird_BirdsSpawn", _Timer, 0);
+
+IF
+AddedTo(S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, _, _)
+AND
+QRY_OnlyOnce("SCL_ShadowBirds")
+AND
+DB_SCL_ShadowBird_Birds(_Char, _Timer)
+THEN
+ObjectTimerLaunch(_Char, "SCL_ShadowBird_BirdsSpawn", _Timer, 0);
+
+
+IF
+ObjectTimerFinished(_Char, "SCL_ShadowBird_BirdsSpawn")
+AND
+DB_SCL_ShadowBird_Birds((CHARACTER)_Char, _)
+AND
+GetPosition(_Char, _X, _Y, _Z)
+THEN
+AppearAtPosition(_Char, _X, _Y, _Z, 1, DFLT_UTIL_Spawn_01_510ff37e-0618-40e4-8ce0-236e3dc9c291, "", 0);
+
+PROC
+PROC_SCL_SurpriseNearbyHarpers((GUIDSTRING)_Player)
+AND
+DB_SCL_HarperScouts_Scouts(_NPC)
+AND
+GetDistanceTo(_Player, _NPC,_Dist)
+AND
+_Dist < 15.0
+THEN
+PROC_MakeSurprised(_NPC);
+
+PROC
+PROC_KnowledgeCheck_Clear(S_SCL_ShadowBirds_NearCorpse_24c1344b-37a0-4ea2-98e1-2bb8ffde8559)
+THEN
+DB_SCL_ShadowBirds_Checkmade(1);
+
+IF
+OnThrown(S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, _, _, _, _, _, _)
+AND
+NOT DB_SCL_ShadowBirds_Checkmade(1)
+THEN
+TeleportTo(S_SCL_ShadowBirds_NearCorpse_24c1344b-37a0-4ea2-98e1-2bb8ffde8559, S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07);
+
+IF
+Teleported(S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, _, _, _, _, _, _, _, _)
+AND
+NOT DB_SCL_ShadowBirds_Checkmade(1)
+THEN
+TeleportTo(S_SCL_ShadowBirds_NearCorpse_24c1344b-37a0-4ea2-98e1-2bb8ffde8559, S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07);
+
+IF
+LeftTrigger(S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, _Trigger)
+AND
+DB_SCL_Shadowcurse_Area(_Trigger)
+AND
+QRY_OnlyOnce("SCL_ShadowBirds")
+THEN
+PROC_KnowledgeCheck_Clear(S_SCL_ShadowBirds_NearCorpse_24c1344b-37a0-4ea2-98e1-2bb8ffde8559);
+PROC_StopLoopEffect((CHARACTER)S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, "SCL_ShadowBirds_WarningEffect");
+
+IF
+EnteredTrigger(S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, _Trigger)
+AND
+DB_SCL_Shadowcurse_SafeZones(_Trigger)
+AND
+QRY_OnlyOnce("SCL_ShadowBirds")
+THEN
+PROC_KnowledgeCheck_Clear(S_SCL_ShadowBirds_NearCorpse_24c1344b-37a0-4ea2-98e1-2bb8ffde8559);
+PROC_StopLoopEffect((CHARACTER)S_SCL_ShadowBirds_DeadBird_53c04708-ea11-4526-83d4-5e2340042f07, "SCL_ShadowBirds_WarningEffect");
+
+//END_REGION
+
+//REGION Banned Selune Items
+IF
+TemplateAddedTo(LOOT_GEN_Idol_Selune_Silver_A_a8491759-fcb1-41bb-8290-035de4bd747f, _, (CHARACTER)_Player, _)
+AND
+DB_Players(_Player)
+AND
+_Player == S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679
+AND
+QRY_OnlyOnce("SH_SeluneIdol")
+THEN
+SetFlag(SCL_State_PickedUpSeluneIdol_b5c56a16-798f-4027-8324-e5888fc1bfb3, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+PROC_TryStartAD((DIALOGRESOURCE)SCL_PIckedUpSeluneIdol_PAD_6793fc28-e7ce-5b61-d812-90211b318bff, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+IF
+TemplateAddedTo(LOOT_GEN_Idol_Selune_Silver_A_a8491759-fcb1-41bb-8290-035de4bd747f, _,(CHARACTER)_Player, _)
+AND
+DB_Players(_Player)
+AND
+_Player != S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679
+AND
+IsInPartyWith(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Player, 1)
+AND
+GetDistanceTo(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Player, _Dist)
+AND
+_Dist < 8.0
+AND
+QRY_OnlyOnce("SH_SeluneIdol")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)SCL_PIckedUpSeluneIdol_PAD_6793fc28-e7ce-5b61-d812-90211b318bff, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+//END_REGION Banned Selune Items
+
+//REGION Plant Blights
+IF
+DB_SCL_Misc_PlantBlights_Ambushing(_BlightCreature, _AmbushTrigger)
+THEN
+SetFlag((FLAG)SCL_BlightCreature_State_Ambushing_f7cf8aa4-0029-43ca-8862-e5512cb4c467, _BlightCreature);
+DB_SCL_Misc_PlantBlights_Ambusher(_BlightCreature);
+DB_AmbushTrigger_Ambusher(_AmbushTrigger, _BlightCreature, 0);
+SetAmbushing(_BlightCreature, 1);
+
+PROC
+PROC_RevealAmbush(_RevealTrigger)
+AND
+DB_AmbushTrigger(_AmbushTrigger, _RevealTrigger, _)
+AND
+DB_SCL_Misc_PlantBlights_Ambushing(_BlightCreature, _AmbushTrigger)
+THEN
+DB_SCL_Misc_PlantBlights_SwitchToAmbushingStatus((CHARACTER)_BlightCreature);
+PROC_SCL_TwigAmbush_Reveal(_BlightCreature, _AmbushTrigger);
+
+IF
+StatusRemoved(_BlightCreature,"SCL_PLANTBLIGHT_AMBUSH",_,_)
+AND
+DB_SCL_Misc_PlantBlights_SwitchToAmbushingStatus((CHARACTER)_BlightCreature)
+THEN
+NOT DB_SCL_Misc_PlantBlights_SwitchToAmbushingStatus((CHARACTER)_BlightCreature);
+ApplyStatus(_BlightCreature, "AMBUSHING", -1.0);
+
+PROC
+PROC_LevelBecameUnreachable("SCL_Main_A")
+AND
+DB_SCL_Misc_PlantBlights_SwitchToAmbushingStatus((CHARACTER)_BlightCreature)
+THEN
+NOT DB_SCL_Misc_PlantBlights_SwitchToAmbushingStatus((CHARACTER)_BlightCreature);
+
+PROC
+PROC_LaunchAmbush(_AmbushTrigger, _)
+AND
+DB_SCL_Misc_PlantBlights_Ambushing(_BlightCreature, _AmbushTrigger)
+THEN
+PROC_SCL_TwigAmbush_Reveal(_BlightCreature, _AmbushTrigger);
+
+PROC
+PROC_CancelAmbush(_AmbushTrigger)
+AND
+DB_SCL_Misc_PlantBlights_Ambushing(_BlightCreature, _AmbushTrigger)
+THEN
+PROC_SCL_TwigAmbush_Reveal(_BlightCreature, _AmbushTrigger);
+
+IF
+EnteredCombat((CHARACTER)_BlightCreature, _)
+AND
+DB_SCL_Misc_PlantBlights_Ambushing(_BlightCreature, _AmbushTrigger)
+THEN
+PROC_SCL_TwigAmbush_Reveal(_BlightCreature, _AmbushTrigger);
+
+IF
+EnteredCombat((CHARACTER)_BlightCreature, _)
+AND
+DB_SCL_Misc_PlantBlights_Ambusher(_BlightCreature)
+THEN
+ClearFlag((FLAG)SCL_BlightCreature_State_Ambushing_f7cf8aa4-0029-43ca-8862-e5512cb4c467, _BlightCreature);
+
+PROC
+PROC_SCL_TwigAmbush_Reveal((CHARACTER)_BlightCreature, (TRIGGER)_AmbushTrigger)
+THEN
+NOT DB_SCL_Misc_PlantBlights_Ambushing(_BlightCreature, _AmbushTrigger);
+SetAmbushing(_BlightCreature, 0);
+RemoveStatus(_BlightCreature, "SCL_PLANTBLIGHT_AMBUSH");
+//END_REGION
+
+//REGION Dead Druid
+IF
+GameBookInterfaceClosed((ITEM)S_SCL_DeadDruid_Journal_25ef83c5-9f8c-4f9b-a775-eda8116d291d, _Player)
+THEN
+SetFlag((FLAG)SCL_DeadDruid_State_HasReadResearch_ad5d819f-2386-40bc-8493-0eeb2cc80e55);
+PROC_KnowledgeCheck(_Player, "SCL_DeadDruid_NatureCheck", S_SCL_DeadDruid_Journal_25ef83c5-9f8c-4f9b-a775-eda8116d291d, "AnimalHandling", (DIFFICULTYCLASS)Act2_Hard_91fb3598-dd68-4fa8-a306-2c7284709b08, (DIALOGRESOURCE)SCL_DeadDruid_PAD_ReadResearch_bf829390-a486-63e4-1c85-82222c1b27f1, (FLAG)SCL_DeadDruid_State_PassedNatureCheck_01a15655-6f14-f48e-8cf2-c74a10d95de9);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage(_Player, S_SCL_DeadDruid_Journal_25ef83c5-9f8c-4f9b-a775-eda8116d291d, "SCL_DeadDruid_NatureCheck")
+AND
+IsTagged(_Player, (TAG)DRUID_44ac4317-4d38-4d28-80e2-94024c6e42f0, 1)
+THEN
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(2);
+//END_REGION
+
+//REGION Dead Cursed Animal
+IF
+DB_InRegion(_Player, (TRIGGER)S_SCL_DeadCursedAnimal_ADTrigger_ebe8a01e-4568-463f-9689-89fc65f87316)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("SCL_DeadCursedAnimal_FoundAnimal")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)SCL_DeadCursedAnimal_PAD_FindAnimal_f719de89-f721-855d-3c0b-b92ee0150dbf, _Player);
+//END_REGION
+
+//REGION Harpers Duty
+IF
+GameBookInterfaceClosed((ITEM)S_SCL_HarpersDuty_Journal_cf486817-5430-4ad6-98c4-fd845965585b, _Player)
+THEN
+PROC_ShowMarker(_Player, "SCL_OliversHouse");
+//END_REGION
+
+
+//REGION Plundered Caravan
+IF
+DB_SCL_PlunderedCaravan_OnStageEntities(_, _Entity)
+THEN
+SetOnStage(_Entity, 0);
+
+// These characters always die if the tieflings survived act 1 and they make it to Act 2.
+PROC
+PROC_SCL_PlunderedCaravan_Init()
+AND
+DB_GlobalFlag(DEN_TieflingRefugees_State_LeftDen_003b304b-f058-4f8a-b9fa-a097e1b6b395)
+THEN
+PROC_SCL_PlunderedCaravan_Init_Internal();
+
+PROC
+PROC_SCL_PlunderedCaravan_Init_Internal()
+AND
+DB_SCL_PlunderedCaravan_CorpsePositions(_Group, _Tiefling, _Position)
+AND
+NOT DB_PermaDefeated(_Tiefling)
+THEN
+DB_SCL_PlunderedCaravan_GroupPresent(_Group);
+SetTag(_Tiefling, (TAG)ACT2_SHADOW_CURSE_IMMUNE_b47643e0-583c-4808-b108-f6d3b605b0a9); // Block resurrecting the corpses
+TeleportTo(_Tiefling, _Position, "SCL_PlunderedCaravan_KillTiefling", 0, 0, 0, 1, 1);
+
+IF
+EntityEvent(_Tiefling, "SCL_PlunderedCaravan_KillTiefling")
+THEN
+Die(_Tiefling, DEATHTYPE.Physical, NULL_00000000-0000-0000-0000-000000000000, 1, 1);
+SetOnStage(_Tiefling, 1);
+
+PROC
+PROC_SCL_PlunderedCaravan_Init_Internal()
+AND
+DB_SCL_PlunderedCaravan_GroupPresent(_Group)
+AND
+DB_SCL_PlunderedCaravan_OnStageEntities(_Group, _Entity)
+THEN
+SetOnStage(_Entity, 1);
+
+PROC
+PROC_SCL_PlunderedCaravan_Init_Internal()
+AND
+DB_SCL_PlunderedCaravan_GroupPresent("SCL_PlunderedCaravan_Ox")
+THEN
+DB_KnowledgeCheckTrigger_AD("SCL_PlunderedCaravan_Tiefling", (TRIGGER)S_SCL_PlunderedCaravan_FindTieflingTrigger_2dc333e3-cc53-49fe-9d16-1cd0c88e175d, "Medicine", (DIFFICULTYCLASS)Act2_Easy_0d9484eb-f680-4a33-853d-46fda64883f2, (DIALOGRESOURCE)SCL_PlunderedCaravan_PAD_InvestigatedTiefling_e5085391-e41c-8e11-b82d-36f8c69c1fdd, (FLAG)SCL_PlunderedCaravan_State_PassedTieflingMedicineCheck_e399b52e-0252-a055-8504-c9369dce092b);
+
+PROC
+PROC_SCL_PlunderedCaravan_Init_Internal()
+AND
+DB_SCL_PlunderedCaravan_GroupPresent("SCL_PlunderedCaravan_Caravan")
+THEN
+DB_KnowledgeCheckTrigger_AD("SCL_PlunderedCaravan_Kidnapping", (TRIGGER)S_SCL_PlunderedCaravan_FindKidnappingTrigger_ba9c7518-6cff-40df-8a82-39aecca8c271, "Perception", (DIFFICULTYCLASS)Act2_Medium_89f0acd4-346f-479d-8b7a-1a3eb5382f6d, (DIALOGRESOURCE)SCL_PlunderedCaravan_PAD_InvestigatedKidnapping_bcfbdada-712d-26c6-6a39-90b978736461, (FLAG)SCL_PlunderedCaravan_State_PassedKidnapInvestigation_694da535-e6dc-072f-1787-0915d078274b);
+
+IF
+TextEvent("SCL_PlumberedCaravan_GoToOx")
+THEN
+PROC_TeleportPartiesTo((TRIGGER)S_Debug_SCL_PlunderedCaravan_OxArea_d2da22e9-bc13-49e8-abb6-43653608e40e, "");
+
+IF
+TextEvent("SCL_PlumberedCaravan_GoToTieflings")
+THEN
+PROC_TeleportPartiesTo((TRIGGER)S_Debug_SCL_PlunderedCaravan_TieflingsArea_cbfbab89-3b1d-4eb3-8f58-32f07a4baf21, "");
+//END_REGION
+
+//REGION
+PROC
+PROC_SCL_Misc_CheckKuotoaFight_Hardcore()
+AND
+CheckRulesetModifierString(SCRIPTED_COMBAT_MECHANICS_cac2d8bd-c197-4a84-9df1-f86f54ad4521,"HARD",1)
+THEN
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_Champion_Hardcore_d3079efa-0477-4459-906d-48a7dbeefc2f, "SCL_CombatGroups_KuoToas");
+
+PROC
+PROC_SCL_Misc_CheckKuotoaFight_Hardcore()
+AND
+CheckRulesetModifierString(SCRIPTED_COMBAT_MECHANICS_cac2d8bd-c197-4a84-9df1-f86f54ad4521,"HARD",0)
+THEN
+DB_GLO_DefeatCounter(S_SCL_FishermansHut_CursedKuoToa_Champion_03524330-c6ca-4078-8fbf-12ec4ffa389a, "SCL_CombatGroups_KuoToas");
+//END_REGION
+
+//REGION MISC
+PROC
+PROC_State_Changed(S_HAV_Haven_SUB_6ac001f4-9c56-4a1b-963d-a509e158ffab, "HAV_Mood", _)
+AND
+NOT QRY_State_IsBeforeState(S_HAV_Haven_SUB_6ac001f4-9c56-4a1b-963d-a509e158ffab, "HAV_Mood", "HAV_Mood_State_Siege")
+AND
+DB_OneShot_VoiceBarkTrigger(S_HAV_EnteringHaven_MoonshieldVBTrigger_7cb5f342-96db-48c7-95e1-98a1e439d03b, (VOICEBARKRESOURCE)HAV_EnteringHaven_VB_Moonshield_e7b5450d-0c48-c997-62ac-88f09e7b1dd2, "Global")
+THEN
+PROC_RemoveOneShotVoiceBarkTrigger((TRIGGER)S_HAV_EnteringHaven_MoonshieldVBTrigger_7cb5f342-96db-48c7-95e1-98a1e439d03b, (VOICEBARKRESOURCE)HAV_EnteringHaven_VB_Moonshield_e7b5450d-0c48-c997-62ac-88f09e7b1dd2);
+//END_REGION MISC
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act2"

@@ -1,0 +1,740 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Disguised Forge Manual
+DB_UND_FurnaceSearch_DisguisedItem(
+	(ITEM)S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, 
+	(ITEMROOT)UNI_UND_FurnaceSearch_MyconidDrowJournal_Real_b4d60093-28b0-4076-b2f4-c7c3d3aa9d50,
+	(ITEMROOT)UNI_UND_FurnaceSearch_MyconidDrowJournal_Disguised_09d63912-2a69-499e-9497-dc832487e426);
+
+DB_UND_FurnaceSearch_DisguisedBook((ITEM)S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9);
+
+PROC_UND_FurnaceSearch_ApplyDisguise((ITEM)S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9);
+//END_REGION Disguised Forge Manual
+
+//REGION Journal
+PROC_TriggerRegisterForPlayers(S_UND_FurnaceSearch_RocheRubbleTrigger_9fc27fa6-c8d7-47b5-bac8-09e08742700e);
+
+DB_QuestDef_State(UND_FurnaceSearch_Knows_Weakness_ae69461f-bb43-2902-cbc2-8801dd1b01c5, "UND_AdamantineForge", "LearnedWeakness"); 
+DB_QuestDef_State(UND_FurnaceSearch_Knows_Rivalry_cf41059d-a66f-29c2-0210-695b142e7117, "UND_AdamantineForge", "LearnedRivalry");
+DB_QuestDef_State(UND_FurnaceSearch_State_ReadMap_ddc0dbb0-5b6e-4667-aee7-092da062cbd9, "UND_AdamantineForge", "FoundMap");
+DB_QuestDef_State_ConditionalFlag(UND_FurnaceSearch_Event_DuergarMentionsForge_b0c2033d-d85a-baf7-6edc-97f726be041a, "UND_AdamantineForge", "LearnedDuergarFirst", 0, UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+DB_QuestDef_State_ConditionalFlag(UND_FurnaceSearch_Event_DuergarMentionsForge_b0c2033d-d85a-baf7-6edc-97f726be041a, "UND_AdamantineForge", "LearnedDuergarQuest", 1, UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+DB_QuestDef_State_ConditionalFlag(UND_FurnaceSearch_Event_DuergarMentionsForge_b0c2033d-d85a-baf7-6edc-97f726be041a, "UND_AdamantineForge", "LearnedRubble", 0, UND_AdamantineForge_Knows_SawForge_c29d5e4c-39a5-4ec0-8fe7-03e3a426fe96);
+DB_QuestDef_State(UND_AdamantineForge_State_GolemSpawned_15052ed5-27d1-497c-bb70-bf19512f4943, "UND_AdamantineForge", "ForgeActivated");
+DB_QuestDef_DefeatedState("UND_AdamantineForge", "GolemDefeated", S_UND_KethericCity_AdamantineGolem_2a5997fc-5f2a-4a13-b309-bed16da3b255);
+DB_QuestDef_State((FLAG)Act2_PointOfNoReturnReached_a3155f30-b8f3-4db5-ac21-d3036f4426e3, "UND_AdamantineForge", "LeftActRubble");
+DB_QuestDef_State((FLAG)Act2_PointOfNoReturnReached_a3155f30-b8f3-4db5-ac21-d3036f4426e3, "UND_AdamantineForge", "LeftAct");
+
+// subquest Rubble
+DB_QuestDef_State(UND_FearfulRothe_State_RubbleDestroyed_f20c21ab-db2f-495d-ad0c-986187ec0570, "UND_AdamantineForge", "DestroyedRubble");
+DB_QuestDef_ChainedState("UND_AdamantineForge", "EnteredForgeQuest", "PassedRubble");
+DB_QuestDef_State(UND_AdamantineForge_Knows_SawForge_c29d5e4c-39a5-4ec0-8fe7-03e3a426fe96, "UND_AdamantineForge", "PassedRubble");
+	// When step _Step in quest _Quest is unlocked, so is step _NewStep. 
+//END_REGION Journal
+
+//REGION Dialog Setups
+DB_GLO_CharacterCorpseDialog((CHARACTER)S_UND_FurnaceSearch_MyconidDrow_a38523e2-7630-402e-8036-17cfe5397fe0, (DIALOGRESOURCE)UND_FurnaceSearch_MyconidDrow_Dead_3dd0f694-1a23-2f21-46aa-1b3081a8b8ec);
+DB_GLO_CharacterCorpseDialog((CHARACTER)S_UND_HookHorror_Hermit_2f00e363-09b2-4573-badc-f0995bef6610, (DIALOGRESOURCE)UND_HookHorror_Hermit_Dead_ad1f623e-96db-4b26-4fd9-6657403fbdaf);
+
+DB_GlobalFlagReactionAfterDialog((FLAG)UND_MyconidDrowDead_State_ToldFurnaceSearch_04c86a5f-0649-b27d-3c38-0a62d902720b, (DIALOGRESOURCE)UND_FurnaceSearch_MyconidDrow_Dead_3dd0f694-1a23-2f21-46aa-1b3081a8b8ec);
+DB_GlobalFlagReactionAfterDialog((FLAG)UND_HookHorrorDrowDead_State_MentionedForge_10ca3f0d-6558-9333-285c-a4d063d01241, (DIALOGRESOURCE)UND_HookHorror_Hermit_Dead_ad1f623e-96db-4b26-4fd9-6657403fbdaf);
+//END_REGION Dialog Setups
+
+//REGION Misc
+PROC_DeclareCounter("UND_FurnaceSearch_LearnedForgeCounter");
+
+DB_DeadOnceFlag((CHARACTER)S_UND_HookHorror_Hermit_2f00e363-09b2-4573-badc-f0995bef6610, UND_FurnaceSearch_State_FliroDead_94942993-aafa-4c81-beff-4092cdfdba2f);
+
+DB_BookFlags(S_UND_FurnaceSearch_MadRecords_833be3b9-9492-4c28-aee4-21c64af4e675,UND_FurnaceSearch_State_FoundMadRecords_ca62d3a3-dbcd-4119-956d-8aa450928b21);
+DB_BookFlags(S_UND_FurnaceSearch_MadRecords_833be3b9-9492-4c28-aee4-21c64af4e675,UND_FurnaceSearch_State_LearnedForgeFromMadDrowRecords_2a6267f3-8389-4e27-b74d-acf700a11a9f);
+
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB((VOICEBARKRESOURCE)UND_FurnaceSearch_VB_LearnedForge_3241b511-5c26-c085-4457-827cc8e512fd, 1);
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB(UND_FurnaceSearch_VB_SecondForgeMention_c94da114-1c6f-5785-836c-f9f1d880ac10, 2);
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB(UND_FurnaceSearch_VB_ThirdForgeMention_d57236c3-08c8-3140-78c7-f85181cfa88f, 3);
+
+// when we learn about the forge from a source we play a VB. 
+// first VB - generic, "Adamantine Forge?"
+// second VB - specific, mentions the previous source 
+// we need to make sure that the second VB cannot mention the second source, so we block it
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB_SourceBlockers("PetrifiedDrow", (FLAG)UND_FurnaceSearch_State_PetrifiedDrowLinesBlocked_0613ca02-a650-4203-b904-4e3d1fbe4e07);
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB_SourceBlockers("MyconidDrow", (FLAG)UND_FurnaceSearch_State_MyconidDrowLinesBlocked_5a33c67b-1859-4c20-b47b-fc990bbdc303);
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB_SourceBlockers("MadDrow", (FLAG)UND_FurnaceSearch_State_MadDrowLinesBlocked_135ffef8-4ab2-4b4f-961a-2246beb29ca5);
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB_SourceBlockers("Duergar", (FLAG)UND_FurnaceSearch_State_DuergarLinesBlocked_f201480c-1f67-4a26-8416-55ba4d99806c);
+//END_REGION Misc
+KBSECTION
+//REGION Learning about the Forge
+IF
+DB_GlobalFlag(UND_FurnaceSearch_Knows_AdamantFurnace_340ce276-b98d-1e30-5414-d15156b31be6)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_Knows_AdamantFurnace_NotFromSight_0248b153-a5bb-4c1a-8595-034534a4ff14)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)UND_FurnaceSearch_Knows_AdamantFurnace_NotFromSight_0248b153-a5bb-4c1a-8595-034534a4ff14);
+
+IF
+DB_GlobalFlag(UND_AdamantineForge_Knows_SawForge_c29d5e4c-39a5-4ec0-8fe7-03e3a426fe96)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+
+// Myconid Drow
+IF
+FlagSet(UND_MyconidDrowDead_State_ToldFurnaceSearch_04c86a5f-0649-b27d-3c38-0a62d902720b, _, _)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(UND_MyconidDrowDead_State_ToldFurnaceSearch_04c86a5f-0649-b27d-3c38-0a62d902720b, UND_FurnaceSearch_MyconidDrow_Dead_3dd0f694-1a23-2f21-46aa-1b3081a8b8ec, _DialogID)
+AND
+DB_DialogPlayers(_DialogID, _Player, 1)
+THEN
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "MyconidDrow", 1);
+
+IF
+GameBookInterfaceClosed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, _Player)
+AND
+NOT DB_UND_FurnaceSearch_Transformed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_State_LearnedForgeFromMyconidDrowJounal_efd89cba-c8cd-4209-a766-05765e58fe07);
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "MyconidDrow", 1);
+
+IF
+CustomBookUIClosed(_Player, "BOOK_UND_FurnaceSearch_ForgeManual")
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_State_LearnedForgeFromMyconidDrowJounal_efd89cba-c8cd-4209-a766-05765e58fe07);
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "MyconidDrow", 1);
+
+// Mad Drow
+PROC
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "MadDrow", _)
+AND
+NOT DB_GlobalFlag((FLAG)UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_State_LearnedForgeFromMadDrowFirst_1dbf96ae-f458-4fc0-be35-c96aae14005f);
+
+PROC
+PROC_BookFlags_FlagSet((ITEM)S_UND_FurnaceSearch_MadRecords_833be3b9-9492-4c28-aee4-21c64af4e675,(FLAG)UND_FurnaceSearch_State_LearnedForgeFromMadDrowRecords_2a6267f3-8389-4e27-b74d-acf700a11a9f,(CHARACTER)_Player)
+THEN
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "MadDrow", 0); // No VB in that case, as Forge reaction will be in the PAD here
+
+IF
+FlagSet(UND_HookHorrorDrowDead_State_MentionedForge_10ca3f0d-6558-9333-285c-a4d063d01241, _, _)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(UND_HookHorrorDrowDead_State_MentionedForge_10ca3f0d-6558-9333-285c-a4d063d01241, UND_HookHorror_Hermit_Dead_ad1f623e-96db-4b26-4fd9-6657403fbdaf, _DialogID)
+AND
+DB_DialogPlayers(_DialogID, _Player, 1)
+THEN
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "MadDrow", 1);
+
+// Petrified Drow
+IF
+FlagSet(UND_PetrifiedDrow_State_MentionedForge_36fd33c7-f0f2-432d-ac6e-7c5bcb5b110a, _, _)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+PROC_GlobalSetFlagAndCache(UND_MyconidDrowDead_Knows_DhournSearchingForge_6541a043-ba3a-4b97-94df-73ec0cf68457);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(UND_PetrifiedDrow_State_MentionedForge_36fd33c7-f0f2-432d-ac6e-7c5bcb5b110a, UND_PetrifiedDrow_Dead_Wizard_fc9a8d4c-9ab9-7751-1a06-5e97cd36446e, _DialogID)
+AND
+DB_DialogPlayers(_DialogID, _Player, 1)
+THEN
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "PetrifiedDrow", 1);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(UND_PetrifiedDrow_State_MentionedForge_36fd33c7-f0f2-432d-ac6e-7c5bcb5b110a, UND_PetrifiedDrow_Wizard_7a4fc9ca-c472-ab4a-669a-549fdf1b5758, _DialogID)
+AND
+DB_DialogPlayers(_DialogID, _Player, 1)
+THEN
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "PetrifiedDrow", 1);
+
+IF
+FlagSet(UND_PetrifiedDrow_State_LearnedForgeFromMap_7ccd223a-6df5-49ea-9e62-44dace429b94, _, _)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(UND_PetrifiedDrow_State_LearnedForgeFromMap_7ccd223a-6df5-49ea-9e62-44dace429b94, UND_PetrifiedDrow_MemoryCrystal_320d13c5-7de7-633e-fde2-54b93865aa2a, _DialogID)
+AND
+DB_DialogPlayers(_DialogID, _Player, 1)
+THEN
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "PetrifiedDrow", 1);
+SetFlag(UND_FurnaceSearch_State_ReadMap_ddc0dbb0-5b6e-4667-aee7-092da062cbd9, NULL_00000000-0000-0000-0000-000000000000);
+
+// Duergar
+IF
+FlagSet(UND_FurnaceSearch_Event_DuergarMentionsForge_b0c2033d-d85a-baf7-6edc-97f726be041a, NULL_00000000-0000-0000-0000-000000000000, _ID)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+DB_UND_FurnaceSearch_DuergarFlagID(_ID);
+
+IF
+DialogEnded(_, _ID)
+AND
+DB_UND_FurnaceSearch_DuergarFlagID(_ID)
+AND
+DB_DialogPlayers(_ID, _Player, _)
+THEN
+NOT DB_UND_FurnaceSearch_DuergarFlagID(_ID);
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, "Duergar", 1);
+
+PROC
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace(_, _, _)
+AND
+NOT DB_GlobalFlag((FLAG)UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)UND_FurnaceSearch_Knows_Forge_340ce276-b98d-1e30-5414-d15156b31be6);
+//END_REGION Learning about the Forge
+
+//REGION VB about the Forge
+PROC
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, (STRING)_Source, _)
+AND
+NOT DB_FurnaceSearch_LearnedForgeSource(_Source)
+THEN
+PROC_IncreaseCounter("UND_FurnaceSearch_LearnedForgeCounter");
+
+PROC
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, (STRING)_Source, 1)
+AND
+NOT DB_FurnaceSearch_LearnedForgeSource(_Source)
+AND
+DB_GlobalCounter("UND_FurnaceSearch_LearnedForgeCounter", _Count)
+AND
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB(_VB, _Count)
+THEN
+PROC_UND_FurnaceSearch_PlayLearningAboutFurnaceVB(_VB, _Player, _Source);
+
+PROC
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, (STRING)_Source, _)
+AND
+NOT DB_FurnaceSearch_LearnedForgeSource(_Source)
+THEN
+DB_FurnaceSearch_LearnedForgeSource(_Source);
+
+PROC
+PROC_UND_FurnaceSearch_PlayLearningAboutFurnaceVB((VOICEBARKRESOURCE)_VB, (CHARACTER)_Player, (STRING)_Source)
+AND
+NOT DB_GlobalFlag(UND_AdamantineForge_Knows_SawForge_c29d5e4c-39a5-4ec0-8fe7-03e3a426fe96)
+AND
+NOT DB_UND_FurnaceSearch_LearningFurnaceVB_InProgress(_VB)
+AND
+GUIDToString(_VB, _GuidString)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, _GuidString)
+AND
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB_SourceBlockers(_Source, _Flag)
+THEN
+DB_UND_FurnaceSearch_LearningFurnaceVB_InProgress(_VB);
+PROC_GlobalSetFlagAndCache(_Flag);
+StartVoiceBark(_VB, _Player);
+
+IF
+VoiceBarkEnded(_VB, _)
+AND
+DB_UND_FurnaceSearch_LearningFurnaceVB_InProgress(_VB)
+AND
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB_SourceBlockers(_, _Flag)
+AND
+DB_GlobalFlag(_Flag)
+THEN
+PROC_GlobalClearFlagAndCache(_Flag);
+NOT DB_UND_FurnaceSearch_LearningFurnaceVB_InProgress(_VB);
+
+IF
+VoiceBarkFailed(_VB)
+AND
+DB_UND_FurnaceSearch_LearningFurnaceVB_InProgress(_VB)
+AND
+DB_UND_FurnaceSearch_LearningAboutFurnaceVB_SourceBlockers(_, _Flag)
+AND
+DB_GlobalFlag(_Flag)
+THEN
+PROC_GlobalClearFlagAndCache(_Flag);
+NOT DB_UND_FurnaceSearch_LearningFurnaceVB_InProgress(_VB);
+//END_REGION VB about the Forge
+
+//REGION Mad Drow Records
+IF
+AddedTo(S_UND_FurnaceSearch_MadRecords_833be3b9-9492-4c28-aee4-21c64af4e675, (CHARACTER)_Player, _)
+AND
+DB_Players(_Player)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_State_FoundMadRecords_ca62d3a3-dbcd-4119-956d-8aa450928b21)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)UND_FurnaceSearch_State_FoundMadRecords_ca62d3a3-dbcd-4119-956d-8aa450928b21);
+
+IF
+GameBookInterfaceClosed(S_UND_FurnaceSearch_MadRecords_833be3b9-9492-4c28-aee4-21c64af4e675, _Player)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_Event_SucceedMadRecords_6a5a24cf-4277-026b-50af-4b5ca4ecbc3d)
+THEN
+PROC_UND_FurnaceSearch_StartMadRecordsCheck(_Player);
+
+PROC
+PROC_UND_FurnaceSearch_StartMadRecordsCheck((CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_Knows_Weakness_ae69461f-bb43-2902-cbc2-8801dd1b01c5)
+AND
+NOT DB_UND_FurnaceSearch_MadRecordsCheck_LastManipulatedCharacter(_)
+AND
+DB_Players(_NearbyPlayer)
+AND
+NOT DB_UND_FurnaceSearch_TriedMadRecordsCheck(_NearbyPlayer)
+AND
+NOT DB_UND_FurnaceSearch_MadRecordsCheck_InProgress(_NearbyPlayer)
+AND
+NOT DB_CantTalk_IgnoreStatuses(_NearbyPlayer)
+AND
+QRY_SpeakerIsInDialogRange(_Player, _NearbyPlayer)
+THEN
+DB_UND_FurnaceSearch_MadRecordsCheck_InProgress(_NearbyPlayer);
+DB_UND_FurnaceSearch_MadRecordsCheck_LastManipulatedCharacter(_Player);
+PROC_TrySkillCheck(_NearbyPlayer, S_UND_FurnaceSearch_MadRecords_833be3b9-9492-4c28-aee4-21c64af4e675, "Perception",	(DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, "UND_FurnaceSearch_MadRecords");
+
+PROC
+PROC_RollResult("UND_FurnaceSearch_MadRecords", _Player, _, _Result)
+AND
+_Result != 2
+AND
+DB_UND_FurnaceSearch_MadRecordsCheck_InProgress(_Player)
+THEN
+DB_UND_FurnaceSearch_TriedMadRecordsCheck(_Player);
+
+PROC
+PROC_RollResult("UND_FurnaceSearch_MadRecords", _Player, _, _)
+AND
+DB_UND_FurnaceSearch_MadRecordsCheck_InProgress(_Player)
+THEN
+NOT DB_UND_FurnaceSearch_MadRecordsCheck_InProgress(_Player);
+
+PROC
+PROC_RollResult("UND_FurnaceSearch_MadRecords", _Player, _, 1)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_Event_SucceedMadRecords_6a5a24cf-4277-026b-50af-4b5ca4ecbc3d)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_Event_SucceedMadRecords_6a5a24cf-4277-026b-50af-4b5ca4ecbc3d);
+StartVoiceBark(UND_FurnaceSearch_VB_MadRecords_c74e5594-1ff4-f962-dda1-3cd9701ad275, _Player);
+
+PROC
+PROC_RollResult("UND_FurnaceSearch_MadRecords", _Player, _, 0)
+AND
+NOT DB_UND_FurnaceSearch_MadRecordsCheck_InProgress(_)
+AND
+DB_UND_FurnaceSearch_MadRecordsCheck_LastManipulatedCharacter(_LastPlayer)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_Event_SucceedMadRecords_6a5a24cf-4277-026b-50af-4b5ca4ecbc3d)
+THEN
+StartVoiceBark(UND_FurnaceSearch_VB_MadRecords_c74e5594-1ff4-f962-dda1-3cd9701ad275, _LastPlayer);
+
+PROC
+PROC_RollResult("UND_FurnaceSearch_MadRecords", _, _, _)
+AND
+DB_UND_FurnaceSearch_MadRecordsCheck_LastManipulatedCharacter(_LastPlayer)
+THEN
+NOT DB_UND_FurnaceSearch_MadRecordsCheck_LastManipulatedCharacter(_LastPlayer);
+
+IF
+DB_GlobalFlag(UND_FurnaceSearch_Event_SucceedMadRecords_6a5a24cf-4277-026b-50af-4b5ca4ecbc3d)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_Knows_Weakness_ae69461f-bb43-2902-cbc2-8801dd1b01c5);
+//END_REGION Mad Drow Records
+
+// Flow:
+//	- if picked up without opening - VB to attract attention of the player
+//	- if opened for the first time (without reveling the illusion) - launch dialog with Investigation check.
+// 		- if succeeded - give info in the dialog + drop the illusion + allow to actually read the book;
+//		- if failed - don't give info, don't let to open the book (launch the dialog "it's a book about flumphs", so that the next player could try);
+//	- if affected with Sussur (or Dispel Magic!) before reading - remove disguise, play VB/PAD to attract the attention
+//		- if interacted with non-disguised book - disguise doesn't return
+//	- if the dead wizard told that the book is disguised by magic - drop the illusion
+//REGION Disguised Forge Manual: Discovering
+// putting to the inventory
+IF
+AddedTo(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, (CHARACTER)_Player, _)
+AND
+DB_Players(_Player)
+AND
+DB_UND_FurnaceSearch_Transformed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9)
+THEN
+PROC_UND_FurnaceSearch_OnDisguisedJournalAdded(_Player);
+PROC_UND_FurnaceSearch_OnDisguisedJournalFound();
+
+// dropping from the inventory to the ground
+IF
+RemovedFrom(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, S_UND_FurnaceSearch_MyconidDrow_a38523e2-7630-402e-8036-17cfe5397fe0)
+AND
+DB_Players(_Player)
+AND
+DB_UND_FurnaceSearch_Transformed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9)
+AND
+IsInInventory(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9,0)
+THEN
+PROC_UND_FurnaceSearch_OnDisguisedJournalAdded(_Player);
+PROC_UND_FurnaceSearch_OnDisguisedJournalFound();
+
+PROC
+PROC_UND_FurnaceSearch_OnDisguisedJournalAdded((CHARACTER)_Player)
+AND
+NOT DB_UND_FurnaceSearch_JournalAdded_TimerLaunched(1)
+AND
+NOT GetFlag(UND_FurnaceSearch_State_InteractedWithDisguisedJournal_dbaad324-310d-4dd8-b2e1-6ab5994f2fe8,_Player,1) // don't do VB if already interacted in the dialog and saw the Active Roll
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "UND_FurnaceSearch_DisguisedJournalAddedVBPlayed")
+THEN
+DB_UND_FurnaceSearch_JournalAdded_TimerLaunched(1);
+ObjectTimerLaunch(_Player, "UND_FurnaceSearch_JournalAdded_Timer", 1000);
+
+IF
+ObjectTimerFinished(_, "UND_FurnaceSearch_JournalAdded_Timer")
+THEN
+NOT DB_UND_FurnaceSearch_JournalAdded_TimerLaunched(1);
+
+IF
+ObjectTimerFinished((CHARACTER)_Player, "UND_FurnaceSearch_JournalAdded_Timer")
+AND
+DB_UND_FurnaceSearch_Transformed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9)
+THEN
+StartVoiceBark(UND_FurnaceSearch_VB_DisguisedJournal_d95f0846-9d3c-5b81-9ef1-efdfed48418b, _Player);
+
+// trying to read the book without putting it in the inventory
+IF
+DialogStarted(UND_FurnaceSearch_DisguisedJournal_f0535942-5283-e27d-7697-53242224531d, _ID)
+AND
+DialogGetInvolvedPlayer(_ID, 1, _Player)
+AND
+QRY_OnlyOnce("UND_FurnaceSearch_DisguisedJournalDialog")
+THEN
+PROC_UND_FurnaceSearch_OnDisguisedJournalFound();
+
+PROC
+PROC_UND_FurnaceSearch_OnDisguisedJournalFound()
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_State_FoundDisguisedJournal_8413922f-9c5b-d938-839e-e8098dff04c4)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)UND_FurnaceSearch_State_FoundDisguisedJournal_8413922f-9c5b-d938-839e-e8098dff04c4);
+
+IF
+DB_GlobalFlag(UND_MyconidDrowDead_State_ToldBook_d4b363cd-19ae-eaea-b89e-8cc734775fb7)
+AND
+DB_GlobalFlag(UND_FurnaceSearch_State_FoundDisguisedJournal_8413922f-9c5b-d938-839e-e8098dff04c4)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_State_FoundForgeManual_ca7f9a3c-119e-4564-aa5a-267b5b84a0fb)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_State_FoundForgeManual_ca7f9a3c-119e-4564-aa5a-267b5b84a0fb);
+
+// in case reading after using Sussur Bloom we don't return the disguise nor comment on the book
+IF
+GameBookInterfaceClosed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, _Player)
+AND
+NOT DB_UND_FurnaceSearch_Transformed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_State_FoundForgeManual_ca7f9a3c-119e-4564-aa5a-267b5b84a0fb)
+THEN
+DB_UND_FurnaceSearch_DisguisedJournal_PlayedTransformPAD(1); // no PAD needed anymore
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_State_DisguisedJournalIllusionDropped_8f5eb93f-17f2-4cfa-870a-45dca7bca3a4);
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_State_FoundForgeManual_ca7f9a3c-119e-4564-aa5a-267b5b84a0fb);
+
+// this can happen only once
+IF
+CustomBookUIClosed(_Player, "BOOK_UND_FurnaceSearch_ForgeManual")
+THEN
+DB_UND_FurnaceSearch_DisguisedJournal_PlayedTransformPAD(1); // no PAD needed anymore
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_State_FoundForgeManual_ca7f9a3c-119e-4564-aa5a-267b5b84a0fb);
+QuestUpdate(_Player, "UND_AdamantineForge", "LearnedManual");
+
+IF
+DialogEnded(UND_FurnaceSearch_DisguisedJournal_f0535942-5283-e27d-7697-53242224531d, _ID)
+AND
+DB_GlobalFlag(UND_FurnaceSearch_State_DisguisedJournalIllusionDropped_8f5eb93f-17f2-4cfa-870a-45dca7bca3a4)
+AND
+QRY_OnlyOnce("UND_FurnaceSearch_State_DisguisedJournalIllusionDropped")
+THEN
+DB_UND_FurnaceSearch_DisguisedJournal_PlayedTransformPAD(1); // no PAD needed anymore
+PROC_UND_FurnaceSearch_RemoveDisguise(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9);
+//END_REGION Disguised Forge Manual: Discovering
+
+//REGION Disguised Forge Manual: Transformation
+IF
+DB_UND_FurnaceSearch_DisguisedItem(_Item,_,_)
+THEN
+ApplyStatus(_Item,"UND_DISGUISEDJOURNAL",-1.0,1,NULL_00000000-0000-0000-0000-000000000000);
+
+// Sussur Tree flower disables the illusion
+IF
+StatusApplied((ITEM)_Item, "UND_SUSSURTREEANTIMAGIC", _, _)
+AND
+DB_UND_FurnaceSearch_DisguisedItem(_Item, _, _)
+THEN
+PROC_UND_FurnaceSearch_RemoveDisguise(_Item);
+
+IF
+StatusRemoved((ITEM)_Item, "UND_SUSSURTREEANTIMAGIC", _, _)
+AND
+DB_UND_FurnaceSearch_DisguisedItem(_Item, _, _)
+THEN
+PROC_UND_FurnaceSearch_ApplyDisguise(_Item);
+
+// Same if in inventory of a character
+IF
+StatusApplied((CHARACTER)_Player, "UND_SUSSURTREEANTIMAGIC", _, _)
+AND
+DB_UND_FurnaceSearch_DisguisedItem(_Item, _, _)
+AND
+GetInventoryOwner(_Item, _Player)
+THEN
+PROC_UND_FurnaceSearch_RemoveDisguise(_Item);
+
+IF
+StatusRemoved((CHARACTER)_Player, "UND_SUSSURTREEANTIMAGIC", _, _)
+AND
+DB_UND_FurnaceSearch_DisguisedItem(_Item, _, _)
+AND
+GetInventoryOwner(_Item, _Player)
+THEN
+PROC_UND_FurnaceSearch_ApplyDisguise(_Item);
+
+// Dispel magic support
+IF
+StatusRemoved((ITEM)_Item, "UND_DISGUISEDJOURNAL", _, _)
+AND
+DB_UND_FurnaceSearch_DisguisedItem(_Item, _, _)
+THEN
+PROC_UND_FurnaceSearch_RemoveDisguise(_Item);
+
+PROC
+PROC_UND_FurnaceSearch_RemoveDisguise(_Item)
+AND
+HasAppliedStatus(_Item,"UND_DISGUISEDJOURNAL",1)
+THEN
+RemoveStatus(_Item,"UND_DISGUISEDJOURNAL",NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_UND_FurnaceSearch_ApplyDisguise((ITEM)_Item)
+AND
+NOT DB_UND_FurnaceSearch_Transformed(_Item)
+AND
+DB_UND_FurnaceSearch_DisguisedItem(_Item, _, _TemplateDisguised)
+AND
+HasActiveStatus(_Item, "UND_SUSSURTREEANTIMAGIC", 0)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_State_DisguisedJournalIllusionDropped_8f5eb93f-17f2-4cfa-870a-45dca7bca3a4)
+THEN
+DB_UND_FurnaceSearch_Transformed(_Item);
+Transform(_Item, _TemplateDisguised, DISGUISE_ceccc4eb-d774-4cd5-9147-12322b81b763);
+PROC_UND_FurnaceSearch_ItemTransformed(_Item, _TemplateDisguised);
+
+PROC
+PROC_UND_FurnaceSearch_RemoveDisguise((ITEM)_Item)
+AND
+DB_UND_FurnaceSearch_Transformed(_Item)
+AND
+DB_UND_FurnaceSearch_DisguisedItem(_Item, _TemplateReal, _)
+THEN
+NOT DB_UND_FurnaceSearch_Transformed(_Item);
+Transform(_Item, _TemplateReal, DISGUISE_ceccc4eb-d774-4cd5-9147-12322b81b763);
+PROC_UND_FurnaceSearch_ItemTransformed(_Item, _TemplateReal);
+
+// Transform VFX
+PROC
+PROC_UND_FurnaceSearch_ItemTransformed((ITEM)_Item, _)
+AND
+NOT DB_LoopEffect(_Item, _, "UND_FurnaceSearch_DisguisedJournal_VFX", _, _, _, _)
+AND
+NOT DB_UND_FurnaceSearch_DisguisedJournal_VFXBlocked(_Item)
+AND
+IsInInventory(_Item, 0)
+THEN
+DB_UND_FurnaceSearch_DisguisedJournal_VFXBlocked(_Item);
+PlayEffect(_Item, VFX_Script_ChestOfMundane_01_ac66b4c8-0a75-2edf-e9a5-3e7511689359); //TODO: custom VFX ?
+ObjectTimerLaunch(_Item, "UND_FurnaceSearch_DisguisedJournal_VFX", 1);
+
+IF
+ObjectTimerFinished((ITEM)_Item, "UND_FurnaceSearch_DisguisedJournal_VFX")
+AND
+DB_UND_FurnaceSearch_DisguisedJournal_VFXBlocked(_Item)
+THEN
+NOT DB_UND_FurnaceSearch_DisguisedJournal_VFXBlocked(_Item);
+//END_REGION Disguised Forge Manual: Transformation
+
+//REGION Disguised Forge Manual: PAD on a transformation
+PROC
+PROC_UND_FurnaceSearch_ItemTransformed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, UNI_UND_FurnaceSearch_MyconidDrowJournal_Real_b4d60093-28b0-4076-b2f4-c7c3d3aa9d50)
+AND
+NOT DB_UND_FurnaceSearch_DisguisedJournal_PlayedTransformPAD(1)
+AND
+DB_GlobalFlag(UND_FurnaceSearch_State_FoundDisguisedJournal_8413922f-9c5b-d938-839e-e8098dff04c4)
+AND
+NOT DB_UND_FurnaceSearch_JournalTransformed_TimerLaunched(1)
+AND
+IsInInventory(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, 0)
+AND
+QRY_GetClosestAvailableCharacterTo(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, 0)
+AND
+DB_ClosestAvailableCharacterTo(_ClosestPlayer, S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, _Distance)
+AND
+_Distance < 15
+THEN
+DB_UND_FurnaceSearch_JournalTransformed_TimerLaunched(1);
+ObjectTimerLaunch(_ClosestPlayer, "UND_FurnaceSearch_JournalTransformed_Timer", 1500);
+
+PROC
+PROC_UND_FurnaceSearch_ItemTransformed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, UNI_UND_FurnaceSearch_MyconidDrowJournal_Real_b4d60093-28b0-4076-b2f4-c7c3d3aa9d50)
+AND
+NOT DB_UND_FurnaceSearch_DisguisedJournal_PlayedTransformPAD(1)
+AND
+DB_GlobalFlag(UND_FurnaceSearch_State_FoundDisguisedJournal_8413922f-9c5b-d938-839e-e8098dff04c4)
+AND
+NOT DB_UND_FurnaceSearch_JournalTransformed_TimerLaunched(1)
+AND
+GetInventoryOwner(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, _Player)
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+DB_UND_FurnaceSearch_JournalTransformed_TimerLaunched(1);
+ObjectTimerLaunch(_Player, "UND_FurnaceSearch_JournalTransformed_Timer", 1700);
+
+IF
+ObjectTimerFinished(_, "UND_FurnaceSearch_JournalTransformed_Timer")
+THEN
+NOT DB_UND_FurnaceSearch_JournalTransformed_TimerLaunched(1);
+
+IF
+ObjectTimerFinished((CHARACTER)_Player, "UND_FurnaceSearch_JournalTransformed_Timer")
+AND
+NOT DB_UND_FurnaceSearch_Transformed(S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9)
+AND
+NOT DB_UND_FurnaceSearch_DisguisedJournal_PlayedTransformPAD(1)
+THEN
+StartVoiceBark(UND_FurnaceSearch_VB_JournalTransformed_1fd99e49-be6b-edf5-3bfc-88c708a4baf2, _Player);
+DB_UND_FurnaceSearch_DisguisedJournal_PlayedTransformPAD(1);
+//END_REGION Disguised Forge Manual: PAD on a transformation
+
+//REGION Disguised Forge Manual: blocking reading the actual manual
+PROC
+PROC_BlockUseOfItem(_Player, _BookItem)
+AND
+DB_UND_FurnaceSearch_Transformed(_BookItem)
+AND
+DB_UND_FurnaceSearch_DisguisedBook(_BookItem)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)UND_FurnaceSearch_DisguisedJournal_f0535942-5283-e27d-7697-53242224531d, (ITEM)S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9, _Player)
+THEN
+DB_CustomUseItemResponse(_Player, _BookItem, 0);
+
+// one-time - open the book after the illusion is remove in the dialog
+IF
+FlagSet(UND_FurnaceSearch_State_DisguisedJournalIllusionDropped_8f5eb93f-17f2-4cfa-870a-45dca7bca3a4, NULL_00000000-0000-0000-0000-000000000000, _)
+AND
+NOT DB_UND_FurnaceSearch_Book_CustomAdded("BOOK_UND_FurnaceSearch_ForgeManual", "UND_FurnaceSearch_RealDrowJournal")
+THEN
+DB_UND_FurnaceSearch_Book_CustomAdded("BOOK_UND_FurnaceSearch_ForgeManual", "UND_FurnaceSearch_RealDrowJournal");
+AddEntryToCustomBook("BOOK_UND_FurnaceSearch_ForgeManual", "UND_FurnaceSearch_RealDrowJournal");
+
+IF
+DialogEnded(UND_FurnaceSearch_DisguisedJournal_f0535942-5283-e27d-7697-53242224531d, _ID)
+AND
+DB_GlobalFlag((FLAG)UND_FurnaceSearch_State_DisguisedJournalIllusionDropped_8f5eb93f-17f2-4cfa-870a-45dca7bca3a4)
+AND
+DialogGetInvolvedPlayer(_ID, 1, _Player)
+THEN
+ObjectTimerLaunch(_Player, "UND_FurnaceSearch_ForgeManual", 100);
+
+IF
+ObjectTimerFinished(_Player, "UND_FurnaceSearch_ForgeManual")
+THEN
+OpenReferencedBookUI((CHARACTER)_Player, "BOOK_UND_FurnaceSearch_ForgeManual", S_UND_FurnaceSearch_MyconidDrowJournal_b437af92-c9f1-4657-961b-32ad0dbf39d9);
+//END_REGION Disguised Forge Manual: blocking reading the actual manual
+
+//REGION Meeting Filro
+IF
+DB_Was_InCombat(S_UND_HookHorror_Hermit_2f00e363-09b2-4573-badc-f0995bef6610, _CombatID)
+AND
+DB_Players(_Player)
+AND
+DB_Was_InCombat(_Player, _CombatID)
+AND
+NOT DB_GlobalFlag(UND_FurnaceSearch_Knows_Filro_3983634a-8c5e-425b-b676-d605360c0509)
+THEN
+PROC_GlobalSetFlagAndCache(UND_FurnaceSearch_Knows_Filro_3983634a-8c5e-425b-b676-d605360c0509);
+//END_REGION Meeting Filro
+
+//REGION Journal Main Quest
+PROC
+PROC_UND_FurnaceSearch_OnLearningAboutFurnace((CHARACTER)_Player, _Source, _)
+AND
+_Source != "Duergar"
+AND
+NOT DB_GlobalFlag(UND_AdamantineForge_Knows_SawForge_c29d5e4c-39a5-4ec0-8fe7-03e3a426fe96)
+THEN
+QuestUpdate(_Player, "UND_AdamantineForge", "LearnedForgeDrow");
+
+// In the Forge
+IF
+EnteredTrigger(_Character, S_UND_AdamantineForge_NearForge_37281033-b274-46eb-97d7-f56441598e6c)
+AND
+DB_PartyMembers(_Character)
+AND
+DB_Players(_Player)
+THEN
+QuestUpdate(_Player, "UND_AdamantineForge", "EnteredForge");
+
+// Crafting item
+IF
+DB_UND_AdamantineForge_ItemSpawned(_Item)
+AND
+NOT DB_UND_FurnaceSearch_CraftedItem((ITEM)_Item)
+THEN
+DB_UND_FurnaceSearch_CraftedItem((ITEM)_Item);
+
+IF
+AddedTo(_Item, (CHARACTER)_Charater, _)
+AND
+DB_PartyMembers(_Charater)
+AND
+DB_UND_FurnaceSearch_CraftedItem((ITEM)_Item)
+THEN
+NOT DB_UND_FurnaceSearch_CraftedItem(_Item);
+QuestUpdate("UND_AdamantineForge", "ItemPickedUp");
+
+IF
+DB_UND_FurnaceSearch_CraftedItem(_Item)
+AND
+DB_Players(_Player)
+AND
+IsInMagicPockets(_Item, _Player, 1)
+THEN
+NOT DB_UND_FurnaceSearch_CraftedItem(_Item);
+QuestUpdate("UND_AdamantineForge", "ItemPickedUp");
+
+IF
+EnteredChasm((ITEM)_Item, _, _, _, _, _)
+AND
+DB_UND_FurnaceSearch_CraftedItem(_Item)
+THEN
+NOT DB_UND_FurnaceSearch_CraftedItem(_Item);
+QuestUpdate("UND_AdamantineForge", "LostItem");
+
+IF
+DestroyedBy((ITEM)_Item, _, _, _)
+AND
+DB_UND_FurnaceSearch_CraftedItem(_Item)
+THEN
+NOT DB_UND_FurnaceSearch_CraftedItem(_Item);
+QuestUpdate("UND_AdamantineForge", "LostItem");
+//END_REGION Journal Main Quest
+
+//REGION Journal Subquest Rubble
+IF
+DB_InRegion(_Player, S_UND_FurnaceSearch_RocheRubbleTrigger_9fc27fa6-c8d7-47b5-bac8-09e08742700e)
+AND
+DB_QuestIsAccepted("UND_AdamantineForge")
+THEN
+PROC_TriggerUnregisterForPlayers(S_UND_FurnaceSearch_RocheRubbleTrigger_9fc27fa6-c8d7-47b5-bac8-09e08742700e);
+QuestUpdate(_Player, "UND_AdamantineForge", "PassedRubble");
+//END_REGION Journal Subquest Rubble
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

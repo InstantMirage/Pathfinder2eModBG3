@@ -1,0 +1,496 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_FOR_BugBearLove_Couple((GUIDSTRING)S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d);
+DB_FOR_BugBearLove_Couple((GUIDSTRING)S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc);
+
+DB_DeadOnceFlag(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, (FLAG)FOR_BugBearLove_State_OgreDead_b493f81a-f5b6-4954-b59d-c7d29ef74b57);
+DB_KilledEvent(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, (FLAG)FOR_BugBearLove_State_KilledOgre_3e5e515d-d4d8-42dd-8c0f-be404218d739);
+DB_GlobalFlagReactionAfterDialog((FLAG)FOR_BugBear_Event_Intimidated_21daed99-a2dc-4895-9bb2-8f6fec083e59, (DIALOGRESOURCE)FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0);
+
+PROC_TriggerRegisterForParty(S_FOR_BugBearSound_62fa1bc3-b9d4-4159-9a2e-58cf00f0e775);
+PROC_TriggerRegisterForParty(S_FOR_BugBearLove_Interrupt_Trigger_6921e8a8-c158-4618-b4a5-82afa2b6c18a);
+PROC_TriggerRegisterForPlayers(S_FOR_DoorProximity_099db38b-0b2f-4b74-9e39-b6f1f0cc44f9);
+
+TriggerRegisterForCharacter(S_FOR_DoorProximity_099db38b-0b2f-4b74-9e39-b6f1f0cc44f9, S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc);
+TriggerRegisterForCharacter(S_FOR_DoorProximity_099db38b-0b2f-4b74-9e39-b6f1f0cc44f9, S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d);
+
+DB_GLO_CharacterCorpseDialog(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, (DIALOGRESOURCE)FOR_Bugbear_Ogre_Dead_d9022e94-779d-6dc4-d071-238dfc7124f0);
+DB_GLO_CharacterCorpseDialog(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, (DIALOGRESOURCE)FOR_Bugbear_Bugbear_Dead_1ec4f717-c970-f148-8d0e-70fbf0b43824);
+
+DB_FOR_BugBearLove_PresentFlags(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (FLAG)FOR_BugBearLove_State_ShadowheartFound_d98214d1-f181-4572-853e-fe4488326600);
+DB_FOR_BugBearLove_PresentFlags(S_Player_Wyll_c774d764-4a17-48dc-b470-32ace9ce447d, (FLAG)FOR_BugBearLove_State_WyllFound_c0200031-d84f-41ba-85cf-56f499ce85c2);
+DB_FOR_BugBearLove_PresentFlags(S_Player_Astarion_c7c13742-bacd-460a-8f65-f864fe41f255, (FLAG)FOR_BugBearLove_State_AstarionFound_50581a6a-aada-4bf6-a4a8-c9791439875c);
+
+DB_SpotPlayers_SpotTrigger_ManualRegistering(S_FOR_BugBearLove_Interrupt_Trigger_6921e8a8-c158-4618-b4a5-82afa2b6c18a);
+DB_SceneTriggerManager("FOR_BugbearLove_Mating",S_FOR_BugBearLove_Interrupt_Trigger_6921e8a8-c158-4618-b4a5-82afa2b6c18a,1);
+
+DB_CombatReact_AD_OnDeathOther(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, (DIALOGRESOURCE)FOR_Bugbear_AD_BugbearKilled_a8de5b71-6b4e-8f73-9ae0-b2467d2d2b12);
+DB_CombatReact_AD_OnDeathOther(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, (DIALOGRESOURCE)FOR_Bugbear_AD_OgreKilled_5e80e9e9-608c-d899-7ec7-c0f1b0719e78);
+DB_CombatReact_AD_OnNextTurn(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, (DIALOGRESOURCE)FOR_BugBear_AD_Combat_6c089a73-e15e-d9ef-32a5-59ddf6253abd);
+
+DB_DialogBlockTradeButton(FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0);
+DB_DialogBlockAttackButton(FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0);
+KBSECTION
+//REGION Debug
+
+IF
+TextEvent("bugbearsurprised")
+AND
+GetHostCharacter(_Player)
+AND
+GetFlag((FLAG)FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2, NULL_00000000-0000-0000-0000-000000000000, 0)
+THEN
+SetFlag((FLAG)FOR_BugBearLove_State_Surprised_b4877bb4-ed82-4020-b180-f6dff008f787, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_FOR_BugBearLove_Surprise(_Player);
+
+//END_REGION
+
+//REGION Scene
+
+IF
+DB_FOR_BugBearLove_Couple(_Character)
+THEN
+DB_SceneManager((CHARACTER)_Character,"FOR_BugbearLove_Mating");
+DB_SpotPlayers_SpotTrigger((CHARACTER)_Character,"FOR_BugbearLove_Mating",S_FOR_BugBearLove_Interrupt_Trigger_6921e8a8-c158-4618-b4a5-82afa2b6c18a);
+DB_SpotPlayers((CHARACTER)_Character,"FOR_BugbearLove_Mating",NULL_00000000-0000-0000-0000-000000000000,NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_IncludeFollowers((CHARACTER)_Character,"FOR_BugbearLove_Mating");
+DB_SpotPlayers_IncludeSummons((CHARACTER)_Character,"FOR_BugbearLove_Mating");
+DB_SpotPlayers_IncludeWildshapedPlayers((CHARACTER)_Character,"FOR_BugbearLove_Mating");
+
+PROC
+PROC_SceneInterrupted(_,_Spotted,"FOR_BugbearLove_Mating","Spotted")
+AND
+DB_Players(_Spotted)
+THEN
+PROC_FOR_BugBearLove_Surprise(_Spotted);
+
+IF
+FlagSet(FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2,_,_)
+THEN
+PROC_SceneInterrupted(NULL_00000000-0000-0000-0000-000000000000,NULL_00000000-0000-0000-0000-000000000000,"FOR_BugbearLove_Mating","EnteredCombat");
+
+PROC
+PROC_SceneInterrupted(_,_,"FOR_BugbearLove_Mating",_)
+THEN
+PROC_SceneOver("FOR_BugbearLove_Mating");
+
+PROC
+PROC_SceneOver("FOR_BugbearLove_Mating")
+THEN
+PROC_TriggerUnregisterForParty(S_FOR_BugBearSound_62fa1bc3-b9d4-4159-9a2e-58cf00f0e775);
+PROC_TriggerUnregisterForParty(S_FOR_BugBearLove_Interrupt_Trigger_6921e8a8-c158-4618-b4a5-82afa2b6c18a);
+PlaySound((ITEM)S_FOR_BugBearSoundOrigin_f43c8ccd-99bc-47f8-8a25-4c9b5adec2f8, "FOR_BugBear_Sex_Stop");
+PROC_GlobalSetFlagAndCache((FLAG)FOR_BugBearLove_State_StoppedMating_f2262579-8317-4d91-836d-a4c87899559b);
+
+QRY
+QRY_FOR_BugBearLove_SceneOngoing()
+AND
+DB_SceneManager(_,"FOR_BugbearLove_Mating")
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Outside House
+
+// ADs from the couple as the player approaches the house
+IF
+DB_InRegion(_Player, S_FOR_BugBearSound_62fa1bc3-b9d4-4159-9a2e-58cf00f0e775) //trigger unregistered when mating is over
+AND
+QRY_OnlyOnce("TUT_BugbearLove_SoundStart")
+THEN
+PlaySound((ITEM)S_FOR_BugBearSoundOrigin_f43c8ccd-99bc-47f8-8a25-4c9b5adec2f8, "FOR_BugBear_Sex_Loop");
+
+//END_REGION
+
+//REGION Door Interaction
+
+IF
+UseStarted(_Char, S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376)
+AND
+DB_PartyMembers((CHARACTER)_Char)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_BugBear_Event_Intimidated_21daed99-a2dc-4895-9bb2-8f6fec083e59)
+AND
+NOT QRY_FOR_BugBear_CharacterMovingCinematically((CHARACTER)_Char)
+THEN
+SetFlag((FLAG)FOR_BugBearLove_State_Surprised_b4877bb4-ed82-4020-b180-f6dff008f787, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_FOR_BugBearLove_Surprise(_Char);
+
+//Door is destroyed - First it checks for the destroyer being nearby
+IF
+DestroyingBy(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, _, _DestroyerOwner, _)
+AND
+QRY_FOR_BugBearLove_SceneOngoing()
+AND
+GetDistanceTo(_DestroyerOwner, S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, 10.0)
+THEN
+PROC_SceneInterrupted(NULL_00000000-0000-0000-0000-000000000000,_DestroyerOwner,"FOR_BugbearLove_Mating","DestroyedItem");
+SetFlag((FLAG)FOR_BugBearLove_State_DestroyedDoor_cfc9052a-ca56-428d-a51a-4591741e739c, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_FOR_BugBearLove_Surprise(_DestroyerOwner);
+
+//If they're not nearby, check if any other players are nearby they can shout at
+IF
+DestroyingBy(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, _, _DestroyerOwner, _)
+AND
+QRY_FOR_BugBearLove_SceneOngoing()
+AND
+NOT GetDistanceTo(_DestroyerOwner, S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, 10.0)
+AND
+GetClosestAlivePlayer(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, _OtherPlayer, _Distance)
+AND
+_Distance <= 10.0
+THEN
+PROC_SceneInterrupted(NULL_00000000-0000-0000-0000-000000000000,_DestroyerOwner,"FOR_BugbearLove_Mating","DestroyedItem");
+SetFlag((FLAG)FOR_BugBearLove_State_DestroyedDoor_cfc9052a-ca56-428d-a51a-4591741e739c, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_FOR_BugBearLove_Surprise(_OtherPlayer);
+
+//And if nobody is nearby, tough luck, everyone is hostile
+IF
+DestroyingBy(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, _, _DestroyerOwner, _)
+AND
+QRY_FOR_BugBearLove_SceneOngoing()
+AND
+NOT GetDistanceTo(_DestroyerOwner, S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, 10.0)
+AND
+GetClosestAlivePlayer(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, _OtherPlayer, _Distance)
+AND
+_Distance > 10.0
+THEN
+PROC_SceneInterrupted(NULL_00000000-0000-0000-0000-000000000000,_DestroyerOwner,"FOR_BugbearLove_Mating","DestroyedItem");
+SetFlag((FLAG)FOR_BugBearLove_State_DestroyedDoor_cfc9052a-ca56-428d-a51a-4591741e739c, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_FOR_BugBearLove_PrepareCombat(_DestroyerOwner);
+
+QRY
+QRY_FOR_BugBear_CharacterMovingCinematically((CHARACTER)_Char)
+AND
+DB_DialogName((DIALOGRESOURCE)FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0, _ID)
+AND
+DB_DialogPlayers(_ID, _Char,_)
+THEN
+DB_NOOP(1);
+
+
+IF
+DestroyedBy(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, _, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+SetFlag((FLAG)FOR_BugbearLove_State_InterruptedCouple_5eb6da8c-d5a4-433b-ab0f-6c2da5af934f, _Player, 0);
+
+IF
+Opened(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376)
+AND
+QRY_FOR_BugBearLove_SceneOngoing()
+THEN
+PROC_SceneInterrupted(NULL_00000000-0000-0000-0000-000000000000,NULL_00000000-0000-0000-0000-000000000000,"FOR_BugbearLove_Mating","Spotted");
+
+IF
+FlagSet((FLAG)FOR_BugBearLove_Event_OpenDoor_258ef2b2-4414-42b8-bc37-4c8455678949, _, _)
+THEN
+Open(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376);
+
+PROC
+PROC_BlockUseOfItem(_Player, S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376)
+AND
+QRY_FOR_BugBearLove_SceneOngoing()
+AND
+DB_Players((CHARACTER)_Player)
+AND
+HasActiveStatus(_Player, "SILENCED", 0)
+AND
+NOT DB_Is_WildShaped(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2)
+AND
+QRY_StartDialog((DIALOGRESOURCE)FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0, S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, _Player)
+THEN
+DB_CustomUseItemResponse(_Player, S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, 0);
+SetFlag((FLAG)FOR_BugBearLove_State_UsingDoor_725a2f84-b30d-4362-a922-a376b84ffadb, NULL_00000000-0000-0000-0000-000000000000, 0);
+DB_FOR_BugBearLove_DoorInteraction((CHARACTER)_Player);
+
+IF
+DialogEnded((DIALOGRESOURCE)FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0, _ID)
+AND
+DB_FOR_BugBearLove_DoorInteraction(_Player)
+THEN
+NOT DB_FOR_BugBearLove_DoorInteraction(_Player);
+ClearFlag((FLAG)FOR_BugBearLove_State_UsingDoor_725a2f84-b30d-4362-a922-a376b84ffadb, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+IF
+FlagSet((FLAG)FOR_BugBearLove_Event_MovePlayerInside_cfa18a8d-4e7e-4b07-92a3-6525c39b1a4f, _Player, _)
+THEN
+PROC_CharacterMoveTo((CHARACTER)_Player, (TRIGGER)S_FOR_BugBearPlayerMove_42bc3bbd-9aa8-4920-938e-39d299f40d82, "Walk", "");
+
+
+PROC
+PROC_FOR_BugBearLove_Surprise((CHARACTER)_Interrupter)
+THEN
+SetFlag((FLAG)FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+PROC
+PROC_FOR_BugBearLove_Surprise((CHARACTER)_Interrupter)
+AND
+IsSpeakerReserved(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, 1)
+THEN
+PROC_ForceStopDialog(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc);
+PROC_ForceStopDialog(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d);
+PROC_FOR_BugBearLove_PrepareCombat(_Interrupter);
+
+PROC
+PROC_FOR_BugBearLove_Surprise((CHARACTER)_Interrupter)
+AND
+IsSpeakerReserved(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, 0)
+AND
+DB_Players(_Interrupter)
+AND
+NOT QRY_StartDialog((DIALOGRESOURCE)FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0, S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, _Interrupter)
+THEN
+PROC_FOR_BugBearLove_PrepareCombat(_Interrupter);
+
+PROC
+PROC_FOR_BugBearLove_Surprise((CHARACTER)_Interrupter)
+AND
+NOT DB_Players(_Interrupter)
+THEN
+PROC_FOR_BugBearLove_PrepareCombat(_Interrupter);
+
+IF
+FlagSet((FLAG)FOR_BugBearLove_State_FindCompanions_7a7080b1-5dc9-4173-bea4-d8255e34af64, _, _)
+AND
+DB_FOR_BugBearLove_PresentFlags(_Player, _Flag)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_InRegion((CHARACTER)_Player, S_FOR_DoorProximity_099db38b-0b2f-4b74-9e39-b6f1f0cc44f9)
+AND
+QRY_SpeakerIsAvailable(_Player)
+THEN
+SetFlag(_Flag, _Player, 0);
+
+
+//END_REGION
+
+//REGION Barbarian Response
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)FOR_BugBear_Event_Intimidated_21daed99-a2dc-4895-9bb2-8f6fec083e59)
+AND
+DB_FOR_BugBearLove_Couple(_BugBear)
+THEN
+PROC_DisappearOutOfSight((CHARACTER)_BugBear, "Walk", 0, "");
+
+//END_REGION
+
+//REGION Hostility
+
+IF
+EnteredCombat(_Couple, _ID)
+AND
+DB_FOR_BugBearLove_Couple(_Couple)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2)
+AND
+GetFaction(_Couple, _Faction)
+THEN
+SetFlag((FLAG)FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2, NULL_00000000-0000-0000-0000-000000000000, 0);
+// Make permanently hostile in case this was a temporary hostile relationship
+PROC_SetRelationToPlayers(_Faction, 0);
+
+IF
+KilledBy(_Couple,_AttackerOwner,_Attacker,_)
+AND
+DB_FOR_BugBearLove_Couple(_Couple)
+AND
+DB_FOR_BugBearLove_Couple(_Other)
+AND
+NOT DB_Dead((CHARACTER)_Other)
+AND
+QRY_GetCharacterOwnerIfItemSummon(_AttackerOwner,_Attacker)
+AND
+DB_QRYRTN_GetCharacterOwnerIfItemSummon(_Killer)
+THEN
+SetFlag((FLAG)FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_FOR_BugBearLove_PrepareCombat(_Killer);
+
+IF
+DialogEnded((DIALOGRESOURCE)FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0, _ID)
+AND
+DB_GlobalFlag((FLAG)FOR_BugBearLove_Event_CoupleHostile_03873ff2-e030-4889-9447-12b74927aaf2)
+AND
+DB_DialogPlayers(_ID,_Player,_)
+THEN
+PROC_FOR_BugBearLove_PrepareCombat((CHARACTER)_Player);
+
+PROC
+PROC_FOR_BugBearLove_PrepareCombat((CHARACTER)_Enemy)
+AND
+DB_GlobalFlag((FLAG)FOR_BugbearLove_State_MoveToDoor_4ef14274-a7b0-4b69-bf57-e9220cf60209)
+THEN
+TeleportTo(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, S_FOR_OgreDoorMove_a81973e0-ed71-4f31-b8f7-698cda671863, "", 0, 0, 0);
+
+PROC
+PROC_FOR_BugBearLove_PrepareCombat((CHARACTER)_Enemy)
+AND
+IsDestroyed(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, 0)
+THEN
+Open(S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376);
+
+PROC
+PROC_FOR_BugBearLove_PrepareCombat((CHARACTER)_Enemy)
+AND
+DB_FOR_BugBearLove_Couple(_Monster)
+AND
+GetFaction(_Monster, _MonsterFaction)
+THEN
+PROC_SetRelationToPlayers(_MonsterFaction, 0);
+PROC_FOR_BugBearLove_EnterCombat((CHARACTER)_Monster,_Enemy);
+
+PROC
+PROC_FOR_BugBearLove_EnterCombat((CHARACTER)_Monster,(CHARACTER)_Enemy)
+AND
+DB_PartyMembers(_Enemy)
+THEN
+PROC_EnterCombat(_Monster, _Enemy);
+
+
+//REGION Couple Death
+
+/* DISABLED UNTIL NEW SYSTEM IS IMPLEMENTED
+IF
+DB_Dead(_Partner)
+AND
+DB_FOR_BugBearLove_Couple(_Partner)
+AND
+DB_FOR_BugBearLove_Couple(_OtherPartner)
+AND
+_OtherPartner != _Partner
+AND
+DB_Dead((CHARACTER)_OtherPartner)
+AND
+DB_Players(_Player)
+AND
+DB_FOR_BugBearLove_Couple(_Couple)
+AND
+GetDistanceTo(_Player, _Couple, _Dist)
+AND
+_Dist <= 30.0
+AND
+QRY_OnlyOnce("FOR_BugbearLove_KilledCouple")
+THEN
+RealtimeObjectTimerLaunch(_Player, "FOR_BugbearLove_ReflectionDelay", 1000);
+
+IF
+ObjectTimerFinished(_Player, "FOR_BugbearLove_ReflectionDelay")
+THEN
+PROC_DefineReflectionDialog((DIALOGRESOURCE)FOR_BugbearLove_RD_AfterFight_d5d4964d-c843-f6ac-e953-70f225e85a32, (CHARACTER)_Player);
+*/
+
+//END_REGION
+
+//END_REGION
+
+//REGION SwD
+
+IF
+FlagSet((FLAG)FOR_Bugbear_Event_QuestionAsked_bf9a86e8-1d30-4d33-8c41-be81010e3b70, _Couple, _)
+AND
+DB_FOR_BugBearLove_Couple(_Couple)
+THEN
+ClearFlag((FLAG)FOR_Bugbear_Event_QuestionAsked_bf9a86e8-1d30-4d33-8c41-be81010e3b70, _Couple, 0);
+PROC_ObjectCountHelper((GUIDSTRING)_Couple, "FOR_Bugbear_SwDQuestionCount");
+
+IF
+DB_ObjectCountHelper(_Couple, "FOR_Bugbear_SwDQuestionCount", 3)
+AND
+DB_FOR_BugBearLove_Couple(_Couple)
+THEN
+SetFlag((FLAG)FOR_Bugbear_State_LastQuestion_284c4348-b297-4458-bd4d-1e357d3573ed, _Couple, 0);
+
+IF
+FlagSet((FLAG)FOR_BugBearLove_State_CheckBodyDistance_7f69e1aa-e284-411a-9530-9570cb126ad1, _, _Inst)
+AND
+GetDistanceTo(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, _Dist)
+AND
+_Dist <= 10.0
+AND
+HasLineOfSight(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc, S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, 1)
+THEN
+ClearFlag((FLAG)FOR_BugBearLove_State_CheckBodyDistance_7f69e1aa-e284-411a-9530-9570cb126ad1, NULL_00000000-0000-0000-0000-000000000000, _Inst);
+SetFlag((FLAG)FOR_BugBearLove_State_BodyClose_a309db3a-e3cc-4fe4-b4b5-a7ab6578ef93, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+
+
+//END_REGION
+
+//REGION Sage Voicebark
+
+IF
+DialogEnded((DIALOGRESOURCE)FOR_BugBear_c4b9c6ba-da3f-211a-68ba-1a2191e7b0b0, _ID)
+AND
+DB_GlobalFlag((FLAG)FOR_BugBearLove_Knows_Lovemaking_1aa68475-384a-4139-9fb5-89e23bd52db6)
+AND
+DB_Players(_Player)
+AND
+GetDistanceTo(_Player, S_FOR_CottageDoor_a3083cd4-313e-88a3-5bfe-1b04df964376, _Dist)
+AND
+_Dist <= 10.0
+AND
+QRY_OnlyOnce("FOR_BugBearLove_ScholarComment")
+THEN
+PROC_TrySkillCheck((CHARACTER)_Player, S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d, "AnimalHandling", (DIFFICULTYCLASS)Act1_Medium_fa621d38-6f83-4e42-a55c-6aa651a75d46, "GLO_BugBearCheck");
+
+PROC
+PROC_RollResult("GLO_BugBearCheck", _Player, _, 1)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_BugBear_VB_Scholar_29757b82-4081-617b-eda2-99e1522c9a7e, (CHARACTER)_Player);
+
+//END_REGION
+
+//REGION Death VB
+
+IF //Due dialog context
+DB_Dead(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc)
+AND
+DB_Dead(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d)
+AND
+DB_FOR_BugBearLove_Couple(_Couple)
+AND
+DB_Players(_Player)
+AND
+QRY_IsInRange(_Player, _Couple, 12.0)
+AND
+QRY_OnlyOnce("FOR_BugBearLove_CoupleDead")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_BugbearLove_VB_AfterFight_ecf2e7f9-a1c7-1aa3-34c7-ebd5d9350910, _Player);
+
+
+//END_REGION
+
+//REGION Combat
+
+//Add Enrage to Ogress if Bugbear dies
+IF
+DB_Dead(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d)
+AND
+NOT CheckRulesetModifierString(SCRIPTED_COMBAT_MECHANICS_cac2d8bd-c197-4a84-9df1-f86f54ad4521,"HARD",1)
+THEN
+AddSpell(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc,"Shout_FOR_Ogre_Enrage");
+
+//Add Enrage to Ogress if Bugbear dies
+IF
+DB_Dead(S_FOR_BugBearMate_b6c6764f-ba9d-4109-8b4e-c0d1da72be7d)
+AND
+CheckRulesetModifierString(SCRIPTED_COMBAT_MECHANICS_cac2d8bd-c197-4a84-9df1-f86f54ad4521,"HARD",1)
+THEN
+AddSpell(S_FOR_OgreMate_489c7f56-b461-41a6-b519-7ef5f1a1bbdc,"Shout_FOR_Ogre_Enrage_Hardcore");
+
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

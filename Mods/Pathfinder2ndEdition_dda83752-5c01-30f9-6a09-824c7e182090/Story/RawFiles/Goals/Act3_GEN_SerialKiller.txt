@@ -1,0 +1,1628 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Books
+DB_BookFlags((ITEM)S_LOW_SerialKiller_NoteFromOrin_9c029a99-2636-4c19-9ff3-c7564a91cd35,(FLAG)LOW_SerialKiller_State_KnowWordOfPassageFromDolor_a874a4ce-4c61-416b-b77a-4cf20fc323e0);
+DB_BookFlags((ITEM)S_LOW_SerialKiller_NoteFromOrin_FigarosBody_fd96ca11-3ad0-4eeb-b550-d5e800e92592,(FLAG)LOW_SerialKiller_State_KnowWordOfPassageFromDeadFigaro_54a20484-0968-48ab-ada1-c2df099caf97);
+DB_SerialKiller_NoteFromOrinBooks((ITEM)S_LOW_SerialKiller_NoteFromOrin_9c029a99-2636-4c19-9ff3-c7564a91cd35);
+DB_SerialKiller_NoteFromOrinBooks((ITEM)S_LOW_SerialKiller_NoteFromOrin_MainDoppelganger_681870ee-8d72-4365-8378-cfd56373ee49);
+DB_SerialKiller_NoteFromOrinBooks((ITEM)S_LOW_SerialKiller_NoteFromOrin_FigarosBody_fd96ca11-3ad0-4eeb-b550-d5e800e92592);
+DB_SerialKiller_NoteFromOrinBooks((ITEM)S_GLO_OrinsMessages_GortashKilled_fe2a63d0-3ed2-4c34-b234-377e34b06959);
+
+//Doppelganger reports
+DB_BookTemplateFlags((ITEMROOT)UNI_BOOK_LOW_SerialKiller_DoppelgangerReports_Figaros_e16e94f6-be06-4bdf-a7b9-691661b9ef8c,(FLAG)LOW_SerialKiller_Knows_DolorRisingStar_e04c9952-d096-51bd-824d-a9f438103cf7);
+DB_BookTemplateFlags((ITEMROOT)UNI_BOOK_LOW_SerialKiller_DoppelgangerReports_WineFestival_3e085a90-cf0a-4b8c-add6-b1625558ce1a,(FLAG)LOW_SerialKiller_Knows_DolorRisingStar_e04c9952-d096-51bd-824d-a9f438103cf7);
+DB_BookTemplateFlags((ITEMROOT)UNI_LOW_TargetList_4ece815c-aff2-45c3-8b07-dd3a04454243,(FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671);
+DB_BookFlags((ITEM)S_WYR_OpenHand_DraftReport_0d967e3f-a266-4907-952c-f2886c741b54, (FLAG)LOW_SerialKiller_Knows_DolorRisingStar_e04c9952-d096-51bd-824d-a9f438103cf7);
+
+DB_BookTemplateFlags(BOOK_UNI_LC_MurderTableauNote02_0a5f7f38-1d03-43f3-a531-4fc0001d1d87, LOW_SerialKiller_State_ReadTableauxNote_bb2abe19-22dd-4773-9c1c-d916645fc24e);
+DB_BookTemplateFlags(BOOK_UNI_LC_MurderTableauNote03_e663acb5-4336-4d46-8d56-95ecbec91077, LOW_SerialKiller_State_ReadTableauxNote_bb2abe19-22dd-4773-9c1c-d916645fc24e);
+DB_BookTemplateFlags(BOOK_UNI_LC_MurderTableauNote04_57164bd6-6549-4fba-b6f8-1a8caf56d759, LOW_SerialKiller_State_ReadTableauxNote_bb2abe19-22dd-4773-9c1c-d916645fc24e);
+DB_BookTemplateFlags(BOOK_UNI_LC_MurderTableauNote05_779bf83a-4335-4891-8414-d1dd59ce8176, LOW_SerialKiller_State_ReadTableauxNote_bb2abe19-22dd-4773-9c1c-d916645fc24e);
+DB_BookTemplateFlags(BOOK_UNI_LC_MurderTableauNote06_de35359e-7c45-45f7-a9ce-6266eafb1c1f, LOW_SerialKiller_State_ReadTableauxNote_bb2abe19-22dd-4773-9c1c-d916645fc24e);
+DB_BookTemplateFlags(BOOK_UNI_WYR_MurderTableauNote01_0a061583-2dae-41db-82e1-54e0ddc02726, LOW_SerialKiller_State_ReadTableauxNote_bb2abe19-22dd-4773-9c1c-d916645fc24e);
+
+//END_REGION
+
+//Doppelganger quest givers dialogs
+DB_Dialogs(S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, LOW_SerialKiller_DoppelgangerGiveQuest_34a08264-8fb0-e8a6-dd6a-a34c811fae87 );
+DB_Dialogs(S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, LOW_SerialKiller_DoppelgangerGiveQuest_Backup_a5adee84-12c2-4a4a-6479-9789e31d0d67);
+
+//REGION States and knows checks
+//Starting the Serial Killer Quest
+DB_LOW_SerialKiller_FlagsThatTriggersWineFiestival((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671);
+DB_LOW_SerialKiller_FlagsThatTriggersWineFiestival((FLAG)WYR_SerialKiller_State_ValeriaSendToDevella_65f1a97d-1656-da36-6417-be1e44a87663);//TODO Check while Journal scripting if we can safely remove this flag with the present flow of the quest
+
+DB_DeadOnceFlag((CHARACTER)S_GLO_HollyphantDetective_acf70307-3bb9-4b91-b894-fa2120916f58,(FLAG)LOW_SerialKiller_State_ValeriaIsDead_35e90fa8-bff8-4fae-87ac-f0f6f23b6a28);
+
+DB_GLO_CompoundFlag(WYR_OpenHand_Knows_KillersName_ce8dca23-7b94-4b18-81ef-ff40ca3d9bed,LOW_SerialKiller_Knows_DolorIsKiller_1f1adc6a-fb17-7f58-a510-3bf96289bd56);
+
+//Dolor states
+DB_State_Priority(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","OffStage",0);
+DB_State_Priority(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","WineFestival",10);
+DB_State_Priority(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","Figaro",20);
+DB_State_Priority(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal",100);
+DB_State_Priority(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal_Assault",101);
+DB_State_Priority(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","PermaDefeated",200);
+
+DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","OffStage");
+
+//Discover the poison
+DB_KnowledgeCheckTemplate_AD("LOW_DiscoverPoisonedWine", (ITEMROOT)CONS_Drink_KarabasansGift_ac9e04d9-c43c-45f2-9922-a17675ef98b5, "Perception", Act3_Medium_77cee1c4-384a-4217-b670-67db3c7add57,
+(DIALOGRESOURCE)LOW_SerialKiller_PAD_PoisonCheck_b09c0a6d-250a-f8eb-0985-0e959cf007c0, (FLAG)LOW_SerialKiller_Know_PlayersKnowAboutPoison_6f7fc46a-2ffa-407e-ad2e-c6f8e13d9567);
+
+//END_REGION
+
+//REGION Victim tracking
+
+//Victim tracking for Murder Tribunal
+DB_LOW_MurderTribunal_PossibleMurderVictims((CHARACTER)S_GLO_Gortash_b878a854-f790-4999-95c4-3f20f00f65ac,(ITEM)S_GLO_GortashsHand_25d5cee5-79d2-4d73-917c-34184b3641c8,(FLAG)LOW_SerialKiller_State_HandHasItem_Gortash_fb65d0bb-54c9-46c5-9f18-89b506aa1303, (CHARACTERROOT)UNI_GLO_Gortash_NoHandTemplate_3bbf4a0c-2eea-459e-942a-85beaa6ae59a);
+DB_LOW_MurderTribunal_PossibleMurderVictims((CHARACTER)S_VO_Dummy_Circus_RealClown_615c8f06-730b-49ff-bda7-0041313f3cd3,(ITEM)S_WYR_Circus_DribblesBodyPart_Hand_dedf021f-478c-4a06-9150-f442e1cd2ecd,(FLAG)LOW_SerialKiller_State_HandHasItem_Dribbles_aadb54de-d086-4004-b4fd-1e5fd658d661, NULL_00000000-0000-0000-0000-000000000000);
+//Gale's hand gets added in the KB
+
+DB_LOW_Serialkiller_HandsFlagInDolorBag(LOW_SerialKiller_State_HandHasItem_Stelmane_4e1f1e27-c740-4f38-a59c-9b6336e7f204);
+DB_LOW_Serialkiller_HandsFlagInDolorBag(LOW_SerialKiller_State_HandHasItem_FatherLorghan_376d6cac-71ee-48f1-9ea2-2ddd1b2b8234);
+DB_LOW_Serialkiller_HandsFlagInDolorBag(LOW_SerialKiller_State_HandHasItem_Alexander_5f1a269a-28e0-43ab-a0e0-d99927ed0c7d);
+DB_LOW_Serialkiller_HandsFlagInDolorBag(LOW_SerialKiller_State_HandHasItem_Franc_62c46efe-2c56-4c00-b1d2-9ce62947a2ac);
+DB_LOW_Serialkiller_HandsFlagInDolorBag(LOW_SerialKiller_State_HandHasItem_Dribbles_aadb54de-d086-4004-b4fd-1e5fd658d661);
+
+
+//MURDER TARGET LIST
+//Duke Belynne Stelmane (already dead)
+//Father Lorghan (already dead)
+//Dribbles the Clown (already dead)
+//Alexander Rainforest (already dead)
+//Franc Peartree  (already dead)
+//Cora Highberry - LOW SK1
+//Figaro Facemaker  - LOW SK2
+//Reevor - Cooker at Elfsong Tavern
+//Blushing Mermaid Patron 08 - Blushing Mermaid, random patron
+//Vylma Vanthampur - Upper City
+//Fridrik Hhune - Upper City
+
+//Tracking the victims we can kill.
+//Lower City characters
+DB_LOW_SerialKiller_TargetList((CHARACTER)S_LOW_CoraHighberry_8a520cf7-c5da-419f-bdd4-792b27c5c679, S_LOW_SerialKiller_Hand_Cora_e8b086d8-1b22-47ac-adf8-7e165fdf99ab);
+DB_LOW_SerialKiller_TargetList((CHARACTER)S_LOW_Figaro_3ff2b7ea-3de2-4bdc-a600-c973f290bc09, S_LOW_SerialKiller_Hand_Figaro_f494ba51-9973-4328-b3fd-04b116281448);
+DB_LOW_SerialKiller_TargetList((CHARACTER)S_LOW_BlushingMermaid_Patron_08_40dcda0b-7891-414f-8aeb-f742d842207d, S_LOW_SerialKiller_Hand_BlushingMermaidPatron08_d83087b0-1a0f-4b57-a277-c083aa9f6560);
+DB_LOW_SerialKiller_TargetList((CHARACTER)S_LOW_Elfsong_Reevor_3e5b30c3-ae3a-48b6-9394-11adde54ad57, S_LOW_SerialKiller_Hand_Reevor_505e07c2-4cdc-4071-9b93-58cd2b68dc48);
+//Null hands for Devella and Valeria
+DB_LOW_SerialKiller_TargetList((CHARACTER)S_LOW_Devella_Fountainhead_048defbd-d386-4272-a5b7-40c1a9e75b81, NULL_00000000-0000-0000-0000-000000000000);
+DB_LOW_SerialKiller_TargetList((CHARACTER)S_GLO_HollyphantDetective_acf70307-3bb9-4b91-b894-fa2120916f58, NULL_00000000-0000-0000-0000-000000000000);
+
+//END_REGION
+
+//REGION Doppelgangers visiting
+
+//Setting up the visiting Doppelganger
+// Transform((CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, (CHARACTERROOT)LOW_SerialKiller_Doppelganger_GiveQuest_c1ace95e-806a-4e83-9cd0-45fffd293ede, (SHAPESHIFTRULE)Shapechanger_a2ff752c-84da-442b-bee1-0e593c377a71);
+// Transform((CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, (CHARACTERROOT)LOW_SerialKiller_Doppelganger_GiveQuest_c1ace95e-806a-4e83-9cd0-45fffd293ede, (SHAPESHIFTRULE)Shapechanger_a2ff752c-84da-442b-bee1-0e593c377a71);
+//ToInventory((ITEM)S_LOW_SerialKiller_DoppelgangerTargetList_437ad731-0769-4c1c-a159-f3bedc72c1d4, (GUIDSTRING)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7,1, 0, 1);
+SetOnStage(S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, 0);
+
+DB_GiveItemToEventWithClear((ITEM) S_LOW_SerialKiller_DoppelgangerBackup_TargetList_e1f236a0-6b80-4035-bca4-f8fe84e26c3d, (FLAG)LOW_SerialKiller_Event_DoppelgangerGiveTargetList_6d3e0be4-9dfa-473a-be7a-5b9c19a35582);
+DB_GiveItemToEventWithClear((ITEM)S_LOW_SerialKiller_NoteFromOrin_MainDoppelganger_681870ee-8d72-4365-8378-cfd56373ee49, (FLAG)LOW_SerialKiller_Event_DoppelgangerGiveNoteFromOrin_b5218bd2-1f4b-4390-b97e-dcab9619519d);
+DB_GiveItemToEventWithClear((ITEM)S_LOW_MurderTribunal_TombstoneShopKey_QuestGivers_548c87fb-821d-4555-b39d-429c30db4c0b, (FLAG)LOW_SerialKiller_Event_DoppelgangerGiveNoteFromOrin_b5218bd2-1f4b-4390-b97e-dcab9619519d);
+
+DB_LOW_SerialKiller_DoppelgangerTryingDialog((CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, (DIALOGRESOURCE)LOW_SerialKiller_DoppelgangerGiveQuest_Backup_a5adee84-12c2-4a4a-6479-9789e31d0d67);
+DB_LOW_SerialKiller_DoppelgangerTryingDialog((CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, (DIALOGRESOURCE)LOW_SerialKiller_DoppelgangerGiveQuest_34a08264-8fb0-e8a6-dd6a-a34c811fae87);
+
+//END_REGION
+
+//REGION Journal
+//Find the bhaal temple quest
+DB_QuestDef_State_ConditionalFlag((FLAG)LOW_Elfsong_Knows_DevellaBhaalExpert_4f7063f0-2361-a399-be46-a2ceb3881659, "LOW_FindBhaalTemple", "FindBhaalTemple_StartPoint_Devella_Clueless", 0, (FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671);
+DB_QuestDef_State((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671, "LOW_FindBhaalTemple", "BecomeOrFollowMurders");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_GortashTalkAboutOrin_0cf0d3b3-b46b-c707-0070-3f222e0d5ce9, "LOW_FindBhaalTemple", "FindBhaalTemple_StartPoint_Gortash_Ceremony");
+DB_QuestDef_State((FLAG)LOW_BhaalTemple_Knows_TempleIsBhaalTemple_b1525a1c-829e-4c05-bc39-c161e30ac235, "LOW_FindBhaalTemple", "StartPoint_NoTargetList_FindBhaalTempleDoor");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_ReadTableauxNote_bb2abe19-22dd-4773-9c1c-d916645fc24e, "LOW_FindBhaalTemple", "FindBhaalTemple_TableauxOfMurder");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_KnowWordOfPassageFromOrin_fff04b2b-f123-482f-8a45-f639f3052dee, "LOW_FindBhaalTemple", "StartPoint_NoTargetList_OrinNote");
+DB_QuestDef_State((FLAG)GLO_OrinsMessages_Event_Read_GortashKilled_c450a024-9683-4c3f-a7f1-a958555f2afb, "LOW_FindBhaalTemple", "MurderTribunal_KillTwoVictims");//Generic message to acknowledge that we already know the password to enter at the Tribunal.
+DB_QuestDef_ChainedState("LOW_FindBhaalTemple", "UnholyAssassin_SecondKill", "MurderTribunal_KillTwoVictims");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_Sarevok_State_Dead_e9d30711-af25-4ba9-813e-cc7c131b17b6, "LOW_FindBhaalTemple", "MurderTribunal_KilledSarevok");
+DB_QuestDef_State_ConditionalFlag((FLAG)LOW_MurderTribunal_Knows_BhaalTempleLocation_0a45cd29-8ae1-43bb-9ef6-b95af1dc6e55, "LOW_FindBhaalTemple", "MurderTribunal_GotMap", 1, LOW_MurderTribunal_Knows_BhaalTempleLocationByMap_2fe05720-c4f4-4f03-8495-f489baaabb1b);
+DB_QuestDef_State_ConditionalFlag((FLAG)LOW_BhaalTemple_State_HasBhaalAmulet_66796361-3cf6-476a-8c09-a076dfa6a172, "LOW_FindBhaalTemple", "MurderTribunal_GotAmulet", 0, (FLAG)LOW_MurderTribunal_State_BecameUnholyAssassin_75ba9b20-e08b-f48e-6f70-5c93586ec729);
+DB_QuestDef_ChainedState("LOW_FindBhaalTemple", "MurderTribunal_FollowMurders_Completion", "MurderTribunal_GoToTempleValeria");
+
+
+//Unholy assassin subquest
+DB_QuestDef_State_ConditionalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671, "LOW_FindBhaalTemple", "UnholyAssasin_Start", 0, (FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05);
+DB_QuestDef_State((FLAG)GLO_OrinsMessages_Event_Read_GortashKilled_c450a024-9683-4c3f-a7f1-a958555f2afb, "LOW_FindBhaalTemple", "UnholyAssassin_GortashSortcut");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_SecondTarget_fe5366dd-df38-4370-7fef-26360c4c3ce8, "LOW_FindBhaalTemple", "UnholyAssassin_SecondKill");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_KnowWordOfPassageFromOrin_fff04b2b-f123-482f-8a45-f639f3052dee, "LOW_FindBhaalTemple", "UnholyAssassin_GortashSortcut");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_Event_TombstoneShop_OpenDoor_88043f62-c9c5-3aa1-4995-02346a6b45b7, "LOW_FindBhaalTemple", "UnholyAssassin_Candlehollows");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_State_OfferedMinscSacrifice_5bda0a8c-eea3-8403-2965-82d9e8b24bfe, "LOW_FindBhaalTemple", "UnholyAssassin_KillMinsc");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_State_OfferedJaheiraSacrifice_4d34ecc5-705a-2081-2826-a62076e705d9, "LOW_FindBhaalTemple", "UnholyAssassin_KillJaheira");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_State_OfferedJaheiraMinscSacrifice_d391d86e-d30f-e4db-6650-a97a2e38a79f, "LOW_FindBhaalTemple", "UnholyAssassin_KillMinscAndJaheira");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8, "LOW_FindBhaalTemple", "UnholyAssassin_MurderTrial");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_State_PerformedBaptism_3e61965d-3413-13fc-efab-46adb1a20060, "LOW_FindBhaalTemple", "UnholyAssassin_BloodBath");
+
+//Find the serial killer subquest
+DB_QuestDef_State_ConditionalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671, "LOW_FindBhaalTemple", "StopMurders_ValeriaTargetList", 1, (FLAG)WYR_OpenHand_State_YannisAskedToInvestigate_394409f9-a450-4f9e-b396-7e861da8287f);
+DB_QuestDef_State((FLAG)LOW_Elfsong_Devella_Knows_MurdersSolved_cf5a99a0-1112-18cb-d0c3-71498843319d, "LOW_FindBhaalTemple", "StopMurders_DevellaTargetList");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_Knows_AlexanderKilledByRedDwarf_849c4a94-35cf-8813-dab5-3ac1b4437aa3, "LOW_FindBhaalTemple", "Stopmurders_SwDAlexander");
+DB_QuestDef_State((FLAG)LOW_Elfsong_Reevor_WarnedAboutKiller_e5ddc10a-dd2e-155a-909b-e4989c2d82fe, "LOW_FindBhaalTemple", "Stopmurders_WarnReevor");
+DB_QuestDef_State((FLAG)LOW_BlushingMermaid_Patron_08_WarnedAboutSerialKiller_bc503ffb-577e-d70a-e8b6-252e882bed8a, "LOW_FindBhaalTemple", "Stopmurders_WarnNesha");
+DB_QuestDef_State((FLAG)LOW_Figaro_SellingThings_State_FigaroKnowsTargetList_cd785159-9139-4b7f-28d7-9bd6993c3569, "LOW_FindBhaalTemple", "Stopmurders_WarnFigaro");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_DolorKillsCoraWineFestival_0fce13c6-8d48-4391-a890-f1397add7af4, "LOW_FindBhaalTemple", "DolorOutWineFestival_KilledCora");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_DolorIsPermaDefeated_a1ca5851-fea5-4536-934a-b402ac8d92a6, "LOW_FindBhaalTemple", "Dolor_IsDead");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_FigaroAlreadyDeadSetup_ed3aa8f2-b822-4073-b1dc-aacc13aa28f5, "LOW_FindBhaalTemple", "InvestigateFigaroDeadPlace");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_KnowWordOfPassageFromDeadFigaro_54a20484-0968-48ab-ada1-c2df099caf97, "LOW_FindBhaalTemple", "Figaro_CrimeScene");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_Event_TombstoneShop_OpenDoor_88043f62-c9c5-3aa1-4995-02346a6b45b7, "LOW_FindBhaalTemple", "FollowingMurders_EnterCandlehollows");
+DB_QuestDef_State((FLAG)LOW_MurderTribunal_Knows_ValeriaToldBhaalTempleLocation_34265520-1ba8-007c-560d-7926f5de38ea, "LOW_FindBhaalTemple", "MurderTribunal_FollowMurders_Completion");
+DB_QuestDef_ChainedState("LOW_FindBhaalTemple", "UnholyAssassin_BloodBath", "MurderTribunal_KillValeria");
+
+//Database for victims and markers
+DB_LOW_SerialKiller_Victim_Marker_AlreadyDead((CHARACTER)S_LOW_SerialKiller_AlexanderRainforest_18fe60a8-7235-4450-ac5b-fcbf15bdae88, "LOW_SerialKiller_Character_Rainforest", "Stopmurders_FailAlexander");
+DB_LOW_SerialKiller_Victim_Marker_AlreadyDead((CHARACTER)S_LOW_SerialKiller_Franc_Peartree_1556e29c-a876-4853-9ea7-283a48703a56, "LOW_SerialKiller_Character_Peartree", "Stopmurders_FailFranc");
+DB_LOW_SerialKiller_Victim_Marker((CHARACTER)S_LOW_BlushingMermaid_Patron_08_40dcda0b-7891-414f-8aeb-f742d842207d, "LOW_SerialKiller_Character_Nesha");
+DB_LOW_SerialKiller_Victim_Marker((CHARACTER)S_LOW_Elfsong_Reevor_3e5b30c3-ae3a-48b6-9394-11adde54ad57, "LOW_SerialKiller_Character_Reevor");
+DB_LOW_SerialKiller_Victim_Marker((CHARACTER)S_LOW_CoraHighberry_8a520cf7-c5da-419f-bdd4-792b27c5c679, "LOW_SerialKiller_Character_Cora");
+DB_LOW_SerialKiller_Victim_Marker((CHARACTER)S_LOW_Figaro_3ff2b7ea-3de2-4bdc-a600-c973f290bc09, "LOW_SerialKiller_Character_Figaro");
+
+//Database for character we can kill and need to update the quest to log it before the wine festival
+DB_LOW_SerialKiller_Victim_QuestState((CHARACTER)S_LOW_BlushingMermaid_Patron_08_40dcda0b-7891-414f-8aeb-f742d842207d, "Stopmurders_FailNesha");
+DB_LOW_SerialKiller_Victim_QuestState((CHARACTER)S_LOW_Elfsong_Reevor_3e5b30c3-ae3a-48b6-9394-11adde54ad57, "Stopmurders_FailReevor");
+DB_LOW_SerialKiller_Victim_QuestState((CHARACTER)S_LOW_Figaro_3ff2b7ea-3de2-4bdc-a600-c973f290bc09, "Stopmurders_FailFigaro");
+
+//Markers not needed
+DB_SerialKiller_MarkersNeeded((FLAG)LOW_SerialKiller_UnholyAssassin_MarkersNotNeeded_6574acf2-cf62-4592-abf7-cf04256bf5dd);
+DB_SerialKiller_MarkersNeeded((FLAG)LOW_SerialKiller_FollowMurders_MarkersNotNeeded_5dde758a-401a-4903-b599-0a95e3f38036);
+
+//END_REGION
+
+//REGION Hidden Boosters
+DB_QuestDef_State((FLAG)LOW_SerialKiller_State_ToldDevellaKilledSarevok_771ad07f-13ee-6589-a8d6-32aaacd36b3f, "HIDDEN_CTY_Boosters", "LOW_SerialKiller_DevellaReward");
+
+//END_REGION Hidden Boosters
+
+//REGION PADs about Murder Tableux
+DB_GEN_SerialKiller_Tableux_Initialized(1);
+
+// no VO - don't play for these
+DB_GEN_SerialKiller_Tableux_DisableForCharacters((CHARACTER)S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba);
+DB_GEN_SerialKiller_Tableux_DisableForCharacters((CHARACTER)S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b);
+//END_REGION
+KBSECTION
+//REGION Flags
+
+IF
+DB_SerialKiller_NoteFromOrinBooks(_Book)
+THEN
+DB_BookFlags(_Book,(FLAG)LOW_MurderTribunal_Knows_WordOfPassage_839150e6-d168-4c89-a980-68b9e9f60556);
+DB_BookFlags(_Book,(FLAG)LOW_MurderTribunal_Knows_UnholyAssassin_8a939a44-bb4a-d32f-0584-388d248f565c);
+
+IF
+FlagSet(_Flag, _Character, _)
+AND
+DB_LOW_MurderTribunal_PossibleMurderVictims(_, _, _Flag, _)
+AND
+DB_PartyMembers((CHARACTER)_Character)
+AND
+GetFlag(LOW_SerialKiller_State_HandHasItem_AnyHAnd_b2bbc248-3018-452c-8a9d-07fcd30c38d5, _Character, 0)
+THEN
+SetFlag(LOW_SerialKiller_State_HandHasItem_AnyHAnd_b2bbc248-3018-452c-8a9d-07fcd30c38d5, _Character);
+
+//Transform the character to the root without hand
+IF
+FlagSet(_Flag, _Character, _)
+AND
+DB_PartyMembers((CHARACTER)_Character)
+AND
+DB_LOW_MurderTribunal_PossibleMurderVictims(_Victim, _, _Flag, _RootWithoutHand)
+AND
+_RootWithoutHand != NULL_00000000-0000-0000-0000-000000000000
+AND
+QRY_GLO_HeadRemoval_CanRemoveHeadInventory((CHARACTER)_Victim)
+AND
+GetDisplayName(_Victim, _OutName)
+AND
+Concatenate("LOW_SerialKiller_TransformWithoutHand_", _OutName, _OutOnlyOnceString)
+AND
+QRY_OnlyOnce(_OutOnlyOnceString)
+THEN
+Transform(_Victim, _RootWithoutHand, (SHAPESHIFTRULE)DeathCorpse_ac4a5946-00cb-464f-9389-e3ac9e8b7e26);
+
+IF
+FlagCleared(_Flag, _Character, _)
+AND
+DB_LOW_MurderTribunal_PossibleMurderVictims(_, _, _Flag, _)
+AND
+DB_PartyMembers((CHARACTER)_Character)
+AND
+NOT QRY_LOW_SerialKiller_HasAnyHand(_Character)
+THEN
+ClearFlag(LOW_SerialKiller_State_HandHasItem_AnyHAnd_b2bbc248-3018-452c-8a9d-07fcd30c38d5, _Character);
+
+QRY
+QRY_LOW_SerialKiller_HasAnyHand((CHARACTER)_Character)
+AND
+DB_LOW_MurderTribunal_PossibleMurderVictims(_, _, _Flag, _)
+AND
+GetFlag(_Flag, _Character, 1)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Dolor states
+
+//Perma-defeated
+PROC
+PROC_StateSet_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+THEN
+PROC_State_Progress(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","PermaDefeated");
+
+//Murder Tribunal
+IF
+DB_GlobalFlag(LOW_SerialKiller_State_PlayersKillSecondTargetList_68c5736d-8b62-4e30-bc9c-0f3bcae40629)
+AND
+NOT DB_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+AND
+NOT DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134, "LOW_Dolor", "WineFestival")//We cannot do this while he's on the wine festival. Not until the festival is done.
+AND
+NOT QRY_SerialKiller_PlayerInFigaros()
+THEN
+PROC_State_Progress(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal");
+
+QRY
+QRY_SerialKiller_PlayerInFigaros()
+AND
+DB_Players(_Player)
+AND
+DB_InRegion(_Player, S_LOW_SerialKiller_Figaro_SUB_13409b18-250a-4259-826f-e30733e12783)
+THEN
+DB_NOOP(1);
+
+IF
+DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_TrialResolved_f3fe8b2d-50ea-3b9c-91ea-13f18f60d617)
+AND
+NOT DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","Figaro")
+AND
+NOT DB_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+THEN
+PROC_State_Progress(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal");
+
+IF
+DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal")
+AND
+NOT DB_GlobalFlag(LOW_MurderTribunal_State_DolorAtTribunal_922e7877-16c1-46b3-aecd-55a1619632dd)
+THEN
+SetFlag(LOW_MurderTribunal_State_DolorAtTribunal_922e7877-16c1-46b3-aecd-55a1619632dd);
+SetStoryDisplayName(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134, "SerialKiller_Dolor_Name"); //Rename Meztil as Dolor
+
+IF
+DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal_Assault")
+AND
+NOT DB_GlobalFlag(LOW_MurderTribunal_State_DolorAtTribunal_922e7877-16c1-46b3-aecd-55a1619632dd)
+THEN
+SetFlag(LOW_MurderTribunal_State_DolorAtTribunal_922e7877-16c1-46b3-aecd-55a1619632dd);
+
+IF
+DB_GlobalFlag(LOW_MurderTribunal_State_DolorAtTribunal_922e7877-16c1-46b3-aecd-55a1619632dd)
+AND
+NOT DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal")
+AND
+NOT DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal_Assault")
+AND
+NOT DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","PermaDefeated")
+THEN
+ClearFlag(LOW_MurderTribunal_State_DolorAtTribunal_922e7877-16c1-46b3-aecd-55a1619632dd);
+
+IF
+DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal")
+THEN
+PROC_RemoveDialog(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134);
+
+IF
+DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal")
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_TrialResolved_f3fe8b2d-50ea-3b9c-91ea-13f18f60d617)
+AND
+NOT DB_InRegion(_,(TRIGGER)S_LOW_MurderTribunal_SUB_c1739d1e-2f74-400d-8895-7c6cb42cda45)
+THEN
+PROC_LOW_MurderTribunal_DoDolorConfrontation(0);
+
+IF
+DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_Dolor","MurderTribunal")
+AND
+DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_TrialResolved_f3fe8b2d-50ea-3b9c-91ea-13f18f60d617)
+THEN
+PROC_LOW_MurderTribunal_DoDolorConfrontation(1);
+
+PROC
+PROC_LOW_MurderTribunal_DoDolorConfrontation(0)
+THEN
+TeleportTo(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,S_LOW_MurderTribunal_Dolor_Point_a5eeade8-cf66-45b0-a1b2-b41f934ea89f,"",0,0,0,1,1);
+SetOnStage(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,1);
+
+PROC
+PROC_LOW_MurderTribunal_DoDolorConfrontation(1)
+THEN
+PROC_AppearOutOfSightTo(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,S_LOW_MurderTribunal_Dolor_Point_a5eeade8-cf66-45b0-a1b2-b41f934ea89f,TeleportTrigger_MurderTribunal_Entrance_09d5165c-dcc9-4891-a177-6915482d3426,"");
+
+PROC
+PROC_LOW_MurderTribunal_DoDolorConfrontation((INTEGER)_)
+THEN
+DB_SpotPlayers((CHARACTER)S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134,"LOW_MurderTribunal_DeathKnight",NULL_00000000-0000-0000-0000-000000000000,NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_LOW_MurderTribunal_DoDolorConfrontation(0)
+AND
+DB_SpotPlayers(_Character,"LOW_MurderTribunal_DeathKnight",_,_)
+THEN
+PROC_SpotPlayers_RestartSpotting(_Character,"LOW_MurderTribunal_DeathKnight");
+
+//END_REGION
+
+//REGION Murder victim/hands
+
+IF
+DB_LOW_MurderTribunal_PossibleMurderVictims(_,_Hand,_Flag, _)
+THEN
+DB_HasItemEvent(_Hand,_Flag);
+
+IF
+KilledBy(_Victim,_Attacker,_,_)
+AND
+DB_LOW_SerialKiller_TargetList(_Victim,_)
+AND
+DB_PartyMembers((CHARACTER)_Attacker)
+THEN
+DB_LOW_MurderTribunal_PlayerVictims(_Victim);
+
+IF
+KilledBy((CHARACTER)S_GLO_Gortash_b878a854-f790-4999-95c4-3f20f00f65ac, _Attacker, _, _)
+AND
+DB_PartyMembers((CHARACTER)_Attacker)
+THEN
+DB_LOW_MurderTribunal_PlayerVictims(S_GLO_Gortash_b878a854-f790-4999-95c4-3f20f00f65ac);
+
+//Any victim is knocked out
+IF
+StatusApplied(_Character, "KNOCKED_OUT", _, _)
+AND
+DB_LOW_SerialKiller_TargetList((CHARACTER)_Character, _Hand)
+AND
+_Hand != NULL_00000000-0000-0000-0000-000000000000
+THEN
+DB_DoNotRemoveKnockedOutCharacterOnLongRest((CHARACTER)_Character);
+
+//Add hands to newly dead targets
+IF
+DB_Dead(_Victim)
+AND
+_Victim != S_GLO_Gortash_b878a854-f790-4999-95c4-3f20f00f65ac
+AND
+DB_LOW_SerialKiller_TargetList((CHARACTER)_Victim, _Hand)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+DB_LOW_MurderTribunal_PlayerVictims(_Victim)
+THEN
+PROC_ToInventoryAndOnStage((ITEM)_Hand, (CHARACTER)_Victim, 1, 0, 1);
+
+//Gale's hand
+IF
+TextEvent("MT_GaleHand")
+AND
+GetHostCharacter(_Player)
+AND
+CreateAtObject(UNI_LOOT_Darkurge_Gale_Severed_Hand_c8fa7c2f-d34a-4b42-a4fa-c2476fab6c92, _Player,0,1,"",0,_Hand)
+THEN
+ToInventory(_Hand,_Player,1,1,1);
+DB_ORI_DarkUrge_GaleHand((ITEM)_Hand);
+
+IF
+DB_ActiveLevel(_)
+AND
+DB_ORI_DarkUrge_GaleHand((ITEM)_Hand)
+AND
+QRY_OnlyOnce("LOW_MurderTribunal_AddedGaleHand")
+THEN
+DB_LOW_MurderTribunal_PossibleMurderVictims((CHARACTER)S_LOW_MurderTribunal_GaleDummy_3ac52eb2-25de-4338-a28e-48e3006729ed,(ITEM)_Hand,(FLAG)LOW_SerialKiller_State_HandHasItem_Gale_581b209d-c188-477b-a064-0364174a848e, (CHARACTERROOT)NULL_00000000-0000-0000-0000-000000000000);
+DB_LOW_MurderTribunal_PlayerVictims((CHARACTER)S_LOW_MurderTribunal_GaleDummy_3ac52eb2-25de-4338-a28e-48e3006729ed);
+
+// Gortash's Hand will be added into players' inventory when they pick the netherstone.
+IF
+AddedTo(S_WYR_CrownController_Gortash_383be300-d328-4152-86df-4927482d1fd7, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+NOT DB_GLO_SerialKiller_GortashHandSended(1)
+THEN
+ToInventory(S_GLO_GortashsHand_25d5cee5-79d2-4d73-917c-34184b3641c8, _Player, 1, 1, 1);
+DB_GLO_SerialKiller_GortashHandSended(1);
+
+//END_REGION
+
+//REGION Doppelgangers visit characters
+
+IF
+DB_LOW_SerialKiller_DoppelgangerPauseRegions(_Trigger)
+THEN
+PROC_TriggerRegisterForPlayers(_Trigger);
+
+//Kill first target
+IF
+KilledBy(_Victim, _Player, _, _ID)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_TargetList(_Victim, _Hand)
+AND
+_Hand != NULL_00000000-0000-0000-0000-000000000000
+AND
+QRY_LOW_SerialKiller_DoppelgangerCanTalk((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_Event_InvestigatorsKilledDoppel_63da33b6-5058-4f87-9043-1e433c30fa25)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerFirstKill");
+PROC_AppearOutOfSightTo((CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, _Player, _Player, "LOW_SerialKiller_DoppelgangerFirstKill");
+
+IF
+EntityEvent(S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, "LOW_SerialKiller_DoppelgangerFirstKill")
+AND
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerFirstKill")
+THEN
+PROC_CharacterMoveToAndTalk((CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, _Player,
+	(DIALOGRESOURCE)LOW_SerialKiller_DoppelgangerGiveQuest_34a08264-8fb0-e8a6-dd6a-a34c811fae87, "LOW_SerialKiller_KillingTargetList", "Run", 30.0);
+SetFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05);
+NOT DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerFirstKill");
+
+//Kill first Valeria or Devella
+IF
+KilledBy(_Victim, _Player, _, _ID)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_TargetList(_Victim, _Hand)
+AND
+_Hand == NULL_00000000-0000-0000-0000-000000000000
+AND
+QRY_LOW_SerialKiller_DoppelgangerCanTalk((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_Event_InvestigatorsKilledDoppel_63da33b6-5058-4f87-9043-1e433c30fa25)
+AND
+NOT DB_InRegion(_Player,(TRIGGER)S_LOW_MurderTribunal_SUB_c1739d1e-2f74-400d-8895-7c6cb42cda45) //Check Valeria and/or Devella isn't at the Murder Tribunal.
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerFirstKill_Investigators");
+PROC_AppearOutOfSightTo((CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, _Player, _Player, "LOW_SerialKiller_DoppelgangerFirstKill_Investigators");
+
+IF
+EntityEvent(S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, "LOW_SerialKiller_DoppelgangerFirstKill_Investigators")
+AND
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerFirstKill_Investigators")
+THEN
+PROC_CharacterMoveToAndTalk((CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, _Player,
+	(DIALOGRESOURCE)LOW_SerialKiller_DoppelgangerGiveQuest_34a08264-8fb0-e8a6-dd6a-a34c811fae87, "LOW_SerialKiller_KillingTargetList", "Run", 30.0);
+SetFlag((FLAG)LOW_SerialKiller_Event_InvestigatorsKilledDoppel_63da33b6-5058-4f87-9043-1e433c30fa25);
+NOT DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerFirstKill_Investigators");
+
+//Kill first target, player is invisible or sneaking
+IF
+KilledBy(_Victim, _Player, _, _ID)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_TargetList(_Victim, _Hand)
+AND
+_Hand != NULL_00000000-0000-0000-0000-000000000000
+AND
+QRY_LOW_SerialKiller_DoppelgangerCannotApproach((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_Event_InvestigatorsKilledDoppel_63da33b6-5058-4f87-9043-1e433c30fa25)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_CantTalk((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7);
+SetFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05);
+
+//Kill Valeria or Devella first, player is invisible or sneaking.
+IF
+KilledBy(_Victim, _Player, _, _ID)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_TargetList(_Victim, _Hand)
+AND
+_Hand == NULL_00000000-0000-0000-0000-000000000000
+AND
+QRY_LOW_SerialKiller_DoppelgangerCannotApproach((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_Event_InvestigatorsKilledDoppel_63da33b6-5058-4f87-9043-1e433c30fa25)
+AND
+NOT DB_InRegion(_Player,(TRIGGER)S_LOW_MurderTribunal_SUB_c1739d1e-2f74-400d-8895-7c6cb42cda45)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_CantTalk((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7);
+SetFlag((FLAG)LOW_SerialKiller_Event_InvestigatorsKilledDoppel_63da33b6-5058-4f87-9043-1e433c30fa25);
+
+//Kill first target AFTER kill Devella or Valeria, no doppelganger appearing, only to track the quest
+IF
+KilledBy(_Victim, _Player, _, _ID)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_TargetList(_Victim, _Hand)
+AND
+_Hand != NULL_00000000-0000-0000-0000-000000000000
+AND
+QRY_LOW_SerialKiller_DoppelgangerCanTalk((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+DB_PartyMembers((CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_Event_InvestigatorsKilledDoppel_63da33b6-5058-4f87-9043-1e433c30fa25)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+SetFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05);
+
+//Kill second target
+IF
+KilledBy(_Victim, _Player, _, _ID)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_TargetList(_Victim, _Hand)
+AND
+_Hand != NULL_00000000-0000-0000-0000-000000000000
+AND
+QRY_LOW_SerialKiller_DoppelgangerCanTalk((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillSecondTargetList_68c5736d-8b62-4e30-bc9c-0f3bcae40629)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_Doppelganer_SecondKill");
+PROC_AppearOutOfSightTo((CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, _Player, _Player, "LOW_SerialKiller_Doppelganer_SecondKill");
+
+
+IF
+EntityEvent(S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, "LOW_SerialKiller_Doppelganer_SecondKill")
+AND
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_Doppelganer_SecondKill")
+THEN
+NOT DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_Doppelganer_SecondKill");
+PROC_CharacterMoveToAndTalk((CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, _Player,
+	(DIALOGRESOURCE)LOW_SerialKiller_DoppelgangerGiveQuest_34a08264-8fb0-e8a6-dd6a-a34c811fae87, "LOW_SerialKiller_KillingTargetList", "Run", 30.0);
+SetFlag((FLAG)LOW_SerialKiller_State_PlayersKillSecondTargetList_68c5736d-8b62-4e30-bc9c-0f3bcae40629);
+NOT DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_Doppelganer_SecondKill");
+
+
+//Kill second target, player invisible or sneaking
+IF
+KilledBy(_Victim, _Player, _, _ID)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_TargetList(_Victim, _Hand)
+AND
+_Hand != NULL_00000000-0000-0000-0000-000000000000
+AND
+QRY_LOW_SerialKiller_DoppelgangerCannotApproach((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillSecondTargetList_68c5736d-8b62-4e30-bc9c-0f3bcae40629)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_CantTalk((CHARACTER)_Player, (CHARACTER)S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7);
+SetFlag((FLAG)LOW_SerialKiller_State_PlayersKillSecondTargetList_68c5736d-8b62-4e30-bc9c-0f3bcae40629);
+
+//If you kill the first target but never meet the doppelganger (probably because he dies walking through some surface), this event will trigger. First Kill
+IF
+TeleportToWaypoint(_Player, _Trigger)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_FirstTarget_728e4d89-c3b8-44ba-d535-ea3f658e1d32)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_SecondTarget_fe5366dd-df38-4370-7fef-26360c4c3ce8)
+AND
+QRY_LOW_SerialKiller_DoppelgangerCanTalk(_Player, (CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerBackup_FirstKill");
+PROC_AppearOutOfSightTo((CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, _Player, _Player, "LOW_SerialKiller_DoppelgangerBackup_FirstKill");
+
+IF
+EntityEvent(S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, "LOW_SerialKiller_DoppelgangerBackup_FirstKill")
+AND
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerBackup_FirstKill")
+THEN
+PROC_CharacterMoveToAndTalk((CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, _Player,
+	(DIALOGRESOURCE)LOW_SerialKiller_DoppelgangerGiveQuest_Backup_a5adee84-12c2-4a4a-6479-9789e31d0d67, "LOW_SerialKiller_KillingTargetList", "Run", 30.0);
+SetFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05);
+NOT DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerBackup_FirstKill");
+
+
+//If you kill the second target but never meet the doppelganger (probably because he dies walking through some surface), this event will trigger. Second Kill
+IF
+TeleportToWaypoint(_Player, _Trigger)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillSecondTargetList_68c5736d-8b62-4e30-bc9c-0f3bcae40629)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_FirstTarget_728e4d89-c3b8-44ba-d535-ea3f658e1d32)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_SecondTarget_fe5366dd-df38-4370-7fef-26360c4c3ce8)
+AND
+NOT DB_GlobalFlag(LOW_SerialKiller_Event_DoppelgangerOutOfSight_ef7b36d9-45dc-f586-82f4-abd550dfb7dd)
+AND
+QRY_LOW_SerialKiller_DoppelgangerCanTalk(_Player, (CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerBackup_SecondKill");
+PROC_AppearOutOfSightTo((CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, _Player, _Player, "LOW_SerialKiller_DoppelgangerBackup_SecondKill");
+
+IF
+EntityEvent(S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, "LOW_SerialKiller_DoppelgangerBackup_SecondKill")
+AND
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerBackup_SecondKill")
+THEN
+PROC_CharacterMoveToAndTalk((CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, _Player,
+	(DIALOGRESOURCE)LOW_SerialKiller_DoppelgangerGiveQuest_Backup_a5adee84-12c2-4a4a-6479-9789e31d0d67, "LOW_SerialKiller_KillingTargetList", "Run", 30.0);
+SetFlag(LOW_SerialKiller_State_PlayersKillSecondTargetList_68c5736d-8b62-4e30-bc9c-0f3bcae40629);
+NOT DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerBackup_SecondKill");
+
+//If you kill the first target but never meet the doppelganger (probably because he dies walking through some surface), this event will trigger. First Kill, teleport to from camp
+IF
+TeleportToFromCamp(_Player)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_FirstTarget_728e4d89-c3b8-44ba-d535-ea3f658e1d32)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_SecondTarget_fe5366dd-df38-4370-7fef-26360c4c3ce8)
+AND
+QRY_LOW_SerialKiller_DoppelgangerCanTalk(_Player, (CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerBackup_FirstKill");
+PROC_AppearOutOfSightTo((CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, _Player, _Player, "LOW_SerialKiller_DoppelgangerBackup_FirstKill");
+
+//If you kill the second target but never meet the doppelganger (probably because he dies walking through some surface), this event will trigger. Second Kill, teleport to from camp
+IF
+TeleportToFromCamp(_Player)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_PlayersKillSecondTargetList_68c5736d-8b62-4e30-bc9c-0f3bcae40629)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_FirstTarget_728e4d89-c3b8-44ba-d535-ea3f658e1d32)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_SecondTarget_fe5366dd-df38-4370-7fef-26360c4c3ce8)
+AND
+NOT DB_GlobalFlag(LOW_SerialKiller_Event_DoppelgangerOutOfSight_ef7b36d9-45dc-f586-82f4-abd550dfb7dd)
+AND
+QRY_LOW_SerialKiller_DoppelgangerCanTalk(_Player, (CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerBackup_SecondKill");
+PROC_AppearOutOfSightTo((CHARACTER)S_LOW_SerialKiller_Doppelganger_Backup_a24f8f6f-c65e-4aec-883e-f950c1f4179a, _Player, _Player, "LOW_SerialKiller_DoppelgangerBackup_SecondKill");
+
+//Fail dialgoue with the doppelgangers, any of them
+IF
+CharacterMoveToAndTalkFailed(_Doppelganger, _Player, "LOW_SerialKiller_KillingTargetList", _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_CantTalk(_Player)
+AND
+NOT DB_LOW_SerialKiller_CantTalk(_Player, _Doppelganger)
+THEN
+DB_LOW_SerialKiller_CantTalk(_Player, _Doppelganger);
+
+//If the doppelganger is on stage
+IF
+DB_LOW_SerialKiller_CantTalk((CHARACTER)_Player, (CHARACTER)_Doppelganger)
+AND
+NOT DB_CantTalk(_Player) //includes combat check
+AND
+NOT DB_CantTalk(_Doppelganger) //includes combat check
+AND
+NOT DB_Offstage(_Doppelganger)
+AND
+NOT DB_HiddenCharacters(_Player, _)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+DB_LOW_SerialKiller_DoppelgangerTryingDialog(_Doppelganger, _Dialog)
+THEN
+NOT DB_LOW_SerialKiller_CantTalk(_Player, _Doppelganger);
+PROC_CharacterMoveToAndTalk((CHARACTER)_Doppelganger, _Player,
+	(DIALOGRESOURCE)_Dialog, "LOW_SerialKiller_KillingTargetList", "Run", 30.0);
+
+//If the doppelganger is off stage
+IF
+DB_LOW_SerialKiller_CantTalk((CHARACTER)_Player, (CHARACTER)_Doppelganger)
+AND
+NOT DB_CantTalk(_Player)
+AND
+DB_Offstage(_Doppelganger)
+AND
+NOT DB_HiddenCharacters(_Player, _)
+AND
+NOT QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+AND
+DB_LOW_SerialKiller_DoppelgangerTryingDialog(_Doppelganger, _Dialog)
+THEN
+NOT DB_LOW_SerialKiller_CantTalk(_Player, _Doppelganger);
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerCantTalk_SecondAttempt", _Dialog);
+PROC_AppearOutOfSightTo((CHARACTER)_Doppelganger, _Player, _Player, "LOW_SerialKiller_DoppelgangerCantTalk_SecondAttempt");
+
+IF
+LeftTrigger(_Player, _Trigger)
+AND
+DB_LOW_SerialKiller_CantTalk(_Player, _Doppelganger)
+AND
+DB_LOW_SerialKiller_DoppelgangerPauseRegions(_Trigger)
+AND
+DB_LOW_SerialKiller_DoppelgangerTryingDialog(_Doppelganger, _Dialog)
+THEN
+NOT DB_LOW_SerialKiller_CantTalk(_Player, _Doppelganger);
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerCantTalk_SecondAttempt", _Dialog);
+PROC_AppearOutOfSightTo((CHARACTER)_Doppelganger, _Player, _Player, "LOW_SerialKiller_DoppelgangerCantTalk_SecondAttempt");
+
+IF
+EntityEvent(_Doppelganger, "LOW_SerialKiller_DoppelgangerCantTalk_SecondAttempt")
+AND
+DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerCantTalk_SecondAttempt", _Dialog)
+THEN
+NOT DB_LOW_SerialKiller_KillerPlayer(_Player, "LOW_SerialKiller_DoppelgangerCantTalk_SecondAttempt", _Dialog);
+PROC_CharacterMoveToAndTalk((CHARACTER)_Doppelganger, _Player,
+	(DIALOGRESOURCE)_Dialog, "LOW_SerialKiller_KillingTargetList", "Run", 30.0);
+
+//Interruption of Doppelganger Dialog
+IF
+DialogEnded(_Dialogue, _)
+AND
+DB_LOW_SerialKiller_DoppelgangerTryingDialog(_Doppelganger, _Dialogue)
+AND
+DB_GlobalFlag(LOW_SerialKiller_Event_DoppelgangerOutOfSight_ef7b36d9-45dc-f586-82f4-abd550dfb7dd)
+THEN
+ClearFlag(LOW_SerialKiller_Event_DoppelgangerOutOfSight_ef7b36d9-45dc-f586-82f4-abd550dfb7dd, NULL_00000000-0000-0000-0000-000000000000);
+PROC_DisappearOutOfSight(_Doppelganger, "Run", 1, "");
+
+IF
+Deactivated(_Doppelganger)
+AND
+DB_LOW_SerialKiller_DoppelgangerTryingDialog((CHARACTER)_Doppelganger, _Dialogue)
+THEN
+SetOnStage(_Doppelganger, 0);
+
+//END_REGION
+
+//REGION QRY_LOW_SerialKiller_DoppelgangerCanTalk and QRY_LOW_SerialKiller_CharacterInProtectedRegion
+
+QRY
+QRY_LOW_SerialKiller_DoppelgangerCanTalk((CHARACTER)_Player, (CHARACTER)_Doppelganger)
+AND
+NOT DB_HiddenCharacters(_Player, _)
+AND
+NOT DB_LOW_SerialKiller_CantTalk(_Player, _Doppelganger)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_LOW_SerialKiller_CharacterInProtectedRegion((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_DoppelgangerPauseRegions(_Trigger)
+AND
+DB_InRegion(_Player, _Trigger)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_LOW_SerialKiller_DoppelgangerCannotApproach((CHARACTER)_Player, (CHARACTER)_Doppelganger)
+AND
+NOT QRY_LOW_SerialKiller_DoppelgangerCanTalk(_Player, _Doppelganger)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_LOW_SerialKiller_DoppelgangerCannotApproach((CHARACTER)_Player, (CHARACTER)_Doppelganger)
+AND
+QRY_LOW_SerialKiller_CharacterInProtectedRegion(_Player)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Begin the quest
+
+//Pick the target list for the first time
+IF
+TemplateAddedTo(UNI_LOW_TargetList_4ece815c-aff2-45c3-8b07-dd3a04454243, _TargetList, (CHARACTER)_Player, _)
+AND
+DB_Players(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_LOW_Elfsong_LeavingPrivateRoom_3e205a46-fae6-4f3e-acc6-da287935ddc6) //at Elfsong Tavern we will have a special behaviour
+THEN
+PROC_TryStartAD(LOW_SerialKiller_PAD_PickTargetList_1042a1f8-daf3-4287-5d67-a0fd17fcab21, _Player);
+
+//Add conditions to the mission triggered flag to be set.
+IF
+DB_GlobalFlag(_Flag)
+AND
+DB_LOW_SerialKiller_FlagsThatTriggersWineFiestival(_Flag)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_WineFestival_a83198eb-b080-4001-bd00-d8368f1334a5)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_MissionTriggered_003250e5-2cca-4612-9b74-a9802e8fec12)
+THEN
+SetFlag((FLAG)LOW_SerialKiller_State_MissionTriggered_003250e5-2cca-4612-9b74-a9802e8fec12);
+
+//Clear the DB when the use is needed no more.
+IF
+DB_GlobalFlag(LOW_SerialKiller_State_WineFestival_a83198eb-b080-4001-bd00-d8368f1334a5)
+AND
+DB_LOW_SerialKiller_FlagsThatTriggersWineFiestival(_Flag)
+THEN
+NOT DB_LOW_SerialKiller_FlagsThatTriggersWineFiestival(_Flag);
+
+//END_REGION
+
+//REGION Drinking the wine
+
+IF
+StatusApplied(_Player, "LOW_SERIALKILLER_PARALYZED", _, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_WineFestival_a83198eb-b080-4001-bd00-d8368f1334a5)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_State_HighberrysRitualPerformed_00c1e2ab-8752-47f1-b847-51aedc0fb189)
+THEN
+SetFlag((FLAG)LOW_SerialKiller_Event_DolorRevealHimself_b9cb8e1a-5ade-1834-7d6d-992f6a232063);
+
+//END_REGION
+
+//REGION Journal
+
+//Debug force update starting the quest if you enter WYR or LOW. Both this quest updates will be always in any player journal after load the city. This will accelerate all our testing.
+IF
+DB_CurrentLevel("BGO_Main_A")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "LearnedAboutOrin");
+QuestUpdate("LOW_FindBhaalTemple", "EnteredCity");
+
+IF
+DB_CurrentLevel("CTY_Main_A")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "LearnedAboutOrin");
+QuestUpdate("LOW_FindBhaalTemple", "EnteredCity");
+
+//General quest
+//Getting the amulet from Sarevok if he is alive
+IF
+FlagSet((FLAG)LOW_MurderTribunal_Event_GiveBhaalAmulet_51ae9508-df79-2849-21a0-9f9aae78d727, _Player, _)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_GoToTempleSarevok");
+
+IF
+FlagSet((FLAG)LOW_BhaalTemple_State_HasBhaalAmulet_66796361-3cf6-476a-8c09-a076dfa6a172, _Player, _)
+AND
+DB_GlobalFlag(LOW_MurderTribunal_Knows_BhaalTempleLocation_0a45cd29-8ae1-43bb-9ef6-b95af1dc6e55)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_GotMapAndAmuletNoSarevok");
+
+IF
+DB_GlobalFlag((FLAG)LOW_BhaalTemple_Event_OpenedMainDoor_6f6497c1-6254-46ad-a3e9-46fcd0909b83)
+AND
+NOT QRY_LOW_DarkUrgeInParty()
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_BhaalTempleEntering");
+
+IF
+DB_GlobalFlag((FLAG)LOW_BhaalTemple_Event_OpenedMainDoor_6f6497c1-6254-46ad-a3e9-46fcd0909b83)
+AND
+QRY_LOW_DarkUrgeInParty()
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_BhaalTempleEntering_DU");
+
+QRY
+QRY_LOW_DarkUrgeInParty()
+AND
+DB_Players(_Player)
+AND
+IsTagged(_PLayer, (TAG)REALLY_DARK_URGE_cd611d7d-b67d-42b4-a75c-a0c6091ef8a2, 1)
+THEN
+DB_NOOP(1);
+
+//REGION Unholy Assassin
+//Unholy assassin
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_FirstTarget_728e4d89-c3b8-44ba-d535-ea3f658e1d32)
+AND
+NOT DB_QuestIsAccepted("LOW_FindBhaalTemple_UnholyAssassin")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "StartPoint_TargetList_AfterKillingOneVictim");
+
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_FirstTarget_728e4d89-c3b8-44ba-d535-ea3f658e1d32)
+AND
+QRY_QuestUpdateIsUnlockedForAny("LOW_FindBhaalTemple", "StartPoint_TargetList_AfterKillingOneVictim")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_FirstKill");
+
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_FirstTarget_728e4d89-c3b8-44ba-d535-ea3f658e1d32)
+AND
+NOT QRY_QuestUpdateIsUnlockedForAny("LOW_FindBhaalTemple_UnholyAssassin", "StartPoint_TargetList_AfterKillingOneVictim")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_FirstKill");
+
+IF
+DB_GlobalFlag(LOW_MurderTribunal_State_OfferedMinscSacrifice_5bda0a8c-eea3-8403-2965-82d9e8b24bfe)
+AND
+DB_PermaDefeated((CHARACTER)S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_MinscMurdered");
+
+IF
+DB_GlobalFlag(LOW_MurderTribunal_State_OfferedJaheiraSacrifice_4d34ecc5-705a-2081-2826-a62076e705d9)
+AND
+DB_PermaDefeated((CHARACTER)S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_JaheiraMurdered");
+
+IF
+DB_GlobalFlag(LOW_MurderTribunal_State_OfferedJaheiraSacrifice_4d34ecc5-705a-2081-2826-a62076e705d9)
+AND
+DB_PermaDefeated((CHARACTER)S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a)
+AND
+DB_PermaDefeated((CHARACTER)S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_JaheiraAndMinscMurdered");
+
+IF
+DB_PermaDefeated((CHARACTER)S_LOW_MurderTribunal_Sarevok_ae9f784a-ea64-4297-95a7-8377e85231b6)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_KillSarevok");
+//END_REGION Unholy Assassin
+
+//REGION Follow the Murders
+//Follow the murders
+
+//Gortash hint
+IF
+DB_GlobalFlag(WYR_KillDirectorGortash_FollowBodiesHint_cb235602-eced-44db-dbeb-fb14e31473d1)
+AND
+DB_QuestIsAccepted("WYR_OpenHandMurder")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "FollowMurders_StartFromGortash");
+
+//Read the Gazette
+IF
+CustomBookUIClosed(_Character, "LOW_Gazette_Issue86")
+AND
+NOT DB_QuestIsAccepted("WYR_OpenHandMurder")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "FollowMurders_StartFromGazette");
+
+IF
+KilledBy(S_GLO_HollyphantDetective_acf70307-3bb9-4b91-b894-fa2120916f58, _, _, _)
+AND
+DB_CurrentLevel("BGO_Main_A")
+THEN
+SetFlag(LOW_SerialKiller_State_ValeriaKilledInWyrm_dad10c35-a5d6-47ab-a4ab-62468b4887f5);
+
+//Valeria send us to Devella, Devella should not be dead.
+IF
+FlagSet(WYR_SerialKiller_State_ValeriaSendToDevella_65f1a97d-1656-da36-6417-be1e44a87663, _, _)
+AND
+NOT DB_PermaDefeated(S_LOW_Devella_Fountainhead_048defbd-d386-4272-a5b7-40c1a9e75b81)
+THEN
+Questupdate("LOW_FindBhaalTemple", "StopMurders_ValeriaSendUsToDevella");
+
+IF
+FlagSet(LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671, _, _)
+AND
+DB_GlobalFlag(LOW_Elfsong_Devella_Event_StelmaneMurdered_6f9a5052-b6f0-8452-2149-5f0781d192d4)
+AND
+NOT DB_PermaDefeated(S_LOW_Devella_Fountainhead_048defbd-d386-4272-a5b7-40c1a9e75b81)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "StopMurders_GetTargetListAfterTalkingToDevella");
+
+//Tableaux hints because Devella and reading the map.
+IF
+FlagSet(LOW_SerialKiller_AllowHelpDevella_Map_48a73e3a-7001-7065-c78c-c0eb117d17fa, _Player, _)
+THEN
+QuestUpdate((CHARACTER)_Player, "LOW_FindBhaalTemple", "FollowMurders_TableauxHint");
+NOT DB_LOW_SerialKiller_Victim_Marker_AlreadyDead((CHARACTER)S_LOW_SerialKiller_Franc_Peartree_1556e29c-a876-4853-9ea7-283a48703a56, "LOW_SerialKiller_Character_Peartree", "Stopmurders_FailFranc");
+
+IF
+TemplateAddedTo(BOOK_LOW_SerialKiller_Map_Tableaux_0abb9873-a07e-486b-bf50-60ccd5f8a0a3, _, _Player, _)
+AND
+NOT QRY_QuestUpdateIsUnlockedForAny("LOW_FindBhaalTemple", "FollowMurders_TableauxHint")
+THEN
+QuestUpdate((CHARACTER)_Player, "LOW_FindBhaalTemple", "FollowMurders_TableauxHint_MapNotDevella");
+NOT DB_LOW_SerialKiller_Victim_Marker_AlreadyDead((CHARACTER)S_LOW_SerialKiller_Franc_Peartree_1556e29c-a876-4853-9ea7-283a48703a56, "LOW_SerialKiller_Character_Peartree", "Stopmurders_FailFranc");
+PROC_HideMarker(S_LOW_SerialKiller_Franc_Peartree_1556e29c-a876-4853-9ea7-283a48703a56, "LOW_SerialKiller_Character_Peartree");
+
+IF
+GameBookInterfaceClosed(_Book, _Player)
+AND
+GetBookID(_Book, _ID)
+AND
+_ID == "LOW_SerialKiller_Map_Tableaux"
+AND
+NOT QRY_QuestUpdateIsUnlockedForAny("LOW_FindBhaalTemple", "FollowMurders_TableauxHint")
+THEN
+QuestUpdate((CHARACTER)_Player, "LOW_FindBhaalTemple", "FollowMurders_TableauxHint_MapNotDevella");
+NOT DB_LOW_SerialKiller_Victim_Marker_AlreadyDead((CHARACTER)S_LOW_SerialKiller_Franc_Peartree_1556e29c-a876-4853-9ea7-283a48703a56, "LOW_SerialKiller_Character_Peartree", "Stopmurders_FailFranc");
+PROC_HideMarker(S_LOW_SerialKiller_Franc_Peartree_1556e29c-a876-4853-9ea7-283a48703a56, "LOW_SerialKiller_Character_Peartree");
+
+//Killing Devella if she already sent players to find the target list
+IF
+DB_PermaDefeated(S_LOW_Devella_Fountainhead_048defbd-d386-4272-a5b7-40c1a9e75b81)
+AND
+NOT DB_GlobalFlag(LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+DB_GlobalFlag(LOW_Elfsong_State_AllowHelpDevella_6692d31b-c2a1-4c1f-6471-1a2c701867dd)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "FollowMurders_TableauxHint_KillDevellaBeforeTargetList");
+
+//Killing Devella before Valeria sent players to her, jump to find the victims
+IF
+DB_PermaDefeated(S_LOW_Devella_Fountainhead_048defbd-d386-4272-a5b7-40c1a9e75b81)
+AND
+DB_GlobalFlag(LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+NOT
+DB_GlobalFlag(LOW_SerialKiller_State_DolorAtFigaro_0c0df309-ff40-f3ef-9df4-c37b86f6e666)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "Stopmurders_KillingDevella");
+
+//Delaying Franc Peartree updates until the right moment if we pick the list in his tableaux because we read the map
+IF
+DB_GlobalFlag(LOW_Elfsong_Devella_Knows_MurdersSolved_cf5a99a0-1112-18cb-d0c3-71498843319d)
+AND
+NOT QRY_LOW_SerialKiller_AnyTableauxState()
+THEN
+DB_QuestDef_SawDeadState("LOW_FindBhaalTemple", "Stopmurders_FailFranc", (CHARACTER)S_LOW_SerialKiller_Franc_Peartree_1556e29c-a876-4853-9ea7-283a48703a56);
+DB_QuestDef_State((FLAG)LOW_SerialKiller_Knows_FrancKilledByRedDwarf_4b68a5c7-c2c1-ad55-2c63-eefe0fc8b8ca, "LOW_FindBhaalTemple", "Stopmurders_SwDFranc");
+SetFlag(LOW_SerialKiller_State_SawDolorVictim_8ae5dc4c-4728-4f42-884a-791095955c92);
+
+IF
+DB_GlobalFlag(LOW_Elfsong_Devella_Knows_MurdersSolved_cf5a99a0-1112-18cb-d0c3-71498843319d)
+AND
+QRY_LOW_SerialKiller_AnyTableauxState()
+AND
+NOT DB_GlobalFlag(LOW_SerialKiller_Knows_FrancKilledByRedDwarf_4b68a5c7-c2c1-ad55-2c63-eefe0fc8b8ca)
+AND
+QRY_OnlyOnce("LOW_QuestUpdate_TableauxAfterFranc")
+AND
+DB_Players(_Player)
+THEN
+QuestUpdate(_Player, "LOW_FindBhaalTemple", "Stopmurders_FailFranc");
+DB_QuestDef_State((FLAG)LOW_SerialKiller_Knows_FrancKilledByRedDwarf_4b68a5c7-c2c1-ad55-2c63-eefe0fc8b8ca, "LOW_FindBhaalTemple", "Stopmurders_SwDFranc");
+
+IF
+DB_GlobalFlag(LOW_Elfsong_Devella_Knows_MurdersSolved_cf5a99a0-1112-18cb-d0c3-71498843319d)
+AND
+QRY_LOW_SerialKiller_AnyTableauxState()
+AND
+DB_GlobalFlag(LOW_SerialKiller_Knows_FrancKilledByRedDwarf_4b68a5c7-c2c1-ad55-2c63-eefe0fc8b8ca)
+AND
+QRY_OnlyOnce("LOW_QuestUpdate_TableauxAfterFranc")
+AND
+DB_Players(_Player)
+THEN
+QuestUpdate(_Player, "LOW_FindBhaalTemple", "Stopmurders_FailFranc");
+QuestUpdate(_Player, "LOW_FindBhaalTemple", "Stopmurders_SwDFranc");
+
+QRY
+QRY_LOW_SerialKiller_AnyTableauxState()
+AND
+QRY_QuestUpdateIsUnlockedForAny("LOW_FindBhaalTemple", "FollowMurders_TableauxHint")
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_LOW_SerialKiller_AnyTableauxState()
+AND
+QRY_QuestUpdateIsUnlockedForAny("LOW_FindBhaalTemple", "FollowMurders_TableauxHint_MapNotDevella")
+THEN
+DB_NOOP(1);
+
+IF
+DB_GlobalFlag(LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_OpenHand_State_YannisAskedToInvestigate_394409f9-a450-4f9e-b396-7e861da8287f)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Elfsong_Devella_Event_StelmaneMurdered_6f9a5052-b6f0-8452-2149-5f0781d192d4)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "StopMurders_DevellaStartingPoint");
+
+//If players see Cora dead after the ritual, update the quest
+IF
+DB_Dead((CHARACTER)S_LOW_CoraHighberry_8a520cf7-c5da-419f-bdd4-792b27c5c679)
+AND
+DB_Sees(_Player, (CHARACTER)S_LOW_CoraHighberry_8a520cf7-c5da-419f-bdd4-792b27c5c679)
+AND
+DB_Players(_Player)
+AND
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_HighberrysRitualPerformed_00c1e2ab-8752-47f1-b847-51aedc0fb189)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "StopMurders_CoraRitual");
+
+IF
+AddedTo(S_LOW_SerialKiller_NoteFromOrin_9c029a99-2636-4c19-9ff3-c7564a91cd35, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+AND
+QRY_OnlyOnce("LOW_FindBhaalTemple_SicariusNoteFromDolor")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_FindSicariusNote");
+SetFlag(LOW_MurderTribunal_Knows_WordOfPassage_839150e6-d168-4c89-a980-68b9e9f60556);
+
+IF
+AddedTo(S_LOW_SerialKiller_NoteFromOrin_9c029a99-2636-4c19-9ff3-c7564a91cd35, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+NOT DB_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+AND
+QRY_OnlyOnce("LOW_FindBhaalTemple_SicariusNoteFromDolor")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_StealedPassphrase");
+SetFlag(LOW_MurderTribunal_Knows_WordOfPassage_839150e6-d168-4c89-a980-68b9e9f60556);
+
+IF
+DB_GlobalFlag(LOW_SerialKiller_State_KnowWordOfPassageFromDolor_a874a4ce-4c61-416b-b77a-4cf20fc323e0)
+AND
+NOT DB_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+AND
+QRY_OnlyOnce("LOW_FindBhaalTemple_SicariusNoteFromDolor")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_StealedPassphrase");
+
+IF
+DB_GlobalFlag(LOW_SerialKiller_State_KnowWordOfPassageFromDolor_a874a4ce-4c61-416b-b77a-4cf20fc323e0)
+AND
+DB_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+AND
+QRY_OnlyOnce("LOW_FindBhaalTemple_SicariusNoteFromDolor")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_FindSicariusNote");
+
+//Tracking if you get the Hands from Dolor (both quests)
+IF
+FlagSet(_DolorHandsFlag, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_Serialkiller_HandsFlagInDolorBag(_DolorHandsFlag)
+THEN
+DB_LOW_SerialKiller_PlayersHaveHandsFromDolor(_DolorHandsflag);
+
+IF
+FlagCleared(_DolorHandsFlag, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_Serialkiller_HandsFlagInDolorBag(_DolorHandsFlag)
+THEN
+NOT DB_LOW_SerialKiller_PlayersHaveHandsFromDolor(_DolorHandsFlag);
+
+IF
+DB_LOW_SerialKiller_PlayersHaveHandsFromDolor(_DolorHandsFlag)
+AND
+SysCount("DB_LOW_SerialKiller_PlayersHaveHandsFromDolor", 1, _OutValue)
+AND
+_OutValue > 1
+AND
+DB_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+AND
+QRY_OnlyOnce("LOW_FindBhaalTemple_FakeIt")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_FakeIt");
+
+IF
+DB_LOW_SerialKiller_PlayersHaveHandsFromDolor(_DolorHandsFlag)
+AND
+SysCount("DB_LOW_SerialKiller_PlayersHaveHandsFromDolor", 1, _OutValue)
+AND
+_OutValue > 1
+AND
+NOT DB_PermaDefeated(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+AND
+QRY_OnlyOnce("LOW_FindBhaalTemple_FakeIt")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_FakeIt_StealedHands");
+
+IF
+KilledBy(_Victim, _Player, _, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_LOW_SerialKiller_Victim_QuestState(_Victim, _QuestStep)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", _QuestStep);
+NOT DB_LOW_SerialKiller_Victim_QuestState(_Victim, _QuestStep);
+
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_State_HighberrysRitualPerformed_00c1e2ab-8752-47f1-b847-51aedc0fb189)
+THEN
+DB_QuestDef_SawDeadState("LOW_FindBhaalTemple", "StopMurders_CoraRitual", (CHARACTER)S_LOW_CoraHighberry_8a520cf7-c5da-419f-bdd4-792b27c5c679);
+
+IF
+DB_State_Current(S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134, "LOW_Dolor", "Figaro")
+AND
+NOT DB_GlobalFlag(LOW_SerialKiller_State_DolorKillsCoraWineFestival_0fce13c6-8d48-4391-a890-f1397add7af4)
+AND
+NOT DB_GlobalFlag(LOW_SerialKiller_State_HighberrysRitualPerformed_00c1e2ab-8752-47f1-b847-51aedc0fb189)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "DolorOutWineFestival");
+
+IF
+DB_PermaDefeated(S_LOW_MurderTribunal_Sarevok_ae9f784a-ea64-4297-95a7-8377e85231b6)
+AND
+NOT DB_PermaDefeated(S_GLO_HollyphantDetective_acf70307-3bb9-4b91-b894-fa2120916f58)
+AND
+DB_GlobalFlag(LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_SaveSacrifice");
+
+IF
+DB_PermaDefeated(S_LOW_MurderTribunal_Sarevok_ae9f784a-ea64-4297-95a7-8377e85231b6)
+AND
+NOT DB_PermaDefeated(S_GLO_HollyphantDetective_acf70307-3bb9-4b91-b894-fa2120916f58)
+AND
+NOT DB_GlobalFlag(LOW_MurderTribunal_State_StartedBaptism_9231a565-3cf9-4754-a9c4-db02e7f0eeb8)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_CheckSacrificialChamber");
+
+IF
+DB_PermaDefeated(S_LOW_MurderTribunal_Sarevok_ae9f784a-ea64-4297-95a7-8377e85231b6)
+AND
+DB_Dead(S_GLO_HollyphantDetective_acf70307-3bb9-4b91-b894-fa2120916f58)
+AND
+NOT DB_GlobalFlag(LOW_SerialKiller_State_ValeriaKilledInWyrm_dad10c35-a5d6-47ab-a4ab-62468b4887f5)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_FollowMurders_Completion_SarevokValeriaDead");
+
+IF
+DB_PermaDefeated(S_LOW_MurderTribunal_Sarevok_ae9f784a-ea64-4297-95a7-8377e85231b6)
+AND
+DB_GlobalFlag(LOW_SerialKiller_State_ValeriaKilledInWyrm_dad10c35-a5d6-47ab-a4ab-62468b4887f5)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_KillSarevok_ValeriaAlreadyDead");
+
+//If we talk to Valeria we already finish the subquest, so we don't need more checks for this
+IF
+DB_GlobalFlag((FLAG)LOW_BhaalTemple_Event_OpenedMainDoor_6f6497c1-6254-46ad-a3e9-46fcd0909b83)
+AND
+NOT DB_PermaDefeated(S_GLO_HollyphantDetective_acf70307-3bb9-4b91-b894-fa2120916f58)
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "MurderTribunal_FollowMurders_Completion_SarevokNoValeria");
+
+IF
+DB_GlobalFlag((FLAG)LOW_BhaalTemple_Event_OpenedMainDoor_6f6497c1-6254-46ad-a3e9-46fcd0909b83)
+AND
+QRY_LOW_DarkUrgeInParty()
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "UnholyAssassin_SkipQuestAfterStartedDU");
+//END_REGION Follow the Murders
+
+//END_REGION
+
+//REGION Markers for victims
+
+IF
+DialogEnded(LOW_BlushingMermaid_Patron_08_f3833dae-d3d3-7500-213e-933f03f28185, _)
+AND
+DB_GlobalFlag(LOW_BlushingMermaid_Patron_08_WarnedAboutSerialKiller_bc503ffb-577e-d70a-e8b6-252e882bed8a)
+AND
+DB_LOW_SerialKiller_Victim_Marker(S_LOW_BlushingMermaid_Patron_08_40dcda0b-7891-414f-8aeb-f742d842207d, _Marker)
+THEN
+PROC_DisappearOutOfSight(S_LOW_BlushingMermaid_Patron_08_40dcda0b-7891-414f-8aeb-f742d842207d, "Sprint", 1, "");
+PROC_HideMarker(S_LOW_BlushingMermaid_Patron_08_40dcda0b-7891-414f-8aeb-f742d842207d, _Marker);
+
+//For victims that you can kill
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+DB_CurrentLevel("CTY_Main_A")
+AND
+DB_LOW_SerialKiller_Victim_Marker(_Victim, _Marker)
+AND
+QRY_LOW_SerialKiller_MarkersNeeded()
+AND
+NOT DB_Dead(_Victim)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_SecondTarget_fe5366dd-df38-4370-7fef-26360c4c3ce8)
+AND
+NOT DB_QuestIsClosed("LOW_FindBhaalTemple")
+THEN
+PROC_ShowMarker(_Victim, _Marker);
+
+//Hiding the markers if we travel back to BGO_Main_A
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+NOT DB_CurrentLevel("CTY_Main_A")
+AND
+DB_LOW_SerialKiller_Victim_Marker(_Victim, _Marker)
+AND
+QRY_LOW_SerialKiller_MarkersNeeded()
+AND
+NOT DB_Dead(_Victim)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_SecondTarget_fe5366dd-df38-4370-7fef-26360c4c3ce8)
+AND
+NOT DB_QuestIsClosed("LOW_FindBhaalTemple")
+THEN
+PROC_HideMarker(_Victim, _Marker);
+
+//Hiding the marker and remove from database if the victim is dead
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+DB_LOW_SerialKiller_Victim_Marker(_Victim, _Marker)
+AND
+QRY_LOW_SerialKiller_MarkersNeeded()
+AND
+DB_Dead(_Victim)
+THEN
+PROC_HideMarker(_Victim, _Marker);
+NOT DB_LOW_SerialKiller_Victim_Marker(_Victim, _Marker);
+
+//For the already dead victims
+//Showing the markers
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+DB_CurrentLevel("CTY_Main_A")
+AND
+DB_LOW_SerialKiller_Victim_Marker_AlreadyDead(_Victim, _Marker, _QuestStep)
+AND
+QRY_LOW_SerialKiller_MarkersNeeded()
+AND
+NOT QRY_QuestUpdateIsUnlockedForAny("LOW_FindBhaalTemple", _QuestStep)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SerialKiller_AssassinMeetsPlayer_SecondTarget_fe5366dd-df38-4370-7fef-26360c4c3ce8)
+AND
+NOT DB_QuestIsClosed("LOW_FindBhaalTemple")
+THEN
+PROC_ShowMarker(_Victim, _Marker);
+
+//Hiding the markers if we travel back to BGO_Main_A or to Endgame
+IF
+DB_GlobalFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671)
+AND
+NOT DB_CurrentLevel("CTY_Main_A")
+AND
+DB_LOW_SerialKiller_Victim_Marker_AlreadyDead(_Victim, _Marker, _QuestStep)
+AND
+QRY_LOW_SerialKiller_MarkersNeeded()
+THEN
+PROC_HideMarker(_Victim, _Marker);
+
+//Hidding target if we found the victim dead and we have the quest update
+IF
+QuestUpdateUnlocked(_Player, "LOW_FindBhaalTemple", _QuestStep)
+AND
+DB_LOW_SerialKiller_Victim_Marker_AlreadyDead(_Victim, _Marker, _QuestStep)
+THEN
+PROC_HideMarker(_Victim, _Marker);
+NOT DB_LOW_SerialKiller_Victim_Marker_AlreadyDead(_Victim, _Marker, _QuestStep);
+
+//Set the flags for markers needed. We may be add new conditions to this (if Orin send us to the Murder Tribunal if we kill Gortash), so better to have a generic way
+IF
+DB_GlobalFlag((FLAG)LOW_MurderTribunal_Knows_WordOfPassage_839150e6-d168-4c89-a980-68b9e9f60556)
+THEN
+SetFlag(LOW_SerialKiller_UnholyAssassin_MarkersNotNeeded_6574acf2-cf62-4592-abf7-cf04256bf5dd);
+SetFlag(LOW_SerialKiller_FollowMurders_MarkersNotNeeded_5dde758a-401a-4903-b599-0a95e3f38036);
+
+IF
+DB_Dead((CHARACTER)S_LOW_Dolor_55837c0f-0171-4020-a4a3-dd6de7ffc134)
+THEN
+SetFlag(LOW_SerialKiller_FollowMurders_MarkersNotNeeded_5dde758a-401a-4903-b599-0a95e3f38036);
+
+IF
+DB_GlobalFlag((FLAG)LOW_MurderTribunal_Sarevok_State_Dead_e9d30711-af25-4ba9-813e-cc7c131b17b6)
+THEN
+SetFlag(LOW_SerialKiller_UnholyAssassin_MarkersNotNeeded_6574acf2-cf62-4592-abf7-cf04256bf5dd);
+SetFlag(LOW_SerialKiller_FollowMurders_MarkersNotNeeded_5dde758a-401a-4903-b599-0a95e3f38036);
+
+
+//Remove everything if we don't need the markers
+IF
+DB_GlobalFlag(_NeededMarkerFlag)
+AND
+DB_SerialKiller_MarkersNeeded(_NeededMarkerFlag)
+THEN
+DB_SerialKiller_Internal_MarkerFlagSet(_NeededMarkerFlag);
+
+IF
+DB_SerialKiller_Internal_MarkerFlagSet(_NeededMarkerFlag)
+AND
+SysCount("DB_SerialKiller_Internal_MarkerFlagSet", 1, _OutValueInternal)
+AND
+SysCount("DB_SerialKiller_MarkersNeeded", 1, _OutValueExternal)
+AND
+_OutValueInternal == _OutValueExternal
+THEN
+PROC_SerialKiller_DisableMarkers();
+
+PROC
+PROC_SerialKiller_DisableMarkers()
+AND
+DB_LOW_SerialKiller_Victim_Marker_AlreadyDead(_Character, _Marker, _Step)
+THEN
+PROC_HideMarker(_Character, _Marker);
+NOT DB_LOW_SerialKiller_Victim_Marker_AlreadyDead(_Character, _Marker, _Step);
+
+PROC
+PROC_SerialKiller_DisableMarkers()
+AND
+DB_LOW_SerialKiller_Victim_Marker(_Character, _Marker)
+THEN
+PROC_HideMarker(_Character, _Marker);
+NOT DB_LOW_SerialKiller_Victim_Marker(_Character, _Marker);
+
+
+QRY
+QRY_LOW_SerialKiller_MarkersNeeded()
+AND
+DB_SerialKiller_MarkersNeeded(_NeededMarkerFlag)
+AND
+NOT DB_GlobalFlag(_NeededMarkerFlag)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Debug
+
+IF
+TextEvent("LOW_ToPeartree")
+AND
+GetHostCharacter(_Player)
+THEN
+TeleportTo(_Player, (CHARACTER)S_LOW_SerialKiller_Franc_Peartree_1556e29c-a876-4853-9ea7-283a48703a56);
+
+IF
+TextEvent("LOW_ToAlexander")
+AND
+GetHostCharacter(_Player)
+THEN
+TeleportTo(_Player, (CHARACTER)S_LOW_SerialKiller_AlexanderRainforest_18fe60a8-7235-4450-ac5b-fcbf15bdae88);
+
+IF
+TextEvent("LOW_ToCora")
+AND
+GetHostCharacter(_Player)
+THEN
+TeleportTo(_Player, (CHARACTER)S_LOW_CoraHighberry_8a520cf7-c5da-419f-bdd4-792b27c5c679);
+
+IF
+TextEvent("LOW_ToFigaro")
+AND
+GetHostCharacter(_Player)
+THEN
+TeleportTo(_Player, (CHARACTER)S_LOW_Figaro_3ff2b7ea-3de2-4bdc-a600-c973f290bc09);
+
+IF
+TextEvent("LOW_ToNesha")
+AND
+GetHostCharacter(_Player)
+THEN
+TeleportTo(_Player, (CHARACTER)S_LOW_BlushingMermaid_Patron_08_40dcda0b-7891-414f-8aeb-f742d842207d);
+
+IF
+TextEvent("LOW_ToReevor")
+AND
+GetHostCharacter(_Player)
+THEN
+TeleportTo(_Player, (CHARACTER)S_LOW_Elfsong_Reevor_3e5b30c3-ae3a-48b6-9394-11adde54ad57);
+
+IF
+DB_GlobalFlag((FLAG)DEBUG_LOW_SerialKiller_KillCoraAndFirstMessenger_4507aaad-6233-483e-93c2-fb2fb9f3c2f6)
+AND
+GetHostCharacter(_Player)
+THEN
+Die(S_LOW_CoraHighberry_8a520cf7-c5da-419f-bdd4-792b27c5c679, DEATHTYPE.Physical, _Player, 1, 0, 1.0);
+Die(S_LOW_SerialKiller_DoppelgangerGiveQuest_30e834cb-f029-424b-b787-12f10fe474d7, DEATHTYPE.Physical, NULL_00000000-0000-0000-0000-000000000000, 1, 0, 1.0);
+SetFlag((FLAG)LOW_SerialKiller_State_PlayersKillFirstTargetList_26d1c8ac-c5a6-4069-bc97-db2c1f7b2b05);
+
+IF
+TextEvent("LOW_SerialKiller_KillCoraAndMessenger")
+THEN
+SetFlag(DEBUG_LOW_SerialKiller_KillCoraAndFirstMessenger_4507aaad-6233-483e-93c2-fb2fb9f3c2f6);
+
+//Begin the mission
+IF
+TextEvent("LOW_SKBegin")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "LearnedAboutOrin");
+QuestUpdate("LOW_FindBhaalTemple", "EnteredCity");
+SetFlag((FLAG)LOW_SerialKiller_Knows_TargetList_262314d1-43bf-4ea5-ae23-4a77bfab2671);
+
+IF
+TextEvent("MAIN_StartOrinQuest")
+THEN
+QuestUpdate("LOW_FindBhaalTemple", "LearnedAboutOrin");
+QuestUpdate("LOW_FindBhaalTemple", "EnteredCity");
+
+//END_REGION
+
+//REGION Reaction to Murder Tableux
+IF
+DB_GEN_SerialKiller_Tableux_Initialized(1)
+AND
+DB_GEN_SerialKiller_TableuxPADs(_Corpse, _Flag, _ID, _Trigger)
+THEN
+PROC_TriggerRegisterForPlayers(_Trigger);
+
+IF
+DB_InRegion(_Player, _Trigger)
+AND
+DB_Players(_Player)
+AND
+NOT DB_GEN_SerialKiller_Tableux_DisableForCharacters(_Player)
+AND
+DB_GEN_SerialKiller_TableuxPADs(_Corpse, _SawCorpseFlag, _ID, _Trigger)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, _ID)
+THEN
+SetFlag(_SawCorpseFlag, _Player);
+PROC_TryStartAD((DIALOGRESOURCE)GLO_PAD_MurderTableaux_42338d0d-ee00-2b11-d63b-b0384de35af2, _Player);
+//END_REGION
+
+//REGION Flaming Fist Sign
+IF
+TemplateUseStarted(_Player, DEC_GEN_Blackboard_Flaming_Fists_A_InvestigationAD_80061337-21ef-4d4e-8b39-5fca340b12df, _Item)
+AND
+DB_Players(_Player)
+THEN
+PROC_TryStartAD(LOW_FlamingFists_AD_Sign_bb8fea3e-9725-cbc2-3ddc-8aabb7dea77c, _Item);
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act3_GEN"

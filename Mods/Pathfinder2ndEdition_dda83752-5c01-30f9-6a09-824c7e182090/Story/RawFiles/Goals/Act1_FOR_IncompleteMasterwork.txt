@@ -1,0 +1,708 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+// Booster books
+DB_FOR_IncompleteMasterwork_BookItems(S_FOR_MasterworkJournal_cee097d0-630e-494d-839d-e8340bba8f84);
+DB_FOR_IncompleteMasterwork_BookItems(S_FOR_MasterworkPlans_e2496600-f704-4160-be88-8cb38f001d0f);
+
+DB_FOR_IncompleteMasterwork_CellarDoors((ITEM)S_FOR_MasterworkOutsideDoor_c899d16c-60b1-4339-b09f-8eb00e157be8);
+DB_FOR_IncompleteMasterwork_CellarDoors(S_FOR_MasterworkInsideDoor_1126e63b-576f-4b6e-86dd-ee23b213b4ec);
+
+DB_DialogBlockAttackButton(FOR_IncompleteMasterwork_ForgeWeapon_46bddf1c-a80c-55e9-4233-bf855224604f);
+
+DB_FOR_IncompleteMasterwork_FirepitBellow(S_FOR_MasterworkBellow_e014b6d1-f0f4-415f-9a9c-a22922f512f6);
+// Thinking about how the anvil works and systemics: change the anvil for an special forging furnace. This can be something difficult to find, so players dont start searching for other anvils and try to forge the weapon there.
+// It also makes the skill check to have more sense, as working with a forging furnace is difficult.
+DB_FOR_IncompleteMasterwork_ForgingFurnace(S_FOR_MasterworkForge_8515bf4e-40eb-460b-a48e-9d48cec16379);
+SetOnStage(S_FOR_MasterworkForge_AfterForgingWeapon_b8841077-d2c0-4312-ab07-cd14be7f5f38, 0);
+
+DB_HasItemEvent(S_FOR_MasterworkPlans_e2496600-f704-4160-be88-8cb38f001d0f,(FLAG) FOR_IncompleteMasterwork_State_HasApprenticePlans_59af54f7-58fb-4959-912d-1c954708aa86);
+DB_PlayerHasTemplateItem(QUEST_FOR_SussurBark_ea99e006-80e1-414a-8995-c03d92eaf170, (FLAG)FOR_IncompleteMasterwork_State_HasSussurBark_48982c92-16b6-407f-88b7-caf295b15fb1);
+
+PROC_TriggerRegisterForPlayers(S_FOR_Masterwork_SeeFurnaceTrigger_aa53d528-7a22-4ea5-a035-b8fa4a5f3bf9);
+PROC_TriggerRegisterForPlayers(S_FOR_Bottomless_BlacksmithCellar_19f4b8fe-b0a1-4d20-9b4f-273c296a8e86);
+
+DB_FOR_IncompleteMasterwork_WeaponTemplates((GUIDSTRING)QUEST_FOR_SussurDagger_8733edb7-f04e-4b6d-ad48-7d49fb782bef, (FLAG)FOR_IncompleteMasterwork_Quest_ObtainedDagger_9855b313-e281-49d7-960d-f4d0b834f398);
+DB_FOR_IncompleteMasterwork_WeaponTemplates((GUIDSTRING)QUEST_FOR_SussurGreatsword_44dedec0-df82-4ed3-b9ca-147bd830e312, (FLAG)FOR_IncompleteMasterwork_Quest_ObtainedGreatsword_68e94e91-fb18-49a2-9905-21969999c72d);
+DB_FOR_IncompleteMasterwork_WeaponTemplates((GUIDSTRING)QUEST_FOR_SussurSickle_6b95bb45-41c3-4954-ac2f-ef1aa169b0b6, (FLAG)FOR_IncompleteMasterwork_Quest_ObtainedSickle_488b4302-8a6b-4241-8e27-ba7f92876afe);
+
+// Journal
+DB_QuestDef_State((FLAG)Act2_PointOfNoReturnReached_a3155f30-b8f3-4db5-ac21-d3036f4426e3, "FOR_IncompleteMasterwork", "ReachedNoReturn");
+KBSECTION
+//REGION Object VBs
+// Player finds Sussur bark
+IF
+FlagSet(FOR_IncompleteMasterwork_State_HasSussurBark_48982c92-16b6-407f-88b7-caf295b15fb1, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+QRY_SpeakerIsAvailable(_Player)
+AND
+QRY_OnlyOnce("FOR_SussurBarkTakenVB")
+THEN
+StartVoiceBark(FOR_IncompleteMasterwork_VB_TakeSussurSap_214ca8d7-3f81-ab3e-76f2-a97570ed2a8a, _Player);
+
+IF
+FlagSet(FOR_IncompleteMasterwork_State_HasSussurBark_48982c92-16b6-407f-88b7-caf295b15fb1, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+SetFlag(FOR_IncompleteMasterwork_Knows_SussurBarkUseful_f095c8bf-dc4b-41c8-9923-035f339e62ce, NULL_00000000-0000-0000-0000-000000000000);
+PROC_FOR_IncompleteMasterwork_FindSussurBark(_Player);
+
+//Player reads journal or plans
+IF
+GameBookInterfaceClosed(_Book, _Player)
+AND
+DB_FOR_IncompleteMasterwork_BookItems(_Book)
+AND
+DB_Players(_Player)
+THEN
+PROC_FOR_IncompleteMasterwork_GetBookVB(_Book, _Player);
+
+// Watch out for interfaces, at least till we have a systemic way for playing dialogs and VBs after reading books.
+// Player reads journal
+PROC
+PROC_FOR_IncompleteMasterwork_GetBookVB(S_FOR_MasterworkJournal_cee097d0-630e-494d-839d-e8340bba8f84, (CHARACTER)_Player)
+AND
+QRY_OnlyOnce("FOR_IncompleteMasterwork_ReadsJournal")
+AND
+DB_GlobalFlag(FOR_IncompleteMasterwork_Knows_ApprenticePlans_5816c50d-a1a9-4586-9851-bf355cfa9536)
+THEN
+StartVoiceBark(FOR_IncompleteMasterwork_VB_TakeJournal_970c4b58-b718-8a6c-5a6d-ed1d3fa79bdc, _Player);
+
+// Player reads plans
+PROC
+PROC_FOR_IncompleteMasterwork_GetBookVB(S_FOR_MasterworkPlans_e2496600-f704-4160-be88-8cb38f001d0f, (CHARACTER)_Player)
+AND
+QRY_OnlyOnce("FOR_IncompleteMasterwork_ReadsPlans")
+THEN
+StartVoiceBark(FOR_IncompleteMasterwork_VB_TakePlans_c8fe2362-c049-0700-f41a-66fa2641ac66, _Player);
+
+// Update journal entries
+PROC
+PROC_FOR_IncompleteMasterwork_GetBookVB(S_FOR_MasterworkJournal_cee097d0-630e-494d-839d-e8340bba8f84, (CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag(FOR_IncompleteMasterwork_Knows_Journal_37fa0b70-ef66-44b5-ade4-e8adc79ab8f6)
+THEN
+SetFlag(FOR_IncompleteMasterwork_Knows_Journal_37fa0b70-ef66-44b5-ade4-e8adc79ab8f6, NULL_00000000-0000-0000-0000-000000000000);
+PROC_FOR_IncompleteMasterwork_FindJournal(_Player);
+
+PROC
+PROC_FOR_IncompleteMasterwork_GetBookVB(S_FOR_MasterworkPlans_e2496600-f704-4160-be88-8cb38f001d0f, (CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag(FOR_IncompleteMasterwork_Knows_ApprenticePlans_5816c50d-a1a9-4586-9851-bf355cfa9536)
+THEN
+SetFlag(FOR_IncompleteMasterwork_Knows_ApprenticePlans_5816c50d-a1a9-4586-9851-bf355cfa9536, NULL_00000000-0000-0000-0000-000000000000);
+PROC_FOR_IncompleteMasterwork_FindPlans((CHARACTER)_Player);
+
+IF
+VoiceBarkEnded(FOR_IncompleteMasterwork_VB_TakePlans_c8fe2362-c049-0700-f41a-66fa2641ac66, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, 1)
+AND
+GetFlag(FOR_IncompleteMasterwork_Event_NatureCheck_0c43282b-3dd4-4394-9ac3-47304cac9dce, _Player, 1)
+THEN
+ClearFlag(FOR_IncompleteMasterwork_Event_NatureCheck_0c43282b-3dd4-4394-9ac3-47304cac9dce, _Player);
+PROC_FOR_IncompleteMasterwork_SussurHistoryCheck((CHARACTER)_Player);
+
+// If player is from the underdark give him advantage
+// don't check if already found the tree, we have a special quest update for that
+PROC
+PROC_FOR_IncompleteMasterwork_SussurHistoryCheck((CHARACTER)_Player)
+AND
+DB_OneShot_VoiceBarkTrigger(S_UND_SussurTree_VB_f7723a0a-72f0-4519-8b20-8c35ddb0a990, UND_SussurTree_VB_Approach_73f84915-8dd1-4e68-d1e0-3a2fd78d09f5, _)
+THEN
+PROC_TrySkillCheck(_Player, S_FOR_MasterworkPlans_e2496600-f704-4160-be88-8cb38f001d0f, "AnimalHandling", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, "FOR_SussurNatureCheck");
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage((CHARACTER)_Character, (GUIDSTRING)S_FOR_MasterworkPlans_e2496600-f704-4160-be88-8cb38f001d0f, _)
+AND
+IsTagged(_Character, REALLY_UNDERDARK_2d0a73b9-f113-4d35-bdee-a31ab9163d74, 1)
+THEN
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(1);
+
+PROC
+PROC_RollResult("FOR_SussurNatureCheck", _Player, _, 1)
+THEN
+SetFlag(FOR_IncompleteMasterwork_Event_NatureCheckSuccess_f2c6a036-2df1-4c07-9f8f-68a3ceffffe4, _Player);
+QuestUpdate(_Player, "FOR_IncompleteMasterwork", "KnowsSussurTree");
+
+// found the Sussur Tree before finding the blueprints - unlock the next quest update
+IF
+QuestUpdateUnlocked(_, "FOR_IncompleteMasterwork", "FindPlansBeforeJournal")
+AND
+NOT DB_OneShot_VoiceBarkTrigger(S_UND_SussurTree_VB_f7723a0a-72f0-4519-8b20-8c35ddb0a990, UND_SussurTree_VB_Approach_73f84915-8dd1-4e68-d1e0-3a2fd78d09f5, _)
+THEN
+QuestUpdate("FOR_IncompleteMasterwork", "TakeSussurBark_AfterTree");
+
+IF
+QuestUpdateUnlocked(_, "FOR_IncompleteMasterwork", "FindPlansAfterJournal")
+AND
+NOT DB_OneShot_VoiceBarkTrigger(S_UND_SussurTree_VB_f7723a0a-72f0-4519-8b20-8c35ddb0a990, UND_SussurTree_VB_Approach_73f84915-8dd1-4e68-d1e0-3a2fd78d09f5, _)
+THEN
+QuestUpdate("FOR_IncompleteMasterwork", "TakeSussurBark_AfterTree");
+
+// Let's wait a bit for the outcome to appear in the UI before starting the VB 
+PROC
+PROC_RollResult("FOR_SussurNatureCheck", _Player, _, _)
+THEN
+RealtimeObjectTimerLaunch(_Player, "FOR_SussurNatureCheck", 500);
+
+IF
+ObjectTimerFinished(_Player, "FOR_SussurNatureCheck")
+THEN
+StartVoiceBark(FOR_IncompleteMasterwork_VB_NatureCheckOutcome_6d8332d4-725b-db84-bd06-52e79f69637f, (CHARACTER)_Player);
+//END_REGION
+
+//REGION Journal updates
+PROC
+PROC_FOR_IncompleteMasterwork_FindJournal((CHARACTER)_Player)
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "FOR_IncompleteMasterwork", "FindPlansBeforeJournal", 0)
+THEN
+QuestUpdate( _Player, "FOR_IncompleteMasterwork", "FindJournal");
+
+PROC
+PROC_FOR_IncompleteMasterwork_FindPlans((CHARACTER)_Player)
+AND
+NOT QRY_FOR_IncompleteMasterwork_AlreadyFoundPlans()
+AND
+NOT DB_GlobalFlag(FOR_IncompleteMasterwork_Knows_Journal_37fa0b70-ef66-44b5-ade4-e8adc79ab8f6)
+THEN
+QuestUpdate( _Player, "FOR_IncompleteMasterwork", "FindPlansBeforeJournal");
+
+PROC
+PROC_FOR_IncompleteMasterwork_FindPlans((CHARACTER)_Player)
+AND
+NOT QRY_FOR_IncompleteMasterwork_AlreadyFoundPlans()
+AND
+DB_GlobalFlag(FOR_IncompleteMasterwork_Knows_Journal_37fa0b70-ef66-44b5-ade4-e8adc79ab8f6)
+THEN
+QuestUpdate( _Player, "FOR_IncompleteMasterwork", "FindPlansAfterJournal");
+
+QRY
+QRY_FOR_IncompleteMasterwork_AlreadyFoundPlans()
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "FOR_IncompleteMasterwork", "FindPlansAfterJournal", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_FOR_IncompleteMasterwork_AlreadyFoundPlans()
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "FOR_IncompleteMasterwork", "FindPlansBeforeJournal", 1)
+THEN
+DB_NOOP(1);
+
+IF
+EnteredTrigger(_Player, S_UND_SussurTree_VB_f7723a0a-72f0-4519-8b20-8c35ddb0a990)
+AND
+DB_Players(_Player)
+AND
+NOT DB_Dead(_Player)
+AND
+QuestIsAccepted(_Player, "FOR_IncompleteMasterwork", 1)
+THEN
+QuestUpdate( _Player, "FOR_IncompleteMasterwork", "TakeSussurBark");
+
+PROC
+PROC_FOR_IncompleteMasterwork_FindSussurBark((CHARACTER)_Player)
+AND
+NOT QRY_FOR_IncompleteMasterwork_HadSussurBark()
+AND
+DB_GlobalFlag(FOR_IncompleteMasterwork_Knows_ApprenticePlans_5816c50d-a1a9-4586-9851-bf355cfa9536)
+THEN
+QuestUpdate( _Player, "FOR_IncompleteMasterwork", "FindSussurBark");
+
+PROC
+PROC_FOR_IncompleteMasterwork_FindSussurBark((CHARACTER)_Player)
+AND
+NOT QRY_FOR_IncompleteMasterwork_HadSussurBark()
+AND
+NOT DB_GlobalFlag(FOR_IncompleteMasterwork_Knows_ApprenticePlans_5816c50d-a1a9-4586-9851-bf355cfa9536)
+THEN
+QuestUpdate( _Player, "FOR_IncompleteMasterwork", "FoundSussurBarkBeforePlans");
+
+QRY
+QRY_FOR_IncompleteMasterwork_HadSussurBark()
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "FOR_IncompleteMasterwork", "FindSussurBark", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_FOR_IncompleteMasterwork_HadSussurBark()
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "FOR_IncompleteMasterwork", "FoundSussurBarkBeforePlans", 1)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION VB after seeing phasing for the first time
+IF
+StatusApplied((CHARACTER)_Spider,"ETHEREAL",_,_)
+AND
+DB_Is_InCombat(_Spider,_Id)
+AND
+IsTagged(_Spider,(TAG)SPIDER_PHASE_c3b3e9cd-ad18-475a-8df1-4562b2a6af19,1)
+AND
+QRY_OnlyOnce("FOR_FirstPhaseSpiderEtherealCast")
+THEN
+DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id);
+PROC_FOR_FirstPhaseSpiderEtherealCast_TryVB(_Spider);
+
+//REPLACE WITH REACTION SPELL WHEN WE HAVE THE FUNCTIONALITY
+//Try to fire VB when the spiders use their reaction
+PROC
+PROC_FOR_FirstPhaseSpiderEtherealCast_TryVB((CHARACTER)_Spider)
+AND
+DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id)
+AND
+GetClosestAlivePlayer(_Spider,(CHARACTER)_Player,_Dist)
+AND
+DB_Players(_Player)
+AND
+_Dist < 30.0
+AND
+QRY_SpeakerIsAvailable(_Player,1)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_IncompleteMasterwork_VB_PhaseSpiderDisappear_9c1c65a6-005d-754f-b369-bd133176574b,_Player);
+NOT DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id);
+
+//Fallback or Alternate activation : Queue the VB at the start of the next player's turn to ensure the players can see the VB
+IF
+TurnStarted((CHARACTER)_Player)
+AND
+DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id)
+AND
+DB_Players(_Player)
+AND
+DB_Is_InCombat(_Player,_Id)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_IncompleteMasterwork_VB_PhaseSpiderDisappear_9c1c65a6-005d-754f-b369-bd133176574b,_Player);
+NOT DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id);
+
+//Clear dbs if spider dies or leaves combat before players can respond with the VB
+IF
+Died(_Spider)
+AND
+DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id)
+THEN
+NOT DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id);
+
+IF
+LeftCombat((CHARACTER)_Spider,_)
+AND
+DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id)
+THEN
+NOT DB_FOR_FirstPhaseSpiderEtherealCast(_Spider,_Id);
+//END_REGION
+
+//REGION Magic pockets flags management
+// Magic pocket flags, used for VBs
+IF
+FlagSet(FOR_IncompleteMasterwork_State_HasApprenticePlans_59af54f7-58fb-4959-912d-1c954708aa86, _, _)
+THEN
+SetFlag(FOR_IncompleteMasterwork_State_PartyHasApprenticePlans_946dde0d-e7aa-4322-b514-129831007a91, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+FlagCleared(FOR_IncompleteMasterwork_State_HasApprenticePlans_59af54f7-58fb-4959-912d-1c954708aa86, _, _)
+THEN
+ClearFlag(FOR_IncompleteMasterwork_State_PartyHasApprenticePlans_946dde0d-e7aa-4322-b514-129831007a91, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+FlagSet(FOR_IncompleteMasterwork_State_HasSussurBark_48982c92-16b6-407f-88b7-caf295b15fb1, _, _)
+THEN
+SetFlag(FOR_IncompleteMasterwork_State_PartyHasSussurBark_8f60a9ea-809b-4ebd-ba8e-f80461cb012c, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+FlagCleared(FOR_IncompleteMasterwork_State_HasSussurBark_48982c92-16b6-407f-88b7-caf295b15fb1, _, _)
+THEN
+ClearFlag(FOR_IncompleteMasterwork_State_PartyHasSussurBark_8f60a9ea-809b-4ebd-ba8e-f80461cb012c, NULL_00000000-0000-0000-0000-000000000000);
+//END_REGION
+
+//REGION Start fire and use furnace
+IF
+UseStarted(_Player, _Item)
+AND
+DB_FOR_IncompleteMasterwork_FirepitBellow(_Item)
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+THEN
+SetEntityEvent(_Furnace, "FOR_KindleFurnace");
+
+PROC
+PROC_BlockUseOfItem(_Player, _Furnace)
+AND
+DB_Players(_Player)
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+AND
+HasActiveStatus(_Furnace, "BURNING", 1)
+AND
+GetFlag(FOR_IncompleteMasterwork_State_FurnaceSecondStage_5682443b-4907-4fe5-acbd-67ef89a35388, _Furnace, 0)
+THEN
+PROC_FOR_IncompleteMasterwork_TryStartForgeWeaponVB(_Player);
+DB_CustomUseItemResponse(_Player, _Furnace, 0);
+
+PROC
+PROC_FOR_IncompleteMasterwork_TryStartForgeWeaponVB((CHARACTER)_Player)
+AND
+NOT DB_FOR_IncompleteMasterwork_ForgeWeaponVB(1)
+THEN
+StartVoiceBark(FOR_IncompleteMasterwork_VB_ForgeWeapon_aa5a4538-c3e6-e9db-1e46-7cba79525450, _Player);
+DB_FOR_IncompleteMasterwork_ForgeWeaponVB(1);
+
+IF
+VoiceBarkEnded(FOR_IncompleteMasterwork_VB_ForgeWeapon_aa5a4538-c3e6-e9db-1e46-7cba79525450, _)
+THEN
+NOT DB_FOR_IncompleteMasterwork_ForgeWeaponVB(1);
+
+IF
+VoiceBarkFailed(FOR_IncompleteMasterwork_VB_ForgeWeapon_aa5a4538-c3e6-e9db-1e46-7cba79525450)
+THEN
+NOT DB_FOR_IncompleteMasterwork_ForgeWeaponVB(1);
+
+// Player has Sussur sap and can use the furnace
+PROC
+PROC_BlockUseOfItem(_Player, _Furnace)
+AND
+DB_Players(_Player)
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+AND
+GetFlag(FOR_IncompleteMasterwork_State_FurnaceSecondStage_5682443b-4907-4fe5-acbd-67ef89a35388, _Furnace, 0)
+THEN
+SetEntityEvent(_Furnace, "FOR_StartFurnace");
+DB_CustomUseItemResponse(_Player, _Furnace, 0);
+
+IF
+TemplatesCombined(UNI_FOR_IncompleteMasterwork_Furnace_b269ae5b-54d7-4558-9d4a-c288aaaa6b79, QUEST_FOR_SussurBark_ea99e006-80e1-414a-8995-c03d92eaf170, _, _, _, _Player, _NewFurnace)
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+THEN
+NOT DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace);
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_NewFurnace);
+PROC_TryStartAD(FOR_IncompleteMasterwork_PAD_ForgeAndBarkCombined_bed12218-5f78-03e4-3406-53843a110f40, _Player);
+
+IF
+Combined(_Furnace, _, _, _, _, _Player, _Weapon)
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+AND
+GetTemplate(_Weapon, _WeaponTemplate)
+AND
+DB_FOR_IncompleteMasterwork_WeaponTemplates(_WeaponTemplate, _Flag)
+THEN
+DB_FOR_IncompleteMasterwork_Forger((CHARACTER)_Player);
+SetFlag(_Flag, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+FlagSet(_Flag, _, _)
+AND
+DB_FOR_IncompleteMasterwork_WeaponTemplates(_, _Flag)
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+AND
+DB_FOR_IncompleteMasterwork_Forger((CHARACTER)_Player)
+THEN
+NOT DB_FOR_IncompleteMasterwork_Forger((CHARACTER)_Player);
+PROC_FOR_IncompleteMasterwork_ForgeWeapon((ITEM)_Furnace, (CHARACTER)_Player);
+
+PROC
+PROC_FOR_IncompleteMasterwork_ForgeWeapon((ITEM)_Furnace, (CHARACTER)_Player)
+AND
+NOT QRY_FOR_IncompleteMasterwork_StartForgeDialog(_Player)
+THEN
+SetCanInteract(_Furnace, 0);
+PROC_FOR_IncompleteMasterwork_ReplaceFurnace(S_FOR_MasterworkForge_AfterForgingWeapon_b8841077-d2c0-4312-ab07-cd14be7f5f38);
+PROC_IncompleteMasterwork_UpdateJournalReward(_Player);
+
+QRY
+QRY_FOR_IncompleteMasterwork_StartForgeDialog((CHARACTER)_Player)
+AND
+NOT DB_Is_WildShaped(_Player)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)FOR_IncompleteMasterwork_ForgeWeapon_46bddf1c-a80c-55e9-4233-bf855224604f, _Player)
+THEN
+DB_NOOP(1);
+
+IF
+DialogStarted(FOR_IncompleteMasterwork_ForgeWeapon_46bddf1c-a80c-55e9-4233-bf855224604f, _)
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+THEN
+SetCanInteract((ITEM)_Furnace, 0);
+
+IF
+DialogEnded(FOR_IncompleteMasterwork_ForgeWeapon_46bddf1c-a80c-55e9-4233-bf855224604f, _Instance)
+AND
+DB_DialogSpeakers(_Instance, _Player, 1)
+THEN
+PROC_FOR_IncompleteMasterwork_ReplaceFurnace(S_FOR_MasterworkForge_AfterForgingWeapon_b8841077-d2c0-4312-ab07-cd14be7f5f38);
+PROC_IncompleteMasterwork_UpdateJournalReward((CHARACTER)_Player);
+
+PROC
+PROC_FOR_IncompleteMasterwork_ReplaceFurnace((GUIDSTRING)_NewFurnace)
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+THEN
+RemoveStatus(_Furnace, "BURNING");
+// Wait a bit so the VFX ends first
+RealtimeObjectTimerLaunch(_NewFurnace, "FOR_ReplaceForge", 500);
+
+IF
+ObjectTimerFinished(_NewFurnace, "FOR_ReplaceForge")
+AND
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace)
+THEN
+NOT DB_FOR_IncompleteMasterwork_ForgingFurnace(_Furnace);
+DB_FOR_IncompleteMasterwork_ForgingFurnace(_NewFurnace);
+SetOnStage(_Furnace, 0);
+SetOnStage(_NewFurnace, 1);
+
+IF
+TemplateUseStarted(_, DEC_GEN_Smith_Bellows_A_9d2a0431-7c4f-49c3-ae69-9179697ea1f9, _Item)
+THEN
+PlayAnimation(_Item, OBJ_Use_Activate_01_42c02cc0-0503-4ca9-9ea0-45564bd0e5d4, "");
+//END_REGION
+
+//REGION Forged weapons
+// Obtained greatsword
+PROC
+PROC_IncompleteMasterwork_UpdateJournalReward((CHARACTER) _Player)
+AND
+DB_GlobalFlag(FOR_IncompleteMasterwork_Quest_ObtainedGreatsword_68e94e91-fb18-49a2-9905-21969999c72d)
+THEN
+QuestUpdate((CHARACTER)_Player, "FOR_IncompleteMasterwork", "ObtainedGreatsword");
+
+// Obtained dagger
+PROC
+PROC_IncompleteMasterwork_UpdateJournalReward((CHARACTER) _Player)
+AND
+DB_GlobalFlag(FOR_IncompleteMasterwork_Quest_ObtainedDagger_9855b313-e281-49d7-960d-f4d0b834f398)
+THEN
+QuestUpdate((CHARACTER)_Player, "FOR_IncompleteMasterwork", "ObtainedDagger");
+
+// Obtained shortbow
+PROC
+PROC_IncompleteMasterwork_UpdateJournalReward((CHARACTER) _Player)
+AND
+DB_GlobalFlag(FOR_IncompleteMasterwork_Quest_ObtainedSickle_488b4302-8a6b-4241-8e27-ba7f92876afe)
+THEN
+QuestUpdate((CHARACTER)_Player, "FOR_IncompleteMasterwork", "ObtainedSickle");
+//END_REGION
+
+//REGION Furnace seen VB
+// As soon as the player enters the trigger, set the flag
+IF
+EnteredTrigger(_Player, S_FOR_Masterwork_SeeFurnaceTrigger_aa53d528-7a22-4ea5-a035-b8fa4a5f3bf9)
+AND
+NOT DB_GlobalFlag((FLAG) FOR_IncompleteMasterwork_Knows_FurnaceSeen_27c8af8a-7972-431c-acff-6f823de00e5d)
+THEN
+SetFlag(FOR_IncompleteMasterwork_Knows_FurnaceSeen_27c8af8a-7972-431c-acff-6f823de00e5d, NULL_00000000-0000-0000-0000-000000000000);
+//END_REGION
+
+//REGION House hole teleport
+// Teleport NPC to cellar
+// The height difference from the house trigger and the teleport is big enough to kill the player when he is teleported. Let him land first and then teleport.
+IF
+EnteredTrigger(_Char, S_FOR_Masterwork_HoleTrigger_58a41860-508d-4ca5-9804-bc7c5c972002)
+THEN
+RealtimeObjectTimerLaunch(_Char, "FOR_MasterworkJump", 100);
+DB_FOR_IncompleteMasterwork_ShouldFallProne((CHARACTER)_Char, 0);
+
+// Char jumped in hole, and should fall prone
+IF
+CastedSpell((CHARACTER)_Char, "Projectile_Jump", _, _, _)
+AND
+DB_FOR_IncompleteMasterwork_ShouldFallProne(_Char, 0)
+THEN
+NOT DB_FOR_IncompleteMasterwork_ShouldFallProne(_Char, 0);
+DB_FOR_IncompleteMasterwork_ShouldFallProne(_Char, 1);
+
+// Char got pushed in hole, and should fall prone
+IF
+StatusRemoved((CHARACTER)_Char, "SHOCKWAVE", _, _)
+AND
+DB_FOR_IncompleteMasterwork_ShouldFallProne(_Char, 0)
+THEN
+NOT DB_FOR_IncompleteMasterwork_ShouldFallProne(_Char, 0);
+DB_FOR_IncompleteMasterwork_ShouldFallProne(_Char, 1);
+
+IF
+ObjectTimerFinished(_Char, "FOR_MasterworkJump")
+AND
+NOT DB_Is_InCombat(_Char, _)
+THEN
+SetCombatGroupID(_Char, ""); // Ambush goblins are all set in the same combat group. If a player throws one into the hole camera will jump from one to another as they are in different regions.
+TeleportTo(_Char, S_FOR_MasterworkCellarTP_dad85c7e-5194-43fc-992a-634cffc20be6, "FOR_BlacksmithCellarTP", 1, 1, 1);
+
+IF
+ObjectTimerFinished(_Char, "FOR_MasterworkJump")
+AND
+DB_Is_InCombat(_Char, _)
+THEN
+SetCombatGroupID(_Char, ""); // Ambush goblins are all set in the same combat group. If a player throws one into the hole camera will jump from one to another as they are in different regions.
+TeleportTo(_Char, S_FOR_MasterworkCellarTP_dad85c7e-5194-43fc-992a-634cffc20be6, "FOR_BlacksmithCellarTP", 0, 0, 1);
+
+// Teleport thrown objects
+IF
+ItemEnteredTrigger(_Item, S_FOR_Masterwork_HoleTrigger_58a41860-508d-4ca5-9804-bc7c5c972002, _)
+AND
+Exists(_Item,1)
+THEN
+TeleportTo(_Item, S_FOR_MasterworkCellarTP_dad85c7e-5194-43fc-992a-634cffc20be6, "", 0, 0, 1);
+
+// Code already cancels the momentum but need support for characters falling to apply fall damage/statuses
+IF
+EntityEvent(_Char, "FOR_BlacksmithCellarTP")
+AND
+HasActiveStatus(_Char, "PRONE_FALLEN", 0)
+AND
+HasActiveStatus(_Char, "FEATHER_FALL", 0)
+AND
+DB_FOR_IncompleteMasterwork_ShouldFallProne((CHARACTER)_Char, 1)
+THEN
+ApplyStatus(_Char, "PRONE_FALLEN", 6.0, 1);
+
+// Cleanup
+IF
+EntityEvent((CHARACTER)_Char, "FOR_BlacksmithCellarTP")
+AND
+DB_FOR_IncompleteMasterwork_ShouldFallProne(_Char, _ShouldFall)
+THEN
+NOT DB_FOR_IncompleteMasterwork_ShouldFallProne(_Char, _ShouldFall);
+//END_REGION
+
+//REGION Locked doors
+// On level used, unlock doors
+IF
+DualEntityEvent(_, S_FOR_MasterworkDoorLever_10b982b0-c3c0-45eb-8006-242a60dd9fc7, "FOR_IncompleteMasterwork_UsedLever")
+AND
+DB_FOR_IncompleteMasterwork_UsedCellarLever(1)
+THEN
+NOT DB_FOR_IncompleteMasterwork_UsedCellarLever(1);
+
+IF
+DualEntityEvent(_, S_FOR_MasterworkDoorLever_10b982b0-c3c0-45eb-8006-242a60dd9fc7, "FOR_IncompleteMasterwork_UsedLever")
+THEN
+PROC_FOR_IncompleteMasterwork_TryUnlockDoors();
+
+IF
+DualEntityEvent(_, S_FOR_MasterworkDoorLever_10b982b0-c3c0-45eb-8006-242a60dd9fc7, "FOR_IncompleteMasterwork_UsedLever")
+THEN
+PROC_FOR_IncompleteMasterwork_TryLockDoors();
+
+// On key used, unlock doors
+IF
+Unlocked(_Door, _, _)
+AND
+DB_FOR_IncompleteMasterwork_CellarDoors(_Door)
+THEN
+NOT DB_FOR_IncompleteMasterwork_UsedCellarLever(1);
+PROC_FOR_IncompleteMasterwork_TryUnlockDoors();
+
+PROC
+PROC_FOR_IncompleteMasterwork_TryUnlockDoors()
+AND
+NOT DB_FOR_IncompleteMasterwork_UsedCellarLever(1)
+AND
+DB_FOR_IncompleteMasterwork_CellarDoors(_Door)
+AND
+IsLocked(_Door, 1)
+THEN
+DB_FOR_IncompleteMasterwork_UsedCellarLever(1);
+Unlock(_Door);
+PROC_TryStartAD(GLO_AD_MechanicalClick_fc8d3dc5-b947-6354-3aa9-d1f02fd51af4, _Door);
+
+PROC
+PROC_FOR_IncompleteMasterwork_TryLockDoors()
+AND
+NOT DB_FOR_IncompleteMasterwork_UsedCellarLever(1)
+AND
+DB_FOR_IncompleteMasterwork_CellarDoors(_Door)
+AND
+IsLocked(_Door, 0)
+THEN
+DB_FOR_IncompleteMasterwork_UsedCellarLever(1);
+Lock(_Door, "FOR_IncompleteMasterwork_CellarKey");
+PROC_TryStartAD(GLO_AD_MechanicalClick_fc8d3dc5-b947-6354-3aa9-d1f02fd51af4, _Door);
+
+//END_REGION
+
+//REGION Destructible wall
+// If wall is destroyed before revealing it, reveal it
+IF
+DestroyedBy(S_FOR_MasterworkDestructibleWall_4d9a981d-256d-4837-8e7f-d37170a911c0, _, _, _)
+THEN
+SetEntityEvent(S_FOR_MasterworkDestructibleWall_4d9a981d-256d-4837-8e7f-d37170a911c0, "StoryReveal");
+//END_REGION
+
+//REGION Bark is destroyed
+IF
+DB_Destroyed(S_UND_SussurBark_ec9aee1d-4965-4620-a81a-a05ccefd8b05)
+AND
+DB_QuestIsOpened("FOR_IncompleteMasterwork")
+THEN
+QuestUpdate("FOR_IncompleteMasterwork", "BarkDestroyed");
+//END_REGION
+
+//REGION Booster hooks
+IF
+TextEvent("IncompleteMasterwork_KnowsPlans")
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("FOR_IncompleteMasterwork_ReadsPlans")
+THEN
+SetFlag((FLAG)FOR_IncompleteMasterwork_Knows_ApprenticePlans_5816c50d-a1a9-4586-9851-bf355cfa9536, NULL_00000000-0000-0000-0000-000000000000);
+QuestUpdate(_Player, "FOR_IncompleteMasterwork", "FindPlans");
+
+IF
+TextEvent("IncompleteMasterwork_UnlockDoors")
+THEN
+PROC_FOR_IncompleteMasterwork_TryUnlockDoors();
+
+IF
+TextEvent("IncompleteMasterwork_GiveBark")
+AND
+QRY_OnlyOnce_Reset("Debug_FOR_GiveBark")
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("Debug_FOR_GiveBark")
+THEN
+ToInventory(S_UND_SussurBark_ec9aee1d-4965-4620-a81a-a05ccefd8b05, _Player, 1, 1, 1);
+
+// Rewards
+IF
+TextEvent("IncompleteMasterwork_GiveRewards")
+AND
+DB_Players(_Player)
+THEN
+TemplateAddTo(QUEST_FOR_SussurGreatsword_44dedec0-df82-4ed3-b9ca-147bd830e312, _Player, 1, 1);
+TemplateAddTo(QUEST_FOR_SussurDagger_8733edb7-f04e-4b6d-ad48-7d49fb782bef, _Player, 1, 1);
+TemplateAddTo(QUEST_FOR_SussurSickle_6b95bb45-41c3-4954-ac2f-ef1aa169b0b6, _Player, 1, 1);
+
+IF
+TextEvent("IM_ForcePlansVB")
+AND
+DB_Players(_Player)
+AND
+QRY_SpeakerIsAvailable(_Player)
+AND
+QRY_OnlyOnce("IM_ForcePlansVB")
+THEN
+StartVoiceBark(FOR_IncompleteMasterwork_VB_TakePlans_c8fe2362-c049-0700-f41a-66fa2641ac66, _Player);
+
+IF
+TextEvent("IM_ForcePlansVB")
+THEN
+NOT DB_OnlyOnce("IM_ForcePlansVB");
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

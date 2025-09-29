@@ -1,0 +1,1110 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//Documentation on Confluence: 
+//-[Link Redacted]
+//-[Link Redacted]
+
+DB_Singleton("GLO_SkillRollHack",0);
+
+DB_GLO_Skillcheck_DefaultAbility("Athletics","Strength");
+DB_GLO_Skillcheck_DefaultAbility("Acrobatics","Dexterity");
+DB_GLO_Skillcheck_DefaultAbility("SleightOfHand","Dexterity");
+DB_GLO_Skillcheck_DefaultAbility("Stealth","Dexterity");
+DB_GLO_Skillcheck_DefaultAbility("Arcana","Intelligence");
+DB_GLO_Skillcheck_DefaultAbility("History","Intelligence");
+DB_GLO_Skillcheck_DefaultAbility("Investigation","Intelligence");
+DB_GLO_Skillcheck_DefaultAbility("Nature","Intelligence");
+DB_GLO_Skillcheck_DefaultAbility("Religion","Intelligence");
+DB_GLO_Skillcheck_DefaultAbility("AnimalHandling","Wisdom");
+DB_GLO_Skillcheck_DefaultAbility("Insight","Wisdom");
+DB_GLO_Skillcheck_DefaultAbility("Medicine","Wisdom");
+DB_GLO_Skillcheck_DefaultAbility("Perception","Wisdom");
+DB_GLO_Skillcheck_DefaultAbility("Survival","Wisdom");
+DB_GLO_Skillcheck_DefaultAbility("Deception","Charisma");
+DB_GLO_Skillcheck_DefaultAbility("Intimidation","Charisma");
+DB_GLO_Skillcheck_DefaultAbility("Performance","Charisma");
+DB_GLO_Skillcheck_DefaultAbility("Persuasion","Charisma");
+
+NOT DB_InvestigationSkillCheckADBlocked(NULL_00000000-0000-0000-0000-000000000000);
+
+// Knowledge check target override:
+// DB_KnowledgeSkillcheck_TargetOverride(_Target, _Override)
+// For use with
+// DB_KnowledgeCheckItem_AD, DB_KnowledgeCheckTrigger and DB_KnowledgeCheckTrigger_AD.
+// If the object about which the skill check is made is a specific in-game object, use the override. This way, the skill
+// check is made when the player clicks on, walks into, or otherwise interacts, as appropriate, with the the normal 
+// _Target object but any systemic bonuses and maluses are applied taking into account the _Override object.
+
+// DB_KnowledgeSkillcheck_AlwaysPlayAD(_Identifier, _Reference)
+//   Always trigger PAD (if it's not yet playing), even if the knowledge/skill check was already performed by this player or succeeded by someone else
+
+DB_TemporaryDCsubstitute(50, (DIFFICULTYCLASS)DC_Legacy_50_e0a7c461-08bf-459d-9c9a-747008ced85c);
+DB_TemporaryDCsubstitute(25, DC_Legacy_25_306ba0ce-1a69-4a46-9ca0-7d3e8f5be954);
+DB_TemporaryDCsubstitute(20, DC_Legacy_20_881bda2f-b08b-4788-b0ec-e410b5bacc57);
+DB_TemporaryDCsubstitute(19, DC_Legacy_19_1afda678-eb97-4b25-9548-0908e84b5475);
+DB_TemporaryDCsubstitute(15, DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539);
+DB_TemporaryDCsubstitute(14, DC_Legacy_14_598ee99a-f9e9-4a07-a98a-d1379131daa1);
+DB_TemporaryDCsubstitute(12, DC_Legacy_12_98197cc5-8713-44bb-9afc-f5fe32bc5ff9);
+DB_TemporaryDCsubstitute(11, DC_Legacy_11_f4c9d750-49a9-4b7d-a27c-92b801b7d808);
+DB_TemporaryDCsubstitute(10, DC_Legacy_10_625be976-7a67-4394-97c8-14c69715ae4b);
+DB_TemporaryDCsubstitute(8, DC_Legacy_8_f149a3ce-7625-4b9c-97b5-cfefaf791b64);
+DB_TemporaryDCsubstitute(5, DC_Legacy_5_6e246ccd-6149-4ec4-a325-034309a18138);
+DB_TemporaryDCsubstitute(0, DC_Legacy_0_98d69b07-f551-4d77-af31-41d074748dc0);
+
+NOT DB_KnowledgeSkillcheck_AlwaysPlayAD("", NULL_00000000-0000-0000-0000-000000000000);
+NOT DB_PerceptionSkillCustomAD((ITEM)NULL_00000000-0000-0000-0000-000000000000, (DIALOGRESOURCE)NULL_00000000-0000-0000-0000-000000000000);
+NOT DB_InvestigationSkillCustomAD((ITEM)NULL_00000000-0000-0000-0000-000000000000, (DIALOGRESOURCE)NULL_00000000-0000-0000-0000-000000000000);
+KBSECTION
+//REGION Ability/Skill checks
+PROC
+PROC_TryAbilityCheck((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Ability,(DIFFICULTYCLASS)_DC,(STRING)_Event)
+AND
+QRY_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubject, (STRING)_Event)
+AND
+DB_QRYRTN_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubjectOverride, (STRING)_EventOverride)
+AND
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Player, (GUIDSTRING)_RollSubject, (STRING)_Event)
+AND
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_AdvantageModifier)
+THEN
+PROC_TryModifiedAbilityCheck_Internal((CHARACTER)_Player,(GUIDSTRING)_RollSubjectOverride,(STRING)_Ability,(DIFFICULTYCLASS)_DC,(STRING)_EventOverride, (INTEGER)_AdvantageModifier);
+
+PROC
+PROC_TryModifiedAbilityCheck_Internal((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Ability,(DIFFICULTYCLASS)_DC,(STRING)_Event, 2)
+THEN
+RequestPassiveRoll(_Player, _RollSubject, "RawAbility", _Ability, (DIFFICULTYCLASS)DC_Legacy_0_98d69b07-f551-4d77-af31-41d074748dc0, 0, _Event);
+
+PROC
+PROC_TryModifiedAbilityCheck_Internal((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Ability,(DIFFICULTYCLASS)_DC,(STRING)_Event, -2)
+THEN
+RequestPassiveRoll(_Player, _RollSubject, "RawAbility", _Ability, (DIFFICULTYCLASS)DC_Legacy_50_e0a7c461-08bf-459d-9c9a-747008ced85c, 0, _Event);
+
+PROC
+PROC_TryModifiedAbilityCheck_Internal((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Ability,(DIFFICULTYCLASS)_DC,(STRING)_Event, (INTEGER)_AdvantageModifier)
+AND
+_AdvantageModifier != 2
+AND
+_AdvantageModifier != -2
+THEN
+RequestPassiveRoll(_Player, _RollSubject, "RawAbility", _Ability, _DC, _AdvantageModifier, _Event);
+
+// TODO: update when code call supports skill + ability
+PROC
+PROC_TrySkillCheck((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Skill,(DIFFICULTYCLASS)_DC,(STRING)_Event)
+THEN
+PROC_TrySkillCheck((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Skill,(DIFFICULTYCLASS)_DC,(STRING)_Event, "");
+
+PROC
+PROC_TrySkillCheck((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Skill,(DIFFICULTYCLASS)_DC,(STRING)_Event, (STRING)_Ability)
+AND
+QRY_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubject, (STRING)_Event)
+AND
+DB_QRYRTN_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubjectOverride, (STRING)_EventOverride)
+AND
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Player, (GUIDSTRING)_RollSubject, (STRING)_Event)
+AND
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_AdvantageModifier)
+THEN
+PROC_TryModifiedSkillCheck_Internal((CHARACTER)_Player,(GUIDSTRING)_RollSubjectOverride,(STRING)_Skill,(DIFFICULTYCLASS)_DC,(STRING)_EventOverride, (STRING)_Ability, (INTEGER)_AdvantageModifier);
+
+PROC
+PROC_TryModifiedSkillCheck_Internal((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Skill,(DIFFICULTYCLASS)_DC,(STRING)_Event, (STRING)_AbilityOverride, 2)
+THEN
+RequestPassiveRoll(_Player, _RollSubject, "SkillCheck", _Skill, (DIFFICULTYCLASS)DC_Legacy_0_98d69b07-f551-4d77-af31-41d074748dc0, 0, _Event);
+
+PROC
+PROC_TryModifiedSkillCheck_Internal((CHARACTER)_Player,(GUIDSTRING)_RollSubject,(STRING)_Skill,(DIFFICULTYCLASS)_DC,(STRING)_Event, (STRING)_AbilityOverride, (INTEGER)_AdvantageModifier)
+AND
+_AdvantageModifier != 2
+AND
+_AdvantageModifier != -2
+THEN
+RequestPassiveRoll(_Player, _RollSubject, "SkillCheck", _Skill, _DC, _AdvantageModifier, _Event);
+
+QRY
+QRY_GLO_SkillCheck_CheckInvalidTarget(_, _)
+AND
+DB_QRYRTN_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubject, (STRING)_Event)
+THEN
+NOT DB_QRYRTN_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubject, (STRING)_Event);
+
+//Rerolling the same subject - event combo.
+//The object hasn't become an item or a character since the check.
+QRY
+QRY_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubject, (STRING)_Event)
+AND
+DB_GLO_SkillCheck_InvalidTargetEvent(_RollSubject, _Event, _AdjustedEventGuid)
+THEN
+DB_QRYRTN_GLO_SkillCheck_CheckInvalidTarget(NULL_00000000-0000-0000-0000-000000000000, _AdjustedEventGuid);
+
+QRY
+QRY_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubject, (STRING)_Event)
+AND
+NOT DB_GLO_SkillCheck_InvalidTargetEvent(_RollSubject, _Event, _)
+AND
+IsItem(_RollSubject, 0)
+AND
+IsCharacter(_RollSubject, 0)
+AND
+GUIDToString(_RollSubject, _Guid)
+AND
+Concatenate(_Event, _Guid, _AdjustedEventGuid)
+THEN
+DB_QRYRTN_GLO_SkillCheck_CheckInvalidTarget(NULL_00000000-0000-0000-0000-000000000000, _AdjustedEventGuid);
+DB_GLO_SkillCheck_InvalidTargetEvent(_RollSubject, _Event, _AdjustedEventGuid);
+
+QRY
+QRY_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubject, (STRING)_Event)
+AND
+NOT DB_QRYRTN_GLO_SkillCheck_CheckInvalidTarget(_, _)
+THEN
+DB_QRYRTN_GLO_SkillCheck_CheckInvalidTarget((GUIDSTRING)_RollSubject, (STRING)_Event);
+
+IF
+RollResult(_Event, _Roller, _Subject, _Success, _, _)
+AND
+NOT DB_GLO_SkillCheck_InvalidTargetEvent(_, _, _Event)
+THEN
+PROC_RollResult(_Event, _Roller, _Subject, _Success);
+
+IF
+RollResult(_Event, _Roller, _Subject, _Success, _, _)
+AND
+DB_GLO_SkillCheck_InvalidTargetEvent(_OriginalSubject, _OriginalEvent, _Event)
+THEN
+PROC_RollResult(_OriginalEvent, _Roller, _OriginalSubject, _Success);
+
+PROC
+PROC_RollResult((STRING)_OriginalEvent, (CHARACTER)_Roller, (GUIDSTRING)_OriginalSubject, (INTEGER)_Success)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Single Player Knowledge Skillcheck (Generic: Check once)
+
+PROC
+PROC_KnowledgeCheck((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference,(STRING)_SkillName,(DIFFICULTYCLASS)_DC)
+THEN
+PROC_KnowledgeCheck((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)NULL_00000000-0000-0000-0000-000000000000,(FLAG)NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_KnowledgeCheck((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+NOT DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference,(INTEGER)_)
+AND
+NOT DB_KnowledgeSkillCheck_AwaitingResult(_Player, _Identifier, _Reference, _AD, _SuccessFlag, _)
+THEN
+PROC_KnowledgeCheck_Internal(_Player,  _Identifier, _Reference, _SkillName, _DC, _AD, _SuccessFlag);
+
+PROC
+PROC_KnowledgeCheck((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference,(INTEGER)_)
+AND
+NOT DB_KnowledgeSkillCheck_AwaitingResult(_Player, _Identifier, _Reference, _AD, _SuccessFlag, _)
+AND
+DB_KnowledgeSkillcheck_AlwaysPlayAD(_Identifier, _Reference)
+AND
+_AD != NULL_00000000-0000-0000-0000-000000000000
+AND
+NOT DB_DialogName(_AD, _)
+THEN
+PROC_TryStartAD(_AD,_Player);
+
+PROC
+PROC_KnowledgeCheck_Internal((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+NOT DB_KnowledgeSkillcheck_TargetOverride(_Reference, _)
+THEN
+DB_KnowledgeSkillCheck_AwaitingResult(_Player, _Identifier, _Reference, _AD, _SuccessFlag, _Reference);
+PROC_TrySkillCheck(_Player,_Reference,_SkillName, _DC, "GLO_KnowledgeCheck");
+
+PROC
+PROC_KnowledgeCheck_Internal((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+DB_KnowledgeSkillcheck_TargetOverride(_Reference, (GUIDSTRING)_Override)
+THEN
+DB_KnowledgeSkillCheck_AwaitingResult(_Player, _Identifier, _Reference, _AD, _SuccessFlag, _Override);
+PROC_TrySkillCheck(_Player,_Override,_SkillName, _DC, "GLO_KnowledgeCheck");
+
+PROC
+PROC_RollResult("GLO_KnowledgeCheck", _Player, _Reference, 1)
+AND
+DB_KnowledgeSkillCheck_AwaitingResult(_Player, _Identifier, _, _AD, _SuccessFlag, _Reference)
+AND
+_SuccessFlag != NULL_00000000-0000-0000-0000-000000000000
+THEN
+SetFlag((FLAG)_SuccessFlag, NULL_00000000-0000-0000-0000-000000000000, 0); // flagType: Global
+
+PROC
+PROC_RollResult("GLO_KnowledgeCheck", _Player, _Override, _Result)
+AND
+DB_KnowledgeSkillCheck_AwaitingResult(_Player, _Identifier, _Reference, _AD, _SuccessFlag, _Override)
+THEN
+NOT DB_KnowledgeSkillCheck_AwaitingResult(_Player, _Identifier, _Reference, _AD, _SuccessFlag, _Override);
+PROC_GLO_KnowledgeCheckEnded(_Player, _Identifier, _Reference, _AD, _Result);
+
+PROC
+PROC_GLO_KnowledgeCheckEnded((CHARACTER)_Player, _Identifier, (GUIDSTRING)_Reference, (DIALOGRESOURCE)_AD, 1)
+AND
+NOT DB_KnowledgeSkillCheck(_, _Identifier, _Reference, 1) //If no-one has succeeded before, do the AD.
+THEN
+PROC_GLO_KnowledgeCheckSuccess(_Player, _Identifier, _Reference);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GLO_KnowledgeCheckEnded((CHARACTER)_Player,  (STRING)_Identifier, (GUIDSTRING)_Reference, (DIALOGRESOURCE)_AD, 1)
+AND
+NOT DB_KnowledgeSkillCheck(_, _Identifier, _Reference, 1) // no one has succeeded before
+AND
+_AD != NULL_00000000-0000-0000-0000-000000000000
+THEN
+PROC_TryStartAD(_AD,_Player);
+
+PROC
+PROC_GLO_KnowledgeCheckEnded((CHARACTER)_Player,  (STRING)_Identifier, (GUIDSTRING)_Reference, (DIALOGRESOURCE)_AD, 1)
+AND
+DB_KnowledgeSkillCheck(_, _Identifier, _Reference, 1)
+AND
+DB_KnowledgeSkillcheck_AlwaysPlayAD(_Identifier, _Reference)
+AND
+_AD != NULL_00000000-0000-0000-0000-000000000000
+THEN
+PROC_TryStartAD(_AD,_Player);
+
+PROC
+PROC_GLO_KnowledgeCheckEnded(_Player,  _Identifier, _Reference, _AD, 0)
+AND
+NOT DB_KnowledgeSkillCheck_AwaitingResult(_,  _Identifier, _Reference, _, _, _) //If you're out of characters (and this is a fail), do the AD.
+AND
+NOT DB_KnowledgeSkillCheck(_,  _Identifier, _Reference, 1) //Again, if no-one has succeeded
+THEN
+PROC_GLO_KnowledgeCheckFailure(_Player, _Identifier, _Reference);
+
+PROC
+PROC_GLO_KnowledgeCheckFailure((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GLO_KnowledgeCheckEnded(_Player,  _Identifier, _Reference, _AD, 0)
+AND
+NOT DB_KnowledgeSkillCheck_AwaitingResult(_, _Identifier, _Reference, _, _, _) //If you're out of characters (and this is a fail), do the AD.
+AND
+NOT DB_KnowledgeSkillCheck(_, _Identifier,_Reference, 1) //Again, if no-one has succeeded
+AND
+_AD != NULL_00000000-0000-0000-0000-000000000000
+THEN
+PROC_TryStartAD(_AD,_Player);
+
+PROC
+PROC_GLO_KnowledgeCheckEnded(_Player, _Identifier, _Reference, _AD_, _Result)
+AND
+_Result != 2
+THEN
+DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference, _Result);
+
+//END_REGION
+
+//REGION External wrappers
+
+QRY
+QRY_GLO_KnowledgeCheck_Succeeded((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference)
+AND
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_KnowledgeCheck_Failed((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference)
+AND
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference, 0)
+AND
+_Reference != NULL_00000000-0000-0000-0000-000000000000
+AND
+NOT DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference, 1)
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference, 1)
+AND
+_Reference != NULL_00000000-0000-0000-0000-000000000000
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier, NULL_00000000-0000-0000-0000-000000000000, 0)
+AND
+NOT DB_KnowledgeSkillCheck(_Player, _Identifier, _, 1)
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier, NULL_00000000-0000-0000-0000-000000000000, 1)
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference)
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference, _)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)NULL_00000000-0000-0000-0000-000000000000)
+AND
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_KnowledgeCheck_Done((CHARACTER)_Player, (STRING)_Identifier)
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _, _)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GLO_KnowledgeCheck_ForceComplete((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference, 0)
+AND
+NOT DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference, 1)
+THEN
+DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference, 0);
+
+
+PROC
+PROC_GLO_KnowledgeCheck_ForceComplete((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference, 1)
+THEN
+DB_KnowledgeSkillCheck(_Player, _Identifier, _Reference, 1);
+
+//END_REGION
+
+//REGION Advantage & Disadvantage
+/*
+Check for situational modifiers:
+Story success trumps story failure.
+Advantage & disadvantage cancel out.
+*/
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(_OnlyResult)
+THEN
+NOT DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(_OnlyResult);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_OnlyResult)
+THEN
+NOT DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_OnlyResult);
+
+// when it's a scripted check with _Identifier, provide a version of the QRY with it
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+DB_KnowledgeSkillCheck_AwaitingResult(_Character, _Identifier, _Reference, _, _, _)
+AND
+QRY_GLO_SkillCheck_CheckAdvantage(_Character, _Reference, _Identifier)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+NOT DB_KnowledgeSkillCheck_AwaitingResult(_Character, _, _Reference, _, _, _)
+AND
+QRY_GLO_SkillCheck_CheckAdvantage(_Character, _Reference, _Event)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(2)
+THEN
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(2);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+NOT DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(2)
+AND
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(-2)
+THEN
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(-2);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+NOT DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_)
+AND
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(1)
+AND
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(-1)
+THEN
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(0);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+NOT DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_)
+AND
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(1)
+THEN
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(1);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+NOT DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_)
+AND
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(-1)
+THEN
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(-1);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+NOT DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_)
+AND
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(0)
+THEN
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(0);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage_Internal((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Event)
+AND
+NOT DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(_)
+THEN
+DB_QRYRTN_GLO_Skillcheck_Internal_CheckAdvantage(0);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage((CHARACTER)_Character, (GUIDSTRING)_Reference, (STRING)_Identifier)
+AND
+1 == 0
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Multi Player Knowledge Skillcheck (Generic: Everyone nearby tries)
+PROC //Do Check on all nearby players
+PROC_KnowledgeCheck_MP((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_Reference,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+DB_Players(_NearbyPlayer)
+AND
+NOT DB_KnowledgeSkillCheck(_NearbyPlayer, _Identifier, _Reference,_)
+AND
+NOT DB_CantTalk_IgnoreStatuses(_NearbyPlayer)
+AND
+QRY_SpeakerIsInDialogRange(_Player, _NearbyPlayer)
+THEN
+PROC_KnowledgeCheck(_NearbyPlayer, _Identifier, _Reference,_SkillName,_DC,_AD,(FLAG)_SuccessFlag);
+//END_REGION
+
+//REGION Single Player Knowledge Skillcheck (UseItem)
+// do the skillcheck if no one has succeeded yet
+IF
+UseStarted(_Player,_KnowledgeItem)
+AND
+DB_Players(_Player)
+AND
+DB_KnowledgeCheckItem_AD((STRING)_Identifier, (GUIDSTRING)_KnowledgeItem,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+NOT DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeItem, _)
+THEN
+PROC_KnowledgeCheck(_Player, _Identifier, (GUIDSTRING)_KnowledgeItem,_SkillName,_DC,_AD,(FLAG)_SuccessFlag);
+
+// play AD if success was already achieved
+IF 
+UseStarted(_Player,_KnowledgeItem)
+AND
+DB_Players(_Player)
+AND
+DB_KnowledgeCheckItem_AD((STRING)_Identifier, (GUIDSTRING)_KnowledgeItem,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+DB_KnowledgeSkillCheck((CHARACTER)_Player, _Identifier, _KnowledgeItem, 1) // this DB gets copied for all DB_Players if success was achieved
+AND
+_AD != NULL_00000000-0000-0000-0000-000000000000
+THEN
+PROC_TryStartAD(_AD,_Player);
+
+// play AD if player failed before
+IF 
+UseStarted(_Player,_KnowledgeItem)
+AND
+DB_Players(_Player)
+AND
+DB_KnowledgeCheckItem_AD((STRING)_Identifier, (GUIDSTRING)_KnowledgeItem,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+DB_KnowledgeSkillCheck((CHARACTER)_Player, _Identifier, _KnowledgeItem, 0)
+AND
+NOT DB_KnowledgeSkillCheck((CHARACTER)_Player, _Identifier, _KnowledgeItem, 1)
+AND
+_AD != NULL_00000000-0000-0000-0000-000000000000
+THEN
+PROC_TryStartAD(_AD,_Player);
+
+//REGION Temporary Patch 4 Implementation
+
+IF
+UseStarted(_Player,_KnowledgeItem)
+AND
+DB_TutorialCompanion(_Player)
+AND
+_Player != S_TUT_Lab_TrappedDevourer_6ca92237-eb1e-4ed8-a1ee-18b3bef21558
+AND
+DB_KnowledgeCheckItem_AD((STRING)_Identifier, (GUIDSTRING)_KnowledgeItem,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+NOT DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeItem, _)
+THEN
+PROC_KnowledgeCheck(_Player, _Identifier, (GUIDSTRING)_KnowledgeItem,_SkillName,_DC,_AD,(FLAG)_SuccessFlag);
+
+//No retry.
+IF 
+UseStarted(_Player,_KnowledgeItem)
+AND
+DB_TutorialCompanion(_Player)
+AND
+_Player != S_TUT_Lab_TrappedDevourer_6ca92237-eb1e-4ed8-a1ee-18b3bef21558
+AND
+DB_KnowledgeCheckItem_AD((STRING)_Identifier, (GUIDSTRING)_KnowledgeItem,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeItem, _Result)
+THEN
+PROC_GLO_KnowledgeCheckEnded((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_KnowledgeItem, (DIALOGRESOURCE)_AD, (INTEGER)_Result); 
+
+
+
+//END_REGION
+
+//END_REGION
+
+//REGION Multi Player Knowledge Skillcheck (Trigger)
+IF
+DB_KnowledgeCheckTrigger((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC)
+THEN
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)NULL_00000000-0000-0000-0000-000000000000,(FLAG)NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)NULL_00000000-0000-0000-0000-000000000000,(FLAG)NULL_00000000-0000-0000-0000-000000000000)
+AND
+NOT DB_KnowledgeCheckTrigger((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC)
+THEN
+NOT DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)NULL_00000000-0000-0000-0000-000000000000,(FLAG)NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+THEN
+PROC_TriggerRegisterForPlayers(_KnowledgeCheckTrigger);
+
+IF
+DB_InRegion(_Player,_KnowledgeCheckTrigger)
+AND
+DB_KnowledgeCheckTrigger_AD(_Identifier, _KnowledgeCheckTrigger,_SkillName,_DC,_AD,(FLAG)_SuccessFlag)
+AND
+NOT DB_CantTalk_IgnoreStatuses(_Player)
+THEN
+PROC_KnowledgeCheck_MP(_Player, _Identifier, (GUIDSTRING)_KnowledgeCheckTrigger,_SkillName,_DC,_AD,(FLAG)_SuccessFlag);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess((CHARACTER)_Player, (STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger)
+AND
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, _KnowledgeCheckTrigger,_SkillName,_DC,_AD,NULL_00000000-0000-0000-0000-000000000000)
+THEN
+PROC_TriggerUnregisterForPlayers(_KnowledgeCheckTrigger);
+
+IF
+FlagSet((FLAG)_SuccessFlag, _, _)
+AND
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, _KnowledgeCheckTrigger,_SkillName,_DC,_AD,(FLAG)_SuccessFlag)
+THEN
+PROC_TriggerUnregisterForPlayers(_KnowledgeCheckTrigger);
+
+PROC
+PROC_KnowledgeCheck_Clear((TRIGGER)_KnowledgeCheckTrigger)
+AND
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+THEN
+PROC_TriggerUnregisterForPlayers(_KnowledgeCheckTrigger);
+NOT DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag);
+
+PROC
+PROC_KnowledgeCheck_Clear((TRIGGER)_KnowledgeCheckTrigger)
+AND
+DB_KnowledgeCheckTrigger((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC)
+THEN
+NOT DB_KnowledgeCheckTrigger((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger,(STRING)_SkillName,(DIFFICULTYCLASS)_DC);
+//END_REGION
+
+//REGION Party knowledge sharing
+IF
+DB_KnowledgeSkillCheck(_Player1, _Identifier, _KnowledgeCheckObject,1)
+AND
+DB_Players(_Player2)
+AND
+NOT DB_KnowledgeSkillCheck(_Player2, _Identifier,  _KnowledgeCheckObject,1)
+THEN
+DB_KnowledgeSkillCheck(_Player2, _Identifier, _KnowledgeCheckObject,1);
+
+IF
+DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeCheckObject,0)
+AND
+DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeCheckObject,1)
+THEN
+NOT DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeCheckObject,0);
+//END_REGION
+
+//REGION Multiple opportunities for the same skill check
+IF
+DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeCheckObject, _Result)
+AND
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger, _, _, _, _)
+AND
+_KnowledgeCheckObject != _KnowledgeCheckTrigger
+THEN
+PROC_KnowledgeCheck_Propagate(_Player, _Identifier, _KnowledgeCheckTrigger, _Result);
+
+IF
+DB_KnowledgeSkillCheck(_Player, _Identifier,  _KnowledgeCheckObject, _Result)
+AND
+DB_KnowledgeCheckItem_AD((STRING)_Identifier, _KnowledgeItem,  _, _, _, _)
+THEN
+PROC_KnowledgeCheck_Propagate(_Player, _Identifier, _KnowledgeItem, _Result);
+
+PROC
+PROC_KnowledgeCheck_Propagate((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_KnowledgeCheckObject, (INTEGER)_Result)
+AND
+NOT DB_KnowledgeCheck_Propagating(_Identifier)
+THEN
+DB_KnowledgeCheck_Propagating(_Identifier);
+PROC_KnowledgeCheck_Propagate_Internal((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_KnowledgeCheckObject, _Result);
+NOT DB_KnowledgeCheck_Propagating(_Identifier);
+
+PROC
+PROC_KnowledgeCheck_Propagate_Internal((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_KnowledgeCheckObject, 1)
+THEN
+DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeCheckObject, 1);
+
+PROC
+PROC_KnowledgeCheck_Propagate_Internal((CHARACTER)_Player, (STRING)_Identifier, (GUIDSTRING)_KnowledgeCheckObject, 0)
+AND
+NOT DB_KnowledgeSkillCheck(_Player, _Identifier, _, 1)
+THEN
+DB_KnowledgeSkillCheck(_Player, _Identifier, _KnowledgeCheckObject, 0);
+
+
+
+IF
+DB_KnowledgeSkillCheck(_Player, _Identifier,  _KnowledgeCheckObject, 1)
+AND
+NOT DB_KnowledgeCheck_Propagating(_Identifier) //Don't re-fire for propagating successes.
+AND
+DB_FallibleCheckItem((STRING)_Identifier, _SkillItem, _, _, _, _)
+THEN
+DB_KnowledgeCheck_Propagating(_Identifier);
+PROC_CharacterPassedItemSkillCheck(_Player, _Identifier, (ITEM)_SkillItem);
+NOT DB_KnowledgeCheck_Propagating(_Identifier);
+
+IF
+DB_KnowledgeSkillCheck(_Player, _Identifier,  _KnowledgeCheckObject, 0)
+AND
+NOT DB_KnowledgeCheck_Propagating(_Identifier) //Don't re-fire for propagating successes.
+AND
+DB_FallibleCheckItem((STRING)_Identifier, _SkillItem, _, _, _, _)
+THEN
+DB_KnowledgeCheck_Propagating(_Identifier);
+PROC_CharacterFailedItemSkillCheck(_Player, _Identifier, (ITEM)_SkillItem);
+NOT DB_KnowledgeCheck_Propagating(_Identifier);
+
+PROC
+PROC_CharacterPassedItemSkillCheck(_Player, _Identifier, _SkillItem)
+AND
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger, _, _, _, _)
+THEN
+PROC_KnowledgeCheck_Propagate(_Player, _Identifier, _KnowledgeCheckTrigger, 1);
+
+PROC
+PROC_CharacterPassedItemSkillCheck(_Player, _Identifier, _SkillItem)
+AND
+DB_KnowledgeCheckItem_AD((STRING)_Identifier, _KnowledgeItem,  _, _, _, _)
+THEN
+PROC_KnowledgeCheck_Propagate(_Player, _Identifier, _KnowledgeItem, 1);
+
+PROC
+PROC_CharacterFailedItemSkillCheck(_Player, _Identifier, _SkillItem)
+AND
+DB_KnowledgeCheckTrigger_AD((STRING)_Identifier, (TRIGGER)_KnowledgeCheckTrigger, _, _, _, _)
+THEN
+PROC_KnowledgeCheck_Propagate(_Player, _Identifier, _KnowledgeCheckTrigger, 0);
+
+PROC
+PROC_CharacterFailedItemSkillCheck(_Player, _Identifier, _SkillItem)
+AND
+DB_KnowledgeCheckItem_AD((STRING)_Identifier, _KnowledgeItem,  _, _, _, _)
+THEN
+PROC_KnowledgeCheck_Propagate(_Player, _Identifier, _KnowledgeItem, 1);
+
+
+//END_REGION
+
+//REGION Skill check with consequences for failure (can be retried)
+IF
+UseStarted(_Character,_SkillItem)
+AND
+DB_FallibleCheckItem((STRING)_Identifier, _SkillItem, (STRING)_SkillName, (DIFFICULTYCLASS)_DC, "", (ANIMATION)_)
+AND
+DB_GLO_Skillcheck_DefaultAbility(_SkillName, _AbilityOverride)
+THEN
+PROC_MakeFallibleItemCheck(_Character, _Identifier, _SkillItem, _SkillName, _DC, _AbilityOverride);
+
+IF
+UseStarted(_Character,_SkillItem)
+AND
+DB_FallibleCheckItem((STRING)_Identifier, _SkillItem, _SkillName, _DC, _AbilityOverride, _)
+AND
+_AbilityOverride != ""
+THEN
+PROC_MakeFallibleItemCheck(_Character, _Identifier, _SkillItem, _SkillName, _DC, _AbilityOverride);
+
+PROC
+PROC_MakeFallibleItemCheck((CHARACTER)_Character, (STRING)_Identifier, (ITEM)_SkillItem, (STRING)_SkillName, (DIFFICULTYCLASS)_DC, (STRING)_AbilityOverride)
+THEN
+DB_FallibleItemCheck_AwaitingResult(_Character, _Identifier, _SkillItem);
+PROC_TrySkillCheck(_Character, _SkillItem, _SkillName, _DC,"GLO_FallibleItemCheck",  (STRING)_AbilityOverride);
+
+PROC
+PROC_RollResult("GLO_FallibleItemCheck", _Character, (ITEM)_SkillItem, 1)
+AND
+DB_FallibleItemCheck_AwaitingResult(_Character, _Identifier, _SkillItem)
+THEN
+PROC_CharacterPassedItemSkillCheck(_Character, _Identifier, _SkillItem);
+
+PROC
+PROC_CharacterPassedItemSkillCheck((CHARACTER)_Character, (STRING)_Identifier, (ITEM)_SkillItem)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_RollResult("GLO_FallibleItemCheck", _Character, (ITEM)_SkillItem, 0)
+AND
+DB_FallibleItemCheck_AwaitingResult(_Character, _Identifier, _SkillItem)
+THEN
+PROC_CharacterFailedItemSkillCheck(_Character, (STRING)_Identifier, _SkillItem);
+
+PROC
+PROC_CharacterFailedItemSkillCheck((CHARACTER)_Character, (STRING)_Identifier, (ITEM)_SkillItem)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_RollResult("GLO_FallibleItemCheck", _Character, (ITEM)_SkillItem, _)
+AND
+DB_FallibleItemCheck_AwaitingResult(_Character, _Identifier, _SkillItem)
+THEN
+NOT DB_FallibleItemCheck_AwaitingResult(_Character, _Identifier, _SkillItem);
+
+//Play an animation
+IF
+DB_FallibleItemCheck_AwaitingResult(_Character, _Identifier, _SkillItem)
+AND
+DB_FallibleCheckItem(_Identifier, _SkillItem, _, _, _, _Animation)
+AND
+_Animation != NULL_00000000-0000-0000-0000-000000000000
+THEN
+PlayAnimation(_Character, _Animation, "");
+//END_REGION
+
+//REGION Perception checks from script
+
+// Behaviour script
+QRY
+QRY_TemporaryDCsubstitute((INTEGER)_DC)
+THEN
+DB_QRYRTN_TemporaryDCsubstitute((DIFFICULTYCLASS)DC_Legacy_50_e0a7c461-08bf-459d-9c9a-747008ced85c);
+
+QRY
+QRY_TemporaryDCsubstitute((INTEGER)_DC)
+AND
+DB_TemporaryDCsubstitute(_RefDC,_DCuuid)
+AND
+_DC <= _RefDC
+AND
+DB_QRYRTN_TemporaryDCsubstitute(_AnyDC)
+THEN
+NOT DB_QRYRTN_TemporaryDCsubstitute(_AnyDC);
+DB_QRYRTN_TemporaryDCsubstitute(_DCuuid);
+
+
+IF
+DualEntityEvent(_Player,_HiddenItem,"PUZZLE_HiddenPerception_CheckPlayer")
+AND
+NOT DB_PerceptionSkillCheck((CHARACTER)_Player,(ITEM)_HiddenItem,_)
+AND
+NOT DB_PerceptionSkillCheck_AwaitingResult(_Player,_HiddenItem)
+AND
+GetVarInteger(_HiddenItem, "DC", _DC)
+AND
+QRY_TemporaryDCsubstitute(_DC)
+AND
+DB_QRYRTN_TemporaryDCsubstitute(_DCsub)
+THEN
+DB_PerceptionSkillCheck_AwaitingResult(_Player,_HiddenItem);
+PROC_TrySkillCheck((CHARACTER)_Player,_HiddenItem,"Perception",_DCsub,"GLO_HiddenItemCheck");
+
+PROC //First try - Check Succeeded
+PROC_RollResult("GLO_HiddenItemCheck", _Character, (ITEM)_HiddenItem, 1)
+AND
+NOT DB_PerceptionSkillCheck(_,_HiddenItem,1)
+AND
+CharacterGetOwner(_Character, _Owner)
+THEN
+PROC_HiddenPerceptionCheckSucceeded(_Character, _Owner, _HiddenItem);
+
+PROC //First try - Check Succeeded
+PROC_RollResult("GLO_HiddenItemCheck", _Character, (ITEM)_HiddenItem, 1)
+AND
+NOT DB_PerceptionSkillCheck(_,_HiddenItem,1)
+AND
+NOT CharacterGetOwner(_Character, _)
+THEN
+PROC_HiddenPerceptionCheckSucceeded(_Character, _Character, _HiddenItem);
+
+PROC //First try - Check Succeeded
+PROC_RollResult("GLO_HiddenItemCheck", _Player, (ITEM)_HiddenItem, 1)
+THEN
+DB_PerceptionSkillCheck(_Player,_HiddenItem,1);
+SetEntityEvent(_HiddenItem,"StoryReveal");
+PROC_LaunchPerceptionSkillCheckAD((CHARACTER)_Player, (ITEM)_HiddenItem);
+
+PROC //First try - Check Failed
+PROC_RollResult("GLO_HiddenItemCheck", _Player, _HiddenItem, 0)
+AND
+NOT DB_PerceptionSkillCheck((CHARACTER)_Player,(ITEM)_HiddenItem,_)
+THEN
+DB_PerceptionSkillCheck(_Player,_HiddenItem, 0);
+
+PROC
+PROC_RollResult("GLO_HiddenItemCheck", _Player, _HiddenItem, _)
+AND
+DB_PerceptionSkillCheck_AwaitingResult(_Player, (ITEM)_HiddenItem)
+THEN
+NOT DB_PerceptionSkillCheck_AwaitingResult(_Player,_HiddenItem);
+
+IF
+DualEntityEvent(_Player, _HiddenItem, "PUZZLE_DiscoveredHiddenItem")
+THEN
+PROC_LaunchPerceptionSkillCheckAD((CHARACTER)_Player, (ITEM)_HiddenItem);
+
+PROC
+PROC_LaunchPerceptionSkillCheckAD((CHARACTER)_Player, (ITEM)_HiddenItem)
+AND
+NOT DB_PerceptionSkillCheckADBlocked(_HiddenItem)
+AND
+GetUUID(_HiddenItem, _UUID)
+AND
+Concatenate("PerceptionSkillCheck_AD_", _UUID, _TimerName)
+THEN
+DB_PerceptionSkillCheck_About(_Player, _HiddenItem, _TimerName);
+ObjectTimerLaunch(_Player, _TimerName, 500);
+
+IF
+ObjectTimerFinished((CHARACTER)_Player, _TimerName)
+AND
+DB_PerceptionSkillCheck_About(_Player,_HiddenItem, _TimerName)
+AND
+QRY_OnlyOnceForNearbyPlayers_Timeout(_Player, "PerceptionSkillCheck_AD_Timeout", 10000)
+THEN
+PROC_PerceptionSkillCheckAD_TryStart(_Player, _HiddenItem);
+
+PROC
+PROC_PerceptionSkillCheckAD_TryStart((CHARACTER)_Player,(ITEM)_HiddenItem)
+AND
+DB_PerceptionSkillCustomAD(_HiddenItem, _CustomAD)
+THEN
+PROC_TryStartAD(_CustomAD, _Player);
+
+PROC
+PROC_PerceptionSkillCheckAD_TryStart((CHARACTER)_Player,(ITEM)_HiddenItem)
+AND
+NOT DB_PerceptionSkillCustomAD(_HiddenItem, _)
+AND
+IsTrap(_HiddenItem, 0)
+THEN
+PROC_TryStartAD(GLO_PerceptionSuccess_48825dbe-a320-7c4c-fe3e-372b717d5bc9, _Player);
+
+PROC
+PROC_PerceptionSkillCheckAD_TryStart((CHARACTER)_Player, (ITEM)_HiddenItem)
+AND
+NOT DB_PerceptionSkillCustomAD(_HiddenItem, _)
+AND
+IsTrap(_HiddenItem, 1)
+THEN
+PROC_TryStartAD(GLO_PerceptionSuccess_Trap_8aae78c8-a937-e386-0a0e-66e1046e8577, _Player);
+
+IF
+ObjectTimerFinished((CHARACTER)_Player, _TimerName)
+AND
+DB_PerceptionSkillCheck_About(_Player, _HiddenItem, _TimerName)
+THEN
+NOT DB_PerceptionSkillCheck_About(_Player, _HiddenItem, _TimerName);
+
+PROC
+PROC_HiddenPerceptionCheckSucceeded((CHARACTER)_Character, (CHARACTER)_Owner, (GUIDSTRING)_HiddenItem)
+THEN
+DB_NOOP(1);
+
+//Constellations
+IF
+DualEntityEvent(_Entity, _Spotter, "CONST_PreventADSpam")
+AND
+DB_Players(_Player)
+AND
+GetDistanceTo(_Spotter, _Player, _Distance)
+AND
+_Distance <= 6.0
+THEN
+PROC_CONST_PreventADSPam(_Player);
+
+PROC
+PROC_CONST_PreventADSPam((CHARACTER)_Player)
+AND
+GetFlag(CONST_SuppressTrapADs_cf3d6d5b-5c2d-403f-a0c3-105922f8c5f1, _Player, 1)
+THEN
+RealtimeObjectTimerCancel(_Player, "CONST_PreventADSpam");
+RealtimeObjectTimerLaunch(_Player, "CONST_PreventADSpam", 5000);
+
+PROC
+PROC_CONST_PreventADSPam((CHARACTER)_Player)
+AND
+GetFlag(CONST_SuppressTrapADs_cf3d6d5b-5c2d-403f-a0c3-105922f8c5f1, _Player, 0)
+THEN
+SetFlag(CONST_SuppressTrapADs_cf3d6d5b-5c2d-403f-a0c3-105922f8c5f1, _Player, 0);
+RealtimeObjectTimerLaunch(_Player, "CONST_PreventADSpam", 5000);
+
+IF
+ObjectTimerFinished(_Player, "CONST_PreventADSpam")
+THEN
+ClearFlag(CONST_SuppressTrapADs_cf3d6d5b-5c2d-403f-a0c3-105922f8c5f1, _Player, 0);
+
+//END_REGION
+
+//REGION Investigation checks from script
+IF
+DualEntityEvent(_Player, _HiddenItem, "PUZZLE_HiddenInvestigation_CheckPlayer")
+AND
+NOT DB_InvestigationSkillCheck((CHARACTER)_Player,(ITEM)_HiddenItem,_)
+AND
+NOT DB_InvestigationSkillCheck_AwaitingResult(_Player, _HiddenItem)
+AND
+GetVarInteger(_HiddenItem, "DC", _DC)
+AND
+QRY_TemporaryDCsubstitute(_DC)
+AND
+DB_QRYRTN_TemporaryDCsubstitute(_DCsub)
+THEN
+DB_InvestigationSkillCheck_AwaitingResult(_Player, _HiddenItem);
+PROC_TrySkillCheck((CHARACTER)_Player, _HiddenItem, "Perception", _DCsub, "GLO_HiddenInvestigationItemCheck");
+
+PROC //First try - Check Succeeded
+PROC_RollResult("GLO_HiddenInvestigationItemCheck", _Player, (ITEM)_HiddenItem, 1)
+THEN
+DB_InvestigationSkillCheck(_Player, _HiddenItem, 1);
+SetEntityEvent(_HiddenItem, "StoryReveal");
+PROC_LaunchInvestigationSkillCheckAD((CHARACTER)_Player, (ITEM)_HiddenItem);
+
+PROC //First try - Check Failed
+PROC_RollResult("GLO_HiddenInvestigationItemCheck", _Player, _HiddenItem, 0)
+AND
+NOT DB_InvestigationSkillCheck((CHARACTER)_Player, (ITEM)_HiddenItem,_)
+THEN
+DB_InvestigationSkillCheck(_Player,_HiddenItem, 0);
+
+PROC
+PROC_RollResult("GLO_HiddenInvestigationItemCheck", _Player, _HiddenItem, _)
+AND
+DB_InvestigationSkillCheck_AwaitingResult(_Player, (ITEM)_HiddenItem)
+THEN
+NOT DB_InvestigationSkillCheck_AwaitingResult(_Player, _HiddenItem);
+
+PROC
+PROC_LaunchInvestigationSkillCheckAD((CHARACTER)_Player, (ITEM)_HiddenItem)
+AND
+_HiddenItem != NULL_00000000-0000-0000-0000-000000000000
+AND
+NOT DB_InvestigationSkillCheckADBlocked(_HiddenItem)
+AND
+GetUUID(_HiddenItem, _UUID)
+AND
+Concatenate("InvestigationSkillCheck_AD_", _UUID, _TimerName)
+THEN
+DB_InvestigationSkillCheck_About(_Player, _HiddenItem, _TimerName);
+ObjectTimerLaunch(_Player, _TimerName, 500);
+
+IF
+ObjectTimerFinished((CHARACTER)_Player, _TimerName)
+AND
+DB_InvestigationSkillCheck_About(_Player, _HiddenItem, _TimerName)
+AND
+QRY_OnlyOnceForNearbyPlayers_Timeout(_Player, "InvestigationSkillCheck_AD_Timeout", 10000)
+THEN
+PROC_InvestigationSkillCheckAD_TryStart(_Player, _HiddenItem);
+
+PROC
+PROC_InvestigationSkillCheckAD_TryStart((CHARACTER)_Player, (ITEM)_HiddenItem)
+AND
+DB_InvestigationSkillCustomAD(_HiddenItem, _CustomAD)
+THEN
+PROC_TryStartAD(_CustomAD,_Player);
+
+PROC
+PROC_InvestigationSkillCheckAD_TryStart((CHARACTER)_Player, (ITEM)_HiddenItem)
+AND
+NOT DB_InvestigationSkillCustomAD(_HiddenItem, _)
+AND
+IsTrap(_HiddenItem, 0)
+THEN
+PROC_TryStartAD(GLO_InvestigationSuccess_6f56969d-fb35-38f1-26ff-5b6c4db3ea68,_Player);
+
+PROC
+PROC_InvestigationSkillCheckAD_TryStart((CHARACTER)_Player, (ITEM)_HiddenItem)
+AND
+NOT DB_InvestigationSkillCustomAD(_HiddenItem, _)
+AND
+IsTrap(_HiddenItem, 1)
+THEN
+PROC_TryStartAD(GLO_InvestigationSuccess_Trap_174f5c13-764b-26f6-83cd-4ea72b50abd9, _Player);
+
+IF
+ObjectTimerFinished((CHARACTER)_Player,_TimerName)
+AND
+DB_InvestigationSkillCheck_About(_Player,_HiddenItem,_TimerName)
+THEN
+NOT DB_InvestigationSkillCheck_About(_Player,_HiddenItem,_TimerName);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION

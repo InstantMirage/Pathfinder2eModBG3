@@ -1,0 +1,936 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+PROC_TriggerRegisterForPlayers((TRIGGER)TRIGGERGUID_S_HAG_ForestIllusion_IllusionCheckArea_d9097b25-a8aa-402d-b858-35018a311efb);
+
+DB_HAG_ForestIllusion_Animal((CHARACTER)CHARACTERGUID_S_HAG_ForestIllusion_Redcap_01_ff840420-d46a-4837-868b-ac02f45e4586,0);
+DB_HAG_ForestIllusion_Animal(CHARACTERGUID_S_HAG_ForestIllusion_Redcap_02_2b08981e-5cb0-496d-98cf-15e6a92121ec,0);
+DB_HAG_ForestIllusion_Animal(CHARACTERGUID_S_HAG_ForestIllusion_Redcap_03_14026955-2546-4d31-bc0c-4bfe0c34bd8a,0);
+DB_HAG_ForestIllusion_Animal((CHARACTER)S_HAG_ForestIllusion_Redcap_04_30a871b1-9df3-42bb-87cb-c284cafd32eb,0);
+
+DB_GLO_DefeatCounter(S_HAG_ForestIllusion_Redcap_01_ff840420-d46a-4837-868b-ac02f45e4586, "HAG_ForestIllusion");
+DB_GLO_DefeatCounter(S_HAG_ForestIllusion_Redcap_02_2b08981e-5cb0-496d-98cf-15e6a92121ec, "HAG_ForestIllusion");
+DB_GLO_DefeatCounter(S_HAG_ForestIllusion_Redcap_03_14026955-2546-4d31-bc0c-4bfe0c34bd8a, "HAG_ForestIllusion");
+DB_GLO_DefeatCounter(S_HAG_ForestIllusion_Redcap_04_30a871b1-9df3-42bb-87cb-c284cafd32eb, "HAG_ForestIllusion");
+
+DB_NoLowAttitudeDialog((CHARACTER)S_HAG_ForestIllusion_Redcap_01_ff840420-d46a-4837-868b-ac02f45e4586);
+DB_NoLowAttitudeDialog((CHARACTER)S_HAG_ForestIllusion_Redcap_02_2b08981e-5cb0-496d-98cf-15e6a92121ec);
+DB_NoLowAttitudeDialog((CHARACTER)S_HAG_ForestIllusion_Redcap_03_14026955-2546-4d31-bc0c-4bfe0c34bd8a);
+DB_NoLowAttitudeDialog((CHARACTER)S_HAG_ForestIllusion_Redcap_04_30a871b1-9df3-42bb-87cb-c284cafd32eb);
+
+SetFlag(HAG_ForestIllusion_Redcaps_State_Redcap_01_96856530-8d49-4c56-a40a-2b2a32a8cece, S_HAG_ForestIllusion_Redcap_01_ff840420-d46a-4837-868b-ac02f45e4586, 0);
+SetFlag(HAG_ForestIllusion_Redcaps_State_Redcap_02_aeb715e7-4a6d-417e-bc5d-c17ca1c456a3, S_HAG_ForestIllusion_Redcap_02_2b08981e-5cb0-496d-98cf-15e6a92121ec, 0);
+SetFlag(HAG_ForestIllusion_Redcaps_State_Redcap_03_a77d7ae0-10c9-47ad-b7e2-60bd9858fd56, S_HAG_ForestIllusion_Redcap_03_14026955-2546-4d31-bc0c-4bfe0c34bd8a, 0);
+SetFlag(HAG_ForestIllusion_Redcaps_State_Redcap_04_a314c0f3-1cbd-42d0-939a-292a1fdf3575, S_HAG_ForestIllusion_Redcap_04_30a871b1-9df3-42bb-87cb-c284cafd32eb, 0);
+
+TriggerSetSoundState((TRIGGER)Amb_SV_Hag_Marsh_Combined_QD_39d3fdd5-f057-441f-ab6c-a322b20d0818,"S_Hag_State_Transformed","HappyHag",1);
+
+DB_HAG_ForestIllusion_Disguises("Redcap", "HAG_DISGUISE_SHEEP", (DIALOGRESOURCE)HAG_ForestIllusion_IllusionEttercap_f201b084-08b1-8d74-050f-a1365bdef235);
+
+PROC_TriggerRegisterForPlayers(TRIGGERGUID_S_HAG_ForestIllusion_EttercapNoAttackBox_747f7036-ca84-4cf9-a677-a08e20e2af15);
+
+DB_HAG_HagTarts(S_HAG_Food_Tart1_af12decd-555d-4cfb-821b-f32c94273f55, CONS_GEN_Food_Tart_Treacle_A_Spoiled_A_c5c39373-6a83-4a74-818a-da1642b9dfd0);
+DB_HAG_HagTarts(S_HAG_Food_Tart2_18464a72-7c62-44bb-9f81-5f6a2895dc55, CONS_GEN_Food_Tart_Treacle_A_Spoiled_A_c5c39373-6a83-4a74-818a-da1642b9dfd0);
+DB_HAG_HagTarts(S_HAG_Food_Tart3_5ffc36c5-1f07-46d2-9f48-9d3ac3007ffb, CONS_GEN_Food_Tart_Treacle_A_Spoiled_A_Eaten_A_d10402d9-e731-4af6-b93e-a6aec0806dc9);
+
+PROC_RegisterWorldGossipTrigger(S_PartyBanterTrigger_HAG_RiverBridgeIllusion_c671f8d8-bd6e-4ea0-90ef-9f412605b1d0);
+PROC_RegisterWorldGossipTrigger(S_PartyBanterTrigger_HAG_RoadBridgeIllusion_d4193258-4825-4567-9eb8-de289242af31);
+
+DB_KnowledgeCheckTrigger_AD("HAG_FireplaceIllusion", S_HAG_FireplaceIllusion_Box_1881d262-e0dc-44bf-b8a0-cabc5cc300ee, "Perception", (DIFFICULTYCLASS)DC_Legacy_10_625be976-7a67-4394-97c8-14c69715ae4b, (DIALOGRESOURCE)HAG_HagSpawn_PAD_FireplaceIllusion_ce8cf816-e398-2dbb-9687-0ac204257d4a, HAG_HagSpawn_State_NoticedFireplaceIllusion_0e70ddd2-4f79-4c31-9709-6631d505b42d);
+
+DB_HAG_WallIllusionElements(S_SecretHagRoof_01_efde7da0-5498-4411-8cfe-27a78d2152a5);
+DB_HAG_WallIllusionElements(S_SecretHagRoof_02_09e8aa63-5563-4948-8eb0-7117a40eafed);
+DB_HAG_WallIllusionElements(S_SecretHagRoof_03_3a177644-ee46-4ab5-b391-c277ecb30b17);
+DB_HAG_WallIllusionElements(S_SecretHagRoof_04_ec7a3881-6eab-483a-8827-68aa71eb7c6a);
+DB_HAG_WallIllusionElements(S_SecretHagRoof_05_a5055420-4dd1-4e20-8c63-961899ac07dc);
+DB_HAG_WallIllusionElements(S_SecretHagRoof_06_004826af-52f0-41f2-b7cf-e4b18549dcf3);
+DB_HAG_WallIllusionElements(S_HAG_HagLairAccess_FireIllusion_Blocker_a6f4bbc3-6bc8-42f0-bf5f-ca66f0e4f7b0);
+
+PROC_TriggerRegisterForPlayers(S_HAG_FairyRings_Swamp_SphereTrigger_3dfd4644-7a1b-4b14-8751-dfe51cde2884);
+
+DB_IgnoreMutingStatussesDialog((DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd);
+
+DB_HAG_ForestIllusion_States(1);
+DB_HAG_ForestIllusion_States(0);
+
+DB_Subregion(S_HAG_DruidMeetingSpot_SUB_4237c4f1-4972-431e-ab46-29c01ec2de67, "HAG_DruidMeetingSpot_SUB", 0, 2);
+KBSECTION
+//REGION Debug
+IF
+TextEvent("hagblight")
+THEN
+SetFlag((FLAG)HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, NULL_00000000-0000-0000-0000-000000000000, 0); // flagType: Global
+//END_REGION
+
+//REGION Exploring Illusion
+IF
+RollResult("HAG_StealFruitFromBush", _Player, _, 0, _, _)
+AND
+DB_Players(_Player)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)HAG_SwampExploration_PAD_PrickedFinger_f40f440b-bd20-428f-8d8d-36c2ef143b21, _Player);
+//END_REGION
+
+//REGION Illusion Animal Dialog
+IF
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,0)
+AND
+GetRace(_IllusionedAnimal, 0, _Race)
+AND
+DB_HAG_ForestIllusion_Disguises(_Race, _, _Dialog)
+THEN
+DB_Dialogs(_IllusionedAnimal, _Dialog);
+
+IF
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,1)
+THEN
+SetFlag((FLAG)HAG_ForestIllusion_State_DroppedIllusion_80e352fe-9a28-4dba-82ff-904f8fda778e, _IllusionedAnimal, 0); // flagType: Object
+
+IF
+EnteredCombat(_IllusionedAnimal, _)
+AND
+DB_HAG_ForestIllusion_Animal((CHARACTER)_IllusionedAnimal, _)
+AND
+NOT DB_GlobalFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506)
+THEN
+SetFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+//END_REGION
+
+//REGION Pig disguises
+IF
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,0)
+AND
+GetRace(_IllusionedAnimal, 0, _Race)
+AND
+DB_HAG_ForestIllusion_Disguises(_Race, _Status, _)
+THEN
+ApplyStatus(_IllusionedAnimal, _Status, -1.0,1);
+
+//END_REGION
+
+//REGION Illusion Check
+IF
+TextEvent("HAG_ForestIllusion_TestTemplateSwap")
+THEN
+UnloadLevelTemplate(LT_WLD_Hag_91b8fb2b-bf33-4e4e-babb-c1e335048110);
+LoadLevelTemplate(LT_WLD_Hag_Swamp_Evil_A_9ca95a3c-3cfa-4771-83e5-5438ea436f13);
+TriggerSetSoundState((TRIGGER)Amb_SV_Hag_Marsh_Happy_FZ_39d3fdd5-f057-441f-ab6c-a322b20d0818,"S_Hag_State_Transformed","EvilHag",1);
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID) // flagType: Global
+AND
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,0)
+AND
+NOT DB_DialogNPCs(_ID, _IllusionedAnimal, _)
+THEN
+PROC_ForceStopDialog(_IllusionedAnimal);
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID) // flagType: Global
+AND
+DB_DialogName((DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd, _ID)
+THEN
+DB_HAG_ForestIllusion_WaitForGroup(1);
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID);
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID) // flagType: Global
+AND
+DB_DialogName((DIALOGRESOURCE)HAG_ForestIllusion_IllusionRedcap_f201b084-08b1-8d74-050f-a1365bdef235, _ID)
+THEN
+DB_HAG_ForestIllusion_WaitForGroup(1);
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID);
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID) // flagType: Global
+AND
+NOT DB_HAG_ForestIllusion_ForestIllusionDialog(_) //Either the illusion dialogue hasn't started yet, or the illusion was broken outside of it.
+AND
+DB_HAG_ForestIllusion_States(_Controlled) //First check for controlled, then uncontrolled.
+AND
+DB_HAG_ForestIllusion_States(_Player) //First check for players, then (failing those) non-players.
+AND
+DB_InRegion(_Character, S_HAG_Swamp_SUB_5bd69370-6b30-4643-8b8f-412a2b837770)
+AND
+IsPlayer(_Character, _Player)
+AND
+IsControlled(_Character, _Controlled)
+AND
+QRY_HAG_ForestIllusion_TransitionWaitsFor(_Character)
+AND
+NOT QRY_OnlyOnce_IsSet("HAG_ForestIllusion_Event_DropIllusion")
+AND
+QRY_PrepForInteractiveDialog(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f,_Character, 0)
+AND
+QRY_StartDialogCustom_Fixed(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _Character, 0, 0, 0, 0)
+THEN
+DB_OnlyOnce("HAG_ForestIllusion_Event_DropIllusion");
+
+QRY
+QRY_HAG_ForestIllusion_JoinRedcapDialog((INTEGER)_ID, (CHARACTER)_Character)
+AND
+DB_DialogPlayers(_ID, _SourcePlayer, 1)
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+QRY_SameUser(_Character, (CHARACTER)_SourcePlayer)
+THEN
+PROC_DialogAddListeningActor((INTEGER)_ID,(GUIDSTRING)_Character);
+
+//This query normally checks if you're in other dialogues (but we can ignore that, because we always stop those right before the dialogue start),
+//if you're dead (but we also want to show this to the dead) and if you need to drop your muting statuses (but we don't want to wait for those).
+QRY
+QRY_SpeakerIsAvailableForDialogSlot(_Player, HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _, _, _)
+THEN
+DB_NOOP(1);
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID) // flagType: Global
+AND
+DB_DialogName((DIALOGRESOURCE)HAG_ForestIllusion_IllusionRedcap_f201b084-08b1-8d74-050f-a1365bdef235, _ID)
+AND
+DB_HAG_ForestIllusion_States(_Controlled) //First check for controlled, then uncontrolled.
+AND
+DB_HAG_ForestIllusion_States(_Player) //First check for players, then (failing those) non-players.
+AND
+DB_InRegion(_Character, S_HAG_Swamp_SUB_5bd69370-6b30-4643-8b8f-412a2b837770)
+AND
+NOT DB_DialogSpeakers(_ID, _Character, _)
+AND
+IsPlayer(_Character, _Player)
+AND
+IsControlled(_Character, _Controlled)
+AND
+NOT QRY_HAG_ForestIllusion_JoinRedcapDialog(_ID, _Character)
+AND
+QRY_HAG_ForestIllusion_TransitionWaitsFor(_Character)
+AND
+NOT QRY_OnlyOnce_IsSet("HAG_ForestIllusion_Event_DropIllusion")
+AND
+QRY_PrepForInteractiveDialog(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f,_Character, 0)
+AND
+QRY_StartDialogCustom_Fixed(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _Character, 0, 0, 0, 0)
+THEN
+DB_OnlyOnce("HAG_ForestIllusion_Event_DropIllusion");
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID) 
+AND
+NOT DB_OnlyOnce("HAG_ForestIllusion_Event_DropIllusion")
+AND
+DB_HAG_ForestIllusion_TransitionWaitsFor(_Character)
+THEN
+DB_HAG_ForestIllusion_UglyTransition(1);
+NOT DB_HAG_ForestIllusion_TransitionWaitsFor(_Character);
+
+IF
+DialogRequestFailed(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+AND
+DB_HAG_ForestIllusion_TransitionWaitsFor(_Character)
+THEN
+DB_HAG_ForestIllusion_UglyTransition(1);
+NOT DB_HAG_ForestIllusion_TransitionWaitsFor(_Character);
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID)
+THEN
+NOT DB_HAG_ForestIllusion_WaitForGroup(1);
+
+QRY
+QRY_HAG_ForestIllusion_TransitionWaitsFor((CHARACTER)_Character)
+THEN
+DB_HAG_ForestIllusion_TransitionWaitsFor(_Character);
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID) // flagType: Global
+AND
+NOT DB_HAG_ForestIllusion_ForestIllusionDialog(_)//Dialog is neither ongoing nor over
+THEN
+DB_HAG_ForestIllusion_ForestIllusionDialog(-1);
+PROC_HAG_ForestIllusion_Swap();
+
+IF
+TemplateAddedTo((ROOT)CONS_FOOD_Fruit_HAG_PoisonApple_1617582e-5c09-460a-8ae7-7be77803955d,_Apple,_,_)
+AND
+NOT DB_HAG_ForestIllusion_PoisonApples((ITEM)_Apple)
+THEN
+DB_HAG_ForestIllusion_PoisonApples((ITEM)_Apple);
+
+IF
+DestroyedBy(_Apple,_,_,_)
+AND
+DB_HAG_ForestIllusion_PoisonApples((ITEM)_Apple)
+THEN
+NOT DB_HAG_ForestIllusion_PoisonApples((ITEM)_Apple);
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _ID) // flagType: Global
+AND
+DB_HAG_ForestIllusion_PoisonApples((ITEM)_Apple)
+THEN
+Transform(_Apple,CONS_FOOD_Fruit_HAG_PoisonApple_Revealed_3f8aa681-6b08-4cc7-8f38-c882f48f17db,(SHAPESHIFTRULE)Disguise_ceccc4eb-d774-4cd5-9147-12322b81b763);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+AND
+DB_GlobalFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506)
+THEN
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID);
+
+IF
+DialogStarted(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+AND
+DB_HAG_ForestIllusion_TransitionWaitsFor(_Character)
+AND
+NOT DB_DialogRequestCache_SpeakerList_Speakers(_, _ID, _Character, _)
+THEN
+PROC_DialogAddListeningActor((INTEGER)_ID, _Character);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers(HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd, _ID)
+AND
+DB_GlobalFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506)
+AND
+NOT DB_HAG_ForestIllusion_ForestIllusionDialog(_)
+THEN
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers((DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+DB_InRegion(_Character, S_HAG_Swamp_SUB_5bd69370-6b30-4643-8b8f-412a2b837770)
+AND
+DB_PartyMembers(_Character)
+AND
+NOT QRY_HAG_ForestIllusion_AlreadyInIllusionDialog(_Character)
+THEN
+DB_HAG_ForestIllusion_WasInPrep((GUIDSTRING)_Character);
+PROC_DialogAddListeningActor((INTEGER)_ID, _Character);
+
+IF
+DialogEnded(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+THEN
+NOT DB_HAG_ForestIllusion_ForestIllusionDialog(_ID);
+
+IF
+DialogEnded(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+AND
+DB_DialogSpeakers(_ID, _Speaker, _)
+THEN
+NOT DB_HAG_ForestIllusion_TransitionWaitsFor((CHARACTER)_Speaker);
+
+IF
+DialogEnded(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+AND
+NOT DB_HAG_ForestIllusion_FadeComplete(_)
+AND
+DB_DialogSpeakers(_ID, _Speaker1, 1)
+AND
+NOT QRY_HAG_ForestIllusion_AddToOngoing(_ID, _Speaker1)
+AND
+NOT QRY_StartDialog_Fixed(HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd, _Speaker1)
+THEN
+PROC_HAG_ForestIllusion_DoSwap();
+
+QRY
+QRY_HAG_ForestIllusion_AddToOngoing((INTEGER)_PrepID, (GUIDSTRING)_PrepSpeaker)
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+DB_DialogSpeakers(_ID, _Speaker2, 1)
+AND
+QRY_SameUser((CHARACTER)_Speaker2, (CHARACTER)_PrepSpeaker)
+AND
+DB_DialogSpeakers(_PrepID, _Speaker, _)
+THEN
+PROC_DialogAddListeningActor(_ID, _Speaker);
+
+IF
+DB_DialogName((DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+AND
+DB_DialogSpeakers(_ID, _Player, _)
+THEN
+RealtimeObjectTimerLaunch(_Player, "HAG_ForestIllusion_Prep_ForceFinish", 1000);
+
+IF
+ObjectTimerFinished(_Player, "HAG_ForestIllusion_Prep_ForceFinish")
+AND
+DB_DialogSpeakers(_ID, _Player, _)
+THEN
+DialogRequestStop(_Player);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers(HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd, _ID)
+AND
+DB_HAG_ForestIllusion_WasInPrep(_Speaker)
+THEN
+NOT DB_HAG_ForestIllusion_TransitionWaitsFor((CHARACTER)_Speaker);
+NOT DB_HAG_ForestIllusion_WasInPrep((CHARACTER)_Speaker);
+PROC_DialogAddListeningActor((INTEGER)_ID, _Speaker);
+
+QRY
+QRY_HAG_ForestIllusion_AlreadyInIllusionDialog((GUIDSTRING)_Character)
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+DB_DialogSpeakers(_ID, _Character, _)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_HAG_ForestIllusion_AlreadyInIllusionDialog((GUIDSTRING)_Character)
+AND
+DB_HAG_ForestIllusion_TransitionWaitsFor((CHARACTER)_Character)
+THEN
+DB_NOOP(1);
+
+IF
+DB_DialogName((DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd, _ID)
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+NOT DB_DialogEnding(_, _ID)
+AND
+DB_InRegion(_Character, S_HAG_Swamp_SUB_5bd69370-6b30-4643-8b8f-412a2b837770)
+AND
+NOT DB_DialogSpeakers(_ID, _Character, _)
+AND
+NOT DB_DialogPlayers(_ID, _Character, _)
+AND
+NOT QRY_HAG_ForestIllusion_AlreadyInIllusionDialog(_Character)
+THEN
+DialogRequestStop(_Character);
+DB_HAG_ForestIllusion_JoiningIllusionDialog((CHARACTER)_Character);
+PROC_HAG_ForestIllusion_StartAddSpeaker(_ID, _Character);
+
+PROC
+PROC_HAG_ForestIllusion_StartAddSpeaker((INTEGER)_ID, (CHARACTER)_Character)
+AND
+QRY_OnlyOnce("HAG_ForestIllusion_Illusioncheck_Prep_AddSpeaker")
+AND
+NOT QRY_StartDialog_Fixed(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _Character)
+THEN
+DialogAddActor((INTEGER)_ID, _Character);
+
+IF
+DB_HAG_ForestIllusion_JoiningIllusionDialog((CHARACTER)_Speaker)
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+DB_DialogSpeakers(_ID, _Speaker, _)
+THEN
+NOT DB_HAG_ForestIllusion_JoiningIllusionDialog((CHARACTER)_Speaker);
+
+IF
+DialogActorJoinFailed(_, _ID, _Speaker)
+AND
+DB_HAG_ForestIllusion_JoiningIllusionDialog((CHARACTER)_Speaker)
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+THEN
+NOT DB_HAG_ForestIllusion_JoiningIllusionDialog((CHARACTER)_Speaker);
+
+IF
+DialogRequestFailed(_, _ID)
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+THEN
+DB_HAG_ForestIllusion_UglyTransition(1);
+PROC_HAG_ForestIllusion_Swap();
+
+IF
+DB_DialogName(_DialogName, _ID)//Only set while dialogue is in progress
+AND
+NOT DB_HAG_ForestIllusion_WaitForGroup(1)
+AND
+NOT DB_HAG_ForestIllusion_TransitionWaitsFor(_)
+AND
+_DialogName != HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f
+AND
+NOT DB_DialogName(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _) //Make sure this dialogue is not ongoing, as that means other characters are still waiting for their fade.
+AND
+NOT DB_DialogRequestCache_DialogInstance(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _) 
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+NOT DB_HAG_ForestIllusion_JoiningIllusionDialog(_)
+THEN
+PROC_HAG_ForestIllusion_Swap();
+
+//If the Prep dialogue is still ongoing (or starting) when the actual transition dialogue has already happened, force the 'ugly' (faded) transition.
+IF
+DialogEnded(_DialogName, _ID)
+AND
+_DialogName != HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+DB_DialogName(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _)
+THEN
+DB_HAG_ForestIllusion_UglyTransition(1);
+PROC_HAG_ForestIllusion_Swap();
+
+IF
+DialogEnded(_DialogName, _ID)
+AND
+_DialogName != HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+DB_DialogRequestCache_DialogInstance(HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _) 
+THEN
+DB_HAG_ForestIllusion_UglyTransition(1);
+PROC_HAG_ForestIllusion_Swap();
+
+QRY
+QRY_HAG_ForestIllusion_Delay()
+AND
+DB_HAG_ForestIllusion_ForestIllusionDialog(_ID)
+AND
+DB_HAG_ForestIllusion_UglyTransition(1)
+AND
+DB_PartyMembers(_Character)
+AND
+IsInTrigger(_Character, (TRIGGER)S_HAG_Swamp_SUB_5bd69370-6b30-4643-8b8f-412a2b837770, 1)
+THEN
+DB_HAG_ForestIllusion_WaitingForFadeComplete(_Character);
+ScreenFadeTo(_Character, 0.5, 0, "HAG_UglyTransition");
+
+IF
+ScreenFadeDone(_User, "HAG_UglyTransition")
+AND
+DB_HAG_ForestIllusion_WaitingForFadeComplete(_Character)
+AND
+GetReservedUserID(_Character, _User)
+THEN
+NOT DB_HAG_ForestIllusion_WaitingForFadeComplete((CHARACTER)_Character);
+DB_HAG_ForestIllusion_FadeComplete((CHARACTER)_Character);
+
+IF
+ScreenFadeDone(_Character, "HAG_UglyTransition")
+AND
+DB_DialogName((DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_Prep_a9ee94d7-186c-060a-af08-fc142ba1ac9f, _ID)
+AND
+DB_DialogSpeakers(_ID, _Player, _)
+THEN
+DialogRequestStop(_Player);
+
+IF
+ScreenFadeDone(_Character, "HAG_UglyTransition")
+AND
+NOT DB_HAG_ForestIllusion_WaitingForFadeComplete(_)
+THEN
+PROC_HAG_ForestIllusion_DoSwap();
+
+
+PROC
+PROC_HAG_ForestIllusion_Swap()
+AND
+QRY_OnlyOnce("HAG_ForestIllusion_Swap")
+AND
+NOT QRY_HAG_ForestIllusion_Delay()
+THEN
+PROC_HAG_ForestIllusion_DoSwap();
+
+PROC
+PROC_HAG_ForestIllusion_DoSwap()
+THEN
+NOT DB_HAG_ForestIllusion_UglyTransition(1);
+
+PROC
+PROC_HAG_ForestIllusion_DoSwap()
+AND
+DB_HAG_ForestIllusion_FadeComplete(_Character)
+THEN
+NOT DB_HAG_ForestIllusion_FadeComplete(_Character);
+RealtimeObjectTimerLaunch(_Character, "HAG_UglyTransition", 2000);
+
+IF
+ObjectTimerFinished(_Character, "HAG_UglyTransition")
+THEN
+ClearScreenFade((CHARACTER)_Character, 1.5, "HAG_UglyTransition", 0);
+
+PROC
+PROC_HAG_ForestIllusion_DoSwap()
+THEN
+UnloadLevelTemplate(LT_WLD_Hag_91b8fb2b-bf33-4e4e-babb-c1e335048110);
+LoadLevelTemplate(LT_WLD_Hag_Swamp_Evil_A_9ca95a3c-3cfa-4771-83e5-5438ea436f13);
+TriggerSetSoundState((TRIGGER)Amb_SV_Hag_Lair_FZ_513adaab-3e65-4fee-ab08-762b78fd3df3,"S_Hag_State_Transformed","EvilHag",1);
+TriggerSetSoundState((TRIGGER)Amb_SV_Hag_Lair_Laboratory_FZ_0fc035a5-4cc8-464e-956c-95f92d2a715d,"S_Hag_State_Transformed","EvilHag",1);
+TriggerSetSoundState((TRIGGER)Amb_SV_Hag_Marsh_Combined_QD_39d3fdd5-f057-441f-ab6c-a322b20d0818,"S_Hag_State_Transformed","EvilHag",1);
+//MusicPlayGeneral("Hag_Reveal_Stinger");
+TimerLaunch("Sound_Hag_State_Transformed",5000);
+
+//Sets all state recursivly on new Sound Volumes
+IF
+TimerFinished("Sound_Hag_State_Transformed")
+THEN
+TriggerSetSoundState((TRIGGER)Amb_SV_Hag_Marsh_Combined_QD_39d3fdd5-f057-441f-ab6c-a322b20d0818,"S_Hag_State_Transformed","EvilHag",1);
+
+PROC
+PROC_HAG_ForestIllusion_DoSwap()
+AND
+DB_HAG_HagTarts(_Tart, _Root)
+THEN
+Transform(_Tart, _Root, POLYMORPH_a0ddddc8-255f-4014-9f63-d7608eb1c2a0);
+
+
+PROC
+PROC_HAG_ForestIllusion_DoSwap()
+THEN
+PROC_Subregion_Rename(S_HAG_Swamp_SUB_5bd69370-6b30-4643-8b8f-412a2b837770, "HAG_Swamp_SUB_Revealed");
+PROC_Subregion_Rename(S_HAG_House_SUB_a54033ab-fc50-476b-99c6-5d6ad01bcf18, "HAG_HagHouse_SUB_Revealed");
+PROC_Subregion_Rename(S_HAG_DruidMeetingSpot_SUB_4237c4f1-4972-431e-ab46-29c01ec2de67, "HAG_DruidMeetingSpot_SUB_Revealed");
+
+
+PROC
+PROC_HAG_ForestIllusion_DoSwap()
+AND
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,0)
+THEN
+PROC_HAG_ForestIllusion_AnimalTransform(_IllusionedAnimal);
+
+
+IF
+AttackedBy((CHARACTER)_IllusionedAnimal,(CHARACTER)_Attacker,_,_,_,_,_)
+AND
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,0)
+THEN
+PROC_HAG_ForestIllusion_AnimalTransform(_IllusionedAnimal);
+PROC_Ambush_SetPlayersSurprised(_Attacker);
+
+IF
+EnteredCombat((CHARACTER)_IllusionedAnimal,_)
+AND
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,0)
+THEN
+PROC_HAG_ForestIllusion_AnimalTransform(_IllusionedAnimal);
+
+//Fix double force update if the fight is already ongoing.
+PROC
+PROC_HAG_ForestIllusion_AnimalTransform((CHARACTER)_IllusionedAnimal)
+AND
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,0)
+AND
+DB_HAG_ForestIllusion_AnimalsJoinFight(_Id)
+AND
+DB_GlobalFlag(HAG_ForestIllusion_State_HelpHag_7a80f789-88a4-44d8-baa6-d09b1521d31e)
+THEN
+SetForceUpdate(_IllusionedAnimal, 0);
+
+PROC
+PROC_HAG_ForestIllusion_AnimalTransform((CHARACTER)_IllusionedAnimal)
+AND
+DB_HAG_ForestIllusion_Disguises(_, _Status, _)
+THEN
+RemoveStatus(_IllusionedAnimal, _Status);
+NOT DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,0);
+DB_HAG_ForestIllusion_Animal(_IllusionedAnimal,1);
+
+IF
+StatusRemoved(_IllusionedAnimal, _Status,_, _)
+AND
+DB_HAG_ForestIllusion_Disguises(_, _Status, _)
+THEN
+PlayEffect(_IllusionedAnimal,(EFFECTRESOURCE)VFX_Script_Hag_Poof_01_a5ac4b11-0c02-a7a6-5c41-a95cf56c847f,"",1.0);
+PlayEffect(_IllusionedAnimal,(EFFECTRESOURCE)VFX_Script_Hag_IllusionHit_01_85f79ea8-36ea-8a43-e21b-48ea94bdf4db,"Dummy_BodyFX");
+
+
+//END_REGION
+
+//REGION Eating Ethels treacle tart
+IF
+UseStarted(_Player, _Tart)
+AND
+DB_Players(_Player)
+AND
+DB_HAG_HagTarts(_Tart, _)
+AND
+NOT DB_GlobalFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506)
+THEN
+PROC_TryStartAD(HAG_Hag_PAD_TriedTart_a5a7d5ad-6b27-cd17-ee1b-ef0237c02c82, _Player);
+
+//END_REGION
+
+//REGION Creatures join combat
+IF
+DB_HAG_ForestIllusion_AnimalsJoinFight(_Id)
+THEN
+SetFlag(HAG_ForestIllusion_State_HelpHag_7a80f789-88a4-44d8-baa6-d09b1521d31e, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+IF
+DB_HAG_ForestIllusion_AnimalsJoinFight(_Id)
+AND
+DB_GlobalFlag(HAG_ForestIllusion_State_HelpHag_7a80f789-88a4-44d8-baa6-d09b1521d31e)
+AND
+DB_HAG_ForestIllusion_Animal(_Character, _)
+THEN
+SetForceUpdate(_Character, 1);
+
+IF
+CombatEnded(_Id)
+THEN
+NOT DB_HAG_ForestIllusion_AnimalsJoinFight(_Id);
+
+IF
+LeftCombat(S_HAG_Hag_c457d064-83fb-4ec6-b74d-1f30dfafd12d, _Id)
+AND
+NOT DB_Defeated(S_HAG_Hag_c457d064-83fb-4ec6-b74d-1f30dfafd12d)
+THEN
+NOT DB_HAG_ForestIllusion_AnimalsJoinFight(_Id);
+
+IF
+DB_GlobalFlag(HAG_ForestIllusion_State_HelpHag_7a80f789-88a4-44d8-baa6-d09b1521d31e)
+AND
+NOT DB_HAG_ForestIllusion_AnimalsJoinFight(_)
+AND
+DB_HAG_ForestIllusion_Animal(_Character, _)
+THEN
+SetForceUpdate(_Character, 0);
+
+IF
+DB_GlobalFlag(HAG_ForestIllusion_State_HelpHag_7a80f789-88a4-44d8-baa6-d09b1521d31e)
+AND
+NOT DB_HAG_ForestIllusion_AnimalsJoinFight(_)
+THEN
+ClearFlag(HAG_ForestIllusion_State_HelpHag_7a80f789-88a4-44d8-baa6-d09b1521d31e, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+//Don't just use PROC_GLO_DefeatCounter_AllDefeated - it waits until the end of combat, which may be too late.
+PROC
+PROC_GLO_DefeatCounter_Notify("HAG_ForestIllusion", _,(INTEGER)_DefeatedCount,(INTEGER)_PermaDefeatedCount)
+AND
+IntegerSum(_DefeatedCount,_PermaDefeatedCount, 4)
+THEN
+SetFlag(HAG_ForrestIllusion_State_RedcapsDead_98238136-a633-4bb3-b477-bb9f93d8dc90, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+//END_REGION
+
+//REGION
+
+IF
+FlagSet(HAG_ForestIllusion_State_HelpHag_7a80f789-88a4-44d8-baa6-d09b1521d31e, _, _)
+AND
+DB_HAG_ForestIllusion_Animal(_Character, _)
+THEN
+SetCombatGroupID(_Character, "");
+DB_HAG_ForestIllusion_RedCap_NoCombatGroup(_Character);
+TriggerRegisterForCharacter(S_HAG_HagHouse_fae45ba1-2da5-4ab7-b24b-8bf7539a3c64, _Character);
+
+IF
+EnteredCombat(_RedCap, _)
+AND
+DB_HAG_ForestIllusion_RedCap_NoCombatGroup((CHARACTER)_RedCap)
+THEN
+SetCombatGroupID(_RedCap, "HAG_RedCaps");
+NOT DB_HAG_ForestIllusion_RedCap_NoCombatGroup(_RedCap);
+TriggerUnregisterForCharacter(S_HAG_HagHouse_fae45ba1-2da5-4ab7-b24b-8bf7539a3c64, _RedCap);
+
+IF
+EnteredTrigger(_RedCap, (TRIGGER)S_HAG_HagHouse_fae45ba1-2da5-4ab7-b24b-8bf7539a3c64)
+AND
+DB_HAG_ForestIllusion_RedCap_NoCombatGroup(_RedCap)
+THEN
+SetCombatGroupID(_RedCap, "HAG_RedCaps");
+NOT DB_HAG_ForestIllusion_RedCap_NoCombatGroup(_RedCap);
+TriggerUnregisterForCharacter(S_HAG_HagHouse_fae45ba1-2da5-4ab7-b24b-8bf7539a3c64, _RedCap);
+
+IF
+FlagCleared(HAG_ForestIllusion_State_HelpHag_7a80f789-88a4-44d8-baa6-d09b1521d31e, _, _)
+AND
+DB_HAG_ForestIllusion_RedCap_NoCombatGroup(_RedCap)
+THEN
+SetCombatGroupID(_RedCap, "HAG_RedCaps");
+NOT DB_HAG_ForestIllusion_RedCap_NoCombatGroup(_RedCap);
+TriggerUnregisterForCharacter(S_HAG_HagHouse_fae45ba1-2da5-4ab7-b24b-8bf7539a3c64, _RedCap);
+
+//END_REGION
+
+
+//REGION Illusion Investigation
+
+
+IF
+DB_KnockedOut((CHARACTER)S_HAG_Hag_c457d064-83fb-4ec6-b74d-1f30dfafd12d)
+AND
+NOT DB_GlobalFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506)
+THEN
+DB_HAG_ForestIllusion_UglyTransition(1);
+SetFlag((FLAG)HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, NULL_00000000-0000-0000-0000-000000000000, 0); // flagType: Global
+
+IF
+DB_Dead((CHARACTER)S_HAG_Hag_c457d064-83fb-4ec6-b74d-1f30dfafd12d)
+AND
+NOT DB_GlobalFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506)
+THEN
+DB_HAG_ForestIllusion_UglyTransition(1);
+SetFlag((FLAG)HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, NULL_00000000-0000-0000-0000-000000000000, 0); // flagType: Global
+
+IF
+DB_PermaDefeated((CHARACTER)S_HAG_Hag_c457d064-83fb-4ec6-b74d-1f30dfafd12d)
+AND
+NOT DB_GlobalFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506)
+THEN
+SetFlag((FLAG)HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, NULL_00000000-0000-0000-0000-000000000000, 0); // flagType: Global
+
+IF
+DB_Dead((CHARACTER)S_HAG_Hag_c457d064-83fb-4ec6-b74d-1f30dfafd12d)
+THEN
+SetFlag((FLAG)HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, NULL_00000000-0000-0000-0000-000000000000, 0); // flagType: Global
+
+IF
+FlagSet((FLAG)GLO_Hag_State_Transformed_c4c1bbcb-28d2-d607-2658-a06f1cf89d95, NULL_00000000-0000-0000-0000-000000000000, _ID)
+AND
+NOT DB_DialogName(HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd, _ID)
+THEN
+SetFlag((FLAG)HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, NULL_00000000-0000-0000-0000-000000000000, 0); // flagType: Global
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _)
+THEN
+PROC_TriggerUnregisterForPlayers((TRIGGER)TRIGGERGUID_S_HAG_ForestIllusion_IllusionCheckArea_d9097b25-a8aa-402d-b858-35018a311efb);
+
+IF //Set the Only Once entry only if the dialogue succeeds in starting.
+EnteredTrigger(_Player,(TRIGGER)TRIGGERGUID_S_HAG_ForestIllusion_IllusionCheckArea_d9097b25-a8aa-402d-b858-35018a311efb)
+AND
+IsInTrigger(_Player, S_HAG_FairyRings_Swamp_SphereTrigger_3dfd4644-7a1b-4b14-8751-dfe51cde2884, 0)
+AND
+NOT QRY_OncePerUserAndNearbyPlayers_IsSet(_Player, "HAG_ForestIllusion_Investigation")
+AND
+QRY_StartDialog((DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd,_Player)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "HAG_ForestIllusion_Investigation")
+THEN
+DB_NOOP(1);
+
+// This dialog has persuasion nodes assigned to the player, but they only contain
+// descriptions of actions and no actual spoken lines -> ignore can't talk
+QRY
+QRY_SpeakerIsAvailableForDialogSlot((GUIDSTRING)_Speaker,(DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd,1,(INTEGER)_AllowStartIfCombat,_)
+AND
+NOT DB_CantAct(_Speaker)
+THEN
+DB_NOOP(1);
+
+
+// if we teleported and then left the fairy ring trigger
+IF
+LeftTrigger(_Player, S_HAG_FairyRings_Swamp_SphereTrigger_3dfd4644-7a1b-4b14-8751-dfe51cde2884)
+AND
+IsInTrigger(_Player,(TRIGGER)TRIGGERGUID_S_HAG_ForestIllusion_IllusionCheckArea_d9097b25-a8aa-402d-b858-35018a311efb, 1)
+AND
+NOT QRY_OncePerUserAndNearbyPlayers_IsSet(_Player, "HAG_ForestIllusion_Investigation")
+AND
+QRY_StartDialog((DIALOGRESOURCE)HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd,_Player)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "HAG_ForestIllusion_Investigation")
+THEN
+DB_NOOP(1);
+
+IF
+DialogStarted(HAG_ForestIllusion_Illusioncheck_ad27b62d-9b83-dd71-4298-1a29a73b69bd, _)
+AND
+QRY_OnlyOnce("HAG_ForestIllusion_AutoSave")
+THEN
+AutoSave();
+//END_REGION
+
+//REGION Banter
+
+IF
+FlagSet(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, _, _)
+THEN
+PROC_UnregisterWorldGossipTrigger(S_PartyBanterTrigger_HAG_RiverBridgeIllusion_c671f8d8-bd6e-4ea0-90ef-9f412605b1d0);
+PROC_UnregisterWorldGossipTrigger(S_PartyBanterTrigger_HAG_RoadBridgeIllusion_d4193258-4825-4567-9eb8-de289242af31);
+
+PROC
+PROC_LongRest()
+AND
+NOT DB_GlobalFlag(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506)
+THEN
+PROC_RegisterWorldGossipTrigger(S_PartyBanterTrigger_HAG_RiverBridgeIllusion_c671f8d8-bd6e-4ea0-90ef-9f412605b1d0);
+PROC_RegisterWorldGossipTrigger(S_PartyBanterTrigger_HAG_RoadBridgeIllusion_d4193258-4825-4567-9eb8-de289242af31);
+
+//END_REGION
+
+//REGION Journal entries
+
+IF
+QuestAccepted(_, "HAG_HagSpawn")
+THEN
+DB_QuestDef_State(HAG_ForestIllusion_Event_DropIllusion_c8a36ee5-68eb-a944-8295-55188d026506, "HAG_HagSpawn", "BrokeIllusion1");
+
+IF
+FlagSet((FLAG)HAG_HagSpawn_Event_CheckSetMayrinaDeal_e02d0642-8dc9-43dd-89a6-8093ea345699, NULL_00000000-0000-0000-0000-000000000000, _Inst)
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "HAG_HagSpawn", "MayrinaDeal", 1)
+AND
+DB_QuestIsOpened("HAG_HagSpawn") //only if quest already active (blocks collecting it and unlocking it once accepted)
+AND
+DB_DialogPlayers(_Inst, _Player, _)
+THEN
+QuestUpdate((CHARACTER)_Player, "HAG_HagSpawn", "MayrinaDeal");
+
+IF
+FlagSet((FLAG)HAG_HagSpawn_Event_CheckSetMayrinaDeal_e02d0642-8dc9-43dd-89a6-8093ea345699, NULL_00000000-0000-0000-0000-000000000000, _Inst)
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "HAG_HagSpawn", "MayrinaTeleported", 1)
+AND
+DB_QuestIsOpened("HAG_HagSpawn") //only if quest already active (blocks collecting it and unlocking it once accepted)
+AND
+DB_DialogPlayers(_Inst, _Player, _)
+THEN
+QuestUpdate((CHARACTER)_Player, "HAG_HagSpawn", "MayrinaDeal");
+
+IF
+FlagSet((FLAG)HAG_HagSpawn_Event_CheckSetMayrinaDeal_e02d0642-8dc9-43dd-89a6-8093ea345699, NULL_00000000-0000-0000-0000-000000000000, _Inst)
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "HAG_HagSpawn", "FledLair", 1)
+AND
+DB_QuestIsOpened("HAG_HagSpawn") //only if quest already active (blocks collecting it and unlocking it once accepted)
+AND
+DB_DialogPlayers(_Inst, _Player, _)
+THEN
+QuestUpdate((CHARACTER)_Player, "HAG_HagSpawn", "MayrinaDeal");
+
+IF
+FlagSet((FLAG)HAG_HagSpawn_Event_CheckSetMayrinaDeal_e02d0642-8dc9-43dd-89a6-8093ea345699, NULL_00000000-0000-0000-0000-000000000000, _Inst)
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "HAG_HagSpawn", "EnteredLair", 1)
+AND
+DB_QuestIsOpened("HAG_HagSpawn") //only if quest already active (blocks collecting it and unlocking it once accepted)
+AND
+DB_DialogPlayers(_Inst, _Player, _)
+THEN
+QuestUpdate((CHARACTER)_Player, "HAG_HagSpawn", "MayrinaDeal");
+
+//END_REGION
+
+//REGION Illusion at the fireplace.
+IF
+FlagSet(HAG_HagSpawn_State_NoticedFireplaceIllusion_0e70ddd2-4f79-4c31-9709-6631d505b42d, _, _)
+THEN
+PROC_HAG_ForestIllusion_ClearFireplaceIllusion();
+PROC_LoopEffect(VFX_Script_Hag_IllusionWall_01_c226465e-3aeb-c02a-b8e3-65684210e1c0, (ITEM)S_HAG_HagLairAccess_FireIllusion_66b0ba70-059e-47ec-81c7-8434ab263f79, "HAG_FireplaceIllusion_Reveal", "WLD_Main_A", "");
+Open(S_DOORPROXY_HagFireplace_66ba8103-b253-46c7-b603-862a290a5aa0);
+DB_TrespassTrigger((TRIGGER)S_HAG_Hag_TrespassNearLair_05b9a2b1-4272-4611-b2c9-58b47e098f2b, NULL_00000000-0000-0000-0000-000000000000, "HAG_TrespassNearLair");
+
+PROC
+PROC_HAG_ForestIllusion_ClearFireplaceIllusion()
+AND
+DB_HAG_WallIllusionElements(_Element)
+THEN
+SetOnStage(_Element, 0);
+
+//END_REGION
+
+IF
+DB_CurrentLevel("CTY_Main_A")
+THEN
+GoalCompleted;
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

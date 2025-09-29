@@ -1,0 +1,350 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+PROC_TriggerRegisterForParty(S_LOW_BeachSahuagin_Appear_Trigger_da667e79-6813-469a-aaea-0ca43bf63291);
+
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)S_LOW_BeachSahuagin_Sahuagin_Champion_01_36902e83-9823-418a-8481-8835e95d481c,(TRIGGER)S_LOW_BeachSahuagin_Sahuagin_Champion_01_Point_68dddc71-e5e7-4df1-b788-a2da4d71c303);
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)S_LOW_BeachSahuagin_Sahuagin_Melee_01_576fa0c7-0227-41bd-9e1c-70bd4add32a2,(TRIGGER)S_LOW_BeachSahuagin_Sahuagin_Melee_01_Point_304a0e6f-895f-4230-8988-180ca0498c33);
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)S_LOW_BeachSahuagin_Sahuagin_Melee_02_05be919c-feef-49ab-80bf-8463f8622bdf,(TRIGGER)S_LOW_BeachSahuagin_Sahuagin_Melee_02_Point_637c8a80-903e-4925-a7ac-de45f01f46cb);
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)S_LOW_BeachSahuagin_Sahuagin_Melee_03_9514d67d-119f-41da-97bc-ab3d7704c06b,(TRIGGER)S_LOW_BeachSahuagin_Sahuagin_Melee_03_Point_4290f6f3-257f-4993-be45-57711491f020);
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)S_LOW_BeachSahuagin_Sahuagin_Melee_04_88d10dd5-b429-460f-945e-d5c797b8b1c7,(TRIGGER)S_LOW_BeachSahuagin_Sahuagin_Melee_04_Point_8aa4c11d-8fe9-4b95-a2cc-11779f2dc4a1);
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)S_LOW_BeachSahuagin_Sahuagin_Ranger_01_515d1e3e-e961-4d4b-883e-4f34a2eb23c7,(TRIGGER)S_LOW_BeachSahuagin_Sahuagin_Ranger_01_Point_2226b8eb-a66d-4eb5-8d3d-a871e080559b);
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)S_LOW_BeachSahuagin_Sahuagin_Ranger_02_a6a894e4-f042-43a2-9111-0421e2a43740,(TRIGGER)S_LOW_BeachSahuagin_Sahuagin_Ranger_02_Point_268fc883-2efe-409b-9f4a-1a7e77cfb109);
+
+DB_LOW_SahuaginAttack_Civilians((CHARACTER)S_LOW_BeachSahuagin_Civilian_Boat_f699d950-c10b-424d-98d2-cdce112a3313,(DIALOGRESOURCE)LOW_SahuaginAttack_AfterCombat_Civilian_Boat_4ccc16df-d947-a573-b46b-896a4e2d138c);
+DB_LOW_SahuaginAttack_Civilians((CHARACTER)S_LOW_BeachSahuagin_Civilian_Fishmonger_ecba853d-f96a-4252-912e-3bf030b10482,(DIALOGRESOURCE)LOW_SahuaginAttack_Fishmonger_04b62f0e-8409-da22-36cc-36e5e9aeab8b);
+DB_LOW_SahuaginAttack_Civilians((CHARACTER)S_LOW_BeachSahuagin_Civilian_FishCustomer_d861fb4a-f98c-416a-88a5-a07525b62554,(DIALOGRESOURCE)LOW_SahuaginAttack_AfterCombat_Civilian_FishCustomer_2754a902-440e-00ef-502f-c123cbc0caed);
+DB_LOW_SahuaginAttack_Civilians((CHARACTER)S_LOW_BeachSahuagin_Civilian_001_912002e8-480d-4039-a75d-fb2e2796976d,(DIALOGRESOURCE)LOW_SahuaginAttack_AfterCombat_Civilian_001_075aff5d-ad79-7e48-de66-abfacc92296d);
+DB_LOW_SahuaginAttack_Civilians((CHARACTER)S_LOW_BeachSahuagin_Civilian_002_da3dafe4-f014-41e1-8dfe-56670ac9fd0a,(DIALOGRESOURCE)LOW_SahuaginAttack_AfterCombat_Civilian_002_78975749-ed88-6bb8-6318-09beef6ff511);
+DB_LOW_SahuaginAttack_Civilians((CHARACTER)S_LOW_BeachSahuagin_Civilian_003_7d8d9cb0-eb53-402b-a5a7-e8878da2427f,(DIALOGRESOURCE)LOW_SahuaginAttack_AfterCombat_Civilian_003_e088a8a8-d115-6a4e-bcb0-27aca906a1ac);
+DB_LOW_SahuaginAttack_Civilians((CHARACTER)S_LOW_BeachSahuagin_Civilian_004_9f40425a-aa24-4051-8b22-5ccb15a3dfba,(DIALOGRESOURCE)LOW_SahuaginAttack_AfterCombat_Civilian_004_30e36e7e-e6f7-de8d-3b01-671ab99a53cf);
+
+DB_Dialogs(S_LOW_BeachSahuagin_Civilian_Fishmonger_ecba853d-f96a-4252-912e-3bf030b10482,(DIALOGRESOURCE)LOW_SahuaginAttack_Fishmonger_04b62f0e-8409-da22-36cc-36e5e9aeab8b);
+
+DB_CorpseCleanup_Area(S_LOW_BeachSahuagin_CorpseCleanUp_Trigger_b673b911-08a3-49c1-97ae-04267f331326);
+
+DB_ItemOwnerShipTriggers("CTY_Main_A", (TRIGGER)S_LOW_Beach_Ownership_965974e7-67d0-4c83-8df6-b26af695b0c4, (CHARACTER)S_LOW_BeachSahuagin_Civilian_Fishmonger_ecba853d-f96a-4252-912e-3bf030b10482);
+KBSECTION
+IF
+TextEvent("sahuaginattack")
+THEN
+PROC_TeleportPartiesTo((TRIGGER)S_LOW_BeachSahuagin_Civilian_FishCustomer_Point_91094df1-ca6f-497a-b1dd-8686ce6bb61d,"");
+
+//REGION Sahuagin spawning
+
+IF
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)_Sahuagin,(TRIGGER)_)
+THEN
+SetOnStage(_Sahuagin,0);
+
+PROC
+PROC_GLO_Chasms_RecoverFromChasm((GUIDSTRING)_Sahuagin, _)
+AND
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)_Sahuagin,(TRIGGER)_Trigger)
+THEN
+TeleportTo(_Sahuagin,_Trigger);
+
+IF
+EnteredTrigger(_,S_LOW_BeachSahuagin_Appear_Trigger_da667e79-6813-469a-aaea-0ca43bf63291)
+AND
+DB_LOW_SahuaginAttack_Sahuagin(_Sahuagin,(TRIGGER)_)
+AND
+Random(1000,_Random)
+THEN
+RealtimeObjectTimerLaunch(_Sahuagin,"LOW_SahuaginAttack_Appear",_Random);
+
+IF
+ObjectTimerFinished(_Sahuagin,"LOW_SahuaginAttack_Appear")
+THEN
+AppearAt((CHARACTER)_Sahuagin,_Sahuagin,1,CUST_Spawn_Dock_01_0c50b24e-ed28-49d4-a4fe-7e951756eb16,"LOW_SahuaginAttack_Spawned",0);
+
+IF
+EntityEvent(_Sahuagin,"LOW_SahuaginAttack_Spawned")
+THEN
+ApplyStatus(_Sahuagin,"WET",12.0,0,NULL_00000000-0000-0000-0000-000000000000);
+CreatePuddle(_Sahuagin,"SurfaceWater",10,15,10,20,1.0);
+
+IF
+EnteredTrigger(_,S_LOW_BeachSahuagin_Appear_Trigger_da667e79-6813-469a-aaea-0ca43bf63291)
+THEN
+SetFlag(LOW_SahuaginAttack_State_SahuaginAttacked_0b56687e-e5b1-4e26-b546-5cf95418423a); //for behaviours
+PROC_TriggerUnregisterForParty(S_LOW_BeachSahuagin_Appear_Trigger_da667e79-6813-469a-aaea-0ca43bf63291);
+
+//END_REGION
+
+//REGION Combat tracking
+
+//PAD for player that was in combat with Sahuagin when they were defeated
+//Track Sahuagin combat
+IF
+DB_Is_InCombat(_Sahuagin,_CombatId)
+AND
+DB_LOW_SahuaginAttack_Sahuagin((CHARACTER)_Sahuagin,(TRIGGER)_)
+THEN
+DB_LOW_SahuaginAttack_Combat(_CombatId);
+
+//Track players in Sahuagin combat
+IF
+DB_Is_InCombat(_Player,_CombatId)
+AND
+DB_LOW_SahuaginAttack_Combat(_CombatId)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+NOT DB_LOW_SahuaginAttack_CombatPlayers(_Player,_CombatId)
+THEN
+DB_LOW_SahuaginAttack_CombatPlayers(_Player,_CombatId);
+
+//Sahuagin combat ended
+IF
+CombatEnded(_CombatId)
+AND
+DB_LOW_SahuaginAttack_Combat(_CombatId)
+AND
+NOT QRY_LOW_SahuaginAttack_NotPermaDefeated()
+//Not using GLO_DefeatCounter because I need to track players that were in this combat anyway
+THEN
+PROC_LOW_SahuaginAttack_QueuePAD(_CombatId);
+
+IF
+CombatEnded(_CombatId)
+AND
+DB_LOW_SahuaginAttack_Combat(_CombatId)
+THEN
+NOT DB_LOW_SahuaginAttack_Combat(_CombatId);
+
+IF
+CombatEnded(_CombatId)
+AND
+DB_LOW_SahuaginAttack_CombatPlayers(_Player,_CombatId)
+THEN
+NOT DB_LOW_SahuaginAttack_CombatPlayers(_Player,_CombatId);
+
+QRY
+QRY_LOW_SahuaginAttack_NotPermaDefeated()
+AND
+DB_LOW_SahuaginAttack_Sahuagin(_Sahuagin,(TRIGGER)_)
+AND
+NOT DB_PermaDefeated(_Sahuagin)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION After combat dialog
+
+//Queue PAD
+PROC
+PROC_LOW_SahuaginAttack_QueuePAD((GUIDSTRING)_CombatId)
+AND
+DB_LOW_SahuaginAttack_CombatPlayers(_Player,_CombatId)
+THEN
+DB_LOW_SahuaginAttack_PAD_CombatPlayers(_Player);
+
+PROC
+PROC_LOW_SahuaginAttack_QueuePAD((GUIDSTRING)_)
+AND
+DB_LOW_SahuaginAttack_PAD_CombatPlayers(_)
+THEN
+TimerLaunch("LOW_SahuaginAttack_AfterCombat",2000);
+TimerLaunch("LOW_SahuaginAttack_PAD",6000);
+//PAD will play if not spotted by this time,
+//otherwise, if ThanksAfterCombat plays, this timer will be cancelled
+//and restarted after ThanksAfterCombat ends
+
+//Some civilians still available for spotting
+IF
+TimerFinished("LOW_SahuaginAttack_AfterCombat")
+AND
+DB_LOW_SahuaginAttack_Civilians(_Character,(DIALOGRESOURCE)_Dialog)
+THEN
+DB_SpotPlayers(_Character,"LOW_SahuaginAttack_AfterCombat",NULL_00000000-0000-0000-0000-000000000000,NULL_00000000-0000-0000-0000-000000000000);
+DB_Dialogs(_Character,_Dialog);
+
+//All civilians perma defeated by the time this timer finishes
+IF
+TimerFinished("LOW_SahuaginAttack_AfterCombat")
+AND
+NOT DB_LOW_SahuaginAttack_Civilians(_,_)
+THEN
+TimerCancel("LOW_SahuaginAttack_PAD");
+TimerLaunch("LOW_SahuaginAttack_PAD",0);
+
+PROC
+PROC_SpotPlayers_Spotted(_Character,"LOW_SahuaginAttack_AfterCombat",_Player)
+AND
+QRY_StartDialog(LOW_SahuaginAttack_Civilian_ThanksAfterCombat_ad1ff95c-00a9-35a3-d10f-3d77748106be,_Character,_Player)
+THEN
+TimerCancel("LOW_SahuaginAttack_PAD");
+PROC_SpotPlayers_StopSpotting("LOW_SahuaginAttack_AfterCombat");
+
+IF
+DialogStarted(LOW_SahuaginAttack_Civilian_ThanksAfterCombat_ad1ff95c-00a9-35a3-d10f-3d77748106be,_DialogId)
+AND
+DB_DialogPlayers(_DialogId,_Player,1)
+THEN
+QuestUpdate((CHARACTER)_Player,"HIDDEN_CTY_Boosters", "LOW_SahuaginAttack_SavedCivilians");
+
+IF
+DialogEnded(LOW_SahuaginAttack_Civilian_ThanksAfterCombat_ad1ff95c-00a9-35a3-d10f-3d77748106be,_DialogId)
+AND
+DB_DialogPlayers(_DialogId,_Player,1)
+THEN
+DB_LOW_SahuaginAttack_PAD_PreferPlayer((CHARACTER)_Player);
+TimerLaunch("LOW_SahuaginAttack_PAD",2000);
+
+IF
+TimerFinished("LOW_SahuaginAttack_PAD")
+AND
+DB_LOW_SahuaginAttack_PAD_CombatPlayers(_Player)
+AND
+DB_CantTalk(_Player)
+THEN
+NOT DB_LOW_SahuaginAttack_PAD_CombatPlayers(_Player);
+
+IF
+TimerFinished("LOW_SahuaginAttack_PAD")
+AND
+DB_LOW_SahuaginAttack_PAD_PreferPlayer((CHARACTER)_Player)
+AND
+DB_CantTalk(_Player)
+THEN
+NOT DB_LOW_SahuaginAttack_PAD_PreferPlayer(_Player);
+
+IF
+TimerFinished("LOW_SahuaginAttack_PAD")
+AND
+NOT DB_LOW_SahuaginAttack_PAD_PreferPlayer((CHARACTER)_)
+AND
+QRY_GetRandom("DB_LOW_SahuaginAttack_PAD_CombatPlayers",1,"DB_LOW_SahuaginAttack_PAD_SelectedPlayer")
+AND
+DB_LOW_SahuaginAttack_PAD_SelectedPlayer((CHARACTER)_Player)
+THEN
+PROC_LOW_SahuaginAttack_TryPAD(_Player);
+NOT DB_LOW_SahuaginAttack_PAD_SelectedPlayer(_Player);
+
+IF
+TimerFinished("LOW_SahuaginAttack_PAD")
+AND
+DB_LOW_SahuaginAttack_PAD_PreferPlayer((CHARACTER)_Player)
+THEN
+PROC_LOW_SahuaginAttack_TryPAD(_Player);
+NOT DB_LOW_SahuaginAttack_PAD_PreferPlayer(_Player);
+
+PROC
+PROC_LOW_SahuaginAttack_TryPAD((CHARACTER)_Player)
+AND
+DB_GlobalFlag(LOW_SahuaginAttack_HasMet_AnySahuagin_6f3016f4-8f4f-48e1-88f5-7105b0e03006)
+THEN
+PROC_TryStartAD(LOW_SahuaginAttack_PAD_AfterCombat_0d6b9754-bca3-1405-c22d-fd4cfb69941d,_Player);
+
+PROC
+PROC_LOW_SahuaginAttack_TryPAD((CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag(LOW_SahuaginAttack_HasMet_AnySahuagin_6f3016f4-8f4f-48e1-88f5-7105b0e03006)
+THEN
+PROC_KnowledgeCheck(_Player,"LOW_SahuaginAttack_IdentifySahuagin",NULL_00000000-0000-0000-0000-000000000000,"Religion",(DIFFICULTYCLASS)Act3_Challenging_96bc76f2-0b2e-4a79-854f-e4971a772c36,
+LOW_SahuaginAttack_PAD_AfterCombat_0d6b9754-bca3-1405-c22d-fd4cfb69941d,LOW_SahuaginAttack_Event_IdentifiedSahuagin_7ec09079-89f9-4ba8-a21b-85bb4ca9715d);
+
+//Water queen's house Sahuagin
+//HasMet flag for other Sahuagin
+//Iron throne Sahuagin are handled in Act3i_IRN_IronThrone
+IF
+DB_Is_InCombat(_Sahuagin,_CombatId)
+AND
+DB_LOW_WaterQueensHouse_SahuaginGuards(_Sahuagin)
+AND
+DB_PartyMembers(_Character)
+AND
+DB_Is_InCombat(_Character,_CombatId)
+AND
+NOT DB_GlobalFlag(LOW_SahuaginAttack_HasMet_AnySahuagin_6f3016f4-8f4f-48e1-88f5-7105b0e03006)
+THEN
+SetFlag(LOW_SahuaginAttack_HasMet_AnySahuagin_6f3016f4-8f4f-48e1-88f5-7105b0e03006);
+
+//END_REGION
+
+//REGION Behaviours/ADs
+
+//EnterCombat PAD
+IF
+TurnStarted(_Player)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+DB_GlobalFlag((FLAG)LOW_SahuaginAttack_State_SahuaginAttacked_0b56687e-e5b1-4e26-b546-5cf95418423a)
+AND
+NOT DB_OnlyOnce("LOW_SahuaginAttack_PAD_EnterCombat")
+AND
+DB_Is_InCombat(_Player,_CombatId)
+AND
+DB_LOW_SahuaginAttack_Sahuagin(_Sahuagin,(TRIGGER)_)
+AND
+DB_Is_InCombat(_Sahuagin,_CombatId)
+AND
+QRY_OnlyOnce("LOW_SahuaginAttack_PAD_EnterCombat")
+THEN
+PROC_TryStartAD(LOW_SahuaginAttack_PAD_EnterCombat_f85bcd18-a51d-f365-4123-8d648e41ca6e,_Player);
+
+//AfterCombat AD timer
+IF
+TimerFinished("LOW_SahuaginAttack_PAD")
+THEN
+TimerLaunch("LOW_SahuaginAttack_AfterCombat_Sailor",10000);
+
+//Sailor after combat AD
+IF
+TimerFinished("LOW_SahuaginAttack_AfterCombat_Sailor")
+AND
+NOT DB_CantTalk(S_LOW_BeachSahuagin_Civilian_Boat_f699d950-c10b-424d-98d2-cdce112a3313)
+AND
+NOT QRY_StartDialog_Fixed(LOW_SahuaginAttack_AD_Sailor_AfterCombat_3bba33da-d43d-bb49-c559-512444c76d97,S_LOW_BeachSahuagin_Civilian_Boat_f699d950-c10b-424d-98d2-cdce112a3313)
+THEN
+TimerLaunch("LOW_SahuaginAttack_AfterCombat_Fishmonger",0);
+
+IF
+AutomatedDialogEnded(LOW_SahuaginAttack_AD_Sailor_AfterCombat_3bba33da-d43d-bb49-c559-512444c76d97,_)
+THEN
+TimerLaunch("LOW_SahuaginAttack_AfterCombat_Fishmonger",1000);
+
+IF
+TimerFinished("LOW_SahuaginAttack_AfterCombat_Sailor")
+AND
+DB_CantTalk(S_LOW_BeachSahuagin_Civilian_Boat_f699d950-c10b-424d-98d2-cdce112a3313)
+THEN
+TimerLaunch("LOW_SahuaginAttack_AfterCombat_Fishmonger",0);
+
+//Fishmonger after combat AD
+IF
+TimerFinished("LOW_SahuaginAttack_AfterCombat_Fishmonger")
+AND
+NOT DB_CantTalk(S_LOW_BeachSahuagin_Civilian_Fishmonger_ecba853d-f96a-4252-912e-3bf030b10482)
+AND
+DB_CantTalk(S_LOW_BeachSahuagin_Civilian_FishCustomer_d861fb4a-f98c-416a-88a5-a07525b62554)
+THEN
+PROC_TryStartAD(LOW_SahuaginAttack_AD_Fishmonger_AfterCombat_2ed30819-411c-4edf-e29f-fce2e82c700e,S_LOW_BeachSahuagin_Civilian_Fishmonger_ecba853d-f96a-4252-912e-3bf030b10482);
+
+IF
+TimerFinished("LOW_SahuaginAttack_AfterCombat_Fishmonger")
+AND
+NOT DB_CantTalk(S_LOW_BeachSahuagin_Civilian_Fishmonger_ecba853d-f96a-4252-912e-3bf030b10482)
+AND
+NOT DB_CantTalk(S_LOW_BeachSahuagin_Civilian_FishCustomer_d861fb4a-f98c-416a-88a5-a07525b62554)
+THEN
+PROC_TryStartAD(LOW_SahuaginAttack_AD_Fishmonger_AfterCombat_2ed30819-411c-4edf-e29f-fce2e82c700e,S_LOW_BeachSahuagin_Civilian_Fishmonger_ecba853d-f96a-4252-912e-3bf030b10482,S_LOW_BeachSahuagin_Civilian_FishCustomer_d861fb4a-f98c-416a-88a5-a07525b62554);
+
+//Sahuagin body clean-up, flag for behaviours
+PROC
+PROC_CorpseCleanup_CreateLootbag(_Sahuagin)
+AND
+DB_LOW_SahuaginAttack_Sahuagin(_Sahuagin,(TRIGGER)_)
+AND
+NOT DB_GlobalFlag(LOW_SahuaginAttack_State_SahuaginCleanedUp_7ec16628-193e-4b47-aa3a-0ef2e6a4ef51)
+THEN
+PROC_GlobalSetFlagAndCache(LOW_SahuaginAttack_State_SahuaginCleanedUp_7ec16628-193e-4b47-aa3a-0ef2e6a4ef51);
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act3b"

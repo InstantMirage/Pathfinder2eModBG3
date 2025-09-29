@@ -1,0 +1,146 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_CHA_ForestTraps(S_CHA_TrapWreck_001_86c7160b-c8ba-496a-9c39-ab67736a844b);
+DB_CHA_ForestTraps(S_CHA_TrapWreck_002_1b80793c-1a84-430b-bc86-d374e2e3165e);
+DB_CHA_ForestTraps(S_CHA_TrapWreck_003_8cf7cdf8-7a78-4c92-9a76-21a21076d98c);
+DB_CHA_ForestTraps(S_CHA_TrapWreck_004_c0987b2c-4ff2-41cc-821b-fa17c6a7b78b);
+
+
+DB_GiveItemToEvent(S_CHA_OutpostBag_3e93a5e1-c8ae-4f2a-b4c9-0e34085240f9,CHA_Outpost_Event_GiveBag_8583a676-76ca-1b79-f509-cd32ce4866c3);
+
+DB_CHA_Outpost_CreviceFoe((CHARACTER)S_CHA_OutpostSpider_001_9323734f-c6c2-451d-9e74-4ba92db7977b,0);
+DB_CHA_Outpost_CreviceFoe(S_CHA_OutpostSpider_002_825b77f9-e540-4764-b612-4c6ef25c5c9f,250);
+DB_CHA_Outpost_CreviceFoe(S_CHA_OutpostSpider_003_93d169ee-3273-43c4-9861-597fbb968b3a,300);
+DB_CHA_Outpost_CreviceFoe(S_CHA_OutpostSpider_004_26ef4a71-8bfd-45e8-9169-51b85b95fcbe,420);
+
+DB_GlobalFlagReactionAfterDialog((FLAG)CHA_Outpost_Event_SnakeOut_3502d0b6-0ff4-2892-2a9e-c3d907454d48, (DIALOGRESOURCE)CHA_Outpost_Crevice_86f2ad81-4c0c-0b37-3870-fcf46e5dfe5d);
+KBSECTION
+IF
+UseStarted(_Char,_Item)
+AND
+DB_CHA_ForestTraps(_Item)
+AND
+DB_Players(_Char)
+THEN
+NOT DB_CHA_ForestTraps(_Item);
+DB_ItemDialog_PlayerVB(_Item,CHA_Forest_VB_TrapReuse_c46f133e-8bfe-1c42-e943-ef83b2222b25);
+StartVoiceBark(CHA_Forest_VB_Trap_681e112a-9244-d633-2887-ca1f5abcd404,_Char);
+
+IF
+AttackedBy(S_CHA_OutpostCrevice_bf96b1d4-011f-4f0c-960d-5fdd530bc375,(CHARACTER)_Own,_,_,_,_,_)
+AND
+NOT DB_GlobalFlag(CHA_Outpost_Event_SnakeOut_3502d0b6-0ff4-2892-2a9e-c3d907454d48)
+AND
+DB_Players(_Own)
+THEN
+PROC_CHA_Outpost_SpidersAppear();
+
+IF
+DestroyedBy(S_CHA_OutpostCrevice_bf96b1d4-011f-4f0c-960d-5fdd530bc375,_,_,_)
+THEN
+SetFlag(CHA_Outpost_State_BagOut_d2d60ca2-d8af-4d88-9d85-5b2e014610d4,NULL_00000000-0000-0000-0000-000000000000);
+PROC_CHA_Outpost_SpidersAppear();
+
+IF
+AddedTo(S_CHA_OutpostBag_3e93a5e1-c8ae-4f2a-b4c9-0e34085240f9,S_CHA_OutpostCrevice_bf96b1d4-011f-4f0c-960d-5fdd530bc375, _)
+THEN
+ClearFlag(CHA_Outpost_State_BagOut_d2d60ca2-d8af-4d88-9d85-5b2e014610d4,NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+RemovedFrom(S_CHA_OutpostBag_3e93a5e1-c8ae-4f2a-b4c9-0e34085240f9,S_CHA_OutpostCrevice_bf96b1d4-011f-4f0c-960d-5fdd530bc375)
+THEN
+SetFlag(CHA_Outpost_State_BagOut_d2d60ca2-d8af-4d88-9d85-5b2e014610d4,NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+DB_CHA_Outpost_CreviceFoe(_Foe,_)
+THEN
+SetOnStage(_Foe,0);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(CHA_Outpost_Event_SnakeOut_3502d0b6-0ff4-2892-2a9e-c3d907454d48)
+THEN
+PROC_CHA_Outpost_SpidersAppear();
+
+PROC
+PROC_CHA_Outpost_SpidersAppear()
+THEN
+SetFlag((FLAG)CHA_Outpost_Event_SnakeOut_3502d0b6-0ff4-2892-2a9e-c3d907454d48, NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_CHA_Outpost_SpidersAppear()
+AND
+DB_CHA_Outpost_CreviceFoe(_Foe,_CombatTimer)
+THEN
+ObjectTimerLaunch(_Foe,"CHA_ForestSpider_CombatTimer",_CombatTimer);
+NOT DB_CHA_Outpost_CreviceFoe(_Foe,_CombatTimer);
+
+IF
+ObjectTimerFinished(_Foe,"CHA_ForestSpider_CombatTimer")
+THEN
+AppearAt((CHARACTER)_Foe,_Foe,1,CUST_Spawn_01_e37e9b01-bb97-45d8-b3ce-0e81a58b7a6e,"");
+
+PROC
+PROC_BlockUseOfItem(_Char,S_CHA_OutpostCrevice_bf96b1d4-011f-4f0c-960d-5fdd530bc375)
+AND
+DB_Is_WildShaped(_Char)
+AND
+NOT DB_GlobalFlag(CHA_Outpost_Event_SnakeOut_3502d0b6-0ff4-2892-2a9e-c3d907454d48)
+THEN
+DB_CustomUseItemResponse(_Char,S_CHA_OutpostCrevice_bf96b1d4-011f-4f0c-960d-5fdd530bc375,0);
+PROC_CHA_Outpost_SpidersAppear();
+
+IF
+UseStarted(_Char,S_CHA_OutpostCrevice_bf96b1d4-011f-4f0c-960d-5fdd530bc375)
+AND
+NOT DB_DialogName(CHA_Outpost_Crevice_86f2ad81-4c0c-0b37-3870-fcf46e5dfe5d,_)
+AND
+QRY_StartDialog_Fixed(CHA_Outpost_Crevice_86f2ad81-4c0c-0b37-3870-fcf46e5dfe5d,_Char)
+THEN
+DB_NOOP(1);
+
+IF
+DialogActorLeft(CHA_Outpost_Crevice_86f2ad81-4c0c-0b37-3870-fcf46e5dfe5d,_,(CHARACTER)_Char,_)
+AND
+GetFlag(CHA_Outpost_Event_Bit_3f45538e-502c-c04e-6e6b-ec592c982a29,_Char,1)
+AND
+QRY_OnlyOnce("CHA_Outpost_Bit")
+THEN
+CreateExplosion(_Char,"Projectile_CHA_OutpostCrevice_Bite",1);
+
+IF
+AddedTo(S_CHA_OutpostJewelry_6e2132e1-3d3d-4271-9337-c695d6f4cbb4,(CHARACTER)_Char, _)
+AND
+DB_Players(_Char)
+AND
+QRY_OnlyOnce("CHA_Outpost_Jewelry")
+AND
+DB_Players(_Roller)
+AND
+QRY_SpeakerIsAvailableAndInDialogRange(_Roller,_Char)
+THEN
+PROC_TrySkillCheck(_Roller,S_CHA_OutpostJewelry_6e2132e1-3d3d-4271-9337-c695d6f4cbb4,"Religion",(DIFFICULTYCLASS)DC_Legacy_12_98197cc5-8713-44bb-9afc-f5fe32bc5ff9,"CHA_Outpost_Jewelry");
+
+PROC
+PROC_RollResult("CHA_Outpost_Jewelry",_Char,S_CHA_OutpostJewelry_6e2132e1-3d3d-4271-9337-c695d6f4cbb4,1)
+AND
+QRY_OnlyOnce("CHA_Outpost_History")
+THEN
+PROC_TryStartAD(CHA_Outpost_PAD_Jewelry_8edb0d01-3439-2794-937c-68fba1655626,_Char);
+
+//REGION Banters
+
+IF
+DB_GlobalFlag(CHA_LaezelTieflings_State_SceneOver_b6fcc020-c718-45d3-964d-2099f95a70c1)
+AND
+DB_GlobalFlag(DEN_RaidingParty_Quest_GoblinRaidOver_98712d90-c46b-20c4-c4df-02c0117e85a5)
+AND
+QRY_OnlyOnce("CHA_Misc_RoadToDenBanter")
+THEN
+PROC_RegisterWorldGossipTrigger((TRIGGER)S_PartyBanterTrigger_CRA_RoadDen_05138b51-dc09-4238-80b4-4915f147597f);
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

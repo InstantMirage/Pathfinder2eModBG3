@@ -1,0 +1,134 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Scared boar
+DB_Dialogs((CHARACTER)S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, (DIALOGRESOURCE)CRA_HarperBooster_ScaredBoar_285981ce-257e-ca94-086a-033b5a0a1140);
+//END_REGION
+
+//REGION Harper cave
+DB_KnowledgeCheckTrigger_AD("CRA_HarperRockTrigger", (TRIGGER)TRIGGERGUID_S_CRA_HarperRockTrigger_f1687389-b836-4a02-886b-d2a6cb869707, "AnimalHandling", (DIFFICULTYCLASS)DC_Legacy_10_625be976-7a67-4394-97c8-14c69715ae4b, (DIALOGRESOURCE)CRA_HarperBooster_AD_Rock_dc90f670-502a-4e18-1d6f-be59d34a1679,(FLAG)CRA_HarperBooster_Event_RockMovable_731541b8-b2d0-4477-b0fd-132bec81e83f);
+DB_BookFlags(S_CRA_HarperBook_1379c20b-5572-4983-8fa8-3c24c7d34656,CRA_HarperBooster_State_ReadDocs_716e547e-ab9f-438f-8b18-61776310cdf9);
+DB_BookFlags(S_CRA_HarperScroll_0203a6ff-5dbe-40d4-84b2-738e846a9543,CRA_HarperBooster_State_ReadDocs_716e547e-ab9f-438f-8b18-61776310cdf9);
+SetCanInteract(S_CRA_HarperRock_00cdfb00-82c7-4ab1-bd20-3dd24af17f8d, 0);
+SetCanInteract(S_CRA_HarperTreasureBox_89b85f26-c282-40e2-bfdc-bf0932649443, 0);
+//END_REGION
+
+//REGION Speak With the Dead on the crashsite
+DB_GLO_CharacterCorpseDialog(S_CRA_DeadPrisoner_EncounterLoot_f35c29c6-d643-8423-1c50-577ac06ee5de, (DIALOGRESOURCE)CRA_DeadPrisoner_Dead_063b6ebc-830a-c0ec-8235-0105398eb8c6);
+DB_GLO_CharacterCorpseDialog(S_CRA_DeadFisherman2_abe4e897-f8d0-8ad9-22d2-1fd83f99091c, (DIALOGRESOURCE)CRA_DeadFisherman2_Dead_ec699cc0-ac27-956f-c920-1a78026e2608);
+DB_GLO_CharacterCorpseDialog(S_CRA_DeadFisherman5_a54e7520-3ec1-835e-2bc0-ec97289e3e73, (DIALOGRESOURCE)CRA_DeadFisherman5_Dead_e7e32d94-f310-31df-4362-1ba96891f408);
+//END_REGION
+
+//REGION Jetty VB
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRA_Jetty_17ab9d94-6a34-4eb7-a71f-ab83342850b5,(VOICEBARKRESOURCE)CRA_General_VB_Jetty_4adbd9d5-a1ce-2e12-4356-f6d3304bc6dd);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRA_RiverVB1_38c4df6c-d697-4e25-8bed-2146b88ce9f8,(VOICEBARKRESOURCE)CRA_General_VB_Jetty_4adbd9d5-a1ce-2e12-4356-f6d3304bc6dd);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRA_RiverVB2_5ec546dd-44ef-48c5-aab0-e06a952de786,(VOICEBARKRESOURCE)CRA_General_VB_Jetty_4adbd9d5-a1ce-2e12-4356-f6d3304bc6dd);
+//END_REGION
+
+//REGION Dead fisherpeoples near dead intellect devourers
+DB_CRA_FailedFightingFisher((CHARACTER)S_CRA_DeadFisherman5_a54e7520-3ec1-835e-2bc0-ec97289e3e73);
+DB_CRA_FailedFightingFisher((CHARACTER)S_CRA_DeadFisherman2_abe4e897-f8d0-8ad9-22d2-1fd83f99091c);
+DB_CRA_FailedFightingFisher((CHARACTER)S_CRA_DeadFisherman3_0b7bd9d6-1521-840d-35bc-b88d77b64195);
+//END_REGION
+
+//REGION Tutorial
+PROC_CRA_Boosters_CheckForGuideTeleport();
+//END_REGION
+KBSECTION
+//REGION Harper cave rock
+IF
+FlagSet((FLAG)CRA_HarperBooster_Event_RockMovable_731541b8-b2d0-4477-b0fd-132bec81e83f, NULL_00000000-0000-0000-0000-000000000000, _)
+THEN
+SetCanInteract(S_CRA_HarperRock_00cdfb00-82c7-4ab1-bd20-3dd24af17f8d, 1);
+TimerLaunch("CRA_HarperRock_Movable", 3000);
+
+IF
+TimerFinished("CRA_HarperRock_Movable")
+THEN
+PROC_LoopEffect(EFFECTRESOURCEGUID_VFX_Script_Perception_Default_01_46bd169e-bbb5-a6fe-0fe7-97c64f620d5d, ITEMGUID_S_CRA_HarperRock_00cdfb00-82c7-4ab1-bd20-3dd24af17f8d, "CRA_Harper_MovableRock", "WLD_Main_A", "");
+
+IF
+Moved(ITEMGUID_S_CRA_HarperRock_00cdfb00-82c7-4ab1-bd20-3dd24af17f8d)
+THEN
+SetCanInteract((ITEM)S_CRA_HarperTreasureBox_89b85f26-c282-40e2-bfdc-bf0932649443, 1);
+PROC_StopLoopEffect(ITEMGUID_S_CRA_HarperRock_00cdfb00-82c7-4ab1-bd20-3dd24af17f8d, "CRA_Harper_MovableRock");
+TimerCancel("CRA_HarperRock_Movable");
+//END_REGION
+
+//REGION Scared Boar
+IF
+WentOnStage(S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, 1)
+THEN
+PROC_CharacterMoveTo(S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, S_CRA_ScaredBoar_RockPoint_a398337d-08e7-41f1-9c36-d7bfbb1b9524, "Run", "CRA_EscapedBoar_StartSpotting");
+
+IF
+EntityEvent(S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_EscapedBoar_StartSpotting")
+THEN
+DB_SpotPlayers_SpotTrigger((CHARACTER)S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_InFront", (TRIGGER)S_CRA_ScaredBoar_FleeFromPlayersBox_b8df2fe7-5bd4-4991-ab7a-58a581c9d05e);
+DB_SpotPlayers((CHARACTER)S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_InFront", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_SpotTrigger((CHARACTER)S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_Behind", (TRIGGER)S_CRA_ScaredBoar_PlayerAtCliffBox_8baf79d8-3762-42e4-a28f-25cf1561eab9);
+DB_SpotPlayers((CHARACTER)S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_Behind", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_SpotPlayers_Spotted(S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_InFront", _)
+THEN
+SetEntityEvent(S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_SpottedPlayer_InFront");
+PROC_SpotPlayers_StopSpotting((CHARACTER)S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_Behind");
+
+PROC
+PROC_SpotPlayers_Spotted(S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_Behind", _)
+THEN
+SetEntityEvent(S_CRA_ScaredBoar_e352fae8-f49a-4f1d-b131-ea10af7591c9, "CRA_ScaredBoar_SpottedPlayer_Behind");
+//END_REGION Scared Boar
+
+//REGION Harper scroll with secret location
+IF
+GameBookInterfaceClosed((ITEM)S_CRA_HarperScroll_0203a6ff-5dbe-40d4-84b2-738e846a9543, _)
+THEN
+PROC_UnlockPartyMarker("CRA_Boosters_HarperSecretLocation", (TRIGGER)S_CRA_HarperSecretLocation_0c9614e9-a402-4f19-a0e9-5b8676bdbd6c);
+//END_REGION
+
+//REGION Furious Fishers
+IF
+CharacterLootedCharacter(_Player, _Corpse)
+AND
+DB_CRA_FailedFightingFisher(_Corpse)
+AND
+IsInTrigger(_Corpse, (TRIGGER)S_CRA_BeachTrigger_ff035e3b-d739-410c-b550-843c524dfa4e, 1)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "CRA_FreddyFisher")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)CRA_General_VB_FightingFishers_bc4fcfe6-2f89-e814-72b5-b618bf550850, _Player);
+//END_REGION
+
+//REGION Teleport TUT alt guide corpse to site
+
+IF
+TextEvent("TUT_Helm_AddDeadGuide")
+THEN
+DB_OneShotPlayerTrigger((TRIGGER)TUT_Helm_GuideCorpsePosition_b64c5d65-07aa-44c0-b76d-3449b3bc66e3);
+TeleportTo(S_TUT_GithGuide_201a0ee6-6411-4564-aaea-1ca057bfea04, TUT_Helm_GuideCorpsePosition_b64c5d65-07aa-44c0-b76d-3449b3bc66e3, "", 0,0,0,0,1);
+PROC_SetOnStage(S_TUT_GithGuide_201a0ee6-6411-4564-aaea-1ca057bfea04,1);
+Die(S_TUT_GithGuide_201a0ee6-6411-4564-aaea-1ca057bfea04, DEATHTYPE.DoT, 1);
+
+PROC
+PROC_CRA_Boosters_CheckForGuideTeleport()
+AND
+DB_GlobalFlag((FLAG)TUT_LowerDeck_State_GuideAppeared_4d3c156f-b09c-4f18-b031-d5caa8acf184)
+THEN
+DB_OneShotPlayerTrigger((TRIGGER)TUT_Helm_GuideCorpsePosition_b64c5d65-07aa-44c0-b76d-3449b3bc66e3);
+TeleportTo(S_TUT_GithGuide_201a0ee6-6411-4564-aaea-1ca057bfea04, TUT_Helm_GuideCorpsePosition_b64c5d65-07aa-44c0-b76d-3449b3bc66e3, "", 0,0,0,0,1);
+PROC_SetOnStage(S_TUT_GithGuide_201a0ee6-6411-4564-aaea-1ca057bfea04,1);
+Die(S_TUT_GithGuide_201a0ee6-6411-4564-aaea-1ca057bfea04, DEATHTYPE.Physical, 1);
+
+PROC
+PROC_OneShotTriggerEntered(_Player, (TRIGGER)TUT_Helm_GuideCorpsePosition_b64c5d65-07aa-44c0-b76d-3449b3bc66e3)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)CRA_Boosters_PAD_DeadGuide_133f5296-75cf-37c6-3735-51891d14a238, _Player);
+
+
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"
