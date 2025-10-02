@@ -1328,19 +1328,14 @@ function IsRangedWeaponInfusion()
 	return SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Projectile_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Fire_2Action') | SpellId('Projectile_ElementalBlast_Fire_Cold_2Action') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning') | SpellId('Projectile_ElementalBlast_Water_Cold') | SpellId('Projectile_ElementalBlast_Water_Acid') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Water_Cold_2Action') | SpellId('Projectile_ElementalBlast_Water_Acid_2Action') | SpellId('Projectile_ElementalBlast_Air_Electric') | SpellId('Projectile_ElementalBlast_Air_Slashing') | SpellId('Projectile_ElementalBlast_Air_Cold') | SpellId('Projectile_ElementalBlast_Air_Electric_2Action') | SpellId('Projectile_ElementalBlast_Air_Slashing_2Action') | SpellId('Projectile_ElementalBlast_Air_Cold_2Action') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning') | SpellId('Projectile_ElementalBlast_Earth_Piercing') | SpellId('Projectile_ElementalBlast_Earth_Poison') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Earth_Piercing_2Action') | SpellId('Projectile_ElementalBlast_Earth_Poison_2Action') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning') | SpellId('Projectile_ElementalBlast_Wood_Vitality') | SpellId('Projectile_ElementalBlast_Wood_Poison') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Wood_Vitality_2Action') | SpellId('Projectile_ElementalBlast_Wood_Poison_2Action') | SpellId('Projectile_ElementalBlast_Metal_Piercing') | SpellId('Projectile_ElementalBlast_Metal_Slashing') | SpellId('Projectile_ElementalBlast_Metal_Lightning') | SpellId('Projectile_ElementalBlast_Metal_Piercing_2Action') | SpellId('Projectile_ElementalBlast_Metal_Slashing_2Action') | SpellId('Projectile_ElementalBlast_Metal_Lightning_2Action')
 end
 
-function GetCraftingDC(entity)
-	local entity = entity or context.Target
-	local DC = 14
-	if (Tagged('RARITY_UNCOMMON', entity).Result) then
-		DC = 18
-	elseif (Tagged('RARITY_RARE', entity).Result) then
-		DC = 22
-	elseif (Tagged('RARITY_VERY_RARE', entity).Result) then
-		DC = 26
-	elseif (Tagged('RARITY_LEGENDARY', entity).Result) then
-		DC = 30
-	end
-	local dump = __util.Throw("%d",DC)
-    error(dump)
-	return DC
+function IsCriticalMissSkill()
+   conditionRoll = context.HitDescription.GetLastConditionRoll(ConditionRollType.ConditionSkillCheck)
+   return ConditionResult(conditionRoll.NaturalRoll == 1)
+   | ConditionResult(conditionRoll.Total <= (conditionRoll.Difficulty - 10))
+end
+
+function IsCriticalSkill()
+   conditionRoll = context.HitDescription.GetLastConditionRoll(ConditionRollType.ConditionSkillCheck)
+   return ConditionResult(conditionRoll.NaturalRoll == 20)
+   | ConditionResult(conditionRoll.Total >= (conditionRoll.Difficulty + 10))
 end
