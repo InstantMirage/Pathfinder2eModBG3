@@ -1,0 +1,224 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+// DB is used to set up root templates of clickable items with a knowledge check.
+// AD is played every time, and knowledge checks can be retried by different characters until success or there's no more characters available.
+//   DB_KnowledgeCheckTemplate_AD((STRING)_Identifier,(ITEMROOT)_KnowledgeItem,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag);
+// If you want for template variations (_A, _B, _C, etc.) to have common skill check, put same _Identifier string AND same _SuccessFlag.
+// But it's perfectly fine to have different ADs though.
+
+NOT DB_KnowledgeCheckTemplate_AD("",(ITEMROOT)NULL_00000000-0000-0000-0000-000000000000,"",(DIFFICULTYCLASS)NULL_00000000-0000-0000-0000-000000000000,(DIALOGRESOURCE)NULL_00000000-0000-0000-0000-000000000000,(FLAG)NULL_00000000-0000-0000-0000-000000000000);
+DB_KnowledgeCheckTemplate_AD("GLO_TemplateUseSkillCheck_StuffedBear",(ITEMROOT)DEC_GEN_StuffedBear_Standing_A_f8d74269-6a5c-461e-8907-2e1a7b18e1ca,"AnimalHandling",
+	(DIFFICULTYCLASS)DC_Medium_fa621d38-6f83-4e42-a55c-6aa651a75d46,
+	(DIALOGRESOURCE)GLO_StuffedBear_Standing_PAD_5f6978f6-e6a0-6e56-3774-bd0234c69bda,
+	(FLAG)GLO_TemplateUseSkillCheck_StuffedBear_Success_e20bb695-7d2f-4dda-b1db-6972ead4e850);
+DB_KnowledgeCheckTemplate_AD("GLO_TemplateUseSkillCheck_StuffedBear",(ITEMROOT)DEC_GEN_StuffedBear_Standing_B_8177353f-5beb-4120-85ec-a4fa261795ae,"AnimalHandling",
+	(DIFFICULTYCLASS)DC_Medium_fa621d38-6f83-4e42-a55c-6aa651a75d46,
+	(DIALOGRESOURCE)GLO_StuffedBear_Standing_PAD_5f6978f6-e6a0-6e56-3774-bd0234c69bda,
+	(FLAG)GLO_TemplateUseSkillCheck_StuffedBear_Success_e20bb695-7d2f-4dda-b1db-6972ead4e850);
+DB_KnowledgeCheckTemplate_AD("GLO_TemplateUseSkillCheck_StuffedBear",(ITEMROOT)DEC_GEN_StuffedBear_Standing_C_d760ca77-927c-4880-98a2-991926cdd2a3,"AnimalHandling",
+	(DIFFICULTYCLASS)DC_Medium_fa621d38-6f83-4e42-a55c-6aa651a75d46,
+	(DIALOGRESOURCE)GLO_StuffedBear_Standing_PAD_5f6978f6-e6a0-6e56-3774-bd0234c69bda,
+	(FLAG)GLO_TemplateUseSkillCheck_StuffedBear_Success_e20bb695-7d2f-4dda-b1db-6972ead4e850);
+
+DB_IgnoreMutingStatussesDialog(GLO_PAD_TeleporterHole_Tiny_f339386b-8fdc-ff24-6a56-6ea1277aa284);
+DB_IgnoreMutingStatussesDialog(GLO_PAD_TeleporterHole_Small_0095f76d-e360-607b-501a-dd9fcdccb24e);
+
+//DB_DropdownLadder((ITEM)_LadderUp,(ITEM)_LadderDown)
+//_LadderUp should have the Story_Use action instead of the Ladder action in its sidebar property
+//_LadderDown should have the Ladder use action and be in the desired target position. It will be off stage initially.
+NOT DB_DropdownLadder((ITEM)NULL_00000000-0000-0000-0000-000000000000,(ITEM)NULL_00000000-0000-0000-0000-000000000000);
+KBSECTION
+IF
+TemplateUseStarted(_Player, _Template, _)
+AND
+DB_Players(_Player)
+AND
+DB_RecipeBook(_Template, (STRING)_ID)
+THEN
+UnlockJournalRecipe(_ID);
+NOT DB_RecipeBook(_Template, _ID);
+
+QRY
+QRY_IsCloseding((ITEM)_Item)
+AND
+IsClosed(_Item,1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_IsCloseding((ITEM)_Item)
+AND
+IsClosing(_Item,1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_IsOpeneding((ITEM)_Item)
+AND
+IsOpened(_Item,1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_IsOpeneding((ITEM)_Item)
+AND
+IsOpening(_Item,1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_DoesntBlock((ITEM)_Item)
+AND
+QRY_IsOpeneding(_Item)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_DoesntBlock((ITEM)_Item)
+AND
+IsDestroyed(_Item, 1)
+THEN
+DB_NOOP(1);
+
+
+//REGION Template use skill check
+
+IF
+TemplateUseStarted(_Player,_Template,_Item)
+AND
+DB_Players(_Player)
+AND
+DB_KnowledgeCheckTemplate_AD((STRING)_Identifier,(ITEMROOT)_Template,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+NOT DB_KnowledgeCheckItem_AD(_,_Item,_,_,_,_) // per-item knowledge checks override per-root knowledge checks
+AND
+DB_GlobalFlag(_SuccessFlag)
+THEN
+PROC_KnowledgeCheckTemplate_PlayAD(_Player,_Identifier,_Template);
+
+IF
+TemplateUseStarted(_Player,_Template,_Item)
+AND
+DB_Players(_Player)
+AND
+DB_KnowledgeCheckTemplate_AD((STRING)_Identifier,(ITEMROOT)_Template,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+NOT DB_KnowledgeCheckItem_AD(_,_Item,_,_,_,_) // per-item knowledge checks override per-root knowledge checks
+AND
+NOT DB_GlobalFlag(_SuccessFlag)
+AND
+DB_KnowledgeCheckTemplate_AlreadyTried(_Player,_Identifier)
+THEN
+PROC_KnowledgeCheckTemplate_PlayAD(_Player,_Identifier,_Template);
+
+IF
+TemplateUseStarted(_Player,_Template,_Item)
+AND
+DB_Players(_Player)
+AND
+DB_KnowledgeCheckTemplate_AD((STRING)_Identifier,(ITEMROOT)_Template,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+AND
+NOT DB_KnowledgeCheckItem_AD(_,_Item,_,_,_,_) // per-item knowledge checks override per-root knowledge checks
+AND
+NOT DB_GlobalFlag(_SuccessFlag)
+AND
+NOT DB_KnowledgeCheckTemplate_AlreadyTried(_Player,_Identifier)
+AND
+NOT DB_KnowledgeCheckTemplate_Waiting(_Identifier,_Template,_Item,_SuccessFlag)
+THEN
+DB_KnowledgeCheckTemplate_Waiting(_Identifier,_Template,_Item,_SuccessFlag);
+PROC_TrySkillCheck(_Player,_Item,_SkillName,_DC,"GLO_KnowledgeCheckTemplate");
+
+PROC
+PROC_RollResult("GLO_KnowledgeCheckTemplate",(CHARACTER)_Roller,(GUIDSTRING)_Item,1)
+AND
+DB_KnowledgeCheckTemplate_Waiting(_Identifier,_Template,(ITEM)_Item,_SuccessFlag)
+THEN
+PROC_GlobalSetFlagAndCache(_SuccessFlag);
+
+PROC
+PROC_RollResult("GLO_KnowledgeCheckTemplate",(CHARACTER)_Roller,(GUIDSTRING)_Item,_Result)
+AND
+_Result != 2
+AND
+DB_KnowledgeCheckTemplate_Waiting(_Identifier,_Template,(ITEM)_Item,_SuccessFlag)
+THEN
+DB_KnowledgeCheckTemplate_AlreadyTried(_Roller,_Identifier);
+PROC_KnowledgeCheckTemplate_PlayAD(_Roller,_Identifier,_Template);
+
+PROC
+PROC_RollResult("GLO_KnowledgeCheckTemplate",(CHARACTER)_Roller,(GUIDSTRING)_Item,_)
+AND
+DB_KnowledgeCheckTemplate_Waiting(_Identifier,_Template,(ITEM)_Item,_SuccessFlag)
+THEN
+NOT DB_KnowledgeCheckTemplate_Waiting(_Identifier,_Template,_Item,_SuccessFlag);
+
+PROC
+PROC_KnowledgeCheckTemplate_PlayAD((CHARACTER)_Speaker,(STRING)_Identifier,(ITEMROOT)_Template)
+AND
+DB_KnowledgeCheckTemplate_AD((STRING)_Identifier,(ITEMROOT)_Template,(STRING)_SkillName,(DIFFICULTYCLASS)_DC,(DIALOGRESOURCE)_AD,(FLAG)_SuccessFlag)
+THEN
+PROC_TryStartAD(_AD,_Speaker);
+
+//END_REGION Template use skill check
+
+
+//REGION TeleporterHoles
+
+IF
+InteractionFallback(_Player,_Item)
+AND
+IsTagged(_Item,TELEPORTER_HOLE_TINY_2e6933bc-7c9b-4293-992b-49a07875c460,1)
+THEN
+PROC_TryStartAD(GLO_PAD_TeleporterHole_Tiny_f339386b-8fdc-ff24-6a56-6ea1277aa284,_Player);
+
+
+IF
+InteractionFallback(_Player,_Item)
+AND
+IsTagged(_Item,TELEPORTER_HOLE_SMALL_263a8a31-154a-45dc-8479-5e75edc0cc75,1)
+THEN
+PROC_TryStartAD(GLO_PAD_TeleporterHole_Small_0095f76d-e360-607b-501a-dd9fcdccb24e,_Player);
+
+//END_REGION TeleporterHoles
+
+//REGION Dropdown ladders
+
+IF
+DB_DropdownLadder((ITEM)_LadderUp,(ITEM)_LadderDown)
+THEN
+SetOnStage(_LadderDown,0);
+
+IF
+UseFinished(_,_LadderUp,1)
+AND
+DB_DropdownLadder((ITEM)_LadderUp,(ITEM)_LadderDown)
+THEN
+PROC_DropdownLadder_Drop((ITEM)_LadderUp);
+
+PROC
+PROC_DropdownLadder_Drop((ITEM)_LadderUp)
+AND
+DB_DropdownLadder((ITEM)_LadderUp,(ITEM)_LadderDown)
+THEN
+ItemMoveTo((ITEM)_LadderUp,_LadderDown,1.0,2.0,1,"DropdownLadder_LadderDropped");
+
+IF
+EntityEvent(_LadderUp,"DropdownLadder_LadderDropped")
+AND
+DB_DropdownLadder((ITEM)_LadderUp,(ITEM)_LadderDown)
+THEN
+SetOnStage(_LadderDown,1);
+
+IF
+WentOnStage(_LadderUp,1)
+AND
+DB_DropdownLadder((ITEM)_LadderUp,(ITEM)_LadderDown)
+THEN
+SetOnStage(_LadderUp,0);
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION

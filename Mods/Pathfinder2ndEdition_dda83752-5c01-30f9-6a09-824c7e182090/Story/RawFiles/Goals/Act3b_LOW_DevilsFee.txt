@@ -1,0 +1,1055 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Helsik and the store
+//Setting up Helsik
+DB_Dialogs(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, (DIALOGRESOURCE)LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3);
+DB_GLO_CharacterCorpseDialog((CHARACTER)S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, (DIALOGRESOURCE)LOW_DevilsFee_SwD_Helsik_042a54fa-f560-3e3c-2113-73a9865a896c);
+DB_LOW_DevilsFee_RevealingItems((ITEM)S_LOW_DevilsFee_InfernalMarble_c8e18f16-4377-4e51-9790-fbff74510814);
+DB_LOW_DevilsFee_RevealingItems((ITEM)S_LOW_DevilsFee_CoinOfMammon_8378143d-07de-4fca-881a-cb9791ac2f1c);
+DB_ItemOwnerShipTriggers("CTY_Main_A",(TRIGGER)S_LOW_DevilsFee_SUB_e46a2282-56a3-44ed-8b02-82f65cc4ae9c,(CHARACTER)S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597);
+PROC_LOW_DevilsFee_AddButlerHat();
+DB_LOW_DevilsFee_NotesHouseOfHope(S_LOW_DevilsFee_NoteFromGortash_f858e24a-8044-41f3-b62f-10e566a0344a);
+DB_HasItemEvent((ITEM)S_LOW_DevilsFee_NoteFromGortash_f858e24a-8044-41f3-b62f-10e566a0344a, (FLAG)LOW_DevilsFee_State_PlayersHaveNoticeFromGortash_b9a6198b-50a4-4893-b2e7-9de53cbef977);
+
+//Set the right dialog flag for Helsik Dialog
+DB_GLO_CompoundFlag((FLAG)WYR_RaphaelTango_Warlock_DiabolistHint_f1dc232a-e053-f624-ded9-187ddfad9008, (FLAG)LOW_DevilsFee_Knows_HelsikWayHoH_6beeb7f7-53ec-c6dc-0261-95b8d7c2fb4e);
+
+// HasItem Events for the elements needed on the ritual (and for the key to get the first floor)
+DB_HasItemEvent((ITEM)S_LOW_DevilsFee_GrimoireRitual_7a24e183-1870-47b8-add2-720db3bd3758, (FLAG)LOW_DevilsFee_State_HasGrimoire_c7ae215d-92c4-4484-aadd-7ba0000026b5);
+DB_HasItemEvent((ITEM)S_LOW_DevilsFee_KeyToRitual_0552450d-a49b-4a7a-acbc-8b298929f27d, (FLAG)LOW_DevilsFee_State_HasHelsikKey_2d37fcf4-ccf2-4b69-a71a-9bdcd5112e87);
+DB_HasItemEvent((ITEM)S_LOW_DevilsFee_InfernalMarble_c8e18f16-4377-4e51-9790-fbff74510814, (FLAG)LOW_DevilsFee_State_HasInfernalMarble_50d9d3e7-45c3-479c-b7bf-4b0aa40de9fe);
+DB_HasItemEvent((ITEM)S_LOW_DevilsFee_RitualPouch_d1a0dc9d-5950-4211-b72f-536863898eb4, (FLAG)LOW_DevilsFee_State_HasPouch_1058180a-bf41-6baa-4d28-18b6a79a6263);
+
+//Getting dialogue events for relevant objects
+DB_GiveItemToEvent((ITEM)S_LOW_DevilsFee_GrimoireRitual_7a24e183-1870-47b8-add2-720db3bd3758, (FLAG)LOW_DevilsFee_Event_GettingGrimoire_d393fe51-7232-483c-baa0-95e9bd5a7267);
+DB_GiveItemToEvent((ITEM)S_LOW_DevilsFee_KeyToRitual_0552450d-a49b-4a7a-acbc-8b298929f27d, (FLAG)LOW_DevilsFee_Event_GettingGrimoire_d393fe51-7232-483c-baa0-95e9bd5a7267);
+DB_GiveItemToEvent((ITEM)S_LOW_DevilsFee_RitualPouch_d1a0dc9d-5950-4211-b72f-536863898eb4, (FLAG)LOW_DevilsFee_Event_GettingGrimoire_d393fe51-7232-483c-baa0-95e9bd5a7267);
+DB_GiveItemToEvent((ITEM)S_LOW_HouseOfHope_Treasures_Gauntlets_HillGiantStrength_1cb8450d-016f-43d4-bb44-79688170f073, (FLAG)LOW_DevilsFee_Event_GivingStolenItem_3b893839-951a-460c-96d6-d57bd6eb8dba);
+
+//Check if the party have money to buy the grimoire
+DB_DialogMoneyTransfer(1, (DIALOGRESOURCE)LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3, 20000); //Full payment to go to House of Hope
+DB_DialogMoneyTransfer(2, (DIALOGRESOURCE)LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3, 10000); // Discount payment to go to house of Hope
+DB_DialogMoneyTransfer(3, (DIALOGRESOURCE)LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3, 5000); // Gortash Info Payment
+DB_DialogMoneyTransfer(4, (DIALOGRESOURCE)LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3, 1); //Toss a coin to your Diabolist (teasing payment in dialog)
+DB_DialogMoneyTransfer(5, (DIALOGRESOURCE)LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3, 100); //Medium bribe
+DB_DialogMoneyTransfer(6, (DIALOGRESOURCE)LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3, 1000); //Big bribe
+DB_DialogMoneyTransfer(7, (DIALOGRESOURCE)LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3, 2000); //Gortash Info Payment, but Gortash is dead
+
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)S_LOW_DevilsFee_Imp_Melee_001_e59fb674-067f-4960-b6fd-91ee47532856);
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)S_LOW_DevilsFee_Imp_Melee_002_c1436b19-09cf-4e64-8354-45ce17b7351c);
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)S_LOW_DevilsFee_Imp_Melee_003_c38d8bc5-52d7-43bb-a62d-7794bb5464df);
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)S_LOW_DevilsFee_Imp_Melee_004_bdae2b84-933c-4d6d-a9e3-c8b1324840ea);
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)S_LOW_DevilsFee_Imp_Ranged_001_51df7e50-4cc1-4dc2-bf1d-31868845b92f);
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)S_LOW_DevilsFee_Imp_Ranged_002_c3891d62-0562-4439-87e4-6942028d3e31);
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)S_LOW_DevilsFee_Minotaur_001_600b2316-722c-4316-b19e-0dbf77b8651a);
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)S_LOW_DevilsFee_Minotaur_002_be15933c-0123-4892-9160-ac2cefb5f9d9);
+
+ToInventory((ITEM)S_LOW_DevilsFee_Key_LetterBox_78ed0b89-3fad-4545-98e4-9c6303a0bd61,S_LOW_DevilsFee_DeskForLetterboxKey_b6960ccf-fc6c-438f-a23f-0c03914b16c2);
+//Plaques and narrator ADs
+DB_ItemDialog_NarratorAD((ITEM)S_LOW_DevilsFee_Plaque1_009bf285-8e9e-487e-b3bc-cd7b4e8a2e08,(DIALOGRESOURCE)LOW_AD_DevilsFee_Plaque1_7cf10bbb-1307-608c-d0f1-6d47b0c95f75);
+DB_ItemDialog_NarratorAD((ITEM)S_LOW_DevilsFee_Plaque2_b11c89cc-2e19-4660-87ec-246785005f57,(DIALOGRESOURCE)LOW_AD_DevilsFee_Plaque2_7d52d4df-8e5f-1375-1652-a89b2a568364);
+DB_ItemDialog_NarratorAD((ITEM)S_LOW_DevilsFee_WarningBoard1_c2776263-8f03-48fb-b5da-d30040add949,(DIALOGRESOURCE)LOW_AD_DevilsFee_WarningBoard1_0e00aaff-54a3-c4e0-e573-aeb89c41e8a9);
+DB_ItemDialog_NarratorAD((ITEM)S_LOW_DevilsFee_Plaque3_81c9d549-71b6-41c9-a627-7ec29c7e54c1,(DIALOGRESOURCE)LOW_AD_DevilsFee_Plaque3_439ab4d8-e77b-94b9-dae5-507bdd73c497);
+
+SetOnStage(S_LOW_DevilsFee_InfernalScroll_d642189f-fa64-4538-8055-9578489140e8, 0);
+
+//Closing store and combat
+DB_LOW_DevilsFee_TimerSummons(100);
+DB_LOW_DevilsFee_TimerSummons_Increment(500);
+//END_REGION
+
+//REGION Hellish items at the store
+//Inclusion database for Karlach
+DB_LOW_DevilsFee_DevilishItems((ITEM)S_UNI_DevilsFee_MonsterBones_000_ff0b7ade-9785-46aa-81bc-1b6923a8657d, "LOW_DevilsFee_01Bones",
+	(DIALOGRESOURCE)LOW_DevilsFee_PAD_HellishItems_Bones01_a350a8c2-b65a-eab2-7a74-b85183276597, (FLAG)LOW_DevilsFee_Knows_HellishItems_01Bones_647ddb56-2151-432b-a54b-785cff9bc762);
+DB_LOW_DevilsFee_DevilishItems((ITEM)S_UNI_DevilsFee_MonsterSkull_000_2af2df35-140c-4670-b380-f3d4d6ba909d, "LOW_DevilsFee_02Skull",
+	(DIALOGRESOURCE)LOW_DevilsFee_PAD_HellishItems_02Skull_1e799ed1-1391-10f4-d728-6091df1c12b9, (FLAG)LOW_DevilsFee_Knows_HellishItems_02Skull_af0f5821-db00-48f7-9f62-6b5ed7db3e94);
+DB_LOW_DevilsFee_DevilishItems((ITEM)S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece, "LLOW_DevilsFee_03Gems",
+	(DIALOGRESOURCE)LOW_DevilsFee_PAD_HellishItems_03Gems_33716bc7-f24d-88f9-3429-ab4e7dc93fd1, (FLAG)LOW_DevilsFee_Knows_HellishItems_03_Gems_fcde1c71-6494-472a-804f-511adab7297a);
+DB_LOW_DevilsFee_DevilishItems((ITEM)S_UNI_DevilsFee_Horns_A_000_872b0116-52f9-4117-a799-2ffaea558979, "LOW_DevilsFee_04Horns",
+	(DIALOGRESOURCE)LOW_DevilsFee_PAD_HellishItems_04Horns_50938ef7-63f9-eabf-4a4d-67b30205b406, (FLAG)LOW_DevilsFee_Knows_HellishItems_04_Horns_defcea58-c1db-43b6-bcbd-bead1e2afd4e);
+DB_LOW_DevilsFee_DevilishItems((ITEM)S_UNI_DevilsFee_Horns_A_001_787de8b8-aaea-42bb-93e8-8fbabc553dbd, "LOW_DevilsFee_04Horns",
+	(DIALOGRESOURCE)LOW_DevilsFee_PAD_HellishItems_04Horns_50938ef7-63f9-eabf-4a4d-67b30205b406, (FLAG)LOW_DevilsFee_Knows_HellishItems_04_Horns_defcea58-c1db-43b6-bcbd-bead1e2afd4e);
+
+DB_LOW_DevilsFee_DiamonsToBlock(S_LOW_Devilsfee_InfernalDiamond02_c7b95a36-6807-4f31-a78e-0092071ab604);
+DB_LOW_DevilsFee_DiamonsToBlock(S_LOW_DevilsFee_InfernalDiamond01_bb363053-dc3e-4b72-9a7d-dd2dc683944b);
+DB_LOW_DevilsFee_BlockDiamonds(1);
+
+//Template book flags
+DB_BookTemplateFlags((ITEMROOT)UNI_BOOK_LOW_DevilsFee_BloodProcessing_8f79740f-dc98-4ca5-a63c-0af22ab62a49, (FLAG)LOW_DevilsFee_Knows_HelsikDiabolistBecauseReportsAndBook_11909130-2e3a-4904-91d4-4567b3f31dea);
+DB_BookTemplateFlags((ITEMROOT)UNI_BOOK_LOW_DevilsFee_BloodProcessing_8f79740f-dc98-4ca5-a63c-0af22ab62a49, (FLAG)LOW_DevilsFee_Knows_ReadBasementGrimmoire_1b27c934-baf4-4d99-3a78-ed2085840d57);
+
+//END_REGION
+
+//REGION Ritual Elements
+DB_LOW_DevilsFee_DealFlags((FLAG)LOW_DevilsFee_Helsik_PromisedGauntlets_152884fe-d029-32dc-05e8-64a107be3ce9);
+DB_LOW_DevilsFee_DealFlags((FLAG)LOW_DevilsFee_State_HelsikSellGrimoire_372022f7-cea6-cfde-8273-9e2e935fd749);
+
+PROC_TriggerRegisterForPlayers((TRIGGER)S_LOW_DevilsFee_CircleOfInvocation_8841f33a-d17b-475e-848f-8f256407e7d0);
+
+DB_LOW_DevilsFee_RitualTriggers((TRIGGER)S_LOW_DevilsFee_DropZone_Skull_01dff637-9b70-4d31-a8da-2e1c9a0b0172, (TAG)BONE_4ab2ef8c-8766-45bb-b3bb-cacc82865889, (FLAG)LOW_DevilsFee_State_RitualPlaced_Skull_9cb9d1aa-014a-45ed-a310-994d1c63d950);
+DB_LOW_DevilsFee_RitualTriggers((TRIGGER)S_LOW_DevilsFee_DropZone_Incense_1c9ff409-1432-4fdc-ae7f-2757a4fa0dfe, (TAG)INCENSE_cb78c689-21b5-49a2-ad0e-a44a83dbb8d7, (FLAG)LOW_DevilsFee_State_RitualPlaced_Incense_685b224a-c6e6-4086-abac-0e96f2d93c8d);
+DB_LOW_DevilsFee_RitualTriggers((TRIGGER)S_LOW_DevilsFee_CircleOfInvocation_8841f33a-d17b-475e-848f-8f256407e7d0, (TAG)LOW_DEVILSFEE_INFERNALMARBLE_e924da8f-2778-40d9-af7e-0e08722ec791, (FLAG)LOW_DevilsFee_State_RitualPlaced_InfernalMarble_5086a34b-d556-48f1-87f0-4f95bda16828);
+DB_LOW_DevilsFee_RitualTriggers((TRIGGER)S_LOW_DevilsFee_DropZone_Coin_268d604e-d290-4380-8002-f5163448a47d, (TAG)ACT3_LOW_DEVILSFEE_COINOFMAMMON_41a50e74-133f-4ac0-997d-9c98da47d313, (FLAG)LOW_DevilsFee_State_RitualPlaced_Coin_2f735686-e357-43ac-81cc-4aa90ce4ec27);
+DB_LOW_DevilsFee_RitualTriggers((TRIGGER)S_LOW_DevilsFee_DropZone_Diamond_05eeffd2-07ea-43a4-aade-1f90db788526, (TAG)DIAMOND_c602daff-1e6b-45d3-a41d-e4ec332652f3, (FLAG)LOW_DevilsFee_State_RitualPlaced_Diamond_df248b83-44e8-4f71-9c18-6c533ecd850d);
+
+//Origin and Destination
+//Yes, can be only one entry, but I don't know if I will to add more portals in the future, so better to keep this generic.
+DB_LOW_DevilsFee_Portals(S_LOW_DevilsFee_PortalToHouseOfHope_839e5ee7-1793-4a43-9e91-6da575e188ac, S_LOW_HouseOfHopeEntrance_f39ce96a-e495-49dd-a171-b3b160a43d80, "LOW_DevilsFee_PortalToHouseOfHope_Message");
+DB_LOW_DevilsFee_Portals(S_LOW_DevilsFee_ReceivingPortalHoH_e87812da-a916-4d8c-bef7-73040524e587, S_LOW_DevilsFee_TeleportBackFromHoH_af219d7d-b65f-4e2a-8d14-ecc588ebebca, "LOW_DevilsFee_PortalToDevilsFee_Message");
+
+DB_LOW_DevilsFee_IncrementalRelationship(5); //Final calculus once we have the proper balance on attitude and gold.
+
+DB_LOW_DevilsFee_PartyLevel(0, 0);
+//END_REGION
+
+//REGION Return from House of Hope
+PROC_TriggerRegisterForPlayers((TRIGGER)S_LOW_DevilsFee_ReturnToDiabolist_74e65e00-d475-4e32-87db-a8cc92b42b06);
+DB_Dialog_AddAllNearbyPlayersAtStart((DIALOGRESOURCE)LOW_HouseOfHope_Emperor_AfterHouse_76ca399f-3e04-9a4c-769f-929eb97eb4af);
+//END_REGION
+
+//REGION LOW_HelsikDeal journal
+DB_QuestDef_State((FLAG)LOW_DevilsFee_State_AcceptDealStealItem_c65df27f-41d6-6c96-33d1-4b8966b8858f, "LOW_HelsikDeal", "HelsikMadeDeal");
+DB_QuestDef_State((FLAG)LOW_HouseOfHope_State_VisitedHouseOfHope_c8889a79-8277-48e9-afa0-e14f6359ea10,"LOW_HelsikDeal", "EnteredHouse");
+
+DB_QuestDef_State((FLAG)LOW_HouseOfHope_State_HasGauntlets_a0f47ec1-1981-d22e-61ef-8ce8425d9287, "LOW_HelsikDeal", "StoleGauntlets");
+
+DB_QuestDef_DefeatedState("LOW_HelsikDeal", "HelsikDefeated", (CHARACTER)S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597);
+
+DB_QuestDef_State((FLAG)LOW_DevilsFee_Event_KeptGauntlets_993d6fe6-6055-c4ae-2033-23ecf60ac787, "LOW_HelsikDeal", "KeptGauntlets");
+DB_QuestDef_State((FLAG)LOW_DevilsFee_Event_PaidMoneyInsteadGauntlets_9c2d69df-250a-2dbe-edcd-390ee2af295d, "LOW_HelsikDeal", "PaidMoneyInstead");
+
+DB_QuestDef_LevelLoaded("LOW_HelsikDeal", "ReachedEnd", "END_Main");
+//END_REGION
+
+//Voice barks
+
+DB_LOW_DevilsFee_CellarBustPosition(0);
+//Hiding old and asserting bust
+PROC_SetOnStage(S_LOW_DevilsFee_CellarLockBust_11221eb7-0681-4a8b-99fb-dd63e544573b, 0);
+
+//REGION Basement
+DB_ItemDialog_NarratorAD((ITEM)S_LOW_DevilsFee_Plaque1_009bf285-8e9e-487e-b3bc-cd7b4e8a2e08,(DIALOGRESOURCE)LOW_AD_DevilsFee_Plaque1_7cf10bbb-1307-608c-d0f1-6d47b0c95f75);
+DB_ItemDialog_NarratorAD((ITEM)S_LOW_DevilsFee_Plaque2_b11c89cc-2e19-4660-87ec-246785005f57,(DIALOGRESOURCE)LOW_AD_DevilsFee_Plaque2_7d52d4df-8e5f-1375-1652-a89b2a568364);
+DB_ItemDialog_NarratorAD((ITEM)S_LOW_DevilsFee_WarningBoard1_c2776263-8f03-48fb-b5da-d30040add949,(DIALOGRESOURCE)LOW_AD_DevilsFee_WarningBoard1_0e00aaff-54a3-c4e0-e573-aeb89c41e8a9);
+DB_ItemDialog_NarratorAD((ITEM)S_LOW_DevilsFee_Plaque3_81c9d549-71b6-41c9-a627-7ec29c7e54c1,(DIALOGRESOURCE)LOW_AD_DevilsFee_Plaque3_439ab4d8-e77b-94b9-dae5-507bdd73c497);
+
+DB_LOW_DevilsFee_PactCombatant((CHARACTER)S_LOW_DevilsFee_Imp_Melee_001_e59fb674-067f-4960-b6fd-91ee47532856);
+//END_REGION
+
+DB_LOW_DiabolistTrapActive(1);
+KBSECTION
+//REGION Setting up
+IF
+DB_LOW_DevilsFee_HelsikInvocations(_Invocation)
+THEN
+SetOnStage(_Invocation, 0);
+
+//Adding (or not) Butler's hat into Helsik's inventory
+PROC
+PROC_LOW_DevilsFee_AddButlerHat()
+AND
+QRY_LOW_DarkUrgeInParty()
+THEN
+ToInventory(S_LOW_Helsik_ButlerHat_df031755-7b3b-4492-842e-90bc26556b60, S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597);
+DB_HasItemEvent(S_LOW_Helsik_ButlerHat_df031755-7b3b-4492-842e-90bc26556b60, LOW_DevilsFee_State_HasButlerHat_ba790efb-ff40-4d1e-be93-697f449e2681);
+DB_GiveItemToEvent(S_LOW_Helsik_ButlerHat_df031755-7b3b-4492-842e-90bc26556b60, LOW_DevilsFee_Event_GivingButlerHat_1f5024af-0d37-415c-8003-47c70dea79ec);
+
+//END_REGION
+
+//REGION Devil's Fee events
+//This will be probably deprectated once the final dialog exists
+IF
+FlagSet((FLAG)LOW_DevilsFee_ReduceRelationshipHelsik_7061c754-fe03-4ef0-f6e0-6afd3b5f44bc, _Player, 1)
+THEN
+AddAttitudeTowardsPlayer((CHARACTER)S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, (CHARACTER)_Player, -5);
+
+//Combat with Helsik
+IF
+FlagSet((FLAG)LOW_DevilsFee_Event_CombatWithHelsik_27017c85-df88-4c89-b20e-e153720819b7,_, _)
+THEN
+PROC_SetRelationToPlayers((FACTION)Act3_LOW_Helsik_d696c1a3-1eff-4b13-80cd-ab46668fb9c0, 0);
+
+IF
+FlagSet((FLAG)LOW_DevilsFee_RiseRelationshipHelsik_170ff2d6-29f7-622c-34e5-af06c13599de, S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, _)
+AND
+GetRelation((FACTION)Act3_LOW_Helsik_d696c1a3-1eff-4b13-80cd-ab46668fb9c0, (FACTION)Hero_a1542c81-6895-929e-4522-10ce218bb360, _OurOriginalRelation)
+AND
+_OurOriginalRelation <= 90
+AND
+DB_LOW_DevilsFee_IncrementalRelationship(_Incremental)
+AND
+IntegerSum(_Incremental, _OurOriginalRelation, _OutFinalRelation)
+THEN
+ClearFlag((FLAG)LOW_DevilsFee_RiseRelationshipHelsik_170ff2d6-29f7-622c-34e5-af06c13599de, S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597);
+PROC_SetRelationToPlayers((FACTION)Act3_LOW_Helsik_d696c1a3-1eff-4b13-80cd-ab46668fb9c0, _OutFinalRelation);
+
+IF
+FlagSet((FLAG)LOW_DevilsFee_RiseRelationshipHelsik_170ff2d6-29f7-622c-34e5-af06c13599de, S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, _)
+AND
+GetRelation((FACTION)Act3_LOW_Helsik_d696c1a3-1eff-4b13-80cd-ab46668fb9c0, (FACTION)Hero_a1542c81-6895-929e-4522-10ce218bb360, _OurOriginalRelation)
+AND
+_OurOriginalRelation > 90
+THEN
+ClearFlag((FLAG)LOW_DevilsFee_RiseRelationshipHelsik_170ff2d6-29f7-622c-34e5-af06c13599de, S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597);
+PROC_SetRelationToPlayers((FACTION)Act3_LOW_Helsik_d696c1a3-1eff-4b13-80cd-ab46668fb9c0, 100);
+
+IF
+FlagSet((FLAG)LOW_DevilsFee_State_HasGrimoire_c7ae215d-92c4-4484-aadd-7ba0000026b5, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+QRY_OnlyOnce("LOW_DevilsFee_EmperorADCanBeTriggered")
+THEN
+DB_OneShotPlayerTrigger(S_LOW_DevilsFee_EmperorAD_InvocationRoom_8881afeb-bc48-4a80-977c-23017b0d4945);
+
+PROC
+PROC_OneShotTriggerEntered(_Player, S_LOW_DevilsFee_EmperorAD_InvocationRoom_8881afeb-bc48-4a80-977c-23017b0d4945)
+THEN
+PROC_EmperorAD(_Player, LOW_DevilsFee_EmperorAD_EnterRitualChamber_b74a628a-e791-ac1f-1245-a49811d6eb48);
+
+IF
+AddedTo(_Item, _Player, _)
+AND
+DB_LOW_DevilsFee_RevealingItems((ITEM)_Item)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_DevilsFee_Know_NoticeHellishItems_b0cfc46c-4730-26f1-f3a2-a6d7147a5e58)
+THEN
+SetFlag((FLAG)LOW_DevilsFee_Know_NoticeHellishItems_b0cfc46c-4730-26f1-f3a2-a6d7147a5e58);
+PROC_TryStartAD((DIALOGRESOURCE)LOW_DevilsFee_PAD_ItemsInInvocationRoom_b50e073e-7094-d73f-9c99-85fdd350a637, _Player);
+
+IF
+EnteredTrigger(_Player, (TRIGGER)S_LOW_DevilsFee_ReturnToDiabolist_74e65e00-d475-4e32-87db-a8cc92b42b06)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_DevilsFee_Knows_HelsikWayHoH_6beeb7f7-53ec-c6dc-0261-95b8d7c2fb4e)
+AND
+QRY_OnlyOnce("LOW_DevilsFee_FirstTimeCircleInvocation")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_DevilsFee_PAD_FirstSeeCircleInvocation_052a2aa8-029e-53ab-7d26-a023993c02b1, _Player);
+SetFlag(LOW_DevilsFee_State_SuspicionsDiabolist_74cb4be9-dc44-4def-9992-02c10fc455e6);
+
+PROC
+PROC_BlockPickupOfItem(_Player, _Diamond)
+AND
+DB_LOW_DevilsFee_DiamonsToBlock(_Diamond)
+AND
+DB_LOW_DevilsFee_BlockDiamonds(1)
+THEN
+DB_CustomPickupItemResponse(_Player, _Diamond, 0);
+PROC_PlayCantUseItemAD(_Player);
+
+IF
+Opened(S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece)
+AND
+DB_LOW_DevilsFee_BlockDiamonds(1)
+AND
+DB_LOW_DevilsFee_DiamonsToBlock(_Diamond)
+THEN
+NOT DB_LOW_DevilsFee_BlockDiamonds(1);
+
+IF
+DestroyedBy(S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece, _, _, _)
+AND
+DB_LOW_DevilsFee_BlockDiamonds(1)
+AND
+DB_LOW_DevilsFee_BlockDiamonds(_Diamond)
+THEN
+NOT DB_LOW_DevilsFee_BlockDiamonds(1);
+
+IF
+AddedTo(_Diamond, _Player, _)
+AND
+DB_LOW_DevilsFee_DiamonsToBlock(_Diamond)
+THEN
+NOT DB_LOW_DevilsFee_DiamonsToBlock(_Diamond);
+SetFlag(LOW_DevilsFee_State_DiamonsStolen_1c2ad267-7636-419d-83fa-e60d15390ff4);
+
+IF
+CustomBookUIClosed(_Character, "LOW_DevilsFee__Diary")
+AND
+NOT DB_GlobalFlag(LOW_Helsik_Know_RevealedAsDiabolist_89e8e322-a263-2b13-d6c3-0e44a555a385)
+THEN
+SetFlag(LOW_DevilsFee_State_SuspicionsDiabolist_74cb4be9-dc44-4def-9992-02c10fc455e6);
+
+//END_REGION
+
+//REGION Store
+
+//Add magic items to Helsik
+IF
+DB_GlobalFlag((FLAG)LOW_Helsik_Know_RevealedAsDiabolist_89e8e322-a263-2b13-d6c3-0e44a555a385)
+THEN
+PROC_SetCustomTradeTreasure((CHARACTER)S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, "LOW_DevilsFee_Diabolist_Trade_Magic");
+
+IF
+FlagSet((FLAG)LOW_DevilsFee_Event_GettingGrimoire_d393fe51-7232-483c-baa0-95e9bd5a7267, _Player, _)
+THEN
+TemplateAddTo((ITEMROOT)UNI_BOOK_DevilsFee_GrimoireSinglePage_432ab95d-e594-47b4-923f-9e15a9f4ccf3, _Player, 1, 1);
+
+//Detect hellish items at the store
+IF
+UseStarted(_Player, _HellishItem)
+AND
+DB_LOW_DevilsFee_DevilishItems(_HellishItem, _ID, _Dialog, _Flag)
+THEN
+PROC_KnowledgeCheck((CHARACTER)_Player, _ID, _HellishItem, "Investigation", (DIFFICULTYCLASS)Act3_Medium_77cee1c4-384a-4217-b670-67db3c7add57, _Dialog, _Flag);
+
+IF
+UseStarted(_Player, _HellishItem)
+AND
+DB_LOW_DevilsFee_DevilishItems(_HellishItem, _ID, _Dialog, _Flag)
+AND
+NOT DB_LOW_DevilsFee_HellisItemsInteracted(_HellishItem)
+THEN
+DB_LOW_DevilsFee_HellisItemsInteracted(_HellishItem);
+
+//To say the AD in a blocked item
+PROC
+PROC_BlockUseOfItem( _Player, S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece, _UseID )
+AND
+DB_LOW_DevilsFee_DevilishItems(S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece, _ID, _Dialog, _Flag)
+THEN
+PROC_KnowledgeCheck((CHARACTER)_Player, _ID, S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece, "Investigation", (DIFFICULTYCLASS)Act3_Medium_77cee1c4-384a-4217-b670-67db3c7add57, _Dialog, _Flag);
+
+PROC
+PROC_BlockUseOfItem( _Player, S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece, _UseID )
+AND
+DB_LOW_DevilsFee_DevilishItems(S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece, _ID, _Dialog, _Flag)
+AND
+NOT DB_LOW_DevilsFee_HellisItemsInteracted(S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece)
+THEN
+DB_LOW_DevilsFee_HellisItemsInteracted(S_DevilsFee_InfernalGemsExpositor_a0db0a97-1bfd-4e0d-a4ff-31a79e3daece);
+
+IF
+DB_LOW_DevilsFee_HellisItemsInteracted(_HellishItem)
+AND
+NOT DB_GlobalFlag(LOW_DevilsFee_State_SuspicionsDiabolist_74cb4be9-dc44-4def-9992-02c10fc455e6)
+AND
+NOT DB_GlobalFlag(LOW_Helsik_Know_RevealedAsDiabolist_89e8e322-a263-2b13-d6c3-0e44a555a385)
+AND
+SysCount("DB_LOW_DevilsFee_HellisItemsInteracted", 1, _OutCounter)
+AND
+_OutCounter > 1
+THEN
+SetFlag(LOW_DevilsFee_State_SuspicionsDiabolist_74cb4be9-dc44-4def-9992-02c10fc455e6);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage((CHARACTER)S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c, _, _ID)
+AND
+DB_LOW_DevilsFee_DevilishItems(_, _ID, _, _Flag)
+AND
+NOT DB_GlobalFlag(_Flag)
+THEN
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(2);
+
+//END_REGION
+
+//REGION Portal puzzle and triggers
+
+//Setting portals off stage
+IF
+DB_LOW_DevilsFee_Portals(_Portal, _, _)
+THEN
+RemoveStatus(_Portal, "LOW_DEVILSFEE_PORTAL_HOUSEOFHOPE");
+PROC_SetOnStage(_Portal, 0);
+
+//New Diamond in Jeweler inventory to buy
+IF
+FlagSet((FLAG)LOW_DevilsFee_State_HasGrimoire_c7ae215d-92c4-4484-aadd-7ba0000026b5, (CHARACTER)_Player, _)
+AND
+DB_PartyMembers(_Player)
+AND
+QRY_OnlyOnce("LOW_DevilsFee_DiamonsIfPlayersGetGrimoire")
+THEN
+TemplateAddTo((ITEMROOT)LOOT_GEM_Diamond_A_Dark_82d4f21d-11c8-47dd-a69f-dcfb3103ff76, S_LOW_Traders_JewelVendor_d68c344d-e491-4ca6-b88e-959e68445bb8, 2, 0);
+
+//Dropping zone for candles
+IF
+ItemEnteredTrigger(_Item, _Trigger, _Mover)
+AND
+DB_LOW_DevilsFee_RitualTriggers(_Trigger, _Tag, _Flag)
+AND
+Exists(_Item,1)
+AND
+IsTagged(_Item, _Tag, 1)
+THEN
+ApplyStatus(_Item, "LOW_DEVILSFEE_BURNING", -1.0, 0, NULL_00000000-0000-0000-0000-000000000000);
+SetFlag((FLAG)_Flag);
+DB_LOW_DevilsFee_RightElements(_Item);
+
+
+PROC
+PROC_BlockPickupOfItem(_Player, _RitualItem)
+AND
+DB_LOW_DevilsFee_RightElements(_RitualItem)
+THEN
+DB_CustomPickupItemResponse(_Player, _RitualItem, 0);
+PROC_PlayCantUseItemAD(_Player);
+
+PROC
+PROC_BlockMoveOfItem(_Player, _RitualItem)
+AND
+DB_LOW_DevilsFee_RightElements(_RitualItem)
+THEN
+DB_CustomMoveItemResponse(_Player, _RitualItem, 0);
+PROC_PlayCantUseItemAD(_Player);
+
+//Opening the portal
+IF
+DB_GlobalFlag(LOW_DevilsFee_State_RitualPlaced_InfernalMarble_2f735686-e357-43ac-81cc-4aa90ce4ec27)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_DevilsFee_State_RitualAlreadyDone_3bc4c164-0e98-fbc7-0cef-f244e390b3b4)
+AND
+DB_GlobalFlag((FLAG)LOW_DevilsFee_State_RitualPlaced_Skull_9cb9d1aa-014a-45ed-a310-994d1c63d950)
+AND
+DB_GlobalFlag((FLAG)LOW_DevilsFee_State_RitualPlaced_Incense_685b224a-c6e6-4086-abac-0e96f2d93c8d)
+AND
+DB_GlobalFlag((FLAG)LOW_DevilsFee_State_RitualPlaced_Diamond_df248b83-44e8-4f71-9c18-6c533ecd850d)
+AND
+DB_GlobalFlag((FLAG)LOW_DevilsFee_State_RitualPlaced_Coin_2f735686-e357-43ac-81cc-4aa90ce4ec27)
+AND
+DB_GlobalFlag((FLAG)LOW_DevilsFee_State_RitualPlaced_InfernalMarble_5086a34b-d556-48f1-87f0-4f95bda16828)
+THEN
+SetFlag((FLAG)LOW_DevilsFee_Event_OpeningPortal_4dfbe814-2457-40ae-bead-b997d0724af2);
+
+//For first travel and dialog to House of Hope, characters on level 12
+IF
+UseStarted(_Player, S_LOW_DevilsFee_PortalToHouseOfHope_839e5ee7-1793-4a43-9e91-6da575e188ac)
+AND
+NOT DB_GlobalFlag(LOW_DevilsFee_State_TraveledOnceToHouseOfHope_36950cf9-1642-a398-e116-0adb189d3b7d)
+AND
+DB_LOW_DevilsFee_Portals(S_LOW_DevilsFee_PortalToHouseOfHope_839e5ee7-1793-4a43-9e91-6da575e188ac, _Destination, _)
+AND
+QRY_LOW_DevilsFee_PartyLevelReady()
+AND
+DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel)
+AND
+IntegerDivide(_Totallevel, _NumberOfParty, _UpperLevel)
+AND
+_UpperLevel >= 12
+THEN
+DB_DevilsFee_InitPortalHoH(_Player, _Destination);
+ReadyCheckGlobal("LOW_DevilsFee_PortalHouseOfHope_FirstTravel", "LOW_DevilsFee_PortalToHouseOfHope_Message", 1, (CHARACTER)_Player);
+
+//For first travel and dialog to House of Hope, characters underleveled
+IF
+UseStarted(_Player, S_LOW_DevilsFee_PortalToHouseOfHope_839e5ee7-1793-4a43-9e91-6da575e188ac)
+AND
+NOT DB_GlobalFlag(LOW_DevilsFee_State_TraveledOnceToHouseOfHope_36950cf9-1642-a398-e116-0adb189d3b7d)
+AND
+DB_LOW_DevilsFee_Portals(S_LOW_DevilsFee_PortalToHouseOfHope_839e5ee7-1793-4a43-9e91-6da575e188ac, _Destination, _)
+AND
+QRY_LOW_DevilsFee_PartyLevelReady()
+AND
+DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel)
+AND
+IntegerDivide(_Totallevel, _NumberOfParty, _LowerLevel)
+AND
+_LowerLevel < 12
+THEN
+DB_DevilsFee_InitPortalHoH(_Player, _Destination);
+ReadyCheckGlobal("LOW_DevilsFee_PortalHouseOfHope_FirstTravel", "LOW_DevilsFee_Underleveled_ReadyCheck", 1, (CHARACTER)_Player);
+
+QRY
+QRY_LOW_DevilsFee_PartyLevelReady()
+AND
+DB_Players(_Player)
+AND
+GetLevel(_Player, _Level)
+AND
+DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel)
+AND
+IntegerSum(_NumberOfParty, 1, _NewNumberOfParty)
+AND
+IntegerSum(_TotalLevel, _Level, _NewTotalLevel)
+THEN
+NOT DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel);
+DB_LOW_DevilsFee_PartyLevel(_NewNumberOfParty, _NewTotalLevel);
+
+//Second+ chances if players wants to go to HoH underleveled
+IF
+UseStarted(_Player, _Portal)
+AND
+DB_LOW_DevilsFee_Portals(_Portal, S_LOW_HouseOfHopeEntrance_f39ce96a-e495-49dd-a171-b3b160a43d80, _Message)
+AND
+DB_GlobalFlag(LOW_DevilsFee_State_TraveledOnceToHouseOfHope_36950cf9-1642-a398-e116-0adb189d3b7d)
+AND
+NOT DB_DevilsFee_InitPortalHoH(_Player, S_LOW_HouseOfHopeEntrance_f39ce96a-e495-49dd-a171-b3b160a43d80)
+AND
+QRY_LOW_DevilsFee_PartyLevelReady()
+AND
+DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel)
+AND
+IntegerDivide(_Totallevel, _NumberOfParty, _LowerLevel)
+AND
+_LowerLevel < 12
+THEN
+DB_DevilsFee_InitPortalHoH(_Player, S_LOW_HouseOfHopeEntrance_f39ce96a-e495-49dd-a171-b3b160a43d80);
+ReadyCheckGlobal("LOW_DevilsFee_PortalHouseOfHope_NoDialog", "LOW_DevilsFee_Underleveled_ReadyCheck", 1, (CHARACTER)_Player);
+
+//Non-FirstTime, generic if you come from HoH or if you already have level 12
+IF
+UseStarted(_Player, _Portal)
+AND
+DB_LOW_DevilsFee_Portals(_Portal, _Destination, _Message)
+AND
+DB_GlobalFlag(LOW_DevilsFee_State_TraveledOnceToHouseOfHope_36950cf9-1642-a398-e116-0adb189d3b7d)
+AND
+NOT DB_DevilsFee_InitPortalHoH(_Player, _Destination)
+THEN
+DB_DevilsFee_InitPortalHoH(_Player, _Destination);
+ReadyCheckGlobal("LOW_DevilsFee_PortalHouseOfHope_NoDialog", _Message, 1, (CHARACTER)_Player);
+
+//This only will be from Devil's Fee to House of Hope for the first time
+IF
+ReadyCheckPassed("LOW_DevilsFee_PortalHouseOfHope_FirstTravel")
+AND
+DB_DevilsFee_InitPortalHoH(_Player, _Destination)
+THEN
+NOT DB_DevilsFee_InitPortalHoH(_Player, _Destination);
+TeleportPartiesWithMovie(_Destination, "LOW_DevilsFee_TeleportToHouseOfHope", "");
+SetFlag((FLAG)LOW_DevilsFee_State_TraveledOnceToHouseOfHope_36950cf9-1642-a398-e116-0adb189d3b7d);
+
+IF
+ReadyCheckPassed("LOW_DevilsFee_PortalHouseOfHope_NoDialog")
+AND
+DB_DevilsFee_InitPortalHoH(_Player, _Destination)
+AND
+DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel)
+THEN
+NOT DB_DevilsFee_InitPortalHoH(_Player, _Destination);
+TeleportPartiesWithMovie(_Destination, "LOW_DevilsFee_TeleportToHouseOfHope", "");
+NOT DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel);
+DB_LOW_DevilsFee_PartyLevel(0, 0);
+
+IF
+ReadyCheckFailed("LOW_DevilsFee_PortalHouseOfHope_NoDialog")
+AND
+DB_DevilsFee_InitPortalHoH(_Player, _Destination)
+AND
+DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel)
+THEN
+NOT DB_DevilsFee_InitPortalHoH(_Player, _Destination);
+NOT DB_LOW_DevilsFee_PartyLevel(_NumberOfParty, _TotalLevel);
+DB_LOW_DevilsFee_PartyLevel(0, 0);
+
+//The portal appears
+IF
+DB_GlobalFlag((FLAG)LOW_DevilsFee_Event_OpeningPortal_4dfbe814-2457-40ae-bead-b997d0724af2)
+AND
+DB_LOW_DevilsFee_Portals(_Portal, _, _)
+THEN
+PROC_SetOnStage(_Portal, 1);
+
+IF
+DB_GlobalFlag((FLAG)LOW_DevilsFee_Event_OpeningPortal_4dfbe814-2457-40ae-bead-b997d0724af2)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("LOW_DevilsFee_EmperorADPortal")
+THEN
+PROC_EmperorAD(_Player, LOW_DevilsFee_EmperorAD_FinishingRitual_e1ec174f-9fd9-3068-f79f-2d8d50625139);
+
+IF
+WentOnStage(_Portal, 1)
+AND
+DB_LOW_DevilsFee_Portals(_Portal, _, _)
+THEN
+ApplyStatus((ITEM)_Portal, "LOW_DEVILSFEE_PORTAL_HOUSEOFHOPE", -1.0);
+SetCanInteract(_Portal, 1);
+
+//Closing the portal if we clear the flages
+IF
+FlagCleared((FLAG)LOW_DevilsFee_Event_OpeningPortal_4dfbe814-2457-40ae-bead-b997d0724af2, NULL_00000000-0000-0000-0000-000000000000, _)
+AND
+DB_LOW_DevilsFee_Portals(_Portal, _, _)
+AND
+GUIDToString(_Portal, _OutPortalString)
+AND
+Concatenate("LOW_DEVILSFEE_PORTAL_HOUSEOFHOPE_", _OutPortalString, _OutTimerName)
+THEN
+RemoveStatus(_Portal, "LOW_DEVILSFEE_PORTAL_HOUSEOFHOPE");
+SetCanInteract((ITEM)_Portal, 0);
+RealtimeObjectTimerLaunch(_Portal, _OutTimerName, 2000);
+DB_LOW_DefilsFee_PortalTimers(_Portal, _OutTimerName);
+
+IF
+ObjectTimerFinished(_Portal, _OutTimerName)
+AND
+DB_LOW_DefilsFee_PortalTimers((ITEM)_Portal, _OutTimerName)
+THEN
+NOT DB_LOW_DefilsFee_PortalTimers(_Portal, _OutTimerName);
+PROC_SetOnStage(_Portal, 0);
+
+
+//END_REGION
+
+//REGION Combat with Helsik
+
+IF
+CombatStarted(_CombatID)
+AND
+DB_Is_InCombat(S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, _CombatID)
+AND
+DB_LOW_DevilsFee_HelsikInvocations(_Invocation)
+AND
+DB_LOW_DevilsFee_TimerSummons(_TimerCount)
+AND
+DB_LOW_DevilsFee_TimerSummons_Increment(_TimerIncrement)
+AND
+IntegerSum(_TimerCount, _TimerIncrement, _OutTimer)
+THEN
+NOT DB_LOW_DevilsFee_TimerSummons(_TimerCount);
+DB_LOW_DevilsFee_TimerSummons(_OutTimer);
+ObjectTimerLaunch(_Invocation, "LOW_DevilsFee_SummonTimer", _Timercount);
+
+IF
+ObjectTimerFinished(_Invocation, "LOW_DevilsFee_SummonTimer")
+THEN
+PROC_Foop(_Invocation, (EFFECTRESOURCE)VFX_Script_InfernalPoofEffect_80bd6b0d-0fc6-d9f3-37b9-5b3d667180e3);
+
+IF
+WentOnStage((CHARACTER)_Servant,1)
+AND
+DB_LOW_DevilsFee_PactCombatant(_Servant)
+AND
+DB_OnlyOnce("LOW_DevilsFee_PactBroken")
+THEN
+ObjectTimerLaunch(_Servant,"Timer_LOW_HelsikPactBroken",1);
+
+IF
+ObjectTimerFinished(_Servant,"Timer_LOW_HelsikPactBroken")
+THEN
+PROC_Poof(_Servant);
+
+IF
+LeftCombat(_Invocation, _)
+AND
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)_Invocation)
+AND
+NOT DB_Is_Incombat(_Invocation, _)
+THEN
+PROC_Poof(_Invocation, (EFFECTRESOURCE)VFX_Script_InfernalPoofEffect_80bd6b0d-0fc6-d9f3-37b9-5b3d667180e3);
+
+PROC
+PROC_StateSet_PermaDefeated(_Invocation)
+AND
+DB_LOW_DevilsFee_HelsikInvocations((CHARACTER)_Invocation)
+THEN
+NOT DB_LOW_DevilsFee_HelsikInvocations(_Invocation);
+
+//END_REGION
+
+//REGION Cleaning procedures
+IF
+DB_LOW_DevilsFee_RitualTriggers(_Trigger, _Tag, _Flag)
+THEN
+TriggerRegisterForItems((TRIGGER)_Trigger);
+//END_REGION
+
+//REGION Return from House of Hope
+
+// A dialogue with Emperor after return to the Diabolist's house
+IF
+DB_InRegion(_Player, (TRIGGER)S_LOW_DevilsFee_ReturnToDiabolist_74e65e00-d475-4e32-87db-a8cc92b42b06)
+AND
+DB_GlobalFlag((FLAG)LOW_HouseOfHope_State_RaphaelIsDead_655d7d21-99a2-4138-9a7a-af1850932e75)
+AND
+QRY_OnlyOnce("LOW_DevilsFee_EmperorTalksAfterVisitingHouse")
+THEN
+PROC_TriggerUnregisterForPlayers((TRIGGER)S_LOW_DevilsFee_ReturnToDiabolist_74e65e00-d475-4e32-87db-a8cc92b42b06);
+PROC_NotifyWhenReadyToTalk(_Player, "LOW_DevlisFee_EmperorWantsToTalk");
+
+PROC
+PROC_ReadyToTalk(_Player, "LOW_DevlisFee_EmperorWantsToTalk")
+AND
+QRY_StartDialog((DIALOGRESOURCE)LOW_HouseOfHope_Emperor_AfterHouse_76ca399f-3e04-9a4c-769f-929eb97eb4af, NULL_00000000-0000-0000-0000-000000000000, _Player)
+THEN
+DB_NOOP(1);
+
+IF
+AddedTo(S_LOW_HouseOfHope_Treasures_Gauntlets_HillGiantStrength_1cb8450d-016f-43d4-bb44-79688170f073, S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, _)
+AND
+NOT DB_PermaDefeated(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597)
+THEN
+SetStoryItem(S_LOW_HouseOfHope_Treasures_Gauntlets_HillGiantStrength_1cb8450d-016f-43d4-bb44-79688170f073, 1);
+
+IF
+RemovedFrom(S_LOW_HouseOfHope_Treasures_Gauntlets_HillGiantStrength_1cb8450d-016f-43d4-bb44-79688170f073, S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597)
+AND
+NOT DB_PermaDefeated(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597)
+THEN
+SetStoryItem(S_LOW_HouseOfHope_Treasures_Gauntlets_HillGiantStrength_1cb8450d-016f-43d4-bb44-79688170f073, 0);
+
+IF
+DB_PermaDefeated(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597)
+AND
+IsInInventoryOf(S_LOW_HouseOfHope_Treasures_Gauntlets_HillGiantStrength_1cb8450d-016f-43d4-bb44-79688170f073, S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, 1)
+THEN
+SetStoryItem(S_LOW_HouseOfHope_Treasures_Gauntlets_HillGiantStrength_1cb8450d-016f-43d4-bb44-79688170f073, 0);
+
+//END_REGION
+
+//REGION Debug
+
+//Opens the portar to house of hope without make the ritual
+IF
+TextEvent("LOW_PortalHouseOfHope")
+THEN
+SetFlag((FLAG)LOW_DevilsFee_Event_OpeningPortal_4dfbe814-2457-40ae-bead-b997d0724af2, NULL_00000000-0000-0000-0000-000000000000, 1);
+
+//Put in player's inventory every needed item to do the ritual
+IF
+TextEvent("LOW_GetAllRitualItems")
+AND
+GetHostCharacter(_Player)
+THEN
+PROC_DEBUG_DevilsFee_GetAllRitualItems(_Player);
+
+IF
+FlagSet(Debug_LOW_DevilsFee_GetAllRitualItems_b3f7b949-551e-ded5-3c1d-94479f2fe57b, _Player, _)
+THEN
+PROC_DEBUG_DevilsFee_GetAllRitualItems(_Player);
+
+PROC
+PROC_DEBUG_DevilsFee_GetAllRitualItems((GUIDSTRING)_Player)
+THEN
+TemplateAddTo((ITEMROOT)BOOK_Tome_Diabolical_Grimoire_A_8e10075c-7b8e-4a95-9b67-af66f0059849, 	(GUIDSTRING)_Player, 1, 0);
+TemplateAddTo((ITEMROOT)UNI_LOW_DevilsFee_InfernalMarble_0cccc96d-ad0e-4329-8079-c0c9a35ced59, 	(GUIDSTRING)_Player, 1, 0);
+TemplateAddTo((ITEMROOT)LOOT_GEN_Coin_Mammon_A_bdcee896-e7bd-484f-8818-44a68749db1c, 			(GUIDSTRING)_Player, 1, 0);
+TemplateAddTo((ITEMROOT)DEC_GEN_Incense_A_05e58ebb-563c-4a32-bc0d-881ed6fe18fb, 				(GUIDSTRING)_Player, 1, 0);
+TemplateAddTo((ITEMROOT)LOOT_GEM_Diamond_A_440f4817-5d30-4867-a982-5b8094ace403, 				(GUIDSTRING)_Player, 1, 0);
+TemplateAddTo((ITEMROOT)DEC_Dungeon_Skeleton_Skull_A_231afb29-b79c-4efd-af23-2e433dea313d, 		(GUIDSTRING)_Player, 1, 0);
+ClearFlag(Debug_LOW_DevilsFee_GetAllRitualItems_b3f7b949-551e-ded5-3c1d-94479f2fe57b, _Player);
+
+//Set the flags to know everything about Helsik
+IF
+TextEvent("LOW_KnowAllHelsik")
+THEN
+SetFlag((FLAG)LOW_DevilsFee_Knows_HelsikWayHoH_6beeb7f7-53ec-c6dc-0261-95b8d7c2fb4e);
+SetFlag((FLAG)LOW_Helsik_Know_RevealedAsDiabolist_89e8e322-a263-2b13-d6c3-0e44a555a385);
+
+IF
+TextEvent("LOW_GetItemsFromGortash")
+AND
+GetHostCharacter(_Player)
+THEN
+SetFlag((FLAG)LOW_Helsik_State_PlayersHaveNoticeFromHelsik_158ef353-5eee-44c7-8bf2-8fb89539c358, _Player);
+
+IF
+TextEvent("helsik_break_pact")
+AND
+QRY_OnlyOnce("LOW_DevilsFee_PactBroken")
+THEN
+DB_NOOP(1);
+
+IF
+TextEvent("helsik_trigger_her_trap")
+THEN
+TeleportTo(S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597,S_LOW_DevilsFee_DoorTrapTrigger_0058d66a-faf1-439e-8e89-858d4162af19);
+
+IF
+TextEvent("helsik_disable_trap")
+THEN
+TeleportTo(S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597,S_LOW_DevilsFee_DoorTrapTrigger_0058d66a-faf1-439e-8e89-858d4162af19);
+
+IF
+TextEvent("LOW_DevilsFee_GetGloves")
+AND
+GetHostCharacter(_Player)
+THEN
+ToInventory(S_LOW_HouseOfHope_Treasures_Gauntlets_HillGiantStrength_1cb8450d-016f-43d4-bb44-79688170f073, _Player, 1, 0, 1);
+SetFlag(LOW_HouseOfHope_State_RaphaelAlerted_f83c3d6b-d6cf-41a1-a03d-c31df5ea44fe);
+SetFlag(LOW_DevilsFee_Helsik_PromisedGauntlets_152884fe-d029-32dc-05e8-64a107be3ce9);
+
+
+
+//END_REGION
+
+//REGION Debug Combat - Start Combat OE Command
+IF
+TextEvent("LOW_DevilsFee_StartCombat")
+THEN
+SetFlag((FLAG)LOW_DevilsFee_Event_CombatWithHelsik_27017c85-df88-4c89-b20e-e153720819b7);
+
+//END_REGION
+
+//REGION Cellar Puzzle
+
+IF
+UseFinished(_Player, S_LOW_DevilsFee_Cellar_Bust_92e9d1a9-189b-42f7-9025-ba88f889eab7, _)
+AND
+DB_LOW_DevilsFee_CellarBustPosition(_Position)
+AND
+IntegerSum(_Position, 1, _NewPosition)
+THEN
+ItemRotateY((ITEM)S_LOW_DevilsFee_Cellar_Bust_92e9d1a9-189b-42f7-9025-ba88f889eab7, 90.0, 90.0);
+NOT DB_LOW_DevilsFee_CellarBustPosition(_Position);
+DB_LOW_DevilsFee_CellarBustPosition(_NewPosition);
+PlaySound(S_LOW_DevilsFee_Cellar_Bust_92e9d1a9-189b-42f7-9025-ba88f889eab7, "Items_Generic_Locked");
+//Evaluate if the hatch opens or if needs to be closed again
+PROC_LOW_DevilsFee_EvaluatePosition();
+
+PROC
+PROC_LOW_DevilsFee_EvaluatePosition()
+AND
+DB_LOW_DevilsFee_CellarBustPosition(3)
+AND
+NOT DB_LOW_DevilsFee_CellarUnlocked(1)
+THEN
+Unlock((ITEM)S_LOW_DevilsFee_HatchToBasement_6fb8cf28-dfe1-4259-8ccb-59ce7f805f28);
+PROC_TryStartAD((DIALOGRESOURCE)GLO_AD_MechanicalClick_fc8d3dc5-b947-6354-3aa9-d1f02fd51af4,(ITEM)S_LOW_DevilsFee_HatchToBasement_6fb8cf28-dfe1-4259-8ccb-59ce7f805f28);
+DB_LOW_DevilsFee_CellarUnlocked(1);
+
+PROC
+PROC_LOW_DevilsFee_EvaluatePosition()
+AND
+DB_LOW_DevilsFee_CellarBustPosition(4)
+AND
+DB_LOW_DevilsFee_CellarUnlocked(1)
+THEN
+NOT DB_LOW_DevilsFee_CellarBustPosition(4);
+DB_LOW_DevilsFee_CellarBustPosition(0);
+NOT DB_LOW_DevilsFee_CellarUnlocked(1);
+PlaySound(S_LOW_DevilsFee_Cellar_Bust_92e9d1a9-189b-42f7-9025-ba88f889eab7, "Items_Generic_Locked");
+Lock(S_LOW_DevilsFee_HatchToBasement_6fb8cf28-dfe1-4259-8ccb-59ce7f805f28, "STORY_KEY");
+
+//Rotate the bust when opening the hatch by other means.
+IF
+Unlocked(S_LOW_DevilsFee_HatchToBasement_6fb8cf28-dfe1-4259-8ccb-59ce7f805f28,_,_)
+AND
+DB_LOW_DevilsFee_CellarBustPosition(_Pos)
+AND
+_Pos != 3
+AND
+IntegerSubtract(3,_Pos,_FinalPos)
+AND
+IntegerProduct(_FinalPos,90,_AngleInt)
+AND
+IntegerToReal(_AngleInt,_Angle)
+THEN
+ItemRotateY((ITEM)S_LOW_DevilsFee_Cellar_Bust_92e9d1a9-189b-42f7-9025-ba88f889eab7, _Angle, 180.0);
+PlaySound(S_LOW_DevilsFee_Cellar_Bust_92e9d1a9-189b-42f7-9025-ba88f889eab7, "Items_Generic_Locked");
+
+// Lever in basement
+IF
+UseFinished(_Player, (ITEM)S_LOW_DevilsFeeCellar_HatchLever_cade731d-65a6-42fb-b780-d028440baaef, _)
+AND
+NOT DB_LOW_DevilsFee_CellarUnlocked(1)
+THEN
+DB_LOW_DevilsFee_CellarUnlocked(1);
+Unlock((ITEM)S_LOW_DevilsFee_HatchToBasement_6fb8cf28-dfe1-4259-8ccb-59ce7f805f28);
+
+PROC
+PROC_BlockUseOfItem(_Player,(ITEM)S_LOW_DevilsFeeCellar_Ladder_bd52f847-9ab7-40a0-9c61-5dc07cd18624)
+AND
+DB_Players(_Player)
+AND
+NOT DB_LOW_DevilsFee_CellarUnlocked(1)
+THEN
+DB_CustomUseItemResponse(_Player,(ITEM)S_LOW_DevilsFeeCellar_Ladder_bd52f847-9ab7-40a0-9c61-5dc07cd18624,0);
+PROC_PlayCantUseItemAD(_Player);
+
+//END_REGION
+
+//REGION Diabolist's Door Trap
+// [Link Redacted]
+
+IF
+EnteredTrigger(_Character,(TRIGGER)S_LOW_DevilsFee_DoorTrapTrigger_0058d66a-faf1-439e-8e89-858d4162af19)
+AND
+_Character != S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597
+AND
+NOT DB_LOW_DevilsFee_HelsikInvocations(_Character)
+AND
+DB_LOW_DiabolistTrapActive(1)
+THEN
+PROC_LOW_DiabolistTrapTrigger();
+
+IF
+EnteredTrigger(S_LOW_DevilsFee_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597,(TRIGGER)S_LOW_DevilsFee_DoorTrapTrigger_0058d66a-faf1-439e-8e89-858d4162af19)
+AND
+DB_LOW_DiabolistTrapActive(1)
+THEN
+PROC_LOW_DevilsFee_DisableTrapByOwner();
+
+IF
+EnteredTrigger(_Character,(TRIGGER)S_LOW_DevilsFee_DoorTrapTrigger_0058d66a-faf1-439e-8e89-858d4162af19)
+AND
+DB_LOW_DevilsFee_HelsikInvocations(_Character)
+AND
+DB_LOW_DiabolistTrapActive(1)
+THEN
+PROC_LOW_DevilsFee_DisableTrapByOwner();
+
+IF
+ObjectTimerFinished(S_LOW_DevilsFee_DoorTrapGlyph_57ab3ff8-3e6e-40ff-9e3d-5129fb0182cc,"Timer_LOW_DiabolistTrapCooldown")
+AND
+DB_LOW_DiabolistTrapActive(1)
+THEN
+NOT DB_LOW_DiabolistTrapTriggered(1);
+
+IF
+ObjectTimerFinished(S_LOW_DevilsFee_DoorTrapGlyph_57ab3ff8-3e6e-40ff-9e3d-5129fb0182cc,"Timer_LOW_DiabolistTrapCooldown")
+AND
+DB_InRegion(_Character,(TRIGGER)S_LOW_DevilsFee_DoorTrapTrigger_0058d66a-faf1-439e-8e89-858d4162af19)
+AND
+NOT DB_Defeated(_Character)
+THEN
+PROC_LOW_DiabolistTrapTrigger();
+
+PROC
+PROC_LOW_DiabolistTrapTrigger()
+AND
+DB_LOW_DiabolistTrapActive(1)
+AND
+NOT DB_LOW_DiabolistTrapTriggered(1)
+THEN
+DB_LOW_DiabolistTrapTriggered(1);
+PROC_TryStartAD((DIALOGRESOURCE)LOW_DevilsFee_AD_ImpWardLaughing_be78da37-d3ba-3192-2c3b-a2f9bddfdc86,S_LOW_DevilsFee_DoorTrapWard_ba88b755-40d9-4c5f-b508-28a8acde937d);
+ObjectTimerLaunch((ITEM)S_LOW_DevilsFee_DoorTrapGlyph_57ab3ff8-3e6e-40ff-9e3d-5129fb0182cc,"Timer_LOW_DiabolistTrapCooldown",6000,1);
+CreateExplosion(S_LOW_DevilsFee_DoorTrapGlyph_57ab3ff8-3e6e-40ff-9e3d-5129fb0182cc,"Projectile_Fireball",10,S_LOW_DevilsFee_DoorTrapGlyph_57ab3ff8-3e6e-40ff-9e3d-5129fb0182cc);
+
+IF
+Combined((ITEM)S_LOW_DevilsFee_DoorTrapWard_ba88b755-40d9-4c5f-b508-28a8acde937d,_,_,_,_,_,_Item)
+THEN
+NOT DB_LOW_DiabolistTrapActive(1);
+Die(S_LOW_DevilsFee_DoorTrapGlyph_57ab3ff8-3e6e-40ff-9e3d-5129fb0182cc);
+DB_LOW_DiabolistTrap_NewHead(_Item);
+
+IF
+UseStarted(_,S_LOW_DevilsFee_DoorTrapWard_ba88b755-40d9-4c5f-b508-28a8acde937d)
+AND
+DB_LOW_DiabolistTrapActive(1)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_DevilsFee_AD_ImpWardGreeting_d2674837-5424-98d4-bdac-614876b9cb92,S_LOW_DevilsFee_DoorTrapWard_ba88b755-40d9-4c5f-b508-28a8acde937d);
+
+IF
+TemplateUseStarted(_,UNI_LOW_DevilsFee_TrapWardHead_Disarmed_ff95f7c4-8366-418d-aee4-dbbab06273ec,_Head)
+AND
+DB_LOW_DiabolistTrap_NewHead(_Head)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_DevilsFee_AD_ImpWardSolved_f6344cf5-0f69-a074-9daf-fc9635869a09,_Head);
+
+PROC
+PROC_LOW_DevilsFee_DisableTrapByOwner()
+AND
+DB_LOW_DiabolistTrapActive(1)
+THEN
+NOT DB_LOW_DiabolistTrapActive(1);
+Die(S_LOW_DevilsFee_DoorTrapGlyph_57ab3ff8-3e6e-40ff-9e3d-5129fb0182cc);
+SetCanInteract((ITEM)S_LOW_DevilsFee_DoorTrapWard_ba88b755-40d9-4c5f-b508-28a8acde937d,0);
+Transform((ITEM)S_LOW_DevilsFee_DoorTrapWard_ba88b755-40d9-4c5f-b508-28a8acde937d,UNI_LOW_DevilsFee_TrapWardHead_Disarmed_ff95f7c4-8366-418d-aee4-dbbab06273ec,(SHAPESHIFTRULE)Polymorph_a0ddddc8-255f-4014-9f63-d7608eb1c2a0);
+ClearOwnership(S_LOW_DevilsFee_SecondFroorDoor_b1d7e2eb-209f-497c-8cb0-45876edda4e2);
+ClearOwnership(S_LOW_DevilsFee_DoorTrapWard_ba88b755-40d9-4c5f-b508-28a8acde937d);
+ClearOwnership(S_LOW_DevilsFee_PortalToHouseOfHope_839e5ee7-1793-4a43-9e91-6da575e188ac);
+
+IF
+DB_GlobalFlag(_Flag)
+AND
+DB_LOW_DevilsFee_DealFlags(_Flag)
+THEN
+PROC_LOW_DevilsFee_DisableTrapByOwner();
+
+//END_REGION
+
+//REGION Store Closed
+//Teleport players outside the store
+IF
+DialogEnded(LOW_Helsik_462f73d1-95a0-ba7b-fe68-d14d12d461b3, _)
+AND
+DB_GlobalFlag(LOW_DevilsFee_State_ShopClosed_Global_39027e13-ac18-4eb4-952c-e0efee2a244a)
+THEN
+DB_LOW_DevilsFee_TeleportAreas((TRIGGER)S_LOW_DevilsFee_TeleportArea_Store_e2cbba44-92ef-4528-a377-95f2e1864f51);
+DB_LOW_DevilsFee_TeleportAreas(S_LOW_DevilsFee_TeleportArea_UpperFloor_e0f9ab5c-17f9-420b-bf0a-68b192d5760f);
+TimerLaunch("LOW_DevilsFee_TeleportOutDevilsFee", 1500);
+
+IF
+DB_LOW_DevilsFee_TeleportAreas(_TeleportArea)
+THEN
+PROC_TriggerRegisterForParty(_TeleportArea);
+
+IF
+EnteredTrigger(_PartyMember, _TeleportArea)
+AND
+DB_LOW_DevilsFee_TeleportAreas(_TeleportArea)
+AND
+NOT DB_HiddenCharacters(_PartyMember, _)
+THEN
+TeleportTo(_PartyMember, LOW_DevilsFee_TeleportOutStore_8e0b1ad5-1458-496a-a5cd-45f5bf24f66c, "LOW_DevilsFee_CharacterTeleported");
+
+IF
+EntityEvent(_PartyMember, "LOW_DevilsFee_CharacterTeleported")
+THEN
+PlayEffect(_PartyMember, (EFFECTRESOURCE)VFX_Script_InfernalPoofEffect_80bd6b0d-0fc6-d9f3-37b9-5b3d667180e3);
+
+IF
+TimerFinished("LOW_DevilsFee_TeleportOutDevilsFee")
+AND
+DB_LOW_DevilsFee_TeleportAreas(_TeleportArea)
+THEN
+NOT DB_LOW_DevilsFee_TeleportAreas(_TeleportArea);
+PROC_TriggerUnregisterForParty(_TeleportArea);
+
+IF
+TimerFinished("LOW_DevilsFee_TeleportOutDevilsFee")
+THEN
+PROC_LOW_DevilsFee_CloseStore();
+
+//Helsik hostile after teleporting players
+
+PROC
+PROC_LOW_DevilsFee_CloseStore()
+AND
+DB_Destroyed(S_LOW_DevilsFee_MainDoor_645c92a1-c344-45a6-b796-c765d0b9d6c3)
+THEN
+PROC_SetRelationToPlayers(Act3_LOW_Helsik_d696c1a3-1eff-4b13-80cd-ab46668fb9c0, 0);
+
+PROC
+PROC_LOW_DevilsFee_CloseStore()
+AND
+NOT DB_Destroyed(S_LOW_DevilsFee_MainDoor_645c92a1-c344-45a6-b796-c765d0b9d6c3)
+AND
+NOT QRY_CharacterMoveTo(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, S_LOW_DevilsFee_HelsikDoorPoint_d7a8e6bc-7a1b-4391-a414-89ac42bfe99f, "Run", "", "")
+THEN
+Close(S_LOW_DevilsFee_MainDoor_645c92a1-c344-45a6-b796-c765d0b9d6c3);
+PROC_SetRelationToPlayers(Act3_LOW_Helsik_d696c1a3-1eff-4b13-80cd-ab46668fb9c0, 0);
+
+PROC
+PROC_LOw_DevilsFee_CloseStore()
+AND
+NOT DB_Destroyed(S_LOW_DevilsFee_MainDoor_645c92a1-c344-45a6-b796-c765d0b9d6c3)
+AND
+QRY_CharacterMoveTo(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, S_LOW_DevilsFee_HelsikDoorPoint_d7a8e6bc-7a1b-4391-a414-89ac42bfe99f, "Run", "", "")
+THEN
+UseSpell(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, "Target_LOW_DevilsFee_ArcaneLock", S_LOW_DevilsFee_MainDoor_645c92a1-c344-45a6-b796-c765d0b9d6c3);
+
+
+IF
+CastedSpell(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, "Target_LOW_DevilsFee_ArcaneLock", _, _, _)
+THEN
+ObjectTimerLaunch(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, "LOW_DevilsFee_TimerToHostile", 1500);
+
+IF
+ObjectTimerFinished(S_LOW_Helsik_299a1c00-ff53-415e-ad8e-9bcbbae55597, "LOW_DevilsFee_TimerToHostile")
+THEN
+PROC_SetRelationToPlayers(Act3_LOW_Helsik_d696c1a3-1eff-4b13-80cd-ab46668fb9c0, 0);
+
+//END_REGION Store Closed
+
+//REGION LOW_HelsikDeal journal
+
+IF
+FlagSet((FLAG)LOW_DevilsFee_Event_GivingStolenItem_3b893839-951a-460c-96d6-d57bd6eb8dba,_,_)
+THEN
+QuestUpdate("LOW_HelsikDeal", "GaveGauntlets");
+
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act3b"

@@ -1,0 +1,247 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Madness Tracking
+PROC_DeclareCounter("UND_MonkAmulet_ResistMadnessCounter");
+DB_UND_MonkAmulet_IncreaseMadnessThreshold(3);
+
+// Params: Flag, DC
+DB_UND_MonkAmulet_MadnessLevels((FLAG)UND_MonkAmulet_State_MinorMadness_f0ace28f-8b25-468b-b4ca-3e676ad22687, (DIFFICULTYCLASS)DC_Legacy_10_625be976-7a67-4394-97c8-14c69715ae4b);
+DB_UND_MonkAmulet_MadnessLevels((FLAG)UND_MonkAmulet_State_ModerateMadness_ed3fa304-f32f-44f5-9654-da46d5fe3c8a, (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539);
+DB_UND_MonkAmulet_MadnessLevels((FLAG)UND_MonkAmulet_State_MajorMadness_cb463ada-23b1-49fb-9fbc-0bfb54520922, (DIFFICULTYCLASS)DC_Legacy_20_881bda2f-b08b-4788-b0ec-e410b5bacc57);
+//END_REGION
+
+//REGION Amulet Banter
+
+DB_GLO_MonkAmuletBanters((TRIGGER)S_UND_DuergarCamp_SUB_05c3bf1f-29a6-437c-9a98-c1ff0ec53a53, (DIALOGRESOURCE)UND_MonkAmulet_AD_KethericCityComment_8e45bd73-b2af-5517-3df1-66b1b0099bde);
+DB_GLO_MonkAmuletBanters_CustomTriggerRegister((TRIGGER)S_UND_DuergarCamp_SUB_05c3bf1f-29a6-437c-9a98-c1ff0ec53a53);
+DB_GLO_MonkAmuletBanters((TRIGGER)S_UND_MonkAmulet_PanicRoomBanter_bf6d2bf8-e2fa-4469-a793-d4419c8193e0, (DIALOGRESOURCE)UND_MonkAmulet_AD_PanicRoomComment_788fe48b-cecc-21a8-80b8-b40a2a9c0557);
+
+//END_REGION
+
+//REGION Lava Bubbles
+DB_KnowledgeCheckTrigger_AD("UND_MonkAmulet_LavaLakeKnowledgeCheck", (TRIGGER)S_UND_MonkAmulet_LavaKnowledgeCheckArea_affc0516-399f-44e6-bd33-09f1373ed680, "Arcana", (DIFFICULTYCLASS)DC_Legacy_10_625be976-7a67-4394-97c8-14c69715ae4b, (DIALOGRESOURCE)UND_MonkAmulet_PAD_EnteredLavaLake_43a5420f-796b-456d-d715-3e059b488298, (FLAG)UND_MonkAmulet_State_RecognisedLavaElemental_cad5702f-b92b-61ce-fb3d-be593bf3a32a);
+
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_000_2e18311b-337c-4920-9bd3-e9d85f92ff46);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_001_80220a30-d921-4266-99e2-518b5833662d);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_002_174c4090-c1d5-46e5-83b8-fc543caa1e60);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_003_72de9b7d-db6a-401d-8885-8d74dea88b47);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_004_cea94590-cd44-4f49-90d2-cdef73a7b32d);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_005_ac58f1cb-3ce2-4f60-9d00-7dbcb81d8259);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_006_3b22e89e-254b-4eb4-b10d-dee6261bb2f5);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_007_b46b8f63-3db2-49af-96a0-e4871c00481a);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_008_f57b739c-3c7e-454e-807a-16ad54aa2a60);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_009_67ab1b99-8cc4-4ae2-8577-36c6ab2afdf7);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_010_c533595d-bc8d-43f5-96c7-4c7af1c6422e);
+DB_UND_MonkAmulet_LavaBubbleLocations((TRIGGER)S_UND_MonkAmulet_LavaBubblePoint_011_1b9d6e44-21e9-4ad7-a7c6-676910c5f8ca);
+
+DB_UND_MonkAmulet_BubblesToSpawn(4);
+
+// Initialise DB so it can be populated later
+DB_UND_MonkAmulet_SpawnBubblesAt(NULL_00000000-0000-0000-0000-000000000000);
+NOT DB_UND_MonkAmulet_SpawnBubblesAt(NULL_00000000-0000-0000-0000-000000000000);
+
+PROC_TriggerRegisterForParty((TRIGGER)S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642);
+//END_REGION
+
+DB_BookFlags(S_UND_MonkAmulet_JusticiarDiary_46463c1a-06ab-4896-9012-abc446c7178a,UND_MonkAmulet_State_ReadJusticiarDiary_45870142-6295-4b60-9fe5-795b56624d33);
+KBSECTION
+//REGION Lava Elemental
+IF
+DB_Sees(_Player, (CHARACTER)S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("UND_MonkAmulet_SpotElementalKnowledgeCheck")
+THEN
+PROC_KnowledgeCheck_MP(_Player, "UND_MonkAmulet_ElementalArcanaCheck", (CHARACTER)S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, "Arcana", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)UND_MonkAmulet_PAD_SawLavaElemental_bc8e350b-c08b-23b6-ebd1-2b44af1cc203, (FLAG)UND_MonkAmulet_State_RecognisedLavaElemental_cad5702f-b92b-61ce-fb3d-be593bf3a32a);
+
+IF
+DB_InRegion(_Player, (TRIGGER)S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642)
+AND
+DB_PartyMembers(_Player)
+AND
+IsForceUpdate(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, 0)
+THEN
+SetForceUpdate(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, 1);
+
+IF
+LeftTrigger(_Player, S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642)
+AND
+DB_PartyMembers(_Player)
+AND
+NOT QRY_TriggerEvents_AnyPartyMemberInTrigger((TRIGGER)S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642)
+AND
+IsForceUpdate(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, 1)
+THEN
+SetForceUpdate(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, 0);
+//END_REGION
+
+//REGION Finding the Amulet
+
+IF
+AddedTo((ITEM)S_UND_MonkAmulet_Amulet_de2ea5a9-943a-4794-9ef7-208be7747178, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag((FLAG)UND_MonkAmulet_State_PlayerSpokeWithAmulet_5614945a-6d08-d67e-2606-99d4f87ea51a)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)UND_MonkAmulet_EquipAmulet_ee8a5144-2022-c562-75f2-c3d7a938fb74, (CHARACTER)S_GLO_LathanderMonk_bd1fac9a-f107-4064-85d0-ec392a6f2b30, _Player)
+THEN
+DB_NOOP(1);
+
+IF
+Equipped(S_UND_MonkAmulet_Amulet_de2ea5a9-943a-4794-9ef7-208be7747178, _Player)
+AND
+DB_Players(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)UND_MonkAmulet_State_PlayerSpokeWithAmulet_5614945a-6d08-d67e-2606-99d4f87ea51a)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)UND_MonkAmulet_EquipAmulet_ee8a5144-2022-c562-75f2-c3d7a938fb74, (CHARACTER)S_GLO_LathanderMonk_bd1fac9a-f107-4064-85d0-ec392a6f2b30, _Player)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Lava Bubbles
+IF
+DB_InRegion(_Player, (TRIGGER)S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642)
+AND
+DB_PartyMembers(_Player)
+AND
+NOT QRY_CheckOtherPartyMembersInTrigger(_Player, (TRIGGER)S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642)
+THEN
+ObjectTimerLaunch(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, "UND_MonkAmulet_LavaBubbleTimer", 6000);
+PROC_DeclareCounter("UND_MonkAmulet_BubbleLocationsChosen");
+
+IF
+LeftTrigger(_Player, S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642)
+AND
+DB_PartyMembers(_Player)
+AND
+NOT QRY_TriggerEvents_AnyPartyMemberInTrigger((TRIGGER)S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642)
+THEN
+TimerCancel("UND_MonkAmulet_LavaBubbleTimer");
+PROC_RemoveCounter("UND_MonkAmulet_BubbleLocationsChosen");
+
+IF
+ObjectTimerFinished(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, "UND_MonkAmulet_LavaBubbleTimer")
+AND
+HasActiveStatus(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, "UND_MONKAMULET_ELEMENTALDISTURBANCE", 1)
+AND
+QRY_TriggerEvents_AnyPartyMemberInTrigger((TRIGGER)S_UND_MonkAmulet_LakeArea_76a03e74-bed0-4349-a015-c101b0ea0642)
+THEN
+PROC_UND_MonkAmulet_GatherBubbleCandidates();
+PROC_UND_MonkAmulet_RefreshBubbleCooldowns();
+PROC_UND_MonkAmulet_ChooseBubbleLocations();
+SetEntityEvent(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, "UND_MonkAmulet_SpawnElementalBubble");
+ObjectTimerLaunch(S_UND_KethericCity_LavaElemental_1c47b089-3e59-41ca-a300-47dfd941b5a0, "UND_MonkAmulet_LavaBubbleTimer", 6000);
+
+
+
+// Load all potential locations into temporary DB_UND_MonkAmulet_LavaBubbleCandidates
+// Make random selections, and remove the selected candidate to prevent duplicates
+// Once all desired candidates are selected, spawn bubbles and clear DB_UND_MonkAmulet_LavaBubbleCandidates
+// Spawned bubbles are set to force update 
+// Area is large enough that bubbles can leave activation range and never have their self-destruct status expire
+// Bubbles are only active for a single turn before they self-destruct so we don't need to manage their force update status
+PROC
+PROC_UND_MonkAmulet_RefreshBubbleCooldowns()
+AND
+DB_UND_MonkAmulet_BubbleLocationCooldown(_Location)
+THEN
+NOT DB_UND_MonkAmulet_BubbleLocationCooldown(_Location);
+
+PROC
+PROC_UND_MonkAmulet_GatherBubbleCandidates()
+AND
+DB_UND_MonkAmulet_LavaBubbleLocations(_Candidate)
+AND
+NOT DB_UND_MonkAmulet_LavaBubbleCandidates(_Candidate)
+AND
+NOT DB_UND_MonkAmulet_BubbleLocationCooldown(_Candidate)
+THEN
+DB_UND_MonkAmulet_LavaBubbleCandidates(_Candidate);
+
+PROC
+PROC_UND_MonkAmulet_ChooseBubbleLocations()
+AND
+DB_UND_MonkAmulet_BubblesToSpawn(_NumBubbles)
+AND
+QRY_GetRandom("DB_UND_MonkAmulet_LavaBubbleCandidates", 1, "DB_UND_MonkAmulet_SpawnBubblesAt")
+AND
+DB_UND_MonkAmulet_SpawnBubblesAt(_Candidate)
+AND
+DB_UND_MonkAmulet_LavaBubbleCandidates((TRIGGER)_Candidate)
+AND
+CreateAtObject(PUZ_UND_LavaBubble_30589104-ccc4-459f-8fa0-84ddb0424f6c, _Candidate, 1, 0, "UND_MonkAmulet_BubbleSpawned", 0, _NewBubble)
+THEN
+PROC_IncreaseCounter("UND_MonkAmulet_BubbleLocationsChosen");
+SetForceUpdate(_NewBubble, 1);
+NOT DB_UND_MonkAmulet_LavaBubbleCandidates((TRIGGER)_Candidate);
+NOT DB_UND_MonkAmulet_SpawnBubblesAt(_Candidate);
+DB_UND_MonkAmulet_BubbleLocationCooldown(_Candidate);
+
+IF
+EntityEvent(_NewBubble, "UND_MonkAmulet_BubbleSpawned")
+THEN
+DB_UND_MonkAmulet_Bubble(_NewBubble);
+
+PROC
+PROC_UND_MonkAmulet_ChooseBubbleLocations()
+AND
+DB_GlobalCounter("UND_MonkAmulet_BubbleLocationsChosen", _Count)
+AND
+DB_UND_MonkAmulet_BubblesToSpawn(_MaxCount)
+AND
+_Count < _MaxCount
+THEN
+PROC_UND_MonkAmulet_ChooseBubbleLocations();
+
+PROC
+PROC_UND_MonkAmulet_ChooseBubbleLocations()
+AND
+DB_GlobalCounter("UND_MonkAmulet_BubbleLocationsChosen", _Count)
+AND
+DB_UND_MonkAmulet_BubblesToSpawn(_MaxCount)
+AND
+_Count >= _MaxCount
+THEN
+PROC_RemoveCounter("UND_MonkAmulet_BubbleLocationsChosen");
+PROC_DeclareCounter("UND_MonkAmulet_BubbleLocationsChosen");
+//END_REGION
+
+//REGION Cleanup
+PROC
+PROC_StateSet_PermaDefeated((GUIDSTRING)_Bubble)
+AND
+DB_UND_MonkAmulet_Bubble(_Bubble)
+THEN
+// Wait one frame with cleaning up so we don't delete the DB in a rule chain triggered by setting this same DB
+SetEntityEvent(_Bubble,"UND_MonkAmulet_Bubble_Destroy",1);
+NOT DB_UND_MonkAmulet_Bubble(_Bubble);
+
+IF
+EntityEvent(_Bubble,"UND_MonkAmulet_Bubble_Destroy")
+THEN
+NOT DB_Destroyed((ITEM)_Bubble);
+NOT DB_PermaDefeated(_Bubble);
+//END_REGION
+
+//REGION Debug
+IF
+TextEvent("UND_MonkAmulet_LavaBubble")
+THEN
+SetOnStage(S_UND_MonkAmulet_LavaBubble_000_efa7a00e-42a1-4d7a-8f4a-b34da8e189dd, 1);
+
+IF
+TextEvent("UND_MonkAmulet_LavaExplosionTest")
+AND
+DB_Players(_Player)
+THEN
+CreateExplosion(_Player, "Projectile_UND_LavaBubbleBurst", 1, _Player);
+//END_REGION 
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

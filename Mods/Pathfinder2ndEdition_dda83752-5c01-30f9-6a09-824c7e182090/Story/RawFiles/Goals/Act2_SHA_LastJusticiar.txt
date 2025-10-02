@@ -1,0 +1,875 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION State Management
+DB_State_Priority(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsCalm", 0);
+DB_State_Priority(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsPanicked", 100);
+DB_State_Priority(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsNegotiation", 200);
+DB_State_Priority(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsUltimatum", 300);
+DB_State_Priority(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsHostile", 400);
+DB_State_Priority(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_JusticiarAppeared", 500);
+DB_State_Priority(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_JusticiarAllied", 600);
+DB_State_Priority(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_JusticiarKilled", 700);
+
+DB_State_Current(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsCalm");
+
+DB_State_Flags(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsCalm", (FLAG)SHA_LastJusticiar_State_RatsCalm_d4eaf192-fd01-44a3-8581-0d7ae1bd6350);
+DB_State_Flags(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsPanicked", (FLAG)SHA_LastJusticiar_State_RatsPanicked_f9d36246-2278-4905-bea1-1452a30cdce7);
+DB_State_Flags(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsNegotiation", (FLAG)SHA_LastJusticiar_State_RatsNegotiation_ae2cc45a-dd79-452c-ad7e-311d867b151d);
+DB_State_Flags(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsUltimatum", (FLAG)SHA_LastJusticiar_State_Ultimatum_05b19df2-2521-4fca-a540-41103a267d32);
+DB_State_Flags(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsHostile", (FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b);
+DB_State_Flags(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_JusticiarAppeared", (FLAG)SHA_LastJusticiar_State_JusticiarAppeared_1bb2fe4b-2c35-48d8-93ed-3e9e834557f6);
+
+DB_DeadOnceFlag((CHARACTER)S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, (FLAG)SHA_LastJusticiar_State_KilledJusticiar_95b1ac4a-c978-3288-a192-d294b70229c4);
+//END_REGION
+
+//REGION Rats
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_ThroneStealer_f36da226-bf20-4dcf-90f0-5618e6e66166);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_ThroneWorshipper_000_7f941321-725d-48a9-b605-429272ec2c46);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_ThroneWorshipper_001_7d473c88-0ea0-48bb-a410-325d6b18a538);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_ThroneWorshipper_002_f37cc75c-1397-4684-af55-ee9d241c7d38);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Extinguisher_994e54d3-d40a-4381-be80-7dddc6ac8b6d);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_000_49a5b3f2-531e-436d-a49b-cd0b79b84916);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_001_5f80d987-63f9-48d3-a780-6c1e6216a56c);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_002_26f06236-306e-423e-9221-288ffa5d70f9);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_003_625653d1-ef2c-484e-a131-e60198676e24);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_004_4214de90-7704-4d2e-88bf-12d2db1560cd);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_005_a2160aea-9581-4be4-aa84-da15209779c9);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_006_99f8e320-0bc2-48a1-ba11-f9773ef94fad);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_007_25f15837-ae57-448a-b0b0-712708468fb4);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Worshipper_008_d3bc5def-79e9-465d-bfb2-5382044397d7);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Scholar_291cc0bc-1ada-44f7-8b2c-0898118f417e);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Guard_000_2006d466-8216-47ce-ba3f-050224f9957a);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Guard_001_2f159306-b27e-4067-897e-8949e28ff313);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Guard_002_b72a495b-d570-4b7e-bbf9-3ac57ea175ba);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_NecroSpy_a83be5e8-46d7-4665-9ee1-fda00e600679);
+DB_SHA_LastJusticiar_Rats((CHARACTER)S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303);
+
+// If 70% of the current wave is left, spawn a new wave
+DB_SHA_LastJusticiar_UltimatumNewWaveTreshold(70);
+
+DB_GlobalCounter("SHA_LastJusticiar_UltimatumWaveCounter", 0);
+
+// Params: Character, Wave
+// Wave 0
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_001_b57c5eb8-af19-40de-9422-2c6cb93832d6, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_000_e0a6fcf0-266a-4875-b2e7-7fc4b2a1139f, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_002_761ab552-cf5a-4412-a18f-c1f992fd26a1, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_003_42970da1-c550-4021-9c25-c2b233d97eed, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_007_e54fc7d8-f8b0-43e9-95da-d57fe73dea88, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_005_8c8b094a-70ad-4036-96cb-49d54cb28b5c, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_004_82bf1d00-3985-4b21-a7be-5cce09620bbd, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_006_d1684257-6daf-4fd6-b204-1b3511ee33b2, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_008_ef62e16e-3c49-470a-bb8d-e5fdec975552, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_010_c53f1560-7423-43c2-8a99-1c6d5ca69694, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_011_5b8dc792-d51d-41c6-b4d6-61eedfa5ec81, 0);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_009_e6d125ef-f3ee-434a-83e8-a9e8f31ad109, 0);
+
+// Wave 1
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_012_95c657d4-5aab-4e38-a20a-a1bfd7d929dc, 1);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_013_76ff6063-c49f-4890-a9d4-dffe1acc00b6, 1);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_014_7bd796df-81d9-4a68-b898-fd76c4625d9f, 1);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_015_045deecf-9ff9-4cb3-91f7-2f50e7083c3f, 1);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_016_8ebaf54d-a04d-45d1-9d9a-1131c7e882c3, 1);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_017_24838525-bad8-4896-9166-9efcceda9dfb, 1);
+
+// Wave 2
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Narcoleptic_019_aee8360e-6bdf-4a24-afde-1a52cc0b920f, 2);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_018_7a5d17c6-ee38-45f9-b7ca-1eb718f5d9c2, 2);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_020_1a1d54cb-d9a3-4d9a-9c2c-f664bd477bc2, 2);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_021_06cc49cb-9377-4f44-b0d6-e3cf425c37d1, 2);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_022_c038da95-e8f1-4fca-b513-0b29c94464b2, 2);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_021_a6ba76ad-a2d5-4695-9ab0-e6f048fb2c06, 2);
+
+// Wave 3
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Narcoleptic_025_b0290bb6-759c-4a48-bbff-d5de5f1f5951, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_022_0b930556-71b7-4bc2-ac69-9f6500711855, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_023_4028f67d-2b1e-4af8-afe6-00ad4001ccaa, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_024_ded42979-3d44-4f44-aab1-52bec9e29f4b, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_026_37cf19b4-d393-4807-82a2-24c92b16807b, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_028_58945498-ad93-4479-9cc4-23288daec671, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_029_3cd5e99e-76c1-40c6-9b8a-d161d4f7503d, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_027_b4445aa4-6277-4e10-8fac-ea481f0aeafa, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_031_878982ed-6cf2-4850-a7b7-4f6366eaa0ac, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_030_75376c42-20b2-497e-8c74-615b74512732, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_032_6fac8834-93a2-416e-a9db-3a7e7a190c9b, 3);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Narcoleptic_033_36674bfb-1d64-498c-aca5-cf73520c9595, 3);
+
+// Wave 4
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_034_ec8398c6-7c0a-48e1-ba1d-69231e431d78, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_035_9c23042e-e39d-4991-a12e-3d878d08d642, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Narcoleptic_037_aea0069d-cfd7-43b2-9dda-e99ac247b75f, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_036_19708a3e-3203-4967-83a6-c760f5895999, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_039_6f1b6213-67be-41fc-8627-5bc9b2c31c90, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_040_82d15c6b-7b4f-4c5e-aa89-70397aef9f3a, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Narcoleptic_038_45ff0e27-69d1-47d7-8cc3-8554dfa137a3, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_041_b6a09bd2-21fa-4627-99d3-436d8d845724, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Narcoleptic_042_6c5474d6-9f38-43ef-a71c-9c8de21f6e6c, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_043_3aa96499-e032-4f79-8ee7-2801773a1018, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_044_276bd01e-f4c5-4318-ad8c-34cb96d3cebb, 4);
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_Wounding_045_b7b7d089-33ad-4314-b1e3-4f5979626d98, 4);
+
+// Areas that provoke a reaction from certain rats when the player enters
+PROC_TriggerRegisterForPlayers((TRIGGER)S_SHA_LastJusticiar_GuardArea_000_5e34b0cb-1d2c-462f-a840-2da6f0b7a3a3);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_SHA_LastJusticiar_GuardArea_001_ea9052cc-1636-4e22-93ca-7b71bc37c616);
+
+DB_DropMutingStatussesDialog((DIALOGRESOURCE)SHA_LastJusticiar_RatsPanicked_f5e8d130-fa60-7fbe-906e-27309b0b180d);
+//END_REGION
+
+//REGION Negotiation State
+DB_SHA_LastJusticiar_NegotiationAreas((TRIGGER)S_SHA_LastJusticiar_NegotiationArea_000_4245d3a0-9469-4c11-9fb4-eed3b22af177);
+DB_SHA_LastJusticiar_NegotiationAreas((TRIGGER)S_SHA_LastJusticiar_NegotiationArea_001_2860b9c4-5235-4832-98d4-0ae7615eaa91);
+DB_SHA_LastJusticiar_NegotiationAreas((TRIGGER)S_SHA_LastJusticiar_NegotiationArea_002_7ec4ae2a-d61b-441e-bc8e-a9e437a2b468);
+DB_SHA_LastJusticiar_NegotiationAreas((TRIGGER)S_SHA_LastJusticiar_NegotiationArea_003_d75b2195-f05a-47eb-97d4-e0794e9bbe0d);
+DB_SHA_LastJusticiar_NegotiationAreas((TRIGGER)S_SHA_LastJusticiar_NegotiationArea_004_e44f2450-a514-4cee-b187-8f113cacd7d1);
+DB_SHA_LastJusticiar_NegotiationAreas((TRIGGER)S_SHA_LastJusticiar_NegotiationArea_005_16c70dd8-72b0-4154-a91f-852bcd109893);
+
+DB_GlobalFlagReactionAfterDialog((FLAG)SHA_LastJusticiar_State_PlayerTruce_1d54b03b-926a-c36d-7480-e29659f6c506, (DIALOGRESOURCE)SHA_LastJusticiar_RatsNegotiate_592f63db-b2b3-9383-9160-1643321f02ce);
+DB_GlobalFlagReactionAfterDialog((FLAG)SHA_LastJusticiar_State_SharedTreasure_bbd04557-5cae-4802-aa7e-9cb86af7b698, (DIALOGRESOURCE)SHA_LastJusticiar_RatsNegotiate_592f63db-b2b3-9383-9160-1643321f02ce);
+
+
+SetOnStage(S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303, 0);
+//END_REGION
+
+//REGION Ultimatum State
+SetOnStage(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 0);
+
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_000_876041f8-555a-40ef-8fdd-f9bbedc0b897);
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_001_814508af-6b82-44b1-a226-15c3775b64a6);
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_002_69d93bcf-df26-4bb1-8c42-064cdecf9a46);
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_003_f8279513-ae25-468c-ba88-c3bd7b75330d);
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_004_1ff2b78d-612a-40c5-a6a4-943e5143ff3a);
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_005_c2247a28-faf1-4354-84bb-553b354e35d3);
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_006_759bcc70-bfac-4871-af31-1c4e068bdc58);
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_007_86e6e4f2-c72c-4e1d-bfaf-b108b7007872);
+DB_SHA_LastJusticiar_PackRat((CHARACTER)S_SHA_TravelRat_008_f99b8a4d-1fc6-4193-aacc-78dac055d839);
+
+DB_SHA_LastJusticiar_RatHoles((ITEM)S_SHA_LastJusticiar_RatTravelTunnel_000_8cb77d4a-2971-45f4-8df8-fc7e2c4af0ab, (TRIGGER)S_SHA_RatHoleTrigger_000_bd30bfcb-a24b-4099-a856-3cb2661ef154);
+DB_SHA_LastJusticiar_RatHoles((ITEM)S_SHA_LastJusticiar_RatTravelTunnel_001_284592a5-9cb4-4640-9d00-be5c9f06ce7e, (TRIGGER)S_SHA_RatHoleTrigger_001_a6d4e70c-153e-46d4-81d1-62fe040057a2);
+DB_SHA_LastJusticiar_RatHoles((ITEM)S_SHA_LastJusticiar_RatTravelTunnel_002_4d0488b9-6b14-4f32-ba98-83bdc53883d2, (TRIGGER)S_SHA_RatHoleTrigger_002_b71b7bfb-5a29-471b-9b8c-3a177ad149b1);
+DB_SHA_LastJusticiar_RatHoles((ITEM)S_SHA_LastJusticiar_RatTravelTunnel_003_db7d66c6-ed18-4a58-b5a7-fedebe5b660a, (TRIGGER)S_SHA_RatHoleTrigger_003_f396d629-881a-432c-8a40-69758fc8b9b3);
+DB_SHA_LastJusticiar_RatHoles((ITEM)S_SHA_LastJusticiar_RatTravelTunnel_004_f4284b73-92c7-4900-b8fa-4c896022286c, (TRIGGER)S_SHA_RatHoleTrigger_004_f34b00b9-0921-4c52-bfa1-3c8f0ab66226);
+//END_REGION
+
+//REGION Justiciar Appearance State
+DB_Dialogs(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, (DIALOGRESOURCE)SHA_LastJusticiar_PostUltimatum_f9f36b76-8602-51dc-6a69-f7ced5dcb9b5);
+DB_GLO_CharacterCorpseDialog((CHARACTER)S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, (DIALOGRESOURCE)SHA_LastJusticiar_SpeakWithDead_a223ab5b-2392-4358-d242-0f3a8ae6ed6e);
+DB_IgnoreMutingStatussesDialog((DIALOGRESOURCE)SHA_LastJusticiar_JusticiarAppears_a91cb7a5-6d80-7c81-b227-25d461dd0a2f);
+
+Transform(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, RAT_A_aa60d129-8d11-4178-a22b-836062e86010, (SHAPESHIFTRULE)WildShape_d47da5e8-e8d0-4e00-9578-35f8b1da8693);
+SetOnStage(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, 0);
+//END_REGION
+
+//REGION Ritual Circle
+
+DB_KnowledgeCheckItem_AD("SHA_LastJusticiar_RitualSite", (ITEM)S_SHA_RitualEffigy_366e4faf-69be-4961-8d5e-5c2dcffa055e, "Investigation", (DIFFICULTYCLASS)Act2_Medium_89f0acd4-346f-479d-8b7a-1a3eb5382f6d, (DIALOGRESOURCE)SHA_LastJusticiar_PAD_RitualCircle_bc91866a-3893-5707-3253-e4a71f5b4bd9,(FLAG)SHA_LastJusticiar_Knows_InfernalRitual_4ca0b9a8-503a-4a5e-990e-17d86762b0ca);
+
+//END_REGION
+KBSECTION
+//REGION State Transition
+IF
+DB_SHA_LastJusticiar_Rats(_Rat)
+THEN
+DB_SHA_LastJusticiar_RatsAlive(_Rat);
+DB_Dialogs(_Rat, (DIALOGRESOURCE)SHA_LastJusticiar_RatsCalm_10a5c4e9-71ac-1b3d-fe89-a92f0fabfc24);
+
+IF
+DB_SHA_LastJusticiar_UltimatumRats(_Rat,_)
+THEN
+SetOnStage(_Rat, 0);
+
+IF
+DB_PermaDefeated(_Rat)
+AND
+DB_SHA_LastJusticiar_RatsAlive((CHARACTER)_Rat,(INTEGER)_Int)
+THEN
+NOT DB_SHA_LastJusticiar_RatsAlive(_Rat,_Int);
+
+IF
+DB_PermaDefeated(_Rat)
+AND
+DB_SHA_LastJusticiar_Rats((CHARACTER)_Rat)
+THEN
+PROC_Foop(_Rat);
+PROC_SHA_LastJusticiar_RatDeath();
+
+IF
+DB_PermaDefeated(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540)
+THEN
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_JusticiarKilled");
+
+IF
+DialogEnded((DIALOGRESOURCE)SHA_LastJusticiar_RatsUltimatum_c2d6a196-c24e-fa56-d420-9d49a6f31192, _)
+THEN
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsHostile");
+
+PROC
+PROC_GLO_DefeatCounter_AllPermaDefeated("SHA_LastJusticiar_DefeatCounter_UltimatumRats")
+THEN
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_JusticiarAppeared");
+
+PROC
+PROC_SHA_LastJusticiar_RatDeath()
+THEN
+PROC_State_IfCurrentProgress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsNegotiation", "SHA_LastJusticiar_State_RatsUltimatum");
+
+PROC
+PROC_SHA_LastJusticiar_RatDeath()
+THEN
+PROC_State_IfCurrentProgress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsPanicked", "SHA_LastJusticiar_State_RatsNegotiation");
+
+PROC
+PROC_SHA_LastJusticiar_RatDeath()
+THEN
+PROC_State_IfCurrentProgress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsCalm", "SHA_LastJusticiar_State_RatsPanicked");
+//END_REGION
+
+//REGION Rat Panic
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_RatsPanicked_f9d36246-2278-4905-bea1-1452a30cdce7)
+AND
+DB_SHA_LastJusticiar_RatsAlive(_Rat)
+THEN
+PROC_RemoveDialog(_Rat);
+DB_Dialogs(_Rat, (DIALOGRESOURCE)SHA_LastJusticiar_RatsPanicked_f5e8d130-fa60-7fbe-906e-27309b0b180d);
+//END_REGION
+
+//REGION Rat Negotiation
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_RatsNegotiation_ae2cc45a-dd79-452c-ad7e-311d867b151d)
+AND
+DB_SHA_LastJusticiar_NegotiationAreas(_NegotiationArea)
+THEN
+PROC_TriggerRegisterForPlayers(_NegotiationArea);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_RatsNegotiation_ae2cc45a-dd79-452c-ad7e-311d867b151d)
+AND
+DB_SHA_LastJusticiar_RatsAlive(_Rat)
+THEN
+PROC_RemoveDialog(_Rat);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_RatsNegotiation_ae2cc45a-dd79-452c-ad7e-311d867b151d)
+THEN
+PROC_RemoveDialog(S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303);
+DB_Dialogs(S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303, (DIALOGRESOURCE)SHA_LastJusticiar_RatsNegotiate_592f63db-b2b3-9383-9160-1643321f02ce);
+
+IF
+DB_InRegion(_Player, _NegotiationArea)
+AND
+DB_Players(_Player)
+AND
+DB_SHA_LastJusticiar_NegotiationAreas(_NegotiationArea)
+AND
+NOT DB_OnlyOnce("SHA_LastJusticiar_DiploratSuccessfullyAppeared")
+AND
+IsInCombat(_Player, 0)
+AND
+GetPosition(_Player, _PlayerX, _PlayerY, _PlayerZ)
+AND
+FindValidPosition(_PlayerX, _PlayerY, _PlayerZ, 12.0, (CHARACTER)S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303, 1, _RatX, _RatY, _RatZ)
+AND
+QRY_OnlyOnce("SHA_LastJusticiar_DiploratSuccessfullyAppeared")
+THEN
+DB_SHA_LastJusticiar_RatAppeared(1);
+AppearAtPosition((CHARACTER)S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303, _RatX, _RatY, _RatZ, 1, NULL_00000000-0000-0000-0000-000000000000, "SHA_LastJusticiar_DiploratAppeared", 0);
+
+IF
+DB_InRegion(_Player, _NegotiationArea)
+AND
+NOT DB_SHA_LastJusticiar_RatAppeared(1)
+AND
+DB_Players(_Player)
+AND
+DB_SHA_LastJusticiar_NegotiationAreas(_NegotiationArea)
+AND
+NOT DB_OnlyOnce("SHA_LastJusticiar_DiploratSuccessfullyAppeared")
+AND
+IsInCombat(_Player, 0)
+AND
+GetPosition(_Player, _PlayerX, _PlayerY, _PlayerZ)
+AND
+QRY_OnlyOnce("SHA_LastJusticiar_DiploratSuccessfullyAppeared")
+THEN
+DB_SHA_LastJusticiar_RatAppeared(1);
+AppearAtPosition((CHARACTER)S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303, _PlayerX, _PlayerY, _PlayerZ, 1, NULL_00000000-0000-0000-0000-000000000000, "SHA_LastJusticiar_DiploratAppeared", 0);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_RatsNegotiation_ae2cc45a-dd79-452c-ad7e-311d867b151d)
+THEN
+PROC_SHA_LastJusticiar_RatRetreat();
+
+IF
+EntityEvent(_Rat, "SHA_LastJusticiar_DiploratAppeared")
+THEN
+NOT DB_SHA_LastJusticiar_RatAppeared(1);
+ObjectTimerLaunch(_Rat, "SHA_LastJusticiar_StartSpottingBufferTimer", 1500);
+
+IF
+ObjectTimerFinished(_Rat, "SHA_LastJusticiar_StartSpottingBufferTimer")
+THEN
+DB_SpotPlayers((CHARACTER)_Rat, "SHA_LastJusticiar_DiploratSpotting", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_SpotPlayers_Spotted(_Rat, "SHA_LastJusticiar_DiploratSpotting", _Player)
+AND
+QRY_StartDialog((DIALOGRESOURCE)SHA_LastJusticiar_RatsNegotiate_592f63db-b2b3-9383-9160-1643321f02ce, _Rat, _Player)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)SHA_LastJusticiar_State_PlayerTruce_1d54b03b-926a-c36d-7480-e29659f6c506)
+THEN
+PROC_DisappearOutOfSight((CHARACTER)S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303, "Run", 0, "SHA_LastJusticiar_DiploratLeft");
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)SHA_LastJusticiar_State_SharedTreasure_bbd04557-5cae-4802-aa7e-9cb86af7b698, (DIALOGRESOURCE)SHA_LastJusticiar_RatsNegotiate_592f63db-b2b3-9383-9160-1643321f02ce, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, _)
+THEN
+PROC_TriggerRegisterForPlayers((TRIGGER)S_SHA_LastJusticiar_StashBox_3f27273c-51f0-4116-8f80-ccd04e0eea44);
+PROC_ShowMarker((CHARACTER)_Player, "SHA_LastJusticiarStash");
+
+IF
+EnteredTrigger(_Player, (TRIGGER)S_SHA_LastJusticiar_StashBox_3f27273c-51f0-4116-8f80-ccd04e0eea44)
+THEN
+PROC_TriggerUnregisterForPlayers((TRIGGER)S_SHA_LastJusticiar_StashBox_3f27273c-51f0-4116-8f80-ccd04e0eea44);
+SetEntityEvent((ITEM)S_SHA_SecretCompartment_Helper_36a78fb7-0b75-4e79-897f-cd289dedd504, "SHA_Secret_RevealCompartment");
+PROC_HideMarker((CHARACTER)_Player, "SHA_LastJusticiarStash");
+
+PROC
+PROC_SHA_LastJusticiar_RatRetreat()
+AND
+DB_SHA_LastJusticiar_RatsAlive(_Rat)
+THEN
+PROC_ForceStopDialog(_Rat);
+PROC_DisappearOutOfSight((CHARACTER)_Rat, "Run", 1, "SHA_LastJusticiar_RatRetreat");
+
+IF // Normal flow + Player has access to killcombat
+DB_Is_InCombat(S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303, _ID)
+AND
+NOT DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+AND
+DB_InRegion((CHARACTER)_Char, (TRIGGER)S_SHA_LastJusticiar_NegotiationArea_002_7ec4ae2a-d61b-441e-bc8e-a9e437a2b468)
+AND
+DB_Is_InCombat(_Char, _ID)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b);
+
+IF //In case the player one shot kills the diplorat
+AttackedBy(S_SHA_LastJusticiar_Rat_Diplorat_ab07a441-2d97-493a-b516-7a4094877303, _, _Char, _, _, _, _)
+AND
+NOT DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+AND
+DB_InRegion((CHARACTER)_Char, (TRIGGER)S_SHA_LastJusticiar_NegotiationArea_002_7ec4ae2a-d61b-441e-bc8e-a9e437a2b468)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b);
+
+//END_REGION
+
+//REGION Rat Ultimatum
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+AND
+IsForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 1)
+THEN
+SetForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 0);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+THEN
+SetOnStage(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 0);
+
+IF
+AttackedBy(_Rat, _Player, _, _, _, _, _)
+AND
+NOT DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+AND
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)_Rat, _)
+AND
+IsEnemy((CHARACTER)_Rat, (CHARACTER)_Player, 0)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Ultimatum_05b19df2-2521-4fca-a540-41103a267d32)
+THEN
+PROC_TriggerRegisterForPlayers((TRIGGER)S_SHA_LastJusticiar_UltimatumDialogTrigger_2da51c13-8e94-4da2-aef0-9a0802d7b335);
+PROC_TriggerRegisterForParty((TRIGGER)S_SHA_LastJusticiation_UltimatumLureArea_56305d1e-25cf-443e-8299-00d7ed144d04);
+PROC_SHA_LastJusticiar_CheckWaveThreshold();
+SetOnStage(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 1);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Ultimatum_05b19df2-2521-4fca-a540-41103a267d32)
+AND
+DB_SHA_LastJusticiar_RatsAlive(_Rat)
+THEN
+PROC_RemoveDialog(_Rat);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+THEN
+PROC_SetRelationToPlayers((FACTION)ACT2_SHA_LastJusticiar_Rats_66080136-112f-4c7d-8b63-0863c87743f3, 0);
+
+IF
+DB_SHA_LastJusticiar_UltimatumRats(_Rat, _)
+THEN
+DB_GLO_DefeatCounter(_Rat, "SHA_LastJusticiar_DefeatCounter_UltimatumRats");
+
+IF
+DB_InRegion(_Player, (TRIGGER)S_SHA_LastJusticiar_UltimatumDialogTrigger_2da51c13-8e94-4da2-aef0-9a0802d7b335)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("SHA_LastJusticiar_StartUltimatumDialog")
+AND
+QRY_StartDialog((DIALOGRESOURCE)SHA_LastJusticiar_RatsUltimatum_c2d6a196-c24e-fa56-d420-9d49a6f31192, (CHARACTER)S_SHA_LastJusticiar_UltimatumSpeaker_5df7b066-7780-4dc5-a040-5aaea73a927e, _Player)
+AND
+DB_SHA_LastJusticiar_UltimatumRats(_Fighter, 0)
+AND
+IsOnStage(_Fighter, 0)
+AND
+QRY_OnlyOnce("SHA_LastJusticiar_SpawnFallBack")
+THEN
+PROC_SHA_LastJusticiar_CheckWaveThreshold();
+
+IF
+DB_InRegion(_Player, (TRIGGER)S_SHA_LastJusticiation_UltimatumLureArea_56305d1e-25cf-443e-8299-00d7ed144d04)
+AND
+DB_PartyMembers(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+AND
+NOT QRY_CheckOtherPartyMembersInTrigger(_Player, (TRIGGER)S_SHA_LastJusticiation_UltimatumLureArea_56305d1e-25cf-443e-8299-00d7ed144d04)
+AND
+IsForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 0)
+THEN
+SetForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 1);
+
+// When a rat is defeated, check if 70% of the wave remains. If so, spawn a new wave
+IF
+DB_PermaDefeated(_Rat)
+AND
+DB_SHA_LastJusticiar_CurrentUltimatumWaveMembers(_Rat)
+THEN
+PROC_SHA_LastJusticiar_CheckWaveThreshold();
+
+IF
+DB_PermaDefeated(_Rat)
+AND
+DB_SHA_LastJusticiar_CurrentUltimatumWaveMembers(_Rat)
+THEN
+PROC_Poof(_Rat);
+
+IF
+LeftTrigger(_Player, (TRIGGER)S_SHA_LastJusticiation_UltimatumLureArea_56305d1e-25cf-443e-8299-00d7ed144d04)
+AND
+DB_PartyMembers(_Player)
+AND
+NOT QRY_CheckOtherPartyMembersInTrigger(_Player, (TRIGGER)S_SHA_LastJusticiation_UltimatumLureArea_56305d1e-25cf-443e-8299-00d7ed144d04)
+AND
+IsForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 1)
+THEN
+SetForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 0);
+
+IF
+WentOnStage(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 1)
+AND
+DB_PartyMembers(_Player)
+AND
+DB_InRegion(_Player, (TRIGGER)S_SHA_LastJusticiation_UltimatumLureArea_56305d1e-25cf-443e-8299-00d7ed144d04)
+AND
+IsForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 0)
+THEN
+SetForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 1);
+
+IF
+WentOnStage(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 0)
+AND
+IsForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 1)
+THEN
+SetForceUpdate(S_SHA_LastJusticiar_UltimatumLure_4700da81-8c8e-455f-9158-dc2b6c204f29, 0);
+
+// Check if we need to spawn a new wave
+PROC
+PROC_SHA_LastJusticiar_CheckWaveThreshold()
+AND
+DB_SHA_LastJusticiar_UltimatumNewWaveTreshold(_Treshold)
+AND
+SysCount("DB_SHA_LastJusticiar_CurrentUltimatumWaveMembers", 1, _TotalMembers)
+AND
+QRY_GLO_DefeatCounter_Count("SHA_LastJusticiar_DefeatCounter_UltimatumWave", "PermaDefeated")
+AND
+DB_QRYRTN_GLO_DefeatCounter_Count(_DefeatedRats)
+AND
+QRY_SHA_LastJusticiar_CheckCanSpawnRats(_TotalMembers, _DefeatedRats, _Treshold)
+THEN
+PROC_SHA_LastJusticiar_SpawnUltimatumWave();
+
+QRY
+QRY_SHA_LastJusticiar_CheckCanSpawnRats((INTEGER)_TotalMembers, (INTEGER)_DefeatedRats, (INTEGER)_Treshold)
+AND
+_TotalMembers <= 0 // Guard against divisions by 0, always force spawning them in this case.
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_SHA_LastJusticiar_CheckCanSpawnRats((INTEGER)_TotalMembers, (INTEGER)_DefeatedRats, (INTEGER)_Treshold)
+AND
+_TotalMembers > 0
+AND
+IntegerSubtract(_TotalMembers, _DefeatedRats, _CurrentMembers)
+AND
+IntegerToReal(_TotalMembers, _RealTotal)
+AND
+IntegerToReal(_CurrentMembers, _RealCurrent)
+AND
+RealDivide(_RealCurrent, _RealTotal, _Ratio)
+AND
+RealProduct(_Ratio, 100.0, _RealPercentage)
+AND
+RealToInteger(_RealPercentage, _Percentage)
+AND
+_Percentage <= _Treshold
+THEN
+DB_NOOP(1);
+
+// When a new wave is spawned clear the already defeated characters from the defeat counter
+PROC
+PROC_SHA_LastJusticiar_SpawnUltimatumWave()
+AND
+DB_GLO_DefeatCounter(_Fighter, "SHA_LastJusticiar_DefeatCounter_UltimatumWave")
+AND
+DB_PermaDefeated(_Fighter)
+THEN
+NOT DB_GLO_DefeatCounter(_Fighter, "SHA_LastJusticiar_DefeatCounter_UltimatumWave");
+
+PROC
+PROC_SHA_LastJusticiar_SpawnUltimatumWave()
+AND
+DB_GlobalCounter("SHA_LastJusticiar_UltimatumWaveCounter", _CurrentWave)
+AND
+DB_SHA_LastJusticiar_UltimatumRats(_Fighter, _CurrentWave)
+THEN
+DB_SHA_LastJusticiar_CurrentUltimatumWaveMembers(_Fighter);
+DB_GLO_DefeatCounter(_Fighter, "SHA_LastJusticiar_DefeatCounter_UltimatumWave");
+AppearAt(_Fighter, _Fighter, 1, NULL_00000000-0000-0000-0000-000000000000, "SHA_LastJusticiar_UltimatumFighterAppeared", 0);
+
+PROC
+PROC_SHA_LastJusticiar_SpawnUltimatumWave()
+THEN
+PROC_IncreaseCounter("SHA_LastJusticiar_UltimatumWaveCounter");
+
+IF
+EnteredCombat(_Fighter, _ID)
+AND
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)_Fighter, 2)
+AND
+DB_Players(_Player)
+AND
+QRY_IsInRange(_Fighter, _Player, 18.0)
+AND
+QRY_OnlyOnce("SHA_LastJusticiar_RatHorde")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)SHA_LastJusticiar_VB_KillRats_9d65cadb-beca-198e-1ccc-1ef9e26caed8, _Player);
+
+IF
+VoiceBarkFailed((VOICEBARKRESOURCE)SHA_LastJusticiar_VB_KillRats_9d65cadb-beca-198e-1ccc-1ef9e26caed8)
+AND
+DB_OnlyOnce("SHA_LastJusticiar_RatHorde")
+THEN
+NOT DB_OnlyOnce("SHA_LastJusticiar_RatHorde");
+
+//END_REGION
+
+//REGION Rat Ultimatum - Horde
+
+IF
+DB_SHA_LastJusticiar_PackRat(_Rat)
+THEN
+SetOnStage(_Rat, 0);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Ultimatum_05b19df2-2521-4fca-a540-41103a267d32)
+THEN
+TimerLaunch("SHA_LastJusticiar_TravelRatSpawn", 5000);
+
+IF
+TimerFinished("SHA_LastJusticiar_TravelRatSpawn")
+AND
+DB_SHA_LastJusticiar_RatHoles(_, _Trigger)
+THEN
+PROC_TriggerRegisterForParty(_Trigger);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+AND
+DB_SHA_LastJusticiar_RatHoles(_, _Trigger)
+THEN
+PROC_TriggerUnregisterForParty(_Trigger);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_Hostile_ed6bc07d-6041-49c3-9fc5-bc604bc8543b)
+AND
+DB_SHA_LastJusticiar_RatActive(_Rat, _)
+THEN
+PROC_DisappearOutOfSight(_Rat, "Run" , 0 , "");
+
+IF
+EnteredTrigger(_Char, _Trigger)
+AND
+DB_SHA_LastJusticiar_RatHoles(_Hole, _Trigger)
+AND
+NOT DB_SHA_LastJusticiar_RatActive(_, _Hole)
+AND
+SysCount("DB_SHA_LastJusticiar_RatActive", 2, _Count)
+AND
+_Count <= 8
+THEN
+PROC_SHA_LastJusticiar_DeterminePackSize((ITEM)_Hole);
+
+IF
+EnteredTrigger(_Char, _Trigger)
+AND
+DB_SHA_LastJusticiar_RatHoles(_Hole, _Trigger)
+AND
+NOT DB_SHA_LastJusticiar_RatActive(_, _)
+THEN
+PROC_SHA_LastJusticiar_DeterminePackSize((ITEM)_Hole);
+
+PROC
+PROC_SHA_LastJusticiar_DeterminePackSize((ITEM)_Hole)
+AND
+Random(4, _PackAddition)
+AND
+IntegerSum(_PackAddition, 2, _Pack)
+THEN
+PROC_SHA_LastJusticiar_TryPackRatAppear((ITEM)_Hole, (INTEGER)_Pack);
+
+PROC
+PROC_SHA_LastJusticiar_TryPackRatAppear((ITEM)_Hole, (INTEGER)_Pack)
+AND
+DB_SHA_LastJusticiar_PackRat(_Rat)
+AND
+NOT DB_SHA_LastJusticiar_RatActive(_Rat, _)
+AND
+QRY_SHA_LastJusticiar_PackSize((INTEGER)_Pack)
+AND
+Random(10, _Random)
+AND
+IntegerProduct(_Random, 300, _Timer)
+THEN
+TeleportTo(_Rat, _Hole, "", 0, 0, 0, 0, 0);
+SetDualEntityEvent(_Rat, _Hole, "SHA_LastJusticiar_RatSpawned", 1);
+DB_SHA_LastJusticiar_RatActive(_Rat, _Hole);
+ObjectTimerLaunch(_Rat, "SHA_LastJusticiar_SpawnDelay", _Timer);
+
+QRY
+QRY_SHA_LastJusticiar_PackSize((INTEGER)_Pack)
+AND
+SysCount("DB_SHA_LastJusticiar_RatActive", 2, _Count)
+AND
+_Count <= _Pack
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_SHA_LastJusticiar_PackSize((INTEGER)_Pack)
+AND
+NOT DB_SHA_LastJusticiar_RatActive(_, _)
+THEN
+DB_NOOP(1);
+
+IF
+ObjectTimerFinished(_Rat, "SHA_LastJusticiar_SpawnDelay")
+THEN
+SetOnStage(_Rat, 1);
+
+IF
+EntityEvent(_Rat, "SHA_LastJusticiar_RatLeft")
+AND
+DB_SHA_LastJusticiar_RatActive((CHARACTER)_Rat, _Hole)
+THEN
+PROC_Poof(_Rat);
+NOT DB_SHA_LastJusticiar_RatActive(_Rat, _Hole);
+
+IF
+EntityEvent(_Rat, "SHA_LastJusticiar_RatSquee")
+AND
+DB_SHA_LastJusticiar_RatActive((CHARACTER)_Rat, _Hole)
+AND
+Random(11, _Rand)
+AND
+_Rand > 7
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)SHA_LastJusticiar_AD_GrabAttention_de3c3537-7e1a-6518-29ed-c8bfd278e4f8, _Rat);
+
+IF
+Deactivated(_Rat)
+AND
+DB_SHA_LastJusticiar_RatActive((CHARACTER)_Rat, _)
+AND
+NOT DB_PermaDefeated(_Rat)
+THEN
+DB_SHA_LastJusticiar_RatInActive(_Rat);
+ObjectTimerLaunch(_Rat, "SHA_LastJusticiar_RemoveTimer", 2000);
+
+IF
+Activated(_Rat)
+AND
+DB_SHA_LastJusticiar_RatInActive((CHARACTER)_Rat)
+AND
+DB_SHA_LastJusticiar_RatActive((CHARACTER)_Rat, _)
+THEN
+NOT DB_SHA_LastJusticiar_RatInActive(_Rat);
+ObjectTimerCancel(_Rat, "SHA_LastJusticiar_RemoveTimer");
+
+IF
+ObjectTimerFinished(_Rat, "SHA_LastJusticiar_RemoveTimer")
+THEN
+NOT DB_SHA_LastJusticiar_RatInActive((CHARACTER)_Rat);
+SetEntityEvent(_Rat, "SHA_LastJusticiar_RatLeft", 1);
+
+//END_REGION
+
+//REGION Justiciar Appeared
+IF
+DB_PermaDefeated(_Rat)
+AND
+DB_SHA_LastJusticiar_UltimatumRats((CHARACTER)_Rat,_)
+THEN
+DB_SHA_LastJusticiar_LastRatFighterKilled(_Rat);
+
+IF
+DB_SHA_LastJusticiar_LastRatFighterKilled(_Rat)
+AND
+DB_SHA_LastJusticiar_LastRatFighterKilled(_OtherRat)
+AND
+_Rat != _OtherRat
+THEN
+NOT DB_SHA_LastJusticiar_LastRatFighterKilled(_OtherRat);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_JusticiarAppeared_1bb2fe4b-2c35-48d8-93ed-3e9e834557f6)
+AND
+DB_SHA_LastJusticiar_LastRatFighterKilled(_Rat)
+AND
+GetPosition(_Rat, _X, _Y, _Z)
+AND
+FindValidPosition(_X, _Y, _Z, 10.0, (CHARACTER)S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, 1, _NewX, _NewY, _NewZ)
+THEN
+DB_SHA_LastJusticiar_Appeared(1);
+AppearAtPosition((CHARACTER)S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, _NewX, _NewY, _NewZ, 1, NULL_00000000-0000-0000-0000-000000000000, "SHA_LastJusticiar_AppearedWildshaped", 0);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_State_JusticiarAppeared_1bb2fe4b-2c35-48d8-93ed-3e9e834557f6)
+AND
+NOT DB_SHA_LastJusticiar_Appeared(1)
+AND
+DB_SHA_LastJusticiar_LastRatFighterKilled(_Rat)
+AND
+GetPosition(_Rat, _X, _Y, _Z)
+THEN
+DB_SHA_LastJusticiar_Appeared(1);
+AppearAtPosition((CHARACTER)S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, _X, _Y, _Z, 1, NULL_00000000-0000-0000-0000-000000000000, "SHA_LastJusticiar_AppearedWildshaped", 0);
+
+IF
+DB_GlobalFlag((FLAG)SHA_LastJusticiar_Event_JusticiarTransforms_1ac06720-c2c2-4e84-bdf3-9b820235c948)
+THEN
+PROC_SHA_LastJusticiar_RevealJusticiar();
+
+IF
+EntityEvent(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar_AppearedWildshaped")
+AND
+DB_SHA_LastJusticiar_LastRatFighterKilled(_Rat)
+AND
+GetClosestAlivePlayer(_Rat, _Player, _Dist)
+AND
+_Dist <= 16.0
+AND
+NOT QRY_StartDialogCustom((DIALOGRESOURCE)SHA_LastJusticiar_JusticiarAppears_a91cb7a5-6d80-7c81-b227-25d461dd0a2f, S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, _Player, 0, 0, 1, 0)
+THEN
+NOT DB_SHA_LastJusticiar_Appeared(1);
+PROC_SHA_LastJusticiar_RevealJusticiar();
+
+PROC
+PROC_SHA_LastJusticiar_RevealJusticiar()
+THEN
+NOT DB_SHA_LastJusticiar_Appeared(1);
+RemoveTransforms(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540);
+PROC_SetRelationToPlayers((FACTION)ACT2_SHA_LastJusticiar_90c58abd-3aed-44da-af2b-9fd399b56d70, 0);
+
+PROC
+PROC_SHA_LastJusticiar_RevealJusticiar()
+AND
+DB_InRegion((CHARACTER)_Char, (TRIGGER)S_SHA_LastJusticiar_NegotiationArea_002_7ec4ae2a-d61b-441e-bc8e-a9e437a2b468)
+THEN
+NOT DB_SHA_LastJusticiar_Appeared(1);
+PROC_EnterCombat(_Char, S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540);
+
+//END_REGION
+
+//REGION Ritual Circle
+
+IF
+AutomatedDialogEnded((DIALOGRESOURCE)SHA_LastJusticiar_PAD_RitualCircle_bc91866a-3893-5707-3253-e4a71f5b4bd9, _)
+AND
+QRY_OnlyOnce("SHA_LastJusticiar_RitualInteracted")
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)SHA_LastJusticiar_State_RitualCircleDiplorat_63d07871-153d-458f-98a8-87c72c2de001);
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsNegotiation");
+
+IF
+GameBookInterfaceClosed((ITEM)S_SHA_RitualBook_bf5d638b-f70a-4de0-b816-f892b15de919, _Player)
+AND
+DB_Players(_Player)
+AND
+NOT DB_OnlyOnce("SHA_LastJusticiar_ReadRitualBook")
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)SHA_LastJusticiar_PAD_RitualBook_905bc919-1efa-a7d5-a61e-41237635e728, _Player)
+AND
+QRY_OnlyOnce("SHA_LastJusticiar_ReadRitualBook")
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Debug
+IF
+TextEvent("SHA_LastJusticiar_SetState_Panicked")
+THEN
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsPanicked");
+
+IF
+TextEvent("SHA_LastJusticiar_SetState_Negotiation")
+THEN
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsNegotiation");
+
+IF
+TextEvent("SHA_LastJusticiar_SetState_Ultimatum")
+THEN
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsUltimatum");
+
+IF
+TextEvent("SHA_LastJusticiar_SetState_Hostile")
+THEN
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_RatsHostile");
+
+IF
+TextEvent("SHA_LastJusticiar_SetState_Apperance")
+THEN
+DB_SHA_LastJusticiar_LastRatFighterKilled((CHARACTER)S_SHA_LastJusticiar_Rat_UltimatumFighter_000_e0a6fcf0-266a-4875-b2e7-7fc4b2a1139f);
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_JusticiarAppeared");
+
+IF
+FlagSet((FLAG)Debug_SHA_MeetLastJusticiar_bd18c238-10f8-48b3-a241-d93b726a093b, _Player, _)
+THEN
+PROC_State_Progress(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, "SHA_LastJusticiar", "SHA_LastJusticiar_State_JusticiarAppeared");
+TeleportTo(S_SHA_LastJusticiar_594ba359-ce55-4b54-9efc-94eca306c540, S_SHA_LastJusticiar_UltimatumDialogTrigger_2da51c13-8e94-4da2-aef0-9a0802d7b335, "SHA_LastJusticiar_JusticiarToLastRat");
+TeleportTo(_Player, S_SHA_LastJusticiar_UltimatumDialogTrigger_2da51c13-8e94-4da2-aef0-9a0802d7b335);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act2"

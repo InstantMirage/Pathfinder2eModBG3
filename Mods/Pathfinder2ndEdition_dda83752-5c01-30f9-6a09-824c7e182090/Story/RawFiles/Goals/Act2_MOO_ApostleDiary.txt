@@ -1,0 +1,47 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+//REGION Ketheric Diary reading reaction
+//TODO Check if Ketheric fight already happened and player is coming back in the tower after
+IF
+GameBookInterfaceClosed(S_MOO_ApostleDiary_3ae7a258-146e-4fa5-8c97-65a1303945f6, _Player)
+AND
+NOT DB_MOO_ApostleDiary_HasRolled(_Player)
+AND
+NOT DB_MOO_ApostleDiary_HasVBed(1)
+THEN
+PROC_TrySkillCheck(_Player, S_MOO_ApostleDiary_3ae7a258-146e-4fa5-8c97-65a1303945f6, "Insight", DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, "MOO_ApostleDiary_StartVB");
+DB_MOO_ApostleDiary_HasRolled(_Player);
+
+PROC
+PROC_RollResult("MOO_ApostleDiary_StartVB", _Player, _, 2)
+THEN
+NOT DB_MOO_ApostleDiary_HasRolled(_Player);
+
+PROC
+PROC_RollResult("MOO_ApostleDiary_StartVB", _Player, _, 1)
+AND
+NOT DB_MOO_ApostleDiary_HasVBed(1)
+THEN
+StartVoiceBark(MOO_ApostleEntry_VB_Ritual_ee439ab1-a588-d92a-bd34-40497f7544d2, _Player);
+DB_MOO_ApostleDiary_HasVBed(1);
+
+IF
+VoiceBarkStarted(MOO_ApostleEntry_VB_Ritual_ee439ab1-a588-d92a-bd34-40497f7544d2, _)
+AND
+DB_MOO_ApostleDiary_HasRolled(_Player)
+THEN
+NOT DB_MOO_ApostleDiary_HasRolled(_Player);
+
+IF
+VoiceBarkStarted(MOO_ApostleEntry_VB_Ritual_ee439ab1-a588-d92a-bd34-40497f7544d2, _)
+THEN
+NOT DB_MOO_ApostleDiary_HasVBed(1);
+GoalCompleted;
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act2"

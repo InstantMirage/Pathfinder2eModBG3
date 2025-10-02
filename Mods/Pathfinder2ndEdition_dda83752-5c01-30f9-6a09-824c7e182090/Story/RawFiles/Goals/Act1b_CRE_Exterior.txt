@@ -1,0 +1,451 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_DropMutingStatussesDialog(CRE_Exterior_CableCarWait_a18f2e32-9629-9bc6-83a6-8f577bce396a);
+DB_Dialogs(CRE_MonasteryApproach_Bird_c85a9bab-49d6-476b-a07b-15e920c3cc24,(DIALOGRESOURCE)CRE_MonasteryApproach_Bird_SWA_8115f34d-bc78-1668-bf64-17ecb4af4621);
+DB_Dialogs((CHARACTER)S_GLO_Expeditioner_5f4048ba-72ef-43c2-9528-1c9a12f3f82f, (DIALOGRESOURCE)CRE_Expeditioner_fe536994-e498-97f8-59e0-39f1dc0d0d45);
+
+//REGION Lift
+
+DB_CRE_Dungeon_Elevator((LEVELTEMPLATE)S_LTN_PLT_CRE_RailLift_000_70bb740a-76eb-4255-b607-e2dcad69dbeb, 
+		(TRIGGER)S_CRE_RailLift000_Down_287ed736-78da-4913-a4a6-c6ad025cf5e3, (ITEM)S_CRE_ElevatorDownLever_000_6a5065f7-72d0-48a3-9871-4659d7243cf9, 
+		(TRIGGER)S_CRE_RailLift000_Up_c44a85bd-ff13-4c4d-bb29-553327c99d69, (ITEM)S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a, 
+		S_CRE_ElevatorLever_000_893fcb67-a68d-4471-8dd5-28e66f907ae3);
+
+DB_CRE_Dungeon_Elevator_StationLevers(S_CRE_ElevatorDownLever_000_6a5065f7-72d0-48a3-9871-4659d7243cf9);
+DB_CRE_Dungeon_Elevator_StationLevers(S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a);
+PROC_CRE_Dungeon_ElevatorInit();
+//END_REGION
+
+//REGION Hungry Bird
+//Player has any kind of Bread
+//* TODO: Add bread tag, and identify appopriate items via tag
+DB_PlayerHasTemplateItem(CONS_FOOD_BreadRoll_A_cc4b1203-b8cc-4eea-9d2f-956ec3bfb381, (FLAG)CRE_HungryBird_State_HasBread_64f283c8-e62e-486d-b40f-dd2d84b35739);
+DB_PlayerHasTemplateItem(CONS_GEN_Food_Bread_Bagel_A_d2d0d39b-9269-46d1-855d-dc25e18b1a6e, (FLAG)CRE_HungryBird_State_HasBread_64f283c8-e62e-486d-b40f-dd2d84b35739);
+DB_PlayerHasTemplateItem(CONS_GEN_Food_Bread_Baguette_A_7481a74a-d167-4205-b6a6-4e79ec2e17d9, (FLAG)CRE_HungryBird_State_HasBread_64f283c8-e62e-486d-b40f-dd2d84b35739);
+DB_PlayerHasTemplateItem(CONS_GEN_Food_Bread_Bun_A_e604f4cc-4c17-4f40-9864-c7de41d9c211, (FLAG)CRE_HungryBird_State_HasBread_64f283c8-e62e-486d-b40f-dd2d84b35739);
+DB_PlayerHasTemplateItem(CONS_GEN_Food_Bread_Loaf_A_e9e7db6c-d210-4dc4-ab0e-8458a506d0cc, (FLAG)CRE_HungryBird_State_HasBread_64f283c8-e62e-486d-b40f-dd2d84b35739);
+DB_PlayerHasTemplateItem(CONS_GEN_Food_Bread_Loaf_B_d4c6879f-7042-4f1a-9fd7-3c7a1092a79a, (FLAG)CRE_HungryBird_State_HasBread_64f283c8-e62e-486d-b40f-dd2d84b35739);
+DB_PlayerHasTemplateItem(CONS_GEN_Food_Pastry_Bread_Braided_A_99921c5b-5e58-4ff6-aeac-1e17f3861d96, (FLAG)CRE_HungryBird_State_HasBread_64f283c8-e62e-486d-b40f-dd2d84b35739);
+
+PROC_CRE_HungryBird_HideRewardMarker();
+
+DB_QuestDef_State((FLAG)CRE_HungryBird_State_RewardGiven_e155685d-9e99-4eff-874a-1f2754a29ac9, "HIDDEN_CRE_Boosters", "CRE_Bluejay_Completed");
+//END_REGION
+
+//REGION Plaques
+DB_ItemDialog_NarratorAD((ITEM)S_CRE_FerrySign_dbb2bf3e-656b-46eb-9c21-efe79fe032cd, (DIALOGRESOURCE)CRE_Exterior_AD_FerrySign_1faa79d4-0d19-72e7-d987-33dbc529554e);
+
+//END_REGION
+
+//REGION Expeditioner
+DB_HasItemEvent(S_CRE_GithyankiEgg_999b6dd7-2901-4604-8280-1931a5217a94, (FLAG)CRE_Hatchery_HasGithYankiEgg_30e136f5-b082-419f-9675-5310edaf782c);
+DB_GiveItemToEvent(S_CRE_GithyankiEgg_999b6dd7-2901-4604-8280-1931a5217a94, (FLAG)CRE_Expeditioner_Event_GiveGithEggTo_c7666c11-1970-430a-b04f-847870341af6);
+DB_HasItemTemplateScriptFlag(1, (DIALOGRESOURCE)CRE_Expeditioner_fe536994-e498-97f8-59e0-39f1dc0d0d45, (ITEMROOT)Quest_CON_OwlBearEgg_374111f7-6756-4f5f-b6e3-e45e8d25def0,2);
+DB_GiveTemplateFromPlayerDialogEvent(Quest_CON_OwlBearEgg_374111f7-6756-4f5f-b6e3-e45e8d25def0, (FLAG)CRE_Expeditioner_Event_HandoverOwlbearEgg_8a3a5d92-08d3-4e89-9eb5-331e8a96c0fa, NULL_00000000-0000-0000-0000-000000000000, 1);
+DB_SpotPlayers((CHARACTER)S_GLO_Expeditioner_5f4048ba-72ef-43c2-9528-1c9a12f3f82f, "CRE_Expeditioner_SpotterPlayer", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_GlobalFlagReactionAfterDialog((FLAG)CRE_Hatchery_State_EggKicked_4cd3d2a8-db6e-4f20-b80e-b49ac2066c43, (DIALOGRESOURCE)CRE_Expeditioner_fe536994-e498-97f8-59e0-39f1dc0d0d45);
+DB_PermaDefeatedFlag(S_GLO_Expeditioner_5f4048ba-72ef-43c2-9528-1c9a12f3f82f, CRE_Expeditioner_State_PermaDefeated_1baaf66e-dad2-4187-835e-29d321bc40ef);
+//END_REGION
+
+//REGION Vista spot
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRE_Exterior_VistaArea_018e604e-49a9-49d4-b1e3-1f0c773ec11d, (VOICEBARKRESOURCE)CRE_Exterior_VB_MonasteryVista_a8900eed-7baa-851c-d675-21aa3a8164b5);
+//END_REGION
+
+//REGION Roadsign
+DB_ItemDialog_NarratorAD(S_CRE_Exterior_Roadsign_aa45043b-5cdd-439a-94e1-286842225277, (DIALOGRESOURCE)CRE_Exterior_AD_Roadsign_ffeb47b8-ea88-e743-27f9-83d773250991);
+//END_REGION
+
+
+//REGION Arrival Statue
+DB_ItemDialog_NarratorAD((ITEM)S_CRE_ArrivalStatuePlaque_27853d1f-2e9c-466c-a5cb-df520cd6d545, (DIALOGRESOURCE)CRE_Exterior_AD_ArrivalStatuePlaque_f5597bc0-71e8-2165-55ae-32d5b90f8110);
+//END_REGION
+
+//REGION Courtyard Statue
+DB_KnowledgeCheckTrigger("CRE_Exterior_CourtyardStatue_Religion", (TRIGGER)S_CRE_Courtyard_LathanderStatueIdentifyTrigger_43d7fadb-84a7-4c84-9bc1-36d4f17165c8, "Insight", (DIFFICULTYCLASS)Act2_Easy_0d9484eb-f680-4a33-853d-46fda64883f2);
+//END_REGION
+
+//REGION Comment about broken bridge to SCL
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRE_BridgeToSCLBrokenArea_576b173b-fc42-48dc-a6d6-d356ad1920c9, (VOICEBARKRESOURCE)CRE_Exterior_VB_BrokenBridgeToSCL_8cde7bbf-ed3d-b146-6329-fabcb29d67ac);
+//END_REGION
+
+//REGION Cultists Undead
+DB_GLO_CharacterCorpseDialog((CHARACTER)S_CRE_CultistsUndead_DeadAbsolutist_001_a001cd52-13a2-4022-8019-251e3bfeb378, (DIALOGRESOURCE)CRE_CultistsUndead_Zealot_Dead_5f466421-d296-f8ca-28b1-7994ce49a38d);
+DB_BookFlags(S_CRE_CultistsUndead_KethericOrders_cc76a064-4bbe-498d-b609-de61a399754a, CRE_Exterior_State_ReadKethericOrders_984ab361-45d1-480c-ab4b-572e4b8a5e84);
+//END_REGION
+KBSECTION
+//REGION Elevators
+
+//REGION Cable Car - Debug
+IF
+TextEvent("crecarup")
+AND
+GetPosition((TRIGGER)S_CRE_RailLift000_Up_c44a85bd-ff13-4c4d-bb29-553327c99d69, _X, _Y, _Z)
+THEN
+PlatformMoveTo((LEVELTEMPLATE)S_LTN_PLT_CRE_RailLift_000_70bb740a-76eb-4255-b607-e2dcad69dbeb, _X, _Y, _Z, 100.0, "CRE_Dungeon_ElevatorSpeedyMove", 0);
+
+IF
+TextEvent("crecardown")
+AND
+GetPosition((TRIGGER)S_CRE_RailLift000_Down_287ed736-78da-4913-a4a6-c6ad025cf5e3, _X, _Y, _Z)
+THEN
+PlatformMoveTo((LEVELTEMPLATE)S_LTN_PLT_CRE_RailLift_000_70bb740a-76eb-4255-b607-e2dcad69dbeb, _X, _Y, _Z, 100.0, "CRE_Dungeon_ElevatorSpeedyMove", 0);
+//END_REGION
+
+PROC
+PROC_CRE_Dungeon_ElevatorInit()
+AND
+DB_CRE_Dungeon_Elevator(_Elevator, _Trigger, _, _, _, _)
+THEN
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _Trigger, "Down");
+
+//REGION Elevator Lever
+IF
+UseStarted(_Char, _Lever)
+AND
+DB_CRE_Dungeon_Elevator(_Elevator, _DownTrigger, _, _UpTrigger, _, _Lever)
+AND
+NOT DB_CRE_Dungeon_ElevatorMoving(_Elevator)
+AND
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _UpTrigger, "Up")
+THEN
+NOT DB_CRE_Dungeon_ElevatorPosition(_Elevator, _UpTrigger, "Up");
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _DownTrigger, "Down");
+DB_CRE_Dungeon_ElevatorMoving(_Elevator);
+PROC_CRE_Dungeon_FindDestination((LEVELTEMPLATE)_Elevator, (TRIGGER)_DownTrigger);
+PROC_CRE_PlayCableCarGossipOnce(_Char);
+
+IF
+UseStarted(_Char, _Lever)
+AND
+DB_CRE_Dungeon_Elevator(_Elevator, _DownTrigger, _, _UpTrigger, _, _Lever)
+AND
+NOT DB_CRE_Dungeon_ElevatorMoving(_Elevator)
+AND
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _DownTrigger, "Down")
+THEN
+NOT DB_CRE_Dungeon_ElevatorPosition(_Elevator, _DownTrigger, "Down");
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _UpTrigger, "Up");
+DB_CRE_Dungeon_ElevatorMoving(_Elevator);
+PROC_CRE_Dungeon_FindDestination((LEVELTEMPLATE)_Elevator, (TRIGGER)_UpTrigger);
+
+
+//END_REGION
+
+//REGION Station Levers
+IF
+UseStarted(_Char, _DownLever)
+AND
+DB_CRE_Dungeon_Elevator(_Elevator, _DownTrigger, _DownLever, _UpTrigger, _, _Lever)
+AND
+NOT DB_CRE_Dungeon_ElevatorMoving(_Elevator)
+AND
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _UpTrigger, "Up")
+THEN
+NOT DB_CRE_Dungeon_ElevatorPosition(_Elevator, _UpTrigger, "Up");
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _DownTrigger, "Down");
+DB_CRE_Dungeon_ElevatorMoving(_Elevator);
+PROC_CRE_Dungeon_FindDestination((LEVELTEMPLATE)_Elevator, (TRIGGER)_DownTrigger);
+
+IF
+UseStarted(_Char, _UpLever)
+AND
+DB_CRE_FerryActive(1)
+AND
+DB_CRE_Dungeon_Elevator(_Elevator, _DownTrigger, _, _UpTrigger, _UpLever, _Lever)
+AND
+NOT DB_CRE_Dungeon_ElevatorMoving(_Elevator)
+AND
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _DownTrigger, "Down")
+THEN
+NOT DB_CRE_Dungeon_ElevatorPosition(_Elevator, _DownTrigger, "Down");
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _UpTrigger, "Up");
+DB_CRE_Dungeon_ElevatorMoving(_Elevator);
+PROC_CRE_Dungeon_FindDestination((LEVELTEMPLATE)_Elevator, (TRIGGER)_UpTrigger);
+
+//Playing cantuse AD
+IF
+UseStarted(_Char, _StationLever)
+AND
+DB_CRE_Dungeon_Elevator_StationLevers(_StationLever)
+AND
+NOT DB_CRE_Dungeon_ElevatorMoving(_)
+THEN
+PROC_PlayCantUseItemAD(_Char);
+
+IF
+UseStarted(_Char, _StationLever)
+AND
+DB_CRE_Dungeon_Elevator_StationLevers(_StationLever)
+AND
+NOT DB_CRE_Dungeon_ElevatorMoving(_)
+THEN
+PROC_PlayCantUseItemAD(_Char);
+//END_REGION
+
+
+PROC
+PROC_CRE_Dungeon_FindDestination((LEVELTEMPLATE)_Elevator, (TRIGGER)_Target)
+AND
+GetPosition(_Target, _X, _Y, _Z)
+THEN
+PROC_CRE_Dungeon_ElevatorMove((LEVELTEMPLATE)_Elevator, (REAL)_X, (REAL)_Y, (REAL)_Z);
+
+PROC
+PROC_CRE_Dungeon_ElevatorMove((LEVELTEMPLATE)_Elevator, (REAL)_X, (REAL)_Y, (REAL)_Z)
+THEN
+PlatformMoveTo(_Elevator, _X, _Y, _Z, 5.0, "CRE_Dungeon_ElevatorMoved", 1);
+PROC_CRE_PlayElevatorAnimation();
+
+IF
+PlatformMovementFinished(_Elevator, "CRE_Dungeon_ElevatorMoved")
+AND
+DB_CRE_Dungeon_Elevator((LEVELTEMPLATE)_Elevator, _, _, _, _, _)
+THEN
+NOT DB_CRE_Dungeon_ElevatorMoving(_Elevator);
+SetForceUpdate(_Elevator, 0);
+PROC_CRE_StopElevatorAnimation();
+
+PROC
+PROC_CRE_PlayElevatorAnimation()
+THEN
+SetForceUpdate(BLD_GEN_Crane_Elevator_E_Cabin_A_000_2df55b3c-a2e7-49bc-8664-a20f6e35fcaf, 1);
+SetForceUpdate(S_CRE_ElevatorLever_000_893fcb67-a68d-4471-8dd5-28e66f907ae3, 1);
+SetForceUpdate(S_CRE_ElevatorDownLever_000_6a5065f7-72d0-48a3-9871-4659d7243cf9, 1);
+SetForceUpdate(S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a, 1);
+SetForceUpdate(BLD_Lathander_Cable_Car_Mechanism_A_000_7987209c-f5d8-47fb-a473-3454840937c5, 1);
+PROC_PlayLoopingAnimation(BLD_GEN_Crane_Elevator_E_Cabin_A_000_2df55b3c-a2e7-49bc-8664-a20f6e35fcaf, NULL_00000000-0000-0000-0000-000000000000, OBJ_Use_Activate_01_42c02cc0-0503-4ca9-9ea0-45564bd0e5d4, NULL_00000000-0000-0000-0000-000000000000);
+PROC_PlayLoopingAnimation(S_CRE_ElevatorLever_000_893fcb67-a68d-4471-8dd5-28e66f907ae3, NULL_00000000-0000-0000-0000-000000000000, OBJ_Use_Activate_01_42c02cc0-0503-4ca9-9ea0-45564bd0e5d4, NULL_00000000-0000-0000-0000-000000000000); 
+PROC_PlayLoopingAnimation(S_CRE_ElevatorDownLever_000_6a5065f7-72d0-48a3-9871-4659d7243cf9, NULL_00000000-0000-0000-0000-000000000000, OBJ_Use_Activate_01_42c02cc0-0503-4ca9-9ea0-45564bd0e5d4, NULL_00000000-0000-0000-0000-000000000000); 
+PROC_PlayLoopingAnimation(S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a, NULL_00000000-0000-0000-0000-000000000000, OBJ_Use_Activate_01_42c02cc0-0503-4ca9-9ea0-45564bd0e5d4, NULL_00000000-0000-0000-0000-000000000000); 
+PROC_PlayLoopingAnimation(BLD_Lathander_Cable_Car_Mechanism_A_000_7987209c-f5d8-47fb-a473-3454840937c5, NULL_00000000-0000-0000-0000-000000000000, OBJ_Use_Activate_01_42c02cc0-0503-4ca9-9ea0-45564bd0e5d4, NULL_00000000-0000-0000-0000-000000000000); 
+
+PROC
+PROC_CRE_StopElevatorAnimation()
+THEN
+StopAnimation(BLD_GEN_Crane_Elevator_E_Cabin_A_000_2df55b3c-a2e7-49bc-8664-a20f6e35fcaf, 0);
+StopAnimation(S_CRE_ElevatorLever_000_893fcb67-a68d-4471-8dd5-28e66f907ae3, 0);
+StopAnimation(S_CRE_ElevatorDownLever_000_6a5065f7-72d0-48a3-9871-4659d7243cf9, 0);
+StopAnimation(S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a, 0);
+StopAnimation(BLD_Lathander_Cable_Car_Mechanism_A_000_7987209c-f5d8-47fb-a473-3454840937c5, 0);
+TimerLaunch("CRE_Elevator_ForceUpdateDisableTimer", 1000);
+
+IF
+TimerFinished("CRE_Elevator_ForceUpdateDisableTimer")
+THEN
+SetForceUpdate(BLD_GEN_Crane_Elevator_E_Cabin_A_000_2df55b3c-a2e7-49bc-8664-a20f6e35fcaf, 0);
+SetForceUpdate(S_CRE_ElevatorLever_000_893fcb67-a68d-4471-8dd5-28e66f907ae3, 0);
+SetForceUpdate(S_CRE_ElevatorDownLever_000_6a5065f7-72d0-48a3-9871-4659d7243cf9, 0);
+SetForceUpdate(S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a, 0);
+SetForceUpdate(BLD_Lathander_Cable_Car_Mechanism_A_000_7987209c-f5d8-47fb-a473-3454840937c5, 0);
+
+
+//REGION Cable Car - First Interaction
+PROC
+PROC_BlockUseOfItem(_Player, S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a)
+AND
+DB_CRE_FerryActivation(_Player)
+AND
+NOT DB_CRE_FerryActive(1)
+THEN
+PROC_PlayCantUseItemAD(_Player);
+
+IF
+AttackedBy(S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a, _Player, _, _, _, _, _)
+AND
+NOT DB_CRE_FerryActive(1)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)CRE_Exterior_VB_FerryResult_c54046f0-5b0e-c0cc-2095-8929b2a547c0, (CHARACTER)_Player);
+
+PROC
+PROC_BlockUseOfItem(_Player, S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a)
+AND
+NOT DB_CRE_FerryActivation(_Player)
+AND
+NOT DB_CRE_FerryActive(1)
+THEN
+DB_CRE_FerryActivation(_Player);
+RequestActiveRoll(_Player, S_CRE_ElevatorUpLever_000_c4d746c1-22e4-4dfd-9be9-33e40428850a, "Strength", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, "CRE_Exterior_UnblockFerry");
+
+IF
+RollResult("CRE_Exterior_UnblockFerry", _Player, _, 1, _, _)
+THEN
+DB_CRE_FerryActive(1);
+SetFlag((FLAG)CRE_Exterior_State_FerryActive_6d076322-51c2-461f-bf29-8b44e4dca804);
+
+IF
+RollResult("CRE_Exterior_UnblockFerry", _Player, _, 1, _, _)
+AND
+DB_CRE_Dungeon_Elevator(_Elevator, _DownTrigger, _, _UpTrigger, _UpLever, _Lever)
+AND
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _DownTrigger, "Down")
+THEN
+PROC_CRE_Dungeon_FindDestination(_Elevator, _UpTrigger);
+NOT DB_CRE_Dungeon_ElevatorPosition(_Elevator, _DownTrigger, "Down");
+DB_CRE_Dungeon_ElevatorPosition(_Elevator, _UpTrigger, "Up");
+DB_CRE_Dungeon_ElevatorMoving(_Elevator);
+
+IF
+RollResult("CRE_Exterior_UnblockFerry", _Player, _, _Result, _, _)
+AND
+_Result != 2
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)CRE_Exterior_VB_FerryResult_c54046f0-5b0e-c0cc-2095-8929b2a547c0, _Player);
+
+//END_REGION
+
+
+
+//REGION Hungry Bird
+IF
+DB_GlobalFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3)
+THEN
+SetFlag(CRE_HungryBird_Event_FlewAway_112d706e-28a1-4829-9a04-d9c3f2bc8c11);
+
+IF
+DB_GlobalFlag((FLAG)CRE_HungryBird_Event_FlewAway_112d706e-28a1-4829-9a04-d9c3f2bc8c11)
+THEN
+PlayAnimation(S_CRE_MonasteryApproach_Bird_c85a9bab-49d6-476b-a07b-15e920c3cc24, CUST_TakeOff_01_5f3d7746-eb42-4599-849e-cdd8e6fecce6, "");
+RealtimeObjectTimerLaunch(S_CRE_MonasteryApproach_Bird_c85a9bab-49d6-476b-a07b-15e920c3cc24, "CRE_BirdFlyawayAnimTime", 1500);
+
+IF
+ObjectTimerFinished(S_CRE_MonasteryApproach_Bird_c85a9bab-49d6-476b-a07b-15e920c3cc24, "CRE_BirdFlyawayAnimTime")
+THEN
+PROC_SetOnStage(S_CRE_MonasteryApproach_Bird_c85a9bab-49d6-476b-a07b-15e920c3cc24, 0);
+
+
+//END_REGION
+
+//REGION Expeditioner
+PROC
+PROC_SpotPlayers_Spotted(S_GLO_Expeditioner_5f4048ba-72ef-43c2-9528-1c9a12f3f82f, "CRE_Expeditioner_SpotterPlayer", _Player)
+AND
+IsTagged(_Player, (TAG)GITHYANKI_677ffa76-2562-4217-873e-2253d4720ba4, 0)
+THEN
+SetFlag((FLAG)CRE_Expeditioner_State_HasSeen_5dec7cce-ab2a-4fe0-b520-ccf513861b25);
+PROC_TryStartAD((DIALOGRESOURCE)CRE_Expeditioner_AD_Greeting_e87891a3-3f4f-febd-ca5c-54b1773ffff7, S_GLO_Expeditioner_5f4048ba-72ef-43c2-9528-1c9a12f3f82f);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)CRE_Hatchery_State_EggKicked_4cd3d2a8-db6e-4f20-b80e-b49ac2066c43, _, _Id)
+AND
+DialogGetInvolvedPlayer(_Id, 1, _Player)
+THEN
+Die(S_CRE_GithyankiEgg_999b6dd7-2901-4604-8280-1931a5217a94, DEATHTYPE.Physical, _Player, 0, 0, 1.0);
+PROC_SetOnStage(S_CRE_GithyankiEgg_999b6dd7-2901-4604-8280-1931a5217a94, 0);
+//END_REGION
+
+//REGION Arrival Statue
+IF
+UseStarted(_Player ,(ITEM)S_CRE_ArrivalStatuePlaque_27853d1f-2e9c-466c-a5cb-df520cd6d545)
+THEN
+DB_CRE_ArrivalStatue_PlaqueUsedBy(_Player);
+
+IF
+AutomatedDialogEnded((DIALOGRESOURCE)CRE_Exterior_AD_ArrivalStatuePlaque_f5597bc0-71e8-2165-55ae-32d5b90f8110, _)
+AND
+DB_CRE_ArrivalStatue_PlaqueUsedBy(_Player)
+AND
+QRY_OnlyOnce("CRE_Exterior_ArrivalStatuePlaque_ReligionCheckAttempted")
+THEN
+PROC_KnowledgeCheck(_Player, "CRE_Exterior_ArrivalStatuePlaque_Religion", S_CRE_ArrivalStatuePlaque_27853d1f-2e9c-466c-a5cb-df520cd6d545, "Insight", (DIFFICULTYCLASS)Act2_Easy_0d9484eb-f680-4a33-853d-46fda64883f2);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_Player, "CRE_Exterior_ArrivalStatuePlaque_Religion",  S_CRE_ArrivalStatuePlaque_27853d1f-2e9c-466c-a5cb-df520cd6d545)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)CRE_Exterior_PAD_LathanderStatueRecognised_d12ec917-be25-d56c-9d4a-5cb3c2057d3c, _Player);
+//END_REGION
+
+//REGION Courtyard Statue
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_Player, "CRE_Exterior_CourtyardStatue_Religion", S_CRE_Courtyard_LathanderStatueIdentifyTrigger_43d7fadb-84a7-4c84-9bc1-36d4f17165c8)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)CRE_Courtyard_PAD_LathanderStatue_22520a06-bf9f-c150-76fc-994d04b1d3bf, _Player);
+//END_REGION
+
+//END_REGION
+
+
+//REGION Ketheric Orders
+IF
+GameBookInterfaceClosed((ITEM)S_CRE_CultistsUndead_KethericOrders_cc76a064-4bbe-498d-b609-de61a399754a,_Player)
+AND
+QRY_OnlyOnce("CRE_KethericOrdersRead")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)CRE_KethericOrders_Read_VB_6e1392b7-d20c-b50d-1e9e-f0e7e6a03857,_Player);
+//END_REGION
+
+//REGION Bird Reward
+PROC
+PROC_CRE_HungryBird_HideRewardMarker()
+AND
+DB_Players(_Player)
+THEN
+PROC_HideMarker(_Player, "CRE_BluejayDigsite");
+
+IF
+FlagSet(CRE_HungryBird_State_RewardGiven_e155685d-9e99-4eff-874a-1f2754a29ac9, _, _)
+AND
+DB_Players(_Player)
+THEN
+PROC_ShowMarker(_Player, "CRE_BluejayDigsite");
+
+IF
+FlagSet(CRE_HungryBird_State_RewardGiven_e155685d-9e99-4eff-874a-1f2754a29ac9, _, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, 1)
+THEN
+PROC_Shovel_RevealRemoteMound(S_CRE_BuriedMound_06_b996fbf6-9620-4b0f-937c-460d0e9b99c4, (CHARACTER)_Player);
+
+IF
+UseFinished(_, S_CRE_BuriedChest_06_3adcadb4-dab8-4d8f-9654-89bfee75c406, 1)
+AND
+DB_Players(_Player)
+THEN
+PROC_HideMarker(_Player, "CRE_BluejayDigsite");
+
+//END_REGION
+
+//REGION Journal
+IF
+FlagSet((FLAG)CRE_CultistUndead_Event_MentionedKetheric_df24f8b3-13a0-e77e-650d-0f0b1d931e41, _, _DialogID)
+AND
+DB_GlobalFlag((FLAG)CRE_CultistUndead_Event_MentionedMOO_3f40c4f9-3290-4e5c-9c2e-4b8c70d35866)
+AND
+DB_DialogPlayers(_DialogID, _Player, 1)
+THEN
+QuestUpdate((CHARACTER)_Player, "GLO_PathToMoonrise", "DeadZealot");
+
+IF
+FlagSet((FLAG)CRE_CultistUndead_Event_MentionedMOO_3f40c4f9-3290-4e5c-9c2e-4b8c70d35866, _, _DialogID)
+AND
+DB_GlobalFlag((FLAG)CRE_CultistUndead_Event_MentionedKetheric_df24f8b3-13a0-e77e-650d-0f0b1d931e41)
+AND
+DB_DialogPlayers(_DialogID, _Player, 1)
+THEN
+QuestUpdate((CHARACTER)_Player, "GLO_PathToMoonrise", "DeadZealot");
+//END_REGION Journal
+
+//REGION Cable car gossip
+PROC
+PROC_CRE_PlayCableCarGossipOnce((CHARACTER)_Char)
+AND
+DB_Players(_Char)
+AND
+QRY_OnlyOnce("CRE_CableCarGossip")
+THEN
+SetFlag((FLAG)BANTERREGION_CRE_Monastery_4489b5fa-44f8-40a8-a612-c09ecff32f8b);
+DB_CRE_ElevatorGossipPlayer(_Char);
+
+IF
+FlagSet((FLAG)BANTERREGION_CRE_Monastery_4489b5fa-44f8-40a8-a612-c09ecff32f8b, _, _)
+AND
+DB_CRE_ElevatorGossipPlayer(_Char)
+THEN
+PROC_StartWorldGossip(_Char);
+ClearFlag((FLAG)BANTERREGION_CRE_Monastery_4489b5fa-44f8-40a8-a612-c09ecff32f8b);
+NOT DB_CRE_ElevatorGossipPlayer(_Char);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1b"

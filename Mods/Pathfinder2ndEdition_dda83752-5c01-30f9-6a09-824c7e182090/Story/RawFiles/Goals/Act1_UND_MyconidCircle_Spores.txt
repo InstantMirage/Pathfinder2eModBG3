@@ -1,0 +1,189 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+// The Myconid Village in the Underdark is surrouned by Rapport spores that they use for telepathic communication
+// There are several places where these spores are present: S_UND_MyconidSpores_00X
+// Each place has: KnowledgeCheckArea, DialogueArea and StatusArea
+// When you enter KnowledgeCheck area you make a Nature check to see if they know about the spores
+// When the players enter a StatusArea trigger they get a special status - UND_RAPPORTSPORES
+// When the players enter a DialogueArea trigger the main Myconid Sovereign starts a dialogue with them
+// using rapport spores
+// KnowledgeCheckArea and StatusArea triggers are basically the same triggers, we need two triggers because KnowledgeCheckArea triggers 
+// are unregistered on a successful knowledge check while StatusArea triggers should always be active
+
+DB_UND_MyconidSpores_KnowledgeCheckAreas((TRIGGER)S_UND_MyconidSpores_000_KnowledgeCheckArea_e3f9ed24-1c64-48ce-87a5-ac58b303edc2);
+DB_UND_MyconidSpores_KnowledgeCheckAreas(S_UND_MyconidSpores_001_KnowledgeCheckArea_c1e5e350-da01-4690-8115-2e6e39b51d51);
+DB_UND_MyconidSpores_KnowledgeCheckAreas(S_UND_MyconidSpores_002_KnowledgeCheckArea_c7d6affa-4719-4b78-97aa-5d032b2a6789);
+DB_UND_MyconidSpores_KnowledgeCheckAreas(S_UND_MyconidSpores_003_KnowledgeCheckArea_5d34de47-a434-4d53-870b-d6aeffd8bb1f);
+DB_UND_MyconidSpores_KnowledgeCheckAreas(S_UND_MyconidSpores_004_KnowledgeCheckArea_2c2d2e79-fc4b-48bc-ab00-66d946f31d8a);
+DB_UND_MyconidSpores_KnowledgeCheckAreas(S_UND_MyconidSpores_005_KnowledgeCheckArea_582dcbd6-a8e3-458f-9a28-fde1f3528111);
+
+DB_UND_MyconidCircle_DialogueAreas((TRIGGER)S_UND_MyconidSpores_000_DialogueArea_2383bfc3-21d2-4f42-9b5e-7312da392f6b);
+DB_UND_MyconidCircle_DialogueAreas(S_UND_MyconidSpores_001_DialogueArea_d4b762d2-8e11-431e-a261-7829197be5c9);
+DB_UND_MyconidCircle_DialogueAreas(S_UND_MyconidSpores_002_DialogueArea_e5c21b62-db92-4d9a-86b6-5521ace7dd5c);
+DB_UND_MyconidCircle_DialogueAreas(S_UND_MyconidSpores_003_DialogueArea_dedb9b91-d235-4c1c-b3b6-722d1378111c);
+DB_UND_MyconidCircle_DialogueAreas(S_UND_MyconidSpores_004_DialogueArea_64649c59-da02-4c40-8097-3d588e113d49);
+DB_UND_MyconidCircle_DialogueAreas(S_UND_MyconidSpores_005_DialogueArea_e8e1b418-9b8a-43a9-baa5-926dc612986d);
+
+DB_UND_MyconidSpores_StatusAreas((TRIGGER)S_UND_MyconidSpores_000_StatusArea_d877471b-a0e0-4163-9ad6-00fc6b255785);
+DB_UND_MyconidSpores_StatusAreas(S_UND_MyconidSpores_001_StatusArea_9db7b882-8428-4532-b1d6-770e6895aa6f);
+DB_UND_MyconidSpores_StatusAreas(S_UND_MyconidSpores_002_StatusArea_30bdd379-73cf-4d33-bbd8-f086f53887cf);
+DB_UND_MyconidSpores_StatusAreas(S_UND_MyconidSpores_003_StatusArea_35fed473-275e-4383-99e7-c0750bd782e3);
+DB_UND_MyconidSpores_StatusAreas(S_UND_MyconidSpores_004_StatusArea_50a1cb33-3513-4044-9b2a-adbf8297fe42);
+DB_UND_MyconidSpores_StatusAreas(S_UND_MyconidSpores_005_DialogueArea_e8e1b418-9b8a-43a9-baa5-926dc612986d);
+DB_UND_MyconidSpores_StatusAreas(S_UND_MyconidSpores_Village_StatusArea_8b9d25d4-3168-454a-b0e0-01f794fa9efa);
+
+PROC_TriggerRegisterForPlayers(TRIGGERGUID_S_UND_MyconidCircle_MainArea_a08c9f65-06ed-4f36-95a9-2330fa9462da);
+
+KBSECTION
+//REGION Spores knowledge
+
+IF
+DB_UND_MyconidSpores_KnowledgeCheckAreas((TRIGGER)_Trigger)
+THEN
+DB_KnowledgeCheckTrigger_AD("UND_MyconidSpores", _Trigger, "AnimalHandling", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, UND_MyconidCircle_VB_RapportSpores_KnowledgeCheck_17dea555-19d8-88a8-925e-e9cba2db5a28, (FLAG)UND_MyconidCircle_Knows_MyconidSpores_15ec4053-f043-b34e-374f-928289e00dd8);
+
+PROC
+PROC_KnowledgeCheck_MP(_Player, "UND_MyconidSpores",_,_,_,_,_)
+AND
+DB_UND_MyconidCircle_DialogueAreas((TRIGGER)_Trigger)
+THEN
+TimerLaunch("UND_MyconidSpores_RapportSporesDelay",12000);
+PROC_TriggerUnregisterForPlayers(_Trigger);
+//END_REGION Spores knowledge 
+
+//REGION Spores dialogue
+
+IF
+DB_UND_MyconidCircle_DialogueAreas((TRIGGER)_Trigger)
+THEN
+PROC_TriggerRegisterForPlayers(_Trigger);
+
+IF
+TimerFinished("UND_MyconidSpores_RapportSporesDelay")
+AND
+DB_UND_MyconidCircle_DialogueAreas((TRIGGER)_Trigger)
+THEN
+PROC_TriggerRegisterForPlayers(_Trigger);
+
+IF
+EnteredTrigger(_Player, _Trigger)
+AND
+DB_Players(_Player)
+AND
+DB_UND_MyconidCircle_DialogueAreas(_Trigger)
+AND
+IsInCombat(_Player,0)
+THEN
+PROC_UND_MyconidCircle_StartSporesDialogues((CHARACTER)_Player);
+PROC_UND_MyconidCircle_SporesAreas_Unregister();
+
+IF
+LeftCombat((CHARACTER)_Player,_)
+AND
+DB_Players(_Player)
+AND
+DB_UND_MyconidCircle_DialogueAreas(_Trigger)
+AND
+IsInTrigger(_Player,_Trigger,1)
+THEN
+PROC_UND_MyconidCircle_StartSporesDialogues((CHARACTER)_Player);
+PROC_UND_MyconidCircle_SporesAreas_Unregister();
+
+
+PROC
+PROC_UND_MyconidCircle_StartSporesDialogues((CHARACTER)_Player)
+AND
+QRY_UND_MyconidCircle_PlayersCount(_Player)
+AND
+QRY_StartDialog((DIALOGRESOURCE)UND_MyconidCircle_RapportSpores_WithCompanions_12fe429f-6b1e-59dc-beef-2734eac8e5d2,
+	(ITEM)S_UND_Myconid_SporesDialogHelper_000_5ea26db4-60a9-43b4-964a-e22fef21523a,
+    _Player)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_UND_MyconidCircle_StartSporesDialogues((CHARACTER)_Player)
+AND
+NOT QRY_UND_MyconidCircle_PlayersCount(_Player)
+AND 
+QRY_StartDialog((DIALOGRESOURCE)UND_MyconidCircle_RapportSpores_Alone_f670a541-65b5-3eb6-d2df-413b4700867c,
+    (ITEM)S_UND_Myconid_SporesDialogHelper_000_5ea26db4-60a9-43b4-964a-e22fef21523a,
+    _Player)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_UND_MyconidCircle_PlayersCount((CHARACTER)_Player)
+AND
+GetClosestAlivePlayer(_Player,_Player2,_Dist)
+AND
+_Player!=_Player2
+AND
+_Dist<=10.0
+THEN
+DB_NOOP(1);
+
+IF
+EnteredTrigger(_Player, S_UND_MyconidCircle_MainArea_a08c9f65-06ed-4f36-95a9-2330fa9462da)
+THEN
+PROC_UND_MyconidCircle_SporesAreas_Unregister();
+
+PROC
+PROC_UND_MyconidCircle_SporesAreas_Unregister()
+AND
+DB_UND_MyconidCircle_DialogueAreas(_Trigger)
+THEN
+PROC_TriggerUnregisterForPlayers(_Trigger);
+NOT DB_UND_MyconidCircle_DialogueAreas(_Trigger);
+//END_REGION Spores dialogue
+
+//REGION Rapport spores
+
+IF
+DB_UND_MyconidSpores_StatusAreas(_Trigger)
+THEN
+PROC_TriggerRegisterForPlayers(_Trigger);
+
+IF
+EnteredTrigger(_Player, _Trigger)
+AND
+DB_UND_MyconidSpores_StatusAreas(_Trigger)
+AND
+HasActiveStatus(_Player, "UND_RAPPORTSPORES", 0)
+THEN
+ApplyStatus(_Player, "UND_RAPPORTSPORES", -1.0, 1);
+
+IF
+LeftTrigger(_Player, _Trigger)
+AND
+DB_UND_MyconidSpores_StatusAreas(_Trigger)
+AND
+NOT QRY_UND_MyconidSpores_PlayerInAnyTrigger(_Player)
+AND
+HasActiveStatus(_Player, "UND_RAPPORTSPORES", 1)
+THEN
+RemoveStatus(_Player, "UND_RAPPORTSPORES");
+
+QRY
+QRY_UND_MyconidSpores_PlayerInAnyTrigger((CHARACTER)_Player)
+AND
+DB_UND_MyconidSpores_StatusAreas(_Trigger)
+AND
+DB_InRegion(_Player, _Trigger)
+THEN
+DB_NOOP(1);
+//END_REGION Rapport spores
+
+//REGION Debug
+IF
+TextEvent("PROC_UND_MyconidCircle_StartSporesDialogues")
+AND
+GetHostCharacter(_Player)
+THEN
+PROC_UND_MyconidCircle_StartSporesDialogues(_Player);
+//END_REGION Debug
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

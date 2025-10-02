@@ -1,0 +1,1643 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_Dialogs((ITEM)S_CRE_LanceRooftopCannon_851dad23-04ff-45b3-91e7-0fee3a34914c, (DIALOGRESOURCE)CRE_Lance_RooftopCannon_47efe00c-c478-eb09-f27a-9f1427041824);
+
+//REGION Lane kill triggers
+DB_CRE_LanceKillTriggers((TRIGGER)S_CRE_LanceLowerCrecheArea_d0a940ba-c37b-4960-a575-5d19c673ed2f);
+DB_CRE_LanceKillTriggers((TRIGGER)S_CRE_LanceUpperCrecheArea_ecdf67a2-4706-48ae-893b-ff92c4552624);
+DB_CRE_LanceKillTriggers((TRIGGER)S_CRE_LanceMonasteryArea1_9a4a6fd8-9ea9-488e-bc5d-2c68953924d1);
+DB_CRE_LanceKillTriggers((TRIGGER)S_CRE_LanceMonasteryArea2_6c10df8f-8cc7-47f4-ac1d-69f6c7059035);
+DB_CRE_LanceKillTriggers((TRIGGER)S_CRE_LanceMonasteryArea3_89d27e5c-9c77-4535-9014-de5d82df6d92);
+DB_CRE_LanceKillTriggers((TRIGGER)S_CRE_LanceMonasteryArea4_403f4237-a0f3-4b64-bccd-4bf620cf82d3);
+DB_CRE_LanceKillTriggers((TRIGGER)S_CRE_LanceMonasteryArea5_fd331801-25e5-426d-9bed-dfcb76b4853a);
+DB_CRE_LanceKillTriggers((TRIGGER)S_CRE_LanceMonasteryArea6_585f6627-1efe-4ffb-ba01-be040785c78b);
+
+DB_InRegionFlag((TRIGGER)S_CRE_LanceLowerCrecheArea_d0a940ba-c37b-4960-a575-5d19c673ed2f, (FLAG)CRE_Lance_State_CharInCreche_dd7d8d6e-ed6e-4261-9b8f-b05f43705dfe);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceUpperCrecheArea_ecdf67a2-4706-48ae-893b-ff92c4552624, (FLAG)CRE_Lance_State_CharInCreche_dd7d8d6e-ed6e-4261-9b8f-b05f43705dfe);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceEscape_MonasteryMiddleSection_610c74cd-d464-4b91-b37c-cee7afa6e134, (FLAG)CRE_Lance_State_CharInMonastery_26309195-8e75-4625-95f7-64ce2d5c32f4);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceEscape_MonasteryLeftWing_e98f1f6b-bb21-42a4-9a94-bb497214c023, (FLAG)CRE_Lance_State_CharInMonastery_26309195-8e75-4625-95f7-64ce2d5c32f4);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceEscape_MonasteryRightWing_28616ce1-284c-45e3-93a1-4a35d962366e, (FLAG)CRE_Lance_State_CharInMonastery_26309195-8e75-4625-95f7-64ce2d5c32f4);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceEscapeElevatorArea_6bb1ae49-82de-4d5a-bf5c-aaf1761b93e1, (FLAG)CRE_Lance_State_CharInElevatorArea_d186df64-395e-439b-873a-f64ef69d12a4);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceEscapeLeftRoofArea_3e0b801b-d1e4-434d-a162-25bc4eb58da1, (FLAG)CRE_Lance_State_CharOnLeftRoof_f37ea5de-4599-4269-bb7c-8a4bb11f3090);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceEscapeMiddleRoofArea_4618ef41-a16f-4898-afd9-04534abeab76, (FLAG)CRE_Lance_State_CharOnMidRoof_a71eb534-883f-459b-b953-3c0217c3ea99);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceEscapeRightRoofArea_5d3d7410-6c7e-4741-b4e5-151a835bfc08, (FLAG)CRE_Lance_State_CharOnRightRoof_6c2ad82e-ac8f-43f9-9704-16b8f16a0f68);
+DB_InRegionFlag((TRIGGER)S_CRE_LanceEscape_RunZone_3bf7f8ee-7913-41df-a0c7-5c27ec8224e5, (FLAG)CRE_Lance_State_CharInCourtyard_1985f01b-1669-4f9a-a01d-984079e5a31c);
+
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceLowerCrecheArea_d0a940ba-c37b-4960-a575-5d19c673ed2f);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceUpperCrecheArea_ecdf67a2-4706-48ae-893b-ff92c4552624);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceEscape_MonasteryMiddleSection_610c74cd-d464-4b91-b37c-cee7afa6e134);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceEscape_MonasteryLeftWing_e98f1f6b-bb21-42a4-9a94-bb497214c023);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceEscape_MonasteryRightWing_28616ce1-284c-45e3-93a1-4a35d962366e);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceEscapeElevatorArea_6bb1ae49-82de-4d5a-bf5c-aaf1761b93e1);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceEscapeLeftRoofArea_3e0b801b-d1e4-434d-a162-25bc4eb58da1);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceEscapeMiddleRoofArea_4618ef41-a16f-4898-afd9-04534abeab76);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceEscapeRightRoofArea_5d3d7410-6c7e-4741-b4e5-151a835bfc08);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_LanceEscape_RunZone_3bf7f8ee-7913-41df-a0c7-5c27ec8224e5);
+
+DB_TriggerEvents_TriggerSet("CRE_Monastery", (TRIGGER)S_CRE_LanceEscape_MonasteryMiddleSection_610c74cd-d464-4b91-b37c-cee7afa6e134);
+DB_TriggerEvents_TriggerSet("CRE_Monastery", (TRIGGER)S_CRE_LanceEscape_MonasteryLeftWing_e98f1f6b-bb21-42a4-9a94-bb497214c023);
+DB_TriggerEvents_TriggerSet("CRE_Monastery", (TRIGGER)S_CRE_LanceEscape_MonasteryRightWing_28616ce1-284c-45e3-93a1-4a35d962366e);
+
+DB_TriggerEvents_TriggerSet("CRE_Creche", (TRIGGER)S_CRE_LanceLowerCrecheArea_d0a940ba-c37b-4960-a575-5d19c673ed2f);
+DB_TriggerEvents_TriggerSet("CRE_Creche", (TRIGGER)S_CRE_LanceUpperCrecheArea_ecdf67a2-4706-48ae-893b-ff92c4552624);
+//END_REGION
+
+
+//REGION AD Triggers
+DB_KnowledgeCheckTrigger_AD("CRE_GithWeapon_HistoryCheck",S_CRE_GithWeaponADTrigger_f6aa131b-4f97-49e4-85f2-2737ce43292f, "History", (DIFFICULTYCLASS)Act1_Medium_fa621d38-6f83-4e42-a55c-6aa651a75d46,(DIALOGRESOURCE)CRE_Lance_PAD_GithWeapon_220803b3-5f93-af58-1adc-32f94a210156, (FLAG)CRE_Lance_GithWeapon_HistoryCheckPassed_cc90d506-c01d-429f-b19d-d883b6256fbd);
+PROC_TriggerRegisterForPlayers(S_CRE_MagicMouthADTrigger_4447fc40-c516-489b-b71e-f5deeb297a0a);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_CRE_Lance_CommentArea_4b22f3ff-cd6f-48f8-933f-f438634f4d76);
+//END_REGION
+
+//magic mouth VFX
+PROC_SetOnStage(S_CRE_MagicMouthVFX_984fd69e-97ea-4755-b4f4-fed0b8e6b435, 0);
+
+//Interacting with the cannon
+DB_FlagReactionAfterDialog((FLAG)CRE_Lance_Event_PrepareToFire_fbbf517e-cf09-431c-a3ed-ed40a3816d55, (DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e);
+
+//REGION lifting the crystals
+DB_CRE_Lance_Crystals((ITEM)S_CRE_Lance_Lens_000_61fae206-9626-453c-ac3d-3be6089158d5, S_CRE_BloodOfLathander_Crystal_RisePoint_00_f14516a8-61a7-43d5-82c9-6c6b202325c8, "CRE_Crystal00");
+DB_CRE_Lance_Crystals((ITEM)S_CRE_Lance_Lens_001_9de17d56-f200-4288-9092-6577118e0cac, S_CRE_BloodOfLathander_Crystal_Risepoint_01_35f8daae-b608-4768-af32-6f79f7a4bb8a, "CRE_Crystal01");
+DB_CRE_Lance_Crystals((ITEM)S_CRE_Lance_Lens_002_96a552d3-1ae5-4a8c-a717-083c25b66281, S_CRE_BloodOfLathander_Crystal_Risepoint_02_1acda224-72ea-4d3a-af6f-ef25a7f44a50, "CRE_Crystal02");
+DB_CRE_Lance_Crystals((ITEM)S_CRE_Lance_Lens_003_e27f5c4c-7b52-4580-ad93-3be30f19bb07, S_CRE_BloodOfLathander_Crystal_RisePoint_03_91cba52c-5c26-4ad4-88e9-51c88671a9a4, "CRE_Crystal03");
+
+DB_CRE_Lance_CrystalColumns(S_CRE_Lathander_Solar_Machine_Lens_A_Pillar_000_bdb82c1b-1f20-44a5-9b06-cdcb6cb32cc6);
+DB_CRE_Lance_CrystalColumns(S_CRE_Lathander_Solar_Machine_Lens_A_Pillar_001_4c05dbb9-8a61-459e-bdcc-3996c4d0abad);
+DB_CRE_Lance_CrystalColumns(S_CRE_Lathander_Solar_Machine_Lens_A_Pillar_002_914d2e81-613c-4ea4-a9e4-bc55917e68f7);
+DB_CRE_Lance_CrystalColumns(S_CRE_Lathander_Solar_Machine_Lens_A_Pillar_003_f39c0536-02c1-4da0-80c5-2bdcf9f13284);
+//END_REGION
+
+//REGION Gauntlet warning plaques
+DB_ItemDialog_NarratorAD(S_CRE_GauntletWarningPlaque001_527dc5eb-613b-4bc4-863d-cd75d6cf9852, (DIALOGRESOURCE)CRE_Lance_AD_MagicMouthGauntlet01_393816ec-c7d6-55ca-8edc-eda92242cfbb);
+DB_ItemDialog_NarratorAD(S_CRE_GauntletWarningPlaque002_ff653611-a6da-4781-b757-ea4d419dfc89, (DIALOGRESOURCE)CRE_Lance_AD_MagicMouthGauntlet02_75ad9f4b-2e35-bdf3-099a-577e6cfdefcf);
+DB_ItemDialog_NarratorAD(S_CRE_GauntletWarningPlaque003_5de2a6c0-0ede-4e89-b977-947cfa93e34c, (DIALOGRESOURCE)CRE_Lance_AD_MagicMouthGauntlet03_dc5ecb81-e673-def4-421f-1f56ab0a59ba);
+//END_REGION
+
+//REGION The Blood of Lathander
+//PROC_SetOnStage(S_CRE_BloodOfLathander_ConcentratorGyro_33e92d05-db4a-45c0-9dc8-d78c7830ea65, 0);
+SetVisible(S_CRE_BloodOfLathander_ConcentratorGyro_33e92d05-db4a-45c0-9dc8-d78c7830ea65, 0);
+
+DB_HasItemEvent((ITEM)S_CRE_TreasureRoomKey_a8a055dd-99fb-4769-ba34-69801b9444ce, (FLAG)CRE_Lance_State_HasTreasureRoomKey_667083de-4c5f-4ad5-8662-917359d8c412);
+DB_HasItemEvent(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, CRE_BloodOfLathander_State_HasBloodOfLathander_e4b75f46-166f-4347-ab33-2b34acdd4b09); //for script state restore we want to track this
+
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRE_SecretSunPassageDoorArea_d37c576b-0522-45d4-b92c-abacf40eda8e, (VOICEBARKRESOURCE)CRE_Lance_VB_TreasureRoomDoor_70785d5b-5d29-32ea-91e3-9f392b1b971b);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRE_GauntletEntranceArea_27fd2cfd-0534-4f9f-ac75-6f7a3e37c3e0, (VOICEBARKRESOURCE)CRE_Lance_VB_EnterGauntlet_3122cf65-f980-ee43-2112-6a359dbc89bd);
+
+PROC_LoopBeamEffect(VFX_Script_SunBeam_01_ada1f190-ea49-4d38-a89a-3d86ccbafae9, S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, "", "", "CRE_BloodOfLathanderBeam", "CRE_Main_A");
+
+DB_BlockPickupOfBloodOfLathander(1);
+
+DB_CRE_LathanderBarriers(S_CRE_BloodOfLathanderBarrier_001_6590dc61-9afc-4516-bc14-0651cea2b17a);
+DB_CRE_LathanderBarriers(S_CRE_BloodOfLathanderBarrier_002_6a01e2ee-283e-4170-832b-b3785fa46906);
+DB_CRE_LathanderBarriers(S_CRE_BloodOfLathanderBarrier_003_bd902f6b-40ec-4fa6-b299-2ef56cbd770b);
+DB_CRE_LathanderBarriers(S_CRE_BloodOfLathanderBarrier_004_982c26aa-479a-4767-b410-5baf908db2de);
+DB_CRE_LathanderBarriers(S_CRE_BloodOfLathanderBarrier_005_1d22b011-c349-42f7-84a1-eee2ea794c69);
+DB_CRE_LathanderBarriers(S_CRE_BloodOfLathanderBarrier_006_8775b7dc-c42a-4101-bf76-971d99102408);
+DB_CRE_LathanderBarriers(S_CRE_BloodOfLathanderBarrier_007_1f53d4d6-b427-49f0-a2b8-68fa70cb2e6e);
+DB_CRE_LathanderBarriers(S_CRE_BloodOfLathanderBarrier_008_01fd16d2-cd92-4375-80aa-48e43a214512);
+
+DB_CRE_LathanderBarriers_Destructables(S_CRE_BloodOfLathanderBarriers_Pipes_On_01_fe919ac1-9452-4700-aa23-e5731fdb4661);
+
+DB_CRE_BloodOfLathander_BarrierTeleportOut(S_CRE_BloodOfLathaander_TeleportOut_01_79cac1b1-1d68-4e74-b925-52b082a1e492, 0);
+DB_CRE_BloodOfLathander_BarrierTeleportOut(S_CRE_BloodOfLathaander_TeleportOut_02_4734675e-73ad-4d96-800e-10f5a43ebb05, 1);
+DB_CRE_BloodOfLathander_BarrierTeleportOut(S_CRE_BloodOfLathaander_TeleportOut_03_49131259-bdb9-48d9-b30d-c0b1395da92a, 2);
+
+DB_CRE_BloodOfLathander_BarrierTeleportOut_Index(0);
+PROC_SetOnStage(S_CRE_BloodOfLathander_CylindricalBarrier_f4d7e951-958d-4a42-ba84-46ca6c18e3ec, 0);
+
+DB_GlobalFlagReactionAfterDialog(CRE_Lance_BarrierTrapActive_ac9084ae-0d0a-49c3-8e5c-d28ad28cd785, (DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e);
+DB_FlagReactionAfterDialog(CRE_BloodOfLathander_Event_TakenBlood_baf03563-0160-4e9d-833b-92b42c1a7cb8, (DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e);
+
+DB_CRE_BloodOfLathander_CannonOffCrystals((ITEM)S_CRE_LanceCrystal_001_3076222f-6432-4d58-89c9-12546fe87be2);
+DB_CRE_BloodOfLathander_CannonOffCrystals((ITEM)S_CRE_LanceCrystal_002_d18604be-6567-45f6-bd5a-040a9a42c62b);
+DB_CRE_BloodOfLathander_CannonOffCrystals((ITEM)S_CRE_LanceCrystal_003_9e8f4a78-e4a2-45c6-97de-0d3302df731d);
+DB_CRE_BloodOfLathander_CannonOffCrystals((ITEM)S_CRE_LanceCrystal_004_ba9060df-e39b-47ab-bd35-213019632790);
+DB_CRE_BloodOfLathander_CannonOffCrystals((ITEM)S_CRE_LanceCrystal_005_562f486e-9002-4bd5-8050-f309446c534b);
+
+DB_CRE_BloodOfLathander_CannonGlowCrystals((ITEM)S_CRE_LanceCrystal_Glowing_001_7fa4e57a-377f-4aa2-a0a1-6c952760169d);
+DB_CRE_BloodOfLathander_CannonGlowCrystals((ITEM)S_CRE_LanceCrystal_Glowing_002_fc776298-dd6f-4c28-ba5f-bb562933f2db);
+DB_CRE_BloodOfLathander_CannonGlowCrystals((ITEM)S_CRE_LanceCrystal_Glowing_003_d75762aa-9f9b-4137-82f8-ac63fce5d325);
+DB_CRE_BloodOfLathander_CannonGlowCrystals((ITEM)S_CRE_LanceCrystal_Glowing_004_88ec7217-4bc9-4f32-89fa-94f4e80ed039);
+DB_CRE_BloodOfLathander_CannonGlowCrystals((ITEM)S_CRE_LanceCrystal_Glowing_005_28738f0d-fe33-4b65-9f6b-51b93464c9a2);
+
+PROC_TriggerRegisterForPlayers(S_CRE_BloodOfLathander_DialogJoinArea_e8d75005-f2f0-4694-ac88-5e6fdc6f5dac);
+//END_REGION
+
+//REGION Lance Shutdown Destructables
+PROC_SetOnStage(S_CRE_Lance_Lens_000_61fae206-9626-453c-ac3d-3be6089158d5, 0);
+PROC_SetOnStage(S_CRE_Lance_Lens_001_9de17d56-f200-4288-9092-6577118e0cac, 0);
+PROC_SetOnStage(S_CRE_Lance_Lens_002_96a552d3-1ae5-4a8c-a717-083c25b66281, 0);
+PROC_SetOnStage(S_CRE_Lance_Lens_003_e27f5c4c-7b52-4580-ad93-3be30f19bb07, 0);
+
+DB_CRE_LanceShutdownDestructables(S_CRE_Lance_Lens_000_61fae206-9626-453c-ac3d-3be6089158d5);
+DB_CRE_LanceShutdownDestructables(S_CRE_Lance_Lens_001_9de17d56-f200-4288-9092-6577118e0cac);
+DB_CRE_LanceShutdownDestructables(S_CRE_Lance_Lens_002_96a552d3-1ae5-4a8c-a717-083c25b66281);
+DB_CRE_LanceShutdownDestructables(S_CRE_Lance_Lens_003_e27f5c4c-7b52-4580-ad93-3be30f19bb07);
+
+PROC_TriggerRegisterForPlayers(S_CRE_BloodOfLathander_DisarmArea_91240fb0-f271-4fa5-a5f0-538af16eb078);
+DB_AddCharactersInTriggerToDialog((DIALOGRESOURCE)CRE_Lance_Disarm_bcf29e12-79af-1530-e4f3-d9d5056bf3d2, (TRIGGER)S_CRE_BloodOfLathander_DisarmArea_91240fb0-f271-4fa5-a5f0-538af16eb078, 1, 0, 1, 1);
+
+DB_DialogStarted_IgnoreStopConditions((DIALOGRESOURCE)CRE_Lance_Disarm_bcf29e12-79af-1530-e4f3-d9d5056bf3d2);
+DB_DropMutingStatussesDialog((DIALOGRESOURCE)CRE_Lance_Disarm_bcf29e12-79af-1530-e4f3-d9d5056bf3d2);
+//END_REGION
+
+
+//REGION Escape cinematic
+//Starting role indexes for the peanuts belonging to the 3 main roles
+DB_CRE_LanceEscapeCinematic_Role1Peanuts_CurrentIndex(4);
+DB_CRE_LanceEscapeCinematic_Role2Peanuts_CurrentIndex(7);
+DB_CRE_LanceEscapeCinematic_Role3Peanuts_CurrentIndex(10);
+//END_REGION
+
+//REGION Portal to roof
+PROC_SetOnStage(S_CRE_Lance_PortalToRoof_98f258c4-92ec-49fa-afbf-76904a21acce, 0);
+PROC_SetOnStage(S_CRE_Lance_PortalToRoof_VFX_15ca3ca8-bf8f-4c58-9879-902d451f346a, 0);
+PROC_SetOnStage(S_CRE_Lance_PortalOnRoof_VFX_1307a9e5-f1ee-4e92-b760-581569a67a46, 0);
+//END_REGION
+
+//REGION Level template swapping
+PROC_SetOnStage(S_CRE_BreakableRoof_1a07f118-1894-4712-a058-8c8974c86331, 0);
+PROC_SetOnStage(S_CRE_BreakableGlass_befe761c-fa15-407f-8228-06479fd20327, 0);
+PROC_SetOnStage(S_CRE_LathanderTower_Breakable_1b02e9f4-9125-48e7-9e30-ced4f406cfcd, 0);
+
+DB_CRE_DestroyedMonastery_DestroyedTemplates((LEVELTEMPLATE)LT_PLT_CRE_Roof_A_Broken_000_4f9f6e35-ee15-433b-a132-da1db9527c5c);
+DB_CRE_DestroyedMonastery_DestroyedTemplates((LEVELTEMPLATE)LT_PLT_CRE_StainedGlass_A_Broken_000_aeb4a51f-8e59-4399-a6db-3d91cd205224);
+DB_CRE_DestroyedMonastery_DestroyedTemplates((LEVELTEMPLATE)LT_PLT_CRE_Tower_A_Broken_000_6c5d5821-5aac-4165-9005-a7cf2c19fde2);
+DB_CRE_DestroyedMonastery_DestroyedTemplates((LEVELTEMPLATE)LT_PLT_CRE_Tower_Lathander_A_Broken_000_5ce40221-ba5b-4267-b313-95e70443dd5a);
+//END_REGION
+
+//REGION Lathander laser animation
+DB_CRE_Lance_AnimationIndex(0);
+//END_REGION
+
+//REGION Ring offstaging
+PROC_TriggerRegisterForParty(S_CRE_BloodOfLathander_RingTopDetection_4eb7b64b-0c51-4842-9349-333e14014753);
+//END_REGION
+KBSECTION
+//REGION Debug Commands
+IF
+TextEvent("cre_testlance")
+AND
+GetHostCharacter(_Player)
+THEN
+PROC_TeleportPartiesTo((TRIGGER)S_CRE_DebugPos_BloodOfLathander_6f34cedf-9917-48e9-811d-f8c8467d79b8, "");
+ToInventory((ITEM)S_CRE_DawnmasterCrest_b0b3322f-c707-4f96-a3c9-ab4265a7452a, _Player);
+PROC_CRE_ChainOfCommand_GithAndCultistsStartTransition();
+
+IF
+TextEvent("cre_testDestroyGD")
+AND
+GetHostCharacter(_Player)
+THEN
+PROC_GroupDiscussion_InstantStart(_Player, (VOICEBARKRESOURCE)CRE_GD_IVB_CrecheDestroyed_81128244-adec-b89d-4eca-5934000206b1);
+
+IF
+TextEvent("CRE_TestEscapeCinematic")
+THEN
+PROC_CRE_Lance_GetPlayersAndStartEscapeCinematic();
+
+IF
+TextEvent("cre_gotogauntlet")
+AND
+GetHostCharacter(_Player)
+THEN
+PROC_TeleportPartiesTo((TRIGGER)S_Debug_CRE_CrecheLower_916ac53f-50b6-4b44-9b88-03b197919126, "");
+
+IF
+TextEvent("cre_spingyro")
+THEN
+PROC_PlayLoopingAnimation(S_CRE_BloodOfLathander_ConcentratorGyro_33e92d05-db4a-45c0-9dc8-d78c7830ea65, OBJ_Use_Activate_01_42c02cc0-0503-4ca9-9ea0-45564bd0e5d4, OBJ_Idle_Activated_01_8be9179a-3dc5-4a35-bd61-33af16176cf4,OBJ_Use_Deactivate_01_bb1e8405-8773-46d1-92c8-9f42d900922b);
+
+//END_REGION
+
+//REGION Triggers
+IF
+DB_CRE_LanceKillTriggers(_Trigger)
+THEN
+PROC_TriggerRegisterForPlayers(_Trigger);
+DB_TriggerEvents_TriggerSet("CRE_Lance_Killzone" ,_Trigger);
+//END_REGION
+
+//REGION Setup
+IF
+DB_CRE_BloodOfLathander_CannonGlowCrystals(_Crystal)
+THEN
+PROC_SetOnStage(_Crystal,0);
+//END_REGION
+
+
+//REGION The Blood of Lathander
+//Storing the character who initiated the pickup in a DB
+PROC
+PROC_BlockPickupOfItem(_Player,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c)
+AND
+DB_Players(_Player)
+AND
+DB_BlockPickupOfBloodOfLathander(1)
+THEN
+DB_CRE_BloodOfLathanderPickuper(_Player);
+DB_CustomPickupItemResponse(_Player,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c,0);
+
+PROC
+PROC_BlockPickupOfItem(_Player,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c)
+AND
+DB_Players(_Player)
+AND
+DB_BlockPickupOfBloodOfLathander(1)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e, S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, _Player)
+THEN
+DB_CustomPickupItemResponse(_Player,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c,0);
+
+PROC
+PROC_BlockMoveOfItem(_Player,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c)
+AND
+DB_Players(_Player)
+AND
+DB_BlockPickupOfBloodOfLathander(1)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e, S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, _Player)
+THEN
+DB_CRE_BloodOfLathanderPickuper(_Player);
+DB_CustomMoveItemResponse(_Player,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c,0);
+
+
+PROC
+PROC_BlockUseOfItem(_Player,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c)
+AND
+DB_Players(_Player)
+AND
+DB_BlockPickupOfBloodOfLathander(1)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e, S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, _Player)
+THEN
+DB_CRE_BloodOfLathanderPickuper(_Player);
+DB_CustomUseItemResponse(_Player,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c,0);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers((DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e, _ID)
+AND
+DB_CRE_BloodOfLathanderPickuper(_DialogInitiator)
+AND
+DB_Players(_Player)
+AND
+NOT DB_CRE_BloodOfLathanderPickuper(_Player)
+AND
+QRY_SpeakerIsAvailableAndInDialogRange(_Player, _DialogInitiator)
+THEN
+PROC_DialogAddListeningActor(_ID, _Player);
+
+//Fallback blocking all interaction with Blood of lathander, in case starting the dialog is not possible
+PROC
+PROC_BlockMoveOfItem(_Character,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c)
+AND
+DB_BlockPickupOfBloodOfLathander(1)
+THEN
+DB_CustomMoveItemResponse(_Character,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c,0);
+
+PROC
+PROC_BlockPickupOfItem(_Character,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c)
+AND
+DB_BlockPickupOfBloodOfLathander(1)
+THEN
+DB_CustomPickupItemResponse(_Character,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c,0);
+
+PROC
+PROC_BlockUseOfItem(_Character,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c)
+AND
+DB_BlockPickupOfBloodOfLathander(1)
+THEN
+DB_CustomUseItemResponse(_Character,S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c,0);
+
+IF
+DialogActorJoined((DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e, _ID, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+NOT DB_CRE_BloodOfLathanderPickuper((CHARACTER)_Player)
+AND
+DB_CRE_BloodOfLathander_BarrierTeleportOut_Index(_Index)
+AND
+IntegerSum(_Index, 1, _NewIndex)
+THEN
+DB_CRE_BloodOfLathadner_CharactersWatchingThePickup(_Player, _Index);
+NOT DB_CRE_BloodOfLathander_BarrierTeleportOut_Index(_Index);
+DB_CRE_BloodOfLathander_BarrierTeleportOut_Index(_NewIndex);
+
+//Teleporting all the additional character back to safe positions oustide the barrier
+IF
+DB_CRE_BloodOfLathadner_CharactersWatchingThePickup(_Character, _Index)
+AND
+DB_CRE_BloodOfLathander_BarrierTeleportOut(_Trigger, _Index)
+THEN
+TeleportTo(_Character, _Trigger, "", 0, 0, 0, 0, 1);
+NOT DB_CRE_BloodOfLathadner_CharactersWatchingThePickup(_Character, _Index);
+
+//Add latecomers to the ongoing dialog
+IF
+DB_InRegion(_Player ,S_CRE_BloodOfLathander_DialogJoinArea_e8d75005-f2f0-4694-ac88-5e6fdc6f5dac)
+AND
+DB_Players(_Player)
+AND
+DB_DialogName((DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e,_Inst)
+AND
+QRY_SpeakerIsAvailable(_Player)
+THEN
+PROC_DialogAddListeningActor(_Inst,_Player);
+
+//Resetting the teleport out index after the dialog ends
+IF
+DialogEnded(CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e, _)
+AND
+DB_CRE_BloodOfLathander_BarrierTeleportOut_Index(_Index)
+THEN
+NOT DB_CRE_BloodOfLathander_BarrierTeleportOut_Index(_Index);
+DB_CRE_BloodOfLathander_BarrierTeleportOut_Index(0);
+
+
+//Removing the pickup initiator from the DB, in case they back out of the dialog and return alter.
+IF
+DialogEnded((DIALOGRESOURCE)CRE_BloodOfLathander_1d36d5d0-7329-6fd2-2961-ceea3402980e, _)
+AND
+DB_CRE_BloodOfLathanderPickuper(_DialogInitiator)
+THEN
+NOT DB_CRE_BloodOfLathanderPickuper(_DialogInitiator);
+
+
+PROC
+PROC_FlagReactionAfterDialog(_Player, (FLAG)CRE_BloodOfLathander_Event_TakenBlood_baf03563-0160-4e9d-833b-92b42c1a7cb8)
+THEN
+ToInventory(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, _Player, 1, 1, 1);
+PROC_CRE_TakenAmulet((GUIDSTRING)_Player);
+PROC_MusicPlayGeneral("CRE_Monastery_SelfDestruct_On");
+
+IF
+FlagSet((FLAG)CRE_BloodOfLathander_Event_TakenBlood_baf03563-0160-4e9d-833b-92b42c1a7cb8, _Player, _)
+THEN
+SetEntityEvent(S_PulseTraps_Helper_DisableEvent_207129c7-91d6-4140-abc2-4b831e25b43b, "CRE_Gauntlet_Disable", 1);
+PROC_CRE_LiftCrystals();
+PROC_PlayLoopingAnimation(S_CRE_BloodOfLathander_ConcentratorGyro_33e92d05-db4a-45c0-9dc8-d78c7830ea65, OBJ_Use_Activate_01_42c02cc0-0503-4ca9-9ea0-45564bd0e5d4, OBJ_Idle_Activated_01_8be9179a-3dc5-4a35-bd61-33af16176cf4,OBJ_Use_Deactivate_01_bb1e8405-8773-46d1-92c8-9f42d900922b);
+
+IF
+MovedBy(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, _Mover)
+THEN
+PROC_CRE_TakenAmulet((GUIDSTRING)_Mover);
+
+PROC
+PROC_CRE_TakenAmulet((GUIDSTRING)_TimerHost)
+AND
+QRY_OnlyOnce("CRE_TakingAmulet")
+THEN
+NOT DB_BlockPickupOfBloodOfLathander(1);
+PROC_StopLoopBeamEffect(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, "CRE_BloodOfLathanderBeam");
+RemoveStatus(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, "LIGHT", NULL_00000000-0000-0000-0000-000000000000);
+RemoveStatus(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, "LEVITATE", NULL_00000000-0000-0000-0000-000000000000);
+PROC_SetOnStage(S_CRE_Lance_PortalToRoof_98f258c4-92ec-49fa-afbf-76904a21acce, 1);
+PROC_SetOnStage(S_CRE_Lance_PortalToRoof_VFX_15ca3ca8-bf8f-4c58-9879-902d451f346a, 1);
+PROC_SetOnStage(S_CRE_Lance_PortalOnRoof_VFX_1307a9e5-f1ee-4e92-b760-581569a67a46, 1);
+PROC_CRE_BloodOfLathander_GlowCannonCrystals();
+PROC_CRE_Lance_TurnOnBeamVFX();
+PROC_CRE_ChainOfCommand_GithAndCultistsStartTransition();
+ //TODO: implement lathander laser animation
+
+PROC
+PROC_CRE_BloodOfLathander_GlowCannonCrystals()
+AND
+DB_CRE_BloodOfLathander_CannonOffCrystals(_Off)
+THEN
+PROC_SetOnStage(_Off, 0);
+
+PROC
+PROC_CRE_BloodOfLathander_GlowCannonCrystals()
+AND
+DB_CRE_BloodOfLathander_CannonGlowCrystals(_On)
+THEN
+PROC_SetOnStage(_On, 1);
+PROC_LoopEffect(VFX_Script_CRE_Lathander_Platform_A_Crystal_B_01_8677ebf4-fc2c-17e0-bfad-624406962341, _On, "CRE_BloodOfLathander_Lance_GlowingCrystals", "CRE_Main_A", "", 1.0);
+
+PROC
+PROC_CRE_Lance_TurnOnBeamVFX()
+THEN
+PROC_LoopBeamEffect(VFX_Script_Sunlight_Concentrate_Beam_Thick_01_d15cca55-67e6-70af-6eb4-61df62592a24, S_CRE_LanceActivationBeam_Source_Gyro_a1fe2138-f900-4dc0-8ca3-6174b7bc5d0c, S_CRE_LanceActivationBeam_Target_Portal_2abf610c-18d3-480f-a547-104f01e3ccd2, "Dummy_FX","Dummy_FX", "CRE_LanceActivationBeam1", "CRE_Main_A");
+PROC_LoopBeamEffect(VFX_Script_Sunlight_Beam_Thick_01_27fd19bf-0f10-c076-e323-853feb1859f3, S_CRE_LanceActivationBeam_Source_RoofPortal_b4fdd98d-e5bc-4c0a-b553-a27f488f2284, S_CRE_LanceActivationBeam_Target_Lance_cdf0ec61-d718-433d-98a4-8094e0602fab, "Dummy_FX","Dummy_FX", "CRE_LanceActivationBeam2", "CRE_Main_A");
+
+PROC
+PROC_CRE_Lance_TurnOnBeamVFX()
+AND
+DB_CRE_Lance_Crystals(_Crystal, _, _String)
+THEN
+PROC_LoopBeamEffect(VFX_Script_Sunlight_Beam_Thin_01_bc15e41a-bace-f3c3-156c-731f63acbb54, _Crystal, S_CRE_LanceActivationBeam_Source_Gyro_a1fe2138-f900-4dc0-8ca3-6174b7bc5d0c, "Dummy_FX","Dummy_FX", _String, "CRE_Main_A");
+
+
+PROC
+PROC_CRE_Lance_TurnOffBeamVFX()
+THEN
+PROC_StopLoopBeamEffect(S_CRE_LanceActivationBeam_Source_Gyro_a1fe2138-f900-4dc0-8ca3-6174b7bc5d0c, "CRE_LanceActivationBeam1");
+PROC_StopLoopBeamEffect(S_CRE_LanceActivationBeam_Source_RoofPortal_b4fdd98d-e5bc-4c0a-b553-a27f488f2284, "CRE_LanceActivationBeam2");
+
+PROC
+PROC_CRE_Lance_TurnOffBeamVFX()
+AND
+DB_CRE_Lance_Crystals(_Item, _, _String)
+THEN
+PROC_StopLoopBeamEffect(_Item, _String);
+
+IF
+DestroyedBy(_Item, _, _, _)
+AND
+DB_CRE_Lance_Crystals(_Item, _, _String)
+THEN
+PROC_StopLoopBeamEffect(_Item, _String);
+
+
+PROC
+PROC_CRE_TakenAmulet(_)
+AND
+NOT DB_CRE_Lance_Deactivate(1)
+THEN
+PROC_CRE_BloodOfLathander_BarrierTrap_TurnOn();
+
+IF
+DB_CRE_LathanderBarriers(_Barrier)
+THEN
+PROC_SetOnStage(_Barrier, 0);
+
+IF
+DestroyedBy(_On, _, _, _)
+AND
+DB_CRE_LathanderBarriers_Destructables(_On)
+THEN
+DB_CRE_LathanderBarriers_DestroyedDestructable(_On);
+
+
+//Managing the barrier trap in and out of dialogs
+IF
+DB_CRE_LathanderBarriers_DestroyedDestructable(S_CRE_BloodOfLathanderBarriers_Pipes_On_01_fe919ac1-9452-4700-aa23-e5731fdb4661)
+THEN
+PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff();
+ClearFlag(CRE_Lance_BarrierTrapActive_ac9084ae-0d0a-49c3-8e5c-d28ad28cd785, NULL_00000000-0000-0000-0000-000000000000, 0);
+SetFlag(CRE_Lance_State_BarrierTrapCrystalDestroyed_c0874b26-7f74-4967-afc4-cf7764e5cac7, NULL_00000000-0000-0000-0000-000000000000, 0); //for cinematic purposes
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(CRE_Lance_BarrierTrapActive_ac9084ae-0d0a-49c3-8e5c-d28ad28cd785)
+THEN
+PROC_CRE_BloodOfLathander_BarrierTrap_TurnOn();
+
+
+
+IF
+FlagCleared(CRE_Lance_BarrierTrapActive_ac9084ae-0d0a-49c3-8e5c-d28ad28cd785, _, _)
+THEN
+PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff();
+
+PROC
+PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff()
+AND
+DB_CRE_LathanderBarriers(_Barrier)
+THEN
+PROC_SetOnStage(_Barrier, 0);
+
+PROC
+PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff()
+AND
+GetPosition(S_CRE_BloodOfLathander_BarrierGen_LowPosition_aa7b6e02-8767-441f-836c-d8232e3414f4, _X, _Y, _Z)
+THEN
+PROC_SetOnStage(S_CRE_BloodOfLathander_CylindricalBarrier_f4d7e951-958d-4a42-ba84-46ca6c18e3ec, 0);
+PlatformMoveTo((LEVELTEMPLATE)S_CRE_BloodOfLathander_GeneratorRing_497d4b94-1881-4c7c-8694-bc0241ae763b, _X, _Y, _Z, 3.0, "CRE_BloodOfLathander_GeneratorRingDown", 1);
+
+PROC
+PROC_CRE_BloodOfLathander_BarrierTrap_TurnOn()
+AND
+NOT DB_GlobalFlag(CRE_Lance_State_BarrierTrapCrystalDestroyed_c0874b26-7f74-4967-afc4-cf7764e5cac7)
+AND
+DB_CRE_LathanderBarriers(_Barrier)
+AND
+GetPosition(S_CRE_BloodOfLathander_GeneratorBottom_ea4331cf-a5dd-4cc5-9cca-d2a70c3e3447, _X, _Y, _Z)
+THEN
+PROC_SetOnStage(_Barrier, 1);
+
+
+PROC
+PROC_CRE_BloodOfLathander_BarrierTrap_TurnOn()
+THEN
+PROC_SetOnStage(S_CRE_BloodOfLathander_CylindricalBarrier_f4d7e951-958d-4a42-ba84-46ca6c18e3ec, 1);
+SetFlag(CRE_Lance_BarrierTrapActive_ac9084ae-0d0a-49c3-8e5c-d28ad28cd785, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_SetOnStage(S_CRE_BloodOfLathander_GeneratorTop_Up_953247aa-fa08-46ee-8892-849dfe9bcdc3, 0);
+LoadLevelTemplate(S_CRE_BloodOfLathander_GeneratorRing_497d4b94-1881-4c7c-8694-bc0241ae763b);
+//PROC_LoopEffect(VFX_Static_ForceFieldBarrier_Capless_Cylinder_01_43cad451-543a-a997-4b90-a234dfaa0348, S_CRE_BloodOfLathander_CylindricalBarrier_f4d7e951-958d-4a42-ba84-46ca6c18e3ec, "CRE_BloodOfLathander_CylinderBarrier", "CRE_Main_A", "");
+
+//Dispelling the barriers
+IF
+UsingSpellOnTarget(_, _Barrier, "Target_DispelMagic", _, _, _)
+AND
+DB_CRE_LathanderBarriers((ITEM)_Barrier)
+THEN
+RealtimeObjectTimerLaunch(_Barrier, "CRE_Lance_LathanderTrapBarrierDispelTimer", 1000);
+
+IF
+ObjectTimerFinished(_Barrier, "CRE_Lance_LathanderTrapBarrierDispelTimer")
+THEN
+ClearFlag(CRE_Lance_BarrierTrapActive_ac9084ae-0d0a-49c3-8e5c-d28ad28cd785, NULL_00000000-0000-0000-0000-000000000000, 0);
+//END_REGION
+
+//REGION Lifting The Crystals
+IF
+DB_CRE_Lance_Crystals(_Crystal, _, _)
+THEN
+PROC_SetOnStage(_Crystal, 0);
+
+IF
+DB_CRE_Lance_CrystalColumns(_Column)
+THEN
+PROC_SetOnStage(_Column, 0);
+
+PROC
+PROC_CRE_LiftCrystals()
+AND
+DB_CRE_Lance_Crystals(_Crystal, _, _)
+THEN
+PROC_SetOnStage(_Crystal, 1);
+
+PROC
+PROC_CRE_LiftCrystals()
+AND
+DB_CRE_Lance_CrystalColumns(_Column)
+THEN
+PROC_SetOnStage(_Column, 1);
+
+
+//ItemMoveTo(_Crystal, _RisenPosition, 5.0, 1.0, 0, "CRE_Lance_CrystalsInPosition", 0);
+
+/*
+IF
+EntityEvent(_, "CRE_Lance_CrystalsInPosition")
+AND
+QRY_OnlyOnce("CRE_Lance_ActivateBeams")
+THEN
+PROC_CRE_Lance_TurnOnBeamVFX();
+*/
+
+//END_REGION
+
+//REGION Firing up the lance
+PROC
+PROC_FlagReactionAfterDialog(_Speaker, (FLAG)CRE_Lance_Event_PrepareToFire_fbbf517e-cf09-431c-a3ed-ed40a3816d55)
+AND
+NOT DB_CRE_Lance_Deactivate(1)
+THEN
+PROC_CRE_FireLance(_Speaker);
+DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_01_452e9666-b1ff-4fb7-aa41-f48ce5fc8162);
+DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_02_a5cc30a1-0a2e-4add-b634-9bade469860f);
+DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_03_7dfbe649-6749-4d45-bbcf-9edbfb874ce2);
+
+PROC
+PROC_CRE_BloodOfLathander_StartCountDown((GUIDSTRING)_TimerHost)
+AND
+GetRulesetModifierString(SCRIPTED_COMBAT_MECHANICS_cac2d8bd-c197-4a84-9df1-f86f54ad4521,"EASY")
+THEN
+ObjectTimerLaunch(_TimerHost, "CRE_Lance_ExplosionCountDown", 42000, 0);
+
+PROC
+PROC_CRE_BloodOfLathander_StartCountDown((GUIDSTRING)_TimerHost)
+AND
+NOT GetRulesetModifierString(SCRIPTED_COMBAT_MECHANICS_cac2d8bd-c197-4a84-9df1-f86f54ad4521,"EASY")
+THEN
+ObjectTimerLaunch(_TimerHost, "CRE_Lance_ExplosionCountDown", 24000, 0);
+
+PROC
+PROC_CRE_FireLance((GUIDSTRING)_TimerHost)
+THEN
+PROC_MusicPlayGeneral("CRE_Monastery_SelfDestruct_On");
+DB_CRE_Lance_ExplosionCountdownTimerHost(_TimerHost);
+PROC_CRE_StartCrecheShakes();
+SetVisible(S_CRE_BloodOfLathander_ConcentratorGyro_33e92d05-db4a-45c0-9dc8-d78c7830ea65, 1);
+PROC_CRE_BloodOfLathander_StartCountDown(_TimerHost);
+PROC_CRE_StartLanceAnimation(_TimerHost);
+SetFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3);
+SetFlag((FLAG)CRE_Lance_State_WasActive_9d239e15-4994-49b1-93dc-a89d37e3bff4);
+StartVoiceBark((VOICEBARKRESOURCE)CRE_Lance_VB_EscapeTookBlood_a4079f96-2e61-5be7-253b-eee23a71930a, (CHARACTER)_TimerHost);
+PROC_CRE_ActivateEscapeVBs();
+DB_DangerZone(S_CRE_DangerZone01_1cd42a3c-b4a6-45cb-a895-04e009eb5b7c, "CRE_ExplodingCreche");
+DB_DangerZone(S_CRE_DangerZone02_f6e3a7bb-27e2-4b68-951f-d1a64f4f297f, "CRE_ExplodingCreche");
+PROC_CRE_CrecheHostile();
+
+//If the planecaster was activated, deactivate it.
+PROC
+PROC_CRE_FireLance(_)
+AND
+DB_GlobalFlag(CRE_ChainOfCommand_State_PlanecasterActive_5e5e9cb6-41d8-4a93-942d-3dca4d357561)
+THEN
+DB_CRE_Lance_PlaneCasterTemporaryDeactivate(1);
+PROC_StopLoopEffect(S_CRE_SecurtiyOfficePlanecaster_9144098a-c9c7-4425-a99d-d7375069e7b7, "CRE_AstralPlanecaster_VFX");
+ClearFlag(CRE_ChainOfCommand_State_PlanecasterActive_5e5e9cb6-41d8-4a93-942d-3dca4d357561);
+
+PROC
+PROC_CRE_FireLance(_)
+AND
+DB_CRE_LanceShutdownDestructables(_Destructables)
+THEN
+PROC_SetOnStage(_Destructables, 1);
+
+PROC
+PROC_CRE_FireLance((CHARACTER)_Host)
+THEN
+PROC_CRE_EnterForcedTurnBased((CHARACTER)_Host);
+
+PROC
+PROC_CRE_EnterForcedTurnBased((CHARACTER)_Host)
+AND
+DB_Players(_Players)
+AND
+DB_InteractiveDialogSpeaker(_DialogID,_Players)
+AND
+DB_CRE_LanceKillTriggers(_Killtrigger)
+AND
+IsInTrigger(_Players, _Killtrigger, 1)
+THEN
+PROC_ForceStopDialog(_Players);
+
+
+//Entering FTB if not in combat or dialog
+//TODO: Once code supports it, ALL enter the same FTB as the player triggering the explosion is in.
+PROC
+PROC_CRE_EnterForcedTurnBased((CHARACTER)_Host)
+THEN
+SharedTurnBaseMode(_Host, 1); //New Shared FTB feature, this should start shared FTB on the whole party, regardless of distance - unless they are in dialog or combat
+
+IF
+EnteredSharedForceTurnBased(_Player, _Zone)
+AND
+GUIDToString(_Zone, _ZoneStr)
+THEN
+DB_CRE_SharedForceTurnBasedZone(_Zone); //Caching the FTB Zone to add characters to later if needed
+PROC_CRE_BloodOfLathander_StartQuestTimer(_Player);
+
+PROC
+PROC_CRE_BloodOfLathander_StartQuestTimer((GUIDSTRING)_Player)
+AND
+GetRulesetModifierString(SCRIPTED_COMBAT_MECHANICS_cac2d8bd-c197-4a84-9df1-f86f54ad4521,"EASY")
+THEN
+ObjectQuestTimerLaunch(_Player, "CRE_Lance_Explosion_QuestTimer", "CRE_BloodOfLathander_TurnTimer", 42000, 0);
+
+PROC
+PROC_CRE_BloodOfLathander_StartQuestTimer((GUIDSTRING)_Player)
+AND
+NOT GetRulesetModifierString(SCRIPTED_COMBAT_MECHANICS_cac2d8bd-c197-4a84-9df1-f86f54ad4521,"EASY")
+THEN
+ObjectQuestTimerLaunch(_Player, "CRE_Lance_Explosion_QuestTimer", "CRE_BloodOfLathander_TurnTimer", 24000, 0);
+
+// This rule removes the old entry from DB_CachedSharedForceTurnBasedZone when a new one gets added
+IF
+DB_CRE_SharedForceTurnBasedZone(_NewZone)
+AND
+DB_CRE_SharedForceTurnBasedZone(_OldZone)
+AND
+_NewZone != _OldZone
+THEN
+NOT DB_CRE_SharedForceTurnBasedZone(_OldZone);
+
+//Entering FTB if in combat. Store the combat instance and wait for it to end. Then enter FTB.
+//TODO: Once code supports it, enter the same FTB as the player triggering the explosion is in.
+PROC
+PROC_CRE_EnterForcedTurnBased(_)
+AND
+DB_Players(_Players)
+AND
+IsInCombat(_Players, 1)
+AND
+DB_Is_InCombat(_Players, _CombatID)
+THEN
+DB_CRE_PlayersInCombatAtFTBStart(_CombatID, _Players);
+
+IF
+CombatEnded(_CombatID)
+AND
+DB_CRE_PlayersInCombatAtFTBStart(_CombatID, _Players)
+AND
+DB_CRE_SharedForceTurnBasedZone(_Zone)
+THEN
+EnterSharedTurnBaseMode(_Players, _Zone);
+NOT DB_CRE_PlayersInCombatAtFTBStart(_CombatID, _Players);
+
+//EXPLOSION
+
+IF
+ObjectTimerFinished(_TimerHost, "CRE_Lance_ExplosionCountDown")
+THEN
+ClearFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3);
+NOT DB_CRE_Lance_ExplosionCountdownTimerHost(_TimerHost);
+PROC_CRE_StopCrecheShakes();
+
+PROC
+PROC_CRE_KillPlayersWithLance()
+AND
+DB_Players(_Player)
+AND
+DB_InRegion(_Player, _Trigger)
+AND
+DB_CRE_LanceKillTriggers(_Trigger)
+THEN
+PROC_CRE_KillWithLance(_Player);
+DB_CRE_KilledWithLance(_Player);
+
+
+PROC
+PROC_CRE_KillWithLance((CHARACTER)_Target)
+THEN
+Die(_Target, DEATHTYPE.Incinerate, NULL_00000000-0000-0000-0000-000000000000, 0, 1, 3.0);
+ApplyStatus(_Target,"DEAD_WILL_O_WISP",-1.0,1,NULL_00000000-0000-0000-0000-000000000000);
+TeleportTo(_Target, S_CRE_DestructionSafePoint_ac7229e8-c9ca-42d9-b582-9033c1489237,"",0, 0, 0, 1, 1);
+
+PROC
+PROC_CRE_Lance_SwitchToLivingCharacter()
+AND
+DB_CRE_KilledWithLance(_Target)
+AND
+IsControlled(_Target, 1)
+AND
+GetReservedUserID(_Target, _UserID)
+AND
+GetClosestAliveUserPlayer(_Target, _UserID, _NewCharacter, _)
+THEN
+MakePlayerActive(_NewCharacter);
+
+PROC
+PROC_CRE_KillWithLance((CHARACTER)S_Player_Astarion_c7c13742-bacd-460a-8f65-f864fe41f255)
+THEN
+SetFlag((FLAG)ORI_Astarion_State_WantsToDiscussSunLance_affe619d-8c66-4982-8273-22ee89f240e2, S_Player_Astarion_c7c13742-bacd-460a-8f65-f864fe41f255);
+//END_REGION
+
+//REGION Escape cinematic
+//If you left a killtrigger and no player is in the killzone, start cinematic
+IF
+LeftTrigger(_Player,_Killzone)
+AND
+DB_CRE_LanceKillTriggers(_Killzone)
+AND
+DB_GlobalFlag(CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3)
+AND
+DB_Players(_Player)
+AND
+NOT QRY_TriggerEvents_AnyPlayerInTriggerSet("CRE_Lance_Killzone")
+AND
+QRY_OnlyOnce("CRE_StartedLanceCinematic")
+THEN
+PROC_CRE_Lance_GetPlayersAndStartEscapeCinematic();
+
+
+//If the countdown ends start the cinematic. Flags decide which cinematic is played.
+IF
+ObjectTimerFinished(_, "CRE_Lance_ExplosionCountDown")
+AND
+QRY_OnlyOnce("CRE_StartedLanceCinematic")
+THEN
+PROC_CRE_Lance_GetPlayersAndStartEscapeCinematic();
+
+PROC
+PROC_CRE_Lance_GetPlayersAndStartEscapeCinematic()
+THEN
+PROC_CRE_Lance_CheckForSurvivors();
+PROC_CRE_Lance_GenerateRolesForCinematic();
+PROC_CRE_Lance_StartEscapeCinematic();
+SetFlag(CRE_Lance_Event_Exploded_f7d93dd1-c30e-4ef2-87c0-0cada12f180d, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_MusicPlayGeneral("CRE_Monastery_SelfDestruct_Off");
+
+PROC
+PROC_CRE_Lance_GetPlayersAndStartEscapeCinematic()
+THEN
+PROC_DangerZone_Safe("CRE_ExplodingCreche");
+
+//When the escape cinematic ends, kill characters left in the kill triggers, and teleport the survivors to the safe location.
+IF
+DialogEnded((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _)
+THEN
+PROC_CRE_KillPlayersWithLance();
+TimerLaunch("CRE_Lance_WaitBeforeSwitchingTolivingChar", 500);
+
+IF
+TimerFinished("CRE_Lance_WaitBeforeSwitchingTolivingChar")
+THEN
+PROC_CRE_Lance_SwitchToLivingCharacter();
+
+IF
+DialogEnded((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _)
+AND
+DB_Players(_Player)
+AND
+NOT DB_CRE_KilledWithLance(_Player)
+AND
+NOT DB_Defeated(_Player)
+THEN
+TeleportTo(_Player, S_CRE_DestructionSafePoint_ac7229e8-c9ca-42d9-b582-9033c1489237, "", 0, 0, 0, 1, 1);
+
+//-------------------NEW ESCAPE CINEMATIC FLOW-------------------//
+PROC
+PROC_CRE_Lance_GenerateRolesForCinematic()
+AND
+DB_Players(_Players)
+AND
+DB_InteractiveDialogSpeaker(_DialogID,_Players)
+AND
+DB_CRE_LanceKillTriggers(_Killtrigger)
+AND
+IsInTrigger(_Players, _Killtrigger, 1)
+THEN
+PROC_ForceStopDialog(_Players);
+
+PROC
+PROC_CRE_Lance_GenerateRolesForCinematic()
+AND
+GetHostCharacter(_HostAvatar)
+THEN
+PROC_CRE_LanceEscape_AssignCharacterToRole(_HostAvatar);
+
+PROC
+PROC_CRE_Lance_GenerateRolesForCinematic()
+AND
+DB_Avatars(_Avatars)
+AND
+GetHostCharacter(_HostAvatar)
+AND
+_Avatars!=_HostAvatar
+THEN
+PROC_CRE_LanceEscape_AssignCharacterToRole(_Avatars);
+
+PROC
+PROC_CRE_Lance_GenerateRolesForCinematic()
+AND
+DB_Players(_Players)
+AND
+NOT DB_Avatars(_Players)
+THEN
+PROC_CRE_LanceEscape_AssignCharacterToRole(_Players);
+
+PROC
+PROC_CRE_Lance_GenerateRolesForCinematic()
+THEN
+PROC_CRE_LanceEscape_FillEmptyRoles();
+
+PROC
+PROC_CRE_Lance_StartEscapeCinematic()
+AND
+DB_CRE_EscapeCinematic_GetPlayer1(_Speaker1)
+AND
+DB_CRE_EscapeCinematic_GetPlayer2(_Speaker2)
+AND
+DB_CRE_EscapeCinematic_GetPlayer3(_Speaker3)
+AND
+QRY_StartDialogCustom_Fixed((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _Speaker1, _Speaker2, _Speaker3, 0, 0, 0, 0)
+THEN
+DB_NOOP(1);
+
+//Adding in peanuts
+PROC
+PROC_StartDialog_AddExtraSpeakers((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, (INTEGER)_Instance)
+AND
+DB_CRE_EscapeCinematic_GetPlayer1Peanuts(_Player, _Index)
+THEN
+//make sure there's no other timelines running on this player
+PROC_ForceStopDialog(_Player);
+DialogAddActorAt(_Instance, _Player, _Index);
+PROC_DialogRequestCache_MakeSpeakerLists_Evaluate((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _Instance, _Player);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, (INTEGER)_Instance)
+AND
+DB_CRE_EscapeCinematic_GetPlayer2Peanuts(_Player, _Index)
+THEN
+//make sure there's no other timelines running on this player
+PROC_ForceStopDialog(_Player);
+DialogAddActorAt(_Instance, _Player, _Index);
+PROC_DialogRequestCache_MakeSpeakerLists_Evaluate((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _Instance, _Player);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, (INTEGER)_Instance)
+AND
+DB_CRE_EscapeCinematic_GetPlayer3Peanuts(_Player, _Index)
+THEN
+//make sure there's no other timelines running on this player
+PROC_ForceStopDialog(_Player);
+DialogAddActorAt(_Instance, _Player, _Index);
+PROC_DialogRequestCache_MakeSpeakerLists_Evaluate((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _Instance, _Player);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, (INTEGER)_Instance)
+AND
+DB_Players(_Player)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer1(_Player)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer2(_Player)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer3(_Player)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer1Peanuts(_Player, _)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer2Peanuts(_Player, _)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer3Peanuts(_Player, _)
+THEN
+PROC_DialogAddListeningActor(_Instance, _Player);
+
+//Assign Role 1
+PROC
+PROC_CRE_LanceEscape_AssignCharacterToRole((CHARACTER)_Player)
+AND
+DB_InRegion(_Player, (TRIGGER)S_CRE_LanceEscape_RunZone_3bf7f8ee-7913-41df-a0c7-5c27ec8224e5)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer1(_)
+AND
+QRY_SpeakerIsAvailable(_Player)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer1(_Player);
+
+//Assign Role 1 peanuts (characters standing around role 1)
+PROC
+PROC_CRE_LanceEscape_AssignCharacterToRole((CHARACTER)_Player)
+AND
+DB_InRegion(_Player, (TRIGGER)S_CRE_LanceEscape_RunZone_3bf7f8ee-7913-41df-a0c7-5c27ec8224e5)
+AND
+DB_CRE_EscapeCinematic_GetPlayer1(_Role1)
+AND
+_Player!=_Role1
+AND
+QRY_SpeakerIsAvailable(_Player)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer1Peanuts(_Player, _)
+AND
+DB_CRE_LanceEscapeCinematic_Role1Peanuts_CurrentIndex(_Index)
+AND
+IntegerSum(_Index, 1, _NewIndex)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer1Peanuts(_Player, _Index);
+NOT DB_CRE_LanceEscapeCinematic_Role1Peanuts_CurrentIndex(_Index);
+DB_CRE_LanceEscapeCinematic_Role1Peanuts_CurrentIndex(_NewIndex);
+
+//Assign role 2
+PROC
+PROC_CRE_LanceEscape_AssignCharacterToRole((CHARACTER)_Player)
+AND
+DB_InRegion(_Player, _Trigger)
+AND
+DB_CRE_LanceKillTriggers(_Trigger)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer2(_)
+AND
+QRY_SpeakerIsAvailable(_Player)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer2(_Player);
+
+//Assign role 2 peanuts
+PROC
+PROC_CRE_LanceEscape_AssignCharacterToRole((CHARACTER)_Player)
+AND
+DB_InRegion(_Player, _Trigger)
+AND
+DB_CRE_LanceKillTriggers(_Trigger)
+AND
+DB_CRE_EscapeCinematic_GetPlayer2(_Role2)
+AND
+_Player!=_Role2
+AND
+DB_InRegion(_Role2, _Trigger)
+AND
+QRY_SpeakerIsAvailable(_Player)
+AND
+DB_CRE_LanceEscapeCinematic_Role2Peanuts_CurrentIndex(_Index)
+AND
+IntegerSum(_Index, 1, _NewIndex)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer2Peanuts(_Player, _Index);
+NOT DB_CRE_LanceEscapeCinematic_Role2Peanuts_CurrentIndex(_Index);
+DB_CRE_LanceEscapeCinematic_Role2Peanuts_CurrentIndex(_NewIndex);
+
+//Assign role 3
+PROC
+PROC_CRE_LanceEscape_AssignCharacterToRole((CHARACTER)_Player)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceUpperCrecheArea_ecdf67a2-4706-48ae-893b-ff92c4552624)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea1_9a4a6fd8-9ea9-488e-bc5d-2c68953924d1)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceLowerCrecheArea_d0a940ba-c37b-4960-a575-5d19c673ed2f)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea2_6c10df8f-8cc7-47f4-ac1d-69f6c7059035)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea3_89d27e5c-9c77-4535-9014-de5d82df6d92)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea4_403f4237-a0f3-4b64-bccd-4bf620cf82d3)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea5_fd331801-25e5-426d-9bed-dfcb76b4853a)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea6_585f6627-1efe-4ffb-ba01-be040785c78b)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceEscape_RunZone_3bf7f8ee-7913-41df-a0c7-5c27ec8224e5)
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer3(_)
+AND
+QRY_SpeakerIsAvailable(_Player)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer3(_Player);
+
+//Assign role 3
+PROC
+PROC_CRE_LanceEscape_AssignCharacterToRole((CHARACTER)_Player)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceUpperCrecheArea_ecdf67a2-4706-48ae-893b-ff92c4552624)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea1_9a4a6fd8-9ea9-488e-bc5d-2c68953924d1)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceLowerCrecheArea_d0a940ba-c37b-4960-a575-5d19c673ed2f)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea2_6c10df8f-8cc7-47f4-ac1d-69f6c7059035)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea3_89d27e5c-9c77-4535-9014-de5d82df6d92)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea4_403f4237-a0f3-4b64-bccd-4bf620cf82d3)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea5_fd331801-25e5-426d-9bed-dfcb76b4853a)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea6_585f6627-1efe-4ffb-ba01-be040785c78b)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceEscape_RunZone_3bf7f8ee-7913-41df-a0c7-5c27ec8224e5)
+AND
+DB_CRE_EscapeCinematic_GetPlayer3(_Role3)
+AND
+_Player!=_Role3
+AND
+QRY_SpeakerIsAvailable(_Player)
+AND
+DB_CRE_LanceEscapeCinematic_Role3Peanuts_CurrentIndex(_Index)
+AND
+IntegerSum(_Index, 1, _NewIndex)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer3Peanuts(_Player, _Index);
+NOT DB_CRE_LanceEscapeCinematic_Role3Peanuts_CurrentIndex(_Index);
+DB_CRE_LanceEscapeCinematic_Role3Peanuts_CurrentIndex(_NewIndex);
+
+PROC
+PROC_CRE_LanceEscape_FillEmptyRoles()
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer1(_)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer1(NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_CRE_LanceEscape_FillEmptyRoles()
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer2(_)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer2(NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_CRE_LanceEscape_FillEmptyRoles()
+AND
+NOT DB_CRE_EscapeCinematic_GetPlayer3(_)
+THEN
+DB_CRE_EscapeCinematic_GetPlayer3(NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_CRE_Lance_CheckForSurvivors()
+AND
+DB_Players(_Player)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceUpperCrecheArea_ecdf67a2-4706-48ae-893b-ff92c4552624)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea1_9a4a6fd8-9ea9-488e-bc5d-2c68953924d1)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceLowerCrecheArea_d0a940ba-c37b-4960-a575-5d19c673ed2f)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea2_6c10df8f-8cc7-47f4-ac1d-69f6c7059035)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea3_89d27e5c-9c77-4535-9014-de5d82df6d92)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea4_403f4237-a0f3-4b64-bccd-4bf620cf82d3)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea5_fd331801-25e5-426d-9bed-dfcb76b4853a)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_CRE_LanceMonasteryArea6_585f6627-1efe-4ffb-ba01-be040785c78b)
+THEN
+SetFlag((FLAG)CRE_LanceEscape_Survived_507e6d32-cf9c-4e08-bcb0-94721d6f0359, NULL_00000000-0000-0000-0000-000000000000, 0);
+//END_REGION
+
+//REGION Deactivating the Lance
+IF
+Combined((ITEM)S_CRE_LanceRooftopControlPanel_6f85585b-0c85-4247-b13f-2ce8de6ce7cc, (ITEM)S_CRE_DawnmasterCrest_b0b3322f-c707-4f96-a3c9-ab4265a7452a, _, _, _, _Player, _)
+AND
+NOT DB_CRE_Lance_Deactivate(1)
+THEN
+NOT DB_BlockPickupOfBloodOfLathander(1);
+SetFlag((FLAG)CRE_Lance_State_Disarmed_a17b9bbd-43e1-4ba2-8f88-a33ecdb07a96, NULL_00000000-0000-0000-0000-000000000000, 0);
+SetFlag((FLAG)CRE_ChainOfCommand_State_TrapsDisabled_914065e7-5b71-42e1-9dbe-f2c536eb534c, NULL_00000000-0000-0000-0000-000000000000, 0);
+SetEntityEvent(S_PulseTraps_Helper_DisableEvent_207129c7-91d6-4140-abc2-4b831e25b43b, "CRE_Gauntlet_Disable", 1);
+
+//Disarming leads to a cinematic
+IF
+Combined((ITEM)S_CRE_LanceRooftopControlPanel_6f85585b-0c85-4247-b13f-2ce8de6ce7cc, (ITEM)S_CRE_DawnmastersCrest_b0b3322f-c707-4f96-a3c9-ab4265a7452a, _, _, _, _Player, _)
+AND
+NOT DB_CRE_Lance_Deactivate(1)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)CRE_Lance_Disarm_bcf29e12-79af-1530-e4f3-d9d5056bf3d2, _Player)
+THEN
+DB_NOOP(1);
+
+//Disarming when the countdown is not active
+IF
+Combined((ITEM)S_CRE_LanceRooftopControlPanel_6f85585b-0c85-4247-b13f-2ce8de6ce7cc, (ITEM)S_CRE_DawnmastersCrest_b0b3322f-c707-4f96-a3c9-ab4265a7452a, _, _, _, _Player, _)
+AND
+NOT DB_GlobalFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3)
+AND
+NOT DB_CRE_Lance_Deactivate(1)
+THEN
+DB_OnlyOnce("CRE_TakingAmulet");
+RemoveStatus(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, "LIGHT", NULL_00000000-0000-0000-0000-000000000000);
+RemoveStatus(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, "LEVITATE", NULL_00000000-0000-0000-0000-000000000000);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRE_BloodOfLathander_WalkOutBanterBox_525bb8b5-2a73-4d2c-80ff-62fcaf47cbee, (VOICEBARKRESOURCE)CRE_Lance_VB_PreventativeDisarmLance_b988e31f-2286-638d-1317-ebb9d4489f3f);
+ToInventory(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, _Player, 1, 1, 1);
+PROC_CRE_LiftCrystals();
+DB_CRE_Lance_Deactivate(1);
+DB_CRE_Lance_Deactivate_WithCrest(1);
+PROC_RemoveDialog(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c);
+PROC_StopLoopBeamEffect(S_CRE_BloodOfLathander_e26f0c19-6185-43a7-b7f7-7155b936c59c, "CRE_BloodOfLathanderBeam");
+
+IF
+DB_GlobalFlag((FLAG)CRE_Lance_State_Disarmed_a17b9bbd-43e1-4ba2-8f88-a33ecdb07a96)
+AND
+DB_GlobalFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3)
+THEN
+DB_CRE_Lance_Deactivate(1);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_CRE_BloodOfLathander_WalkOutBanterBox_525bb8b5-2a73-4d2c-80ff-62fcaf47cbee, (VOICEBARKRESOURCE)CRE_Lance_VB_DeactivateLance_c57e33fd-fd6d-6348-3d38-c243188b9d56);
+PROC_SetOnStage(S_CRE_Lance_PortalToRoof_98f258c4-92ec-49fa-afbf-76904a21acce, 0);
+PROC_SetOnStage(S_CRE_Lance_PortalToRoof_VFX_15ca3ca8-bf8f-4c58-9879-902d451f346a, 0);
+PROC_SetOnStage(S_CRE_Lance_PortalOnRoof_VFX_1307a9e5-f1ee-4e92-b760-581569a67a46, 0);
+
+//Unloading the hovering ring leveltemplate in a way that doesn't destroy the player characters
+PROC
+PROC_CRE_CarefulRingUnload()
+AND
+DB_GlobalFlag(CRE_Lance_BarrierTrapActive_ac9084ae-0d0a-49c3-8e5c-d28ad28cd785)
+AND
+NOT QRY_AnyCharacterInTrigger(S_CRE_BloodOfLathander_RingTopDetection_4eb7b64b-0c51-4842-9349-333e14014753)
+THEN
+UnloadLevelTemplate(S_CRE_BloodOfLathander_GeneratorRing_497d4b94-1881-4c7c-8694-bc0241ae763b);
+
+PROC
+PROC_CRE_CarefulRingUnload()
+AND
+DB_GlobalFlag(CRE_Lance_BarrierTrapActive_ac9084ae-0d0a-49c3-8e5c-d28ad28cd785)
+AND
+DB_InRegion(_Character, S_CRE_BloodOfLathander_RingTopDetection_4eb7b64b-0c51-4842-9349-333e14014753)
+THEN
+DB_CRE_BloodOfLathander_CharacterToTeleportOffRing(_Character);
+
+PROC
+PROC_CRE_CarefulRingUnload()
+AND
+DB_CRE_BloodOfLathander_CharacterToTeleportOffRing(_Character)
+THEN
+TeleportTo(_Character, S_CRE_BloodOfLathaander_TeleportOut_01_79cac1b1-1d68-4e74-b925-52b082a1e492,"CRE_BloodOfLathander_TeleportedFromRingTop", 0, 0, 0, 0, 1);
+
+IF
+EntityEvent(_Character, "CRE_BloodOfLathander_TeleportedFromRingTop")
+THEN
+NOT DB_CRE_BloodOfLathander_CharacterToTeleportOffRing((CHARACTER)_Character);
+
+IF
+EntityEvent(_, "CRE_BloodOfLathander_TeleportedFromRingTop")
+AND
+NOT DB_CRE_BloodOfLathander_CharacterToTeleportOffRing(_)
+THEN
+UnloadLevelTemplate(S_CRE_BloodOfLathander_GeneratorRing_497d4b94-1881-4c7c-8694-bc0241ae763b);
+
+//Portal
+IF
+UseStarted(_Player, S_CRE_Lance_PortalToRoof_98f258c4-92ec-49fa-afbf-76904a21acce)
+THEN
+TeleportTo(_Player, S_CRE_RooftopTeleportTrigger_8dae489d-c8b0-4faa-97c3-74a8e3c1b339,"", 0, 1, 1, 1, 1);
+
+IF
+DB_CRE_Lance_Deactivate(1)
+AND
+DB_GlobalFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3)
+THEN
+PROC_CRE_Lance_CancelExplosion();
+PROC_MusicPlayGeneral("CRE_Monastery_SelfDestruct_Off");
+PROC_CRE_CarefulRingUnload();
+
+PROC
+PROC_CRE_Lance_CancelExplosion()
+AND
+DB_CRE_Lance_ExplosionCountdownTimerHost(_TimerHost)
+AND
+DB_Players(_Player)
+THEN
+PROC_CRE_EndLanceAnimation((GUIDSTRING)_TimerHost);
+PROC_CRE_StopCrecheShakes();
+StopAnimation(S_CRE_BloodOfLathander_ConcentratorGyro_33e92d05-db4a-45c0-9dc8-d78c7830ea65, 1);
+PROC_SetOnStage(S_CRE_BloodOfLathander_ConcentratorGyro_33e92d05-db4a-45c0-9dc8-d78c7830ea65, 0);
+ObjectTimerCancel(_TimerHost, "CRE_Lance_ExplosionCountDown");
+ObjectTimerCancel(_Player,"CRE_Lance_Explosion_QuestTimer");
+ClearFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3);
+NOT DB_CRE_Lance_ExplosionCountdownTimerHost(_TimerHost);
+PROC_CRE_Lance_TurnOffBeamVFX();
+SharedTurnBaseMode(_Player, 0);
+PROC_CRE_DeactivateEscapeVBs();
+PROC_DangerZone_Safe("CRE_ExplodingCreche");
+NOT DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_01_452e9666-b1ff-4fb7-aa41-f48ce5fc8162);
+NOT DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_02_a5cc30a1-0a2e-4add-b634-9bade469860f);
+NOT DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_03_7dfbe649-6749-4d45-bbcf-9edbfb874ce2);
+
+PROC
+PROC_CRE_Lance_CancelExplosion()
+AND
+DB_CRE_Lance_PlaneCasterTemporaryDeactivate(1)
+THEN
+PROC_LoopEffect(VFX_Script_CRE_HoloDeck_Planecaster_Activated_01_434a632f-1f52-361f-18dd-0b3ffdd77afa, S_CRE_SecurtiyOfficePlanecaster_9144098a-c9c7-4425-a99d-d7375069e7b7, "CRE_AstralPlanecaster_VFX", "CRE_Main_A", "", 1.0);
+SetFlag(CRE_ChainOfCommand_State_PlanecasterActive_5e5e9cb6-41d8-4a93-942d-3dca4d357561);
+NOT DB_CRE_Lance_PlaneCasterTemporaryDeactivate(1);
+//----------------------------
+
+//Shutting down the lance by destroying certain objects
+IF
+DestroyedBy(_On, _, _, _)
+AND
+DB_CRE_LanceShutdownDestructables(_On)
+THEN
+DB_CRE_DestroyedShutdownDestructables(_On);
+
+IF
+DestroyedBy(_On, _NewDestroyer, _, _)
+AND
+DB_CRE_LanceShutdownDestructables(_On)
+AND
+DB_CRE_LanceShutdownDestroyer(_OldDestroyer)
+THEN
+NOT DB_CRE_LanceShutdownDestroyer(_OldDestroyer);
+DB_CRE_LanceShutdownDestroyer(_NewDestroyer);
+
+IF
+DestroyedBy(_On, _NewDestroyer, _, _)
+AND
+DB_CRE_LanceShutdownDestructables(_On)
+AND
+NOT DB_CRE_LanceShutdownDestroyer(_)
+THEN
+DB_CRE_LanceShutdownDestroyer(_NewDestroyer);
+
+IF
+DB_CRE_DestroyedShutdownDestructables(_)
+AND
+DB_CRE_DestroyedShutdownDestructables(S_CRE_Lance_Lens_000_61fae206-9626-453c-ac3d-3be6089158d5)
+AND
+DB_CRE_DestroyedShutdownDestructables(S_CRE_Lance_Lens_001_9de17d56-f200-4288-9092-6577118e0cac)
+AND
+DB_CRE_DestroyedShutdownDestructables(S_CRE_Lance_Lens_002_96a552d3-1ae5-4a8c-a717-083c25b66281)
+AND
+DB_CRE_DestroyedShutdownDestructables(S_CRE_Lance_Lens_003_e27f5c4c-7b52-4580-ad93-3be30f19bb07)
+AND
+QRY_OnlyOnce("CRE_Lance_LanceDestroyed")
+THEN
+SetFlag((FLAG)CRE_Lance_State_Disarmed_a17b9bbd-43e1-4ba2-8f88-a33ecdb07a96, NULL_00000000-0000-0000-0000-000000000000, 0);
+SetFlag((FLAG)CRE_Lance_State_DisarmedByDestroy_2cf709bf-3276-4710-97ec-346dd28f45a9, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+
+//In Case there is no destroyer for some reason
+IF
+DB_CRE_DestroyedShutdownDestructables(_LastDestroyed)
+AND
+DB_CRE_DestroyedShutdownDestructables(S_CRE_Lance_Lens_000_61fae206-9626-453c-ac3d-3be6089158d5)
+AND
+DB_CRE_DestroyedShutdownDestructables(S_CRE_Lance_Lens_001_9de17d56-f200-4288-9092-6577118e0cac)
+AND
+DB_CRE_DestroyedShutdownDestructables(S_CRE_Lance_Lens_002_96a552d3-1ae5-4a8c-a717-083c25b66281)
+AND
+DB_CRE_DestroyedShutdownDestructables(S_CRE_Lance_Lens_003_e27f5c4c-7b52-4580-ad93-3be30f19bb07)
+AND
+NOT DB_CRE_LanceShutdownDestroyer(_)
+AND
+QRY_GetClosestAvailableCharacterTo(_LastDestroyed, 0)
+AND
+DB_ClosestAvailableCharacterTo(_Player, _LastDestroyed, _Dist)
+AND
+_Dist < 50.0
+THEN
+DB_CRE_LanceShutdownDestroyer(_Player);
+
+IF 
+FlagSet((FLAG)CRE_Lance_State_DisarmedByDestroy_2cf709bf-3276-4710-97ec-346dd28f45a9, NULL_00000000-0000-0000-0000-000000000000, _ )
+THEN
+PROC_CRE_Lance_LanceDestroyed();
+
+PROC
+PROC_CRE_Lance_LanceDestroyed()
+AND
+DB_CRE_LanceShutDownDestroyer(_Player)
+AND
+NOT DB_CRE_Lance_Deactivate_WithCrest(1)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)CRE_Lance_Disarm_bcf29e12-79af-1530-e4f3-d9d5056bf3d2, _Player)
+THEN
+DB_CRE_Lance_Deactivate(1);
+PROC_SetOnStage(S_CRE_Lance_PortalToRoof_98f258c4-92ec-49fa-afbf-76904a21acce, 0);
+PROC_SetOnStage(S_CRE_Lance_PortalToRoof_VFX_15ca3ca8-bf8f-4c58-9879-902d451f346a, 0);
+PROC_SetOnStage(S_CRE_Lance_PortalOnRoof_VFX_1307a9e5-f1ee-4e92-b760-581569a67a46, 0);
+
+IF
+DialogStarted((DIALOGRESOURCE)CRE_Lance_Disarm_bcf29e12-79af-1530-e4f3-d9d5056bf3d2, _ID)
+AND
+DB_Players(_Player)
+AND
+DB_InRegion(_Player, (TRIGGER)S_CRE_BloodOfLathander_DisarmArea_91240fb0-f271-4fa5-a5f0-538af16eb078)
+AND
+QRY_SpeakerIsAvailable(_Player)
+THEN
+PROC_DialogAddListeningActor(_ID, _Player);
+//END_REGION
+
+//REGION Screen Shakes
+IF
+TextEvent("CRE_StartCrecheShakes")
+THEN
+PROC_CRE_StartCrecheShakes();
+
+IF
+TextEvent("CRE_StopCrecheShakes")
+THEN
+PROC_CRE_StopCrecheShakes();
+
+PROC
+PROC_CRE_StartCrecheShakes()
+AND
+DB_Players(_Player)
+AND
+QRY_CRE_PlayerInKillZone(_Player)
+THEN
+PlayEffect(_Player, VFX_Script_Generic_Camera_Shake_01_492bfa46-eafa-fe77-d9db-c5ede8175a6f);
+
+PROC
+PROC_CRE_StartCrecheShakes()
+THEN
+TimerLaunch("CRE_ShakeCameraOn",2000);
+DB_CRE_CrecheShakesActive(1);
+
+IF
+TimerFinished("CRE_ShakeCameraOn")
+AND
+DB_CRE_CrecheShakesActive(1)
+THEN
+PROC_CRE_StartCrecheShakes();
+
+PROC
+PROC_CRE_StopCrecheShakes()
+AND
+DB_CRE_CrecheShakesActive(1)
+THEN
+NOT DB_CRE_CrecheShakesActive(1);
+
+QRY
+QRY_CRE_PlayerInKillZone((CHARACTER)_Player)
+AND
+DB_InRegion(_Player, _Region)
+AND
+DB_CRE_LanceKillTriggers(_Region)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Breadcrumbs
+
+IF
+DB_InRegion(_Player, S_CRE_MagicMouthADTrigger_4447fc40-c516-489b-b71e-f5deeb297a0a)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnceForNearbyPlayers_Timeout(_Player,"CRE_MagicMouthTriggered", 10000)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)CRE_Lance_AD_MagicMouthWarning_810d91d1-0701-4124-a72d-3fac14615f80, S_CRE_MagicMouthDagger_ef6be9fe-5255-428e-9a9b-68248088b8a0);
+
+IF
+AutomatedDialogStarted(CRE_Lance_AD_MagicMouthWarning_810d91d1-0701-4124-a72d-3fac14615f80, _)
+THEN
+PROC_SetOnStage(S_CRE_MagicMouthVFX_984fd69e-97ea-4755-b4f4-fed0b8e6b435, 1);
+
+IF
+AutomatedDialogEnded(CRE_Lance_AD_MagicMouthWarning_810d91d1-0701-4124-a72d-3fac14615f80, _)
+THEN
+PROC_SetOnStage(S_CRE_MagicMouthVFX_984fd69e-97ea-4755-b4f4-fed0b8e6b435, 0);
+
+IF
+UseStarted(_Player, S_CRE_MagicMouthDagger_ef6be9fe-5255-428e-9a9b-68248088b8a0)
+THEN
+PROC_KnowledgeCheck((CHARACTER)_Player, "CRE_Lance_MagicMouthIdentification", S_CRE_MagicMouthDagger_ef6be9fe-5255-428e-9a9b-68248088b8a0, "Arcana", DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)CRE_Lance_PAD_MagicMouthKnowledgeCheck_c8a2178b-f625-4f83-c901-84a0e44307dd, (FLAG)CRE_Lance_State_MagicMouthArcanaCheckPassed_75b4daad-c4ff-4c9a-b616-34b1fd7dffe0);
+//END_REGION
+
+//REGION debug commands
+IF
+TextEvent("CRE_Lance_AddCrest")
+AND
+GetHostCharacter(_Player)
+THEN
+TemplateAddTo(UNI_CRE_DawnmasterCrest_3b05b86b-4282-4a92-ace7-e323c1fc1d1e, _Player, 1, 1);
+//END_REGION
+
+//REGION Combat-end FTB
+//If the player has a combat during the countdown, they should re-enter FTB when it ends
+IF
+CombatStarted(_CombatID)
+AND
+DB_GlobalFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3)
+THEN
+DB_CRE_CombatDuringCountdown(_CombatID);
+
+IF
+CombatEnded(_CombatID)
+AND
+DB_CRE_CombatDuringCountdown(_CombatID)
+AND
+DB_GlobalFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3)
+AND
+DB_Players(_Player)
+THEN
+SharedTurnBaseMode(_Player, 1);
+//END_REGION
+
+//REGION Starting Group Voicebark after destroying Creche
+//Added a small delay to allow characters who were inside the monastery to be killed after the dialog ends and correctly check their status for the Group Discussion
+IF
+DialogEnded((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _)
+THEN
+TimerLaunch("CRE_Lance_CrecheDestroyed_GroupDiscussionStartDelay", 1000);
+
+IF
+TimerFinished("CRE_Lance_CrecheDestroyed_GroupDiscussionStartDelay")
+THEN
+NOT DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_01_452e9666-b1ff-4fb7-aa41-f48ce5fc8162);
+NOT DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_02_a5cc30a1-0a2e-4add-b634-9bade469860f);
+NOT DB_PartyDialogSuppressionZone((TRIGGER)S_CRE_PartySuppressionZone_CrecheDestruction_03_7dfbe649-6749-4d45-bbcf-9edbfb874ce2);
+
+IF
+TimerFinished("CRE_Lance_CrecheDestroyed_GroupDiscussionStartDelay")
+AND
+NOT QRY_CRE_Lance_Escape_CheckLaezelIsAvailable() //If Laezel is available, a different dialog plays instead of the GD
+AND
+DB_Players(_Player)
+AND
+NOT DB_Defeated(_Player)
+AND
+QRY_OnlyOnce("CRE_LanceEscapeSuccessful_ReflectionDialog")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)CRE_Lance_VB_CrecheDestroyed_32331c50-a863-7cd2-98e9-1b5da41eb742, _Player);
+
+//Check if Laezel is in the party and is not defeated
+QRY
+QRY_CRE_Lance_Escape_CheckLaezelIsAvailable()
+AND
+DB_Players((CHARACTER)S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12)
+AND
+NOT DB_Defeated(S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION Fake Blood of Lathander VB
+IF
+AddedTo((ITEM)S_CRE_FakeBloodOfLathander_2ded9354-fb45-4ea1-a090-6672e511dba0, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+PROC_KnowledgeCheck(_Player, "CRE_FakeBloodOfLathander_PickedUp", (ITEM)S_CRE_FakeBloodOfLathander_2ded9354-fb45-4ea1-a090-6672e511dba0, "Insight", (DIFFICULTYCLASS)Act2_Medium_89f0acd4-346f-479d-8b7a-1a3eb5382f6d);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage(_Player, S_CRE_FakeBloodOfLathander_2ded9354-fb45-4ea1-a090-6672e511dba0, _)
+AND
+DB_CRE_BloodOfLathander_SeenTheEmptyDisplay(_Player)
+THEN
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(2);
+
+PROC
+PROC_RollResult(_, _Player, (ITEM)S_CRE_FakeBloodOfLathander_2ded9354-fb45-4ea1-a090-6672e511dba0, 1)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)CRE_BloodOfLathander_VB_FakeBloodPickedUp_b6f1295a-3231-dcea-e3af-b51050a02471, _Player);
+//END_REGION
+
+//REGION Seeng Lance VB
+IF
+DB_InRegion(_Player, (TRIGGER)S_CRE_Lance_CommentArea_4b22f3ff-cd6f-48f8-933f-f438634f4d76)
+AND
+DB_Players(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)CRE_Lance_State_ExplosionCountdownActive_8b52ae9e-0cf3-46e5-924d-64e11aefa0e3)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "CRE_Lance_CommentedOnLance")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)CRE_Lance_VB_LanceComment_7a2e87cc-2275-6697-c038-c4c6d0ecf808, _Player);
+//END_REGION
+
+//REGION Escape VBs
+PROC
+PROC_CRE_ActivateEscapeVBs()
+THEN
+DB_OneShot_VoiceBarkTrigger(S_CRE_LanceEscapeVBRoofPortal_a31e6a81-db84-4d25-a2ee-f218eef3deb0, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_PortalComment_721c53cb-df35-b696-9aba-92141834bca5);
+DB_OneShot_VoiceBarkTrigger(S_CRE_LanceEscapeVBRightRoof_e98a7c57-cecc-4c12-becc-dc8d83d82dbc, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_RightRoof01_e8e8fb86-f730-0db1-b0ed-89b52155a36e);
+DB_OneShot_VoiceBarkTrigger(S_CRE_LanceEscapeVBLeftRoof01_eed26f74-347a-4201-95f8-9021541662c8, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_LeftRoof01_945a2d11-6967-b723-479b-cc3ee4a672f1);
+DB_OneShot_VoiceBarkTrigger(S_CRE_LanceEscapeVBLeftRoof02_a8c8ffef-26b7-4164-9d49-1c9724016f72, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_LeftRoof02_c626203a-533c-d7f6-5fe7-4cc6c0df8959);
+DB_OneShot_VoiceBarkTrigger(S_CRE_LanceEscapeVBLeftBalcony_62796774-f1fa-4999-ae67-edbd7bd1c0f6, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_LeftBalcony_33903571-4d86-4f2d-ef31-30be71521865);
+DB_OneShot_VoiceBarkTrigger(S_CRE_NearLanceArea_6a5328eb-f775-41fd-87cc-c9623091a937, (VOICEBARKRESOURCE)CRE_Lance_VB_EscapeRoofGarden_b70456ce-8b60-b24a-c9bd-c5c6cb4e2fc8);
+
+PROC
+PROC_CRE_DeactivateEscapeVBs()
+THEN
+PROC_RemoveOneShotVoiceBarkTrigger(S_CRE_LanceEscapeVBRoofPortal_a31e6a81-db84-4d25-a2ee-f218eef3deb0, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_PortalComment_721c53cb-df35-b696-9aba-92141834bca5);
+PROC_RemoveOneShotVoiceBarkTrigger(S_CRE_LanceEscapeVBRightRoof_e98a7c57-cecc-4c12-becc-dc8d83d82dbc, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_RightRoof01_e8e8fb86-f730-0db1-b0ed-89b52155a36e);
+PROC_RemoveOneShotVoiceBarkTrigger(S_CRE_LanceEscapeVBLeftRoof01_eed26f74-347a-4201-95f8-9021541662c8, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_LeftRoof01_945a2d11-6967-b723-479b-cc3ee4a672f1);
+PROC_RemoveOneShotVoiceBarkTrigger(S_CRE_LanceEscapeVBLeftRoof02_a8c8ffef-26b7-4164-9d49-1c9724016f72, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_LeftRoof02_c626203a-533c-d7f6-5fe7-4cc6c0df8959);
+PROC_RemoveOneShotVoiceBarkTrigger(S_CRE_LanceEscapeVBLeftBalcony_62796774-f1fa-4999-ae67-edbd7bd1c0f6, (VOICEBARKRESOURCE)CRE_Lance_VB_Escaping_LeftBalcony_33903571-4d86-4f2d-ef31-30be71521865);
+PROC_RemoveOneShotVoiceBarkTrigger(S_CRE_NearLanceArea_6a5328eb-f775-41fd-87cc-c9623091a937, (VOICEBARKRESOURCE)CRE_Lance_VB_EscapeRoofGarden_b70456ce-8b60-b24a-c9bd-c5c6cb4e2fc8);
+//END_REGION
+
+//REGION Level template swapping
+//Unloading the destroyed templates (not using "Start loaded" setting to allow cinematics to work with these assets)
+IF
+DB_CRE_DestroyedMonastery_DestroyedTemplates(_Template)
+THEN
+UnloadLevelTemplate(_Template);
+
+IF
+DialogStarted((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _)
+THEN
+UnloadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_Roof_A_000_5c504a68-570a-489c-8feb-ba344f57849e);
+UnloadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_StainedGlass_B_000_6744a8bf-86d6-459a-ab3e-d8a2524b1f79);
+UnloadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_Tower_Lathander_A_000_db622697-c932-471a-a63a-e17f53e915e7);
+PROC_SetOnStage(S_CRE_BreakableRoof_1a07f118-1894-4712-a058-8c8974c86331, 1);
+PROC_SetOnStage(S_CRE_BreakableGlass_befe761c-fa15-407f-8228-06479fd20327, 1);
+PROC_SetOnStage(S_CRE_LathanderTower_Breakable_1b02e9f4-9125-48e7-9e30-ced4f406cfcd, 1);
+
+IF
+DialogEnded((DIALOGRESOURCE)CRE_Lance_Escape_3ed9f536-77d6-ec62-785a-b8ee10ec814d, _)
+THEN
+PROC_SetOnStage(S_CRE_BreakableRoof_1a07f118-1894-4712-a058-8c8974c86331, 0);
+LoadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_Roof_A_Broken_000_4f9f6e35-ee15-433b-a132-da1db9527c5c);
+
+IF
+DB_GlobalFlag(CRE_Lance_Event_ExplosionNode_1e112200-bf7f-4e1c-af5f-27ab5d1e2620)
+THEN
+UnloadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_Tower_A_000_1bbed625-ab24-45e9-b51f-1e4f092e9e46);
+UnloadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_StainedGlass_A_000_e220b8ca-02b6-4fc6-9dbc-82ed6716e035);
+LoadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_Tower_A_Broken_000_6c5d5821-5aac-4165-9005-a7cf2c19fde2);
+LoadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_StainedGlass_A_Broken_000_aeb4a51f-8e59-4399-a6db-3d91cd205224);
+LoadLevelTemplate((LEVELTEMPLATE)LT_PLT_CRE_Tower_Lathander_A_Broken_000_5ce40221-ba5b-4267-b313-95e70443dd5a);
+PROC_SetOnStage(S_CRE_LathanderTower_Breakable_1b02e9f4-9125-48e7-9e30-ced4f406cfcd, 0);
+//END_REGION
+
+//REGION Lance cannon animation
+PROC
+PROC_CRE_ProgressLanceAnimation((GUIDSTRING)_TimerHost)
+AND
+DB_CRE_Lance_AnimationIndex(_Index)
+AND
+IntegerSum(_Index, 1, _NewIndex)
+AND
+_NewIndex < 5
+THEN
+NOT DB_CRE_Lance_AnimationIndex(_Index);
+DB_CRE_Lance_AnimationIndex(_NewIndex);
+SetAnimationEventInt(S_CRE_LathanderLaser_3fcc818d-25e2-47c8-9e60-58c1c930a7db, "LathanderLaserPlayIndex",_NewIndex);
+ObjectTimerLaunch(_TimerHost, "CRE_Lance_AnimationTimer", 6000, 0);
+
+IF
+ObjectTimerFinished(_TimerHost, "CRE_Lance_AnimationTimer")
+THEN
+PROC_CRE_ProgressLanceAnimation(_TimerHost);
+
+PROC
+PROC_CRE_StartLanceAnimation((GUIDSTRING)_TimerHost)
+THEN
+SetForceUpdate(S_CRE_LathanderLaser_3fcc818d-25e2-47c8-9e60-58c1c930a7db, 1);
+TimerLaunch("CRE_Lance_ForceUpdateActivateTimer", 1000);
+
+IF
+TimerFinished("CRE_Lance_ForceUpdateActivateTimer")
+AND
+DB_CRE_Lance_ExplosionCountdownTimerHost(_TimerHost)
+THEN
+PROC_CRE_ProgressLanceAnimation((GUIDSTRING)_TimerHost);
+ApplyStatus(S_CRE_LathanderLaser_3fcc818d-25e2-47c8-9e60-58c1c930a7db, "CRE_LANCE_CHARGE", -1.0, 1, NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_CRE_EndLanceAnimation((GUIDSTRING)_TimerHost)
+THEN
+SetAnimationEventInt(S_CRE_LathanderLaser_3fcc818d-25e2-47c8-9e60-58c1c930a7db, "LathanderLaserPlayIndex",4);
+RemoveStatus(S_CRE_LathanderLaser_3fcc818d-25e2-47c8-9e60-58c1c930a7db, "CRE_LANCE_CHARGE", NULL_00000000-0000-0000-0000-000000000000);
+TimerLaunch("CRE_Lance_ForceUpdateDeactivateTimer", 6000);
+
+IF
+TimerFinished("CRE_Lance_ForceUpdateDeactivateTimer")
+THEN
+SetForceUpdate(S_CRE_LathanderLaser_3fcc818d-25e2-47c8-9e60-58c1c930a7db, 0);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1b"

@@ -1,0 +1,662 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+PROC_TriggerRegisterForPlayers(S_WYR_Windmill_BrainQuakeTrigger_5629e56c-c6a3-4115-9eb1-ab51ca65cc88);
+
+SetHasDialog(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, 1);
+DB_GLO_SleepingDialog((DIALOGRESOURCE)WYR_Windmill_Mindflayer_91a4e644-7eee-bbd4-3647-ec6d0934f515);
+
+DB_ItemOwnerShipTriggers("BGO_Main_A", S_WYR_Windmill_Ownership_PicnicCivilians_cf66b66f-a6d1-41c5-b226-e7e4b9b689a3, S_WYR_Windmill_Civilian1_c82e2241-e072-4c94-a926-f63096fdf058);
+
+DB_PermaDefeatedFlag(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, WYR_Windmill_State_MindflayerPermaDefeated_bff439da-9df0-4b19-9590-0679d80aa856);
+
+//DB of huntable civilians for MF
+DB_WYR_Windmill_HuntableCivilians((CHARACTER)S_WYR_Windmill_Civilian1_c82e2241-e072-4c94-a926-f63096fdf058);
+DB_WYR_Windmill_HuntableCivilians((CHARACTER)S_WYR_Windmill_Civilian2_4b20c9c6-be85-43ea-975a-213fa34ad0b3);
+DB_WYR_Windmill_HuntableCivilians((CHARACTER)S_WYR_Windmill_Civilian3_20245c98-de91-4812-b648-3e7a05a8a2b5);
+DB_WYR_Windmill_HuntableCivilians((CHARACTER)S_WYR_Windmill_Civilian4_b5e6f2dd-3756-49cb-8b3b-6e9c88aa9beb);
+DB_WYR_Windmill_HuntableCivilians((CHARACTER)S_WYR_Windmill_Civilian5_0638d68d-71a9-4ca2-8650-a536a6fb367c);
+
+//Reset mindflayer on reload
+SetOnStage(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, 1);
+DB_Dialogs((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, (DIALOGRESOURCE)WYR_Windmill_Mindflayer_91a4e644-7eee-bbd4-3647-ec6d0934f515);
+
+//Haystack
+DB_KnowledgeCheckItem_AD("WYR_Windmill_HayStackSearch", (ITEM)S_WYR_Windmill_HayStack_9c6b686e-3a7c-40e2-b8ad-3cdbb5accb06, "Perception", (DIFFICULTYCLASS)Act3_VeryHard_60916b01-ba4c-418e-9f30-19a669704b4d, NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+KBSECTION
+//REGION: Debug code
+IF
+TextEvent("Windmill_MF_Helped")
+THEN
+SetFlag((FLAG)WYR_Windmill_State_BodyGiven_500f48b2-6888-7f02-b3de-7c17f051dd8d);
+PROC_WYR_Windmill_MF_Awakened();
+
+IF
+TextEvent("Windmill_MF_WaitForPlayer")
+THEN
+PROC_CharacterMoveTo((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, S_WYR_Windmill_Point_Front_9616c2dc-0ea7-4068-8399-ab9ee4b5e92c, "Walk", "WYR_Windmill_MF_ArrivedAtFront");
+
+IF
+TextEvent("Windmill_MF_Hunts")
+THEN
+SetOnStage((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, 1);
+RemoveStatus(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, "SLEEPING", NULL_00000000-0000-0000-0000-000000000000);
+Use(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, TOOL_Ladder_Wood_10n5H_A_000_099c7445-f91b-4c8f-9f5c-2196e5070cf8, 1, 1, "WYR_Windmill_MF_UsedLadder");
+
+IF
+TextEvent("Windmill_MF_SpellTest")
+THEN
+UseSpell(S_WYR_Windmill_Civilian2_4b20c9c6-be85-43ea-975a-213fa34ad0b3, "Target_MindBlast_MindFlayer", (CHARACTER)S_WYR_Windmill_Civilian1_c82e2241-e072-4c94-a926-f63096fdf058);
+
+IF
+TextEvent("Windmill_MF_AmbushHunt")
+THEN
+SetOnStage((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, 1);
+PROC_SetRelationTemporaryHostile((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, (CHARACTER)S_WYR_Windmill_Civilian1_c82e2241-e072-4c94-a926-f63096fdf058);
+PROC_SetRelationTemporaryHostile((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, (CHARACTER)S_WYR_Windmill_Civilian2_4b20c9c6-be85-43ea-975a-213fa34ad0b3);
+PROC_SetRelationTemporaryHostile((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, (CHARACTER)S_WYR_Windmill_Civilian3_20245c98-de91-4812-b648-3e7a05a8a2b5);
+PROC_SetRelationTemporaryHostile((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, (CHARACTER)S_WYR_Windmill_Civilian4_b5e6f2dd-3756-49cb-8b3b-6e9c88aa9beb);
+PROC_SetRelationTemporaryHostile((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, (CHARACTER)S_WYR_Windmill_Civilian5_0638d68d-71a9-4ca2-8650-a536a6fb367c);
+PROC_CharacterMoveTo((CHARACTER)S_WYR_Windmill_Civilian1_c82e2241-e072-4c94-a926-f63096fdf058, S_WYR_Windmill_Point_Front_9616c2dc-0ea7-4068-8399-ab9ee4b5e92c, "Walk", "");
+PROC_CharacterMoveTo((CHARACTER)S_WYR_Windmill_Civilian2_4b20c9c6-be85-43ea-975a-213fa34ad0b3, S_WYR_Windmill_Point_Front_9616c2dc-0ea7-4068-8399-ab9ee4b5e92c, "Walk", "");
+PROC_CharacterMoveTo((CHARACTER)S_WYR_Windmill_Civilian3_20245c98-de91-4812-b648-3e7a05a8a2b5, S_WYR_Windmill_Point_Front_9616c2dc-0ea7-4068-8399-ab9ee4b5e92c, "Walk", "");
+PROC_CharacterMoveTo((CHARACTER)S_WYR_Windmill_Civilian4_b5e6f2dd-3756-49cb-8b3b-6e9c88aa9beb, S_WYR_Windmill_Point_Front_9616c2dc-0ea7-4068-8399-ab9ee4b5e92c, "Walk", "");
+PROC_CharacterMoveTo((CHARACTER)S_WYR_Windmill_Civilian5_0638d68d-71a9-4ca2-8650-a536a6fb367c, S_WYR_Windmill_Point_Front_9616c2dc-0ea7-4068-8399-ab9ee4b5e92c, "Walk", "");
+ClearFlag(WYR_Windmill_State_MindflayerHunts_52f1c3c5-a312-b0ae-c3a6-25785b0ad7d1);
+SetFlag(WYR_Windmill_State_MindflayerHunts_52f1c3c5-a312-b0ae-c3a6-25785b0ad7d1);
+//END_REGION
+
+//REGION: triggers for brainquake / scream
+IF
+TextEvent("windmill_test_brainquake")
+AND
+GetHostCharacter(_Player)
+THEN
+PROC_GLO_Brainquakes_StartForcedEvent(_Player,"WYR_Brainquakes_EventOnlyOnce_Windmill");
+
+IF
+DB_InRegion(_Player, S_WYR_Windmill_BrainQuakeTrigger_5629e56c-c6a3-4115-9eb1-ab51ca65cc88)
+AND
+DB_Players(_Player)
+THEN
+PROC_TriggerUnregisterForPlayers(S_WYR_Windmill_BrainQuakeTrigger_5629e56c-c6a3-4115-9eb1-ab51ca65cc88);
+TimerLaunch("WYR_Windmill_BrainquakeResponseTimer", 6500);
+PROC_GLO_Brainquakes_ShakeGroundAroundCharacter(_Player);
+
+// wait for brainquake to finish before activating screamtrigger
+IF
+TimerFinished("WYR_Windmill_BrainquakeResponseTimer")
+THEN
+DB_OneShotPlayerTrigger(S_WYR_Windmill_CeremorphScreamTrigger_5c01ea7f-e7d1-4d54-9846-e6015a50646b);
+
+PROC
+PROC_OneShotTriggerEntered(_Player, S_WYR_Windmill_CeremorphScreamTrigger_5c01ea7f-e7d1-4d54-9846-e6015a50646b)
+AND
+DB_Players(_Player)
+AND
+NOT DB_Defeated(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17)
+AND
+HasActiveStatus(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, "SLEEPING", 1)
+THEN
+PROC_WYR_Windmill_Scream(_Player);
+
+//TODO: Replace sound placeholder
+PROC
+PROC_WYR_Windmill_Scream((CHARACTER)_Player)
+AND
+QRY_StartDialog_Fixed(WYR_Windmill_CeremorphosisScream_AD_447dd34d-b9c3-1209-fa0b-31830d7e88d0, DOOR_GEN_Hatch_Wood_C_004_af638a20-e3b0-449d-aea4-42f9c44a0a3c)
+THEN
+PlaySound(DOOR_GEN_Hatch_Wood_C_004_af638a20-e3b0-449d-aea4-42f9c44a0a3c, "TUT_MindflayerTransformation_VictimScreams_B");
+TimerLaunch("WYR_Windmill_ScreamResponseTimer", 2000);
+DB_WYR_Windmill_HeardScream(_Player);
+
+IF
+TimerFinished("WYR_Windmill_ScreamResponseTimer")
+AND
+DB_WYR_Windmill_HeardScream(_Player)
+THEN
+StartVoiceBark(WYR_Windmill_VB_CeremorphosisResponse_dd106a4e-54b0-1621-8729-e34bd85e757a, _Player);
+SetFlag(WYR_Windmill_State_HeardScream_4d3b0031-3656-4bb4-9cfd-249267cce806);
+NOT DB_WYR_Windmill_HeardScream(_Player);
+//END_REGION
+
+//REGION: player starts dialog with MF
+// Start dialog and attempt to include closest non-illithid character.
+QRY
+QRY_SelectCustomDialog(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, (CHARACTER)_InitialSpeaker)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_WindmillMindflayerFollowup_State_MindflayerInBG_834b84d1-8917-437f-8b7f-105d91085758)
+AND
+QRY_WYR_Windmill_OptionalNonIllithidSpeaker(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _InitialSpeaker)
+AND
+DB_QRYRTN_WYR_Windmill_OptionalNonIllithidSpeaker(_OptionalNonIllithidSpeaker)
+THEN
+DB_SelectedDialog(WYR_Windmill_Mindflayer_91a4e644-7eee-bbd4-3647-ec6d0934f515, S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _InitialSpeaker, _OptionalNonIllithidSpeaker);
+
+
+// clear DB of optional non illithid speakers
+QRY
+QRY_WYR_Windmill_OptionalNonIllithidSpeaker((CHARACTER)_NPC, (CHARACTER)_Speaker)
+AND
+DB_QRYRTN_WYR_Windmill_OptionalNonIllithidSpeaker(_NonIllithidSpeaker)
+THEN 
+NOT DB_QRYRTN_WYR_Windmill_OptionalNonIllithidSpeaker(_NonIllithidSpeaker);
+
+QRY
+QRY_WYR_Windmill_OptionalNonIllithidSpeaker((CHARACTER)_NPC, (CHARACTER)_Speaker)
+AND
+QRY_OnlyOnce_Reset("WYR_Windmill_OptionalNonIllithidSpeaker")
+THEN
+DB_NOOP(1);
+
+// Get closest non-Illithid party member
+QRY
+QRY_WYR_Windmill_OptionalNonIllithidSpeaker((CHARACTER)_NPC, (CHARACTER)_Speaker)
+AND
+DB_PartyMembers(_PartyMember)
+AND
+_Speaker != _PartyMember
+AND
+IsTagged(_PartyMember, (TAG)ILLITHID_1eec74e8-3673-4500-abec-57b7ed8469ed, 0)
+AND
+QRY_SpeakerIsAvailableAndInDialogRange(_PartyMember, _NPC)
+AND
+QRY_OnlyOnce("WYR_Windmill_OptionalNonIllithidSpeaker")
+THEN
+DB_QRYRTN_WYR_Windmill_OptionalNonIllithidSpeaker(_PartyMember);
+
+// If none found, set null
+QRY
+QRY_WYR_Windmill_OptionalNonIllithidSpeaker((CHARACTER)_Speaker)
+AND
+NOT DB_QRYRTN_WYR_Windmill_OptionalNonIllithidSpeaker(_)
+THEN
+DB_QRYRTN_WYR_Windmill_OptionalNonIllithidSpeaker(NULL_00000000-0000-0000-0000-000000000000);
+//END_REGION
+
+//REGION: player awakens mindflayer by talking or attacking
+//awaken MF
+IF
+FlagSet((FLAG)WYR_Windmill_Event_WakeMindflayer_fe8ebf07-934f-4efe-8461-d85411009715, _Player, _)
+THEN
+PROC_WYR_Windmill_MF_Awakened();
+
+PROC
+PROC_WYR_Windmill_MF_Awakened()
+THEN
+PROC_GlobalSetFlagAndCache(WYR_Windmill_State_MindflayerAwakened_904a1cf6-d190-41fa-a841-75772426cca6);
+RemoveStatus(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, "SLEEPING", NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+StatusRemoved(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, "SLEEPING", _WakeCause, _)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Windmill_State_MindflayerAwakened_904a1cf6-d190-41fa-a841-75772426cca6)
+THEN
+ObjectTimerLaunch(_WakeCause, "WYR_Windmill_MF_Awakened", 10, 1);
+
+IF
+ObjectTimerFinished(_, "WYR_Windmill_MF_Awakened")
+THEN
+PROC_GlobalSetFlagAndCache(WYR_Windmill_State_MindflayerAwakened_904a1cf6-d190-41fa-a841-75772426cca6);
+
+// If the cause of the awaken is a player, attempt to start a dialog
+IF
+ObjectTimerFinished(_Player, "WYR_Windmill_MF_Awakened")
+AND
+DB_Players((CHARACTER)_Player)
+AND
+QRY_SelectAndStartDialog(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _Player)
+THEN
+DB_NOOP(1);
+
+//rudely awaken MF
+IF
+FlagSet((FLAG)WYR_Windmill_Event_WakeMindflayerRudely_a22edca7-7fbe-4fcd-9d87-8ecdd138d466, (CHARACTER)_Attacker, _)
+THEN
+PROC_WYR_Windmill_MF_RudelyAwakened(_Attacker);
+
+//rudely awaken MF when attacked
+IF
+AttackedBy(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, (CHARACTER)_Attacker,_ , _, _, _, _)
+AND
+NOT DB_GlobalFlag(WYR_Windmill_State_MindflayerAwakened_904a1cf6-d190-41fa-a841-75772426cca6)
+THEN
+PROC_WYR_Windmill_MF_RudelyAwakened(_Attacker);
+
+PROC
+PROC_OnDialogAttackRequested(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _Attacker)
+AND
+NOT DB_GlobalFlag(WYR_Windmill_State_MindflayerAwakened_904a1cf6-d190-41fa-a841-75772426cca6)
+THEN
+PROC_WYR_Windmill_MF_RudelyAwakened(_Attacker);
+
+PROC
+PROC_WYR_Windmill_MF_RudelyAwakened((CHARACTER)_Attacker)
+AND
+GetFaction(_Attacker, _AttackerFaction)
+THEN
+PROC_WYR_Windmill_MF_Awakened();
+PROC_SetRelationToPlayers((FACTION)Act3_WYR_Windmill_MF_f9c171f7-2621-4ecd-b11b-059cf5d9fa2f, 0);
+PROC_MakeSurprised(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, 2, 1);
+//END_REGION
+
+//REGION: player gives body to MF / MF gives reward to player
+IF
+FlagSet((FLAG)WYR_Windmill_Event_GiveBodyDead_97a5c4f0-317d-30e1-9e57-a4faeff4e474, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+MagicPocketsMoveToByTag(_Player,"DEFEATED_f0020818-86f1-4ee9-a5a9-9ace9ecc9010 & HUMANOID_7fbed0d4-cabc-4a9d-804e-12ca6088a0a8 & !PLAYABLE_25bf5042-5bf6-4360-8df8-ab107ccb0d37",1,S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17,1,1);
+
+IF
+FlagSet((FLAG)WYR_Windmill_Event_GiveRewardItem_1770aca5-d684-55fd-6e3b-75483b32475e, _Player, _Dialog)
+AND
+IsInInventoryOf(S_WYR_Windmill_MF_Reward_8dbecd84-f082-44e0-831e-9c9dcdb4d1c4, S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, 1)
+THEN
+ToInventory(S_WYR_Windmill_MF_Reward_8dbecd84-f082-44e0-831e-9c9dcdb4d1c4, _Player, 1, 0, 1);
+SetFlag(WYR_Windmill_State_RewardItemGiven_9481362e-2b47-493e-9efe-82b1149ac926, S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _Dialog);
+
+IF
+FlagSet((FLAG)WYR_Windmill_Event_GiveRewardPower_63455abf-6d0d-2943-bd04-a780ee1f6da5, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+IsTagged(_Player, (TAG)ILLITHID_1eec74e8-3673-4500-abec-57b7ed8469ed, 1)
+THEN
+PlayEffect(_Player, (EFFECTRESOURCE)VFX_Cinematic_Hag_HeadHold_01_2698b617-2913-24fd-4d9e-77eba6e7b5ec);
+PROC_AddTadpolePoint(_Player);
+
+//END_REGION
+
+//REGION: player interacts with MF brain
+// give Daisy explanation of MF brain
+IF
+DB_PermaDefeated(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Windmill_State_BodyGiven_500f48b2-6888-7f02-b3de-7c17f051dd8d)
+AND
+DB_Players(_Player)
+AND
+GetDistanceTo(_Player, S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _DistanceToMF)
+AND
+_DistanceToMF < 15.0
+AND
+IsControlled(_Player, 1)
+AND
+IsTagged(_Player, (TAG)ILLITHID_1eec74e8-3673-4500-abec-57b7ed8469ed, 1)
+AND
+QRY_OnlyOncePerUser(_Player, "WYR_Windmill_MFDead_DaisyExplainsBrain")
+THEN
+PROC_EmperorAD(_Player, (DIALOGRESOURCE)WYR_Windmill_MindflayerDead_EmperorAD_31b3a176-7f73-def9-efd6-937d3d41390a);
+
+//tadpoled character eats fresh brain
+PROC
+PROC_BlockUseOfItem(_Player, S_WYR_Windmill_MF_Brain_09c288c0-bcba-45d5-bdfe-bbbc01a3dbc8)
+AND
+DB_Players(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Windmill_State_BodyGiven_500f48b2-6888-7f02-b3de-7c17f051dd8d)
+AND
+IsTagged(_Player, (TAG)ILLITHID_1eec74e8-3673-4500-abec-57b7ed8469ed, 1)
+THEN
+PROC_AddTadpolePoint(_Player);
+SetFlag((FLAG)WYR_Windmill_State_AteMindflayerBrain_cc9adfb3-9456-4ad1-b11c-d5f461fe779f);
+
+//tadpoled character eats old brain. Daisy responds.
+PROC
+PROC_BlockUseOfItem(_Player, S_WYR_Windmill_MF_Brain_09c288c0-bcba-45d5-bdfe-bbbc01a3dbc8)
+AND
+DB_Players(_Player)
+AND
+DB_GlobalFlag((FLAG)WYR_Windmill_State_BodyGiven_500f48b2-6888-7f02-b3de-7c17f051dd8d)
+AND
+IsTagged(_Player, (TAG)ILLITHID_1eec74e8-3673-4500-abec-57b7ed8469ed, 1)
+THEN
+ObjectTimerLaunch(_Player, "WYR_Windmill_AteBrainTooLate_Timer", 1000, 0);
+
+IF
+ObjectTimerFinished((CHARACTER)_Player, "WYR_Windmill_AteBrainTooLate_Timer")
+THEN
+PROC_EmperorAD(_Player, (DIALOGRESOURCE)WYR_Windmill_AteBrainTooLate_EmperorAD_3258ca42-bb62-085a-ef30-7290f3576a6d);
+
+// Non-Illithid player eats the brain, wasting its potential
+PROC
+PROC_BlockUseOfItem(_Player, S_WYR_Windmill_MF_Brain_09c288c0-bcba-45d5-bdfe-bbbc01a3dbc8)
+AND
+DB_Players(_Player)
+AND
+IsTagged(_Player, (TAG)ILLITHID_1eec74e8-3673-4500-abec-57b7ed8469ed, 0)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)WYR_Windmill_NonIllithidEatsBrain_PAD_0d316de0-c479-2901-ba24-8ae86607a730, _Player);
+//TODO: add separate status effect for eating brain as non-illithid
+
+// If brain is looted, MF dies
+IF
+MovedFromTo(S_WYR_Windmill_MF_Brain_09c288c0-bcba-45d5-bdfe-bbbc01a3dbc8, S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _, _)
+AND
+NOT DB_Dead(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17)
+THEN
+Die(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, DEATHTYPE.Physical, NULL_00000000-0000-0000-0000-000000000000, 0, 0);
+//END_REGION
+
+//REGION: MF goes hunting if you tell him to
+
+//REGION: MF hunt code
+// MF finds huntable civilian
+QRY
+QRY_WYR_Windmill_ChooseHuntableCivilian()
+AND
+QRY_WYR_Windmill_ResetHuntableCivilian()
+AND
+QRY_OnlyOnce_Reset("WYR_Windmill_ChooseHuntableCivilian")
+AND
+DB_WYR_Windmill_HuntableCivilians(_Civilian)
+AND
+NOT DB_Defeated(_Civilian)
+AND
+QRY_OnlyOnce("WYR_Windmill_ChooseHuntableCivilian")
+THEN
+DB_QRYRTN_WYR_Windmill_ChooseHuntableCivilian(_Civilian);
+
+QRY
+QRY_WYR_Windmill_ResetHuntableCivilian()
+THEN
+PROC_WYR_Windmill_ResetHuntableCivilian();
+
+PROC
+PROC_WYR_Windmill_ResetHuntableCivilian()
+AND
+DB_QRYRTN_WYR_Windmill_ChooseHuntableCivilian(_Civilian)
+THEN
+NOT DB_QRYRTN_WYR_Windmill_ChooseHuntableCivilian(_Civilian);
+
+// 1. MF moves upstairs
+PROC
+PROC_MF_GoesHunting((CHARACTER)_MF)
+THEN
+Use(_MF, TOOL_Ladder_Wood_10n5H_A_000_099c7445-f91b-4c8f-9f5c-2196e5070cf8, 1, 1, "WYR_Windmill_MF_UsedLadder");
+
+//TODO: what if door is still locked and MF doesn't have key anymore? (very edge case)
+// 2. Wait for MF to be ready to continue moving
+IF
+EntityEvent((CHARACTER)_MF, "WYR_Windmill_MF_UsedLadder")
+THEN
+PROC_NotifyWhenReadyToMoveOn(_MF, "WYR_Windmill_MF_ReadyToMoveToCivilians");
+
+// 3a. MF moves to huntable civilian (combat will begin automatically)
+PROC
+PROC_ReadyToMoveOn((CHARACTER)_MF, "WYR_Windmill_MF_ReadyToMoveToCivilians")
+AND
+QRY_WYR_Windmill_ChooseHuntableCivilian()
+AND
+DB_QRYRTN_WYR_Windmill_ChooseHuntableCivilian(_Civilian)
+THEN
+PROC_WYR_Windmill_MF_KillCivilian(_MF, _Civilian);
+
+// 3b. MF Can't find huntable civilian
+PROC
+PROC_ReadyToMoveOn((CHARACTER)_MF, "WYR_Windmill_MF_ReadyToMoveToCivilians")
+AND
+NOT QRY_WYR_Windmill_ChooseHuntableCivilian()
+THEN
+PROC_CharacterMoveTo(_MF, S_WYR_Windmill_Point_Front_9616c2dc-0ea7-4068-8399-ab9ee4b5e92c, "Walk", "WYR_Windmill_MF_ArrivedAtFront");
+
+// 4b. MF arrives in front of Windmill, waiting for a player to kill
+IF
+EntityEvent((CHARACTER)_MF, "WYR_Windmill_MF_ArrivedAtFront")
+THEN
+DB_SpotPlayers(_MF, "WYR_Windmill_MF_SpotPlayer", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_SpotTrigger(_MF, "WYR_Windmill_MF_SpotPlayer", S_WYR_Windmill_MFLooksForPlayerTrigger_4f1e004a-0616-42a6-ab05-d72df86c9de7);
+
+// 5b. MF spots player and starts convo which results in combat
+PROC
+PROC_SpotPlayers_Spotted(_MF, "WYR_Windmill_MF_SpotPlayer", _Player)
+AND
+DB_Players(_Player)
+AND
+QRY_StartDialog(WYR_Windmill_Mindflayer_WaitForPlayer_904700d0-88af-f22d-9c35-185061065039, _MF, _Player)
+THEN
+DB_NOOP(1);
+
+// MF moves to civilian, Aoe stuns target, tentacle stuns target, extracts brain from target
+// Add crime to MF moving around
+PROC
+PROC_WYR_Windmill_MF_KillCivilian((CHARACTER)_MF, (CHARACTER)_Target)
+AND
+CrimeGetNewID(_NewCrimeID)
+THEN
+PROC_CharacterRegisterCrime(_MF, "WYR_Windmill_MindflayerReaction", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000, _NewCrimeID);
+
+// 1. Move to civilian
+PROC
+PROC_WYR_Windmill_MF_KillCivilian((CHARACTER)_MF, (CHARACTER)_Target)
+AND
+NOT DB_Is_InCombat(_MF, _)
+AND
+NOT DB_WYR_Windmill_MFEatBody(_)
+THEN
+DB_WYR_Windmill_MFKillTarget(_Target);
+PROC_CharacterMoveTo(_MF, _Target, "Run", "WYR_Windmill_MF_ArrivedAtCivilian");
+
+// 2. AoE stun target
+IF
+EntityEvent((CHARACTER)_MF, "WYR_Windmill_MF_ArrivedAtCivilian")
+AND
+NOT DB_Is_InCombat(_MF, _)
+AND
+NOT DB_WYR_Windmill_MFEatBody(_)
+AND
+DB_WYR_Windmill_MFKillTarget(_Target)
+AND
+CrimeGetNewID(_NewCrimeID)
+THEN
+PROC_CharacterRegisterCrime(_MF, "WYR_Windmill_MFKills", NULL_00000000-0000-0000-0000-000000000000, _Target, _NewCrimeID);
+UseSpell(_MF, "Zone_WYR_Mindblast_NoDamageNoResist", _Target);
+
+// 3. Tentacle attack target
+IF
+CastedSpell((CHARACTER)_MF, "Zone_WYR_Mindblast_NoDamageNoResist", _, _, _)
+AND
+NOT DB_Is_InCombat(_MF, _)
+AND
+NOT DB_WYR_Windmill_MFEatBody(_)
+AND
+DB_WYR_Windmill_MFKillTarget(_Target)
+THEN
+UseSpell(_MF, "Target_WYR_Tentacles_MindFlayer_NoDamageNoResist", _Target);
+
+// 4. Extract brain
+IF
+CastedSpell((CHARACTER)_MF, "Target_WYR_Tentacles_MindFlayer_NoDamageNoResist", _, _, _)
+AND
+NOT DB_Is_InCombat(_MF, _)
+AND
+NOT DB_WYR_Windmill_MFEatBody(_)
+AND
+DB_WYR_Windmill_MFKillTarget(_Target)
+THEN
+UseSpell(_MF, "Target_WYR_ExtractBrain_MindFlayer_AlwaysHit", _Target);
+ObjectTimerLaunch(_MF, "WYR_Windmill_MF_BeforeHuntDoneLeave", 3000, 0);
+
+// 5. Leave scene
+IF
+ObjectTimerFinished(_MF, "WYR_Windmill_MF_BeforeHuntDoneLeave")
+THEN
+SetFlag((FLAG)WYR_Windmill_State_MindflayerHuntDone_741f4535-bec7-477a-a0ae-b5a336b6441f);
+
+// Mindflayer turn starts in combat
+IF
+TurnStarted((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17)
+AND
+DB_GlobalFlag((FLAG)WYR_Windmill_State_MindflayerHunts_52f1c3c5-a312-b0ae-c3a6-25785b0ad7d1)
+AND
+DB_Sees(_Player, S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17)
+AND
+DB_Players(_Player)
+AND
+NOT DB_Is_InCombat(_Player, _)
+AND
+QRY_OnlyOnce("WYR_Windmill_MF_AsksPlayerForHelp")
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)WYR_Windmill_Mindflayer_AskPlayerForHelp_56c6e23d-6990-3039-09e4-733ffd65677d, S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _Player)
+THEN
+DB_NOOP(1);
+
+// Player agrees to help mindflayer
+IF
+FlagSet((FLAG)WYR_Windmill_Event_PlayerAssistsMindflayerHunt_d39122c3-cd5a-31e7-181d-e5c8c488330f, (CHARACTER)_Player, _)
+THEN
+PROC_SetRelationToPlayers((FACTION)Act3_WYR_Windmill_MF_f9c171f7-2621-4ecd-b11b-059cf5d9fa2f, 100);
+PROC_WYR_Windmill_PlayersTemporaryHostileToOtherCombatants(_Player, (CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17);
+
+PROC
+PROC_WYR_Windmill_PlayersTemporaryHostileToOtherCombatants((CHARACTER)_Player, (CHARACTER)_MF)
+AND
+IsInCombat(_MF, 1)
+AND
+CombatGetGuidFor(_MF, _CombatID)
+AND
+DB_Is_InCombat(_Combatant, _CombatID)
+AND
+IsCharacter((CHARACTER)_Combatant, 1)
+AND
+_Combatant != _MF
+AND
+NOT DB_Players(_Combatant)
+THEN
+PROC_SetRelationTemporaryHostile(_Combatant, _Player);
+
+// Player will fight mindflayer
+IF
+FlagSet((FLAG)WYR_Windmill_Event_PlayerBetraysMindflayerHunt_49b23754-573e-6115-fa21-8659bf8a2654, (CHARACTER)_Player, _)
+THEN
+PROC_SetRelationToPlayers((FACTION)Act3_WYR_Windmill_MF_f9c171f7-2621-4ecd-b11b-059cf5d9fa2f, 0);
+
+// The mindflayer kills a humanoid in combat (and not with the normal civilian kill sequence) and will eat this body
+IF
+KilledBy(_Victim, S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _, _)
+AND
+DB_GlobalFlag((FLAG)WYR_Windmill_State_MindflayerHunts_52f1c3c5-a312-b0ae-c3a6-25785b0ad7d1)
+AND
+NOT DB_WYR_Windmill_MFKillTarget(_Victim)
+AND
+IsTagged(_Victim, (TAG)HUMANOID_7fbed0d4-cabc-4a9d-804e-12ca6088a0a8, 1)
+THEN
+PROC_WYR_Windmill_MF_EatBody(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, _Victim);
+
+// The mindlfayer killed a passerby while waiting for player, stop spotting
+PROC
+PROC_WYR_Windmill_MF_EatBody((CHARACTER)_MF, (CHARACTER)_Victim)
+AND
+DB_SpotPlayers(_MF, "WYR_Windmill_MF_SpotPlayer", _, _)
+THEN
+NOT DB_SpotPlayers(_MF, "WYR_Windmill_MF_SpotPlayer", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+NOT DB_SpotPlayers_SpotTrigger(_MF, "WYR_Windmill_MF_SpotPlayer", S_WYR_Windmill_MFLooksForPlayerTrigger_4f1e004a-0616-42a6-ab05-d72df86c9de7);
+
+// Mindflayer eats body
+PROC
+PROC_WYR_Windmill_MF_EatBody((CHARACTER)_MF, (CHARACTER)_Victim)
+THEN
+DB_WYR_Windmill_MFEatBody(_Victim);
+PROC_ClearStoryMove(_MF);
+ObjectTimerLaunch(_MF, "WYR_Windmill_MF_WaitBeforeEating", 5000, 0);
+
+IF
+ObjectTimerFinished((CHARACTER)_MF, "WYR_Windmill_MF_WaitBeforeEating")
+AND
+NOT DB_CantAct(_MF)
+AND
+DB_WYR_Windmill_MFEatBody((CHARACTER)_Victim)
+THEN
+DebugText(_MF, "Eating corpse"); // replace with animation
+Die(_Victim, DEATHTYPE.Physical, _MF, 1, 1, 1.0);
+ObjectTimerLaunch(_MF, "WYR_Windmill_MF_Eating", 5000, 0);
+
+IF
+ObjectTimerFinished((CHARACTER)_MF, "WYR_Windmill_MF_Eating")
+AND
+NOT DB_CantAct(_MF)
+AND
+DB_WYR_Windmill_MFEatBody(_Victim)
+THEN
+NOT DB_WYR_Windmill_MFEatBody(_Victim);
+SetFlag((FLAG)WYR_Windmill_State_MindflayerHuntDone_741f4535-bec7-477a-a0ae-b5a336b6441f);
+
+// MF leaves the scene
+IF
+FlagSet((FLAG)WYR_Windmill_State_MindflayerHuntDone_741f4535-bec7-477a-a0ae-b5a336b6441f, _, _)
+THEN
+ObjectTimerLaunch(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, "WYR_Windmill_MF_WaitingToLeave", 5000, 0);
+
+IF
+ObjectTimerFinished(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, "WYR_Windmill_MF_WaitingToLeave")
+THEN
+PROC_NotifyWhenReadyToMoveOn((CHARACTER)S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, "WYR_Windmill_MF_ReadyToLeave");
+
+PROC
+PROC_ReadyToMoveOn((CHARACTER)_MF, "WYR_Windmill_MF_ReadyToLeave")
+THEN
+PROC_DisappearOutOfSightTo(_MF, S_WYR_Windmill_Point_Exit_00948cbc-95af-4fd3-bef9-7b3e5c33f1ca, "Sprint", 0, "");
+//END_REGION
+
+// player tells MF to go hunt himself
+IF
+DB_GlobalFlag((FLAG)WYR_Windmill_State_MindflayerHunts_52f1c3c5-a312-b0ae-c3a6-25785b0ad7d1)
+THEN
+PROC_MF_GoesHunting(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17);
+SetHasDialog(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, 0);
+PROC_PeacefulResolve(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17);
+
+// If MF has been fed, after long rest, MF disappears
+PROC
+PROC_LongRest()
+AND
+NOT DB_GlobalFlag((FLAG)LOW_WindmillMindflayerFollowup_State_MindflayerInBG_834b84d1-8917-437f-8b7f-105d91085758)
+AND
+DB_GlobalFlag((FLAG)WYR_Windmill_State_BodyGiven_500f48b2-6888-7f02-b3de-7c17f051dd8d)
+AND
+QRY_OnlyOnce("WYR_Windmill_MF_OffStage")
+THEN
+RemoveStatus(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, "WYR_WINDMILL_MINDFLAYER_WEAK");
+SetOnStage(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17, 0);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_WYR_Windmill_MindflayerTrigger_85db1931-0ec7-4267-b934-b19b2379b146, (VOICEBARKRESOURCE)WYR_Windmill_VB_MindflayerFedAndGone_c3aab910-b4a9-b8f2-2b95-db13b022afd1);
+
+IF
+FlagSet((FLAG)WYR_Windmill_State_BodyGiven_500f48b2-6888-7f02-b3de-7c17f051dd8d,_,_)
+AND
+DB_CombatReact_AD_OnEntered(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17,(DIALOGRESOURCE)WYR_Windmill_AD_Mindflayer_Combat_01_b8a5e674-af62-5de8-eec0-7aada8b11fc1)
+THEN
+NOT DB_CombatReact_AD_OnEntered(S_WYR_Windmill_MF_2084666f-59fb-470f-bb68-4523cf881d17,(DIALOGRESOURCE)WYR_Windmill_AD_Mindflayer_Combat_01_b8a5e674-af62-5de8-eec0-7aada8b11fc1);
+
+IF
+DB_Sees(_Civilian1, _Civilian2)	
+AND
+DB_WYR_Windmill_HuntableCivilians(_Civilian1)
+AND
+DB_WYR_Windmill_HuntableCivilians(_Civilian2)
+AND
+DB_PermaDefeated(_Civilian2)
+THEN
+PROC_WYR_Windmill_CivilianFlees(_Civilian1);
+
+PROC
+PROC_WYR_Windmill_CivilianFlees((CHARACTER)_Civilian)
+THEN
+PROC_DisappearOutOfSightTo(_Civilian, S_WYR_Windmill_Point_Exit_00948cbc-95af-4fd3-bef9-7b3e5c33f1ca, "Run", 1, "");
+//END_REGION
+
+//REGION: Hay stack
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_Player, "WYR_Windmill_HayStackSearch", _)
+AND
+DB_Players(_Player)
+AND
+CreateAtObject(ARR_Arrow_Of_Acid_0bfb72d2-0e8e-4d16-aeae-3159b0d4b195, _Player, 0, 0, "", 0, _Arrow)
+THEN
+PROC_TryStartAD(GLO_InvestigationSuccess_6f56969d-fb35-38f1-26ff-5b6c4db3ea68, _Player);
+ToInventory((ITEM)_Arrow, _Player);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act3"

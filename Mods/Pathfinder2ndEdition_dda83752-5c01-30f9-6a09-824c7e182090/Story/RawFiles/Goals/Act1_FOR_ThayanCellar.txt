@@ -1,0 +1,844 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+SetOnStage(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, 0);
+SetCanInteract(S_FOR_SecretDoor_7a8d4e98-b661-427d-8437-71451ddb847c, 0);
+PROC_TriggerRegisterForParty((TRIGGER)S_FOR_ThayanCellar_SecretLabArea_448458f8-773f-426d-a287-3becd992173e);
+PROC_TriggerRegisterForParty((TRIGGER)S_FOR_ThayanCellar_CellarTrapTrigger_3a2b26ca-6705-4f68-b5ee-e29633023f87);
+PROC_TriggerRegisterForPlayers(S_FOR_ThayanCellar_SafeBubble_cc621ff4-1971-4084-9a5b-c47d3050640d);
+TriggerRegisterForItems((TRIGGER)S_FOR_ThayanOrb_MirrorBox_bb4820dd-89ce-4ab0-8554-557a5bb3fc67);
+
+DB_FlagReactionAfterDialog((FLAG)FOR_ThayanCellar_Event_DestroyMirror_c1b401c5-d21c-405e-bf38-b273d3a6b376, (DIALOGRESOURCE)FOR_ThayanCellar_MagicMirror_f899b723-7363-c89d-ec8f-ec1a7dc86454);
+
+DB_FOR_ThayanCellar_Braziers((ITEM)S_FOR_Brazier_000_3fa48bca-2143-4b10-94d2-7cc2616596c1);
+DB_FOR_ThayanCellar_Braziers((ITEM)S_FOR_Brazier_001_3ee5753f-d494-4497-968c-29238214b188);
+
+//REGION Undead Ambush
+DB_FOR_ThayanCellar_UndeadContainer(S_FOR_Crypt_002_d22904ef-0759-47eb-9ceb-bcd107edc6d0, S_FOR_ThayG_Skeleton_002_171eb53b-f6a4-465a-9bb1-585a74a0efcc);
+DB_FOR_ThayanCellar_UndeadContainer(S_FOR_Crypt_003_8c5e3d51-2244-499e-ba59-2d7b0041b3db, S_FOR_ThayG_Skeleton_003_7be92b31-6fcd-4fef-8708-9bb927f89fd5);
+DB_FOR_ThayanCellar_UndeadContainer(S_FOR_Crypt_004_91bcb042-868e-4629-a345-45747864e6d8, S_FOR_ThayG_Skeleton_004_d1f7d900-0e2d-4706-a141-20a026c003ed);
+DB_FOR_ThayanCellar_UndeadContainer(S_FOR_Crypt_005_83da924f-91a9-48ee-bf50-24d9b050ea4a, S_FOR_ThayG_Skeleton_005_43a9bace-50c0-4313-bc3b-824adecf0aad);
+DB_FOR_ThayanCellar_UndeadContainer(S_FOR_Crypt_006_7668d12b-f129-4e34-b882-c94d569a90fc, S_FOR_ThayG_Skeleton_006_fe72d606-8d37-4dfc-bbe2-2afda9e91c88);
+DB_FOR_ThayanCellar_UndeadContainer(S_FOR_Crypt_007_1c01b1fc-6032-41f5-a705-94334e72d97e, S_FOR_ThayG_Skeleton_007_595edf1e-af70-4dec-a1a6-735f4966c42f);
+DB_FOR_ThayanCellar_UndeadContainer(S_FOR_Crypt_008_bfa6370c-b65a-4a7e-8a35-3c69a4b4f427, S_FOR_ThayG_Skeleton_008_532d1b22-b493-4282-b366-a55dbd6cf8a4);
+
+DB_FOR_ThayanCellar_AmbushStopped(0);
+
+PROC_FOR_ThayanCellar_InitUndead();
+//END_REGION
+
+//REGION Secret Areas
+DB_FOR_ThayanCellar_SecretDoors(S_FOR_MovingBookCase_eb1fa168-7b0e-4d17-9d54-03b74365ac84, S_FOR_SecretWallLever_8f2afbad-fe57-4574-b8c2-6c0ae0bff0cf);
+//END_REGION
+
+//REGION Apothecary House
+DB_KnowledgeCheckItem_AD("FOR_Thayan_ApothecaryHerbs", S_FOR_Thayan_ApothecaryHerbs_be767903-b998-4dca-a5f1-5e04828d4df4, "AnimalHandling", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)FOR_ThayanCellar_VB_InspectHerbs_6ad6b713-12cb-813d-7ed4-cf3d0e8cc23c, (FLAG)FOR_ThayanCellar_State_IdentifiedHerbs_d7a1f673-b092-41cc-88a1-3687725b01ad);
+DB_KnowledgeCheckItem_AD("FOR_Thayan_ApothecaryCauldron", S_FOR_Thayan_ApothecaryCauldron_2b3ab481-94eb-4a70-912c-3b772aa4d5cc, "Medicine", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)FOR_ThayanCellar_VB_InspectCookingPot_53d85e9d-fbb3-5dea-5576-4f3ac8a0d365, (FLAG)FOR_ThayanCellar_State_IdentifiedCookingPot_11204032-c043-4a30-bd88-958300c6fce0);
+PROC_TriggerRegisterForPlayers(S_FOR_Thayan_ApothecaryHouseTrigger_2c46c830-8f1c-45b0-aa3e-feb66e2d3c53);
+//END_REGION
+
+//REGION Quasit
+PROC_TriggerRegisterForParty((TRIGGER)S_FOR_OrbAndSkeletonsRoom_dff5d215-e4c9-42cb-abb3-cfc288ff8fc1);
+
+DB_FOR_ThayanCellar_QuasitNames((FLAG)FOR_ThayanCellar_State_QuasitName1_09d81790-babd-4cd8-b02a-0b6883bc7eb7, "FOR_ThayanCellar_QuasitName1");
+DB_FOR_ThayanCellar_QuasitNames((FLAG)FOR_ThayanCellar_State_QuasitName2_22a59e56-1524-4e16-810f-0fda6eae9649, "FOR_ThayanCellar_QuasitName2");
+DB_FOR_ThayanCellar_QuasitNames((FLAG)FOR_ThayanCellar_State_QuasitName3_d4db7baf-45cc-471a-8b19-26e02ad61785, "FOR_ThayanCellar_QuasitName3");
+//END_REGION
+
+//REGION Danger Zone
+PROC_TriggerRegisterForParty((TRIGGER)S_FOR_ThayanCellar_DangerZone_5978a2ae-581a-4063-a953-f0713aca5bbe);
+//END_REGION
+
+//REGION EA Hack - Orb Trap
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_000_88f7a06e-4d4f-4885-bd93-fdd82495adbe, 0);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_001_ffe045bc-57f5-463c-a14f-ac9a350719c8, 1);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_002_4ca0b0cb-d9c3-4f35-93f0-4b097da85edb, 2);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_003_e42f84b3-a6a4-443e-8e24-f9286bfae566, 3);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_004_2975374b-2d18-4797-a38d-9f7a1e8c5a5b, 4);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_005_d72cf61d-8bd2-41d6-8f0d-3deb0da39278, 5);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_006_739ae41a-8325-4ecf-b7f6-3f66b5931fb0, 6);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_007_36fd8705-e70d-42c5-bc2e-7c8c3838d413, 7);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_008_01503ed2-88d1-4987-b76d-acde58e5aeaf, 8);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_004_2975374b-2d18-4797-a38d-9f7a1e8c5a5b, 9);
+DB_FOR_ThayanCellar_OrbPath((TRIGGER)S_FOR_ThayanCellar_OrbRoute_005_d72cf61d-8bd2-41d6-8f0d-3deb0da39278, 10);
+
+DB_FOR_ThayanCellar_OrbCurrentPoint(0);
+//END_REGION
+
+//Magic Mirror
+DB_BookFlags(S_FOR_ThayanJournal_9339e000-6be5-45c3-868d-7e686c7d2b69,FOR_ThayanCellar_Knows_WizardName_6977d982-cf60-46f3-ab39-73fe325f442c);
+DB_QuestDef_State((FLAG)FOR_ThayanCellar_Event_OpenMirror_d1da5931-fb01-4f5d-940a-74d2b1e7aff8, "HIDDEN_WLD_Boosters", "FOR_ThayanCellar_OpenMirror");
+
+SetOnStage(Quest_ThayGuardian_Stalactite_01_8ffd570c-6e3f-4042-bdf2-1b28e3322c92,0);
+SetOnStage(Quest_ThayGuardian_Stalactite_02_5589fab1-63e7-49fc-a4d1-3a242dfed744,0);
+SetOnStage(Quest_ThayGuardian_Stalactite_03_7261181b-e91e-45ae-868f-0acc41db6a24,0);
+KBSECTION
+ //REGION Apothecary House
+//TODO: Need solution for firing VB after using inventory item
+IF
+UseFinished(_Player, S_FOR_Thayan_ApothecaryLedger_551bb6db-470a-42ba-88e1-c5f628d08c9b, 1)
+AND
+DB_InRegion(_Player, S_FOR_Thayan_ApothecaryHouseTrigger_2c46c830-8f1c-45b0-aa3e-feb66e2d3c53)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_ThayanCellar_State_CellarDiscovered_308aa3f8-f4f2-4c48-88e9-59d36b1778e8)
+AND
+QRY_SpeakerIsAvailable(_Player)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "FOR_ThayanCellar_PlayerReadLedger")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_ThayanCellar_VB_ReadLedger_5a10dc2c-f146-2656-b8cb-aa639f1650c0, _Player);
+//END_REGION
+
+//REGION Secret Door
+
+// Open the secret bookcase door
+IF
+DualEntityEvent(_Player, _Lever, "FOR_ThayanCellar_OpenSecretDoor")
+AND
+DB_FOR_ThayanCellar_SecretDoors(_Door, _Lever)
+AND
+NOT DB_FOR_ThayanCellar_MovingDoor(_Door)
+AND
+NOT DB_FOR_ThayanCellar_OpenedDoor(_Door)
+THEN
+DB_FOR_ThayanCellar_MovingDoor(_Door);
+DB_FOR_ThayanCellar_OpenedDoor(_Door);
+Open((ITEM)S_FOR_MovingBookCase_eb1fa168-7b0e-4d17-9d54-03b74365ac84);
+Open(S_FOR_MovingBookCase_InvisibleDoor_46f1c81c-6ff0-4aaf-b584-07789f0ad09d);
+
+//Close the secret bookcase door
+IF
+DualEntityEvent(_Player, _Lever, "FOR_ThayanCellar_OpenSecretDoor")
+AND
+DB_FOR_ThayanCellar_SecretDoors(_Door, _Lever)
+AND
+NOT DB_FOR_ThayanCellar_MovingDoor(_Door)
+AND
+DB_FOR_ThayanCellar_OpenedDoor(_Door)
+THEN
+DB_FOR_ThayanCellar_MovingDoor(_Door);
+NOT DB_FOR_ThayanCellar_OpenedDoor(_Door);
+Close((ITEM)S_FOR_MovingBookCase_eb1fa168-7b0e-4d17-9d54-03b74365ac84);
+Close(S_FOR_MovingBookCase_InvisibleDoor_46f1c81c-6ff0-4aaf-b584-07789f0ad09d);
+
+IF
+EntityEvent(_Door, "FOR_ThayanCellar_OpenedDoor")
+AND
+DB_FOR_ThayanCellar_MovingDoor(_Door)
+THEN
+NOT DB_FOR_ThayanCellar_MovingDoor(_Door);
+
+IF
+EntityEvent(_Door, "FOR_ThayanCellar_ClosedDoor")
+AND
+DB_FOR_ThayanCellar_MovingDoor(_Door)
+THEN
+NOT DB_FOR_ThayanCellar_MovingDoor(_Door);
+
+IF
+DualEntityEvent(_Player, _Lever, "FOR_ThayanCellar_OpenLabSecretDoor")
+AND
+QRY_OnlyOnce_Reset("FOR_ThayanCellar_LabSecretDoorProcessed")
+AND
+IsOpened(S_FOR_SecretDoor_7a8d4e98-b661-427d-8437-71451ddb847c, 0)
+AND
+QRY_OnlyOnce("FOR_ThayanCellar_LabSecretDoorProcessed")
+THEN
+Open(S_FOR_SecretDoor_7a8d4e98-b661-427d-8437-71451ddb847c);
+
+IF
+DualEntityEvent(_Player, _Lever, "FOR_ThayanCellar_OpenLabSecretDoor")
+AND
+IsOpened(S_FOR_SecretDoor_7a8d4e98-b661-427d-8437-71451ddb847c, 1)
+AND
+QRY_OnlyOnce("FOR_ThayanCellar_LabSecretDoorProcessed")
+THEN
+Close(S_FOR_SecretDoor_7a8d4e98-b661-427d-8437-71451ddb847c);
+//END_REGION
+
+//REGION Magic Mirror
+
+QRY
+QRY_FOR_ThayanCellar_NoReflection((CHARACTER)_Player)
+AND
+IsTagged(_Player, (TAG)REALLY_ASTARION_ffd08582-7396-4cac-bcd4-8f9cd0fd8ef3, 1)
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_State_NoReflection_034ae669-eb9a-45c3-9d29-de54a1e8d486, _Player, 0);
+
+QRY
+QRY_FOR_ThayanCellar_NoReflection((CHARACTER)_Player)
+AND
+HasActiveStatusWithGroup(_Player, "SG_Invisible", 1)
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_State_NoReflection_034ae669-eb9a-45c3-9d29-de54a1e8d486, _Player, 0);
+
+QRY
+QRY_FOR_ThayanCellar_NoReflection((CHARACTER)_Player)
+THEN
+DB_NOOP(1);
+
+IF
+DialogEnded((DIALOGRESOURCE)FOR_ThayanCellar_MagicMirror_f899b723-7363-c89d-ec8f-ec1a7dc86454, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, _)
+AND
+GetFlag((FLAG)FOR_ThayanCellar_State_NoReflection_034ae669-eb9a-45c3-9d29-de54a1e8d486, _Player, 1)
+THEN
+ClearFlag((FLAG)FOR_ThayanCellar_State_NoReflection_034ae669-eb9a-45c3-9d29-de54a1e8d486, _Player);
+
+PROC
+PROC_BlockUseOfItem(_Char, (ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_ThayanCellar_Event_OpenMirror_d1da5931-fb01-4f5d-940a-74d2b1e7aff8)
+THEN
+DB_CustomUseItemResponse(_Char, (ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, 0);
+
+PROC
+PROC_BlockUseOfItem(_Char, (ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89)
+AND
+NOT DB_FOR_ThayanCellar_TrapActive(1)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_ThayanCellar_Event_OpenMirror_d1da5931-fb01-4f5d-940a-74d2b1e7aff8)
+AND
+QRY_SpeakerIsAvailable((ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89)
+AND
+DB_Players(_Char)
+AND
+QRY_FOR_ThayanCellar_NoReflection((CHARACTER)_Char)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)FOR_ThayanCellar_MagicMirror_f899b723-7363-c89d-ec8f-ec1a7dc86454, (ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, _Char)
+THEN
+DB_NOOP(1);
+
+IF
+FlagSet((FLAG)FOR_ThayanCellar_Event_OpenMirror_d1da5931-fb01-4f5d-940a-74d2b1e7aff8, _, _)
+THEN
+SetCanInteract((ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, 0);
+Open((ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89);
+
+
+PROC
+PROC_FlagReactionAfterDialog(_Barb, (FLAG)FOR_ThayanCellar_Event_DestroyMirror_c1b401c5-d21c-405e-bf38-b273d3a6b376)
+AND
+IsDestroyed((ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, 0)
+THEN
+Die((ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, DEATHTYPE.Physical, _Barb, 0, 0, 1.0);
+
+//END_REGION
+
+//REGION Thayan Trap
+QRY
+QRY_FOR_ThayanCellar_OrbNotTriggeredOrFinished()
+AND
+DB_FOR_ThayanCellar_OrbFinished(1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_FOR_ThayanCellar_OrbNotTriggeredOrFinished()
+AND
+NOT DB_FOR_ThayanCellar_TrapActive(1)
+THEN
+DB_NOOP(1);
+
+//REGION Deploy Trap
+IF
+DialogEnded((DIALOGRESOURCE)FOR_ThayanCellar_MagicMirror_f899b723-7363-c89d-ec8f-ec1a7dc86454, _ID)
+AND
+DB_GlobalFlag((FLAG)FOR_ThayanCellar_Event_StartTrap_42248191-11cd-46f4-ac37-a1770c113563)
+AND
+NOT DB_FOR_ThayanCellar_TrapActive(1)
+THEN
+DB_FOR_ThayanCellar_TrapActive(1);
+NOT DB_Dialogs(S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, (DIALOGRESOURCE)FOR_ThayanCellar_MagicMirror_f899b723-7363-c89d-ec8f-ec1a7dc86454);
+PROC_RemoveDialog(S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89);
+ClearFlag((FLAG)FOR_ThayanCellar_Event_StartTrap_42248191-11cd-46f4-ac37-a1770c113563, NULL_00000000-0000-0000-0000-000000000000, _ID);
+TimerLaunch("FOR_ThayanCellar_OrbEmerging", 100);
+
+PROC
+PROC_BlockUseOfItem((CHARACTER)_Player, (ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89)
+AND
+DB_FOR_ThayanCellar_TrapActive(1)
+THEN
+DB_CustomUseItemResponse(_Player, (ITEM)S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, 0);
+PROC_PlayCantUseItemAD(_Player);
+
+IF
+FlagSet(FOR_ThayanCellar_Event_StartTrap_42248191-11cd-46f4-ac37-a1770c113563, _, _)
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_Event_TrapActivatedOnce_e4a8bf1e-f176-a23a-ffcd-cd50c531ed23, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+TimerFinished("FOR_ThayanCellar_OrbEmerging")
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_Event_TrapInProgress_b88cda6a-46f0-48f6-929b-7967696be9b2, NULL_00000000-0000-0000-0000-000000000000);
+SetOnStage(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, 1);
+ItemMoveTo(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, S_FOR_ThayanOrbEmerge_338a236a-feb1-473b-8b69-0bc6b86dcad1, 1.0, 0.0, 0, "FOR_ThayanCellar_OrbEmerged", 1);
+
+IF
+EntityEvent(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_ThayanCellar_OrbEmerged")
+AND
+DrawSurfaceOnPath(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, SS_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "SurfaceFire", 0.5, 30.0, _Handle)
+THEN
+DB_FOR_ThayanCellar_SurfaceHandle(_Handle);
+ApplyStatus(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_THAYANCELLAR_TRAPFUEL", 60.0, 1, NULL_00000000-0000-0000-0000-000000000000);
+PROC_FOR_ThayanCellar_OrbTrace();
+
+IF
+EntityEvent(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_ThayanCellar_OrbEmerged")
+AND
+DB_Players(_Player)
+AND
+DB_InRegion(_Player, S_FOR_ThayanCellar_Boundaries_ee808e8c-a15f-45f2-8dae-e225dd9674ab)
+AND
+QRY_IsInRange(_Player, S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, 10.0)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "FOR_ThayanCellar_OrbSeen")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_ThayanCellar_VB_TrapStart_01be5f1b-2143-25f2-17ce-f7e753b5233c, _Player);
+
+//END_REGION
+
+//REGION Orb Movement and Player Trace
+
+IF
+EntityEvent(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_FireOrb_EndPath")
+THEN
+CreateExplosion(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "Projectile_UND_ThayanCellar_OrbExplosion", 3);
+
+IF
+EntityEvent(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_FireOrb_EndPath")
+AND
+NOT DB_Is_InCombat(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, _)
+THEN
+TimerLaunch("FOR_ThayanCellar_OrbCooldown", 300);
+
+IF
+EntityEvent(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_FireOrb_EndPath")
+AND
+DB_Is_InCombat(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, _)
+THEN
+EndTurn(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1);
+
+IF
+TimerFinished("FOR_ThayanCellar_OrbCooldown")
+THEN
+PROC_FOR_ThayanCellar_OrbTrace();
+
+PROC
+PROC_FOR_ThayanCellar_OrbTrace()
+AND
+NOT DB_FOR_ThayanCellar_OrbFinished(1)
+AND
+NOT QRY_FOR_ThayanCellar_OrbTrace()
+THEN
+PROC_FOR_ThayanCellar_OrbLeave();
+
+QRY
+QRY_FOR_ThayanCellar_OrbTrace()
+AND
+DB_FOR_ThayanCellar_OrbCurrentPoint(_Index)
+AND
+DB_FOR_ThayanCellar_OrbPath(_Point, _Index)
+AND
+GetPosition(_Point, _X, _Y, _Z)
+AND
+RealSum(_Y, 2.3, _NewY) //So it floats in the air rather than dragging across the ground
+AND
+IntegerSum(_Index, 1, _NewIndex) 
+THEN
+ItemMoveToPosition((ITEM)S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, _X, _NewY, _Z, 1.6, 1.2, "FOR_FireOrb_EndPath", 0);
+NOT DB_FOR_ThayanCellar_OrbCurrentPoint(_Index);
+DB_FOR_ThayanCellar_OrbCurrentPoint(_NewIndex);
+
+QRY
+QRY_FOR_ThayanCellar_ClosestTarget()
+AND
+DB_InRegion(_Char, S_FOR_ThayanCellar_Boundaries_ee808e8c-a15f-45f2-8dae-e225dd9674ab)
+AND
+GetDistanceTo(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, _Char, _Dist)
+AND
+NOT DB_Defeated ((CHARACTER)_Char)
+THEN
+DB_FOR_ThayanCellar_TargetDistance(_Char, _Dist);
+
+IF
+DB_FOR_ThayanCellar_TargetDistance(_Char1, _Dist1)
+AND
+DB_FOR_ThayanCellar_TargetDistance(_Char2, _Dist2)
+AND
+_Char1 != _Char2
+AND
+_Dist1 <= _Dist2
+THEN
+NOT DB_FOR_ThayanCellar_TargetDistance(_Char2, _Dist2);
+
+QRY
+QRY_FOR_ThayanCellar_RemoveData()
+AND
+DB_FOR_ThayanCellar_TargetDistance(_Target, _Dist)
+THEN
+NOT DB_FOR_ThayanCellar_TargetDistance(_Target, _Dist);
+
+QRY
+QRY_FOR_ThayanCellar_RemoveData()
+AND
+NOT DB_FOR_ThayanCellar_TargetDistance(_, _)
+THEN
+DB_NOOP(1);
+
+
+//END_REGION
+
+//REGION Orb Finish 
+
+IF
+DestroyedBy(S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, _, _, _)
+AND
+NOT DB_FOR_ThayanCellar_OrbFinished(1)
+THEN
+DB_FOR_ThayanCellar_OrbFinished(1);
+PROC_FOR_ThayanCellar_OrbLeave();
+
+IF
+UsingSpellOnTarget(_, S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "Target_DispelMagic", _, _, _)
+AND
+NOT DB_FOR_ThayanCellar_OrbFinished(1)
+THEN
+DB_FOR_ThayanCellar_OrbFinished(1);
+PROC_FOR_ThayanCellar_OrbLeave();
+
+IF
+UsingSpellOnTarget(_, S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, "Target_DispelMagic", _, _, _)
+AND
+NOT DB_FOR_ThayanCellar_OrbFinished(1)
+THEN
+DB_FOR_ThayanCellar_OrbFinished(1);
+PROC_FOR_ThayanCellar_OrbLeave();
+
+IF
+StatusRemoved(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_THAYANCELLAR_TRAPFUEL", _, _)
+AND
+NOT DB_FOR_ThayanCellar_OrbFinished(1)
+THEN
+DB_FOR_ThayanCellar_OrbFinished(1);
+PROC_FOR_ThayanCellar_OrbLeave();
+
+PROC
+PROC_FOR_ThayanCellar_OrbTrace()
+AND
+DB_FOR_ThayanCellar_OrbFinished(1)
+THEN
+NOT DB_FOR_ThayanCellar_OrbFinished(1);
+TimerCancel("FOR_ThayanCellar_OrbTimer");
+PROC_FOR_ThayanCellar_OrbLeave();
+//END_REGION
+
+//REGION Orb Return
+PROC
+PROC_FOR_ThayanCellar_OrbLeave()
+THEN
+TimerLaunch("FOR_ThayanCellar_ReturnDelay", 4000);
+
+PROC
+PROC_FOR_ThayanCellar_OrbLeave()
+AND
+DB_Players(_Player)
+AND
+DB_InRegion(_Player, S_FOR_ThayanCellar_Boundaries_ee808e8c-a15f-45f2-8dae-e225dd9674ab)
+AND
+QRY_IsInRange(_Player, S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, 10.0)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "FOR_ThayanCellar_OrbExhaustVB")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_ThayanCellar_VB_Trap_1e28f571-72ed-9aa2-0f4a-5ad710f1ea1b, _Player);
+
+IF
+TimerFinished("FOR_ThayanCellar_ReturnDelay")
+AND
+DB_FOR_ThayanCellar_SurfaceHandle(_Handle)
+THEN
+NOT DB_FOR_ThayanCellar_SurfaceHandle(_Handle);
+StopDrawSurfaceOnPath(_Handle);
+RemoveStatus(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_THAYANCELLAR_TRAPFUEL");
+ItemMoveTo(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, S_FOR_ThayanOrbEmerge_338a236a-feb1-473b-8b69-0bc6b86dcad1, 1.2, 0.0, 0, "FOR_FireOrb_LeavePath", 1);
+
+IF
+EntityEvent(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_FireOrb_LeavePath")
+THEN
+ItemMoveTo(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, S_FOR_ThayanOrbMirror_660ac921-fa64-42da-a8d4-2b09d90baf31, 0.8, 0.0, 0, "FOR_FireOrb_ReturnToMirror", 1);
+DB_FOR_ThayanCellar_TrapActiveOnDeactivationPath(1);
+
+IF
+EntityEvent(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, "FOR_FireOrb_ReturnToMirror")
+AND
+DB_FOR_ThayanCellar_TrapActive(1)
+THEN
+DB_Dialogs(S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89, (DIALOGRESOURCE)FOR_ThayanCellar_MagicMirror_f899b723-7363-c89d-ec8f-ec1a7dc86454);
+NOT DB_FOR_ThayanCellar_TrapActive(1);
+ClearFlag((FLAG)FOR_ThayanCellar_Event_TrapInProgress_b88cda6a-46f0-48f6-929b-7967696be9b2, NULL_00000000-0000-0000-0000-000000000000);
+SetOnStage(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, 0);
+//END_REGION
+
+//REGION Combat
+
+IF
+TurnStarted(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1)
+THEN
+PROC_FOR_ThayanCellar_OrbTrace();
+
+IF
+LeftCombat(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1, _)
+THEN
+PROC_FOR_ThayanCellar_OrbTrace();
+
+//END_REGION
+
+//REGION Turret Delay
+
+IF
+DualEntityEvent(_, S_FOR_BookPressurePlate_8288ace1-357d-417a-98e3-1ec7ade1e05d, "FOR_ThayanCellar_BookPressurePlate_Pressed")
+THEN
+TimerLaunch("FOR_ThayanCellar_TurretDelay", 750);
+
+IF
+TimerFinished("FOR_ThayanCellar_TurretDelay")
+THEN
+SetDualEntityEvent(NULL_00000000-0000-0000-0000-000000000000, S_FOR_ThayanTurret_001_da680b84-21b6-4daf-a9a0-7c5d24ddbdd0, "FOR_ThayanCellar_BookPressurePlate_PressedRight");
+
+IF
+DualEntityEvent(_, S_FOR_BookPressurePlate_8288ace1-357d-417a-98e3-1ec7ade1e05d, "FOR_ThayanCellar_BookPressurePlate_UnPressed")
+THEN
+TimerCancel("FOR_ThayanCellar_TurretDelay");
+
+//END_REGION
+
+//END_REGION
+
+//REGION Secret Lab Entry
+
+IF
+DB_InRegion(_Player, (TRIGGER)S_FOR_ThayanCellar_SecretLabArea_448458f8-773f-426d-a287-3becd992173e)
+AND
+DB_Players(_Player)
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_State_LabDiscovered_72e17f62-be19-4277-be42-01a6f62afbf3);
+
+IF
+DB_InRegion(_Player, (TRIGGER)S_FOR_ThayanCellar_SecretLabArea_448458f8-773f-426d-a287-3becd992173e)
+AND
+NOT DB_CantTalk(_Player)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "S_FOR_ThayanCellar_LabEntry", 6.0)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_ThayanCellar_VB_EnterSecretLab_40112dbc-2f4d-50fb-7490-5f616bc56e14, _Player);
+
+//END_REGION
+
+//REGION Investigations
+
+PROC
+PROC_BlockUseOfItem(_Player, S_FOR_MovingBookCase_eb1fa168-7b0e-4d17-9d54-03b74365ac84)
+AND
+GetFlag((FLAG)FOR_ThayanCellar_State_TriedBookcaseCheck_b36dbfd7-0853-4306-ad04-ef4ecf9b7405, _Player, 0)
+THEN
+DB_CustomUseItemResponse(_Player, S_FOR_MovingBookCase_eb1fa168-7b0e-4d17-9d54-03b74365ac84, 0);
+PROC_TrySkillCheck(_Player, S_FOR_MovingBookCase_eb1fa168-7b0e-4d17-9d54-03b74365ac84, "Perception", (DIFFICULTYCLASS)DC_Legacy_10_625be976-7a67-4394-97c8-14c69715ae4b, "FOR_ThayanCellar_BookCaseInvestigate");
+
+PROC
+PROC_RollResult("FOR_ThayanCellar_BookCaseInvestigate", _Player, S_FOR_MovingBookCase_eb1fa168-7b0e-4d17-9d54-03b74365ac84, 1)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)FOR_ThayanCellar_VB_Bookcase_a8b000eb-b8a6-28c4-ff87-e57989c232f3, _Player);
+
+PROC
+PROC_RollResult("FOR_ThayanCellar_BookCaseInvestigate", _Player, S_FOR_MovingBookCase_eb1fa168-7b0e-4d17-9d54-03b74365ac84, _Result)
+AND
+_Result != 2
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_State_TriedBookcaseCheck_b36dbfd7-0853-4306-ad04-ef4ecf9b7405, _Player, 0);
+
+IF
+UseStarted(_Player, S_FOR_DoctorLog_bd7b6fad-8409-4d5d-bd8b-824c93412165)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("FOR_ThayanCellar_ReadLog")
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_Quest_ReadDoctorLog_db3f8b4a-87f4-4732-abd1-9de54fd58a6a, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+//END_REGION
+
+//REGION Undead Container
+IF
+DB_PermaDefeated(_Undead)
+AND
+DB_FOR_ThayanCellar_ActiveUndead(_Undead)
+THEN
+NOT DB_FOR_ThayanCellar_ActiveUndead(_Undead);
+
+IF
+DB_FOR_ThayanCellar_ActiveUndead(_Undead)
+THEN
+DB_GLO_DefeatCounter(_Undead, "FOR_ThayanCellar_SkeletonAmbush");
+
+PROC
+PROC_GLO_DefeatCounter_AllPermaDefeated("FOR_ThayanCellar_SkeletonAmbush")
+THEN
+NOT DB_FOR_ThayanCellar_AmbushStopped(0);
+DB_FOR_ThayanCellar_AmbushStopped(1);
+
+PROC
+PROC_FOR_ThayanCellar_InitUndead()
+AND
+DB_FOR_ThayanCellar_UndeadContainer(_, _Undead)
+AND
+GetFaction(_Undead,_Faction)
+AND
+GetCombatGroupID(_Undead,_CmbGroupID)
+THEN
+PROC_CharacterDisableAllCrimes((CHARACTER)_Undead);
+ApplyStatus(_Undead,"FOR_THAYAN_UNDEAD_SLUMBER",-1.0,1,_Undead);
+DB_FOR_ThayanCellar_SavedUndeadCombatInfo(_Undead,_Faction,_CmbGroupID);
+SetFaction(_Undead,ACT1_FOR_ThayanUndead_Neutral_StandUp_2b6426e3-6970-4fdd-82c9-850520e43fb1);
+SetCombatGroupID(_Undead,"");
+SetOnStage(_Undead, 0);
+
+PROC
+PROC_FOR_ThayanCellar_InitUndead()
+AND
+DB_FOR_ThayanCellar_UndeadContainer(_, _Undead)
+AND
+DB_FOR_ThayanCellar_UndeadContainer(_Casket, _OtherUndead)
+AND
+_Undead != _OtherUndead
+THEN
+AiAddInterestingItem((CHARACTER)_Undead, (ITEM)_Casket);
+
+//REGION Undead Appear
+PROC
+PROC_BlockUseOfItem(_Player, _Chest)
+AND
+DB_Players(_Player)
+AND
+DB_FOR_ThayanCellar_UndeadContainer(_Chest, _Undead)
+AND
+DB_FOR_ThayanCellar_AmbushStopped(0)
+THEN
+DB_CustomUseItemResponse(_Player, _Chest, 0);
+SetFlag((FLAG)FOR_ThayanCellar_State_TombOpened_a19ade94-68fe-42a0-9c7a-ee1c6338c10f, _Chest, 0);
+PROC_FOR_ThayanCellar_SkeletonEmerge((ITEM)_Chest, (CHARACTER)_Undead);
+
+IF
+UseStarted(_Char, _Chest)
+AND
+NOT DB_Players(_Char)
+AND
+DB_FOR_ThayanCellar_UndeadContainer(_Chest, _Undead)
+AND
+DB_FOR_ThayanCellar_AmbushStopped(0)
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_State_TombOpened_a19ade94-68fe-42a0-9c7a-ee1c6338c10f, _Chest, 0);
+PROC_FOR_ThayanCellar_SkeletonEmerge((ITEM)_Chest, (CHARACTER)_Undead);
+
+PROC
+PROC_BlockUseOfItem(_Player, _Chest)
+AND
+DB_Players(_Player)
+AND
+DB_FOR_ThayanCellar_UndeadContainer(_Chest, _Undead)
+AND
+QRY_OnlyOnce("FOR_ThayanCellar_UndeadAmbush")
+THEN
+PROC_Ambush_SetPlayersSurprised(_Player);
+
+IF
+HitpointsChanged(_Chest, _Hitpoints)
+AND
+_Hitpoints != 100.0
+AND
+DB_FOR_ThayanCellar_UndeadContainer(_Chest, _Undead)
+AND
+DB_FOR_ThayanCellar_AmbushStopped(0)
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_State_TombOpened_a19ade94-68fe-42a0-9c7a-ee1c6338c10f, _Chest, 0);
+PROC_FOR_ThayanCellar_SkeletonEmerge((ITEM)_Chest, (CHARACTER)_Undead);
+
+PROC
+PROC_FOR_ThayanCellar_SkeletonEmerge((ITEM)_Chest, (CHARACTER)_Undead)
+THEN
+PROC_FOR_ThayanCellar_TombDestroy((ITEM)_Chest, (CHARACTER)_Undead);
+
+PROC
+PROC_FOR_ThayanCellar_TombDestroy((ITEM)_Chest, (CHARACTER)_Undead)
+AND
+IsDestroyed((ITEM)_Chest, 0)
+THEN
+Die((ITEM)_Chest, DEATHTYPE.Physical, _Undead, 0, 0);
+
+IF
+DestroyedBy(_Chest,_,_,_)
+AND
+DB_FOR_ThayanCellar_AmbushStopped(0)
+AND
+DB_FOR_ThayanCellar_UndeadContainer(_Chest, _Undead)
+AND
+GetWorldTransformFromLocal(_Chest, 0.0, 0.0, 0.0, 0.0 ,-90.0, 0.0, _DestX, _Y, _DestZ, _RotX, _RotY, _RotZ)
+AND
+RealSum(_Y, 2.0, _DestY)
+THEN
+ToTransform(S_FOR_ThayG_SpawnHelper_86195bd5-840e-41f9-97cc-24cdfd30e3c9,_DestX, _DestY, _DestZ,0.0,_RotY,0.0);
+TeleportTo(_Undead,S_FOR_ThayG_SpawnHelper_86195bd5-840e-41f9-97cc-24cdfd30e3c9,"", 0, 0, 0, 0, 1);
+SetOnStage(_Undead,1);
+RealtimeObjectTimerLaunch(_Undead,"FOR_ThayanCellar_SkeletonRise",250);
+NOT DB_FOR_ThayanCellar_UndeadContainer(_Chest, _Undead);
+DB_FOR_ThayanCellar_ActiveUndead((CHARACTER)_Undead);
+PROC_FOR_ThayanCellar_TombCheck();
+SetEntityEvent(_Undead, "FOR_ThayanCellar_SkeletonReleased_QuestUpdate");
+
+IF
+ObjectTimerFinished(_Undead,"FOR_ThayanCellar_SkeletonRise")
+THEN
+RemoveStatus(_Undead,"FOR_THAYAN_UNDEAD_SLUMBER",_Undead);
+RealtimeObjectTimerLaunch(_Undead,"FOR_ThayanCellar_SkeletonFinishStandUpAnimation",2700);
+
+IF
+ObjectTimerFinished(_Undead,"FOR_ThayanCellar_SkeletonFinishStandUpAnimation")
+AND
+DB_FOR_ThayanCellar_SavedUndeadCombatInfo((CHARACTER)_Undead,_Faction,_CmbGroupID)
+THEN
+NOT DB_FOR_ThayanCellar_SavedUndeadCombatInfo(_Undead,_Faction,_CmbGroupID);
+SetFlag(FOR_ThayanCellar_State_OutOfCrypt_a5f29cbf-abb5-4530-be4a-cda4a26832fe,_Undead);
+SetFaction(_Undead,_Faction);
+SetCombatGroupID(_Undead,_CmbGroupID);
+
+PROC
+PROC_FOR_ThayanCellar_TombCheck()
+AND
+NOT DB_FOR_ThayanCellar_UndeadContainer(_, _)
+THEN
+SetFlag((FLAG)FOR_ThayanCellar_State_TombsEmpty_808119f1-b6c7-4d85-8831-77b404e77105, NULL_00000000-0000-0000-0000-000000000000, 0);
+
+//END_REGION
+
+//END_REGION
+
+//REGION Book Trap
+
+IF
+DualEntityEvent(_Player, S_FOR_BookTrapPressurePlate_e444dd79-e81b-40bf-918e-fa3976219af7, "FOR_ThayanCellar_FrontPressurePlate_Pressed")
+AND
+DB_FOR_ThayanCellar_Braziers(_Brazier)
+AND
+HasActiveStatus(_Brazier, "BURNING", 0)
+THEN
+ApplyStatus(_Brazier, "BURNING", -1.0, 1);
+
+IF
+DualEntityEvent(_Player, S_FOR_BookPressurePlate_8288ace1-357d-417a-98e3-1ec7ade1e05d, "FOR_ThayanCellar_BookPressurePlate_Pressed")
+THEN
+Close(S_FOR_BookCellDoor_7ac6feab-91dc-40bd-a9a8-e7bc8ba2abf8);
+Lock(S_FOR_BookCellDoor_7ac6feab-91dc-40bd-a9a8-e7bc8ba2abf8, "FOR_BookCellKey");
+
+IF
+DualEntityEvent(_Player, S_FOR_BookPressurePlate_8288ace1-357d-417a-98e3-1ec7ade1e05d, "FOR_ThayanCellar_BookPressurePlate_Pressed")
+THEN
+TimerLaunch("FOR_ThayanCellar_BookTrap_FTBDelay", 1000);
+
+IF
+TimerFinished("FOR_ThayanCellar_BookTrap_FTBDelay")
+AND
+DB_InRegion(_TrapVictim, (TRIGGER)S_FOR_ThayanCellar_CellarTrapTrigger_3a2b26ca-6705-4f68-b5ee-e29633023f87)
+THEN
+ForceTurnBasedMode(_TrapVictim, 1);
+
+IF
+LeftTrigger(_Character, S_FOR_ThayanCellar_CellarTrapTrigger_3a2b26ca-6705-4f68-b5ee-e29633023f87)
+AND
+NOT QRY_TriggerEvents_AnyNotDefeatedPartyMemberInTrigger((TRIGGER)S_FOR_ThayanCellar_CellarTrapTrigger_3a2b26ca-6705-4f68-b5ee-e29633023f87)
+THEN
+SetDualEntityEvent(_Character, S_FOR_ThayanTurret_001_da680b84-21b6-4daf-a9a0-7c5d24ddbdd0, "FOR_ThayanCellar_BookPressurePlate_UnPressed");
+SetDualEntityEvent(_Character, S_FOR_ThayanTurret_000_1a2f60cd-1038-49c7-a3f4-56ad9e760ef5, "FOR_ThayanCellar_BookPressurePlate_UnPressed");
+
+IF
+DB_Defeated(_Character)
+AND
+DB_InRegion((CHARACTER)_Character, (TRIGGER)S_FOR_ThayanCellar_CellarTrapTrigger_3a2b26ca-6705-4f68-b5ee-e29633023f87)
+AND
+NOT QRY_TriggerEvents_AnyNotDefeatedPartyMemberInTrigger((TRIGGER)S_FOR_ThayanCellar_CellarTrapTrigger_3a2b26ca-6705-4f68-b5ee-e29633023f87)
+THEN
+SetDualEntityEvent(_Character, S_FOR_ThayanTurret_001_da680b84-21b6-4daf-a9a0-7c5d24ddbdd0, "FOR_ThayanCellar_BookPressurePlate_UnPressed");
+SetDualEntityEvent(_Character, S_FOR_ThayanTurret_000_1a2f60cd-1038-49c7-a3f4-56ad9e760ef5, "FOR_ThayanCellar_BookPressurePlate_UnPressed");
+//END_REGION
+
+//REGION Quasit summon
+IF
+DB_PlayerSummons(_Quasit)
+AND
+GetTemplate(_Quasit, QUEST_FOR_QuasitSummon_000c1be8-615a-4324-b59d-1f0f5637df36)
+THEN
+PROC_FOR_ThayanCellar_SetAndStartDialog(_Quasit);
+
+PROC
+PROC_FOR_ThayanCellar_SetAndStartDialog((CHARACTER)_Quasit)
+THEN
+DB_Dialogs(_Quasit, (DIALOGRESOURCE)FOR_ThayanCellar_QuasitSummon_7b661231-3d26-6ab4-2dae-9cbd4d0cc848);
+
+PROC
+PROC_FOR_ThayanCellar_SetAndStartDialog((CHARACTER)_Quasit)
+AND
+NOT DB_OnlyOnce("FOR_StartedQuasitDialog")
+AND
+CharacterGetOwner(_Quasit, _Owner)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)FOR_ThayanCellar_QuasitSummon_7b661231-3d26-6ab4-2dae-9cbd4d0cc848, _Quasit, _Owner)
+AND
+QRY_OnlyOnce("FOR_StartedQuasitDialog")
+THEN
+DB_NOOP(1);
+
+//Reaction to the trap
+IF
+DB_FOR_ThayanCellar_TrapActive(1)
+AND
+DB_PlayerSummons(_Quasit)
+AND
+GetTemplate(_Quasit, QUEST_FOR_QuasitSummon_000c1be8-615a-4324-b59d-1f0f5637df36)
+AND
+DB_InRegion(_Quasit, (TRIGGER)S_FOR_OrbAndSkeletonsRoom_dff5d215-e4c9-42cb-abb3-cfc288ff8fc1)
+AND
+QRY_OnlyOnce("FOR_ThayanCellar_QuasitReacts")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)FOR_ThayanCellar_AD_QuasitReactsToTrap_c8e888fa-ea4f-1f7b-2e1b-693b5797858e, _Quasit);
+
+IF //Change display name based on the name the player chooses.
+FlagSet(_NameFlag, _Quasit, _)
+AND
+DB_FOR_ThayanCellar_QuasitNames((FLAG)_NameFlag, (STRING)_NameKey)
+THEN
+SetStoryDisplayName((CHARACTER)_Quasit, _NameKey);
+DB_GLO_Quasit_Name((FLAG)_NameFlag, (STRING)_NameKey);
+
+//END_REGION
+
+//REGION Sound
+
+IF
+ItemEnteredTrigger(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1,S_FOR_ThayanOrb_MirrorBox_bb4820dd-89ce-4ab0-8554-557a5bb3fc67,_)
+AND
+NOT DB_FOR_ThayanCellar_TrapActiveOnDeactivationPath(1)
+THEN
+PlaySound(S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89,"SE_PUZ_GEN_Orb_Magical_A_ThruMirror_Enter");
+
+IF
+ItemEnteredTrigger(S_FOR_ThayanOrb_c9b5f985-466d-41d4-88fd-adfa999aaeb1,S_FOR_ThayanOrb_MirrorBox_bb4820dd-89ce-4ab0-8554-557a5bb3fc67,_)
+AND
+DB_FOR_ThayanCellar_TrapActiveOnDeactivationPath(1)
+THEN
+NOT DB_FOR_ThayanCellar_TrapActiveOnDeactivationPath(1);
+PlaySound(S_FOR_MagicMirror_7b0d83fb-8cda-4b55-b1b7-fa5073ae5c89,"SE_PUZ_GEN_Orb_Magical_A_ThruMirror_Exit");
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

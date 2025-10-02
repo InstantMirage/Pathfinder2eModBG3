@@ -1,0 +1,168 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+SetStoryDisplayName(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, "GLO_DevilishOx_PolymorphedName");
+
+TriggerRegisterForCharacter((TRIGGER)S_HAV_OxPaddock_1c300edd-42c4-43a0-9bd8-ee313cb0569e, (CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56);
+
+PROC_GLO_DevilishOx_TeleportIfAlive();
+
+DB_DefeatedStateFlag(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, GLO_DevilishOx_State_Defeated_4061b72f-ce89-4b86-b18b-ed9c5fbc7cc8);
+DB_InRegionFlag((TRIGGER)S_HAV_OxPaddock_1c300edd-42c4-43a0-9bd8-ee313cb0569e, (FLAG)HAV_DevilishOx_State_InRegion_f448f37a-0280-49f9-b777-086622780f08);
+
+DB_Dialogs((CHARACTER)S_HAV_LastLightOx000_7150c268-1a23-4967-82e8-bf69c624a22b, (DIALOGRESOURCE)HAV_LastLightOx000_d08d5eef-a951-f270-5df7-7c564bf3ecf6);
+DB_Dialogs((CHARACTER)S_HAV_LastLightOx001_b80708e2-bb6e-46a2-b68e-086c53d95cef, (DIALOGRESOURCE)HAV_LastLightOx001_97cc60ac-7290-16a7-5dd8-b71556162d64);
+
+DB_QuestDef_State(HAV_LastLightOx002_GaveReward_a07826a0-879d-574c-b192-bd4f508bd5a9, "HIDDEN_SCL_Boosters", "SCL_DevilishOx_LeftOxBe");
+KBSECTION
+//REGION Debug
+IF
+TextEvent("KillDevilishOx")
+AND
+GetHostCharacter(_Player)
+THEN
+Die((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, DEATHTYPE.Physical, 0);
+
+IF
+TextEvent("MetOxIn_DruidsGrove")
+THEN
+SetFlag(DEN_DevilishOx_MeetAtDruidsGrove_HasMet_SwA_94637372-3365-4c0c-97fa-59b7d089cd53);
+
+IF
+TextEvent("MetOxIn_LastLightInn")
+THEN
+SetFlag(HAV_DevilishOx_LastLight_HasMet_SwA_12a0387f-f284-417b-a91b-53ab87ef9e85);
+//END_REGION
+
+
+//REGION
+//Check if the Ox is alive, and if so we teleport it to the inn
+PROC
+PROC_GLO_DevilishOx_TeleportIfAlive()
+AND
+NOT DB_PermaDefeated(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56)
+AND
+NOT DB_DevilishOx_InHaven(1)
+THEN
+PROC_SetOnStage(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, 1);
+TeleportTo(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, S_HAV_TeleportDevilishOxPos_13a4e1cb-cea2-491c-b8ba-e1dd25e94ff8);
+PROC_RemoveDialog(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56); //removing previous dialog as it's no longer relevant at this point
+DB_Dialogs((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, (DIALOGRESOURCE)HAV_LastLightOx002_5dee5628-5f90-1dfe-05fa-63cc1243c713);
+RemoveStatus((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56,"HAV_PHASM_OX_DISGUISE_ACT1",NULL_00000000-0000-0000-0000-000000000000);
+ApplyStatus((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56,"HAV_PHASM_OX_DISGUISE",-1.0,1,NULL_00000000-0000-0000-0000-000000000000);
+PROC_SetAnubisConfig((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, "GLO_DevilishOx");
+SetLevel((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, 5);
+SetFaction((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, (FACTION)Act2_HAV_RealOxen_f81a448a-46e0-4d4d-ab72-267f5338d8ce);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_HAV_OxKnowledgeCheck_16e38d44-7e30-4115-863f-1f7529af7587);
+DB_KnowledgeCheckTrigger("HAV_DevilishOx_Investigation", (TRIGGER)S_HAV_OxKnowledgeCheck_16e38d44-7e30-4115-863f-1f7529af7587, "AnimalHandling", (DIFFICULTYCLASS)Act2_Medium_89f0acd4-346f-479d-8b7a-1a3eb5382f6d);
+DB_DevilishOx_InHaven(1);
+
+PROC
+PROC_GLO_DevilishOx_TeleportIfAlive()
+AND
+DB_Defeated(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56)
+AND
+NOT DB_PermaDefeated(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56)
+THEN
+PROC_CharacterFullRestore(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56);
+
+//Check if the tiefling refugees from the grove are dead - if so remove the two regular ox
+IF
+DB_GlobalFlag(DEN_AttackOnDen_State_RaiderVictory_abe1bce8-c234-4afe-a490-76210d98a078)
+THEN
+PROC_SetOnStage((CHARACTER)S_HAV_LastLightOx000_7150c268-1a23-4967-82e8-bf69c624a22b, 0);
+PROC_SetOnStage((CHARACTER)S_HAV_LastLightOx001_b80708e2-bb6e-46a2-b68e-086c53d95cef, 0);
+//END_REGION
+
+
+//REGION
+IF
+FlagSet(HAV_DevilishOx_State_Fled_aa1fff72-16df-4269-abda-61e5120a8623, _, _)
+THEN
+PROC_KnowledgeCheck_Clear((TRIGGER)S_HAV_OxKnowledgeCheck_16e38d44-7e30-4115-863f-1f7529af7587);
+
+PROC
+PROC_StateSet_Defeated(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56)
+THEN
+PROC_KnowledgeCheck_Clear((TRIGGER)S_HAV_OxKnowledgeCheck_16e38d44-7e30-4115-863f-1f7529af7587);
+
+//Play this first AD if the player didn't meet the ox in DEN
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_Player, "HAV_DevilishOx_Investigation", S_HAV_OxKnowledgeCheck_16e38d44-7e30-4115-863f-1f7529af7587)
+AND
+NOT DB_GlobalFlag(DEN_DevilishOx_State_InsightCheckSucceeded_36e186dc-ba92-4ac1-8dbd-f41a2b97d8d0)
+THEN
+PROC_TryStartAD(DEN_DevilishOx_PAD_FirstInsight_ee3df178-2a9b-5fc9-e3fc-f9357e063bc1, _Player);
+SetFlag(DEN_DevilishOx_State_InsightCheckSucceeded_36e186dc-ba92-4ac1-8dbd-f41a2b97d8d0);
+
+//Play this second AD if the player has heard the insight check AD in DEN
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_Player, "HAV_DevilishOx_Investigation", S_HAV_OxKnowledgeCheck_16e38d44-7e30-4115-863f-1f7529af7587)
+AND
+DB_GlobalFlag(DEN_DevilishOx_State_InsightCheckSucceeded_36e186dc-ba92-4ac1-8dbd-f41a2b97d8d0)
+THEN
+PROC_TryStartAD(HAV_DevilishOx_PAD_SecondInsight_5575293d-a90c-c98a-f105-c8c92503b0ee, _Player);
+SetFlag(HAV_DevilishOx_State_InsightCheckSucceeded_0aa9dbad-3ff9-4956-a3e6-e5beaeb9caf4);
+//END_REGION
+
+
+//REGION
+//If the Ox enters combat then it morphs into another creature
+IF
+EnteredCombat(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, _)
+AND
+QRY_OnlyOnce("HAV_DevilishOx_EnteredCombat")
+THEN
+PROC_Foop((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56);
+RemoveStatus(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, "HAV_PHASM_OX_DISGUISE", NULL_00000000-0000-0000-0000-000000000000);
+
+//When the Ox turns back into a monster the people of Haven become becomes its enemy
+IF
+StatusRemoved(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, "HAV_PHASM_OX_DISGUISE", _, _)
+THEN
+SetFaction((CHARACTER)S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, (FACTION)Act2_HAV_Phasm_9fec6a42-f208-436d-904c-0a3b1843838b);
+PROC_SetRelationToPlayers((FACTION)Act2_HAV_Phasm_9fec6a42-f208-436d-904c-0a3b1843838b, 0);
+PROC_SetRelationToPlayers((FACTION)Act2_HAV_Haven_e52bfc8c-7826-470d-a9f5-f6fae80dde82, 100);
+PROC_SetRelationToPlayers((FACTION)Act2_HAV_Tieflings_f4ff1850-c9fc-4ee5-80e7-fa6b2a958d39, 100);
+PROC_SetRelationToPlayers((FACTION)ACT2_SCL_HarpersAmbush_f9940d88-f049-4522-a2ae-4b8304e4563c, 100);
+PROC_SetRelationToPlayers((FACTION)Act2_HAV_RealOxen_f81a448a-46e0-4d4d-ab72-267f5338d8ce, 100);
+SetFlag(HAV_DevilishOx_State_MonsterRevealed_32e50fb0-ab45-44cf-86af-3984de34f338, NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_CharacterRegisterCrimeHandleIgnoresAfter(_CrimeID, _, _, _, S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56)
+THEN
+CrimeIgnoreCrime(_CrimeID, S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56);
+
+//If it leaves combat, it would disappear out of sight
+IF
+LeftCombat(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, _)
+THEN
+PROC_DisappearOutOfSight(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, "Run", 1,"");
+SetFlag(HAV_DevilishOx_State_Fled_aa1fff72-16df-4269-abda-61e5120a8623, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+DB_Dead(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56)
+AND
+DB_GlobalFlag(HAV_DevilishOx_State_MonsterRevealed_32e50fb0-ab45-44cf-86af-3984de34f338)
+AND
+QRY_GetClosestAvailableCharacterTo(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, 0, 0, NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000, 1)
+AND
+DB_ClosestAvailableCharacterTo(_Player, S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56, _Dist)
+AND
+_Dist <= 30.0
+AND
+QRY_OnlyOnce("GLO_DevilishOx_DeathReactionVB")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)HAV_DevilishOx_VB_DeathReaction_23a6603c-5e6f-8c98-6f96-912232e22378, _Player);
+
+IF
+DB_Dead(S_GLO_DevilishOx_49eb5b4b-c6ed-4d37-8f68-97b1128b7d56)
+AND
+DB_GlobalFlag(HAV_DevilishOx_State_MonsterRevealed_32e50fb0-ab45-44cf-86af-3984de34f338)
+THEN
+SetFlag(HAV_DevilishOx_State_Dead_ad25ab08-e632-4279-9e10-30e610fbe4a3);  // For Dammon's anubis behavior
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act2"
