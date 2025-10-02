@@ -755,7 +755,7 @@
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and IsMeleeAttack() and IsWeaponAttack() and not Item() and Self(context.Source,context.Observer) and HasDamageEffectFlag(DamageFlags.Hit) and not IsKillingBlow() and not AnyEntityIsItem() and IsCritical();" />
         <field name="Roll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,FortitudeDC())" />
-        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(Grappled,100,2);ApplyStatus(SELF,GRAPPLED_SOURCE,100,2);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
+        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,Grappled,100,2);ApplyStatus(GRAPPLED_SOURCE,100,2);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
         <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
@@ -777,7 +777,7 @@
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and Self(context.Target,context.Observer) and IsAttack() and IsHit();" />
         <field name="Roll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,ReflexDC())" />
-        <field name="Success" type="StringTableFieldDefinition" value="IF(IsCritical()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);" />
+        <field name="Success" type="StringTableFieldDefinition" value="IF(IsCritical()):ApplyStatus(OBSERVER_SOURCE,DISARM, 100, 1);ApplyStatus(OBSERVER_SOURCE,HINDERED,100,1);" />
         <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableCondition" type="StringTableFieldDefinition" value="not HasStatus('SG_Polymorph') or Tagged('MINDFLAYER') or HasStatus('SG_Disguise')" />
@@ -798,7 +798,7 @@
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and Self(context.Target,context.Observer) and IsAttack() and IsHit();" />
         <field name="Roll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,FortitudeDC())" />
-        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(Grappled,100,2);ApplyStatus(SELF,GRAPPLED_SOURCE,100,2);" />
+        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,Grappled,100,2);ApplyStatus(GRAPPLED_SOURCE,100,2);" />
         <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableCondition" type="StringTableFieldDefinition" value="not HasStatus('SG_Polymorph') or Tagged('MINDFLAYER') or HasStatus('SG_Disguise')" />
@@ -857,7 +857,7 @@
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and Enemy(context.Observer, context.Target) and not Tagged('AI_IGNORED_TARGET') and not AnyEntityIsItem();" />
         <field name="Roll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, ClassDC(context.Observer))" />
-        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(ForestStoppedStatus,100,1)" />
+        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,ForestStoppedStatus,100,1);" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableCondition" type="StringTableFieldDefinition" value="HasStatus('TangledForestStanceStatus');" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
@@ -1338,7 +1338,7 @@
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and Self(context.Target,context.Observer);" />
         <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(-LevelMapValue(CharacterLevel));ApplyStatus(OBSERVER_OBSERVER,KineticistOverflow,100,0);RemoveStatus(OBSERVER_OBSERVER,ChannelElementsStatusAir);RemoveStatus(OBSERVER_OBSERVER,ChannelElementsStatusEarth);RemoveStatus(OBSERVER_OBSERVER,ChannelElementsStatusFire);RemoveStatus(OBSERVER_OBSERVER,ChannelElementsStatusWater);RemoveStatus(OBSERVER_OBSERVER,ChannelElementsStatusMetal);RemoveStatus(OBSERVER_OBSERVER,ChannelElementsStatusWood);RemoveStatus(OBSERVER_OBSERVER,ChannelingStatus);RemoveStatus(OBSERVER_OBSERVER,ThermalNimbusAura_Fire);RemoveStatus(OBSERVER_OBSERVER,ThermalNimbusAura_Cold);RemoveStatus(OBSERVER_OBSERVER,RavelOfThorns_Aura);RemoveStatus(OBSERVER_OBSERVER,RavelOfThorns_DamageAura);" />
         <field name="Roll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC())" />
-        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(STUNNED1,100,1);" />
+        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,STUNNED1,100,1);" />
         <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled;Ask" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableCondition" type="StringTableFieldDefinition" value="CanCastImpulse('Earth',true) and not HasStatus('SG_Polymorph') or Tagged('MINDFLAYER') or HasStatus('SG_Disguise');" />
@@ -1412,7 +1412,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="f92318d8-df5e-4638-9acf-d0251afc609c" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h54f635c8ga5bdge771g87b8gd8485cc8aa4a" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf8e6d915g806cg693fgbaf7ga0c0ca7aa754" version="1" />
-        <field name="Success" type="StringTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(4)):ApplyStatus(OBSERVER_SOURCE,IronCommandPersistent_Rank1,100,10);IF(CharacterLevelGreaterThan(4) and not CharacterLevelGreaterThan(8)):ApplyStatus(OBSERVER_TARGET,IronCommandPersistent_Rank2,100,10);IF(CharacterLevelGreaterThan(8) and not CharacterLevelGreaterThan(11)):ApplyStatus(OBSERVER_TARGET,IronCommandPersistent_Rank3,100,10);IF(CharacterLevelGreaterThan(11) and not CharacterLevelGreaterThan(12)):ApplyStatus(OBSERVER_TARGET,IronCommandPersistent_Rank4,100,10);" />
+        <field name="Success" type="StringTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(4)):ApplyStatus(OBSERVER_SOURCE,IronCommandPersistent_Rank1,100,10);IF(CharacterLevelGreaterThan(4) and not CharacterLevelGreaterThan(8)):ApplyStatus(OBSERVER_SOURCE,IronCommandPersistent_Rank2,100,10);IF(CharacterLevelGreaterThan(8) and not CharacterLevelGreaterThan(11)):ApplyStatus(OBSERVER_SOURCE,IronCommandPersistent_Rank3,100,10);IF(CharacterLevelGreaterThan(11) and not CharacterLevelGreaterThan(12)):ApplyStatus(OBSERVER_SOURCE,IronCommandPersistent_Rank4,100,10);" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(IronCommandPersistent_Rank1,100,1);" />
         <field name="Failure" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,PRONE,100,2);" />
       </fields>
