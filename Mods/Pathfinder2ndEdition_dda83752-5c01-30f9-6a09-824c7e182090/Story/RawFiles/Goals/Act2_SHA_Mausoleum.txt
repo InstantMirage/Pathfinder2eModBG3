@@ -1,0 +1,398 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+PROC_TriggerRegisterForParty((TRIGGER)S_SHA_SkullTrigger_7c8452e5-b1b9-4d4f-8b7d-afd5e1d1b27e);
+
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_SHA_Mausoleum_OpenTomb_f63eaaac-0abe-4624-b008-b8adc21f8b58, (VOICEBARKRESOURCE)SHA_Mausoleum_VB_OpenTomb_6c6a7bff-2f4e-bcc2-749c-d4ff7f3f448a);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_SHA_Mausoleum_DiscVB_ac66aad4-141e-4334-82b7-23ca8bf25258, (VOICEBARKRESOURCE)SHA_Mausoleum_VB_FoundDisc_81891544-3001-bb20-e0bd-f5fc007479b1);
+
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_SHA_Mausoleum_NecromancerRoom_14c3ed21-0428-4790-ac05-2d7024434f5f, (VOICEBARKRESOURCE)SHA_Mausoleum_VB_NecromancerRoom_0f3c7373-1ccd-8271-5eaf-7cfa05ddb168);
+DB_KnowledgeCheckTrigger_AD("SHA_Mausoleum_MyrkulSymbol", (TRIGGER)S_SHA_Mausoleum_ClericRoom_a937f2c4-b2d1-4421-be62-5e2423b472da, "Insight", (DIFFICULTYCLASS)Act2_Hard_91fb3598-dd68-4fa8-a306-2c7284709b08, (DIALOGRESOURCE)SHA_Mausoleum_PAD_MyrkulSymbol_de0c12d6-b760-6ca2-726b-9c2a0ca2f527, (FLAG)SHA_Mausoleum_State_PassedMyrkulReligionCheck_36df88d1-43ba-4de6-d6ab-4e34d3427db9);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_SHA_Mausoleum_ClericRoom_a937f2c4-b2d1-4421-be62-5e2423b472da, (VOICEBARKRESOURCE)SHA_Mausoleum_VB_ClericWreckage_a9ac84b6-7be3-561e-2d54-bcd8f0e3eb6b);
+
+DB_ItemDialog_NarratorAD(S_SHA_Mausoleum_IsobelsPlaque_81c6892b-8eeb-434d-9b9a-8a97a17a432a, (DIALOGRESOURCE)SHA_Mausoleum_AD_IsobelsPlaque_2de59813-d77b-0300-965a-26164b7e6267);
+
+//REGION Disc
+PROC_TriggerRegisterForParty((TRIGGER)S_SHA_Mausoleum_TeleportToTempleCinematic_94f1090e-22b4-47b7-bde4-cafa7d95d678);
+DB_AddCharactersInTriggerToDialog((DIALOGRESOURCE)SHA_Mausoleum_CINE_DescendingIntoTemple_32499e0a-9705-686a-e670-6c672b7420c2, (TRIGGER)S_SHA_Mausoleum_TeleportToTempleCinematic_94f1090e-22b4-47b7-bde4-cafa7d95d678, 1, 1, 1);
+DB_DialogBlockAttackButton((DIALOGRESOURCE)SHA_Mausoleum_CINE_DescendingIntoTemple_32499e0a-9705-686a-e670-6c672b7420c2);
+DB_IgnoreMutingStatussesDialog((DIALOGRESOURCE)SHA_Mausoleum_CINE_DescendingIntoTemple_32499e0a-9705-686a-e670-6c672b7420c2);
+//END_REGION
+
+//REGION Mausoleum puzzle
+DB_SHA_Mausoleum_SecretDoors((ITEM)S_SHA_Mausoleum_SecretDoor_000_5c9a72eb-fe02-404c-ad4f-4cb44c6fae73);
+DB_SHA_Mausoleum_SecretDoors((ITEM)S_SHA_Mausoleum_SecretDoor_001_570afbc8-8214-45bc-b999-4ed5e5681349);
+
+DB_SHA_Mausoleum_MuralPuzzle_CurrentStep(-1);
+DB_SHA_Mausoleum_Mural(0, (ITEM)S_SHA_Mausoleum_Mural_000_8b0b46d3-abdf-4134-95db-97c6160bcce5, (ITEM)S_SHA_MausoleumPuzzle_Button_000_fe4be1c0-e975-47b0-a8b0-4c842d9adaba, (VOICEBARKRESOURCE)SHA_Mausoleum_VB_Mural_000_13de9ef5-30a1-8a47-4c8a-c453d5d64d97);
+DB_SHA_Mausoleum_Mural(1, (ITEM)S_SHA_Mausoleum_Mural_001_e390916b-8b5e-4af7-a6ca-6243288728ca, (ITEM)S_SHA_MausoleumPuzzle_Button_001_d3c4b3b1-8bf7-4e7c-8024-6edb6c4b12d1, (VOICEBARKRESOURCE)SHA_Mausoleum_VB_Mural_001_bf14b885-a5d9-9baf-b522-3c6563dc3801);
+DB_SHA_Mausoleum_Mural(2, (ITEM)S_SHA_Mausoleum_Mural_002_0d9dac9d-4110-4fde-a81a-8c3d08062f6c, (ITEM)S_SHA_MausoleumPuzzle_Button_002_5973dbc4-3094-4a05-9d69-c8a514e4151c, (VOICEBARKRESOURCE)SHA_Mausoleum_VB_Mural_002_80cde8c0-2bab-e5fd-afde-9d2df68a4f5e);
+
+DB_SHA_Mausoleum_Turrets((ITEM)S_SHA_Mausoleum_PressurePlate_000_122c3a87-330a-4149-8b55-6f05aff5c01a, (ITEM)S_SHA_MausoleumTurret_000_0b1d9b1d-0c98-4ead-90aa-f23ec7492337, "SHA_MausoleumTurret_000");
+DB_SHA_Mausoleum_Turrets((ITEM)S_SHA_Mausoleum_PressurePlate_001_4e2686a0-7c93-4f27-82c0-408777279b90, (ITEM)S_SHA_MausoleumTurret_001_9baa0134-3aec-4b78-a862-a4bc78754c86, "SHA_MausoleumTurret_001");
+DB_SHA_Mausoleum_Turrets((ITEM)S_SHA_Mausoleum_PressurePlate_002_8860dd21-262a-4b60-8fa5-e6e95db9bab9, (ITEM)S_SHA_MausoleumTurret_002_f378b00b-0715-4bee-b264-c8e3e94ffbd4, "SHA_MausoleumTurret_002");
+DB_SHA_Mausoleum_Turrets((ITEM)S_SHA_Mausoleum_PressurePlate_003_103c4e3e-5875-409e-90db-0b82899777bf, (ITEM)S_SHA_MausoleumTurret_003_f95d22da-4f52-4015-9241-1e7749b29c89, "SHA_MausoleumTurret_003");
+DB_SHA_Mausoleum_Turrets((ITEM)S_SHA_Mausoleum_PressurePlate_004_d4c72f83-f44b-47b1-b878-0a4f23e0a6cc, (ITEM)S_SHA_MausoleumTurret_004_7d0a7bd6-764c-4606-a7c9-8598cd5691c2, "SHA_MausoleumTurret_004");
+DB_SHA_Mausoleum_Turrets((ITEM)S_SHA_Mausoleum_PressurePlate_005_8365aa1a-b220-4eb6-89a9-482f530f6c8c, (ITEM)S_SHA_MausoleumTurret_005_dbc9766f-9b07-4f8c-8dbb-e4d52d0e4210, "SHA_MausoleumTurret_005");
+//END_REGION
+
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_Mausoleum_KethericExperiment3_901ed572-6bf9-43b3-ae67-91877f565307,(DIALOGRESOURCE)SHA_Mausoleum_AD__KethericExperiment1_5d9b7860-da9d-a8dc-9e4c-36700ce09b99);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_Mausoleum_KethericExperiment6_536d6048-cc72-47fc-9b19-3e54fa0b8c76,(DIALOGRESOURCE)SHA_Mausoleum_AD__KethericExperiment2_57cd8ca7-107b-fe00-2986-2aa27f0f5b0c);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_Mausoleum_KethericExperiment5_57091bd3-a1ca-4231-9346-c414dbe963f5,(DIALOGRESOURCE)SHA_Mausoleum_AD__KethericExperiment2_57cd8ca7-107b-fe00-2986-2aa27f0f5b0c);
+DB_ItemDialog_NarratorAD((ITEM)S_SCL_Mausoleum_KethericExperiment7_54cf1002-c4e1-4c8f-be09-9896dace5da1,(DIALOGRESOURCE)SHA_Mausoleum_AD__KethericExperiment3_726aa9b5-a58f-a7b3-271c-ac58a675bb60);
+KBSECTION
+//REGION Secret door
+
+PROC
+PROC_SHA_Mausoleum_OpenSecretDoors()
+AND
+DB_SHA_Mausoleum_SecretDoors(_Door)
+AND
+IsClosed(_Door, 1)
+THEN
+PROC_ItemUnlockAndOpen(_Door);
+//END_REGION
+
+//REGION Shar temple map
+IF
+GameBookInterfaceClosed(S_SHA_Mausoleum_KethericsMap_8a0b05a4-1d0d-4c79-9c2b-91c0b0efa29d, _Player)
+AND
+DB_Players(_Player)
+AND
+NOT DB_CantTalk(_Player)
+AND
+QRY_OncePerUserAndNearbyPlayers(_Player, "SHA_Mausoleum_ReadMap")
+THEN
+StartVoiceBark(SHA_Mausoleum_VB_KethericsMap_868b87ab-08f1-0f8c-dfb1-56d781c3f970, _Player);
+//END_REGION
+
+//REGION Disc cinematic
+PROC
+PROC_BlockUseOfItem(_Player, (ITEM)S_SHA_Mausoleum_TempleTeleporter_d2cf7c3d-d9bb-4ae4-8764-d7e95b62a6b7)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("SHA_Mausoleum_DiscCinematic")
+AND
+QRY_StartDialog_Fixed(SHA_Mausoleum_CINE_DescendingIntoTemple_32499e0a-9705-686a-e670-6c672b7420c2, _Player)
+THEN
+DB_CustomUseItemResponse(_Player, (ITEM)S_SHA_Mausoleum_TempleTeleporter_d2cf7c3d-d9bb-4ae4-8764-d7e95b62a6b7, 0);
+
+PROC
+PROC_BlockUseOfItem(_PartyMember, (ITEM)S_SHA_Mausoleum_TempleTeleporter_d2cf7c3d-d9bb-4ae4-8764-d7e95b62a6b7)
+AND
+NOT DB_Players(_PartyMember)
+AND
+NOT DB_OnlyOnce("SHA_Mausoleum_DiscCinematic")
+THEN
+DB_CustomUseItemResponse(_PartyMember, (ITEM)S_SHA_Mausoleum_TempleTeleporter_d2cf7c3d-d9bb-4ae4-8764-d7e95b62a6b7, 0);
+
+IF
+DialogStarted(SHA_Mausoleum_CINE_DescendingIntoTemple_32499e0a-9705-686a-e670-6c672b7420c2, _Instance)
+AND
+DB_DialogPlayers(_Instance, _Player, _)
+THEN
+TeleportTo(_Player, (TRIGGER)S_SHA_TempleTP_97143165-c1ff-4a58-ad66-d99b138718b1, "", 1, 1, 1, 1, 1);
+
+IF
+TextEvent("SHA_ReEnableDiscCinematic")
+THEN
+NOT DB_OnlyOnce("SHA_Mausoleum_DiscCinematic");
+PROC_TriggerRegisterForParty(S_SHA_Mausoleum_TeleportToTempleCinematic_94f1090e-22b4-47b7-bde4-cafa7d95d678);
+//END_REGION
+
+//REGION Mural Puzzle
+IF
+DB_SHA_Mausoleum_Mural(_, _Mural, _, _VB)
+THEN
+DB_ItemDialog_PlayerVB(_Mural, _VB);
+
+IF
+DualEntityEvent((CHARACTER)_Player, (ITEM)_Button, "SHA_Mausoleum_MuralButton")
+AND
+DB_Players(_Player)
+AND
+DB_SHA_Mausoleum_Mural(_CurrentIndex, _, _Button, _)
+AND
+QRY_SHA_Mausoleum_MuralHasPuzzleStatus(_Button)
+THEN
+PROC_PlayCantUseItemAD(_Player);
+
+IF
+DualEntityEvent((CHARACTER)_Player, (ITEM)_Button, "SHA_Mausoleum_MuralButton")
+AND
+DB_SHA_Mausoleum_Mural(_CurrentIndex, _, _Button, _)
+AND
+NOT QRY_SHA_Mausoleum_MuralHasPuzzleStatus(_Button)
+THEN
+PROC_SHA_Mausoleum_UpdateCurrentStep(_Button);
+
+
+QRY
+QRY_SHA_Mausoleum_MuralHasPuzzleStatus((ITEM)_Button)
+AND
+DB_SHA_Mausoleum_Mural(_, _Mural, _Button, _)
+AND
+HasActiveStatus(_Mural, "SHA_MAUSOLEUM_MURAL_INPROGRESS", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_SHA_Mausoleum_MuralHasPuzzleStatus((ITEM)_Button)
+AND
+DB_SHA_Mausoleum_Mural(_, _Mural, _Button, _)
+AND
+HasActiveStatus(_Mural, "SHA_MAUSOLEUM_MURAL_RIGHTORDER", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_SHA_Mausoleum_MuralHasPuzzleStatus((ITEM)_Button)
+AND
+DB_SHA_Mausoleum_Mural(_, _Mural, _Button, _)
+AND
+HasActiveStatus(_Mural, "SHA_MAUSOLEUM_MURAL_WRONGORDER", 1)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_SHA_Mausoleum_UpdateCurrentStep((ITEM)_Button)
+AND
+DB_SHA_Mausoleum_MuralPuzzle_CurrentStep(_PrevStep)
+AND
+IntegerSum(_PrevStep, 1, _CurrentStep)
+THEN
+NOT DB_SHA_Mausoleum_MuralPuzzle_CurrentStep(_PrevStep);
+DB_SHA_Mausoleum_MuralPuzzle_CurrentStep(_CurrentStep);
+
+// Used wrong button
+PROC
+PROC_SHA_Mausoleum_UpdateCurrentStep((ITEM)_Button)
+AND
+DB_SHA_Mausoleum_MuralPuzzle_CurrentStep(_Step)
+AND
+NOT DB_SHA_Mausoleum_Mural(_Step, _, _Button, _)
+THEN
+PROC_GlobalSetFlagAndCache(SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638);
+
+PROC
+PROC_SHA_Mausoleum_UpdateCurrentStep((ITEM)_Button)
+AND
+DB_SHA_Mausoleum_Mural(_, _Mural, _Button, _)
+THEN
+ApplyStatus(_Mural, "SHA_MAUSOLEUM_MURAL_INPROGRESS", -1.0, 1);
+
+PROC
+PROC_SHA_Mausoleum_UpdateCurrentStep((ITEM)_Button)
+AND
+DB_SHA_Mausoleum_MuralPuzzle_CurrentStep(2)
+THEN
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)_Button);
+
+PROC
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)_Button)
+AND
+NOT DB_GlobalFlag(SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638)
+AND
+DB_SHA_Mausoleum_Mural(_, _LastMural, _Button, _)
+AND
+DB_SHA_Mausoleum_Mural(_, _Mural, _, _)
+THEN
+PlaySound(_Button, "SE_SCL_MausoleumPuzzle_Succed");
+RemoveStatus(_Mural, "SHA_MAUSOLEUM_MURAL_INPROGRESS");
+ApplyStatus(_Mural, "SHA_MAUSOLEUM_MURAL_RIGHTORDER", -1.0, 1);
+
+PROC
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)_Button)
+AND
+NOT DB_GlobalFlag(SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638)
+AND
+DB_SHA_Mausoleum_Mural(_, _LastMural, _Button, _)
+THEN
+PlaySound(_LastMural, "SE_SCL_MausoleumPuzzle_Succed");
+
+PROC
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)_Button)
+AND
+NOT DB_GlobalFlag(SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638)
+THEN
+PROC_SHA_Mausoleum_OpenSecretDoors();
+
+PROC
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)_Button)
+AND
+DB_GlobalFlag(SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638)
+AND
+DB_SHA_Mausoleum_Mural(_, _Mural, _, _)
+THEN
+RemoveStatus(_Mural, "SHA_MAUSOLEUM_MURAL_INPROGRESS");
+ApplyStatus(_Mural, "SHA_MAUSOLEUM_MURAL_WRONGORDER", 3.0, 1);
+
+PROC
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)_Button)
+AND
+DB_GlobalFlag(SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638)
+AND
+DB_SHA_Mausoleum_Mural(_, _LastMural, _Button, _)
+THEN
+PlaySound(_LastMural, "SE_SCL_MausoleumPuzzle_Fail");
+
+PROC
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)_Button)
+AND
+DB_GlobalFlag(SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638)
+THEN
+PROC_SHA_Mausoleum_ActivateTrap();
+
+PROC
+PROC_SHA_Mausoleum_OpenSecretDoors()
+THEN
+PROC_SHA_Mausoleum_DeactivateTrap();
+
+PROC
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)_Button)
+THEN
+NOT DB_SHA_Mausoleum_MuralPuzzle_CurrentStep(2);
+DB_SHA_Mausoleum_MuralPuzzle_CurrentStep(-1);
+ClearFlag(SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638, NULL_00000000-0000-0000-0000-000000000000);
+
+//REGION Puzzle trap
+PROC
+PROC_SHA_Mausoleum_ActivateTrap()
+AND
+DB_SHA_Mausoleum_Turrets(_PressurePlate, _, _)
+THEN
+SetDualEntityEvent(NULL_00000000-0000-0000-0000-000000000000, _PressurePlate, "SHA_Mausoleum_GasPits_On");
+DB_SHA_Mausoleum_TrapTriggered(1);
+DB_OnlyOnce("SHA_MausoleumTrapPAD");
+
+PROC
+PROC_SHA_Mausoleum_DeactivateTrap()
+AND
+DB_SHA_Mausoleum_Turrets(_PressurePlate, _, _)
+THEN
+SetDualEntityEvent(NULL_00000000-0000-0000-0000-000000000000, _PressurePlate, "SHA_Mausoleum_GasPits_Off");
+NOT DB_SHA_Mausoleum_TrapTriggered(1);
+
+IF
+AttemptedDisarm(_PressurePlate, _, _, 0)
+AND
+DB_SHA_Mausoleum_Turrets(_PressurePlate, _Turret, _Event)
+THEN
+SetDualEntityEvent(NULL_00000000-0000-0000-0000-000000000000, _Turret, _Event);
+
+IF
+DualEntityEvent((CHARACTER)_Player, (ITEM)_PressurePlate, "SHA_Mausoleum_TrapPressurePlate_On")
+AND
+NOT DB_SHA_Mausoleum_TrapTriggered(1)
+AND
+DB_Players(_Player)
+AND
+NOT DB_OnlyOnce("SHA_MausoleumTrapPAD")
+THEN
+PROC_TryStartAD(SHA_Mausoleum_PAD_DisarmedPressurePlate_c0dd363b-0971-98b0-efd4-425595a22c41, _Player);
+
+IF
+AutomatedDialogStarted(SHA_Mausoleum_PAD_DisarmedPressurePlate_c0dd363b-0971-98b0-efd4-425595a22c41, _)
+THEN
+DB_OnlyOnce("SHA_MausoleumTrapPAD");
+
+IF
+DualEntityEvent(_, (ITEM)_PressurePlate, "SHA_Mausoleum_TrapPressurePlate_On")
+AND
+DB_SHA_Mausoleum_TrapTriggered(1)
+AND
+DB_SHA_Mausoleum_Turrets(_PressurePlate, _Turret, _Event)
+THEN
+SetDualEntityEvent(NULL_00000000-0000-0000-0000-000000000000, _Turret, _Event);
+//END_REGION Puzzle trap
+//END_REGION Mural Puzzle
+
+//REGION Magic Skull
+
+IF
+EnteredTrigger(_, (TRIGGER)S_SHA_SkullTrigger_7c8452e5-b1b9-4d4f-8b7d-afd5e1d1b27e)
+AND
+NOT DB_PermaDefeated(S_SHA_Necromancer_53651a9f-7ea8-444f-ba2d-224390b72f7d)
+AND
+QRY_SpeakerIsAvailable((ITEM)S_SHA_MagicSkull_63e05b48-254a-4cd8-b95a-ea6eb582f433)
+THEN
+PROC_TriggerUnregisterForParty((TRIGGER)S_SHA_SkullTrigger_7c8452e5-b1b9-4d4f-8b7d-afd5e1d1b27e);
+PROC_LoopEffect((EFFECTRESOURCE)VFX_Script_MagicMouth_01_39272314-0666-1b46-ece8-565d69b391d5, (ITEM)S_SHA_MagicSkullHelper_8d933f1b-d79a-460d-ba90-c4894b9d709c, "SHA_MagicSkull_MagicMouth", "SCL_Main_A", "", 1.0);
+PROC_TryStartAD((DIALOGRESOURCE)SHA_Crypt_AD_MagicSkull_49a95b57-79dc-1816-916c-5b2cdbc64aec, S_SHA_MagicSkull_63e05b48-254a-4cd8-b95a-ea6eb582f433);
+
+IF
+UseFinished(_, (ITEM)S_SHA_MagicSkull_63e05b48-254a-4cd8-b95a-ea6eb582f433, 1)
+AND
+NOT DB_PermaDefeated(S_SHA_Necromancer_53651a9f-7ea8-444f-ba2d-224390b72f7d)
+AND
+QRY_SpeakerIsAvailable(S_SHA_MagicSkull_63e05b48-254a-4cd8-b95a-ea6eb582f433)
+THEN
+PROC_LoopEffect((EFFECTRESOURCE)VFX_Script_MagicMouth_01_39272314-0666-1b46-ece8-565d69b391d5, (ITEM)S_SHA_MagicSkullHelper_8d933f1b-d79a-460d-ba90-c4894b9d709c, "SHA_MagicSkull_MagicMouth", "SCL_Main_A", "", 1.0);
+PROC_TryStartAD((DIALOGRESOURCE)SHA_Crypt_AD_MagicSkull_49a95b57-79dc-1816-916c-5b2cdbc64aec, S_SHA_MagicSkull_63e05b48-254a-4cd8-b95a-ea6eb582f433);
+
+IF
+AutomatedDialogEnded((DIALOGRESOURCE)SHA_Crypt_AD_MagicSkull_49a95b57-79dc-1816-916c-5b2cdbc64aec, _)
+AND
+DB_LoopEffect((ITEM)S_SHA_MagicSkullHelper_8d933f1b-d79a-460d-ba90-c4894b9d709c, _, "SHA_MagicSkull_MagicMouth", _, _, _, _)
+THEN
+PROC_StopLoopEffect((ITEM)S_SHA_MagicSkullHelper_8d933f1b-d79a-460d-ba90-c4894b9d709c, "SHA_MagicSkull_MagicMouth");
+
+IF
+AutomatedDialogRequestFailed((DIALOGRESOURCE)SHA_Crypt_AD_MagicSkull_49a95b57-79dc-1816-916c-5b2cdbc64aec, _)
+AND
+DB_LoopEffect((ITEM)S_SHA_MagicSkullHelper_8d933f1b-d79a-460d-ba90-c4894b9d709c, _, "SHA_MagicSkull_MagicMouth", _, _, _, _)
+THEN
+PROC_StopLoopEffect((ITEM)S_SHA_MagicSkullHelper_8d933f1b-d79a-460d-ba90-c4894b9d709c, "SHA_MagicSkull_MagicMouth");
+
+IF
+DestroyedBy(S_SHA_MagicSkull_63e05b48-254a-4cd8-b95a-ea6eb582f433, _, _, _)
+AND
+DB_LoopEffect((ITEM)S_SHA_MagicSkullHelper_8d933f1b-d79a-460d-ba90-c4894b9d709c, _, "SHA_MagicSkull_MagicMouth", _, _, _, _)
+THEN
+PROC_StopLoopEffect((ITEM)S_SHA_MagicSkullHelper_8d933f1b-d79a-460d-ba90-c4894b9d709c, "SHA_MagicSkull_MagicMouth");
+
+//END_REGION
+
+//REGION VB Handling
+IF
+AutomatedDialogEnded(SHA_Mausoleum_AD_IsobelsPlaque_2de59813-d77b-0300-965a-26164b7e6267, _ID)
+AND
+GetClosestPlayer(S_SHA_Mausoleum_IsobelsPlaque_81c6892b-8eeb-434d-9b9a-8a97a17a432a, _Player, _)
+AND
+QRY_OnlyOnce("SHA_Mausoleum_AD_IsobelsPlaque_Played")
+THEN
+StartVoiceBark(SHA_Mausoleum_VB_IsobelsPlaque_bf62af69-ee47-4e0d-e390-ebcdd79b0ccb, _Player);
+
+IF
+VoiceBarkEnded(SHA_Mausoleum_VB_IsobelsPlaque_bf62af69-ee47-4e0d-e390-ebcdd79b0ccb,_ID)
+THEN
+DB_SHA_Mausoleum_ShouldSetKnowsKethericFatherFlag(1);
+
+IF
+VoiceBarkFailed(SHA_Mausoleum_VB_IsobelsPlaque_bf62af69-ee47-4e0d-e390-ebcdd79b0ccb) //The VB is set up for two characters - if there's only one character around VB will fail, but we need to set up the flag
+THEN
+DB_SHA_Mausoleum_ShouldSetKnowsKethericFatherFlag(1);
+
+IF
+DB_GlobalFlag(HAV_TakingIsobel_HasMet_Isobel_b0da6d9c-23bb-46d0-a55c-2a851e07b010)
+AND
+DB_SHA_Mausoleum_ShouldSetKnowsKethericFatherFlag(1)
+THEN
+PROC_GlobalSetFlagAndCache(GLO_Isobel_KnowsKethericFather_93182f99-8977-42bb-a3c5-094a7a686068);
+NOT DB_SHA_Mausoleum_ShouldSetKnowsKethericFatherFlag(1);
+
+//END_REGION
+
+//REGION Debug
+IF
+DB_GlobalFlag((FLAG)Debug_SHA_SolveMuralPuzzle_1b1a4b05-f796-4dd3-80ea-c7fbe6a87f09)
+THEN
+ClearFlag((FLAG)SHA_Mausoleum_State_WrongOrderPressed_d2b4c98d-d03a-4141-b2b0-c9e2b7a72638);
+PROC_SHA_Mausoleum_ResolvePuzzle((ITEM)S_SHA_MausoleumPuzzle_Button_002_5973dbc4-3094-4a05-9d69-c8a514e4151c);
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act2"

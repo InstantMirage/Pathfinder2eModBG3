@@ -1,0 +1,856 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Party Banter Triggers
+PROC_RegisterWorldGossipTrigger((TRIGGER)S_PartyBanterTrigger_FOR_VillageWest_c36a3edc-bb17-414d-9df6-f2766dcda74a);
+PROC_RegisterWorldGossipTrigger((TRIGGER)S_PartyBanterTrigger_FOR_VillageMine_98d8fbcf-ff7a-430d-b6ef-c50181e32714);
+PROC_RegisterWorldGossipTrigger((TRIGGER)S_PartyBanterTrigger_FOR_VillageNorth_ae666264-6faf-4c80-ae49-c80db6f64651);
+PROC_RegisterWorldGossipTrigger((TRIGGER)S_PartyBanterTrigger_FOR_ForestNorth_1d15c151-ddc6-40fe-957b-2268043d3237);
+PROC_RegisterWorldGossipTrigger((TRIGGER)S_PartyBanterTrigger_FOR_ForestSouth_c3aaff7a-ffd4-4315-8b78-75181b2d9921);
+PROC_RegisterWorldGossipTrigger((TRIGGER)S_PartyBanterTrigger_FOR_ForestDock_7bb65898-d5f1-4f63-b764-ffd2a2efe04b);
+//END_REGION
+
+//REGION Goblin Ambush
+DB_FOR_VillageAmbushers((CHARACTER)S_FOR_Ambush_Goblins_Ranger_01_8e553c24-5100-4939-9041-4dec8499d553);
+DB_FOR_VillageAmbushers((CHARACTER)S_FOR_Ambush_Goblins_Ranger_02_70a50383-e377-45c0-a793-b44d36d2df55);
+DB_FOR_VillageAmbushers((CHARACTER)S_FOR_Ambush_Goblins_Ranger_03_e3d96e92-39fa-4ec1-9503-bd00f40285aa);
+DB_FOR_VillageAmbushers((CHARACTER)S_FOR_Ambush_Goblins_Caster_01_826000b8-c6cd-4018-af55-31ee7e6a4668);
+DB_FOR_VillageAmbushers((CHARACTER)S_FOR_Ambush_Goblins_Caster_02_1f3d846e-f26c-49d4-b917-d9f43fd137b4);
+
+DB_FOR_VillageAmbushers_CancelAmbushTriggers((TRIGGER)S_FOR_Ambush_CancelAmbushTrigger_000_f1f48e05-1a84-4556-b287-9f332c6569e4);
+DB_FOR_VillageAmbushers_CancelAmbushTriggers((TRIGGER)S_FOR_Ambush_CancelAmbushTrigger_001_5d9a2955-e57c-4d8c-adc0-1c7ef16e7856);
+
+DB_AmbushTrigger((TRIGGER)S_FOR_Ambush_InitiateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97, (TRIGGER)S_FOR_Ambush_PerceptionTrigger_837f941a-db5b-49a2-b34d-f62e555c5acd, (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539);
+DB_AmbushTrigger_AmbushRevealAD((TRIGGER)S_FOR_Ambush_PerceptionTrigger_837f941a-db5b-49a2-b34d-f62e555c5acd, (DIALOGRESOURCE)FOR_GoblinAmbush_PAD_SpottedAmbush_8425c9cb-a6fc-84b0-664a-44c72f64ebd0);
+
+DB_AddCharactersInTriggerToDialog((DIALOGRESOURCE)FOR_GoblinAmbush_ff0fbb34-72a7-4816-2a1c-bd13e5a246e7, (TRIGGER)S_FOR_Ambush_AmbushDialogTrigger_9b610296-b036-469e-9386-89668ac1be46, 1, 0, 1);
+
+PROC_TriggerRegisterForParty(S_FOR_Ambush_InitiateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97);
+PROC_TriggerRegisterForParty(S_FOR_Ambush_ImmediateCombatTrigger_3773cc15-3b15-4d18-8929-f3e22acc7ff4);
+PROC_TriggerRegisterForPlayers(S_FOR_Ambush_AmbushDialogTrigger_9b610296-b036-469e-9386-89668ac1be46);
+//END_REGION
+
+//REGION Goblin Checkpoint - Village
+DB_GlobalFlagReactionAfterDialog((FLAG)FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, (DIALOGRESOURCE)FOR_GoblinAmbush_ff0fbb34-72a7-4816-2a1c-bd13e5a246e7);
+DB_GlobalFlagReactionAfterDialog((FLAG)FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, (DIALOGRESOURCE)FOR_GoblinAmbush_CheckpointGuards_895decda-32ab-b951-4af2-2b495553a5cf);
+DB_GlobalFlagReactionAfterDialog((FLAG)FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, (DIALOGRESOURCE)FOR_GoblinAmbush_CheckpointGuardsWarning_2ec3d474-387f-9ef3-ab3d-4b654cda8d2c);
+DB_GlobalFlagReactionAfterDialog((FLAG)FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, (DIALOGRESOURCE)FOR_GoblinAmbush_Warning_97949d0e-dc28-54e2-42f5-ee8ff33a78bf);
+DB_GlobalFlagReactionAfterDialog((FLAG)FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, (DIALOGRESOURCE)FOR_Village_Trespassing_0de4c26f-9744-2212-ec0b-979c176687f9);
+
+DB_FOR_Village_CheckpointGoblins((CHARACTER)S_FOR_Ambush_CheckpointGuard_000_36d897c8-bd94-4a3d-97fd-5f48fb45f952);
+DB_FOR_Village_CheckpointGoblins((CHARACTER)S_FOR_Ambush_CheckpointGuard_001_ebbed723-7ed1-40e0-979a-289918a25c68);
+DB_FOR_Village_CheckpointGoblins((CHARACTER)S_FOR_Ambush_PatrollingGoblin_6db1f304-683a-4409-ab7a-b22f64f2c2e3);
+
+DB_Dialogs((CHARACTER)S_FOR_Ambush_PatrollingGoblin_6db1f304-683a-4409-ab7a-b22f64f2c2e3, (DIALOGRESOURCE)FOR_GoblinAmbush_PatrollingGoblin_ee29af04-b26e-6bb0-dc18-5247d2890a60);
+DB_Dialogs((CHARACTER)S_FOR_Ambush_CheckpointGuard_000_36d897c8-bd94-4a3d-97fd-5f48fb45f952, (DIALOGRESOURCE)FOR_GoblinAmbush_CheckpointGuards_895decda-32ab-b951-4af2-2b495553a5cf);
+DB_Dialogs((CHARACTER)S_FOR_Ambush_CheckpointGuard_001_ebbed723-7ed1-40e0-979a-289918a25c68, (DIALOGRESOURCE)FOR_GoblinAmbush_CheckpointGuardsWarning_2ec3d474-387f-9ef3-ab3d-4b654cda8d2c);
+DB_CheckPoint((CHARACTER)S_FOR_Ambush_CheckpointGuard_000_36d897c8-bd94-4a3d-97fd-5f48fb45f952, 
+				(CHARACTER)S_FOR_Ambush_CheckpointGuard_001_ebbed723-7ed1-40e0-979a-289918a25c68,
+				(TRIGGER)S_FOR_Ambush_CheckpointSpotTrigger_6bf94c83-3a56-414f-84f3-21b2188ad2a9,
+				(TRIGGER)S_FOR_Ambush_WarningArea_SwampCheckpoint_da719b28-55ca-42fa-8b59-52fc7a270b26,
+				(TRIGGER)S_FOR_Ambush_TresspassTrigger_6c775943-0b96-4d1b-8ee0-68c362cbaa0b,
+				"FOR_Ambush_SwampCheckpoint",
+				(FLAG)FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139,
+				"FOR_Village_Trespass");
+
+DB_DialogMoneyTransfer(2, (DIALOGRESOURCE)FOR_GoblinAmbush_CheckpointGuards_895decda-32ab-b951-4af2-2b495553a5cf, 50);
+DB_DialogMoneyTransfer(3, (DIALOGRESOURCE)FOR_GoblinAmbush_CheckpointGuards_895decda-32ab-b951-4af2-2b495553a5cf, 100);
+
+DB_QuestDef_State((FLAG)FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, "HIDDEN_WLD_Boosters", "FOR_GoblinAmbush_Persuaded");
+//END_REGION
+
+//REGION Sleeping bugbear
+SetVisible((ITEM)S_FOR_SleepingBugbear_InvisibleBed_1a87a689-e8d4-4659-b8f5-9e99d0804b96, 0);
+//END_REGION
+
+//REGION Selune Stash
+PROC_TriggerRegisterForPlayers((TRIGGER)S_FOR_SeluneStash_NoticeShrineTrigger_d5c8dda2-590d-4199-a06e-d12cf285ac2b);
+ApplyStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", -1.0, 1, NULL_00000000-0000-0000-0000-000000000000);
+//END_REGION
+
+SetOnStage(S_FOR_ZhentCache_0d88a72b-e7b9-4609-8f56-ccb4a15e61bd,0);
+
+DB_OneShot_VoiceBarkTrigger(S_FOR_BlueprintSphere_ff4d98a6-5b04-4d7b-9745-e09c46d5f423,FOR_Blueprints_VB_500748e9-9a8e-e0db-4252-b4f4c0e858bf);
+
+//REGION Knife in meat booster
+
+PROC_SetOnStage(S_FOR_KnifeInMeat_BrokenHandle_f7fc29c2-13e4-489c-a212-afd7a5532a3c, 0);
+PROC_SetOnStage(S_FOR_KnifeInMeat_BrokenTip_3fd27f03-9748-449b-a303-37aa6ebda5ef, 0);
+
+DB_GlobalFlagReactionAfterDialog(FOR_KnifeInMeat_State_KnifeTaken_606820f4-dc66-8733-c9ef-febc8f7e529a,FOR_KnifeInMeat_7874d8bb-10ee-2f6e-1554-08a0aefc7c73);
+DB_Dialogs(S_FOR_KnifeInMeatMeat_aa7495b9-088d-40e9-bffe-0a008ff6f9aa, (DIALOGRESOURCE)FOR_KnifeInMeat_7874d8bb-10ee-2f6e-1554-08a0aefc7c73);
+SetCanPickUp(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7, 0);
+SetMovable(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7, 0);
+SetTag((ITEM)S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7,ITEMINTERACTION_UNLOCKED_6ca541e1-b5d9-4cfa-b745-61a5483052d7);
+
+DB_FOR_KnifeInMeat_DialogStarters(S_FOR_KnifeInMeat_BrokenHandle_f7fc29c2-13e4-489c-a212-afd7a5532a3c);
+DB_FOR_KnifeInMeat_DialogStarters(S_FOR_KnifeInMeat_BrokenTip_3fd27f03-9748-449b-a303-37aa6ebda5ef);
+DB_FOR_KnifeInMeat_DialogStarters(S_FOR_KnifeInMeatMeat_aa7495b9-088d-40e9-bffe-0a008ff6f9aa);
+DB_FOR_KnifeInMeat_DialogStarters(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7);
+
+//END_REGION
+
+//Combat NPC Reactivity
+DB_CombatReact_AD_OnNextTurn(S_FOR_Ambush_Goblins_Ranger_01_8e553c24-5100-4939-9041-4dec8499d553,(DIALOGRESOURCE)FOR_Ambush_AD_Combat_Goblins_Ranger_01_aaaf7276-a1bf-e155-04cd-a906b2023058);
+DB_CombatReact_AD_OnNextTurn(S_FOR_Ambush_Goblins_Caster_01_826000b8-c6cd-4018-af55-31ee7e6a4668,(DIALOGRESOURCE)FOR_Ambush_AD_Combat_Goblins_Caster_01_d46b2ef9-cd77-b80f-7dc7-8fea93b0b78f);
+
+PROC_SetOnStage(DEC_GEN_WaterPump_A_000_cbedf8b0-3789-81c7-643a-ea75c6478228, 0);
+PROC_SetOnStage(DEC_GEN_WaterPump_A_000_259d2fc1-92ce-8dfc-121e-7344bea33508, 0);
+PROC_SetOnStage(DEC_GEN_WaterPump_A_000_9b079f1d-b742-85fb-1850-6f225bc7e075, 0);
+PROC_SetOnStage(DEC_GEN_WaterPump_A_000_fddc187a-8203-8aff-3825-4a40b27538e0, 0);
+PROC_SetOnStage(DEC_GEN_WaterPump_A_000_ed7fa4f4-fcff-8f2f-2fa7-11c7efe83bdb, 0);
+KBSECTION
+//REGION Village Square Cleared
+// Conditions:
+// 1. Defeat ogres
+// 2. Unfortunate Gnome goblins defeated - FOR_GnomeGoblinsDead
+// 3. Defeat goblin ambushers
+// 4. Defeat checkpoint guards
+// 5. Defeat apothecary goblins
+// 6. Defeat sleeping bugbear
+// 7. Bugbear lovers killed
+
+IF
+DB_FOR_SchoolOgres(_Ogre)
+THEN
+DB_GLO_DefeatCounter(_Ogre, "FOR_VillageSafeZone");
+
+IF
+DB_FOR_Village_CheckpointGoblins(_Goblin)
+THEN
+DB_GLO_DefeatCounter(_Goblin, "FOR_VillageSafeZone");
+
+IF
+DB_FOR_ApothecaryGoblins(_Goblin)
+THEN
+DB_GLO_DefeatCounter(_Goblin, "FOR_VillageSafeZone");
+DB_GLO_DefeatCounter(_Goblin, "FOR_VillageCheckpoint");
+
+IF
+DB_FOR_VillageAmbushers(_Enemy)
+THEN
+DB_GLO_DefeatCounter(_Enemy, "FOR_VillageSafeZone");
+DB_GLO_DefeatCounter(_Enemy, "FOR_VillageAmbush");
+
+IF
+DB_FOR_BugBearLove_Couple(_Enemy)
+THEN
+DB_GLO_DefeatCounter(_Enemy, "FOR_VillageSafeZone");
+
+IF
+FlagSet((FLAG)FOR_GnomeGoblinsDead_8910f084-c9ad-2336-c6a7-098d71914529, NULL_00000000-0000-0000-0000-000000000000, _)
+THEN
+DB_FOR_Village_UnfortunateGnomeResolved(1);
+
+// Activate banter and remove danger zone village is cleared
+PROC
+PROC_GLO_DefeatCounter_AllPermaDefeated("FOR_VillageSafeZone")
+AND
+DB_FOR_Village_UnfortunateGnomeResolved(1)
+AND
+DB_PermaDefeated(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32)
+THEN
+PROC_RegisterWorldGossipTrigger((TRIGGER)S_PartyBanterTrigger_FOR_VillageSquareCleared_77d6bb4c-7633-4881-8035-463690b4f92a);
+
+PROC
+PROC_GLO_DefeatCounter_AllPermaDefeated("FOR_VillageAmbush")
+THEN
+DB_FOR_Village_AmbushCleared(1);
+
+PROC
+PROC_GLO_DefeatCounter_AllPermaDefeated("FOR_VillageCheckpoint")
+THEN
+DB_FOR_Village_CheckpointResolved(1);
+
+//END_REGION
+
+//REGION Village - Goblin Checkpoint
+PROC
+PROC_CheckPointDialogue(_Player, (CHARACTER)S_FOR_Ambush_CheckpointGuard_000_36d897c8-bd94-4a3d-97fd-5f48fb45f952)
+AND
+GetFlag(FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, NULL_00000000-0000-0000-0000-000000000000, 0)
+AND
+QRY_StartCheckpointWarningDialog("FOR_Ambush_SwampCheckpoint", (DIALOGRESOURCE)FOR_GoblinAmbush_CheckpointGuards_895decda-32ab-b951-4af2-2b495553a5cf, (CHARACTER)S_FOR_Ambush_CheckpointGuard_000_36d897c8-bd94-4a3d-97fd-5f48fb45f952, _Player)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_CheckPointDialogue(_Player, (CHARACTER)S_FOR_Ambush_CheckpointGuard_001_ebbed723-7ed1-40e0-979a-289918a25c68)
+AND
+GetFlag(FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, NULL_00000000-0000-0000-0000-000000000000, 0)
+AND
+QRY_StartCheckpointWarningDialog("FOR_Ambush_SwampCheckpoint", (DIALOGRESOURCE)FOR_GoblinAmbush_CheckpointGuardsWarning_2ec3d474-387f-9ef3-ab3d-4b654cda8d2c, (CHARACTER)S_FOR_Ambush_CheckpointGuard_001_ebbed723-7ed1-40e0-979a-289918a25c68, _Player)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139)
+THEN
+PROC_FOR_Village_PacifyGoblins();
+
+PROC
+PROC_FOR_Village_PacifyGoblins()
+THEN
+DB_FOR_Village_AmbushCleared(1);
+PROC_SetRelationMutual((FACTION)Hero_a1542c81-6895-929e-4522-10ce218bb360, (FACTION)ACT1_FOR_ApothecaryGoblins_ffc86327-7a24-426d-a7de-84d7ad51deef, 50);
+PROC_CancelAmbush((TRIGGER)S_FOR_Ambush_InitiateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97);
+DB_FOR_Village_CheckpointResolved(1);
+
+PROC
+PROC_FOR_Village_PacifyGoblins()
+AND
+DB_FOR_VillageAmbushers(_Goblin)
+AND
+NOT DB_PermaDefeated(_Goblin)
+THEN
+PROC_PeacefulResolve(_Goblin);
+//END_REGION
+
+//REGION Village - Goblin Ambush
+IF
+DB_FOR_VillageAmbushers(_Ambusher)
+THEN
+DB_AmbushTrigger_Ambusher((TRIGGER)S_FOR_Ambush_InitateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97, _Ambusher, 1);
+DB_Dialogs(_Ambusher, (DIALOGRESOURCE)FOR_Village_Trespassing_0de4c26f-9744-2212-ec0b-979c176687f9);
+
+PROC
+PROC_FOR_Village_PacifyGoblins()
+AND
+DB_FOR_VillageAmbushers(_Ambusher)
+THEN
+PROC_RemoveDialog(_Ambusher);
+
+PROC
+PROC_FOR_Village_PacifyGoblins()
+THEN
+DB_Dialogs(S_FOR_Ambush_Goblins_Caster_01_826000b8-c6cd-4018-af55-31ee7e6a4668, (DIALOGRESOURCE)FOR_GoblinAmbush_ff0fbb34-72a7-4816-2a1c-bd13e5a246e7);
+DB_Dialogs(S_FOR_Ambush_Goblins_Caster_02_1f3d846e-f26c-49d4-b917-d9f43fd137b4, (DIALOGRESOURCE)FOR_GoblinAmbush_Warning_97949d0e-dc28-54e2-42f5-ee8ff33a78bf);
+DB_Dialogs(S_FOR_Ambush_Goblins_Ranger_01_8e553c24-5100-4939-9041-4dec8499d553,(DIALOGRESOURCE)GEB_AD_CantTalkNow_ae991ba1-8a2e-9cc7-b4c2-379af7f058c5);
+DB_Dialogs(S_FOR_Ambush_Goblins_Ranger_02_70a50383-e377-45c0-a793-b44d36d2df55,(DIALOGRESOURCE)GEB_AD_CantTalkNow_ae991ba1-8a2e-9cc7-b4c2-379af7f058c5);
+DB_Dialogs(S_FOR_Ambush_Goblins_Ranger_03_e3d96e92-39fa-4ec1-9503-bd00f40285aa,(DIALOGRESOURCE)GEB_AD_CantTalkNow_ae991ba1-8a2e-9cc7-b4c2-379af7f058c5);
+
+IF
+DB_FOR_VillageAmbushers_CancelAmbushTriggers(_Trigger)
+THEN
+PROC_TriggerRegisterForParty(_Trigger);
+
+IF
+DB_PermaDefeated(_Ambusher)
+AND
+DB_FOR_VillageAmbushers((CHARACTER)_Ambusher)
+THEN
+NOT DB_FOR_VillageAmbushers(_Ambusher);
+NOT DB_AmbushTrigger_Ambusher((TRIGGER)S_FOR_Ambush_InitateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97, _Ambusher, 1);
+
+// If the player gets onto the roof then cancel the ambush
+// This allows for the ambushers to react to trespass disturbances
+// Lead ambusher will still perform the FOR_GoblinAmbush dialog using spot events
+IF
+DB_InRegion(_Player, _Trigger)
+AND
+DB_FOR_VillageAmbushers_CancelAmbushTriggers(_Trigger)
+AND
+DB_PartyMembers(_Player)
+THEN
+PROC_CancelAmbush((TRIGGER)S_FOR_Ambush_InitiateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97);
+
+IF
+TurnStarted(S_FOR_Ambush_Goblins_Caster_01_826000b8-c6cd-4018-af55-31ee7e6a4668)
+AND
+QRY_OnlyOnce("FOR_Ambush_LeaderCombatAD")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)FOR_GoblinAmbush_AD_StartedCombat_3baae255-3804-3645-ed6a-c3a5231be9d4, (CHARACTER)S_FOR_Ambush_Goblins_Caster_01_826000b8-c6cd-4018-af55-31ee7e6a4668);
+
+IF
+DialogEnded((DIALOGRESOURCE)FOR_Village_Trespassing_0de4c26f-9744-2212-ec0b-979c176687f9, _ID)
+AND
+DB_DialogNPCs(_ID,_Ambusher,1)
+AND
+DB_FOR_VillageAmbushers((CHARACTER)_Ambusher)
+AND
+DB_PlayerTrespassing((CHARACTER)_Player, _CrimeID, (TRIGGER)S_FOR_Ambush_TresspassTrigger_6c775943-0b96-4d1b-8ee0-68c362cbaa0b)
+AND
+CrimeStopIgnoringCriminal(_CrimeID, _Player, 1)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_DialogFlagSetup((DIALOGRESOURCE)FOR_Village_Trespassing_0de4c26f-9744-2212-ec0b-979c176687f9, _Ambusher, _Player)
+AND
+DB_FOR_VillageAmbushers((CHARACTER)_Ambusher)
+AND
+DB_PlayerTrespassing((CHARACTER)_Player, _CrimeID, (TRIGGER)S_FOR_Ambush_TresspassTrigger_6c775943-0b96-4d1b-8ee0-68c362cbaa0b)
+AND
+CrimeIgnoreCriminal(_CrimeID, _Player, 1)
+THEN
+DB_NOOP(1);
+
+// If player reveals the ambush we need to set a flag for the dialog
+PROC
+PROC_RevealAmbush((TRIGGER)S_FOR_Ambush_PerceptionTrigger_837f941a-db5b-49a2-b34d-f62e555c5acd, _Player)
+THEN
+SetFlag((FLAG)FOR_Ambush_Knows_GoblinAmbushers_2c15e023-a97e-0318-7222-4be955c932b5, _Player, 0);
+
+// If the player enters the ambush area from inside the village immediately start combat
+PROC
+PROC_LaunchAmbush((TRIGGER)S_FOR_Ambush_InitiateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97, _Player)
+AND
+QRY_OnlyOnce_Reset("FOR_GoblinAmbush_StartHostileAmbush")
+AND
+DB_InRegion(_Player, (TRIGGER)S_FOR_Ambush_ImmediateCombatTrigger_3773cc15-3b15-4d18-8929-f3e22acc7ff4)
+AND
+QRY_OnlyOnce("FOR_GoblinAmbush_StartHostileAmbush")
+THEN
+PROC_GoblinAmbush_StartCombat(_Player);
+
+PROC
+PROC_LaunchAmbush((TRIGGER)S_FOR_Ambush_InitiateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97, _Player)
+AND
+NOT DB_InRegion(_Player, (TRIGGER)S_FOR_Ambush_ImmediateCombatTrigger_3773cc15-3b15-4d18-8929-f3e22acc7ff4)
+AND
+DB_PartyMembers(_Player)
+AND
+NOT QRY_StartDialogCustomWithAvailableSpeakerInRange_TryTargetFirst((DIALOGRESOURCE)FOR_GoblinAmbush_ff0fbb34-72a7-4816-2a1c-bd13e5a246e7, (CHARACTER)S_FOR_Ambush_Goblins_Caster_01_826000b8-c6cd-4018-af55-31ee7e6a4668, _Player, 25.0, 1, 1, 1, 0)
+THEN
+PROC_GoblinAmbush_StartCombat(_Player);
+
+// If the ambush is cancelled allow the lead ambusher to spot the player to start the dialog as normal
+PROC
+PROC_CancelAmbush((TRIGGER)S_FOR_Ambush_InitiateTrigger_e2f45a27-9ead-4bea-8ecb-f8dcd38fec97)
+AND
+DB_FOR_VillageAmbushers(_Ambusher)
+THEN
+DB_SpotPlayers(_Ambusher, "FOR_Ambush_LookoutForPlayer", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_SpotTrigger_ManualRegistering((TRIGGER)S_FOR_Ambush_AmbushDialogTrigger_9b610296-b036-469e-9386-89668ac1be46);
+DB_SpotPlayers_SpotTrigger(_Ambusher, "FOR_Ambush_LookoutForPlayer", (TRIGGER)S_FOR_Ambush_AmbushDialogTrigger_9b610296-b036-469e-9386-89668ac1be46);
+
+// If ambush was cancelled spot players while they are in the Ambush trigger. But only if they haven't already been pacified.
+PROC
+PROC_SpotPlayers_Spotted(_Ambusher, "FOR_Ambush_LookoutForPlayer", _Player)
+AND
+DB_FOR_VillageAmbushers(_Ambusher)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("FOR_GoblinAmbush_StartSpotDialog")
+AND
+NOT DB_FOR_Village_AmbushCleared(1)
+AND
+NOT QRY_StartDialogCustomWithAvailableSpeakerInRange_TryTargetFirst((DIALOGRESOURCE)FOR_GoblinAmbush_ff0fbb34-72a7-4816-2a1c-bd13e5a246e7, (CHARACTER)S_FOR_Ambush_Goblins_Caster_01_826000b8-c6cd-4018-af55-31ee7e6a4668, _Player, 25.0, 1, 1, 1, 0)
+THEN
+PROC_GoblinAmbush_StartCombat(_Player);
+
+PROC
+PROC_GoblinAmbush_StartCombat((CHARACTER)_Player)
+THEN
+PROC_SetRelationMutual((FACTION)ACT1_FOR_AmbushGoblins_e1234697-59a4-4427-af77-695229f11622, (FACTION)Hero_a1542c81-6895-929e-4522-10ce218bb360, 0);
+
+PROC
+PROC_GoblinAmbush_StartCombat((CHARACTER)_Player)
+AND
+DB_FOR_VillageAmbushers(_Ambusher)
+THEN
+PROC_EnterCombat(_Ambusher, _Player);
+//END_REGION
+
+//REGION Owlbear Cave - Selune Stash
+
+IF
+DB_InRegion(_Player, (TRIGGER)S_FOR_SeluneStash_NoticeShrineTrigger_d5c8dda2-590d-4199-a06e-d12cf285ac2b)
+AND
+IsTagged(_Player, (TAG)SELUNE_4533d292-5b1f-43c7-ad44-6bc7db1000ca, 1)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_SeluneStash_State_KnowShrineCheckSuccess_20782b30-1471-9548-3c1e-458d02d16fbb)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)FOR_SeluneStash_State_KnowShrineCheckSuccess_20782b30-1471-9548-3c1e-458d02d16fbb);
+PROC_TryStartAD((DIALOGRESOURCE)FOR_SeluneStash_PAD_NoticeShrine_09eb5576-754b-a6ef-fea0-ca83704370de, _Player);
+
+IF
+DB_InRegion(_Player, (TRIGGER)S_FOR_SeluneStash_NoticeShrineTrigger_d5c8dda2-590d-4199-a06e-d12cf285ac2b)
+AND
+IsTagged(_Player, (TAG)SHAR_486e4a27-e6f9-40a5-9dd1-108a1d0f60eb, 1)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_SeluneStash_State_KnowShrineCheckSuccess_20782b30-1471-9548-3c1e-458d02d16fbb)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)FOR_SeluneStash_State_KnowShrineCheckSuccess_20782b30-1471-9548-3c1e-458d02d16fbb);
+PROC_TryStartAD((DIALOGRESOURCE)FOR_SeluneStash_PAD_NoticeShrine_09eb5576-754b-a6ef-fea0-ca83704370de, _Player);
+
+IF
+DB_InRegion(_Player, (TRIGGER)S_FOR_SeluneStash_NoticeShrineTrigger_d5c8dda2-590d-4199-a06e-d12cf285ac2b)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_SeluneStash_State_KnowShrineCheckSuccess_20782b30-1471-9548-3c1e-458d02d16fbb)
+AND
+IsTagged(_Player, (TAG)SHAR_486e4a27-e6f9-40a5-9dd1-108a1d0f60eb, 0)
+AND
+IsTagged(_Player, (TAG)SELUNE_4533d292-5b1f-43c7-ad44-6bc7db1000ca, 0)
+THEN
+PROC_KnowledgeCheck_MP(_Player, "FOR_SeluneStash_NoticeShrineTrigger", (TRIGGER)S_FOR_SeluneStash_NoticeShrineTrigger_d5c8dda2-590d-4199-a06e-d12cf285ac2b, "Insight", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)FOR_SeluneStash_PAD_NoticeShrine_09eb5576-754b-a6ef-fea0-ca83704370de, (FLAG)FOR_SeluneStash_State_KnowShrineCheckSuccess_20782b30-1471-9548-3c1e-458d02d16fbb);
+
+IF
+DB_GlobalFlag((FLAG)FOR_SeluneStash_State_KnowShrineCheckSuccess_20782b30-1471-9548-3c1e-458d02d16fbb)
+THEN
+PROC_TriggerUnregisterForPlayers((TRIGGER)S_FOR_SeluneStash_NoticeShrineTrigger_d5c8dda2-590d-4199-a06e-d12cf285ac2b);
+
+// Event comes from Anubis: FOR_SeluneStash_ArcanaCheck
+IF
+DualEntityEvent(_Player, _Item, "FOR_SeluneStash_ChestSeen")
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+PROC_KnowledgeCheck(_Player, "FOR_SeluneStash_ChestArcanaCheck", _Item, "Insight", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)FOR_SeluneStash_PAD_NoticeStashSeal_9bc4cccb-4477-bba9-6c51-eb78a0bbe915, (FLAG)FOR_SeluneStash_State_StashSealCheckSuccess_3e06bfb5-0cd0-4a17-86b3-81e4e44cc8f5);
+
+IF
+AddedTo(S_FOR_SeluneStash_PrayerSheet_41d8320f-0720-44d3-89d0-bb9cd5f43d9f, _Player, _)
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+PROC_KnowledgeCheck(_Player, "FOR_SeluneStash_PrayerSheet", (ITEM)S_FOR_SeluneStash_PrayerSheet_41d8320f-0720-44d3-89d0-bb9cd5f43d9f, "Insight", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)FOR_SeluneStash_PAD_PickupPrayerSheet_51f1b559-2dca-620e-965a-de86f4fcacf3, (FLAG)FOR_SeluneStash_State_PrayerSheetCheckSuccess_7efd70d9-fb9b-49c4-ac3b-c93b522c288f);
+
+IF
+GameBookInterfaceClosed(S_FOR_SeluneStash_PrayerSheet_41d8320f-0720-44d3-89d0-bb9cd5f43d9f, _Player)
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+PROC_KnowledgeCheck(_Player, "FOR_SeluneStash_PrayerSheet", (ITEM)S_FOR_SeluneStash_PrayerSheet_41d8320f-0720-44d3-89d0-bb9cd5f43d9f, "Insight", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, (DIALOGRESOURCE)FOR_SeluneStash_PAD_PickupPrayerSheet_51f1b559-2dca-620e-965a-de86f4fcacf3, (FLAG)FOR_SeluneStash_State_PrayerSheetCheckSuccess_7efd70d9-fb9b-49c4-ac3b-c93b522c288f);
+
+IF
+AttackedBy(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, _AttackerOwner, _Attacker, _, _, _, _)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+AND
+QRY_GetCharacterOwnerIfItemSummon(_AttackerOwner,_Attacker)
+AND
+DB_QRYRTN_GetCharacterOwnerIfItemSummon(_ResolvedAttacker)
+THEN
+PROC_FOR_SeluneStash_TriggerTrap(_ResolvedAttacker);
+
+IF
+DestroyedBy(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, _Destroyer, _, _)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+THEN
+PROC_FOR_SeluneStash_TriggerTrap(_Destroyer);
+
+IF
+AddedTo(_Object, S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, _)
+AND
+// TODO: add character support once GetInventoryOwner supports GUIDSTRING as first argument
+QRY_IsExistingItem(_Object,1)
+THEN
+PROC_FOR_SeluneStash_PlayerMessedWithContents((ITEM)_Object);
+
+IF
+RemovedFrom(_Object, S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4)
+AND
+// TODO: add character support once GetInventoryOwner supports GUIDSTRING as first argument
+QRY_IsExistingItem(_Object,1)
+THEN
+PROC_FOR_SeluneStash_PlayerMessedWithContents((ITEM)_Object);
+
+// If the player loots the chest using Shadowheart as a companion instantly lower approval
+IF
+RemovedFrom(_Object, S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4)
+AND
+// TODO: add character support once GetInventoryOwner supports GUIDSTRING as first argument
+QRY_IsExistingItem(_Object,1)
+THEN
+PROC_FOR_SeluneStash_ShadowheartTakeObject((ITEM)_Object);
+
+IF
+RollResult("FOR_SeluneStash_StealFromStash", _Player, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, 0, _, _)
+AND
+DB_Players(_Player)
+AND
+ChangeApprovalRating((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Player, 1, -2, _)
+THEN
+DB_NOOP(1);
+
+IF
+RollResult("FOR_SeluneStash_StealFromStash", _Player, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, 2, _, _)
+AND
+QRY_OnlyOnce_Reset("FOR_SeluneStash_StoleItems")
+THEN
+DB_NOOP(1);
+
+IF
+UseStarted(_Player, S_FOR_SeluneStash_PrayerSheet_41d8320f-0720-44d3-89d0-bb9cd5f43d9f)
+AND
+DB_Players(_Player)
+AND
+QRY_FOR_SeluneStash_NearChest(_Player)
+AND
+IsTagged(_Player, (TAG)SHAR_486e4a27-e6f9-40a5-9dd1-108a1d0f60eb, 0)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+THEN
+SetFlag((FLAG)FOR_SeluneStash_State_SuccessfullyReadPrayer_db939d8c-b517-4c22-8107-45cd4b3853d0, _Player, 0);
+
+IF
+GameBookInterfaceClosed(S_FOR_SeluneStash_PrayerSheet_41d8320f-0720-44d3-89d0-bb9cd5f43d9f, _Player)
+AND
+QRY_FOR_SeluneStash_NearChest(_Player)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)FOR_SeluneStash_PAD_OpenStashWithPrayer_1fc6c501-11f6-b109-feb0-7ae548ee3b42, _Player);
+
+IF
+GameBookInterfaceClosed(S_FOR_SeluneStash_PrayerSheet_41d8320f-0720-44d3-89d0-bb9cd5f43d9f, _Player)
+AND
+GetFlag((FLAG)FOR_SeluneStash_State_SuccessfullyReadPrayer_db939d8c-b517-4c22-8107-45cd4b3853d0, _Player, 1)
+AND
+QRY_FOR_SeluneStash_NearChest(_Player)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+THEN
+RemoveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL");
+
+IF
+StatusRemoved(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", _, _)
+AND
+DB_Players(_Player)
+THEN
+QuestUpdate(_Player, "HIDDEN_WLD_Boosters", "FOR_SeluneStash_Opened");
+
+PROC
+PROC_BlockUseOfItem(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 0)
+AND
+NOT DB_OnlyOnce("FOR_SeluneStashOM_MomentStarted")
+AND
+QRY_FOR_SeluneStash_TryPartyMoment(_Character)
+THEN
+DB_CustomUseItemResponse(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, 0);
+PROC_StartPartyOriginMoment((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (DIALOGRESOURCE)FOR_Owlbear_OM_Shadowheart_COM_6c7d91e2-3a91-3aa3-ca52-b1d44edd804b);
+
+QRY
+QRY_FOR_SeluneStash_TryPartyMoment((CHARACTER)_Character)
+AND
+IsInPartyWith(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Character, 1)
+AND
+GetDistanceTo(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, _Dist)
+AND
+_Dist < 12.0
+AND
+QRY_OnlyOnce("FOR_SeluneStashOM_MomentStarted")
+THEN
+DB_NOOP(1);
+
+IF
+UseStarted(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4)
+AND
+DB_Players(_Character)
+AND
+QRY_OnlyOnce("FOR_SeluneStashOM_MomentStarted")
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_BlockUseOfItem(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+AND
+QRY_FOR_SeluneStash_CanRemoveSeal(_Character)
+THEN
+DB_CustomUseItemResponse(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, 0);
+RemoveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL");
+
+PROC
+PROC_BlockUseOfItem(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+AND
+NOT QRY_FOR_SeluneStash_CanRemoveSeal(_Character)
+THEN
+DB_CustomUseItemResponse(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, 0);
+PROC_FOR_SeluneStash_TriggerTrap(_Character);
+
+PROC
+PROC_BlockPickupOfItem(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+AND
+NOT QRY_FOR_SeluneStash_CanRemoveSeal(_Character)
+THEN
+DB_CustomPickupItemResponse(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, 0);
+PROC_FOR_SeluneStash_TriggerTrap(_Character);
+
+PROC
+PROC_BlockMoveOfItem(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4)
+AND
+HasActiveStatus(S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, "FOR_SELUNESTASH_CHESTSEAL", 1)
+AND
+NOT QRY_FOR_SeluneStash_CanRemoveSeal(_Character)
+THEN
+DB_CustomMoveItemResponse(_Character, (ITEM)S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, 0);
+PROC_FOR_SeluneStash_TriggerTrap(_Character);
+
+PROC
+PROC_FOR_SeluneStash_TriggerTrap((GUIDSTRING)_Target)
+THEN
+CreateExplosion(_Target, "Projectile_FOR_SeluneStash_ChestTrap", 1, S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4);
+
+PROC
+PROC_FOR_SeluneStash_TriggerTrap(_Target)
+AND
+DB_Players((CHARACTER)_Target)
+AND
+QRY_OnlyOnce("FOR_SeuluneStash_TriedToOpenChest")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)FOR_SeluneStash_PAD_TriggeredTrap_1b31dda4-0b1e-4d4d-14af-8aad38b62b09, _Target);
+
+PROC
+PROC_FOR_SeluneStash_PlayerMessedWithContents((ITEM)_Item)
+AND
+NOT DB_Avatars((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+NOT GetInventoryOwner(_Item, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+GetInventoryOwner(_Item, _Player)
+AND
+DB_Players((CHARACTER)_Player)
+AND
+IsInPartyWith(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Player, 1)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_SeluneStash_State_ConvincedShadowheart_b507bd98-09bc-01b6-50e0-711f4378d8c4)
+AND
+QRY_OnlyOnce("FOR_SeluneStash_StoleItems")
+THEN
+RequestActiveRoll(_Player, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, "SleightOfHand", (DIFFICULTYCLASS)DC_Legacy_15_bddbb9b8-a242-4c3e-a2eb-3fd274c0c539, "FOR_SeluneStash_StealFromStash");
+
+PROC
+PROC_FOR_SeluneStash_ShadowheartTakeObject((ITEM)_Object)
+AND
+GetInventoryOwner(_Object, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+NOT DB_Avatars((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+QRY_GetBestAvatarForCompanion((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+DB_QRYRTN_GetBestAvatarForCompanion((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679,_Avatar)
+AND
+QRY_OnlyOnce("FOR_SeluneStash_StoleItems")
+AND
+ChangeApprovalRating((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Avatar, 1, -2, _)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_FOR_SeluneStash_CanRemoveSeal((CHARACTER)_Looter)
+AND
+IsTagged(_Looter, (TAG)SELUNE_4533d292-5b1f-43c7-ad44-6bc7db1000ca, 1)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)FOR_SeluneStash_PAD_OpenStashAsSelunite_ceaf521d-9053-824f-c0b2-2bcb6e734b94, _Looter);
+
+QRY
+QRY_FOR_SeluneStash_NearChest((CHARACTER)_Player)
+AND
+GetDistanceTo(_Player, S_FOR_SeluneStash_Chest_3121a64d-b19f-43eb-aade-b641429366c4, _Dist)
+AND
+_Dist < 6.0
+THEN
+DB_NOOP(1);
+
+// If a Selune worshipper picks up the prayer sheet, automatically pass the test
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage(_Player, (ITEM)S_FOR_SeluneStash_PrayerSheet_41d8320f-0720-44d3-89d0-bb9cd5f43d9f, _)
+AND
+IsTagged(_Player, (TAG)SELUNE_4533d292-5b1f-43c7-ad44-6bc7db1000ca, 1)
+THEN
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(2);
+
+//END_REGION
+
+//REGION Debug
+IF
+TextEvent("PacifyMoonhaven")
+THEN
+SetFlag(FOR_GoblinAmbush_GoblinsPacified_1268cab6-b501-bb0e-f9b0-f8fe7b6d7139, NULL_00000000-0000-0000-0000-000000000000, 0);
+PROC_FOR_Village_PacifyGoblins();
+//END_REGION
+
+//REGION Hole in the tree
+PROC
+PROC_HiddenPerceptionCheckSucceeded(_, _Player, (GUIDSTRING)S_FOR_TreeHole_bf6ac50c-ba1f-4798-b895-4680cc156c5d)
+AND
+DB_Players(_Player)
+THEN
+QuestUpdate((CHARACTER)_Player, "HIDDEN_WLD_Boosters", "FOR_Backpack_SucceededCheck");
+
+//END_REGION
+
+//REGION Marked Post
+
+
+//END_REGION
+
+//REGION Banters
+
+IF
+DB_FOR_Village_AmbushCleared(1)
+AND
+NOT DB_DEN_AdventurersQuest_AdventurersOnRoad(1)
+AND
+NOT DB_OneShot_VoiceBarkTrigger(S_DEN_AtCorpsesVBArea_0f297a62-e5e3-4970-b26f-2d33fcdf3029, _, _)
+THEN
+PROC_RegisterWorldGossipTrigger(S_PartyBanterTrigger_FOR_ForestBridgeCleared_ae5e7879-d579-419b-8317-fe2e7a32457a);
+
+IF
+DB_DEN_AdventurersQuest_AdventurersOnRoad(1)
+THEN
+PROC_UnregisterWorldGossipTrigger(S_PartyBanterTrigger_FOR_ForestBridgeCleared_ae5e7879-d579-419b-8317-fe2e7a32457a);
+
+IF
+DB_FOR_Village_CheckpointResolved(1)
+THEN
+PROC_RegisterWorldGossipTrigger(S_PartyBanterTrigger_FOR_VillageSouth_4f2a2ba8-a44c-45d6-ba69-18cbb67a71b1);
+
+//END_REGION
+
+//REGION Zhent Cache
+IF
+EntityEvent(S_FOR_ZhentCover_4ac2bc10-833e-47c5-9135-21e0dbd76de0,"StoryReveal")
+THEN
+SetOnStage(S_FOR_ZhentCache_0d88a72b-e7b9-4609-8f56-ccb4a15e61bd,1);
+SetCanInteract(S_FOR_ZhentCache_0d88a72b-e7b9-4609-8f56-ccb4a15e61bd,0);
+
+IF
+Moved(S_FOR_ZhentCover_4ac2bc10-833e-47c5-9135-21e0dbd76de0)
+THEN
+SetCanInteract(S_FOR_ZhentCache_0d88a72b-e7b9-4609-8f56-ccb4a15e61bd,1);
+
+IF
+Opened(S_FOR_ZhentCache_0d88a72b-e7b9-4609-8f56-ccb4a15e61bd)
+AND
+QRY_OnlyOnce("PLA_ZhentCache_SucceededCheck")
+THEN
+QuestUpdate("HIDDEN_WLD_Boosters", "PLA_ZhentCache_SucceededCheck");
+//END_REGION
+
+//REGION Village Hole
+IF
+UseStarted(_Char,S_FOR_HoleBook_da2a1502-399f-440d-93be-db6930231525)
+AND
+DB_Players(_Char)
+AND
+QRY_OnlyOnce("FOR_VillageHole_VB")
+THEN
+StartVoiceBark(FOR_VillageHole_VB_edc479e3-6b03-3e6b-a3d3-8e7b15929149,_Char);
+
+
+//END_REGION
+
+//REGION Knife In Meat
+PROC
+PROC_BlockUseOfItem(_Player, _DialogStarter)
+AND
+DB_FOR_KnifeInMeat_DialogStarters(_DialogStarter)
+AND
+DB_Players(_Player)
+THEN
+DB_CustomUseItemResponse(_Player, _DialogStarter, 0);
+PROC_FOR_KnifeInMeat_StartDiaog(_Player);
+
+PROC
+PROC_FOR_KnifeInMeat_StartDiaog((CHARACTER)_Player)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)FOR_KnifeInMeat_7874d8bb-10ee-2f6e-1554-08a0aefc7c73,S_FOR_KnifeInMeatMeat_aa7495b9-088d-40e9-bffe-0a008ff6f9aa,_Player)
+THEN
+DB_NOOP(1);
+
+IF
+DestroyedBy(S_FOR_KnifeInMeatMeat_aa7495b9-088d-40e9-bffe-0a008ff6f9aa, _, _, _)
+AND
+NOT DB_GlobalFlag(FOR_KnifeInMeat_State_KnifeBroken_5e718932-f772-c0cb-5fdf-50435d32478c)
+AND
+NOT DB_GlobalFlag((FLAG)FOR_KnifeInMeat_State_KnifeTaken_606820f4-dc66-8733-c9ef-febc8f7e529a)
+THEN
+SetFlag(FOR_KnifeInMeat_State_KnifeBroken_5e718932-f772-c0cb-5fdf-50435d32478c);
+
+IF
+DestroyedBy(S_FOR_KnifeInMeatMeat_aa7495b9-088d-40e9-bffe-0a008ff6f9aa, _, _, _)
+THEN
+SetCanInteract(S_FOR_KnifeInMeat_BrokenHandle_f7fc29c2-13e4-489c-a212-afd7a5532a3c, 0);
+SetCanInteract(S_FOR_KnifeInMeat_BrokenTip_3fd27f03-9748-449b-a303-37aa6ebda5ef, 0);
+
+IF
+FlagSet(FOR_KnifeInMeat_State_KnifeBroken_5e718932-f772-c0cb-5fdf-50435d32478c, _, _)
+THEN
+PROC_SetOnStage(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7, 0);
+PROC_SetOnStage(S_FOR_KnifeInMeat_BrokenHandle_f7fc29c2-13e4-489c-a212-afd7a5532a3c, 1);
+PROC_SetOnStage(S_FOR_KnifeInMeat_BrokenTip_3fd27f03-9748-449b-a303-37aa6ebda5ef, 1);
+
+IF
+FlagSet(FOR_KnifeInMeat_State_KnifeTaken_606820f4-dc66-8733-c9ef-febc8f7e529a, _, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, 1)
+THEN
+NOT DB_FOR_KnifeInMeat_DialogStarters(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7);
+QuestUpdate("HIDDEN_WLD_Boosters", "FOR_KnifeMeat_SucceededCheck");
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(FOR_KnifeInMeat_State_KnifeTaken_606820f4-dc66-8733-c9ef-febc8f7e529a, _, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, 1)
+THEN
+ClearTag((ITEM)S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7,ITEMINTERACTION_UNLOCKED_6ca541e1-b5d9-4cfa-b745-61a5483052d7); //disables use action
+SetCanPickUp(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7, 1);
+SetMovable(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7, 1);
+DB_FOR_KnifeInMeat_ToInventoryTimer(_Player);
+RealtimeObjectTimerLaunch(_Player,"FOR_KnifeInMeat_ToInventory",1000);
+
+IF
+AddedTo(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7,_,_)
+AND
+DB_FOR_KnifeInMeat_ToInventoryTimer(_Player)
+THEN
+ObjectTimerCancel(_Player,"FOR_KnifeInMeat_ToInventory");
+NOT DB_FOR_KnifeInMeat_ToInventoryTimer(_Player);
+
+IF
+ObjectTimerFinished(_Player,"FOR_KnifeInMeat_ToInventory")
+THEN
+NOT DB_FOR_KnifeInMeat_ToInventoryTimer(_Player);
+ToInventory(S_FOR_KnifeInMeat_e09e5e04-0e27-4faa-b4fa-3f7f6c1603d7, _Player, 1, 1, 1);
+
+//END_REGION
+
+//REGION Sleeping bugbear
+IF
+EnteredCombat(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32, _)
+AND
+HasActiveStatus(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32, "FOR_SLEEPINGBUGBEAR_SLEEPING", 1)
+THEN
+DB_FOR_SleepingBugbear_RemoveSleepingStatus(1);
+
+IF
+TurnStarted(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32)
+AND
+DB_FOR_SleepingBugbear_RemoveSleepingStatus(1)
+THEN
+NOT DB_FOR_SleepingBugbear_RemoveSleepingStatus(1);
+RemoveStatus(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32, "FOR_SLEEPINGBUGBEAR_SLEEPING");
+
+IF
+LeftCombat(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32, _)
+AND
+DB_FOR_SleepingBugbear_RemoveSleepingStatus(1)
+THEN
+NOT DB_FOR_SleepingBugbear_RemoveSleepingStatus(1);
+
+IF
+StatusApplied(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32, _Status, _, _)
+AND
+_Status != "FOR_SLEEPINGBUGBEAR_SLEEPING"
+AND
+IsStatusFromGroup(_Status, "SG_Unconscious", 1)
+AND
+HasActiveStatus(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32, "FOR_SLEEPINGBUGBEAR_SLEEPING", 1)
+THEN
+RemoveStatus(S_FOR_SleepingBugbear_473994b1-617b-4cdb-b087-b8429de8df32, "FOR_SLEEPINGBUGBEAR_SLEEPING");
+//END_REGION Sleeping bugbear
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act1"

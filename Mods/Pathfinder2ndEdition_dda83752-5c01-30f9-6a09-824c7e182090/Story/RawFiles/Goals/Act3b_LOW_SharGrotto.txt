@@ -1,0 +1,2036 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Sharran sentry
+
+DB_Dialogs((CHARACTER)S_LOW_GrottoSentry_90c54fce-9a57-4ff5-9d36-0363ef90c5f1, (DIALOGRESOURCE)LOW_SharGrotto_GrottoSentry_223eba2a-fa66-36d3-edb6-23a7ec8bb323);
+
+DB_TrespassTrigger((TRIGGER)S_LOW_InnerGrottoTrespass_73a192ef-e53d-4944-890c-c4210ffa7f96,(TRIGGER)NULL_00000000-0000-0000-0000-000000000000, "LOW_SharGrotto_Trespass");
+
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_Event_TrespasserSpotted_ba8392e8-fa2f-4ce8-966f-7bfbf101e39c, (DIALOGRESOURCE)LOW_NGB_SharGrotto_Trespassing_fac07fbe-0d24-e220-7b2b-35932fa5c844);
+DB_GlobalFlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_PromisedBringShadowheart_ba85fccc-c09b-41c3-82ec-69693db59204, (DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_NoShadowheart_78e68cb8-fc4e-fa55-c4a9-5f7224b86fe4);
+
+//REGION Checkpoints
+
+DB_CheckPoint(
+(CHARACTER)S_LOW_GrottoCheckpointGuard_000_4502bf48-a7fc-4708-94ef-52bfd8285c6c, 
+(CHARACTER)S_LOW_GrottoCheckpointGuard_001_1effcc57-318d-4d42-873d-7550a399a40b, 
+(TRIGGER)S_LOW_GrottoHallRight_PrimarySpotTrigger_977ce7a1-0c00-45c2-b05d-303b4f6fcb3f, 
+(TRIGGER)S_LOW_GrottoHallRight_WarningSpotTrigger_e8131466-f817-410a-9de7-7bdfb0db33f6,
+(TRIGGER)S_LOW_InnerGrottoTrespass_73a192ef-e53d-4944-890c-c4210ffa7f96,
+"S_LOW_GrottoRightHallCheckpoint",
+(FLAG)LOW_SharGrotto_State_GrottoAdmitted_3a92f2ee-8d50-4557-915b-f7bae85c7546,
+"LOW_SharGrotto_Trespass");
+
+DB_CheckPoint(
+(CHARACTER)S_LOW_GrottoCheckpointGuard_002_4ed10e2c-72d0-47cd-aee3-ecd531205ac8, 
+(CHARACTER)S_LOW_GrottoCheckpointGuard_003_67f579e5-655b-41e3-b74c-37fe1abd03d4, 
+(TRIGGER)S_LOW_GrottoHallLeft_PrimarySpotTrigger_0facf95a-f84c-409a-aacb-5975905c0b0c, 
+(TRIGGER)S_LOW_GrottoHallLeft_WarningSpotTrigger_e5ec1039-429b-4a92-a8ef-ae50e74e4288,
+(TRIGGER)S_LOW_InnerGrottoTrespass_73a192ef-e53d-4944-890c-c4210ffa7f96,
+"S_LOW_GrottoLeftHallCheckpoint",
+(FLAG)LOW_SharGrotto_State_GrottoAdmitted_3a92f2ee-8d50-4557-915b-f7bae85c7546,
+"LOW_SharGrotto_Trespass");
+
+//END_REGION
+
+//END_REGION
+
+//REGION Training Hall
+
+//REGION Heartform and Fear Tags
+
+DB_LOW_SharGrotto_FearTags((FLAG)LOW_SharGrotto_State_Fear_Betrayal_a4afbf03-0e9c-4eeb-87ff-d77c98dc1f40, (TAG)ACT3_LOW_HOUSEOFGRIEF_FEAR_BETRAYAL_64c980e9-5a36-4445-bb73-be08a2cd70e6);
+DB_LOW_SharGrotto_FearTags((FLAG)LOW_SharGrotto_State_Fear_Darkness_9a37addc-52bf-4018-a4d0-43f60119ed4b, (TAG)ACT3_LOW_HOUSEOFGRIEF_FEAR_DARKNESS_2905d006-36ac-4dd2-8cfc-f6f898001a52);
+DB_LOW_SharGrotto_FearTags((FLAG)LOW_SharGrotto_State_Fear_Disease_a5df90d7-8ee9-409e-a4a6-0e1bd1950a50, (TAG)ACT3_LOW_HOUSEOFGRIEF_FEAR_DISEASE_10a6215e-1152-4550-bf6f-443f15369951);
+DB_LOW_SharGrotto_FearTags((FLAG)LOW_SharGrotto_State_Fear_Mindflayer_0fe87179-b848-4a09-afa9-9d0472bd18fb, (TAG)ACT3_LOW_HOUSEOFGRIEF_FEAR_MINDFLAYER_6aeefcd3-25b4-4d13-928f-6c13ff63d0a9);
+DB_LOW_SharGrotto_FearTags((FLAG)LOW_SharGrotto_State_Fear_Powerless_74c4b6e3-7199-4d2d-9dba-4e14ea52593e, (TAG)ACT3_LOW_HOUSEOFGRIEF_FEAR_POWERLESS_2e33a20d-0a3a-495a-83e6-aa91503d489d);
+DB_LOW_SharGrotto_FearTags((FLAG)LOW_SharGrotto_State_Fear_Spiders_d9d0a2ad-4492-430d-9221-c2c539acb833, (TAG)ACT3_LOW_HOUSEOFGRIEF_FEAR_SPIDERS_b0581c50-c2c8-4140-b793-dfaea33945da);
+
+DB_LOW_SharGrotto_HeartFormTags((FLAG)LOW_HouseOfGrief_State_HeartViolent_3e1caeae-f449-45a2-bfe2-3b95130c4282, (TAG)ACT3_LOW_HOUSEOFGRIEF_HEART_VIOLENT_71c456cd-8cc2-4eac-9425-e7e359b3eea9);
+DB_LOW_SharGrotto_HeartFormTags((FLAG)LOW_HouseOfGrief_State_HeartCraven_af6a7f33-6463-4683-bb72-3eaea2a2b2ba, (TAG)ACT3_LOW_HOUSEOFGRIEF_HEART_CRAVEN_fe684418-2454-45c1-a482-328b12f60b7a);
+DB_LOW_SharGrotto_HeartFormTags((FLAG)LOW_HouseOfGrief_State_HeartJealous_9f69fa5d-5e86-41ee-9c7c-ef873fa63bd5, (TAG)ACT3_LOW_HOUSEOFGRIEF_HEART_JEALOUS_9b15de08-d0aa-439f-bcad-e7a6201505a7);
+DB_LOW_SharGrotto_HeartFormTags((FLAG)LOW_HouseOfGrief_State_HeartYearning_c4b91748-43e0-46aa-8457-05d8ac961d43, (TAG)ACT3_LOW_HOUSEOFGRIEF_HEART_MELANCHOLY_e57c19fe-4f1c-4a44-9b5a-a9b511fdbbef);
+DB_LOW_SharGrotto_HeartFormTags((FLAG)LOW_HouseOfGrief_State_HeartPrying_d772ec00-a8bc-46d0-b499-42642b4a2155, (TAG)ACT3_LOW_HOUSEOFGRIEF_HEART_PRYING_f8d720f9-9c6b-4097-be00-1661ec059de8);
+DB_LOW_SharGrotto_HeartFormTags((FLAG)LOW_HouseOfGrief_State_HeartFalse_4c684059-73bc-48c4-85ff-dfad3c45ad75, (TAG)ACT3_LOW_HOUSEOFGRIEF_HEART_FALSE_04bfa5a1-5701-443b-90a3-cf8e596ac503);
+
+//END_REGION
+
+DB_GlobalFlagReactionAfterDialog((FLAG)LOW_SharGrotto_Event_SurrenderShadowheart_bfc7f3b7-4e58-44e1-bb58-131ee77fc0ad, (DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_COM_6ebbe983-6aa1-1f25-6fcb-ec0aed2252bd);
+
+DB_Dialogs(S_LOW_SharranTrainee_000_9a3f9520-f900-4f00-b244-546e89bebc16, (DIALOGRESOURCE)LOW_SharGrotto_Trainee_000_e5071211-1b4a-7d46-532f-d84116fbd894);
+DB_Dialogs(S_LOW_SharranTrainee_001_6869f71b-d661-4544-8211-708ec2225249, (DIALOGRESOURCE)LOW_SharGrotto_Trainee_001_6b1310ca-9c0a-9470-ac63-ca09ea9ba45a);
+DB_Dialogs(S_LOW_SharranTrainee_002_37441df0-a3fa-4709-800f-a4cfcec2448d, (DIALOGRESOURCE)LOW_SharGrotto_Trainee_002_2fbbb81c-6f4d-920d-61b9-7f2d7f06d2a9);
+DB_Dialogs(S_LOW_SharranTrainee_003_a071057d-8106-4556-b12f-92b3a7335368, (DIALOGRESOURCE)LOW_SharGrotto_Trainee_003_9f270691-91a0-a523-2f8a-ff9970d28303);
+DB_Dialogs(S_LOW_SharranTrainee_004_24498358-fc73-4e6f-bf64-466c8bb22fb8, (DIALOGRESOURCE)LOW_SharGrotto_Trainee_004_e31c0250-23d7-7211-16b8-1cad6bcfaa11);
+DB_Dialogs(S_LOW_SharranTrainee_005_d31ee394-f77e-435f-8db0-390f780f2b39, (DIALOGRESOURCE)LOW_SharGrotto_Trainee_005_7c9ae059-ac70-2647-39aa-01313bca6b7e);
+DB_Dialogs(S_LOW_SharranTrainee_006_279da1af-4002-4add-af07-95a7f249aabd, (DIALOGRESOURCE)LOW_SharGrotto_Trainee_006_638fd515-e703-8345-3d2d-839e94e4be73);
+DB_Dialogs(S_LOW_ViconiaCultist_000_73bbaf85-e889-48b8-81cd-f2350fa0802b, (DIALOGRESOURCE)LOW_SharGrotto_Cultist_000_9593a269-f51f-3af7-77ba-fc930b19a96e);
+DB_Dialogs(S_LOW_ViconiaCultist_001_5ce3f68d-a9b4-4ae0-adae-26f84e20f39a, (DIALOGRESOURCE)LOW_SharGrotto_Cultist_001_f3413a22-a25b-1d54-d57f-cb0c37cf395f);
+DB_Dialogs(S_LOW_ViconiaCultist_002_29503898-388a-4f16-a429-ef2f778ba43e, (DIALOGRESOURCE)LOW_SharGrotto_Cultist_002_f4a2d5e2-a91f-d6be-1c59-0bb9673bb051);
+DB_Dialogs(S_LOW_OptionalCultist_000_68f11a56-ab1d-432c-adbf-8d9b24083915, (DIALOGRESOURCE)LOW_SharGrotto_OptionalCultist_000_af825f1c-cb1d-b8c9-9ef6-60cd0791ef88);
+DB_Dialogs(S_LOW_OptionalCultist_001_3c3af72b-2ae5-4ea4-86f3-ed8ce9a09d30, (DIALOGRESOURCE)LOW_SharGrotto_OptionalCultist_001_ba29416b-c610-9a5b-1e9a-e958f5c6c1f8);
+DB_Dialogs(S_LOW_SwayedDarkJusticiar_0e473c58-f86f-4952-a8c8-73e8ffb348c6, (DIALOGRESOURCE)LOW_SharGrotto_SwayedJusticiar_1ec74020-6302-c13a-ffe8-909e03e1c648);
+DB_Dialogs(S_GLO_SharranInformer_b2cf2efe-ec06-48cd-8fb7-ad596d61164f, (DIALOGRESOURCE)LOW_SharGrotto_SharranInformer_30f22c6b-1842-2cbd-ba19-bdf316b18893);
+DB_Dialogs(S_LOW_LossDoorGuard_90f9cb08-1019-424e-9b97-84d6a28898f2, (DIALOGRESOURCE)LOW_SharGrotto_DoorGuard_a49eac82-b735-7d4c-bb03-58359b9fbcee);
+
+DB_GLO_CharacterCorpseDialog((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_Dead_Viconia_ba7d66a5-3c22-daba-7d5e-f747a10bc731);
+
+DB_SceneManager((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_SharranTrainee_000_9a3f9520-f900-4f00-b244-546e89bebc16, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_SharranTrainee_001_6869f71b-d661-4544-8211-708ec2225249, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_SharranTrainee_002_37441df0-a3fa-4709-800f-a4cfcec2448d, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_SharranTrainee_003_a071057d-8106-4556-b12f-92b3a7335368, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_SharranTrainee_004_24498358-fc73-4e6f-bf64-466c8bb22fb8, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_SharranTrainee_005_d31ee394-f77e-435f-8db0-390f780f2b39, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_SharranTrainee_006_279da1af-4002-4add-af07-95a7f249aabd, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_ViconiaCultist_000_73bbaf85-e889-48b8-81cd-f2350fa0802b, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_ViconiaCultist_001_5ce3f68d-a9b4-4ae0-adae-26f84e20f39a, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_ViconiaCultist_002_29503898-388a-4f16-a429-ef2f778ba43e, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_OptionalCultist_000_68f11a56-ab1d-432c-adbf-8d9b24083915, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_OptionalCultist_001_3c3af72b-2ae5-4ea4-86f3-ed8ce9a09d30, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_LOW_SwayedDarkJusticiar_0e473c58-f86f-4952-a8c8-73e8ffb348c6, "LOW_SharGrotto_SermonScene");
+DB_SceneManager((CHARACTER)S_GLO_SharranInformer_b2cf2efe-ec06-48cd-8fb7-ad596d61164f, "LOW_SharGrotto_SermonScene");
+
+DB_DropMutingStatussesDialog((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_NoShadowheart_78e68cb8-fc4e-fa55-c4a9-5f7224b86fe4);
+DB_DropMutingStatussesDialog((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_AOM_OOM_2a789ab8-8c27-ce72-9cc1-13c14c4cc491);
+DB_DropMutingStatussesDialog((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_COM_6ebbe983-6aa1-1f25-6fcb-ec0aed2252bd);
+
+//END_REGION
+
+//REGION Armoury
+
+DB_KnowledgeCheckTrigger_AD("LOW_SharGrotto_SpotHideOut", (TRIGGER)S_LOW_SecretHoleSpot_9391dc0e-2b3f-42c4-a708-35478f592a4d, "Perception", (DIFFICULTYCLASS)Act3_Medium_77cee1c4-384a-4217-b670-67db3c7add57, (DIALOGRESOURCE)LOW_SharGrotto_PAD_SpottedCaveHole_af712553-6486-7e28-4c6b-724e2025f373, (FLAG)LOW_SharGrotto_State_SucceededPerceptionCheck_c00483cc-9d13-4ad0-9c77-5b27f36bd1ea);
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_LOW_SecretHideOut_a40c8c00-b8c5-46c4-95ae-86f407199e2d, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_FoundHideOut_62043e30-4a81-62e2-c9db-ea950ce747de, "Global");
+SetCanInteract((ITEM)S_LOW_CaveObstruction_90f012d6-595c-4a76-a6dc-1d77d2a61dc7, 0);
+
+//END_REGION
+
+//REGION Dormitory
+
+DB_Dialogs(S_LOW_ShadowheartFriend_2c10ff0f-d2ff-4dcb-8f8b-c6f870044f5d, (DIALOGRESOURCE)LOW_SharGrotto_ShadowheartFriend_b35f5ec6-2635-89a2-9eee-573d2545b04e);
+DB_DefeatedStateFlag(S_LOW_ShadowheartFriend_2c10ff0f-d2ff-4dcb-8f8b-c6f870044f5d, (FLAG)LOW_ShadowheartFriend_State_Defeated_cc356b4c-c53b-4326-8eb2-ae463b670acd);
+
+PROC_DefineSingleOriginMoment((DIALOGRESOURCE)LOW_SharGrotto_ShadowheartFriend_b35f5ec6-2635-89a2-9eee-573d2545b04e,(TAG)REALLY_SHADOWHEART_642d2aee-e3df-47e3-9f47-bbcd441bb9e0,
+(DIALOGRESOURCE)LOW_SharGrotto_FamiliarFace_OM_Shadowheart_AOM_OOM_76131ed2-b08c-9014-8997-f3af9f1968ba,
+(DIALOGRESOURCE)LOW_SharGrotto_FamiliarFace_OM_Shadowheart_COM_7c87d40e-6e62-66a7-8c4a-20d5edbf37c8,
+(DIALOGRESOURCE)LOW_SharGrotto_FamiliarFace_OM_Shadowheart_AOM_OOM_76131ed2-b08c-9014-8997-f3af9f1968ba);
+
+DB_ItemDialog_PlayerVB((ITEM)S_LOW_BookShelf_31f77d0b-bc74-4394-a401-5d707bbfe91a, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_ShadowheartShelf_8cbbe9d3-af3f-3f2b-4aa2-5e45c318ca24);
+DB_ItemDialog_PlayerVB((ITEM)S_LOW_JewelryBox_3ef06131-8238-4dc2-8408-fcee993743cc, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_QueenJewels_f762316e-7723-b57f-803d-5d4ba5385d54);
+
+//END_REGION
+
+//REGION Viconia Encounter
+DB_LOW_SharGrotto_ConfrontationParticipants("Guard", (CHARACTER)S_LOW_GrottoCheckpointGuard_000_4502bf48-a7fc-4708-94ef-52bfd8285c6c);
+DB_LOW_SharGrotto_ConfrontationParticipants("Guard", (CHARACTER)S_LOW_GrottoCheckpointGuard_001_1effcc57-318d-4d42-873d-7550a399a40b);
+DB_LOW_SharGrotto_ConfrontationParticipants("Guard", (CHARACTER)S_LOW_GrottoCheckpointGuard_002_4ed10e2c-72d0-47cd-aee3-ecd531205ac8);
+DB_LOW_SharGrotto_ConfrontationParticipants("Guard", (CHARACTER)S_LOW_GrottoCheckpointGuard_003_67f579e5-655b-41e3-b74c-37fe1abd03d4);
+DB_LOW_SharGrotto_ConfrontationParticipants("Guard", (CHARACTER)S_LOW_GrottoSentry_90c54fce-9a57-4ff5-9d36-0363ef90c5f1);
+DB_LOW_SharGrotto_ConfrontationParticipants("Unaligned", (CHARACTER)S_LOW_SharranTrainee_000_9a3f9520-f900-4f00-b244-546e89bebc16);
+DB_LOW_SharGrotto_ConfrontationParticipants("Unaligned", (CHARACTER)S_LOW_SharranTrainee_001_6869f71b-d661-4544-8211-708ec2225249);
+DB_LOW_SharGrotto_ConfrontationParticipants("Unaligned", (CHARACTER)S_LOW_SharranTrainee_002_37441df0-a3fa-4709-800f-a4cfcec2448d);
+DB_LOW_SharGrotto_ConfrontationParticipants("Unaligned", (CHARACTER)S_LOW_SharranTrainee_003_a071057d-8106-4556-b12f-92b3a7335368);
+DB_LOW_SharGrotto_ConfrontationParticipants("Unaligned", (CHARACTER)S_LOW_SharranTrainee_004_24498358-fc73-4e6f-bf64-466c8bb22fb8);
+DB_LOW_SharGrotto_ConfrontationParticipants("Unaligned", (CHARACTER)S_LOW_SharranTrainee_005_d31ee394-f77e-435f-8db0-390f780f2b39);
+DB_LOW_SharGrotto_ConfrontationParticipants("Unaligned", (CHARACTER)S_LOW_SharranTrainee_006_279da1af-4002-4add-af07-95a7f249aabd);
+DB_LOW_SharGrotto_ConfrontationParticipants("Lackeys", (CHARACTER)S_LOW_ViconiaCultist_000_73bbaf85-e889-48b8-81cd-f2350fa0802b);
+DB_LOW_SharGrotto_ConfrontationParticipants("Lackeys", (CHARACTER)S_LOW_ViconiaCultist_001_5ce3f68d-a9b4-4ae0-adae-26f84e20f39a);
+DB_LOW_SharGrotto_ConfrontationParticipants("Lackeys", (CHARACTER)S_LOW_ViconiaCultist_002_29503898-388a-4f16-a429-ef2f778ba43e);
+DB_LOW_SharGrotto_ConfrontationParticipants("Lackeys", (CHARACTER)S_LOW_OptionalCultist_000_68f11a56-ab1d-432c-adbf-8d9b24083915);
+DB_LOW_SharGrotto_ConfrontationParticipants("Lackeys", (CHARACTER)S_LOW_OptionalCultist_001_3c3af72b-2ae5-4ea4-86f3-ed8ce9a09d30);
+DB_LOW_SharGrotto_ConfrontationParticipants("ShadowheartAlly", (CHARACTER)S_LOW_SwayedDarkJusticiar_0e473c58-f86f-4952-a8c8-73e8ffb348c6);
+DB_LOW_SharGrotto_ConfrontationParticipants("Informer", (CHARACTER)S_GLO_SharranInformer_b2cf2efe-ec06-48cd-8fb7-ad596d61164f);
+DB_LOW_SharGrotto_ConfrontationParticipants("Viconia", (CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313);
+
+PROC_DefineSingleOriginMoment((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_NoShadowheart_78e68cb8-fc4e-fa55-c4a9-5f7224b86fe4,(TAG)REALLY_SHADOWHEART_642d2aee-e3df-47e3-9f47-bbcd441bb9e0,
+(DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_AOM_OOM_2a789ab8-8c27-ce72-9cc1-13c14c4cc491,
+(DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_COM_6ebbe983-6aa1-1f25-6fcb-ec0aed2252bd,
+(DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_AOM_OOM_2a789ab8-8c27-ce72-9cc1-13c14c4cc491);
+DB_OriginMoment_MaxDistance((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_AOM_OOM_2a789ab8-8c27-ce72-9cc1-13c14c4cc491, 30.0);
+DB_OriginMoment_MaxDistance((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_COM_6ebbe983-6aa1-1f25-6fcb-ec0aed2252bd, 30.0);
+
+PROC_DefineSingleOriginMoment((DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_NoShadowheart_6c6f05fc-391a-40f8-c7c0-68bd37dd1e09,(TAG)REALLY_SHADOWHEART_642d2aee-e3df-47e3-9f47-bbcd441bb9e0,
+(DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_OM_Shadowheart_AOM_OOM_a13d9a9f-6c85-a18a-cfef-8889c0e19e34,
+(DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_OM_Shadowheart_COM_03382bb9-9c85-28fd-4c24-9069e44a0807,
+(DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_OM_Shadowheart_AOM_OOM_a13d9a9f-6c85-a18a-cfef-8889c0e19e34);
+
+DB_PreventKnockedOutPermaDefeated(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313);
+DB_KeepDialogsOnDeath(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313);
+DB_Dialogs(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_NoShadowheart_78e68cb8-fc4e-fa55-c4a9-5f7224b86fe4);
+DB_SpotPlayers((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_ViconiaSpot", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_IncludeSummons((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_ViconiaSpot");
+DB_SpotPlayers_IncludeWildshapedPlayers((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_ViconiaSpot");
+DB_SpotPlayers_TargetIgnoreCantTalk((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_ViconiaSpot");
+
+DB_LOW_SharGrotto_CultistSwayFlags("Unaligned", (FLAG)LOW_SharGrotto_Event_SwayedUnaligned_3162ef49-99cd-4714-b9e1-6159999b2362);
+DB_LOW_SharGrotto_CultistSwayFlags("Lackeys", (FLAG)LOW_SharGrotto_Event_SwayedLackeys_f99ff6dc-4b3b-4367-9666-36c750c2c64e);
+DB_LOW_SharGrotto_CultistSwayFlags("ShadowheartAlly", (FLAG)LOW_SharGrotto_Event_SwayedAllies_d3da43d4-b5e8-400b-81f7-76944035a5d8);
+
+DB_GLO_DefeatCounter(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_SharranCultists");
+DB_GLO_DefeatCounter_AllPermaDefeatedGlobalFlag("LOW_SharGrotto_SharranCultists", (FLAG)LOW_SharGrotto_State_KilledCultists_2f9e0755-1f69-45f4-b7d7-7ad1814ecc3c);
+
+//VICONIA CIOMBAT REACTIONS
+DB_CombatReact_AD_OnTurn(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_Viconia_AD_TauntPlayer_32fcf81d-c32c-695b-55fb-d2f52fd64e36, 1);
+DB_CombatReact_AD_OnTurn(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_Viconia_AD_TauntPlayer_32fcf81d-c32c-695b-55fb-d2f52fd64e36, 2);
+DB_CombatReact_AD_OnTurn(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_Viconia_AD_TauntPlayer_32fcf81d-c32c-695b-55fb-d2f52fd64e36, 3);
+DB_CombatReact_AD_OnTurn(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_Viconia_AD_TauntPlayer_32fcf81d-c32c-695b-55fb-d2f52fd64e36, 4);
+DB_CombatReact_AD_OnCast(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaExploitFear_7ada322f-a52a-6072-ea02-c854b3b3c42a, "Target_LOW_HouseOfGrief_ExploitFear_Darkness");
+DB_CombatReact_AD_OnCast(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaExploitFear_7ada322f-a52a-6072-ea02-c854b3b3c42a, "Target_LOW_HouseOfGrief_ExploitFear_Disease");
+DB_CombatReact_AD_OnCast(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaExploitFear_7ada322f-a52a-6072-ea02-c854b3b3c42a, "Target_LOW_HouseOfGrief_ExploitFear_Powerless");
+DB_CombatReact_AD_OnCast(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaExploitFear_7ada322f-a52a-6072-ea02-c854b3b3c42a, "Target_LOW_HouseOfGrief_ExploitFear_Mindflayer");
+DB_CombatReact_AD_OnCast(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaExploitFear_7ada322f-a52a-6072-ea02-c854b3b3c42a, "Target_LOW_HouseOfGrief_ExploitFear_Betrayal");
+DB_CombatReact_AD_OnCast(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaExploitFear_7ada322f-a52a-6072-ea02-c854b3b3c42a, "Target_LOW_HouseOfGrief_ExploitFear_Spider_2");
+DB_CombatReact_AD_OnCast(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaExploitFear_7ada322f-a52a-6072-ea02-c854b3b3c42a, "Target_LOW_HouseOfGrief_ExploitFear_Wolf_2");
+DB_CombatReact_AD_AppliedStatus(ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaHeartForm_38a8eac5-0d91-84bb-037b-95067e586774, "LOW_HOUSEOFGRIEF_HEART_CURSE_VIOLENT");
+DB_CombatReact_AD_AppliedStatus(ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaHeartForm_38a8eac5-0d91-84bb-037b-95067e586774, "LOW_HOUSEOFGRIEF_HEART_CURSE_CRAVEN");
+DB_CombatReact_AD_AppliedStatus(ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaHeartForm_38a8eac5-0d91-84bb-037b-95067e586774, "LOW_HOUSEOFGRIEF_HEART_CURSE_JEALOUS");
+DB_CombatReact_AD_AppliedStatus(ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaHeartForm_38a8eac5-0d91-84bb-037b-95067e586774, "LOW_HOUSEOFGRIEF_HEART_CURSE_MELANCHOLY");
+DB_CombatReact_AD_AppliedStatus(ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaHeartForm_38a8eac5-0d91-84bb-037b-95067e586774, "LOW_HOUSEOFGRIEF_HEART_CURSE_PRYING");
+DB_CombatReact_AD_AppliedStatus(ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaHeartForm_38a8eac5-0d91-84bb-037b-95067e586774, "LOW_HOUSEOFGRIEF_HEART_CURSE_FALSE");
+DB_CombatReact_AD_AppliedStatus(ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, (DIALOGRESOURCE)LOW_SharGrotto_AD_ViconiaHeartForm_38a8eac5-0d91-84bb-037b-95067e586774, "LOW_HOUSEOFGRIEF_HEART_CURSE_SHADOWHEART");
+
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_001_1effcc57-318d-4d42-873d-7550a399a40b, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_001_dad1c5b6-4bfa-3dfd-94a6-493eae86d1cd, 1);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_001_1effcc57-318d-4d42-873d-7550a399a40b, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_001_dad1c5b6-4bfa-3dfd-94a6-493eae86d1cd, 3);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_001_1effcc57-318d-4d42-873d-7550a399a40b, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_001_dad1c5b6-4bfa-3dfd-94a6-493eae86d1cd, 6);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_001_1effcc57-318d-4d42-873d-7550a399a40b, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_001_dad1c5b6-4bfa-3dfd-94a6-493eae86d1cd, 9);
+
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_000_4502bf48-a7fc-4708-94ef-52bfd8285c6c, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_000_4a6fed76-64b7-7997-c9d2-ebebe5a87598, 2);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_000_4502bf48-a7fc-4708-94ef-52bfd8285c6c, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_000_4a6fed76-64b7-7997-c9d2-ebebe5a87598, 6);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_000_4502bf48-a7fc-4708-94ef-52bfd8285c6c, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_000_4a6fed76-64b7-7997-c9d2-ebebe5a87598, 9);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_000_4502bf48-a7fc-4708-94ef-52bfd8285c6c, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_000_4a6fed76-64b7-7997-c9d2-ebebe5a87598, 10);
+
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_003_67f579e5-655b-41e3-b74c-37fe1abd03d4, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_003_968a6226-2a6d-2e83-a32b-594204c442b9, 2);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_003_67f579e5-655b-41e3-b74c-37fe1abd03d4, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_003_968a6226-2a6d-2e83-a32b-594204c442b9, 6);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_003_67f579e5-655b-41e3-b74c-37fe1abd03d4, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_003_968a6226-2a6d-2e83-a32b-594204c442b9, 8);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_003_67f579e5-655b-41e3-b74c-37fe1abd03d4, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_003_968a6226-2a6d-2e83-a32b-594204c442b9, 10);
+
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_002_4ed10e2c-72d0-47cd-aee3-ecd531205ac8, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_002_9fe57c20-bcc6-d0b8-b131-c91f5f85ffcb, 1);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_002_4ed10e2c-72d0-47cd-aee3-ecd531205ac8, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_002_9fe57c20-bcc6-d0b8-b131-c91f5f85ffcb, 4);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_002_4ed10e2c-72d0-47cd-aee3-ecd531205ac8, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_002_9fe57c20-bcc6-d0b8-b131-c91f5f85ffcb, 7);
+DB_CombatReact_AD_OnTurn(S_LOW_GrottoCheckpointGuard_002_4ed10e2c-72d0-47cd-aee3-ecd531205ac8, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_GrottoCheckpointGuard_002_9fe57c20-bcc6-d0b8-b131-c91f5f85ffcb, 8);
+
+DB_CombatReact_AD_OnTurn(S_LOW_ViconiaCultist_001_5ce3f68d-a9b4-4ae0-adae-26f84e20f39a, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_ViconiaCultist_001_04b0883c-5347-5f40-70e8-932e0ce36b71, 3);
+DB_CombatReact_AD_OnTurn(S_LOW_ViconiaCultist_001_5ce3f68d-a9b4-4ae0-adae-26f84e20f39a, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_ViconiaCultist_001_04b0883c-5347-5f40-70e8-932e0ce36b71, 4);
+DB_CombatReact_AD_OnTurn(S_LOW_ViconiaCultist_001_5ce3f68d-a9b4-4ae0-adae-26f84e20f39a, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_ViconiaCultist_001_04b0883c-5347-5f40-70e8-932e0ce36b71, 5);
+DB_CombatReact_AD_OnTurn(S_LOW_ViconiaCultist_001_5ce3f68d-a9b4-4ae0-adae-26f84e20f39a, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_ViconiaCultist_001_04b0883c-5347-5f40-70e8-932e0ce36b71, 6);
+
+DB_CombatReact_AD_OnTurn(S_LOW_SharranTrainee_001_6869f71b-d661-4544-8211-708ec2225249, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_SharranTrainee_001_5c92c012-daa5-33f2-359f-72b08fd00957, 1);
+DB_CombatReact_AD_OnTurn(S_LOW_SharranTrainee_001_6869f71b-d661-4544-8211-708ec2225249, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_SharranTrainee_001_5c92c012-daa5-33f2-359f-72b08fd00957, 2);
+DB_CombatReact_AD_OnTurn(S_LOW_SharranTrainee_001_6869f71b-d661-4544-8211-708ec2225249, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_SharranTrainee_001_5c92c012-daa5-33f2-359f-72b08fd00957, 3);
+DB_CombatReact_AD_OnTurn(S_LOW_SharranTrainee_001_6869f71b-d661-4544-8211-708ec2225249, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_SharranTrainee_001_5c92c012-daa5-33f2-359f-72b08fd00957, 8);
+
+DB_CombatReact_AD_OnTurn(S_LOW_SharranTrainee_002_37441df0-a3fa-4709-800f-a4cfcec2448d, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_SharranTrainee_002_43806894-9a59-b461-1c8a-0bd094181b45, 1);
+DB_CombatReact_AD_OnTurn(S_LOW_SharranTrainee_002_37441df0-a3fa-4709-800f-a4cfcec2448d, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_SharranTrainee_002_43806894-9a59-b461-1c8a-0bd094181b45, 4);
+DB_CombatReact_AD_OnTurn(S_LOW_SharranTrainee_002_37441df0-a3fa-4709-800f-a4cfcec2448d, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_SharranTrainee_002_43806894-9a59-b461-1c8a-0bd094181b45, 6);
+DB_CombatReact_AD_OnTurn(S_LOW_SharranTrainee_002_37441df0-a3fa-4709-800f-a4cfcec2448d, (DIALOGRESOURCE)LOW_SharGrotto_AD_OnTurn_SharranTrainee_002_43806894-9a59-b461-1c8a-0bd094181b45, 9);
+
+//REGION Dark Justiciar
+
+DB_LOW_SharGrotto_JusticiarArmor(UNI_SHA_JusticiarArmor_Breastplate_742d43ff-b74d-4cbe-9554-51773bbccdc2, "Breast");
+DB_LOW_SharGrotto_JusticiarArmor(UNI_SHA_JusticiarArmor_Gloves_73a443e0-2056-4e4c-b8d2-d4283d8d3595, "Gloves");
+
+//END_REGION
+
+PROC_LOW_SharGrotto_ViconiaConfrontation_SetUp();
+
+DB_GLO_DieFlag((FLAG)ORI_Shadowheart_Event_KillViconia_551f236d-6e7f-461d-bbf6-94cf0cc4ae88, (CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, DEATHTYPE.Physical, NULL_00000000-0000-0000-0000-000000000000);
+DB_PermaDefeatedEvent(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (FLAG)ORI_Shadowheart_State_KilledViconia_472e18f2-15f9-4004-bdae-a9340fff7b15);
+
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_SparedViconia_cd5421b3-6051-4641-a56f-69588173c13c, (DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_OM_Shadowheart_COM_03382bb9-9c85-28fd-4c24-9069e44a0807);
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_SparedViconia_cd5421b3-6051-4641-a56f-69588173c13c, (DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_OM_Shadowheart_AOM_OOM_a13d9a9f-6c85-a18a-cfef-8889c0e19e34);
+
+//END_REGION
+
+//REGION Door of Loss
+
+TriggerRegisterForItems((TRIGGER)S_LOW_AltarTrigger_cb619852-ce0b-449f-b009-a16fb12da49d);
+TriggerRegisterForCharacter((TRIGGER)S_LOW_LossDoorBounds_43068efd-75c3-4299-a27f-d3e82c36ee17, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+TriggerRegisterForCharacter((TRIGGER)S_LOW_AltarProximity_02066208-2947-4f99-8c25-7c02210e53c3, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+TriggerRegisterForCharacter((TRIGGER)S_LOW_PostViconiaBounds_b23e10f4-2c85-45d3-a8a8-206c3afc11f9, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+PROC_TriggerRegisterForParty((TRIGGER)S_LOW_DoorOpenBounds_7ed73ca2-8acf-4eec-b237-a894804dad96);
+
+DB_LOW_SharGrotto_LossAltar((ITEM)S_LOW_LossAltarStatue_37760d6c-056a-4f23-9256-bc01217b9056);
+DB_LOW_SharGrotto_LossAltar((ITEM)S_LOW_LossAltarPedestal_d962c6eb-08ab-4bbc-8664-d8f24fc0b480);
+DB_LOW_SharGrotto_LossAltar((ITEM)S_LOW_HelperEffect_f064268a-a84b-4677-b50b-11b465e14c62);
+
+PROC_DeclareCounter("LOW_SharGrotto_AltarCount");
+PROC_LOW_SharGrotto_LossAltarInit();
+//END_REGION
+
+//REGION Shadowheart Parents
+Use((CHARACTER)S_LOW_ShadowheartFather_c12d561f-beae-4ef6-917e-0bec2f829449, (ITEM)S_LOW_FatherDisc_b86ca835-ece4-4b7f-8fe4-b5437af62377, "LOW_SharGrotto_AttachedToWheel");
+Use((CHARACTER)S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e, (ITEM)S_LOW_MotherDisc_c11dbb3d-7fe1-4a5b-bd85-8da2992f3987, "LOW_SharGrotto_AttachedToWheel");
+
+SetCanInteract((ITEM)S_LOW_FatherDisc_b86ca835-ece4-4b7f-8fe4-b5437af62377, 0);
+SetCanInteract((ITEM)S_LOW_MotherDisc_c11dbb3d-7fe1-4a5b-bd85-8da2992f3987, 0);
+SetCanInteract((ITEM)S_LOW_FeetDisc_a3eecd10-0271-4e06-b6fc-806e2afff9cc, 0);
+
+PROC_DefineSingleOriginMoment((DIALOGRESOURCE)LOW_SharGrotto_ShadowheartFather_c07cb7d4-21d6-8203-86d6-dcc60764e9b0,(TAG)REALLY_SHADOWHEART_642d2aee-e3df-47e3-9f47-bbcd441bb9e0,
+(DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1,
+(DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2,
+(DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1);
+
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_LOW_SpotParents_08cf60ce-80ea-4035-950d-459c358816aa, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_SpottedParents_adc86a57-00c6-8d40-2fd7-2be466acb430, "Global");
+
+DB_Dialogs(S_LOW_ShadowheartFather_c12d561f-beae-4ef6-917e-0bec2f829449, (DIALOGRESOURCE)LOW_SharGrotto_ShadowheartFather_c07cb7d4-21d6-8203-86d6-dcc60764e9b0);
+DB_Dialogs(S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e, (DIALOGRESOURCE)LOW_SharGrotto_ShadowheartMother_37b44def-24e6-c5f0-427e-d4dda1890207);
+DB_OriginMayLeaveDialog((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (DIALOGRESOURCE)CAMP_Shadowheart_CRD_DefeatedParents_fae58cb0-9bf8-6f91-4b15-f08d23604107);
+DB_OriginMayLeaveDialog((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (DIALOGRESOURCE)LOW_SharGrotto_DefeatedParents_cd8e69ea-d78d-aa3b-6f23-202e67e0cff4);
+
+DB_LOW_SharGrotto_ExclusiveReacts("Murder");
+DB_LOW_SharGrotto_ExclusiveReacts("Assault");
+
+PROC_CharacterDisableAllCrimes(S_LOW_ShadowheartFather_c12d561f-beae-4ef6-917e-0bec2f829449);
+PROC_CharacterDisableAllCrimes(S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e);
+
+DB_LOW_SharGrotto_ShadowheartParents(S_LOW_ShadowheartFather_c12d561f-beae-4ef6-917e-0bec2f829449, (DIALOGRESOURCE)LOW_SharGrotto_ShadowheartFather_c07cb7d4-21d6-8203-86d6-dcc60764e9b0, (TRIGGER)S_CAMP_SLUMS_Shadowdad_22d7fad3-af80-4ea2-8e3e-c49afe13ec6f, (DIALOGRESOURCE)CAMP_ShadowheartFather_215fdd40-89b6-fbd7-9a5b-a18d031cd0d4);
+DB_LOW_SharGrotto_ShadowheartParents(S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e, (DIALOGRESOURCE)LOW_SharGrotto_ShadowheartMother_37b44def-24e6-c5f0-427e-d4dda1890207, (TRIGGER)S_CAMP_SLUMS_Shadowmom_a07a0368-dd93-471f-81b9-2e29e9b9089f, (DIALOGRESOURCE)CAMP_ShadowheartMother_88c80e2e-a203-0627-6c2a-12695a769c7e);
+
+DB_DialogDeath(S_LOW_ShadowheartFather_c12d561f-beae-4ef6-917e-0bec2f829449);
+DB_DialogDeath(S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e);
+
+DB_OriginMoment_ExtraNPCs((DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1, S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e);
+DB_OriginMoment_ExtraNPCs((DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2, S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e);
+
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_RejectShar_SavedParents_486d69d4-a7c2-4cb5-8fcb-8f2cb738ada9, LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1);
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_RejectShar_SavedParents_486d69d4-a7c2-4cb5-8fcb-8f2cb738ada9, LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2);
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_Shar_SavedParents_8a0fad17-1615-4a0d-a045-21661d9a2aa0, LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1);
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_Shar_SavedParents_8a0fad17-1615-4a0d-a045-21661d9a2aa0, LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2);
+
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_RejectShar_KilledParents_e9060caf-66b0-4701-8dfd-5ae1125f5afd, LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1);
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_RejectShar_KilledParents_e9060caf-66b0-4701-8dfd-5ae1125f5afd, LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2);
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_Shar_KilledParents_3a3b0ecf-a1ed-4733-8548-0348befc6bac, LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1);
+DB_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_Shar_KilledParents_3a3b0ecf-a1ed-4733-8548-0348befc6bac, LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2);
+
+DB_LOW_SharGrotto_ParentsResolutions((TAG)SHADOWHEART_ENEMYOFSHARPATH_8eca8027-996c-4c61-bec6-77f853de295b, ORI_Shadowheart_State_RejectShar_KilledParents_e9060caf-66b0-4701-8dfd-5ae1125f5afd, ORI_Shadowheart_State_RejectShar_SavedParents_486d69d4-a7c2-4cb5-8fcb-8f2cb738ada9);
+DB_LOW_SharGrotto_ParentsResolutions((TAG)SHADOWHEART_SHARPATH_9624a3fe-bb9e-47c5-b9ab-417e6da6f84b, ORI_Shadowheart_State_Shar_KilledParents_3a3b0ecf-a1ed-4733-8548-0348befc6bac, ORI_Shadowheart_State_Shar_SavedParents_8a0fad17-1615-4a0d-a045-21661d9a2aa0);
+//END_REGION
+
+//REGION Gith
+
+DB_KnowledgeCheckTrigger("LOW_SharGrotto_GithLog", (TRIGGER)S_LOW_GithInvestigation_649d48cf-809c-47ee-a133-bd0508eefa1a, "Perception", (DIFFICULTYCLASS)Act3_Medium_77cee1c4-384a-4217-b670-67db3c7add57);
+SetCanInteract((ITEM)S_LOW_RubbleContainer_30a493be-7dc7-48c7-ac38-5c9fce2b5e13, 0);
+
+//END_REGION
+
+//REGION WRD
+
+PROC_TriggerRegisterForPlayers((TRIGGER)S_LOW_ChamberOfLoss_15d3d070-5887-4305-a931-0ce2882c1955);
+
+//END_REGION
+
+//REGION Undercellar
+
+TriggerRegisterForCharacter((TRIGGER)S_LOW_GrottoOutfitRoom_SHCheck_264402e8-71f4-4136-afa6-78449165f7f3, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+DB_ItemDialog_PlayerVB((ITEM)S_LOW_SharMannequin_Bard_1650e818-14b0-4e17-8cd6-15d3310aa1b4, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_Mannequins_701382d3-f8d3-ff27-200c-0aeaef6f0ab1);
+DB_ItemDialog_PlayerVB((ITEM)S_LOW_SharMannequin_DaisyDress_5f1aa05c-a0f8-4eee-a048-7715c2b23b77, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_Mannequins_701382d3-f8d3-ff27-200c-0aeaef6f0ab1);
+DB_ItemDialog_PlayerVB((ITEM)S_LOW_SharMannequin_Doublet_6c54a5e4-e397-41f2-92b7-d2692f8d200d, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_Mannequins_701382d3-f8d3-ff27-200c-0aeaef6f0ab1);
+DB_ItemDialog_PlayerVB((ITEM)S_LOW_SharMannequin_RichDress_48ac5dd6-818c-4423-8138-b757f05d4475, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_Mannequins_701382d3-f8d3-ff27-200c-0aeaef6f0ab1);
+DB_ItemDialog_PlayerVB((ITEM)S_LOW_TortureRack_21464900-5f2c-440c-8238-d55b6fca4eb1, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_TortureRack_d0e59beb-88b1-1344-580b-0515d077d9e1);
+DB_ItemDialog_PlayerVB((ITEM)S_LOW_TortureBench_81acb432-b3c8-4fdd-b71c-734ea496d2d7, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_TortureBench_f2cd853a-59a0-1074-da22-cce3e300e3ef);
+
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_LOW_GrottoOutfitRoom_2ae4a62a-b910-49a0-80d1-9f43ee281056, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_OutfitRoom_a5dc531b-4275-5347-df7c-a6772018013a, "Global");
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_LOW_TortureOutfitRoom_b9e67623-17d1-4eda-b738-3e13622e4b85, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_TortureRoom_b8322397-15c1-ba31-4a3e-95edcaeb1f76, "Global");
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_LOW_ShadowheartCorridor_46b52925-9351-46a1-b20f-3cc6edc3bbf1, (VOICEBARKRESOURCE)LOW_SharGrotto_VB_ShadowheartCorridor_6a2b9334-762a-fcf0-77e9-8cc4efbd6ca3, "Global");
+
+DB_LOW_SharGrotto_Mannequins((ITEM)S_LOW_SharMannequin_Doublet_6c54a5e4-e397-41f2-92b7-d2692f8d200d, (DIALOGRESOURCE)LOW_SharGrotto_PAD_Mannequin_Doublet_260161bd-7972-4d72-16d4-47651f3c489b);
+DB_LOW_SharGrotto_Mannequins((ITEM)S_LOW_SharMannequin_DaisyDress_5f1aa05c-a0f8-4eee-a048-7715c2b23b77, (DIALOGRESOURCE)LOW_SharGrotto_PAD_Mannequin_FancyDress_18648eee-45f3-3f8a-19b7-4e02ce4cf395);
+DB_LOW_SharGrotto_Mannequins((ITEM)S_LOW_SharMannequin_RichDress_48ac5dd6-818c-4423-8138-b757f05d4475, (DIALOGRESOURCE)LOW_SharGrotto_PAD_Mannequin_GreenDress_281afa60-f8f9-1395-d787-053903f4cb46);
+DB_LOW_SharGrotto_Mannequins((ITEM)S_LOW_SharMannequin_Bard_1650e818-14b0-4e17-8cd6-15d3310aa1b4, (DIALOGRESOURCE)LOW_SharGrotto_PAD_Mannequin_Bard_4835967a-a6f0-d486-47aa-06043b733cb5);
+//END_REGION
+
+//REGION
+
+DB_Dialogs((ITEM)S_LOW_BlackMirror_d9907043-c08f-49bb-87d0-bb3eeb723a06, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+
+DB_LOW_SharGrotto_MirrorFlags(0, (FLAG)LOW_SharGrotto_State_Mirror_AtleastOne_006137c3-12e6-49e2-bf66-1e9c903488e6);
+DB_LOW_SharGrotto_MirrorFlags(1, (FLAG)LOW_SharGrotto_State_Mirror_AtleastTwo_312b7945-539c-498e-9cb9-d2d6ecf369cd);
+DB_LOW_SharGrotto_MirrorFlags(2, (FLAG)LOW_SharGrotto_State_Mirror_AtleastThree_dc046b91-3122-4fd4-b0cd-93dc6d3246c5);
+DB_LOW_SharGrotto_MirrorFlags(3, (FLAG)LOW_SharGrotto_State_Mirror_AtleastFour_3048b621-ee24-4835-bb42-47b23675ea25);
+DB_LOW_SharGrotto_MirrorFlags(4, (FLAG)LOW_SharGrotto_State_Mirror_AtleastFive_6585b24f-75b9-491f-8f77-8938d9a0bec9);
+DB_LOW_SharGrotto_MirrorFlags(5, (FLAG)LOW_SharGrotto_State_Mirror_AtleastSix_e91d99ae-ceb1-4bb8-ae4a-4731702649bf);
+
+DB_LOW_SharGrotto_MirrorMemories((FLAG)LOW_SharGrotto_State_Mirror_StrengthBoon_a56dc9d9-ad76-4c50-80d0-220a143b7350, "LOW_SharGrotto_Mirror_StrengthBoon_Passive");
+DB_LOW_SharGrotto_MirrorMemories((FLAG)LOW_SharGrotto_State_Mirror_DexterityBoon_4acd716a-be6f-407a-a2c4-ca05df6dbaad, "LOW_SharGrotto_Mirror_DexterityBoon_Passive");
+DB_LOW_SharGrotto_MirrorMemories((FLAG)LOW_SharGrotto_State_Mirror_ConstitutionBoon_75de0426-0ec0-4e8e-b515-f29e4959d091, "LOW_SharGrotto_Mirror_ConstitutionBoon_Passive");
+DB_LOW_SharGrotto_MirrorMemories((FLAG)LOW_SharGrotto_State_Mirror_IntelligenceBoon_3748609d-1bd3-4e1b-84df-17fc048ac2a2, "LOW_SharGrotto_Mirror_IntelligenceBoon_Passive");
+DB_LOW_SharGrotto_MirrorMemories((FLAG)LOW_SharGrotto_State_Mirror_WisdomBoon_39efe295-9388-443a-bc8f-9159da9c4ea7, "LOW_SharGrotto_Mirror_WisdomBoon_Passive");
+DB_LOW_SharGrotto_MirrorMemories((FLAG)LOW_SharGrotto_State_Mirror_CharismaBoon_bd441ffc-da74-4e01-a7bc-d6b8128a281f, "LOW_SharGrotto_Mirror_CharismaBoon_Passive");
+DB_LOW_SharGrotto_MirrorMemories((FLAG)LOW_SharGrotto_State_Mirror_MinorCharismaBoon_980c4489-7ce3-4539-9781-24eaff117c10, "LOW_SharGrotto_Mirror_MinorCharismaBoon_Passive");
+
+DB_LOW_SharGrotto_MirrorPlayerMemories((FLAG)LOW_SharGrotto_State_Mirror_OfferedStrengthMemory_53b26466-e873-49ff-8290-12f9dae27f3c, "LOW_STRENGTHSACRIFICE");
+DB_LOW_SharGrotto_MirrorPlayerMemories((FLAG)LOW_SharGrotto_State_Mirror_OfferedDexterityMemory_d367b7c2-3ea0-4936-884c-3f0e66b82d22, "LOW_DEXTERITYSACRIFICE");
+DB_LOW_SharGrotto_MirrorPlayerMemories((FLAG)LOW_SharGrotto_State_Mirror_OfferedConstitutionMemory_4ca660eb-efe5-4242-927a-9c6484dd6eeb, "LOW_CONSTITUTIONSACRIFICE");
+DB_LOW_SharGrotto_MirrorPlayerMemories((FLAG)LOW_SharGrotto_State_Mirror_OfferedIntelligenceMemory_16dbd751-9d30-46af-9dec-ad11a4b975ff, "LOW_INTELLIGENCESACRIFICE");
+DB_LOW_SharGrotto_MirrorPlayerMemories((FLAG)LOW_SharGrotto_State_Mirror_OfferedWisdomMemory_aaabef4b-0f60-4e1a-8c31-0e8daa2cd403, "LOW_WISDOMSACRIFICE");
+DB_LOW_SharGrotto_MirrorPlayerMemories((FLAG)LOW_SharGrotto_State_Mirror_OfferedCharismaMemory_be63a02d-e7c7-43bc-adfd-bdcd8d2c7c85, "LOW_CHARISMASACRIFICE");
+
+DB_LOW_SharGrotto_MirrorShadowheartMemories((FLAG)LOW_SharGrotto_State_Mirror_SHhasRomance_0669a1c6-8f6d-4be7-9bf0-812bd2cb40a6, (FLAG)LOW_SharGrotto_State_Mirror_OfferedCharismaMemory_be63a02d-e7c7-43bc-adfd-bdcd8d2c7c85);
+DB_LOW_SharGrotto_MirrorShadowheartMemories((FLAG)ORI_Shadowheart_State_NobleStalkMemory_d0d87954-6563-4e26-9f2c-4616e3cfeb0e, (FLAG)LOW_SharGrotto_State_Mirror_OfferedConstitutionMemory_4ca660eb-efe5-4242-927a-9c6484dd6eeb);
+DB_LOW_SharGrotto_MirrorShadowheartMemories((FLAG)ORI_Shadowheart_State_HideoutMemoryUnlocked_b14b2caa-27c5-4cd9-b365-babf4f959f3f, (FLAG)LOW_SharGrotto_State_Mirror_OfferedWisdomMemory_aaabef4b-0f60-4e1a-8c31-0e8daa2cd403);
+DB_LOW_SharGrotto_MirrorShadowheartMemories((FLAG)ORI_Shadowheart_State_GraffitiMemoryUnlocked_eb535c3e-a33f-4d0b-94cb-2abf7c66ab18, (FLAG)LOW_SharGrotto_State_Mirror_OfferedDexterityMemory_d367b7c2-3ea0-4936-884c-3f0e66b82d22);
+DB_LOW_SharGrotto_MirrorShadowheartMemories((FLAG)ORI_Shadowheart_State_GraveMemoryUnlocked_f1382026-f257-42cf-b10d-98c6eeb10ad5, (FLAG)LOW_SharGrotto_State_Mirror_OfferedIntelligenceMemory_16dbd751-9d30-46af-9dec-ad11a4b975ff);
+
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_StrengthBoon_a56dc9d9-ad76-4c50-80d0-220a143b7350, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_DexterityBoon_4acd716a-be6f-407a-a2c4-ca05df6dbaad, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_ConstitutionBoon_75de0426-0ec0-4e8e-b515-f29e4959d091, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_IntelligenceBoon_3748609d-1bd3-4e1b-84df-17fc048ac2a2, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_WisdomBoon_39efe295-9388-443a-bc8f-9159da9c4ea7, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_CharismaBoon_bd441ffc-da74-4e01-a7bc-d6b8128a281f, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_MinorCharismaBoon_980c4489-7ce3-4539-9781-24eaff117c10, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_OfferedStrengthMemory_53b26466-e873-49ff-8290-12f9dae27f3c, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_OfferedDexterityMemory_d367b7c2-3ea0-4936-884c-3f0e66b82d22, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_OfferedConstitutionMemory_4ca660eb-efe5-4242-927a-9c6484dd6eeb, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_OfferedIntelligenceMemory_16dbd751-9d30-46af-9dec-ad11a4b975ff, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_OfferedWisdomMemory_aaabef4b-0f60-4e1a-8c31-0e8daa2cd403, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+DB_FlagReactionAfterDialog((FLAG)LOW_SharGrotto_State_Mirror_OfferedCharismaMemory_be63a02d-e7c7-43bc-adfd-bdcd8d2c7c85, (DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112);
+
+PROC_LOW_SharGrotto_MemoryCheck();
+//END_REGION
+
+//REGION Misc
+SetOnStage((ITEM)PUZ_GEN_Key_Threshold_of_Loss_b49e15a1-e63f-488a-9649-6140c363fe5b, 0); //There should have never been a key to this door.
+
+DB_SpotPlayers((CHARACTER)S_LOW_GrottoSentry_90c54fce-9a57-4ff5-9d36-0363ef90c5f1, "LOW_SharGrotto_SentryGreet", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_TargetIgnoreCantTalk((CHARACTER)S_LOW_GrottoSentry_90c54fce-9a57-4ff5-9d36-0363ef90c5f1, "LOW_SharGrotto_SentryGreet");
+DB_SpotPlayers_CustomRadius((CHARACTER)S_LOW_GrottoSentry_90c54fce-9a57-4ff5-9d36-0363ef90c5f1, "LOW_SharGrotto_SentryGreet", 10.0);
+
+//END_REGION
+
+//REGION Behaviour
+
+DB_LOW_SharGrotto_PrayingCultists((CHARACTER)S_LOW_OptionalCultist_000_68f11a56-ab1d-432c-adbf-8d9b24083915);
+DB_LOW_SharGrotto_PrayingCultists((CHARACTER)S_LOW_SharranTrainee_000_9a3f9520-f900-4f00-b244-546e89bebc16);
+DB_LOW_SharGrotto_PrayingCultists((CHARACTER)S_LOW_SharranTrainee_001_6869f71b-d661-4544-8211-708ec2225249);
+DB_LOW_SharGrotto_PrayingCultists((CHARACTER)S_LOW_SharranTrainee_004_24498358-fc73-4e6f-bf64-466c8bb22fb8);
+//END_REGION
+
+DB_TopicalGreeting((FLAG)TG_LOW_SharGrotto_InGrotto_fa6de38a-6cd5-463d-8492-61952782b85f);
+DB_TopicalGreetingEndCondition_FlagSet((FLAG)TG_LOW_SharGrotto_InGrotto_fa6de38a-6cd5-463d-8492-61952782b85f, (FLAG)LOW_SharGrotto_Event_LeftGrotto_5e8e8690-a1f4-47f5-93a1-2c99a65a35a6);
+KBSECTION
+//REGION Grotto Trespass
+
+IF
+DialogStarted((DIALOGRESOURCE)LOW_NGB_SharGrotto_Trespassing_fac07fbe-0d24-e220-7b2b-35932fa5c844, _ID)
+AND
+DB_DialogNPCs(_ID, _Cultist, 1)
+THEN
+DB_LOW_SharGrotto_CultistSpottedSneaker(_Cultist);
+
+PROC
+PROC_FlagReactionAfterDialog((CHARACTER)_Player, (FLAG)LOW_SharGrotto_Event_TrespasserSpotted_ba8392e8-fa2f-4ce8-966f-7bfbf101e39c)
+AND
+DB_LOW_SharGrotto_CultistSpottedSneaker(_Cultist)
+AND
+NOT QRY_LOW_SharGrotto_ViconiaDialogActive()
+THEN
+PROC_LOW_SharGrotto_TriggerDialog((CHARACTER)_Player);
+CharacterStopCrime(_Player, "LOW_SharGrotto_Trespass", NULL_00000000-0000-0000-0000-000000000000);
+NOT DB_LOW_SharGrotto_CultistSpottedSneaker(_Cultist);
+
+PROC
+PROC_FlagReactionAfterDialog((CHARACTER)_Player,(FLAG)LOW_SharGrotto_Event_TrespasserSpotted_ba8392e8-fa2f-4ce8-966f-7bfbf101e39c)
+AND
+DB_LOW_SharGrotto_CultistSpottedSneaker(_Cultist)
+AND
+QRY_LOW_SharGrotto_ViconiaDialogActive()
+AND
+DB_QRYRTN_LOW_SharGrotto_ConfrontID(_ID)
+THEN
+CharacterStopCrime(_Player, "LOW_SharGrotto_Trespass", NULL_00000000-0000-0000-0000-000000000000);
+PROC_DialogAddListeningActor(_ID, _Player);
+NOT DB_LOW_SharGrotto_CultistSpottedSneaker(_Cultist);
+NOT DB_QRYRTN_LOW_SharGrotto_ConfrontID(_ID);
+
+QRY
+QRY_LOW_SharGrotto_ViconiaDialogActive()
+AND
+DB_DialogName((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_NoShadowheart_78e68cb8-fc4e-fa55-c4a9-5f7224b86fe4, _ID)
+THEN
+DB_QRYRTN_LOW_SharGrotto_ConfrontID(_ID);
+
+QRY
+QRY_LOW_SharGrotto_ViconiaDialogActive()
+AND
+DB_DialogName((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_AOM_OOM_2a789ab8-8c27-ce72-9cc1-13c14c4cc491, _ID)
+THEN
+DB_QRYRTN_LOW_SharGrotto_ConfrontID(_ID);
+
+QRY
+QRY_LOW_SharGrotto_ViconiaDialogActive()
+AND
+DB_DialogName((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_COM_6ebbe983-6aa1-1f25-6fcb-ec0aed2252bd, _ID)
+THEN
+DB_QRYRTN_LOW_SharGrotto_ConfrontID(_ID);
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_ConfrontViconia_SharranAlliance_ea829b7c-5f69-c4fc-6b4c-b8a190d31a86, _, _)
+AND
+DB_LOW_SharGrotto_ConfrontationParticipants(_, _Char)
+THEN
+PROC_PeacefulResolve(_Char);
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_State_PromisedBringShadowheart_ba85fccc-c09b-41c3-82ec-69693db59204, _, _)
+THEN
+PROC_LOW_SharGrotto_Admitted();
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_ConfrontViconia_SharranAlliance_ea829b7c-5f69-c4fc-6b4c-b8a190d31a86, _, _)
+THEN
+PROC_LOW_SharGrotto_Admitted();
+
+IF
+FlagSet((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097, _, _)
+THEN
+PROC_LOW_SharGrotto_Admitted();
+
+PROC
+PROC_LOW_SharGrotto_Admitted()
+AND
+DB_TrespassTrigger((TRIGGER)S_LOW_GreaterGrottoTrespass_fa9add2a-81e6-4a4f-a37b-09a1cd680192,(TRIGGER)NULL_00000000-0000-0000-0000-000000000000, "LOW_SharGrotto_Trespass")
+THEN
+PROC_RemoveDBTrespassTrigger((TRIGGER)S_LOW_GreaterGrottoTrespass_fa9add2a-81e6-4a4f-a37b-09a1cd680192,(TRIGGER)NULL_00000000-0000-0000-0000-000000000000);
+
+PROC
+PROC_LOW_SharGrotto_Admitted()
+AND
+DB_TrespassTrigger((TRIGGER)S_LOW_InnerGrottoTrespass_73a192ef-e53d-4944-890c-c4210ffa7f96,(TRIGGER)NULL_00000000-0000-0000-0000-000000000000, "LOW_SharGrotto_Trespass")
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_GrottoAdmitted_3a92f2ee-8d50-4557-915b-f7bae85c7546);
+PROC_RemoveDBTrespassTrigger((TRIGGER)S_LOW_InnerGrottoTrespass_73a192ef-e53d-4944-890c-c4210ffa7f96,(TRIGGER)NULL_00000000-0000-0000-0000-000000000000);
+
+QRY
+QRY_CRIME_BlockRegisterCrime(_Player, "LOW_SharGrotto_Trespass", _, _, _)
+AND
+DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_CRIME_BlockRegisterCrime(_Player, "LOW_SharGrotto_Trespass", _, _, _)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_CrimeGetCustomArrestDialogCustom(_Guard,_CrimeID,_,_Player,_, (CHARACTER)S_LOW_ShadowheartFriend_2c10ff0f-d2ff-4dcb-8f8b-c6f870044f5d,_)
+AND
+DB_Players(_Player)
+AND
+CrimeGetType(_CrimeID, "LOW_SharGrotto_Trespass")
+THEN
+DB_CrimeArrest_CustomDialog(_Guard, _CrimeID, (DIALOGRESOURCE)LOW_NGB_SharGrotto_Trespassing_fac07fbe-0d24-e220-7b2b-35932fa5c844);
+
+//REGION Checkpoints
+//RIGHT HALL CHECKPOINT
+PROC
+PROC_CheckPointDialogue((CHARACTER)_Player, S_LOW_GrottoCheckpointGuard_000_4502bf48-a7fc-4708-94ef-52bfd8285c6c)
+AND
+QRY_StartCheckpointWarningDialog(
+	"S_LOW_GrottoRightHallCheckpoint",
+	(DIALOGRESOURCE)LOW_SharGrotto_RightCheckpoint_Primary_2500639e-c7b9-bb6f-f0d5-f6117171d7a4, 
+	(CHARACTER)S_LOW_GrottoCheckpointGuard_000_4502bf48-a7fc-4708-94ef-52bfd8285c6c, _Player)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_CheckPointDialogue((CHARACTER)_Player, S_LOW_GrottoCheckpointGuard_001_1effcc57-318d-4d42-873d-7550a399a40b)
+AND
+QRY_StartCheckpointWarningDialog(
+	"S_LOW_GrottoRightHallCheckpoint",
+	(DIALOGRESOURCE)LOW_SharGrotto_RightCheckpoint_Warning_54258d40-2c71-8051-9850-22a52bdcf804, 
+	(CHARACTER)S_LOW_GrottoCheckpointGuard_001_1effcc57-318d-4d42-873d-7550a399a40b, 
+	_Player)
+THEN
+DB_NOOP(1);
+
+//LEFT HALL CHECKPOINT
+PROC
+PROC_CheckPointDialogue((CHARACTER)_Player, S_LOW_GrottoCheckpointGuard_002_4ed10e2c-72d0-47cd-aee3-ecd531205ac8)
+AND
+QRY_StartCheckpointWarningDialog(
+	"S_LOW_GrottoLeftHallCheckpoint",
+	(DIALOGRESOURCE)LOW_SharGrotto_LeftCheckpoint_Primary_4b2b82cf-f734-587a-e186-0054b6b140e1, 
+	(CHARACTER)S_LOW_GrottoCheckpointGuard_002_4ed10e2c-72d0-47cd-aee3-ecd531205ac8, _Player)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_CheckPointDialogue((CHARACTER)_Player, S_LOW_GrottoCheckpointGuard_003_67f579e5-655b-41e3-b74c-37fe1abd03d4)
+AND
+QRY_StartCheckpointWarningDialog(
+	"S_LOW_GrottoLeftHallCheckpoint",
+	(DIALOGRESOURCE)LOW_SharGrotto_LeftCheckpoint_Warning_7e66a3df-17ff-9967-4c2d-bb7c95b7c175, 
+	(CHARACTER)S_LOW_GrottoCheckpointGuard_003_67f579e5-655b-41e3-b74c-37fe1abd03d4, 
+	_Player)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//END_REGION
+
+//REGION Training Hall
+
+//REGION Viconia Confrontation
+
+//REGION Sharran Check
+
+IF 
+FlagSet((FLAG)LOW_SharGrotto_Event_CheckArmor_c138c905-e511-4bc1-97f0-6332cb888007, _Player, _)
+AND
+NOT QRY_LOW_SharGrotto_CheckArmor((CHARACTER)_Player)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_HasDarkJusticiarArmourSet_8e6b195c-9171-4e71-b496-a65ca4463c63);
+
+QRY //Check if character is wearing armor that is not part of the Dark Justiciar Set
+QRY_LOW_SharGrotto_CheckArmor((CHARACTER)_Player)
+AND
+DB_LOW_SharGrotto_JusticiarArmor(_ArmorTemplate, _Slot)
+AND
+GetEquippedItem(_Player, _Slot, _Armor)
+AND
+GetTemplate(_Armor, _Template)
+AND
+_Template != _ArmorTemplate
+THEN
+DB_NOOP(1);
+
+
+//END_REGION
+
+//REGION Surrendering Shadowheart
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)LOW_SharGrotto_Event_SurrenderShadowheart_bfc7f3b7-4e58-44e1-bb58-131ee77fc0ad, _, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, _)
+THEN
+DB_CompanionLeaving((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (CHARACTER)_Player);
+PROC_Origins_CompanionLeavePermanently((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, "LOW_SharGrotto_SoldToViconia");
+PROC_DisappearOutOfSightTo((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, S_LOW_ShadowheartMovePos_33535284-bed1-49f4-ae32-f9c2c25af352, "Walk", 0, "LOW_SharGrotto_ShadowheartLeftForWipe");
+
+PROC
+PROC_LongRest()
+AND
+NOT DB_PermaDefeated((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+DB_GlobalFlag((FLAG)LOW_SharGrotto_Event_SurrenderShadowheart_bfc7f3b7-4e58-44e1-bb58-131ee77fc0ad)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ShadowheartWiped")
+THEN
+TeleportTo((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (TRIGGER)S_LOW_ShadowheartPos_936e4555-544b-46fd-a93c-cf2fbffb9c6b, "", 0, 0, 0, 1, 1);
+SetOnStage((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, 1);
+SetFaction((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa);
+PROC_RemoveDialog((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+DB_Dialogs((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (DIALOGRESOURCE)LOW_SharGrotto_ShadowheartMindWiped_0b35060c-8e9e-a818-6f39-9874bed2e5ef);
+
+
+//END_REGION
+
+//SET-UP
+
+//CASE 1: Viconia + Lackeys + Ferg
+
+PROC
+PROC_LOW_SharGrotto_ViconiaConfrontation_SetUp()
+THEN
+TeleportTo(S_SHA_VoiceOfShar_OverrideSpeaker_9293e853-5c10-45a1-a158-ebcde08c02ee, (TRIGGER)S_LOW_SharPoint_2d57442d-1bb0-4d77-bccb-d495275cdd9f, "LOW_SharGrotto_SharTeleport", 0, 0, 0, 1, 0);
+
+PROC
+PROC_LOW_SharGrotto_ViconiaConfrontation_SetUp()
+AND
+DB_GlobalFlag((FLAG)WYR_SharInformer_State_InformerEnemy_da9d89d1-e5d1-4b68-bf20-0da80ab148cc)
+THEN
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers("Unaligned");
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers("Lackeys");
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers("ShadowheartAlly");
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers("Informer");
+
+//CASE 2: Viconia + Lackeys 
+
+PROC
+PROC_LOW_SharGrotto_ViconiaConfrontation_SetUp()
+AND
+NOT DB_GlobalFlag((FLAG)WYR_SharInformer_State_InformerEnemy_da9d89d1-e5d1-4b68-bf20-0da80ab148cc)
+THEN
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers("Unaligned");
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers("Lackeys");
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers("ShadowheartAlly");
+
+PROC
+PROC_LOW_SharGrotto_ViconiaConfrontation_SetUp()
+AND
+DB_LOW_SharGrotto_ConfrontationParticipants(_Group, _NPC)
+THEN
+DB_CRIME_Guards_NoSummonBy(_NPC);
+
+PROC
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers((STRING)_Group)
+AND
+DB_LOW_SharGrotto_ConfrontationParticipants(_Group, _NPC)
+THEN
+DB_OriginMoment_ExtraNPCs((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_AOM_OOM_2a789ab8-8c27-ce72-9cc1-13c14c4cc491, _NPC);
+DB_OriginMoment_ExtraNPCs((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_COM_6ebbe983-6aa1-1f25-6fcb-ec0aed2252bd, _NPC);
+
+PROC
+PROC_LOW_SharGrotto_ViconiaConfrontation_DefineExtraSpeakers("Informer")
+AND
+DB_LOW_SharGrotto_ConfrontationParticipants("Informer", _NPC)
+THEN
+TeleportTo(S_GLO_SharranInformer_b2cf2efe-ec06-48cd-8fb7-ad596d61164f, (TRIGGER)S_LOW_FergAppear_cee56731-eb3e-4a8a-ac81-f33ab96020ac, "", 0, 0, 0, 0, 0);
+
+//INITIAL DIALOG
+
+PROC
+PROC_SceneInterrupted(_, _Char, "LOW_SharGrotto_SermonScene", _Reason)
+AND
+DB_GLO_GenericSceneManager_ViolenceReason(_Reason)
+THEN
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa, 0);
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_FinishedSermon_1ab561f3-1756-494a-bbbd-90580e530c36);
+PROC_SceneOver("LOW_SharGrotto_SermonScene");
+
+PROC
+PROC_SceneInterrupted(_, _, "LOW_SharGrotto_SermonScene", _Interrupt)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_FinishedSermon_1ab561f3-1756-494a-bbbd-90580e530c36);
+PROC_SceneOver("LOW_SharGrotto_SermonScene");
+
+PROC
+PROC_SpotPlayers_Spotted((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_ViconiaSpot", _Player)
+AND
+DB_Players(_Player)
+THEN
+PROC_LOW_SharGrotto_TriggerDialog((CHARACTER)_Player);
+
+PROC
+PROC_SpotPlayers_Spotted((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_ViconiaSpot", _Player)
+AND
+NOT DB_Players(_Player)
+THEN
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa, 0);
+
+PROC
+PROC_LOW_SharGrotto_TriggerDialog((CHARACTER)_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+AND
+QRY_StartDialog((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_NoShadowheart_78e68cb8-fc4e-fa55-c4a9-5f7224b86fe4, (CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _Player)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_CRIME_BlockRegisterCrime((CHARACTER)_Criminal, (STRING)_Crime, (GUIDSTRING)_Evidence, (CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _)
+THEN
+DB_NOOP(1);
+
+IF
+DialogStarted((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_AOM_OOM_2a789ab8-8c27-ce72-9cc1-13c14c4cc491, _)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ConfrontationStarted")
+THEN
+PROC_SpotPlayers_StopSpotting((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_ViconiaSpot");
+
+IF
+DialogStarted((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_COM_6ebbe983-6aa1-1f25-6fcb-ec0aed2252bd, _)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ConfrontationStarted")
+THEN
+PROC_SpotPlayers_StopSpotting((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SharGrotto_ViconiaSpot");
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_AOM_OOM_2a789ab8-8c27-ce72-9cc1-13c14c4cc491, _, _)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)LOW_SharGrotto_ConfrontViconia_OM_Shadowheart_COM_6ebbe983-6aa1-1f25-6fcb-ec0aed2252bd, _, _)
+THEN
+DB_NOOP(1);
+
+IF
+FlagSet(_SwayFlag, _Player, _)
+AND
+DB_LOW_SharGrotto_CultistSwayFlags(_Group, _SwayFlag)
+AND
+DB_LOW_SharGrotto_ConfrontationParticipants(_Group, _Cultist)
+AND
+IsEnemy(_Cultist, (CHARACTER)_Player, 0)
+AND
+NOT DB_PermaDefeated(_Cultist)
+THEN
+SetFaction(_Cultist, (FACTION)ACT3_LOW_SharCultist_SwayedCultist_6829cbb6-ef01-4423-8b12-130912ce302a);
+
+//COMBAT
+
+//REGION Mapping of the Heart
+
+//APPLY HEART FORM AND FEAR
+
+IF
+FlagSet(_Flag, _Player, _)
+AND
+DB_LOW_HouseOfGrief_HeartForms(_, _, _Flag)
+AND
+DB_LOW_SharGrotto_HeartFormTags(_Flag, _Tag)
+THEN
+SetTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _Tag);
+
+IF
+FlagSet(_Fear, _Player, _)
+AND
+DB_LOW_SharGrotto_FearTags(_Fear, _Tag)
+THEN
+SetTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _Tag);
+
+
+//VICONIA STATUS
+
+IF
+DB_Is_InCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _)
+THEN
+ApplyStatus(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_HOUSEOFGRIEF_SH_PRESENCE", -1.0, 1);
+DB_LOW_SharGrotto_ViconiaHasStatus(1);
+
+IF
+DB_LOW_SharGrotto_ViconiaHasStatus(1)
+AND
+NOT DB_Is_InCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _)
+THEN
+RemoveStatus(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_HOUSEOFGRIEF_SH_PRESENCE");
+
+//SHADOWHEART
+IF
+DB_Is_InCombat(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _ID)
+AND
+DB_Is_InCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _ID)
+AND
+NOT DB_LOW_SharGrotto_HeartTagged(1)
+THEN
+SetTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (TAG)ACT3_LOW_HOUSEOFGRIEF_SHADOWHEART_f16ff923-66b8-46d2-80db-95108612bbee);
+DB_LOW_SharGrotto_HeartTagged(1);
+
+IF
+DB_LOW_SharGrotto_HeartTagged(1)
+AND
+DB_Is_InCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _ID)
+AND
+NOT DB_Is_InCombat(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _ID)
+THEN
+NOT DB_LOW_SharGrotto_HeartTagged(1);
+ClearTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (TAG)ACT3_LOW_HOUSEOFGRIEF_SHADOWHEART_f16ff923-66b8-46d2-80db-95108612bbee);
+
+IF
+DB_LOW_SharGrotto_HeartTagged(1)
+AND
+NOT DB_Is_InCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _)
+THEN
+NOT DB_LOW_SharGrotto_HeartTagged(1);
+ClearTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (TAG)ACT3_LOW_HOUSEOFGRIEF_SHADOWHEART_f16ff923-66b8-46d2-80db-95108612bbee);
+
+IF
+DB_Is_InCombat(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _ID)
+AND
+DB_Is_InCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _ID)
+AND
+NOT DB_OnlyOnce("ORI_Shadowheart_ViconiaWolfReaction")
+THEN
+DB_OnlyOnce("ORI_Shadowheart_ViconiaWolfReaction");
+DB_CombatReact_AD_OnCastOther(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, ORI_Shadowheart_PAD_ViconiaWolf_cf8b3753-feb9-cd10-d044-2d8bcdf410c1, "Target_LOW_HouseOfGrief_ExploitFear_Wolf_2");
+
+
+//END_REGION
+
+QRY
+QRY_DialogAttackRequested_CustomResponse(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _Player)
+THEN
+PROC_TryStopDialogFor(_Player);
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa, 0);
+
+IF
+EnteredCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _)
+AND
+DB_LOW_SharGrotto_ConfrontationParticipants(_, _Cultist)
+AND
+NOT DB_Defeated(_Cultist)
+AND
+GetFaction(_Cultist, (FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa)
+THEN
+DB_GLO_DefeatCounter(_Cultist, "LOW_SharGrotto_SharranCultists");
+
+IF
+EnteredCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_CheckPointCancelled")
+THEN
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa, 0);
+PROC_CancelCheckpoint("S_LOW_GrottoRightHallCheckpoint");
+PROC_CancelCheckpoint("S_LOW_GrottoLeftHallCheckpoint");
+
+IF
+RelationChanged((FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa, (FACTION)Hero_a1542c81-6895-929e-4522-10ce218bb360, _Relation, _)
+AND
+_Relation > 0 
+AND
+DB_LOW_SharGrotto_ConfrontationParticipants(_, _Cultist)
+AND
+DB_Is_InCombat(_Cultist, _)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_PermanentHostile")
+THEN
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa, 0);
+
+IF
+DB_Is_InCombat(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _ID)
+AND
+DB_Is_InCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _ID)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+THEN
+SetImmortal(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, 1);
+
+IF
+AttackedBy(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _, _, _, _Damage, _, _)
+AND
+NOT DB_Is_WildShaped((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313)
+AND
+_Damage >= 1
+AND
+GetHitpoints((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _HP)
+AND
+_HP <= 1
+AND
+IsImmortal((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, 1)
+AND
+NOT QRY_LOW_SharGrotto_ViconiaStatus()
+THEN
+PROC_CombatReact_RemoveCombatADs((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313);
+SetFaction(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (FACTION)ACT3_LOW_ViconiaDefeated_873c1fe1-508c-45bb-969c-e986cdab1b3e);
+PROC_SetRelationMutual((FACTION)ACT3_LOW_SharCultist_SwayedCultist_6829cbb6-ef01-4423-8b12-130912ce302a, (FACTION)ACT3_LOW_ViconiaDefeated_873c1fe1-508c-45bb-969c-e986cdab1b3e, 51);
+PROC_GlobalSetFlagAndCache((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097);
+SetImmortal(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, 0);
+SetTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (TAG)AI_AVOID_TARGET_3eebe42c-39ec-4165-9e70-b6811ab7b313);
+SetTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (TAG)AI_UNPREFERRED_TARGET_9787450d-f34d-43bd-be88-d2bac00bb8ee);
+ApplyStatus(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SHARGROTTO_VICONIADEFEAT", -1.0, 1, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+StatusApplied(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "KNOCKED_OUT", _, _)
+THEN
+PROC_CombatReact_RemoveCombatADs((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313);
+SetFaction(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (FACTION)ACT3_LOW_ViconiaDefeated_873c1fe1-508c-45bb-969c-e986cdab1b3e);
+PROC_SetRelationMutual((FACTION)ACT3_LOW_SharCultist_SwayedCultist_6829cbb6-ef01-4423-8b12-130912ce302a, (FACTION)ACT3_LOW_ViconiaDefeated_873c1fe1-508c-45bb-969c-e986cdab1b3e, 51);
+
+IF
+DB_CombatStarted(_ID)
+AND
+NOT DB_OnlyOnce("LOW_SharGrotto_ViconiaConfronted")
+AND
+DB_Is_InCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _ID)
+THEN
+DB_LOW_SharGrotto_ViconiaCombat(_ID);
+
+IF
+CombatEnded(_ID)
+AND
+DB_LOW_SharGrotto_ViconiaCombat(_ID)
+AND
+QRY_LOW_SharGrotto_ViconiaStatus()
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ViconiaConfronted")
+THEN
+ClearTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (TAG)AI_AVOID_TARGET_3eebe42c-39ec-4165-9e70-b6811ab7b313);
+ClearTag(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (TAG)AI_UNPREFERRED_TARGET_9787450d-f34d-43bd-be88-d2bac00bb8ee);
+PROC_CharacterDisableAllCrimes((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313,1);
+PROC_GlobalSetFlagAndCache((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097);
+PROC_RemoveDialog(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313);
+SetHitpointsPercentage(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, 10.0);
+SetImmortal(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, 0);
+DB_Dialogs(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, (DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_NoShadowheart_6c6f05fc-391a-40f8-c7c0-68bd37dd1e09);
+
+QRY
+QRY_LOW_SharGrotto_ViconiaStatus()
+AND
+HasActiveStatus(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SHARGROTTO_VICONIADEFEAT", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_LOW_SharGrotto_ViconiaStatus()
+AND
+HasActiveStatus(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "KNOCKED_OUT", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_CorpseLooting_BlockMakeOwned(_Char)
+AND
+DB_LOW_SharGrotto_ConfrontationParticipants(_, _Char)
+THEN
+DB_NOOP(1);
+
+IF
+DB_PermaDefeated(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+THEN
+PROC_LOW_SharGrotto_Admitted();
+PROC_GlobalSetFlagAndCache((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097);
+
+IF
+CombatEnded(_ID)
+AND
+DB_LOW_SharGrotto_ViconiaCombat(_ID)
+THEN
+NOT DB_LOW_SharGrotto_ViconiaCombat(_ID);
+
+//RESOLUTION
+
+IF
+DB_InRegion(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (TRIGGER)S_LOW_AltarProximity_02066208-2947-4f99-8c25-7c02210e53c3)
+AND
+DB_GlobalFlag((FLAG)LOW_SharGrotto_State_KilledCultists_2f9e0755-1f69-45f4-b7d7-7ad1814ecc3c)
+AND
+IsTagged(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (TAG)SHADOWHEART_SHARPATH_9624a3fe-bb9e-47c5-b9ab-417e6da6f84b, 1)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_SharCalledOut")
+THEN
+TriggerUnregisterForCharacter((TRIGGER)S_LOW_AltarProximity_02066208-2947-4f99-8c25-7c02210e53c3, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_AD_SharVoiceAltar_5857e168-ec5f-14e1-5a6b-b8c6509aa613, (ITEM)S_LOW_LossAltarStatue_37760d6c-056a-4f23-9256-bc01217b9056);
+
+IF
+DB_InRegion((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (TRIGGER)S_LOW_PostViconiaBounds_b23e10f4-2c85-45d3-a8a8-206c3afc11f9)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_State_LossDoorOpened_7e985e7e-b56b-40cf-a7d2-db08295ae07c)
+AND
+DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+AND
+NOT DB_CantTalk((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_PostViconia")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_PostViconia_bf7329d2-25d3-e0e1-095d-e0af6e1c50bb, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_OM_Shadowheart_AOM_OOM_a13d9a9f-6c85-a18a-cfef-8889c0e19e34, _, _)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)LOW_SharGrotto_ViconiaDefeated_OM_Shadowheart_COM_03382bb9-9c85-28fd-4c24-9069e44a0807, _, _)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)ORI_Shadowheart_State_SparedViconia_cd5421b3-6051-4641-a56f-69588173c13c)
+THEN
+RemoveStatus(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "KNOCKED_OUT", NULL_00000000-0000-0000-0000-000000000000);
+RemoveStatus(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, "LOW_SHARGROTTO_VICONIADEFEAT", NULL_00000000-0000-0000-0000-000000000000);
+PROC_DisappearOutOfSightTo((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, S_LOW_SharranTrainee_003_GuardLookAt_0e201d44-29e8-4539-8bad-fc5efaaba4e3, "Walk", 0, "");
+
+IF
+FlagSet((FLAG)ORI_Shadowheart_State_BecamePontiff_4c521953-3277-4a59-9e3d-8e161916ed8b, _, _)
+THEN
+TriggerRegisterForCharacter((TRIGGER)S_LOW_FealtyBounds_9098c9fb-df62-4c7d-87cd-4070678fb9f9, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+IF
+EnteredTrigger((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (TRIGGER)S_LOW_FealtyBounds_9098c9fb-df62-4c7d-87cd-4070678fb9f9)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_OfferFealty_9a7b540c-8f3e-4ea8-bde7-01e67e3e2020);
+TriggerUnregisterForCharacter((TRIGGER)S_LOW_FealtyBounds_9098c9fb-df62-4c7d-87cd-4070678fb9f9, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+PROC
+PROC_LongRest()
+AND
+DB_GlobalFlag(LOW_SharGrotto_State_OfferFealty_9a7b540c-8f3e-4ea8-bde7-01e67e3e2020)
+AND
+NOT DB_GlobalFlag(LOW_SharGrotto_State_CultistActivity_ed215bbf-787d-4b2f-811e-7e9aec032c2d)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_CultistActivity_ed215bbf-787d-4b2f-811e-7e9aec032c2d);
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_State_CultistActivity_ed215bbf-787d-4b2f-811e-7e9aec032c2d, _, _)
+AND
+DB_LOW_SharGrotto_PrayingCultists(_Cultist)
+AND
+NOT DB_PermaDefeated(_Cultist)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_State_CultistsPraying_daa525da-ebae-4a39-87b0-31e36790e6e7)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_CultistsPraying_daa525da-ebae-4a39-87b0-31e36790e6e7);
+
+
+//END_REGION
+
+//END_REGION
+
+//REGION Dormitory
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)LOW_SharGrotto_FamiliarFace_OM_Shadowheart_AOM_OOM_76131ed2-b08c-9014-8997-f3af9f1968ba, _, _)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)LOW_SharGrotto_FamiliarFace_OM_Shadowheart_COM_7c87d40e-6e62-66a7-8c4a-20d5edbf37c8, _, _)
+THEN
+DB_NOOP(1);
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_State_UnlockedFriendDialog_dd67ca1e-b36d-49d1-8822-6bb47ebfe2fe, _, _)
+THEN
+SetCanTrade((CHARACTER)S_LOW_ShadowheartFriend_2c10ff0f-d2ff-4dcb-8f8b-c6f870044f5d, 1);
+
+PROC
+PROC_LongRest()
+AND
+NOT DB_LevelUnreachable("CTY_Main_A")
+AND
+DB_GlobalFlag((FLAG)LOW_SharGrotto_State_TraderLeavingNextRest_ebc26739-3c56-4798-94c4-e6643cfaa518)
+AND
+NOT DB_OffStage(S_LOW_ShadowheartFriend_2c10ff0f-d2ff-4dcb-8f8b-c6f870044f5d)
+THEN
+DB_ExecuteWhenObjectInCurrentLevel("GLO_OffStage",S_LOW_ShadowheartFriend_2c10ff0f-d2ff-4dcb-8f8b-c6f870044f5d);
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_State_TraderJoiningCombat_c7308f7d-05c0-41f5-9489-35e1865b7920, _, _)
+THEN
+SetFaction((CHARACTER)S_LOW_ShadowheartFriend_2c10ff0f-d2ff-4dcb-8f8b-c6f870044f5d, (FACTION)ACT3_LOW_SharCultist_SwayedCultist_6829cbb6-ef01-4423-8b12-130912ce302a);
+
+
+//END_REGION
+
+//REGION Door of Loss
+
+//REGION Door opened prematurely
+
+IF
+Opened((ITEM)S_LOW_LossDoor_cf162070-3360-49d1-9f26-0919b6856c02)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+THEN
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, 0);
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_DoorGuard_02694e65-8567-4147-a8eb-3956b1b7606a, 0);
+
+IF
+RelationChanged((FACTION)ACT3_LOW_Viconia_645c9175-5efd-411b-a3c2-b098de8f7c00, (FACTION)Hero_a1542c81-6895-929e-4522-10ce218bb360, 0, _)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+THEN
+DB_LOW_SharGrotto_ViconiaHostile(1);
+
+IF
+DB_GlobalFlag((FLAG)LOW_SharGrotto_State_LossDoorOpened_7e985e7e-b56b-40cf-a7d2-db08295ae07c)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+AND
+DB_LOW_SharGrotto_ViconiaHostile(1)
+AND
+GetClosestAlivePlayer((ITEM)S_LOW_LossDoor_cf162070-3360-49d1-9f26-0919b6856c02, _Player, _)
+AND
+DB_InRegion(_Player, (TRIGGER)S_LOW_DoorOpenBounds_7ed73ca2-8acf-4eec-b237-a894804dad96)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_StartedCombat")
+THEN
+EnterCombat((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _Player);
+EnterCombat((CHARACTER)S_LOW_LossDoorGuard_90f9cb08-1019-424e-9b97-84d6a28898f2, _Player);
+
+IF //In case it was a non-player who opened the door.
+DB_GlobalFlag((FLAG)LOW_SharGrotto_State_LossDoorOpened_7e985e7e-b56b-40cf-a7d2-db08295ae07c)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+AND
+DB_LOW_SharGrotto_ViconiaHostile(1)
+AND
+DB_InRegion(_PartyMember, (TRIGGER)S_LOW_DoorOpenBounds_7ed73ca2-8acf-4eec-b237-a894804dad96)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_StartedCombat")
+THEN
+EnterCombat((CHARACTER)S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _PartyMember);
+EnterCombat((CHARACTER)S_LOW_LossDoorGuard_90f9cb08-1019-424e-9b97-84d6a28898f2, _PartyMember);
+
+IF
+DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+AND
+DB_LOW_SharGrotto_ViconiaHostile(1)
+THEN
+NOT DB_LOW_SharGrotto_ViconiaHostile(1);
+
+
+//END_REGION
+
+IF
+UseFinished(_Player, (ITEM)S_LOW_LossDoor_cf162070-3360-49d1-9f26-0919b6856c02, _)
+AND
+DB_Players(_Player)
+AND
+DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+AND
+IsClosed((ITEM)S_LOW_LossDoor_cf162070-3360-49d1-9f26-0919b6856c02, 1)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_LossDoorInteract")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_PAD_LossDoor_925eb985-1b9b-cc8c-c520-8fc7e3be9f71, _Player);
+
+PROC
+PROC_LOW_SharGrotto_LossAltarInit()
+AND
+DB_LOW_SharGrotto_LossAltar(_Altar)
+AND
+GetPosition(_Altar, _X, _Y, _Z)
+THEN
+SetCanInteract(_Altar, 0);
+DB_LOW_SharGrotto_LossAltarPos(_Altar, _X, _Y, _Z);
+
+IF
+ItemEnteredTrigger(_Item, (TRIGGER)S_LOW_AltarTrigger_cb619852-ce0b-449f-b009-a16fb12da49d, _)
+AND
+NOT DB_LOW_SharGrotto_LossAltar(_Item)
+AND
+Exists(_Item,1)
+AND
+IsStoryItem(_Item, 0)
+AND
+ItemGetGoldValue(_Item, _Value)
+AND
+NOT DB_LOW_SharGrotto_AltarItems(_Item)
+THEN
+//TODO: CHECK CONTAINERS
+PROC_LOW_SharGrotto_CheckValue((ITEM)_Item, (INTEGER)_Value);
+
+PROC
+PROC_LOW_SharGrotto_CheckValue((ITEM)_Item, (INTEGER)_Value)
+THEN
+PROC_IncreaseCounter("LOW_SharGrotto_AltarCount", _Value);
+PROC_LoopEffect((EFFECTRESOURCE)VFX_Status_Dipped_Fire_Overlay_01_3adb1e74-983e-40cb-935d-8ad1abc3db92, _Item, "LOW_SharGrotto_ItemSacrifice", "CTY_Main_A", "");
+DB_LOW_SharGrotto_AltarItems(_Item);
+
+IF
+ItemLeftTrigger(_Item, (TRIGGER)S_LOW_AltarTrigger_cb619852-ce0b-449f-b009-a16fb12da49d, _)
+AND
+DB_LOW_SharGrotto_AltarItems(_Item)
+AND
+ItemGetGoldValue(_Item, _Value)
+THEN
+PROC_DecreaseCounter("LOW_SharGrotto_AltarCount", _Value);
+PROC_StopLoopEffect(_Item, "LOW_SharGrotto_ItemSacrifice");
+NOT DB_LOW_SharGrotto_AltarItems(_Item);
+
+PROC
+PROC_CounterIncreased("LOW_SharGrotto_AltarCount", _Value)
+THEN
+PROC_LOW_SharGrotto_PrepareAltarMove((INTEGER)_Value);
+
+PROC
+PROC_CounterDecreased("LOW_SharGrotto_AltarCount", _Value)
+THEN
+PROC_LOW_SharGrotto_PrepareAltarMove((INTEGER)_Value);
+
+PROC
+PROC_CounterDecreased("LOW_SharGrotto_AltarCount", _Value)
+AND
+NOT DB_OnlyOnce("LOW_SharGrotto_RaisedFirstTime")
+AND
+DB_Players(_Player)
+AND
+QRY_SpeakerIsAvailableAndInDialogRange(_Player, (TRIGGER)S_LOW_AltarTrigger_cb619852-ce0b-449f-b009-a16fb12da49d)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_RaisedFirstTime")
+AND
+NOT DB_LOW_SharGrotto_BlockAltarLootVB(1)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_AltarLoot_4083ef00-8f95-71e1-f1f1-a5c01b6f535c, _Player);
+
+PROC
+PROC_LOW_SharGrotto_PrepareAltarMove((INTEGER)_Value)
+AND
+_Value < 1000
+THEN
+PROC_LOW_SharGrotto_MoveAltar((INTEGER)_Value);
+
+PROC
+PROC_LOW_SharGrotto_PrepareAltarMove((INTEGER)_Value)
+AND
+_Value >= 1000
+THEN
+PROC_LOW_SharGrotto_MoveAltar(1000);
+
+PROC
+PROC_LOW_SharGrotto_MoveAltar((INTEGER)_Value)
+AND
+IntegerToReal(_Value, _RealValue)
+AND
+RealDivide(_RealValue, 1000.0, _Percentage)
+AND
+RealProduct(0.300, _Percentage, _MoveHeight)
+AND
+DB_LOW_SharGrotto_LossAltarPos(_Altar, _X, _Y, _Z)
+AND
+RealSubtract(_Y, _MoveHeight, _NewY)
+THEN
+ItemMoveToPosition(_Altar, _X, _NewY, _Z, 1.0, 1.0, "LOW_SharGrotto_MoveAltar", 0);
+PROC_LOW_SharGrotto_MoveTrigger((REAL)_MoveHeight);
+
+PROC
+PROC_LOW_SharGrotto_MoveTrigger((REAL)_MoveHeight)
+AND
+GetPosition((TRIGGER)S_LOW_AltarTriggerOrigin_065e39e5-5a44-46b7-b223-d8383bc5487e, _X, _Y, _Z)
+AND
+RealSubtract(_Y, _MoveHeight, _NewY)
+THEN
+TeleportToPosition(S_LOW_AltarTrigger_cb619852-ce0b-449f-b009-a16fb12da49d, _X, _NewY, _Z, "", 0, 0, 0, 0, 0);
+
+PROC
+PROC_CounterIncreased("LOW_SharGrotto_AltarCount", _Value)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_State_LossDoorOpened_7e985e7e-b56b-40cf-a7d2-db08295ae07c)
+AND
+_Value >= 1000
+AND
+HasActiveStatus((ITEM)S_LOW_LossPyre_43f40930-2239-4c6d-bb19-1809dcf03d01, "BURNING", 1)
+THEN
+RemoveStatus((ITEM)S_LOW_LossPyre_43f40930-2239-4c6d-bb19-1809dcf03d01, "BURNING");
+
+IF
+StatusRemoved((ITEM)S_LOW_LossPyre_43f40930-2239-4c6d-bb19-1809dcf03d01, "BURNING", _, _)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_State_LossDoorOpened_7e985e7e-b56b-40cf-a7d2-db08295ae07c)
+AND
+DB_GlobalCounter("LOW_SharGrotto_AltarCount", _Count)
+AND
+_Count >= 1000
+THEN
+PROC_Low_SharGrotto_OpenDoor();
+PROC_Low_SharGrotto_RemoveOfferedItems();
+
+PROC
+PROC_Low_SharGrotto_RemoveOfferedItems()
+THEN
+PlayEffect((TRIGGER)S_LOW_AltarTrigger_cb619852-ce0b-449f-b009-a16fb12da49d, (EFFECTRESOURCE)VFX_Script_DestroyAction_Thayan_Incense_Burner_A_Purple_01_a14661ee-1fbc-cb6b-395e-b2c9cfee09a3);
+
+PROC
+PROC_Low_SharGrotto_RemoveOfferedItems()
+AND
+DB_LOW_SharGrotto_AltarItems(_Item)
+THEN
+NOT DB_LOW_SharGrotto_AltarItems(_Item);
+SetOnStage(_Item, 0);
+
+IF
+DB_InRegion((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (TRIGGER)S_LOW_LossDoorBounds_43068efd-75c3-4299-a27f-d3e82c36ee17)
+AND
+DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+AND
+NOT DB_Is_InCombat(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _)
+AND
+IsTagged((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (TAG)SHADOWHEART_SHARPATH_9624a3fe-bb9e-47c5-b9ab-417e6da6f84b, 1)
+THEN
+DB_LOW_SharGrotto_BlockAltarLootVB(1);
+TriggerUnregisterForCharacter((TRIGGER)S_LOW_LossDoorBounds_43068efd-75c3-4299-a27f-d3e82c36ee17, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+PROC_Low_SharGrotto_OpenDoor();
+
+PROC
+PROC_Low_SharGrotto_OpenDoor()
+AND
+QRY_OnlyOnce("LOW_SharGrotto_OpenLossDoor")
+THEN
+PROC_ItemUnlockAndOpen((ITEM)S_LOW_LossDoor_cf162070-3360-49d1-9f26-0919b6856c02);
+
+IF
+Opened((ITEM)S_LOW_LossDoor_cf162070-3360-49d1-9f26-0919b6856c02)
+THEN
+TriggerUnregisterForItems((TRIGGER)S_LOW_AltarTrigger_cb619852-ce0b-449f-b009-a16fb12da49d);
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_LossDoorOpened_7e985e7e-b56b-40cf-a7d2-db08295ae07c);
+SetCanInteract((ITEM)S_LOW_LossDoor_cf162070-3360-49d1-9f26-0919b6856c02, 0);
+
+
+//END_REGION
+
+//REGION Shadowheart Parents
+
+//REGION Player Kills Parents
+
+
+//PARENT REACTIONS
+
+IF
+DB_PermaDefeated(_Parent)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _, _)
+AND
+DB_LOW_SharGrotto_ParentsResolutions(_, _KilledFlag, _)
+AND
+NOT DB_GlobalFlag((FLAG)_KilledFlag)
+AND
+NOT DB_GlobalFlag((FLAG)ORI_Shadowheart_State_ConcludedGrotto_438098b7-3b50-48d6-ac53-6960b2849e10)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_OtherParent, _, _, _)
+AND //In case _Parent was knocked out but not killed. But they can't leave through long rest when tied up.
+NOT DB_Dead((CHARACTER)_OtherParent)
+THEN
+Die(_OtherParent, DEATHTYPE.Necrotic, NULL_00000000-0000-0000-0000-000000000000, 0, 0);
+
+QRY
+QRY_LOW_SharGrotto_KilledParents()
+AND
+DB_LOW_SharGrotto_ParentsResolutions(_, _KilledFlag, _)
+AND
+DB_GlobalFlag((FLAG)_KilledFlag)
+THEN
+DB_NOOP(1);
+
+IF
+DB_PermaDefeated(_Parent)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _, _)
+AND
+NOT QRY_LOW_SharGrotto_KilledParents()
+AND
+DB_GlobalFlag((FLAG)ORI_Shadowheart_State_ConcludedGrotto_438098b7-3b50-48d6-ac53-6960b2849e10)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_OtherParent, _, _, _)
+AND
+NOT DB_PermaDefeated(_OtherParent)
+THEN
+PROC_LOW_SharGrotto_ParentLeave((CHARACTER)_OtherParent);
+
+PROC
+PROC_LOW_SharGrotto_ParentLeave((CHARACTER)_Parent)
+THEN
+PROC_NotifyWhenReadyToMoveOn(_Parent, "LOW_SharGrotto_ParentCrimeReadyToLeave");
+
+PROC
+PROC_ReadyToMoveOn(_Parent, "LOW_SharGrotto_ParentCrimeReadyToLeave")
+THEN
+PROC_DisappearOutOfSight((CHARACTER)_Parent, "Run", 1, "LOW_SharGrotto_ParentCrimeReadyToLeave");
+
+PROC
+PROC_ReadyToMoveOn_Failed(_Parent, "LOW_SharGrotto_ParentCrimeReadyToLeave")
+THEN
+SetOnStage(_Parent, 0);
+
+//SHADOWHEART REACTIONS
+
+QRY
+QRY_CRIME_BlockRegisterCrime((CHARACTER)_Player, (STRING)_Crime, _, (CHARACTER)_Parent, _ID)
+AND //We do not have to care about avatars sabotaging their own questline.
+NOT DB_Avatars((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+NOT QRY_LOW_SharGrotto_ParentsQuestKill()
+AND
+DB_LOW_SharGrotto_ExclusiveReacts(_Crime)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _, _)
+AND
+DB_Players(_Player)
+THEN
+PROC_LOW_SharGrotto_ParentAssault((CHARACTER)_Parent, (CHARACTER)_Player);
+
+QRY
+QRY_LOW_SharGrotto_ParentsQuestKill()
+AND
+DB_LOW_SharGrotto_ParentsResolutions(_, _KilledFlag, _)
+AND
+DB_GlobalFlag((FLAG)_KilledFlag)
+THEN
+DB_NOOP(1);
+
+IF //CASE 0-A: NO CLEAR KILLER 
+KilledBy(_Parent, _Killer, _, _)
+AND
+NOT DB_Players((CHARACTER)_Killer)
+AND
+DB_LOW_SharGrotto_ParentsResolutions(_, _KilledFlag, _)
+AND
+NOT DB_GlobalFlag((FLAG)_KilledFlag)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _, _)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_DefeatedParents_a97d7fe5-340d-4b78-b38a-1949627698bf);
+PROC_LOW_SharGrotto_ParentAssault_NoKiller((CHARACTER)_Parent);
+
+PROC //SHADOWHEART NEARBY
+PROC_LOW_SharGrotto_ParentAssault_NoKiller((CHARACTER)_Parent)
+AND
+QRY_SpeakerIsInDialogRange(_Parent, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_PAD_DefeatedParentNoAvatar_fd311fcf-1709-d194-5268-0f43bb32614f, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+PROC //SHADOWHEART AWAY
+PROC_LOW_SharGrotto_ParentAssault_NoKiller((CHARACTER)_Parent)
+AND
+NOT QRY_SpeakerIsInDialogRange(_Parent, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_PAD_DefeatedParentAway_16a1ae04-c1c2-e7c4-40a2-04322c882b80, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+PROC //CASE 1: SHADOWHEART IS NOT NEARBY
+PROC_LOW_SharGrotto_ParentAssault((CHARACTER)_Parent, (CHARACTER)_Player)
+AND
+NOT QRY_SpeakerIsInDialogRange(_Player, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+DB_PermaDefeated(_Parent)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_DefeatedParents_a97d7fe5-340d-4b78-b38a-1949627698bf);
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_PAD_DefeatedParentAway_16a1ae04-c1c2-e7c4-40a2-04322c882b80, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+PROC
+PROC_LongRest()
+AND
+DB_GlobalFlag((FLAG)LOW_SharGrotto_State_DefeatedParents_a97d7fe5-340d-4b78-b38a-1949627698bf)
+THEN
+PROC_RemoveDialog((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+DB_Dialogs((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (DIALOGRESOURCE)CAMP_Shadowheart_CRD_DefeatedParents_fae58cb0-9bf8-6f91-4b15-f08d23604107);
+PROC_GLO_PartyMembers_MakeNPC((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+PROC //CASE 2: SHADOWHEART IS KILLER BUT NO PLAYER NEARBY
+PROC_LOW_SharGrotto_ParentAssault((CHARACTER)_Parent, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+DB_Players(_Player)
+AND
+_Player != S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679
+AND
+NOT QRY_SpeakerIsInDialogRange(_Player, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+DB_PermaDefeated(_Parent)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_DefeatedParents_a97d7fe5-340d-4b78-b38a-1949627698bf);
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_PAD_DefeatedParentNoAvatar_fd311fcf-1709-d194-5268-0f43bb32614f, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+PROC //CASE 3: SHADOWHEART IS NEARBY
+PROC_LOW_SharGrotto_ParentAssault((CHARACTER)_Parent, (CHARACTER)_Player)
+AND
+_Player != S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679
+AND
+DB_PermaDefeated(_Parent)
+AND
+QRY_SpeakerIsInDialogRange(_Player, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ProvokedConfrontation")
+AND
+NOT QRY_StartDialog_Fixed((DIALOGRESOURCE)LOW_SharGrotto_DefeatedParents_cd8e69ea-d78d-aa3b-6f23-202e67e0cff4, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Player)
+THEN
+PROC_Origins_CompanionLeavePermanently((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, "CompanionHostile");
+PROC_GLO_PartyMembers_TransferStoryItems((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (CHARACTER)_Player);
+PROC_SetRelationToPlayers((FACTION)Origin_ShadowHeart_901cd370-86ff-b538-e1e8-574c84135ca0, 0);
+PROC_LOW_SharGrotto_FightPlayerAD();
+
+PROC //CASE 4: SHADOWHEART IS NEARBY AND KILLER AND PLAYER IS NEARBY
+PROC_LOW_SharGrotto_ParentAssault((CHARACTER)_Parent, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+DB_Players(_Player)
+AND
+_Player != S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679
+AND
+QRY_SpeakerIsInDialogRange(_Player, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+DB_PermaDefeated(_Parent)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ProvokedConfrontation")
+AND
+NOT QRY_StartDialog_Fixed((DIALOGRESOURCE)LOW_SharGrotto_DefeatedParents_cd8e69ea-d78d-aa3b-6f23-202e67e0cff4, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Player)
+THEN
+PROC_Origins_CompanionLeavePermanently((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, "CompanionHostile");
+PROC_SetRelationToPlayers((FACTION)Origin_ShadowHeart_901cd370-86ff-b538-e1e8-574c84135ca0, 0);
+PROC_LOW_SharGrotto_FightPlayerAD();
+
+IF
+DialogEnded((DIALOGRESOURCE)LOW_SharGrotto_DefeatedParents_cd8e69ea-d78d-aa3b-6f23-202e67e0cff4, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, _)
+AND
+_Player != S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679
+THEN
+PROC_Origins_CompanionLeavePermanently((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, "CompanionHostile");
+PROC_SetRelationToPlayers((FACTION)Origin_ShadowHeart_901cd370-86ff-b538-e1e8-574c84135ca0, 0);
+PROC_LOW_SharGrotto_FightPlayerAD();
+
+PROC
+PROC_LOW_SharGrotto_FightPlayerAD()
+AND
+QRY_SpeakerIsAvailable(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_PAD_DefeatedParent_869fb81a-d0cf-b8c0-e9fe-928d62a10975, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+//WARNINGS
+
+PROC //CASE 1: SHADOWHEART IS NOT NEARBY
+PROC_LOW_SharGrotto_ParentAssault((CHARACTER)_Parent, (CHARACTER)_Player)
+AND
+NOT DB_PermaDefeated(_Parent)
+AND
+NOT QRY_SpeakerIsInDialogRange(_Parent, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_AttackedParents")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_AttackedParent_11404ca2-ba17-1768-1427-65eb4b1348c1, _Player);
+
+PROC //CASE 2: SHADOWHEART IS NEARBY
+PROC_LOW_SharGrotto_ParentAssault((CHARACTER)_Parent, (CHARACTER)_Player)
+AND
+NOT DB_PermaDefeated(_Parent)
+AND
+QRY_SpeakerIsInDialogRange(_Parent, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_AttackedParents")
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_PAD_AttackedParentSH_22aa986e-1103-1817-caf5-a7600f03eb03, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+
+//END_REGION
+
+//REGION Parent Setup
+
+IF
+EntityEvent(_Parent, "LOW_SharGrotto_AttachedToWheel")
+THEN
+ApplyStatus(_Parent, "LOW_SHARPRISON", -1.0, 1, NULL_00000000-0000-0000-0000-000000000000);
+
+IF
+UseFinished(_Parent, _Wheel, _)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _, _)
+AND
+GetTemplate(_Wheel, DEC_Dungeon_Shar_Wheel_A_18f3c376-05fb-4bf9-ada4-82982375a81f)
+AND
+HasActiveStatus(_Parent, "LOW_SHARPRISON", 1)
+THEN
+RemoveStatus(_Parent, "LOW_SHARPRISON");
+
+//END_REGION
+
+//ORIGIN MOMENT SET-UP
+
+QRY
+QRY_SelectCustomDialog_AfterGenerics((CHARACTER)S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e, _Player)
+AND
+NOT DB_GlobalFlag((FLAG)ORI_Shadowheart_State_ConcludedGrotto_438098b7-3b50-48d6-ac53-6960b2849e10)
+AND
+QRY_SpeakerIsInDialogRange((CHARACTER)S_LOW_ShadowheartMother_d085272a-f1d0-4ff8-a498-80728030f83e, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+AND
+NOT DB_CantTalk(S_LOW_ShadowheartFather_c12d561f-beae-4ef6-917e-0bec2f829449)
+AND
+NOT DB_SelectedDialog( (DIALOGRESOURCE)LOW_SharGrotto_ShadowheartFather_c07cb7d4-21d6-8203-86d6-dcc60764e9b0, S_LOW_ShadowheartFather_c12d561f-beae-4ef6-917e-0bec2f829449, _Player)
+THEN
+DB_SelectedDialog((DIALOGRESOURCE)LOW_SharGrotto_ShadowheartFather_c07cb7d4-21d6-8203-86d6-dcc60764e9b0, S_LOW_ShadowheartFather_c12d561f-beae-4ef6-917e-0bec2f829449, _Player);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers((DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1, _Inst)
+AND
+QRY_SpeakerIsAvailable(S_SHA_VoiceOfShar_OverrideSpeaker_9293e853-5c10-45a1-a158-ebcde08c02ee)
+THEN
+PROC_DialogAddSpeakingActor(_Inst, S_SHA_VoiceOfShar_OverrideSpeaker_9293e853-5c10-45a1-a158-ebcde08c02ee);
+
+PROC
+PROC_StartDialog_AddExtraSpeakers((DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2, _Inst)
+AND
+QRY_SpeakerIsAvailable(S_SHA_VoiceOfShar_OverrideSpeaker_9293e853-5c10-45a1-a158-ebcde08c02ee)
+THEN
+PROC_DialogAddSpeakingActor(_Inst, S_SHA_VoiceOfShar_OverrideSpeaker_9293e853-5c10-45a1-a158-ebcde08c02ee);
+
+
+//PARENTS FATE OUTCOMES
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(ORI_Shadowheart_State_RejectShar_KilledParents_e9060caf-66b0-4701-8dfd-5ae1125f5afd)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _, _)
+THEN
+PROC_Poof(_Parent, (EFFECTRESOURCE)VFX_Cinematic_MistyStep_Disappear_01_61463e09-06f6-bbc5-a667-27983f1d7135);
+PROC_GlobalSetFlagAndCache((FLAG)ORI_Shadowheart_State_ConcludedGrotto_438098b7-3b50-48d6-ac53-6960b2849e10);
+
+IF
+FlagSet(ORI_Shadowheart_State_Shar_KilledParents_3a3b0ecf-a1ed-4733-8548-0348befc6bac, _, _)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _, _)
+THEN
+Die(_Parent, DEATHTYPE.Physical, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, 0, 0, 0.0);
+PROC_GlobalSetFlagAndCache((FLAG)ORI_Shadowheart_State_ConcludedGrotto_438098b7-3b50-48d6-ac53-6960b2849e10);
+
+IF
+DialogEnded(LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1, _)
+THEN
+PROC_LOW_SharGrotto_ParentsFate();
+
+IF
+DialogEnded(LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2, _)
+THEN
+PROC_LOW_SharGrotto_ParentsFate();
+
+PROC
+PROC_LOW_SharGrotto_ParentsFate()
+AND
+DB_LOW_SharGrotto_ParentsResolutions(_, _, _SpareFlag)
+AND
+DB_GlobalFlag((FLAG)_SpareFlag)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _CampPos, _CampDialog)
+AND
+NOT DB_PermaDefeated(_Parent)
+THEN
+RemoveStatus(_Parent, "LOW_SHARPRISON");
+EndRepose(_Parent);
+PROC_GlobalSetFlagAndCache((FLAG)ORI_Shadowheart_State_ConcludedGrotto_438098b7-3b50-48d6-ac53-6960b2849e10);
+
+IF
+ReposeRemoved(_Parent, _)
+AND
+DB_LOW_SharGrotto_ParentsResolutions(_, _, _SpareFlag)
+AND
+DB_GlobalFlag((FLAG)_SpareFlag)
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _, _)
+AND
+DB_GlobalFlag((FLAG)ORI_Shadowheart_State_ConcludedGrotto_438098b7-3b50-48d6-ac53-6960b2849e10)
+AND
+NOT DB_PermaDefeated(_Parent)
+THEN
+PROC_DisappearOutOfSightTo((CHARACTER)_Parent, S_LOW_SharranTrainee_003_GuardLookAt_0e201d44-29e8-4539-8bad-fc5efaaba4e3, "Walk", 0, "LOW_SharGrotto_ParentLeft");
+
+IF
+EntityEvent(_Parent, "LOW_SharGrotto_ParentLeft")
+AND
+DB_LOW_SharGrotto_ShadowheartParents(_Parent, _, _CampPos, _CampDialog)
+THEN
+PROC_Camp_TeleportToCamp((CHARACTER)_Parent, (TRIGGER)_CampPos);
+SetOnStage(_Parent, 1);
+PROC_RemoveDialog(_Parent);
+DB_Dialogs((CHARACTER)_Parent, (DIALOGRESOURCE)_CampDialog);
+
+IF
+FlagSet((FLAG)ORI_Shadowheart_State_Shar_SavedParents_8a0fad17-1615-4a0d-a045-21661d9a2aa0, _, _)
+THEN
+PROC_LOW_SharGrotto_CultistsHostile();
+
+IF
+FlagSet((FLAG)ORI_Shadowheart_State_RejectShar_KilledParents_e9060caf-66b0-4701-8dfd-5ae1125f5afd, _, _)
+THEN
+PROC_LOW_SharGrotto_CultistsHostile();
+
+IF
+FlagSet((FLAG)ORI_Shadowheart_State_RejectShar_SavedParents_486d69d4-a7c2-4cb5-8fcb-8f2cb738ada9, _, _)
+THEN
+PROC_LOW_SharGrotto_CultistsHostile();
+
+PROC
+PROC_LOW_SharGrotto_CultistsHostile()
+THEN
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa, 0);
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_House_a97a8fce-e4ba-43ac-b3e3-60ff9d273d72, 0);
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_SwayedCultist_6829cbb6-ef01-4423-8b12-130912ce302a, 0);
+
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_AOM_OOM_93197c73-73c0-4482-e023-252cdf461dc1, _, _)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)LOW_SharGrotto_ParentsFate_OM_Shadowheart_COM_aa3b3a6b-b584-90f1-6a20-7a3ed4f037c2, _, _)
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//REGION Misc
+
+PROC
+PROC_LevelLoadedOnce("CTY_Main_A")
+THEN
+Transform((CHARACTER)S_LOW_GrottoSentry_90c54fce-9a57-4ff5-9d36-0363ef90c5f1, (CHARACTERROOT)Halflings_Male_Harper_Melee_d2254595-972e-4286-bd5e-ba4bed78b9fd, (SHAPESHIFTRULE)RaceOnly_f007a112-a1a3-497b-8ea9-6105273aa24e);
+
+PROC
+PROC_SpotPlayers_Spotted((CHARACTER)S_LOW_GrottoSentry_90c54fce-9a57-4ff5-9d36-0363ef90c5f1, "LOW_SharGrotto_SentryGreet", _Player)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_SharGrotto_AD_GrottoSentry_7b9acbe4-c97d-d44d-8bd1-99436112dbff, (CHARACTER)S_LOW_GrottoSentry_90c54fce-9a57-4ff5-9d36-0363ef90c5f1);
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_GreetedParty_12192fc3-0ad6-4da6-b41f-5a559135dbe2);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_Player, "LOW_SharGrotto_GithLog", (TRIGGER)S_LOW_GithInvestigation_649d48cf-809c-47ee-a133-bd0508eefa1a)
+THEN
+PROC_PlayPerceptionRevealEffect((ITEM)S_LOW_RubbleContainer_30a493be-7dc7-48c7-ac38-5c9fce2b5e13, "LOW_SharGrotto_PileReveal");
+SetCanInteract((ITEM)S_LOW_RubbleContainer_30a493be-7dc7-48c7-ac38-5c9fce2b5e13, 1);
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_FoundDebris_e998bb2f-66f9-576f-2c3e-cc7f6ad3a66d, _Player);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_Player, "LOW_SharGrotto_SpotHideOut", (TRIGGER)S_LOW_SecretHoleSpot_9391dc0e-2b3f-42c4-a708-35478f592a4d)
+THEN
+PROC_PlayPerceptionRevealEffect((ITEM)S_LOW_CaveObstruction_90f012d6-595c-4a76-a6dc-1d77d2a61dc7, "LOW_SharGrotto_BlockadeReveal", 500);
+SetCanInteract((ITEM)S_LOW_CaveObstruction_90f012d6-595c-4a76-a6dc-1d77d2a61dc7, 1);
+
+IF
+CharacterLootedCharacter(_Player, (CHARACTER)S_LOW_TonguelessGith_969a6a9b-ca6a-49bb-9291-04e7afdab39e)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ReadNote")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_FoundGith_c1c52c6f-7465-06ec-79eb-41b5c199d331, _Player);
+
+IF
+GameBookInterfaceClosed((ITEM)S_LOW_GithNote_1a15be9f-4764-4bb4-8edc-04ff741babf8, _Player)
+AND
+DB_Players(_Player)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ReadNote")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_HeistInterrogation_07b9b08b-55c4-c100-a43f-3601396c0571, _Player);
+
+IF
+AddedTo(S_LOW_JusticiarHelm_a76e8999-9a14-41af-868b-03fa9c31a3bb, (CHARACTER)_Player, _)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_LootedJusticiarHelmet")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_JusticiarHelmet_b118062b-1f30-dd6b-e499-7a10fe105729, _Player);
+
+IF
+AddedTo(S_LOW_WyvernWhiskey_f52f56f5-686d-4341-848b-5916c6913f39, (CHARACTER)_Player, _)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_LootedWhiskey")
+THEN
+PROC_KnowledgeCheck((CHARACTER)_Player, "LOW_SharGrotto_WhiskeyCheck", S_LOW_WyvernWhiskey_f52f56f5-686d-4341-848b-5916c6913f39, "History", (DIFFICULTYCLASS)Act3_Easy_5028066b-6ea0-4a6a-9e3e-53bee62559a7, (DIALOGRESOURCE)LOW_SharGrotto_PAD_WyvernWhiskey_803ca3cf-5881-360d-f3ff-ea4d5031e58c, (FLAG)LOW_SharGrotto_State_PassedWhiskeyCheck_a7bdbbc6-3c3f-4719-bc09-ef750bff3cee);
+
+IF
+GameBookInterfaceClosed((ITEM)S_LOW_SharGithRecords_d8307160-02da-4db8-bf94-1ad4c8b19ae4, _Player)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ReadHeistInfo")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_HeistPreparation_0337d245-c15a-843f-8d26-6b166204a6f7, _Player);
+
+IF
+GameBookInterfaceClosed((ITEM)S_LOW_ViconiaHistory_feac28f5-58dc-428b-a764-8d17773e9fd5, _Player)
+AND
+QRY_OnlyOnce("LOW_SharGrotto_ReadLetter")
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_CalimportLetter_08cedc50-c2d5-9cfd-42d9-bba87a6e6f0e, _Player);
+
+//TG - 59 - Is in Shar Grotto
+IF
+DB_InRegion(_Player, (TRIGGER)S_LOW_SharranGrotto_SUB_852ec92c-713b-48de-80f5-353d95bbd3de)
+AND
+QRY_OnlyOnce("TG_LOW_SharGrotto_EnteredGrotto")
+AND
+DB_Avatars(_Avatar)
+THEN
+SetFlag((FLAG)TG_LOW_SharGrotto_InGrotto_fa6de38a-6cd5-463d-8492-61952782b85f, _Avatar);
+
+IF
+DB_TopicalGreeting((FLAG)TG_LOW_SharGrotto_InGrotto_fa6de38a-6cd5-463d-8492-61952782b85f)
+AND
+NOT DB_InRegion(_, (TRIGGER)S_LOW_SharranGrotto_SUB_852ec92c-713b-48de-80f5-353d95bbd3de)
+AND
+QRY_OnlyOnce("TG_LOW_SharGrotto_LeftGrotto")
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_Event_LeftGrotto_5e8e8690-a1f4-47f5-93a1-2c99a65a35a6);
+
+
+//END_REGION
+
+//REGION Undercellar
+
+PROC
+PROC_BlockUseOfItem((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Mannequin)
+AND
+DB_LOW_SharGrotto_Mannequins(_Mannequin, _Dialog)
+AND
+DB_Players(_Player)
+AND
+QRY_SpeakerIsAvailable(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+THEN
+DB_CustomUseItemResponse(_Player, _Mannequin, 0);
+PROC_TrySkillCheck((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _Mannequin, "History", (DIFFICULTYCLASS)Act3_Hard_6298329e-255c-4826-9209-e911873b64e7, "LOW_SharGrotto_Mannequin");
+
+PROC
+PROC_RollResult("LOW_SharGrotto_Mannequin", _Player, _Mannequin, 1)
+AND
+DB_LOW_SharGrotto_Mannequins((ITEM)_Mannequin, _Dialog)
+THEN
+PROC_TryStartAD(_Dialog, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+PROC
+PROC_RollResult("LOW_SharGrotto_Mannequin", _Player, _Mannequin, 0)
+AND
+DB_LOW_SharGrotto_Mannequins((ITEM)_Mannequin, _Dialog)
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_Mannequins_701382d3-f8d3-ff27-200c-0aeaef6f0ab1, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+
+PROC
+PROC_RollResult("LOW_SharGrotto_Mannequin", _Player, _Mannequin, _)
+AND
+DB_LOW_SharGrotto_Mannequins((ITEM)_Mannequin, _Dialog)
+THEN
+NOT DB_LOW_SharGrotto_Mannequins(_Mannequin, _Dialog);
+
+//END_REGION
+
+//REGION Mirror of Loss
+
+IF
+GameBookInterfaceClosed((ITEM)S_LOW_ShadowheartNote_099b5fa8-f80e-4cbb-a7bc-ca5d6119ac4e, _Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_Knows_Mirror_MirrorNature_dccb63c4-7563-454a-8dd5-21bd302cabca)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_Knows_Mirror_MirrorNature_dccb63c4-7563-454a-8dd5-21bd302cabca);
+StartVoiceBark((VOICEBARKRESOURCE)LOW_SharGrotto_VB_FoundMirrorNote_5e83d356-6f2b-f186-7ae9-4b6b8526a97f, _Player);
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_Event_Mirror_RollMemory_9ae217ca-c5c2-458b-9f48-93df07e35a06, _Player, _)
+AND
+Random(5, _Random)
+AND
+QRY_LOW_SharGrotto_CalculateMirrorBonus((CHARACTER)_Player)
+AND
+DB_LOW_SharGrotto_MirrorBonus(_Player, _Bonus)
+AND
+IntegerSum(_Random, _Bonus, _Sum)
+AND
+DB_LOW_SharGrotto_MirrorFlags(_Index, _Flag)
+AND
+_Sum >= _Index
+THEN
+ClearFlag((FLAG)LOW_SharGrotto_Event_Mirror_RollMemory_9ae217ca-c5c2-458b-9f48-93df07e35a06, _Player);
+SetFlag(_Flag, _Player);
+
+QRY
+QRY_LOW_SharGrotto_CalculateMirrorBonus((CHARACTER)_Player)
+AND
+NOT DB_LOW_SharGrotto_MirrorBonus(_Player, _)
+THEN
+DB_LOW_SharGrotto_MirrorBonus(_Player, 0);
+
+QRY
+QRY_LOW_SharGrotto_CalculateMirrorBonus((CHARACTER)_Player)
+AND
+DB_LOW_SharGrotto_MirrorBonus(_Player, _Bonus)
+AND
+GetFlag((FLAG)LOW_SharGrotto_State_Mirror_PrayerSuccess_f98c5c36-e1fa-4c16-b74d-0ccaefd836eb, _Player, 1)
+AND
+IntegerSum(_Bonus, 3, _NewBonus)
+THEN
+ClearFlag((FLAG)LOW_SharGrotto_State_Mirror_PrayerSuccess_f98c5c36-e1fa-4c16-b74d-0ccaefd836eb, _Player);
+DB_LOW_SharGrotto_MirrorBonus(_Player, _NewBonus);
+
+QRY
+QRY_LOW_SharGrotto_CalculateMirrorBonus((CHARACTER)_Player)
+THEN
+DB_NOOP(1);
+
+IF
+DialogEnded((DIALOGRESOURCE)LOW_SharGrotto_MemoryMirror_03dcc001-edc1-9d40-3b93-14a162c86112, _ID)
+AND
+DB_DialogPlayers(_ID, _Player, _)
+AND
+DB_LOW_SharGrotto_MirrorFlags(_, _Flag)
+AND
+GetFlag(_Flag, _Player, 1)
+THEN
+ClearFlag(_Flag, _Player);
+
+PROC
+PROC_FlagReactionAfterDialog(_Player, _Flag)
+AND
+DB_LOW_SharGrotto_MirrorMemories(_Flag, _Boon)
+THEN
+AddPassive(_Player, _Boon);
+
+PROC
+PROC_FlagReactionAfterDialog(_Player, _Flag)
+AND
+DB_LOW_SharGrotto_MirrorPlayerMemories(_Flag, _Curse)
+THEN
+ApplyStatus(_Player, _Curse, -1.0, 1, (ITEM)S_LOW_BlackMirror_d9907043-c08f-49bb-87d0-bb3eeb723a06);
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_Event_Mirror_RobMemory_b285a99b-8dc2-463c-b7f9-2dd5147d37e5, _Player, _)
+AND
+DB_LOW_SharGrotto_MirrorPlayerMemories(_Flag, _Curse)
+AND
+GetFlag(_Flag, _Player, 0)
+AND
+NOT DB_LOW_SharGrotto_Mirror_MemoryFabricated(_Player)
+THEN
+SetFlag(_Flag, _Player);
+ApplyStatus(_Player, _Curse, -1.0, 1, (ITEM)S_LOW_BlackMirror_d9907043-c08f-49bb-87d0-bb3eeb723a06);
+DB_LOW_SharGrotto_Mirror_MemoryFabricated(_Player);
+
+IF
+FlagSet((FLAG)LOW_SharGrotto_Event_OfferedForbiddenKnowledge_a909f35c-c0b5-40c1-bc3e-777c1454c496, _Player, _)
+AND
+IsTagged(_Player, (TAG)FORBIDDENKNOWLEDGE_673cb6af-f12b-4d6e-abfa-1bb83cf4ce44, 1)
+THEN
+ClearTag(_Player, (TAG)FORBIDDENKNOWLEDGE_673cb6af-f12b-4d6e-abfa-1bb83cf4ce44);
+
+IF
+TagCleared(_Char, (TAG)FORBIDDENKNOWLEDGE_673cb6af-f12b-4d6e-abfa-1bb83cf4ce44)
+THEN
+RemovePassive(_Char, "CTY_NecromancyOfThay_ForbiddenKnowledge_Passive");
+
+IF
+TagCleared((CHARACTER)_Char, (TAG)FORBIDDENKNOWLEDGE_673cb6af-f12b-4d6e-abfa-1bb83cf4ce44)
+AND
+HasSpell(_Char, "Target_CursedTome_WakeTheDead", 1)
+THEN
+RemoveSpell(_Char, "Target_CursedTome_WakeTheDead", 1);
+
+//REGION Shadowheart Memories
+
+PROC
+PROC_LOW_SharGrotto_MemoryCheck()
+AND
+GetFlag((FLAG)ORI_State_Partnered_6c1a31e8-1d3d-42a5-af4f-72ef7a798f74, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, 1)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_Mirror_SHhasRomance_0669a1c6-8f6d-4be7-9bf0-812bd2cb40a6);
+
+IF
+FlagSet((FLAG)ORI_State_Partnered_6c1a31e8-1d3d-42a5-af4f-72ef7a798f74, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_SharGrotto_State_Mirror_SHhasRomance_0669a1c6-8f6d-4be7-9bf0-812bd2cb40a6);
+
+PROC
+PROC_LOW_SharGrotto_MemoryCheck()
+AND
+DB_LOW_SharGrotto_MirrorShadowheartMemories(_MemoryFlag, _SacrificeFlag)
+AND
+NOT DB_LOW_SharGrotto_MirrorShadowheartMemories_Active(_MemoryFlag, _SacrificeFlag)
+AND
+DB_GlobalFlag(_MemoryFlag)
+THEN
+DB_LOW_SharGrotto_MirrorShadowheartMemories_Active(_MemoryFlag, _SacrificeFlag);
+
+IF
+FlagSet(_MemoryFlag, _, _)
+AND
+DB_LOW_SharGrotto_MirrorShadowheartMemories(_MemoryFlag, _SacrificeFlag)
+THEN
+DB_LOW_SharGrotto_MirrorShadowheartMemories_Active(_MemoryFlag, _SacrificeFlag);
+
+IF
+FlagSet(_SacrificeFlag, S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, _)
+AND
+DB_LOW_SharGrotto_MirrorShadowheartMemories_Active(_MemoryFlag, _SacrificeFlag)
+THEN
+NOT DB_LOW_SharGrotto_MirrorShadowheartMemories_Active(_MemoryFlag, _SacrificeFlag);
+
+IF
+DB_GlobalFlag((FLAG)LOW_SharGrotto_State_Mirror_SHhasMemories_1b5541eb-dc65-4dac-9b6d-c8e4dd3ed0e1)
+AND
+NOT DB_LOW_SharGrotto_MirrorShadowheartMemories_Active(_, _)
+THEN
+PROC_GlobalClearFlagAndCache((FLAG)LOW_SharGrotto_State_Mirror_SHhasMemories_1b5541eb-dc65-4dac-9b6d-c8e4dd3ed0e1);
+
+IF
+DB_LOW_SharGrotto_MirrorShadowheartMemories_Active(_MemoryFlag, _SacrificeFlag)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_State_Mirror_SHhasMemories_1b5541eb-dc65-4dac-9b6d-c8e4dd3ed0e1)
+THEN
+PROC_GlobalClearFlagAndCache((FLAG)LOW_SharGrotto_State_Mirror_SHhasMemories_1b5541eb-dc65-4dac-9b6d-c8e4dd3ed0e1);
+
+//END_REGION
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act3b"

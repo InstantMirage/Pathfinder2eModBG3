@@ -1,0 +1,625 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//REGION Default Dialogs
+
+DB_Dialogs((CHARACTER)S_LOW_GriefGuard_000_e2a86aa9-3d65-4517-a946-f1ad851b6ef1, (DIALOGRESOURCE)LOW_HouseOfGrief_GriefGuard_000_73a30de9-9abd-c8a6-2f4c-cf3c3d8400c1);
+DB_Dialogs((CHARACTER)S_LOW_GriefGuard_001_1442d4e5-7c3d-4509-b72a-422788b4545c, (DIALOGRESOURCE)LOW_HouseOfGrief_GriefGuard_001_2d65a92a-5fe4-cd68-e64e-723ecb6d7246);
+DB_Dialogs((CHARACTER)S_LOW_DoorSentry_616de0b4-c76d-4ef4-a3f9-4e0803371a6c, (DIALOGRESOURCE)LOW_HouseOfGrief_DoorSentry_c89b07af-ea0f-b795-b604-829b861f65ed);
+DB_Dialogs((CHARACTER)S_LOW_GriefAttendant_2d74b412-6ed8-438a-b229-6cee7a48acca, (DIALOGRESOURCE)LOW_HouseOfGrief_GriefAttendant_31abb867-fe83-02ea-ccac-5367b2749027);
+DB_Dialogs((CHARACTER)S_LOW_ConfusedMerchant_b24e02bf-8c2c-40f3-82af-dd4fb20b2e17, (DIALOGRESOURCE)LOW_HouseOfGrief_ConfusedMerchant_4aa3aa64-269b-2ab0-fda4-c7570b486385);
+DB_Dialogs((CHARACTER)S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, (DIALOGRESOURCE)LOW_HouseOfGrief_ViconiaMapping_81568711-7b8f-d188-ee16-e9436c7b009f);
+
+//END_REGION
+
+//REGION Confused Merchants
+
+DB_DialogMoneyTransfer(1, (DIALOGRESOURCE)LOW_HouseOfGrief_ConfusedMerchant_4aa3aa64-269b-2ab0-fda4-c7570b486385, 100, 1);
+DB_DialogMoneyTransfer(2, (DIALOGRESOURCE)LOW_HouseOfGrief_ConfusedMerchant_4aa3aa64-269b-2ab0-fda4-c7570b486385, 500, 1);
+DB_DialogMoneyTransfer(3, (DIALOGRESOURCE)LOW_HouseOfGrief_ConfusedMerchant_4aa3aa64-269b-2ab0-fda4-c7570b486385, 2000, 1);
+
+DB_HasItemEvent(S_LOW_MerchantDiamond_f120a7b9-d2b5-4922-bc02-811101ef1203, (FLAG)LOW_HouseOfGrief_State_HasDiamond_949c1047-7614-4b1a-8cd3-124cc3eeb9c2);
+DB_GiveItemToEvent(S_LOW_MerchantDiamond_f120a7b9-d2b5-4922-bc02-811101ef1203, (FLAG)LOW_HouseOfGrief_Event_GiveDiamond_e2661af4-e6fa-4eeb-a124-d11c5fc9e098);
+
+//END_REGION
+
+//REGION Attendant of Grief
+
+DB_DialogMoneyTransfer(1, (DIALOGRESOURCE)LOW_HouseOfGrief_GriefAttendant_31abb867-fe83-02ea-ccac-5367b2749027, 1000, 2);
+
+DB_HasItemEvent((ITEM)S_LOW_CollectionsKey_2705670f-65c4-449d-b80d-af37852ecf5f, (FLAG)LOW_SharGrotto_State_HasCollectionsKey_42e32be6-6c90-45f7-ad78-58acb78e8720);
+DB_GiveItemToEvent((ITEM)S_LOW_CollectionsKey_2705670f-65c4-449d-b80d-af37852ecf5f, (FLAG)LOW_SharGrotto_State_GiveCollectionsKey_529ef9ba-034a-429b-a939-461619171b80);
+
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_LOW_CollectionsBounds_4003ea05-fff5-4848-b402-2063247a5690, (VOICEBARKRESOURCE)LOW_HouseOfGrief_VB_CollectionBox_e6122ad0-39ef-1a85-58af-ec5b164908dc, "Global");
+SetOwner((ITEM)S_LOW_GriefDoor_1aa5ac36-b156-4efe-8214-2056381e5f0a, (CHARACTER)S_LOW_GriefAttendant_2d74b412-6ed8-438a-b229-6cee7a48acca);
+
+//END_REGION
+
+//REGION Mapping of the Heart
+
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartViolent", -1, (FLAG)LOW_HouseOfGrief_State_HeartViolent_OneMinus_580db535-c0d8-46e3-9ba0-827a5ac767a2);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartViolent", 1, (FLAG)LOW_HouseOfGrief_State_HeartViolent_OnePlus_c2c31705-1008-433d-af80-079a7799cb38);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartViolent", 2, (FLAG)LOW_HouseOfGrief_State_HeartViolent_TwoPlus_ab9e0c79-2e93-459f-98a4-710f12d2d309);
+
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartCraven", -1, (FLAG)LOW_HouseOfGrief_State_HeartCraven_OneMinus_b6d1b5b4-5972-46c4-8a3c-2d441cbc02de);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartCraven", 1, (FLAG)LOW_HouseOfGrief_State_HeartCraven_OnePlus_ed6b26e1-5dde-471c-b177-c8ebd042f7a6);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartCraven", 2, (FLAG)LOW_HouseOfGrief_State_HeartCraven_TwoPlus_743264d5-10ff-4f2b-aaee-76d1d272f721);
+
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartJealous", -1, (FLAG)LOW_HouseOfGrief_State_HeartJealous_OneMinus_c0977473-8638-4b95-943e-f0e8e8ef0095);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartJealous", 1, (FLAG)LOW_HouseOfGrief_State_HeartJealous_OnePlus_464f8bf1-d99b-426f-a1ea-1300a8d6ed17);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartJealous", 2, (FLAG)LOW_HouseOfGrief_State_HeartJealous_TwoPlus_a652e4e6-17e0-46fb-bdcb-d58340158c83);
+
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartYearning", -1, (FLAG)LOW_HouseOfGrief_State_HeartYearning_OneMinus_7091414e-7f2d-48e4-8af3-975d5c052884);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartYearning", 1, (FLAG)LOW_HouseOfGrief_State_HeartYearning_OnePlus_3568c175-12d9-43b9-aa01-2d6774c7852a);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartYearning", 2, (FLAG)LOW_HouseOfGrief_State_HeartYearning_TwoPlus_6a6fb024-a221-4311-803c-8e4de8d4b486);
+
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartPrying", -1, (FLAG)LOW_HouseOfGrief_State_HeartPrying_OneMinus_6a0b98a2-1ef0-4579-aaa6-9b266d622944);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartPrying", 1, (FLAG)LOW_HouseOfGrief_State_HeartPrying_OnePlus_f3b45a4d-2ee0-4d72-a21b-adf358ab814b);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartPrying", 2, (FLAG)LOW_HouseOfGrief_State_HeartPrying_TwoPlus_473f2e47-4c4e-4e50-9b42-ac9a19b4b7a8);
+
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartFalse", -1, (FLAG)LOW_HouseOfGrief_State_HeartFalse_OneMinus_9ef46de5-9dbf-4659-afef-52bf2550a351);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartFalse", 1, (FLAG)LOW_HouseOfGrief_State_HeartFalse_OnePlus_199de3b5-eb33-4de8-a54a-f63ca0ceeed3);
+DB_LOW_HouseOfGrief_HeartMapping("LOW_HouseOfGrief_HeartFalse", 2, (FLAG)LOW_HouseOfGrief_State_HeartFalse_TwoPlus_efba79ab-3e00-4215-96b4-000e8a9a7ef5);
+
+DB_LOW_HouseOfGrief_HeartForms("LOW_HouseOfGrief_HeartViolent", "Intimidation", (FLAG)LOW_HouseOfGrief_State_HeartViolent_3e1caeae-f449-45a2-bfe2-3b95130c4282);
+DB_LOW_HouseOfGrief_HeartForms("LOW_HouseOfGrief_HeartCraven", "Survival", (FLAG)LOW_HouseOfGrief_State_HeartCraven_af6a7f33-6463-4683-bb72-3eaea2a2b2ba);
+DB_LOW_HouseOfGrief_HeartForms("LOW_HouseOfGrief_HeartJealous", "Persuasion", (FLAG)LOW_HouseOfGrief_State_HeartJealous_9f69fa5d-5e86-41ee-9c7c-ef873fa63bd5);
+DB_LOW_HouseOfGrief_HeartForms("LOW_HouseOfGrief_HeartYearning", "Religion", (FLAG)LOW_HouseOfGrief_State_HeartYearning_c4b91748-43e0-46aa-8457-05d8ac961d43);
+DB_LOW_HouseOfGrief_HeartForms("LOW_HouseOfGrief_HeartPrying", "History", (FLAG)LOW_HouseOfGrief_State_HeartPrying_d772ec00-a8bc-46d0-b499-42642b4a2155);
+DB_LOW_HouseOfGrief_HeartForms("LOW_HouseOfGrief_HeartFalse", "Deception", (FLAG)LOW_HouseOfGrief_State_HeartFalse_4c684059-73bc-48c4-85ff-dfad3c45ad75);
+
+PROC_LOW_HouseOfGrief_StartCounters();
+
+//END_REGION
+
+//REGION Viconia Illusion
+
+ApplyStatus(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "INVISIBILITY", -1.0, 1);
+SetOnStage(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, 0);
+CharacterDisableAllCrimes(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f);
+
+DB_GlobalFlagReactionAfterDialog((FLAG)LOW_HouseOfGrief_Event_ViconiaVanish_7fe5f6da-016e-458a-b181-5bd3bba75158, (DIALOGRESOURCE)LOW_HouseOfGrief_MeetingViconia_OM_Shadowheart_COM_7faa8762-49df-5912-49cd-79f8bb626e57);
+
+//REGION Viconia Illusion States
+
+DB_State_Priority(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaNotPresent", 0);
+DB_State_Priority(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaVisible", 100);
+DB_State_Priority(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaSeated", 200);
+DB_State_Priority(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_MappingDone", 300);
+DB_State_Priority(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaLeft", 400);
+DB_State_Priority(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_GrottoOpened", 500);
+
+
+DB_State_Flags(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaVisible", (FLAG)LOW_HouseOfGrief_State_ViconiaVisible_6c747323-9285-4c78-b947-78c2eade8669);
+DB_State_Flags(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaSeated", (FLAG)LOW_HouseOfGrief_State_ViconiaSeated_8980029c-e4c7-4415-a55e-54f277032c5d);
+DB_State_Flags(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_MappingDone", (FLAG)LOW_HouseOfGrief_State_MappingDone_f5fb65be-8b37-4f9e-8108-fbab86428cce);
+DB_State_Flags(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaLeft", (FLAG)LOW_HouseOfGrief_State_ViconiaLeft_7cfc57f5-7cad-432e-bc80-4c357b45ad3c);
+
+
+DB_State_Current(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaNotPresent");
+
+//END_REGION
+
+//END_REGION
+
+//REGION Secret Door
+SetCanInteract((ITEM)S_LOW_SecretDoor_309650e9-6013-449e-a487-6d6d348d82bd, 0);
+SetCanInteract((ITEM)S_DOOR_Invisible_A_ToGrotto_fb614206-fede-4849-969c-a2f71ab33c6a, 0);
+
+DB_GlobalFlagReactionAfterDialog((FLAG)LOW_HouseOfGrief_Event_OpenSecretDoor_88a7aecb-095e-4a4e-aed4-8a0e6d04bd02, (DIALOGRESOURCE)LOW_HouseOfGrief_ViconiaMapping_81568711-7b8f-d188-ee16-e9436c7b009f);
+DB_GlobalFlagReactionAfterDialog((FLAG)LOW_HouseOfGrief_Event_OpenSecretDoor_88a7aecb-095e-4a4e-aed4-8a0e6d04bd02, (DIALOGRESOURCE)LOW_HouseOfGrief_MeetingViconia_OM_Shadowheart_COM_7faa8762-49df-5912-49cd-79f8bb626e57);
+DB_GlobalFlagReactionAfterDialog((FLAG)LOW_HouseOfGrief_Event_OpenSecretDoor_88a7aecb-095e-4a4e-aed4-8a0e6d04bd02, (DIALOGRESOURCE)LOW_HouseOfGrief_MeetingViconia_OM_Shadowheart_AOM_OOM_acd28654-5731-e7ef-5d83-ce0c5f76cbc0);
+
+TriggerRegisterForCharacter((TRIGGER)S_LOW_GriefAltarBounds_a957fc20-5cbf-482b-ae3b-85ac9ef644ed, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+PROC_TriggerRegisterForParty((TRIGGER)S_LOW_GriefBackroom_5e52bac2-3cb6-488b-be9a-59599692acda);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_LOW_ButtonSpot_81a0a68e-9e27-4304-8948-0df42c833c7e);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_LOW_ButtonSpot_81a0a68e-9e27-4304-8948-0df42c833c7e);
+
+//END_REGION
+
+//REGION JOURNAL - Investigate the Sharrans
+
+DB_QuestDef_State((FLAG)LOW_HouseOfGrief_State_LearnedAboutHouse_0dd5322c-700d-4369-81df-f75986d53d24, "LOW_InvestigateSharrans", "MetConfusedMerchant");
+DB_QuestDef_State((FLAG)LOW_HouseOfGrief_State_EntryDenied_1e18553a-d3c0-485b-8f20-ef64fb02b175, "LOW_InvestigateSharrans", "EntryDenied");
+DB_QuestDef_State((FLAG)LOW_HouseOfGrief_Event_AttendantShowToRoom_bcadad71-c096-4e8d-8d96-0c80139bd4fc, "LOW_InvestigateSharrans", "InvitedUnburdening");
+DB_QuestDef_State((FLAG)LOW_HouseOfGrief_Event_ViconiaRevealed_4413a2da-d951-02ed-99fc-6235ec635e21, "LOW_InvestigateSharrans", "MetViconiaIllusion");
+DB_QuestDef_State((FLAG)LOW_SharGrotto_State_PromisedBringShadowheart_ba85fccc-c09b-41c3-82ec-69693db59204, "LOW_InvestigateSharrans", "ViconiaDealProposed");
+DB_QuestDef_State((FLAG)LOW_SharGrotto_ConfrontViconia_SharranAlliance_ea829b7c-5f69-c4fc-6b4c-b8a190d31a86, "LOW_InvestigateSharrans", "ViconiaDealSuccess");
+DB_QuestDef_LevelLoaded("LOW_InvestigateSharrans", "SharCultRemains", "END_Main");
+
+DB_QuestDef_ChainedState("LOW_InvestigateSharrans", "ViconiaDealProposed", "BringShadowheart");
+DB_QuestDef_State((FLAG)ORI_Shadowheart_State_ToldShadowheartAboutViconiaPromise_5948a9fc-5aa8-4648-9cfb-7b873fd5a324, "LOW_InvestigateSharrans", "InformedShadowheart");
+DB_QuestDef_State((FLAG)ORI_Shadowheart_State_TriedToLureShadowheart_b25e9fec-5808-48ae-9019-ea86ba05825f, "LOW_InvestigateSharrans", "TrickedShadowheart");
+DB_QuestDef_ChainedState("LOW_InvestigateSharrans", "SharCultDestroyed_Violent", "DestroyedCult");
+DB_QuestDef_ChainedState("LOW_InvestigateSharrans", "SharCultDestroyed", "DestroyedCult");
+DB_QuestDef_ChainedState("LOW_InvestigateSharrans", "SharCultRemains", "LeftRegion");
+DB_QuestDef_ChainedState("LOW_InvestigateSharrans", "ViconiaDealSuccess", "SoldShadowheart");
+
+//END_REGION
+
+//REGION Misc
+
+DB_SpotPlayers((CHARACTER)S_LOW_GriefGuard_000_e2a86aa9-3d65-4517-a946-f1ad851b6ef1, "LOW_HouseOfGrief_GuardGreet", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_TargetIgnoreCantTalk((CHARACTER)S_LOW_GriefGuard_000_e2a86aa9-3d65-4517-a946-f1ad851b6ef1, "LOW_HouseOfGrief_GuardGreet");
+DB_SpotPlayers_CustomRadius((CHARACTER)S_LOW_GriefGuard_000_e2a86aa9-3d65-4517-a946-f1ad851b6ef1, "LOW_HouseOfGrief_GuardGreet", 5.0);
+
+DB_SpotPlayers((CHARACTER)S_LOW_GriefAttendant_2d74b412-6ed8-438a-b229-6cee7a48acca, "LOW_HouseOfGrief_AttendantGreet", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_TargetIgnoreCantTalk((CHARACTER)S_LOW_GriefAttendant_2d74b412-6ed8-438a-b229-6cee7a48acca, "LOW_HouseOfGrief_AttendantGreet");
+DB_SpotPlayers_CustomRadius((CHARACTER)S_LOW_GriefAttendant_2d74b412-6ed8-438a-b229-6cee7a48acca, "LOW_HouseOfGrief_AttendantGreet", 5.0);
+
+//END_REGION
+
+// Voice bark
+DB_OneShot_VoiceBarkTrigger((TRIGGER)S_LOW_HouseOfGrief_FamiliarShadowheartVB_Trigger_943511ec-f413-4c68-a214-759f520c0a6b,(VOICEBARKRESOURCE)LOW_HouseOfGrief_VB_FamiliarPlaceShadowheart_ca19cb25-c58e-0482-fcae-8933ecf7f708);
+
+DB_AutoSaveTrigger((TRIGGER)S_LOW_GriefSave_b51d18c9-d06e-4855-9126-8041fc39e315);
+
+//Ownership
+DB_ItemOwnerShipTriggers("CTY_Main_A", (TRIGGER)S_LOW_HouseOfGrief_Ownership_e3881421-2d93-4076-a5ac-a1a00df9c0d7, (CHARACTER)S_LOW_GriefAttendant_2d74b412-6ed8-438a-b229-6cee7a48acca);
+KBSECTION
+//REGION Door Sentry
+PROC
+PROC_BlockUseOfItem(_Player, (ITEM)S_LOW_GriefDoor_1aa5ac36-b156-4efe-8214-2056381e5f0a)
+AND
+IsClosed((ITEM)S_LOW_GriefDoor_1aa5ac36-b156-4efe-8214-2056381e5f0a, 1)
+AND
+DB_Players(_Player)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_HouseOfGrief_State_GotPermissionToEnter_f9e76b17-2592-48aa-8546-e86e4c0efceb)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_HouseOfGrief_State_SentryMoveToDesk_5b5c91de-7305-4122-a2a8-6d0796db409d)
+AND
+QRY_SpeakerIsAvailableAndInDialogRange(S_LOW_DoorSentry_616de0b4-c76d-4ef4-a3f9-4e0803371a6c, S_LOW_GriefDoor_1aa5ac36-b156-4efe-8214-2056381e5f0a)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_HouseOfGrief_State_TriedToOpenDoor_d92a48b1-6ad5-4e22-8da9-50a1357f20b7);
+DB_CustomUseItemResponse(_Player, (ITEM)S_LOW_GriefDoor_1aa5ac36-b156-4efe-8214-2056381e5f0a, 0);
+PROC_LOW_HouseOfGrief_StartInterruptDialog((CHARACTER)_Player);
+ 
+PROC
+PROC_LOW_HouseOfGrief_StartInterruptDialog((CHARACTER)_Player)
+AND
+NOT QRY_StartDialog_Fixed((DIALOGRESOURCE)LOW_HouseOfGrief_DoorSentry_c89b07af-ea0f-b795-b604-829b861f65ed, S_LOW_DoorSentry_616de0b4-c76d-4ef4-a3f9-4e0803371a6c, _Player)
+THEN
+PROC_GlobalClearFlagAndCache((FLAG)LOW_HouseOfGrief_State_TriedToOpenDoor_d92a48b1-6ad5-4e22-8da9-50a1357f20b7);
+
+IF
+FlagSet((FLAG)LOW_HouseOfGrief_State_GotPermissionToEnter_f9e76b17-2592-48aa-8546-e86e4c0efceb, _, _)
+THEN
+ClearOwnership((ITEM)S_LOW_GriefDoor_1aa5ac36-b156-4efe-8214-2056381e5f0a);
+
+IF
+Closed((ITEM)S_LOW_GriefDoor_1aa5ac36-b156-4efe-8214-2056381e5f0a)
+AND
+QRY_OnlyOnce("LOW_HouseOfGrief_UnlockDoor")
+THEN
+Unlock((ITEM)S_LOW_GriefDoor_1aa5ac36-b156-4efe-8214-2056381e5f0a);
+
+//END_REGION
+
+//REGION Viconia Illusion
+
+//REGION Grief Brench
+
+IF
+UseFinished(_Player, (ITEM)S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754, _)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_HouseOfGrief_State_PlayerHostile_dc16eca3-584a-4847-9664-c51222410abc)
+AND
+NOT DB_OnlyOnce("LOW_HouseOfGrief_MappingStarted")
+AND
+DB_Players(_Player)
+THEN
+PROC_LOW_HouseOfGrief_ViconiaAppear((CHARACTER)_Player);
+
+PROC
+PROC_LOW_HouseOfGrief_ViconiaAppear((CHARACTER)_Player)
+AND
+IsOnStage(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, 1)
+THEN
+PROC_LOW_HouseOfGrief_StartMapping((CHARACTER)_Player);
+
+PROC
+PROC_LOW_HouseOfGrief_ViconiaAppear((CHARACTER)_Player)
+AND
+IsOnStage(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, 0)
+THEN
+SetOnStage(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, 1);
+PROC_State_Progress(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaVisible");
+SetHasDialog(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, 0);
+RemoveStatus(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "INVISIBILITY"); 
+PlayEffect(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, (EFFECTRESOURCE)VFX_Script_SCL_Trial_Shar_Teleport_Appear_BodyFX_01_520e41d0-3515-f40c-1ebc-9b6f899ec782);
+Use((CHARACTER)S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, (ITEM)S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754, "");
+PROC_LOW_HouseOfGrief_StartMapping((CHARACTER)_Player);
+
+PROC
+PROC_LOW_HouseOfGrief_StartMapping((CHARACTER)_Player)
+AND
+NOT DB_OnlyOnce("LOW_HouseOfGrief_MappingStarted")
+AND
+QRY_StartDialog((DIALOGRESOURCE)LOW_HouseOfGrief_ViconiaMapping_81568711-7b8f-d188-ee16-e9436c7b009f, S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, _Player)
+AND
+QRY_OnlyOnce("LOW_HouseOfGrief_MappingStarted")
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_BlockUseOfItem(_Char, (ITEM)S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754)
+AND
+DB_Players(_Char)
+AND
+QRY_LOW_HouseOfGrief_CheckIfReposed()
+THEN
+DB_CustomUseItemResponse(_Char, (ITEM)S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754, 0);
+
+IF
+UseStarted(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, (ITEM)S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754)
+AND
+NOT DB_OnlyOnce("LOW_HouseOfGrief_MappingStarted")
+THEN
+PROC_State_Progress(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaSeated");
+SetHasDialog(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, 1);
+
+IF
+UseStarted(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, (ITEM)S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754)
+AND
+NOT DB_OnlyOnce("LOW_HouseOfGrief_MappingStarted")
+AND
+NOT QRY_LOW_HouseOfGrief_CheckIfReposed()
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_HouseOfGrief_AD_ViconiaIllusionSeated_595470d5-0690-5432-ba00-a593e7d55aad, S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f);
+
+QRY
+QRY_LOW_HouseOfGrief_CheckIfReposed()
+AND
+DB_Players(_Player)
+AND
+IsReposedOnEntity(_Player, (ITEM)S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754, 1)
+THEN
+DB_NOOP(1);
+
+IF
+ReposeAdded(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754)
+THEN
+SetFlag((FLAG)LOW_HouseOfGrief_ViconiaMapping_State_ShadowheartSitsOnBench_a6fd9b07-8e28-f2e0-3ecd-163ebe1159d4);
+
+IF
+ReposeRemoved(S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, S_LOW_GriefBench_a282c6af-9767-4022-8a20-7cd3f6ac4754)
+THEN
+ClearFlag((FLAG)LOW_HouseOfGrief_ViconiaMapping_State_ShadowheartSitsOnBench_a6fd9b07-8e28-f2e0-3ecd-163ebe1159d4);
+//END_REGION
+
+//REGION Mapping of the Heart Test
+
+PROC
+PROC_LOW_HouseOfGrief_StartCounters()
+AND
+DB_LOW_HouseOfGrief_HeartForms(_HeartForm, _, _)
+THEN
+PROC_DeclareCounter(_HeartForm);
+
+IF //Add points to particular heartform
+FlagSet(_Flag, _, _)
+AND
+DB_LOW_HouseOfGrief_HeartMapping(_HeartForm, _Point, _Flag)
+THEN
+PROC_GlobalClearFlagAndCache(_Flag);
+PROC_IncreaseCounter(_HeartForm, _Point);
+
+IF //Determine the highest scoring heartform
+FlagSet((FLAG)LOW_HouseOfGrief_Event_DetermineHeartForm_f2f9c186-bb12-4916-a26c-7f62d1193c1b, _Player, _)
+AND
+QRY_LOW_HouseOfGrief_HighestHeartForm((CHARACTER)_Player)
+AND
+DB_QRYRTN_LOW_HouseOfGrief_HighestHeartForm(_HeartForm, _Count)
+AND
+DB_LOW_HouseOfGrief_HeartForms(_HeartForm, _, _Flag)
+THEN
+SetFlag(_Flag, _Player);
+
+//REGION //QRY_LOW_HouseOfGrief_HighestHeartForm
+QRY //Create initial DB
+QRY_LOW_HouseOfGrief_HighestHeartForm((CHARACTER)_Player)
+AND
+DB_LOW_HouseOfGrief_HeartForms(_HeartForm, _, _)
+THEN
+DB_QRYRTN_LOW_HouseOfGrief_HighestHeartForm(_HeartForm, -99);
+
+QRY //Check which heartforms rank the highest.
+QRY_LOW_HouseOfGrief_HighestHeartForm((CHARACTER)_Player)
+AND
+DB_LOW_HouseOfGrief_HeartForms(_HeartForm, _, _)
+AND
+DB_GlobalCounter(_HeartForm, _Count)
+AND
+DB_QRYRTN_LOW_HouseOfGrief_HighestHeartForm(_OtherHeartForm, _Current)
+AND
+_Count > _Current
+AND
+QRY_LOW_HouseOfGrief_HeartFormTieCheck((CHARACTER)_Player, (STRING)_HeartForm, (INTEGER)_Count, (STRING)_OtherHeartForm, (INTEGER)_Current)
+THEN
+NOT DB_QRYRTN_LOW_HouseOfGrief_HighestHeartForm(_OtherHeartForm, _Current);
+DB_QRYRTN_LOW_HouseOfGrief_HighestHeartForm(_HeartForm, _Count);
+//END_REGION
+
+//REGION //QRY_LOW_HouseOfGrief_HeartFormTieCheck
+QRY //If higher than the other then continue
+QRY_LOW_HouseOfGrief_HeartFormTieCheck((CHARACTER)_Player, (STRING)_HeartForm, (INTEGER)_Count, (STRING)_OtherHeartForm, (INTEGER)_Current)
+AND
+_Count > _Current
+THEN
+DB_NOOP(1);
+
+QRY //If equal then find the skill with the lowest skill value
+QRY_LOW_HouseOfGrief_HeartFormTieCheck((CHARACTER)_Player, (STRING)_HeartForm, (INTEGER)_Count, (STRING)_OtherHeartForm, (INTEGER)_Current)
+AND
+_Count == _Current
+AND
+_HeartForm != _OtherHeartForm
+AND
+DB_LOW_HouseOfGrief_HeartForms(_HeartForm, _Skill, _)
+AND
+CalculatePassiveSkill(_Player, _Skill, _SkillValue)
+AND
+DB_LOW_HouseOfGrief_HeartForms(_OtherHeartForm, _OtherSkill, _)
+AND
+CalculatePassiveSkill(_Player, _OtherSkill, _CurrentValue)
+AND
+_SkillValue < _CurrentValue
+THEN
+DB_NOOP(1);
+
+//END_REGION
+
+//END_REGION
+
+IF
+HitpointsChanged(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, _Percentage)
+AND
+_Percentage < 100.0
+AND
+QRY_OnlyOnce("LOW_HouseOfGrief_AttackedIllusion")
+THEN
+PROC_LOW_HouseOfGrief_AttackedIllusion();
+
+PROC
+PROC_LOW_HouseOfGrief_AttackedIllusion()
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_HouseOfGrief_State_AttackedViconia_90a779d8-d505-43b1-a203-a15ac9ccece0);
+PROC_Poof(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f);
+TriggerUnregisterForCharacter((TRIGGER)S_LOW_GriefAltarBounds_a957fc20-5cbf-482b-ae3b-85ac9ef644ed, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+PROC_State_Progress(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaLeft");
+
+PROC
+PROC_LOW_HouseOfGrief_AttackedIllusion()
+THEN
+PROC_LoopEffect((EFFECTRESOURCE)VFX_Script_MagicMouth_01_39272314-0666-1b46-ece8-565d69b391d5, S_LOW_ViconiaHelper_4fb9bf6c-f6b4-4c55-838f-1401fc9d98d3, "LOW_FemaleBust_MagicMouth", "CTY_Main_A", "", 1.0);
+PROC_TryStartAD((DIALOGRESOURCE)LOW_HouseOfGrief_AD_AttackedIllusion_f2e97f63-5e10-9d21-505f-dd024677971c, (ITEM)S_LOW_ViconiaHelper_4fb9bf6c-f6b4-4c55-838f-1401fc9d98d3);
+
+IF
+AutomatedDialogEnded((DIALOGRESOURCE)LOW_HouseOfGrief_AD_AttackedIllusion_f2e97f63-5e10-9d21-505f-dd024677971c, _)
+AND
+DB_LoopEffect(S_LOW_ViconiaHelper_4fb9bf6c-f6b4-4c55-838f-1401fc9d98d3, _, "LOW_FemaleBust_MagicMouth", _, _, _, _)
+THEN
+PROC_LOW_HouseOfGrief_OpenDoor();
+PROC_StopLoopEffect(S_LOW_ViconiaHelper_4fb9bf6c-f6b4-4c55-838f-1401fc9d98d3, "LOW_FemaleBust_MagicMouth");
+
+IF
+AutomatedDialogRequestFailed((DIALOGRESOURCE)LOW_HouseOfGrief_AD_AttackedIllusion_f2e97f63-5e10-9d21-505f-dd024677971c, _)
+AND
+DB_LoopEffect(S_LOW_ViconiaHelper_4fb9bf6c-f6b4-4c55-838f-1401fc9d98d3, _, "LOW_FemaleBust_MagicMouth", _, _, _, _)
+THEN
+PROC_LOW_HouseOfGrief_OpenDoor();
+PROC_StopLoopEffect(S_LOW_ViconiaHelper_4fb9bf6c-f6b4-4c55-838f-1401fc9d98d3, "LOW_FemaleBust_MagicMouth");
+
+IF
+DialogEnded((DIALOGRESOURCE)LOW_HouseOfGrief_ViconiaMapping_81568711-7b8f-d188-ee16-e9436c7b009f, _)
+THEN
+PROC_State_Progress(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_MappingDone");
+
+IF
+DialogEnded((DIALOGRESOURCE)LOW_HouseOfGrief_MeetingViconia_OM_Shadowheart_COM_7faa8762-49df-5912-49cd-79f8bb626e57, _)
+THEN
+PROC_State_Progress(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_MappingDone");
+
+IF
+DialogEnded((DIALOGRESOURCE)LOW_HouseOfGrief_MeetingViconia_OM_Shadowheart_AOM_OOM_acd28654-5731-e7ef-5d83-ce0c5f76cbc0, _)
+THEN
+PROC_State_Progress(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_MappingDone");
+
+IF
+WentOnStage(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, 0)
+AND
+DB_OnlyOnce("LOW_HouseOfGrief_MappingStarted")
+THEN
+PROC_State_Progress(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "LOW_MappingOfTheHeart", "LOW_HouseOfGrief_ViconiaLeft");
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)LOW_HouseOfGrief_Event_ViconiaVanish_7fe5f6da-016e-458a-b181-5bd3bba75158)
+THEN
+ApplyStatus(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, "INVISIBILITY", 6.0, 1, S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f);
+SetOnStage(S_LOW_ViconiaIllusion_dff48da6-3915-4c67-b2fa-1f8a195d1e1f, 0);
+
+//END_REGION
+
+//REGION Secret Door
+
+IF
+DialogStarted((DIALOGRESOURCE)LOW_HouseOfGrief_ViconiaMapping_81568711-7b8f-d188-ee16-e9436c7b009f, _)
+AND
+NOT DB_PartOfTheTeam((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)ORI_Shadowheart_State_PermaUnavailable_068b6f26-6b5e-4ad7-991b-fac10f96000d);
+
+IF
+DB_GlobalFlag((FLAG)LOW_HouseOfGrief_State_WaitingforShadowheartForDoor_f487f9f0-9f28-47c7-b818-a3c352657ed9)
+AND
+NOT DB_PartOfTheTeam((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)ORI_Shadowheart_State_PermaUnavailable_068b6f26-6b5e-4ad7-991b-fac10f96000d);
+PROC_GlobalClearFlagAndCache((FLAG)LOW_HouseOfGrief_State_WaitingforShadowheartForDoor_f487f9f0-9f28-47c7-b818-a3c352657ed9);
+
+IF
+UseFinished(_, (ITEM)S_LOW_GriefAltarButton_804ab809-13dc-45ac-84a7-4faff8f6f6a9, _)
+AND
+IsOpened((ITEM)S_LOW_SecretDoor_309650e9-6013-449e-a487-6d6d348d82bd, 0)
+THEN
+PROC_LOW_HouseOfGrief_OpenDoor();
+
+IF
+EnteredTrigger((CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679, (TRIGGER)S_LOW_GriefAltarBounds_a957fc20-5cbf-482b-ae3b-85ac9ef644ed)
+AND
+DB_GlobalFlag((FLAG)LOW_HouseOfGrief_State_WaitingforShadowheartForDoor_f487f9f0-9f28-47c7-b818-a3c352657ed9)
+THEN
+PROC_GlobalClearFlagAndCache((FLAG)LOW_HouseOfGrief_State_WaitingforShadowheartForDoor_f487f9f0-9f28-47c7-b818-a3c352657ed9);
+TriggerUnregisterForCharacter((TRIGGER)S_LOW_GriefAltarBounds_a957fc20-5cbf-482b-ae3b-85ac9ef644ed, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+PROC_LOW_HouseOfGrief_OpenDoor();
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)LOW_HouseOfGrief_Event_OpenSecretDoor_88a7aecb-095e-4a4e-aed4-8a0e6d04bd02)
+THEN
+TriggerUnregisterForCharacter((TRIGGER)S_LOW_GriefAltarBounds_a957fc20-5cbf-482b-ae3b-85ac9ef644ed, (CHARACTER)S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679);
+PROC_GlobalClearFlagAndCache((FLAG)LOW_HouseOfGrief_Event_OpenSecretDoor_88a7aecb-095e-4a4e-aed4-8a0e6d04bd02);
+PROC_LOW_HouseOfGrief_OpenDoor();
+
+PROC
+PROC_LOW_HouseOfGrief_OpenDoor()
+AND
+IsOpened((ITEM)S_LOW_SecretDoor_309650e9-6013-449e-a487-6d6d348d82bd, 0)
+AND
+GetPosition((TRIGGER)S_LOW_AltarSinkPoint_51c4ebd4-22d1-44f2-ad1e-d89dc9d1c58c, _X, _Y, _Z)
+THEN
+PlatformMoveTo(LT_PLT_LOW_GriefAltar_000_1d9b200c-d66f-4437-a283-a7258504bc5e, _X, _Y, _Z, 1.5, "LOW_HouseOfGrief_MovePlatform", 0);
+Open((ITEM)S_LOW_SecretDoor_309650e9-6013-449e-a487-6d6d348d82bd);
+
+IF
+Opened((ITEM)S_LOW_SecretDoor_309650e9-6013-449e-a487-6d6d348d82bd)
+THEN
+SetCanInteract((ITEM)S_DOOR_Invisible_A_ToGrotto_fb614206-fede-4849-969c-a2f71ab33c6a, 1);
+
+//END_REGION
+
+//REGION Hostile Players
+
+IF
+RelationChanged((FACTION)ACT3_LOW_SharCultist_House_a97a8fce-e4ba-43ac-b3e3-60ff9d273d72, _PlayerFaction, 0, _)
+AND
+DB_Players(_AnyPlayer)
+AND
+GetFaction(_AnyPlayer, _PlayerFaction)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)LOW_HouseOfGrief_State_PlayerHostile_dc16eca3-584a-4847-9664-c51222410abc);
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_Unaligned_8309bb65-7dcd-4a4b-b9de-bd0d5cda4731, 0);
+PROC_SetRelationToPlayers((FACTION)ACT3_LOW_SharCultist_Grotto_415731a9-1e23-4873-afe9-a4619a973bfa, 0);
+
+IF
+EnteredTrigger(_Player, (TRIGGER)S_LOW_ButtonSpot_81a0a68e-9e27-4304-8948-0df42c833c7e)
+AND
+DB_GlobalFlag((FLAG)LOW_HouseOfGrief_State_PlayerHostile_dc16eca3-584a-4847-9664-c51222410abc)
+AND
+IsOpened((ITEM)S_LOW_SecretDoor_309650e9-6013-449e-a487-6d6d348d82bd, 0)
+AND
+QRY_OnlyOnce("LOW_HouseOfGrief_EmergencyButton")
+THEN
+SetEntityEvent((ITEM)S_LOW_GriefAltarButton_804ab809-13dc-45ac-84a7-4faff8f6f6a9, "RevealFromStory");
+PROC_TriggerUnregisterForPlayers((TRIGGER)S_LOW_ButtonSpot_81a0a68e-9e27-4304-8948-0df42c833c7e);
+
+//END_REGION
+
+//REGION Misc
+
+PROC
+PROC_SpotPlayers_Spotted((CHARACTER)S_LOW_GriefGuard_000_e2a86aa9-3d65-4517-a946-f1ad851b6ef1, "LOW_HouseOfGrief_GuardGreet", _Player)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_HouseOfGrief_AD_GuardGreeting_7609df83-bb91-5805-f983-8ae0857c5921, (CHARACTER)S_LOW_GriefGuard_000_e2a86aa9-3d65-4517-a946-f1ad851b6ef1);
+
+PROC
+PROC_SpotPlayers_Spotted((CHARACTER)S_LOW_GriefAttendant_2d74b412-6ed8-438a-b229-6cee7a48acca, "LOW_HouseOfGrief_AttendantGreet", _Player)
+THEN
+PROC_TryStartAD((DIALOGRESOURCE)LOW_HouseOfGrief_AD_AttendantGreeting_a9d00b7c-11b3-e287-dc71-fed7d387ca34, (CHARACTER)S_LOW_GriefAttendant_2d74b412-6ed8-438a-b229-6cee7a48acca);
+
+IF
+DB_GlobalFlag((FLAG)ORI_Shadowheart_State_BecamePontiff_4c521953-3277-4a59-9e3d-8e161916ed8b)
+THEN
+ClearOwnership((ITEM)S_LOW_CollectionsBox_d2b08796-481b-4fc4-8554-ccd60fc7e8df);
+
+//END_REGION
+
+//REGION JOURNAL - Investigate the Sharrans
+
+IF
+FlagSet((FLAG)LOW_HouseOfGrief_Knows_UnburdeningOffered_7011aecb-2d62-40d2-860a-81355b87b86b, _, _)
+AND
+NOT DB_QuestIsOpened("LOW_InvestigateSharrans")
+THEN
+QuestUpdate("LOW_InvestigateSharrans", "MetGriefAttendant");
+
+IF
+FlagSet((FLAG)LOW_HouseOfGrief_Knows_UnburdeningOffered_7011aecb-2d62-40d2-860a-81355b87b86b, _, _)
+AND
+DB_QuestIsOpened("LOW_InvestigateSharrans")
+AND
+DB_GlobalFlag((FLAG)LOW_HouseOfGrief_State_LearnedAboutHouse_0dd5322c-700d-4369-81df-f75986d53d24)
+THEN
+QuestUpdate("LOW_InvestigateSharrans", "UnburdeningMentioned");
+
+IF
+EnteredTrigger(_, (TRIGGER)S_LOW_GriefBackroom_5e52bac2-3cb6-488b-be9a-59599692acda)
+AND
+DB_QuestIsOpened("LOW_InvestigateSharrans")
+AND
+NOT DB_GlobalFlag((FLAG)LOW_HouseOfGrief_Event_AttendantShowToRoom_bcadad71-c096-4e8d-8d96-0c80139bd4fc)
+THEN
+PROC_TriggerUnregisterForParty((TRIGGER)S_LOW_GriefBackroom_5e52bac2-3cb6-488b-be9a-59599692acda);
+QuestUpdate("LOW_InvestigateSharrans", "AltBackroomEntry");
+
+IF
+Opened((ITEM)S_LOW_SecretDoor_309650e9-6013-449e-a487-6d6d348d82bd)
+AND
+NOT DB_QuestIsOpened("LOW_InvestigateSharrans")
+THEN
+QuestUpdate("LOW_InvestigateSharrans", "AltViolenceEntry");
+
+IF
+FlagSet((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097, _, _)
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "LOW_InvestigateSharrans", "AltViolenceEntry", 1)
+THEN
+QuestUpdate("LOW_InvestigateSharrans", "SharCultDestroyed_Violent");
+
+IF
+FlagSet((FLAG)LOW_Grotto_State_ViconiaDefeated_8e27eb4e-8d52-4966-8aa4-e658ff595097, _, _)
+AND
+QuestUpdateIsUnlocked(NULL_00000000-0000-0000-0000-000000000000, "LOW_InvestigateSharrans", "AltViolenceEntry", 0)
+THEN
+QuestUpdate("LOW_InvestigateSharrans", "SharCultDestroyed");
+
+IF
+EnteredCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_ConfrontViconia_SharranAlliance_ea829b7c-5f69-c4fc-6b4c-b8a190d31a86)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_State_PromisedBringShadowheart_ba85fccc-c09b-41c3-82ec-69693db59204)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_State_FailedDeal_ec315b8d-dda0-4aac-ba23-3d311282b7c9)
+THEN
+QuestUpdate("LOW_InvestigateSharrans", "ViconiaAttacked");
+
+IF
+EnteredCombat(S_LOW_Viconia_b1ea974d-96fb-47ca-b6d9-9c85fcb69313, _)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_ConfrontViconia_SharranAlliance_ea829b7c-5f69-c4fc-6b4c-b8a190d31a86)
+AND
+NOT DB_GlobalFlag((FLAG)LOW_SharGrotto_State_PromisedBringShadowheart_ba85fccc-c09b-41c3-82ec-69693db59204)
+AND
+DB_GlobalFlag((FLAG)LOW_SharGrotto_State_FailedDeal_ec315b8d-dda0-4aac-ba23-3d311282b7c9)
+THEN
+QuestUpdate("LOW_InvestigateSharrans", "ViconiaDealFailed");
+
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act3b"

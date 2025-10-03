@@ -1,0 +1,1028 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+// Envelopes containing letters
+DB_WYR_Posthouse_EnvelopedLetters((ITEM)S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030, (ITEM)S_WYR_Posthouse_MissingLetter1_Opened_e925ac28-b36e-4281-80f0-3dc1b94b726e);
+DB_WYR_Posthouse_EnvelopedLetters((ITEM)S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49, (ITEM)S_WYR_Posthouse_MissingLetter2_Opened_cd1dd6bc-0105-4c22-beb7-298df510e653);
+DB_WYR_Posthouse_EnvelopedLetters((ITEM)S_WYR_Posthouse_UrgentReportForDukeRavengard_d9922125-23f8-405c-a2cc-f448621cd178, (ITEM)S_WYR_Posthouse_UrgentReportForDukeRavengard_Opened_cc57cc55-4b45-4cd6-bea4-2f2981a342e3);
+
+// Tara missing pigeons quest
+DB_WYR_Posthouse_TreessymOwnership(S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030);
+DB_WYR_Posthouse_TreessymOwnership(S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49);
+DB_WYR_Posthouse_TreessymOwnership(S_WYR_Posthouse_TressymItem_276c18e0-71cf-4934-aaae-edc9ffc9ad2e);
+DB_WYR_Posthouse_TreessymOwnership(S_WYR_Posthouse_TressymNest_f63d506d-300f-4806-b091-9b664c1976a2);
+PROC_WYR_Posthouse_InitTressymQuest();
+
+// Yes I'm using invisible chairs to put pigeons in red AI bound locations. Don't act like you have a better solution.
+SetVisible(S_WYR_Posthouse_Chair_Pigeon_dc2cb1fc-e372-4671-9080-49dd490db3ed, 0);
+SetVisible(S_WYR_Posthouse_Chair_Pigeon_001_65cff41a-b1e3-4b6d-be9e-5c7cc8cfb20b, 0);
+SetVisible(S_WYR_Posthouse_Chair_Pigeon_002_75dde22c-d95b-4ec5-9ed3-0ddd319776e2, 0);
+
+// Pigeon rename flag
+DB_GlobalFlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_SetPigeonNameReal_d4b8de1f-aa02-4364-bcae-dd9b507b8696, (DIALOGRESOURCE)WYR_Posthouse_Pigeon_f65ee3de-01c0-0725-1e32-81b104182485);
+
+// Gomwick letter quest
+DB_HasItemEvent((ITEM)S_FOR_Courier_Letter3_0cca612d-0e08-48fe-8011-ca050aa5569b, (FLAG)WYR_Posthouse_State_PlayerHasCourierLetter_2dbbcfdf-d3e1-49a6-920f-ee34d9dd6422);
+DB_GiveItemToEvent((ITEM)S_FOR_Courier_Letter3_0cca612d-0e08-48fe-8011-ca050aa5569b, (FLAG)WYR_Posthouse_Event_GiveCourierLetterToPostmaster_19478a9c-8185-40df-a8b4-a6a580ff5f96);
+
+// Ownership of items in Posthouse
+DB_ItemOwnerShipTriggers("BGO_Main_A", (TRIGGER)S_WYR_Posthouse_Ownership_Postmaster_e4187ced-ffd4-4ba6-9805-f754f6d55b0b, (CHARACTER)S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6);
+DB_ItemOwnerShipClearItem("BGO_Main_A", (ITEM)WYR_Posthouse_GortashCoronationPoster_000_4ea40e3c-85e2-4476-8d22-6b4f1425e95d);
+DB_ItemOwnerShipTriggers("BGO_Main_A", (TRIGGER)S_WYR_Posthouse_Ownership_Courier_2710743b-04bf-4496-9819-122c4531777c, (CHARACTER)S_WYR_Posthouse_Courier_3759e727-50b6-4bb2-b341-bf26bb765227);
+DB_ItemOwnerShipTriggers("BGO_Main_A", (TRIGGER)S_WYR_Posthouse_Ownership_Equerry_66e80e4b-68c8-4f98-97d4-5edc67d6975a, (CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53);
+
+DB_HasItemEvent((ITEM)S_WYR_Posthouse_UrgentReportForDukeRavengard_d9922125-23f8-405c-a2cc-f448621cd178, WYR_Posthouse_State_HasEnvelopeForRavengard_cc01ae34-ee6b-46af-90d9-e179d50bbdbd);
+DB_HasItemEvent((ITEM)S_WYR_Posthouse_UrgentReportForDukeRavengard_Opened_cc57cc55-4b45-4cd6-bea4-2f2981a342e3, WYR_Posthouse_State_HasReportForRavengard_0cebf782-e7ec-4a66-b989-85186a25ecde);
+DB_BookFlags(S_WYR_UrgentReportForDukeRavengard_cc57cc55-4b45-4cd6-bea4-2f2981a342e3, WYR_Posthouse_Knows_ReportForRavengard_d1b92737-69d2-4798-9a98-54c418e32622);
+
+DB_PermaDefeatedFlag((CHARACTER)ACT3_WYR_Posthouse_Postmaster_ceda2afb-e7cd-4963-94ac-43d69c2726b1, (FLAG)WYR_Posthouse_State_PostmasterPermaDefeated_4d60bb06-09aa-4638-9be8-d965708004d7);
+// Scratch
+PROC_TriggerRegisterForPlayers(S_WYR_Posthouse_DogAD_Trigger_4fd3b47b-2206-45e7-827d-b3bd5780e424);
+
+DB_WYR_PostHouse_EquerryGroom((CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53);
+DB_WYR_PostHouse_EquerryGroom((CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3);
+
+DB_PermaDefeatedFlag(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, (FLAG)WYR_Posthouse_State_EquerryPermaDefeated_d4f0d459-8a81-4acc-829f-3c98e7ac273e);
+
+// Dogs and their kennel doors / triggers
+DB_WYR_Posthouse_DogKennel((CHARACTER)S_WYR_Posthouse_CapturedDog_02_a4acea63-3a80-4e0e-857f-208a2e46d925, (ITEM)S_WYR_PostHouse_KennelDoor_001_91d7c4ce-a17f-4af7-9abd-abc598c32610, (TRIGGER)S_WYR_PostHouse_Trigger_Kennel_001_ab3ab4b8-60f3-4289-80cb-c27ae1075008);
+DB_WYR_Posthouse_DogKennel((CHARACTER)S_WYR_Posthouse_CapturedDog_01_88aec51f-b977-4ebf-9bd6-89ed2701c3c0, (ITEM)S_WYR_PostHouse_KennelDoor_003_78da2dad-58de-41cc-96c8-c2c1c74e8a91, (TRIGGER)S_WYR_PostHouse_Trigger_Kennel_003_ed879264-b9ad-4e30-9815-3eca9643b5ec);
+DB_WYR_Posthouse_DogKennel((CHARACTER)S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, (ITEM)S_WYR_PostHouse_KennelDoor_002_c18ee776-8eea-4bb3-bf2d-68e5db0c3cfc, (TRIGGER)S_WYR_PostHouse_Trigger_Kennel_002_de274572-5341-4946-8836-7dd706f45410);
+
+DB_WYR_Posthouse_DogCaptured((CHARACTER)S_WYR_Posthouse_CapturedDog_02_a4acea63-3a80-4e0e-857f-208a2e46d925);
+DB_WYR_Posthouse_DogCaptured((CHARACTER)S_WYR_Posthouse_CapturedDog_01_88aec51f-b977-4ebf-9bd6-89ed2701c3c0);
+
+DB_FlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_TressymFireballsPlayer_2a2120e7-8d02-4817-1444-6fbf1ad6e206, (DIALOGRESOURCE)WYR_Posthouse_CrimeReaction_GalesTressym_467e36fe-9e91-67db-2a56-305018c641e4);
+DB_FlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_TressymFireballsPlayer_2a2120e7-8d02-4817-1444-6fbf1ad6e206, (DIALOGRESOURCE)WYR_Posthouse_Tara_OM_Gale_AOM_COM_OOM_999ecebb-967d-172b-0411-3d455cdf27e6);
+DB_FlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_TressymFireballsPlayer_2a2120e7-8d02-4817-1444-6fbf1ad6e206, (DIALOGRESOURCE)WYR_Posthouse_GalesTressym_6bbdb0cc-9a74-63c4-ec0b-21d26e65714e);
+DB_GlobalFlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_TressymFliesAway_ceb74fcd-4eea-645b-79a4-6c31cde125e1, (DIALOGRESOURCE)WYR_Posthouse_CrimeReaction_GalesTressym_467e36fe-9e91-67db-2a56-305018c641e4);
+DB_GlobalFlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_TressymFliesAway_ceb74fcd-4eea-645b-79a4-6c31cde125e1, (DIALOGRESOURCE)WYR_Posthouse_Tara_OM_Gale_AOM_COM_OOM_999ecebb-967d-172b-0411-3d455cdf27e6);
+DB_GlobalFlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_TressymFliesAway_ceb74fcd-4eea-645b-79a4-6c31cde125e1, (DIALOGRESOURCE)WYR_Posthouse_GalesTressym_6bbdb0cc-9a74-63c4-ec0b-21d26e65714e);
+
+// Dialogs
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_Guard_001_9bed513a-8b15-478b-bd6d-05b8b1388121, (DIALOGRESOURCE)WYR_Posthouse_Guard_001_b9157ae2-6257-307f-38d5-e74597fa4ec4);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6, (DIALOGRESOURCE)WYR_Posthouse_Postmaster_b759f6ef-a616-ee5b-2293-1315e2576164);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_Pigeon_ed3a66c7-87f8-400e-a753-093d0cc476c4, (DIALOGRESOURCE)WYR_Posthouse_Pigeon_f65ee3de-01c0-0725-1e32-81b104182485);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_Pigeon_001_535f61a4-f102-4b9c-85a9-300a38d12b35, (DIALOGRESOURCE)WYR_Posthouse_Pigeon_001_7e1817c5-dbc3-9db3-0807-2b9deab60a2d);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_Pigeon_002_d8bf1a9a-a3de-42bd-a0b7-22be3b2c4908, (DIALOGRESOURCE)WYR_Posthouse_Pigeon_002_b68becec-4bde-b340-4fab-9f59c30bb844);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_Courier_3759e727-50b6-4bb2-b341-bf26bb765227, (DIALOGRESOURCE)WYR_Posthouse_Courier_134fd0db-7f4a-e542-7f22-fa7606502cab);
+DB_Dialogs((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, (DIALOGRESOURCE)WYR_Posthouse_GalesTressym_6bbdb0cc-9a74-63c4-ec0b-21d26e65714e);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, (DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, (DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_BroadsheetSeller_ef30ef8d-d89b-4914-816c-5354ff74f516, (DIALOGRESOURCE)WYR_Posthouse_PaperGirl_a45529bb-5119-b40a-d80e-ca1499d1d754);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_CapturedDog_01_88aec51f-b977-4ebf-9bd6-89ed2701c3c0, (DIALOGRESOURCE)WYR_Posthouse_CapturedDog_01_da1a084d-7e53-101e-a6c3-859b31185b29);
+DB_Dialogs((CHARACTER)S_WYR_Posthouse_CapturedDog_02_a4acea63-3a80-4e0e-857f-208a2e46d925, (DIALOGRESOURCE)WYR_Posthouse_CapturedDog_02_3c06e1ca-86c8-069b-1281-8191990f79eb);
+
+// Postmaster
+DB_SpotPlayers(S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6, "WYR_Posthouse_Postmaster_WelcomeSpotting", NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+DB_SpotPlayers_IncludeFollowers(S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6, "WYR_Posthouse_Postmaster_WelcomeSpotting");
+DB_SpotPlayers_IncludeWildshapedPlayers(S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6, "WYR_Posthouse_Postmaster_WelcomeSpotting");
+DB_SpotPlayers_TargetIgnoreCantTalk(S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6, "WYR_Posthouse_Postmaster_WelcomeSpotting");
+DB_SpotPlayers_SpotTrigger(S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6, "WYR_Posthouse_Postmaster_WelcomeSpotting", S_WYR_Posthouse_Postmaster_WelcomeSpotArea_c6790c93-cf13-4c7e-b3c0-8f25d8c62a9d);
+DB_KnowledgeSkillcheck_TargetOverride(S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054, S_CAMP_GaleTressym_a1e0f2b1-25d0-4d7a-9343-b4b49314105e);
+
+// Broadsheetseller
+DB_Children(S_WYR_Posthouse_BroadsheetSeller_ef30ef8d-d89b-4914-816c-5354ff74f516);
+DB_DialogMoneyTransfer(1, WYR_Posthouse_PaperGirl_a45529bb-5119-b40a-d80e-ca1499d1d754, 2);
+DB_HasItemTemplateScriptFlag(1, (DIALOGRESOURCE)WYR_Posthouse_PaperGirl_a45529bb-5119-b40a-d80e-ca1499d1d754, (ITEMROOT)UNI_LOW_BaldursMouth_DailyPaper_5ffe11b1-4949-47cd-ab49-80053db261f9, 1);
+PROC_TriggerRegisterForPlayers((TRIGGER)S_WYR_Posthouse_BroadsheetSeller_EarshotAD_058a11c7-0290-4a7d-b903-ad6fafbef4cf);
+DB_FlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_HeardOfStelmanesDeath_b625f154-5df9-4504-97e5-0db76a4e82e7, (DIALOGRESOURCE)WYR_Posthouse_PaperGirl_a45529bb-5119-b40a-d80e-ca1499d1d754);
+KBSECTION
+//REGION Broadsheet seller
+// Player overhears broadsheet seller Stelmane AD
+IF
+AutomatedDialogEnded(WYR_Posthouse_AD_PaperGirl_b00df48a-4498-e483-acc9-d41ef2570d48, _)
+AND
+DB_Players(_Player)
+AND
+DB_InRegion(_Player, S_WYR_Posthouse_BroadsheetSeller_EarshotAD_058a11c7-0290-4a7d-b903-ad6fafbef4cf)
+THEN
+PROC_GLO_Gazette_TryEmperorResponseStelmaneDead(_Player);
+
+IF
+FlagSet((FLAG)GLO_Daisy_State_TriggerDaisyStelmane_0ea9e817-7b69-4ced-97ec-d579740198e3, _, _)
+THEN
+PROC_TriggerUnregisterForPlayers((TRIGGER)S_WYR_Posthouse_BroadsheetSeller_EarshotAD_058a11c7-0290-4a7d-b903-ad6fafbef4cf);
+
+// Player heard Stelmane news in broadsheet seller interactive dialog
+PROC
+PROC_FlagReactionAfterDialog(_Player, (FLAG)WYR_Posthouse_Event_HeardOfStelmanesDeath_b625f154-5df9-4504-97e5-0db76a4e82e7)
+AND
+DB_Players((CHARACTER)_Player)
+THEN
+PROC_GLO_Gazette_TryEmperorResponseStelmaneDead(_Player);
+
+// Generate trade treasure when talking to the paper girl
+PROC
+PROC_DialogFlagSetup(WYR_Posthouse_PaperGirl_a45529bb-5119-b40a-d80e-ca1499d1d754, S_WYR_Posthouse_BroadsheetSeller_ef30ef8d-d89b-4914-816c-5354ff74f516, _Player)
+THEN
+PROC_GenTradeItems((CHARACTER)_Player, S_WYR_Posthouse_BroadsheetSeller_ef30ef8d-d89b-4914-816c-5354ff74f516);
+
+//END_REGION
+
+//REGION Letters
+PROC
+PROC_Posthouse_Init_MissingLetters()
+AND
+DB_GlobalFlag(PLA_ZhentShipment_State_ChestSentAway_5d9f274d-a38b-4d81-bc9f-bc8c1fcb59ca)
+AND
+QRY_OnlyOnce("WYR_Posthouse_Init_MissingLetters")
+THEN
+DB_WYR_Posthouse_EnvelopedLetters((ITEM)S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030, (ITEM)S_WYR_Posthouse_MissingLetter3_Opened_4fa5a7e9-76cd-4984-8eca-078fe3656431);
+DB_WYR_Posthouse_EnvelopedLetters((ITEM)S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030, (ITEM)S_WYR_Posthouse_MissingLetter4_Opened_1664fa81-36c3-4a92-bb11-a7ac21b68e54);
+DB_HasItemEvent((ITEM)S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030, (FLAG)WYR_Posthouse_State_PlayerHasMissingLetters_09a6f570-68aa-4961-981e-0c63096d84b4);
+DB_GiveItemToEvent((ITEM)S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030, (FLAG)WYR_Posthouse_Event_GiveMissingLettersToPostmaster_0e8ee1a6-a8d6-4055-95fe-dac6986aaa20);
+DB_HasItemEvent((ITEM)S_WYR_Posthouse_MissingLetter1_Opened_e925ac28-b36e-4281-80f0-3dc1b94b726e, (FLAG)WYR_Posthouse_State_PlayerHasOpenedMissingLetters_eb82f5be-a1ff-49b1-b14d-f26f199e62f1);
+DB_GiveItemToEvent((ITEM)S_WYR_Posthouse_MissingLetter1_Opened_e925ac28-b36e-4281-80f0-3dc1b94b726e, (FLAG)WYR_Posthouse_Event_GiveOpenedMissingLettersToPostmaster_80eb7f59-147e-44e0-83db-2b6e651515ba);
+PROC_SetOnStage(S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030, 1);
+PROC_SetOnStage(S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49, 0);
+
+PROC
+PROC_Posthouse_Init_MissingLetters()
+AND
+NOT DB_GlobalFlag(PLA_ZhentShipment_State_ChestSentAway_5d9f274d-a38b-4d81-bc9f-bc8c1fcb59ca)
+AND
+QRY_OnlyOnce("WYR_Posthouse_Init_MissingLetters")
+THEN
+DB_WYR_Posthouse_EnvelopedLetters((ITEM)S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49, (ITEM)S_WYR_Posthouse_MissingLetter3_Opened_4fa5a7e9-76cd-4984-8eca-078fe3656431);
+DB_WYR_Posthouse_EnvelopedLetters((ITEM)S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49, (ITEM)S_WYR_Posthouse_MissingLetter4_Opened_1664fa81-36c3-4a92-bb11-a7ac21b68e54);
+DB_HasItemEvent((ITEM)S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49, (FLAG)WYR_Posthouse_State_PlayerHasMissingLetters_09a6f570-68aa-4961-981e-0c63096d84b4);
+DB_GiveItemToEvent((ITEM)S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49, (FLAG)WYR_Posthouse_Event_GiveMissingLettersToPostmaster_0e8ee1a6-a8d6-4055-95fe-dac6986aaa20);
+DB_HasItemEvent((ITEM)S_WYR_Posthouse_MissingLetter2_Opened_cd1dd6bc-0105-4c22-beb7-298df510e653, (FLAG)WYR_Posthouse_State_PlayerHasOpenedMissingLetters_eb82f5be-a1ff-49b1-b14d-f26f199e62f1);
+DB_GiveItemToEvent((ITEM)S_WYR_Posthouse_MissingLetter2_Opened_cd1dd6bc-0105-4c22-beb7-298df510e653, (FLAG)WYR_Posthouse_Event_GiveOpenedMissingLettersToPostmaster_80eb7f59-147e-44e0-83db-2b6e651515ba);
+PROC_SetOnStage(S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49, 1);
+PROC_SetOnStage(S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030, 0);
+
+// Hide the letters in envelopes
+PROC
+PROC_Posthouse_Init_MissingLetters()
+AND
+DB_WYR_Posthouse_EnvelopedLetters(_, _Letter)
+THEN
+PROC_SetOnStage(_Letter, 0);
+
+IF
+UseStarted(_Player, (ITEM)_Envelope)
+AND
+DB_Players(_Player)
+AND
+NOT DB_Defeated(_Player)
+AND
+DB_WYR_Posthouse_EnvelopedLetters(_Envelope, _Letter)
+THEN
+NOT DB_WYR_Posthouse_EnvelopedLetters(_Envelope, _Letter);
+PROC_WYR_Posthouse_OpenEnvelope(_Player, _Envelope, _Letter);
+
+PROC
+PROC_WYR_Posthouse_OpenEnvelope((CHARACTER)_Character, (ITEM)_Envelope, (ITEM)_Letter)
+AND
+DB_Players(_Character)
+THEN
+PROC_SetOnStage(_Envelope, 0);
+DB_WYR_Posthouse_RemovingEnvelope(_Envelope);
+PROC_ToInventoryAndOnStage(_Letter, _Character, 1, 1, 1);
+
+IF
+WentOnStage(_Envelope, 0)
+AND
+DB_WYR_Posthouse_RemovingEnvelope((ITEM)_Envelope)
+THEN
+Drop(_Envelope);
+NOT DB_WYR_Posthouse_RemovingEnvelope(_Envelope);
+
+IF
+GameBookInterfaceClosed((ITEM)S_WYR_Posthouse_MissingLetter1_Opened_e925ac28-b36e-4281-80f0-3dc1b94b726e, _Player)
+AND
+DB_Players(_Player)
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_PlayerHasReadMissingLetters_16e1c8ec-7701-c474-ca99-5d19243936a2, _Player);
+
+IF
+GameBookInterfaceClosed((ITEM)S_WYR_Posthouse_MissingLetter2_Opened_cd1dd6bc-0105-4c22-beb7-298df510e653, _Player)
+AND
+DB_Players(_Player)
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_PlayerHasReadMissingLetters_16e1c8ec-7701-c474-ca99-5d19243936a2, _Player);
+
+IF
+DestroyedBy(_Envelope, _Destroyer, _, _)
+AND
+DB_WYR_Posthouse_EnvelopedLetters(_Envelope, _Letter)
+THEN
+NOT DB_WYR_Posthouse_EnvelopedLetters(_Envelope, _Letter);
+Die(_Letter, DEATHTYPE.Physical, _Destroyer, 0, 1);
+
+IF
+DestroyedBy(S_WYR_Posthouse_MissingLetter1_Opened_e925ac28-b36e-4281-80f0-3dc1b94b726e, _, _, _)
+THEN
+SetFlag(WYR_Posthouse_State_MissingLetterDestroyed_ba5c70d6-cf9f-47be-bbd5-bb8f84b2f1a2);
+
+IF
+DestroyedBy(S_WYR_Posthouse_MissingLetter2_Opened_cd1dd6bc-0105-4c22-beb7-298df510e653, _, _, _)
+THEN
+SetFlag(WYR_Posthouse_State_MissingLetterDestroyed_ba5c70d6-cf9f-47be-bbd5-bb8f84b2f1a2);
+
+IF
+DestroyedBy(S_WYR_Posthouse_UrgentReportForDukeRavengard_Opened_cc57cc55-4b45-4cd6-bea4-2f2981a342e3, _, _, _)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION Naming events
+IF
+DB_GlobalFlag((FLAG)WYR_Posthouse_Event_SetPigeonNameCourier_5782849e-cbeb-4866-9bd5-617cbb5f4265)
+AND 
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_Event_SetPigeonNameReal_d4b8de1f-aa02-4364-bcae-dd9b507b8696)
+THEN
+SetStoryDisplayName(S_WYR_Posthouse_Pigeon_ed3a66c7-87f8-400e-a753-093d0cc476c4, "Posthouse_Pigeon_Name1");
+
+PROC
+PROC_GlobalFlagReactionAfterDialog((FLAG)WYR_Posthouse_Event_SetPigeonNameReal_d4b8de1f-aa02-4364-bcae-dd9b507b8696)
+THEN
+SetStoryDisplayName(S_WYR_Posthouse_Pigeon_ed3a66c7-87f8-400e-a753-093d0cc476c4, "Posthouse_Pigeon_Name2");
+
+IF
+DB_GlobalFlag((FLAG)WYR_Posthouse_Event_SetTressymNameReal_93fb1222-942b-4d5d-b6c3-4eda30cc2055)
+THEN
+SetStoryDisplayName(S_WYR_Posthouse_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, "Gale_Tressym_Name");
+//END_REGION
+
+//REGION Tressym - Init
+PROC
+PROC_WYR_Posthouse_InitTressymQuest()
+AND
+DB_PermaDefeated((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236)
+THEN
+PROC_SetOnStage((ITEM)S_WYR_Posthouse_PigeonBlood_000_d8f2bf19-421f-446a-948f-d9c5acee128a, 0);
+PROC_SetOnStage((ITEM)S_WYR_Posthouse_PigeonBlood_001_fd6bbcd0-8298-49b2-abe0-b459fddbf9b0, 0);
+PROC_SetOnStage((ITEM)S_WYR_Posthouse_PigeonBlood_002_1eebad50-e2bc-493e-9497-153a8e43f95b, 0);
+PROC_SetOnStage((ITEM)S_WYR_Posthouse_PigeonBlood_003_3feaa17f-3bc2-4f5e-80f4-bce3ae80a5ee, 0);
+PROC_SetOnStage((ITEM)S_WYR_Posthouse_PigeonBlood_004_160569b7-09e7-47a4-91a3-91fa9f990471, 0);
+PROC_SetOnStage((ITEM)S_WYR_Posthouse_MissingLetter1_86a5df5c-9863-4daf-be5a-a994e12c5030, 0);
+PROC_SetOnStage((ITEM)S_WYR_Posthouse_MissingLetter2_0565dd58-484d-4a34-8835-8493af38ef49, 0);
+PROC_SetOnStage((ITEM)S_WYR_Posthouse_TressymNest_f63d506d-300f-4806-b091-9b664c1976a2, 0);
+SetFlag((FLAG)WYR_Posthouse_State_Tressym_QuestDisabled_4b68a98c-b925-40a7-9b78-03def6edf708);
+
+PROC
+PROC_WYR_Posthouse_InitTressymQuest()
+AND
+NOT DB_GlobalFlag(WYR_Posthouse_State_Tressym_QuestDisabled_4b68a98c-b925-40a7-9b78-03def6edf708)
+THEN
+CreatePuddle((ITEM)S_WYR_Posthouse_PigeonBlood_000_d8f2bf19-421f-446a-948f-d9c5acee128a, "SurfaceBlood", 5, 10, 1, 2, 1.0);
+CreatePuddle((ITEM)S_WYR_Posthouse_PigeonBlood_001_fd6bbcd0-8298-49b2-abe0-b459fddbf9b0, "SurfaceBlood", 5, 10, 1, 2, 1.0);
+CreatePuddle((ITEM)S_WYR_Posthouse_PigeonBlood_002_1eebad50-e2bc-493e-9497-153a8e43f95b, "SurfaceBlood", 5, 10, 1, 2, 1.0);
+CreatePuddle((ITEM)S_WYR_Posthouse_PigeonBlood_003_3feaa17f-3bc2-4f5e-80f4-bce3ae80a5ee, "SurfaceBlood", 2, 4, 1, 2, 1.0);
+CreatePuddle((ITEM)S_WYR_Posthouse_PigeonBlood_004_160569b7-09e7-47a4-91a3-91fa9f990471, "SurfaceBlood", 2, 4, 1, 2, 1.0);
+PROC_SetOnStage(S_WYR_Posthouse_MissingLetter_Opened_e925ac28-b36e-4281-80f0-3dc1b94b726e, 0);
+TeleportTo(S_WYR_Posthouse_MissingLetter_Opened_e925ac28-b36e-4281-80f0-3dc1b94b726e, S_WYR_Posthouse_MissingLetter_86a5df5c-9863-4daf-be5a-a994e12c5030);
+PROC_SetOnStage(S_WYR_Posthouse_UrgentReportForDukeRavengard_Opened_cc57cc55-4b45-4cd6-bea4-2f2981a342e3, 0);
+TeleportTo(S_WYR_Posthouse_UrgentReportForDukeRavengard_Opened_cc57cc55-4b45-4cd6-bea4-2f2981a342e3, S_WYR_Posthouse_UrgentReportForDukeRavengard_d9922125-23f8-405c-a2cc-f448621cd178);
+PROC_Posthouse_Init_MissingLetters();
+DB_KnowledgeCheckTrigger_AD("WYR_Posthouse_Nature_PigeonBlood", S_WYR_Posthouse_Trigger_PigeonBlood_001_89ba3ed2-79a0-49cc-8126-ccb40a0d118e, "AnimalHandling", (DIFFICULTYCLASS)Act3_VeryEasy_b9cea18d-f40a-444d-a692-76582a69130c, WYR_Posthouse_PAD_PlayerSpotsPigeonBlood000_97227e59-0698-bb10-fee4-227fad068d03, (FLAG)WYR_Posthouse_State_PigeonBlood_NatureCheckSuccess_b61d8663-b402-4a1e-bbb9-e3138c2f9869);
+DB_KnowledgeCheckTrigger_AD("WYR_Posthouse_Nature_PigeonBlood", S_WYR_Posthouse_Trigger_PigeonBlood_002_bc41bdef-553c-44ed-a753-8164f044eec5, "AnimalHandling", (DIFFICULTYCLASS)Act3_VeryEasy_b9cea18d-f40a-444d-a692-76582a69130c, WYR_Posthouse_PAD_PlayerSpotsPigeonBlood000_97227e59-0698-bb10-fee4-227fad068d03, (FLAG)WYR_Posthouse_State_PigeonBlood_NatureCheckSuccess_b61d8663-b402-4a1e-bbb9-e3138c2f9869);
+PROC_WYR_Posthouse_InitTressym();
+PROC_WYR_Posthouse_InitTressym_NoticeTressym();
+
+PROC
+PROC_WYR_Posthouse_InitTressym()
+AND
+NOT DB_GlobalFlag(WYR_Posthouse_State_TressymHasGivenReward_939d0367-8bc7-487f-b8ef-15c5c9fd0faf)
+AND
+NOT DB_GlobalFlag(WYR_Posthouse_Event_TressymFliesToCamp_20c421d6-7aad-9576-14e2-5a000038a570)
+AND
+NOT DB_GlobalFlag(WYR_Posthouse_Event_TressymFliesAway_ceb74fcd-4eea-645b-79a4-6c31cde125e1)
+THEN
+SysClear("DB_WYR_Posthouse_Tressym", 1);
+DB_WYR_Posthouse_Tressym(S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236);
+PROC_SetOnStage(S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, 1);
+PROC_WYR_Posthouse_TeleportTressym(S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236);
+PROC_ToInventoryAndOnStage(S_WYR_Posthouse_TressymItem_276c18e0-71cf-4934-aaae-edc9ffc9ad2e, S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236);
+PROC_RemoveAllDialogEntriesForSpeaker(S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236);
+DB_Dialogs(S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, (DIALOGRESOURCE)WYR_Posthouse_GalesTressym_6bbdb0cc-9a74-63c4-ec0b-21d26e65714e);
+SetStoryDisplayName((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, "Posthouse_Tressym_Unknown");
+SetFlag((FLAG)WYR_Posthouse_TressymIsGales_b2467cd8-a4ae-4358-9e22-2ed0391f3de9);
+PROC_DefineSingleOriginMoment((DIALOGRESOURCE)WYR_Posthouse_GalesTressym_6bbdb0cc-9a74-63c4-ec0b-21d26e65714e, (TAG)REALLY_GALE_9b0354c0-56d9-4723-8034-918ac9abab19, (DIALOGRESOURCE)WYR_Posthouse_Tara_OM_Gale_AOM_COM_OOM_999ecebb-967d-172b-0411-3d455cdf27e6);
+PROC_WYR_Posthouse_SetTressymOwnership();
+
+PROC
+PROC_WYR_Posthouse_TeleportTressym((CHARACTER)_Tressym)
+THEN
+TeleportTo(_Tressym, S_WYR_Posthouse_Point_Tressym_e1f7e783-6a2d-45c7-bac5-894a35d87c27);
+
+// prevent camp from reclaiming tressym on initial level swap
+PROC
+PROC_WYR_Posthouse_TeleportTressym((CHARACTER)_Tressym)
+AND
+DB_CampLevelSwap_WasInCamp(_Tressym)
+THEN
+NOT DB_CampLevelSwap_WasInCamp(_Tressym);
+
+PROC
+PROC_WYR_Posthouse_SetTressymOwnership()
+AND
+DB_WYR_Posthouse_TreessymOwnership(_Item)
+THEN
+SetOwner((ITEM)_Item, (CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236);
+
+PROC
+PROC_WYR_Posthouse_ClearTressymOwnership()
+AND
+DB_WYR_Posthouse_TreessymOwnership(_Item)
+THEN
+ClearOwnership((ITEM)_Item);
+
+QRY
+QRY_OriginMoment_PreventRelaunchDialog((DIALOGRESOURCE)WYR_Posthouse_Tara_OM_Gale_AOM_COM_OOM_999ecebb-967d-172b-0411-3d455cdf27e6, _, _)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION Tressym - Pigeon blood trail
+// After a succesful Nature check, swap the other pigeon blood nature check for an investigation to get the clue of Open Hand Temple
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_, "WYR_Posthouse_Nature_PigeonBlood", (TRIGGER)S_WYR_Posthouse_Trigger_PigeonBlood_001_89ba3ed2-79a0-49cc-8126-ccb40a0d118e)
+THEN
+PROC_KnowledgeCheck_Clear((TRIGGER)S_WYR_Posthouse_Trigger_PigeonBlood_002_bc41bdef-553c-44ed-a753-8164f044eec5);
+DB_KnowledgeCheckTrigger_AD("WYR_Posthouse_Investigation_PigeonBlood", (TRIGGER)S_WYR_Posthouse_Trigger_PigeonBlood_002_bc41bdef-553c-44ed-a753-8164f044eec5, "Survival", (DIFFICULTYCLASS)Act3_VeryEasy_b9cea18d-f40a-444d-a692-76582a69130c, WYR_Posthouse_PAD_PlayerSpotsPigeonBlood001_f1006f45-68f4-eda2-29e4-cde34eb61b6a, (FLAG)WYR_Posthouse_State_PigeonBlood_InvestigationCheckSuccess_2a672cea-f1a6-4cef-82af-ddd6242db8a0);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_, "WYR_Posthouse_Nature_PigeonBlood", (TRIGGER)S_WYR_Posthouse_Trigger_PigeonBlood_002_bc41bdef-553c-44ed-a753-8164f044eec5)
+THEN
+PROC_KnowledgeCheck_Clear((TRIGGER)S_WYR_Posthouse_Trigger_PigeonBlood_001_89ba3ed2-79a0-49cc-8126-ccb40a0d118e);
+DB_KnowledgeCheckTrigger_AD("WYR_Posthouse_Investigation_PigeonBlood", (TRIGGER)S_WYR_Posthouse_Trigger_PigeonBlood_001_89ba3ed2-79a0-49cc-8126-ccb40a0d118e, "Survival", (DIFFICULTYCLASS)Act3_VeryEasy_b9cea18d-f40a-444d-a692-76582a69130c, WYR_Posthouse_PAD_PlayerSpotsPigeonBlood001_f1006f45-68f4-eda2-29e4-cde34eb61b6a, (FLAG)WYR_Posthouse_State_PigeonBlood_InvestigationCheckSuccess_2a672cea-f1a6-4cef-82af-ddd6242db8a0);
+//END_REGION
+
+//REGION Tressym - triggers
+QRY
+QRY_WYR_Posthouse_InitTressym_SkillCheckNeeded()
+AND
+NOT DB_GlobalFlag((FLAG)ORI_Gale_State_TressymJoined_c46cfbb6-2aad-47a9-81a1-bdd28a7919fb)
+AND
+DB_GlobalFlag((FLAG)ORI_Gale_State_WasRecruited_a56d3a51-2983-5f82-25f4-ad142948b133)
+THEN
+DB_NOOP(1);
+
+// If Tara is not recruited in CAMP but Gale is, initialize a skill check to see if the character approaching recognizes Gale's symbol, otherwise, run a simple PAD trigger.
+PROC
+PROC_WYR_Posthouse_InitTressym_NoticeTressym()
+AND
+NOT QRY_WYR_Posthouse_InitTressym_SkillCheckNeeded()
+THEN
+DB_OneShotPlayerTrigger(S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054);
+
+PROC
+PROC_OneShotTriggerEntered((CHARACTER)S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604, (TRIGGER)S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)WYR_Posthouse_PAD_GaleSpottedTressym_057f11a8-bc78-22b3-242a-65649e506b9d, (CHARACTER)S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_OneShotTriggerEntered(_Player, (TRIGGER)S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054)
+AND
+DB_Players(_Player)
+AND
+_Player != S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)WYR_Posthouse_PAD_NotGaleSpottedTressym_1dd81d3c-3bc3-d698-b9a5-0bd2d3e41a20, (CHARACTER)_Player)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_OneShotTriggerEntered(_Player, (TRIGGER)S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054)
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_Tressym_PlayerGotClose_2eb39adb-dbf3-4f01-a77a-46ff6379d69b);
+
+PROC
+PROC_WYR_Posthouse_InitTressym_NoticeTressym()
+AND
+QRY_WYR_Posthouse_InitTressym_SkillCheckNeeded()
+THEN
+DB_KnowledgeCheckTrigger("WYR_Posthouse_RecognizeTaraAsGales", S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054, "Perception", (DIFFICULTYCLASS)Act3_Easy_5028066b-6ea0-4a6a-9e3e-53bee62559a7);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage(_Character, _, "WYR_Posthouse_RecognizeTaraAsGales")
+AND
+GetFlag((FLAG)ORI_Gale_Knows_DiscussedTressym_9bac6592-c60b-c97e-10f1-61ccdc380367, _Character, 1)
+THEN
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(1);
+
+QRY
+QRY_GLO_SkillCheck_CheckAdvantage(S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604, _, "WYR_Posthouse_RecognizeTaraAsGales")
+THEN
+DB_QRYRTN_GLO_Skillcheck_CheckAdvantage(2);
+
+PROC
+PROC_GLO_KnowledgeCheckFailure((CHARACTER)_Player, "WYR_Posthouse_RecognizeTaraAsGales", S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054)
+AND
+DB_Players(_Player)
+AND
+_Player != S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)WYR_Posthouse_PAD_NotGaleSpottedTressym_1dd81d3c-3bc3-d698-b9a5-0bd2d3e41a20, _Player)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_, "WYR_Posthouse_RecognizeTaraAsGales", S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)WYR_Posthouse_State_Tressym_PlayersSeesGaleSymbol_722a4065-ee43-4ee8-b235-bc4a904d62c3);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess(_Player, "WYR_Posthouse_RecognizeTaraAsGales", S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054)
+AND
+DB_Players(_Player)
+AND
+_Player != S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604
+THEN
+StartVoiceBark((VOICEBARKRESOURCE)WYR_Posthouse_VB_NotGaleSpottedTressym_edd29f6c-fe9a-80b0-16c5-9e087ecff1ae, _Player);
+
+PROC
+PROC_GLO_KnowledgeCheckSuccess(S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604, "WYR_Posthouse_RecognizeTaraAsGales", S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)WYR_Posthouse_PAD_GaleSpottedTressym_057f11a8-bc78-22b3-242a-65649e506b9d, S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GLO_KnowledgeCheckFailure(S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604, "WYR_Posthouse_RecognizeTaraAsGales", S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)WYR_Posthouse_PAD_GaleSpottedTressym_057f11a8-bc78-22b3-242a-65649e506b9d, S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_GLO_KnowledgeCheckEnded(_Player, "WYR_Posthouse_RecognizeTaraAsGales", S_WYR_Posthouse_SpotTressym_Trigger_29e73862-c4ab-417f-8805-5c84b2f28054, _, _)
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_Tressym_PlayerGotClose_2eb39adb-dbf3-4f01-a77a-46ff6379d69b);
+
+//END_REGION
+
+//REGION Tressym - event flags
+IF
+FlagSet(WYR_Posthouse_Event_TressymFliesToCamp_20c421d6-7aad-9576-14e2-5a000038a570, _, _)
+THEN
+PROC_WYR_Posthouse_Tara_FliesAway();
+
+PROC
+PROC_GlobalFlagReactionAfterDialog(WYR_Posthouse_Event_TressymFliesAway_ceb74fcd-4eea-645b-79a4-6c31cde125e1)
+THEN
+PROC_WYR_Posthouse_Tara_FliesAway();
+
+PROC
+PROC_WYR_Posthouse_Tara_FliesAway()
+AND
+DB_WYR_Posthouse_Tressym(_Tressym)
+AND
+IsOnStage(_Tressym, 1)
+THEN
+SetHasDialog(_Tressym, 0);
+PROC_WYR_Posthouse_ClearTressymOwnership();
+SetDetached(_Tressym, 1);
+PROC_SetInvulnerable(_Tressym, 1);
+PlayAnimation(_Tressym, (ANIMATION)CUST_FlyAway_01_8c213e7c-ae64-4dab-b254-af09e8e9c0d1, "");
+
+IF
+AnimationEvent(_Tressym, "AnimationSetOffStage", _)
+AND
+DB_WYR_Posthouse_Tressym(_Tressym)
+THEN
+PROC_SetOnStage(_Tressym, 0);
+SetDetached(_Tressym, 0);
+PROC_SetInvulnerable(_Tressym, 0);
+
+IF
+FlagSet((FLAG)WYR_Posthouse_Event_TressymGivesRewardTo_c04c0b37-87ec-1466-9d19-0b0ebe0a21bb, (CHARACTER)_Player, _)
+AND
+DB_Players(_Player)
+AND
+IsInInventoryOf(S_WYR_Posthouse_TressymItem_276c18e0-71cf-4934-aaae-edc9ffc9ad2e, S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, 1)
+THEN
+ToInventory(S_WYR_Posthouse_TressymItem_276c18e0-71cf-4934-aaae-edc9ffc9ad2e, _Player, 1, 1, 1);
+
+IF
+MovedFromTo((ITEM)S_WYR_Posthouse_TressymItem_276c18e0-71cf-4934-aaae-edc9ffc9ad2e, (CHARACTER)_Tressym, (CHARACTER)_Player, 1)
+AND
+DB_WYR_Posthouse_Tressym(_Tressym)
+AND
+DB_Players(_Player)
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_TressymHasGivenReward_939d0367-8bc7-487f-b8ef-15c5c9fd0faf);
+
+PROC
+PROC_FlagReactionAfterDialog((CHARACTER)_Player, (FLAG)WYR_Posthouse_Event_TressymFireballsPlayer_2a2120e7-8d02-4817-1444-6fbf1ad6e206)
+AND
+DB_Players(_Player)
+AND
+NOT DB_Defeated((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236)
+THEN
+DB_WYR_Posthouse_TressymFireballsPlayer(_Player);
+UseSpell((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, "Target_MistyStep", (TRIGGER)S_WYR_Posthouse_Tressym_Point_Teleport_11af55ac-5736-4685-a486-45b5eb24f76b);
+
+IF
+CastedSpell((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, "Target_MistyStep", _, _, _)
+AND
+DB_WYR_Posthouse_TressymFireballsPlayer(_Player)
+THEN
+UseSpell((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236,  "Projectile_Fireball", _Player);
+
+IF
+CastSpellFailed((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, "Target_MistyStep", _, _, _)
+AND
+DB_WYR_Posthouse_TressymFireballsPlayer(_Player)
+THEN
+PROC_WYR_Posthouse_Tara_FliesAway();
+NOT DB_WYR_Posthouse_TressymFireballsPlayer(_Player);
+
+IF
+CastedSpell((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, "Projectile_Fireball", _, _, _)
+AND
+DB_WYR_Posthouse_TressymFireballsPlayer(_Player)
+THEN
+PROC_WYR_Posthouse_Tara_FliesAway();
+NOT DB_WYR_Posthouse_TressymFireballsPlayer(_Player);
+
+IF
+CastSpellFailed((CHARACTER)S_GLO_Gale_Tressym_ada7ee81-829d-48c7-ba73-9c9ec191d236, "Projectile_Fireball", _, _, _)
+AND
+DB_WYR_Posthouse_TressymFireballsPlayer(_Player)
+THEN
+PROC_WYR_Posthouse_Tara_FliesAway();
+NOT DB_WYR_Posthouse_TressymFireballsPlayer(_Player);
+
+PROC
+PROC_LongRest()
+AND
+DB_GlobalFlag((FLAG)WYR_Posthouse_Event_TressymEatsMorePigeons_30532d1b-41ab-1ca1-dcdf-f949cb44f490)
+AND
+QRY_OnlyOnce("WYR_Posthouse_TressymEatsMorePigeons")
+THEN
+PROC_SetOnStage(S_WYR_Posthouse_Pigeon_001_535f61a4-f102-4b9c-85a9-300a38d12b35, 0);
+PROC_SetOnStage(S_WYR_Posthouse_Pigeon_002_d8bf1a9a-a3de-42bd-a0b7-22be3b2c4908, 0);
+//END_REGION
+
+//REGION Scratch
+// (FLAG)CAMP_Courier_Dog_Moved2Camp_7dcb7732-1c76-463a-bec9-251f30860e6c
+IF
+EnteredTrigger(_Player, S_WYR_Posthouse_DogAD_Trigger_4fd3b47b-2206-45e7-827d-b3bd5780e424)
+AND
+DB_Players(_Player)
+AND
+IsControlled(_Player, 1)
+AND
+NOT DB_WYR_Posthouse_EquerryGroomArgumentCooldown(1)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_EquerryLeaves_ed582a57-4fba-3fa0-22b0-6c3cdee35bb6)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_GroomRanAway_ac724a83-f780-4275-82c0-a4092390ba81)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_EquerryFiredGroom_b99562b9-22a9-a84f-143d-9a65f5cfbd53)
+AND
+QRY_StartDialog_Fixed((DIALOGRESOURCE)WYR_Posthouse_EquerryGroomArguing_AD_cd9bfde3-34ab-f32b-7c6d-1e8054a7fbdc, (CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, (CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3)
+THEN
+DB_WYR_Posthouse_EquerryGroomArgumentCooldown(1);
+TimerLaunch("WYR_Posthouse_EquerryGroomArgumentCooldown", 10000);
+
+IF
+TimerFinished("WYR_Posthouse_EquerryGroomArgumentCooldown")
+AND
+DB_WYR_Posthouse_EquerryGroomArgumentCooldown(1)
+THEN
+NOT DB_WYR_Posthouse_EquerryGroomArgumentCooldown(1);
+
+// Disable groom in dialog
+IF
+FlagSet((FLAG)WYR_Posthouse_State_EquerryFiredGroom_b99562b9-22a9-a84f-143d-9a65f5cfbd53, _, _)
+AND
+DB_DialogNPCs(_DialogID, S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, _)
+AND
+DialogRemoveActorFromDialog(_DialogID, S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, 1)
+THEN
+PROC_TriggerUnregisterForPlayers(S_WYR_Posthouse_DogAD_Trigger_4fd3b47b-2206-45e7-827d-b3bd5780e424);
+PROC_RemoveAllDialogEntriesForSpeaker(S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3);
+SetHasDialog(S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, 0);
+PROC_DisappearOutOfSightTo(S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, S_WYR_Posthouse_Point_GroomLeaveDestination_bc951228-fbe6-4270-af23-200b0d16ff2e, "Walk", 0, "");
+
+// Disable equerry in dialog
+IF
+FlagSet((FLAG)WYR_Posthouse_State_EquerryLeaves_ed582a57-4fba-3fa0-22b0-6c3cdee35bb6, _, _)
+AND
+DB_DialogNPCs(_DialogID, S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, _)
+AND
+DialogRemoveActorFromDialog(_DialogID, S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, 1)
+THEN
+PROC_TriggerUnregisterForPlayers(S_WYR_Posthouse_DogAD_Trigger_4fd3b47b-2206-45e7-827d-b3bd5780e424);
+PROC_RemoveAllDialogEntriesForSpeaker(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53);
+SetHasDialog(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, 0);
+PROC_DisappearOutOfSightTo(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, S_WYR_Posthouse_Point_EquerryLeaveDestination_ce293dea-799a-4696-9269-a177ddb8d217, "Walk", 0, "WYR_Posthouse_EquerryLeft");
+PROC_PeacefulResolve(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53);
+
+IF
+EntityEvent(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, "WYR_Posthouse_EquerryLeft")
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_EquerryLeft_e1fa25df-1f63-4912-8bf5-a421970f77a5);
+
+// Equerry gets killed
+PROC
+PROC_StateSet_PermaDefeated((CHARACTER)ACT3_WYR_Posthouse_Equerry_e85c7858-d205-4737-91ce-53d3b390a85a)
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_EquerryLeaves_ed582a57-4fba-3fa0-22b0-6c3cdee35bb6);
+
+// Groom gets killed
+PROC
+PROC_StateSet_PermaDefeated((CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3)
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_EquerryFiredGroom_b99562b9-22a9-a84f-143d-9a65f5cfbd53);
+
+// Teleport dog to cage if Equerry keeps dog
+// TODO: Check if cage door is still intact.
+IF
+FlagSet((FLAG)WYR_Posthouse_State_EquerryReclaimedDog_56d9cc7b-861d-9ffd-7eed-d83f95419e4d, _, _)
+AND
+NOT DB_PermaDefeated(S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901)
+THEN
+TeleportTo(S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, S_WYR_Posthouse_Point_CourierDog_bf887544-a6e2-4278-930c-d2996c6d2eb8);
+SetFlag((FLAG)WYR_Posthouse_State_DogCapturedAtPostHouse_15be0be6-ef80-4593-8811-dda079f57247);
+Close(DEC_GEN_Dog_Cage_Door_B_000_c18ee776-8eea-4bb3-bf2d-68e5db0c3cfc);
+
+PROC
+PROC_WYR_Posthouse_PlayerCallsScratch((CHARACTER)_Player)
+THEN
+PROC_WYR_Posthouse_PlayerCallsScratch((CHARACTER)_Player, (CHARACTER)_Player);
+
+PROC
+PROC_WYR_Posthouse_PlayerCallsScratch((CHARACTER)_Player, (CHARACTER)_TeleportTo)
+AND
+NOT DB_GlobalFlag((FLAG)GLO_CourierDog_State_UnavailableForSummon_0fef1fa5-9216-4833-94c1-5fe1da7da7c7)
+THEN
+TeleportTo((CHARACTER)S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, _TeleportTo);
+PROC_Foop((CHARACTER)S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901);
+SetFlag((FLAG)WYR_Posthouse_State_DogAtPosthouse_39d92e64-a60d-4857-8829-920c3b0f80a9);
+SetFlag((FLAG)GLO_CourierDog_State_UnavailableForSummon_0fef1fa5-9216-4833-94c1-5fe1da7da7c7);
+
+PROC
+PROC_WYR_Posthouse_ScratchBackToCamp()
+THEN
+PROC_DismissToCamp(S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901);
+ClearFlag((FLAG)WYR_Posthouse_State_DogAtPosthouse_39d92e64-a60d-4857-8829-920c3b0f80a9);
+ClearFlag((FLAG)GLO_CourierDog_State_UnavailableForSummon_0fef1fa5-9216-4833-94c1-5fe1da7da7c7);
+
+PROC
+PROC_WYR_Posthouse_ScratchReleased()
+THEN
+PROC_WYR_Posthouse_ScratchBackToCamp();
+ClearFlag((FLAG)WYR_Posthouse_State_DogCapturedAtPostHouse_15be0be6-ef80-4593-8811-dda079f57247);
+SetFlag((FLAG)WYR_Posthouse_State_PlayerReclaimedDog_513268de-0000-f621-2e77-13bb6c5fd74f);
+
+IF
+FlagSet((FLAG)WYR_Posthouse_State_DogAtPosthouse_39d92e64-a60d-4857-8829-920c3b0f80a9, _, _)
+THEN
+DB_WYR_Posthouse_DogCaptured((CHARACTER)S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901);
+
+IF
+FlagCleared((FLAG)WYR_Posthouse_State_DogAtPosthouse_39d92e64-a60d-4857-8829-920c3b0f80a9, _, _)
+THEN
+NOT DB_WYR_Posthouse_DogCaptured((CHARACTER)S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901);
+//END_REGION
+
+//REGION Scratch Equerry / Groom dialog
+// Swap familiar Scratch with real Scratch at dialog start
+PROC
+PROC_StartDialog_PreDialogStarted((DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34, _, _, _, _, _, _Player, _, _)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_DogVisitedPosthouse_47f6f7a4-7c94-41fd-84dd-fb558b08b531)
+AND
+DB_FOR_CourierDog_ActiveSummon(_ScratchSummon)
+AND
+IsInTrigger(_ScratchSummon, S_WYR_Posthouse_Kennel_3ebc52f1-db2c-456f-b76a-b20d4ad0d4c1, 1)
+THEN
+PROC_WYR_Posthouse_PlayerCallsScratch((CHARACTER)_Player, (CHARACTER)_ScratchSummon);
+
+// ensure we can have courier dog as speaker when we assign him when offstage
+QRY
+QRY_SpeakerIsAvailable(S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, 0, 0, 0)
+AND
+DB_OffStage(S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901)
+AND
+QRY_SpeakerIsInCurrentLevel(S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901)
+AND
+DB_SelectedDialog((DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34, (CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, (CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, (CHARACTER)S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, _)
+THEN
+DB_NOOP(1);
+
+// dog available
+QRY
+QRY_SelectCustomDialog((CHARACTER)_Speaker, _Player)
+AND
+DB_WYR_PostHouse_EquerryGroom(_Speaker)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_DogVisitedPosthouse_47f6f7a4-7c94-41fd-84dd-fb558b08b531)
+AND
+QRY_SpeakerIsAvailable(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53)
+AND
+QRY_SpeakerIsAvailable(S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3)
+AND
+QRY_SpeakerIsAvailable(S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901)
+THEN
+PROC_WYR_Posthouse_EquerryGroom_SetMainSpeaker(_Speaker);
+DB_SelectedDialog((DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34, (CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, (CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, (CHARACTER)S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, _Player);
+
+// dog not available
+QRY
+QRY_SelectCustomDialog((CHARACTER)_Speaker, _Player)
+AND
+DB_WYR_PostHouse_EquerryGroom(_Speaker)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_DogVisitedPosthouse_47f6f7a4-7c94-41fd-84dd-fb558b08b531)
+AND
+NOT DB_SelectedDialog((DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34, (CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, (CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, (CHARACTER)S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, _Player)
+THEN
+PROC_WYR_Posthouse_EquerryGroom_SetMainSpeaker(_Speaker);
+DB_SelectedDialog((DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34, (CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, (CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, NULL_00000000-0000-0000-0000-000000000000, _Player);
+
+PROC
+PROC_WYR_Posthouse_EquerryGroom_SetMainSpeaker((CHARACTER)_Speaker)
+AND
+QRY_WYR_Posthouse_EquerryGroom_ResetMainSpeaker()
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_EquerryGroom_MainSpeaker_8c08a8d8-ce68-41bb-908b-4e2507931ddf, _Speaker);
+
+QRY
+QRY_WYR_Posthouse_EquerryGroom_ResetMainSpeaker()
+AND
+DB_WYR_PostHouse_EquerryGroom(_Speaker)
+THEN
+ClearFlag((FLAG)WYR_Posthouse_State_EquerryGroom_MainSpeaker_8c08a8d8-ce68-41bb-908b-4e2507931ddf, _Speaker);
+
+// Start solo dialogs after quest
+QRY
+QRY_SelectCustomDialog(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, _Player)
+AND
+DB_GlobalFlag((FLAG)WYR_Posthouse_State_DogVisitedPosthouse_47f6f7a4-7c94-41fd-84dd-fb558b08b531)
+THEN
+DB_SelectedDialog((DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34, (CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000, _Player);
+
+QRY
+QRY_SelectCustomDialog(S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, _Player)
+AND
+DB_GlobalFlag((FLAG)WYR_Posthouse_State_DogVisitedPosthouse_47f6f7a4-7c94-41fd-84dd-fb558b08b531)
+THEN
+DB_SelectedDialog((DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34, NULL_00000000-0000-0000-0000-000000000000, (CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, NULL_00000000-0000-0000-0000-000000000000, _Player);
+
+QRY
+QRY_SelectCustomDialog(S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, _Player)
+AND
+DB_GlobalFlag((FLAG)WYR_Posthouse_State_DogCapturedAtPostHouse_15be0be6-ef80-4593-8811-dda079f57247)
+THEN
+DB_SelectedDialog((DIALOGRESOURCE)WYR_Posthouse_CourierDog_70faa310-f9dd-927d-6280-e21b24e8f53d, S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901, _Player);
+
+// dog appears on stage when summoned in the dialog
+IF
+FlagSet((FLAG)WYR_Posthouse_Event_PlayerCallsForDog_d35a1868-73dd-4989-a9fe-c2894c2cde50, (CHARACTER)_Player, _)
+AND
+DB_Players(_Player)
+THEN
+ClearFlag((FLAG)WYR_Posthouse_Event_PlayerCallsForDog_d35a1868-73dd-4989-a9fe-c2894c2cde50, (CHARACTER)_Player);
+PROC_WYR_Posthouse_PlayerCallsScratch((CHARACTER)_Player);
+
+IF
+DialogAttackRequested((CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, _Player)
+AND
+DB_GlobalFlag((FLAG)WYR_Posthouse_State_DogAtPosthouse_39d92e64-a60d-4857-8829-920c3b0f80a9)
+THEN
+PROC_GlobalSetFlagAndCache((FLAG)WYR_Posthouse_State_PlayerAttacksEquerry_98a9b541-a924-1a4c-b7d0-b384fd2281f7);
+
+// resolution in which player keeps the dog, dog returns to camp
+IF
+DialogEnded((DIALOGRESOURCE)WYR_Posthouse_EquerryGroom_cf775f02-1bf8-d214-3843-49d2f39c3f34, _)
+AND
+DB_GlobalFlag((FLAG)WYR_Posthouse_State_DogAtPosthouse_39d92e64-a60d-4857-8829-920c3b0f80a9)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_PlayerAttacksEquerry_98a9b541-a924-1a4c-b7d0-b384fd2281f7)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_EquerryReclaimedDog_56d9cc7b-861d-9ffd-7eed-d83f95419e4d)
+THEN
+PROC_WYR_Posthouse_ScratchBackToCamp();
+//END_REGION
+
+//REGION Dogs enter combat with Equerry when released
+IF
+DB_WYR_Posthouse_DogKennel(_Dog, _, _Trigger)
+THEN
+TriggerRegisterForCharacter(_Trigger, _Dog);
+
+IF
+Opened(_Door)
+AND
+DB_WYR_Posthouse_DogKennel(_Dog, _Door, _)
+THEN
+PROC_WYR_Posthouse_DogFreed(_Dog);
+
+IF
+DestroyedBy(_Door, _, _, _)
+AND
+DB_WYR_Posthouse_DogKennel(_Dog, _Door, _)
+THEN
+PROC_WYR_Posthouse_DogFreed(_Dog);
+
+PROC
+PROC_WYR_Posthouse_DogFreed((CHARACTER)_Dog)
+AND
+DB_WYR_Posthouse_DogCaptured(_Dog)
+AND
+NOT DB_PermaDefeated(_Dog)
+THEN
+SetFlag((FLAG)WYR_Posthouse_Event_DogFreed_27141221-ccf3-45b8-9eae-b6974fc1f180, _Dog);
+
+IF
+FlagSet((FLAG)WYR_Posthouse_Event_DogFreed_27141221-ccf3-45b8-9eae-b6974fc1f180, _Dog, _)
+AND
+DB_WYR_Posthouse_DogCaptured((CHARACTER)_Dog)
+THEN
+SetCanJoinCombat(_Dog, 1);
+NOT DB_WYR_Posthouse_DogCaptured(_Dog);
+PROC_WYR_Posthouse_DogDecidesWhatToDo(_Dog);
+
+// Equerry at Posthouse: Dog fights and then runs
+PROC
+PROC_WYR_Posthouse_DogDecidesWhatToDo((CHARACTER)_Dog)
+AND
+QRY_WYR_Posthouse_EquerryAtPosthouse()
+THEN
+PROC_SetRelationTemporaryHostile(_Dog, (CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53);
+PROC_WYR_Posthouse_GroomFlees();
+PROC_WYR_Posthouse_DogFlees(_Dog);
+
+// Equerry gone, Groom at Posthouse: Posthouse Dog stays
+PROC
+PROC_WYR_Posthouse_DogDecidesWhatToDo(_Dog)
+AND
+NOT QRY_WYR_Posthouse_EquerryAtPosthouse()
+AND
+QRY_WYR_Posthouse_GroomAtPosthouse()
+AND
+_Dog != S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901
+THEN
+DB_NOOP(1);
+
+// Equerry gone, Groom at Posthouse: Scratch runs away
+PROC
+PROC_WYR_Posthouse_DogDecidesWhatToDo(_Dog)
+AND
+NOT QRY_WYR_Posthouse_EquerryAtPosthouse()
+AND
+QRY_WYR_Posthouse_GroomAtPosthouse()
+AND
+_Dog == S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901
+THEN
+PROC_WYR_Posthouse_DogFlees(_Dog);
+
+// Equerry gone, Groom gone: Dog runs away
+PROC
+PROC_WYR_Posthouse_DogDecidesWhatToDo(_Dog)
+AND
+NOT QRY_WYR_Posthouse_EquerryAtPosthouse()
+AND
+NOT QRY_WYR_Posthouse_GroomAtPosthouse()
+THEN
+PROC_WYR_Posthouse_DogFlees(_Dog);
+
+QRY
+QRY_WYR_Posthouse_EquerryAtPosthouse()
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_EquerryLeaves_ed582a57-4fba-3fa0-22b0-6c3cdee35bb6)
+AND
+NOT DB_PermaDefeated((CHARACTER)S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_WYR_Posthouse_GroomAtPosthouse()
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_EquerryFiredGroom_b99562b9-22a9-a84f-143d-9a65f5cfbd53)
+AND
+NOT DB_PermaDefeated((CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3)
+AND
+NOT DB_OnlyOnce("WYR_Posthouse_GroomFlees")
+THEN
+DB_NOOP(1);
+
+// Track when the dog has left the trigger for behavior
+IF
+LeftTrigger(_Dog, _Trigger)
+AND
+DB_WYR_Posthouse_DogKennel(_Dog, _, _Trigger)
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_DogLoose_9ff746c2-47b3-4da7-9894-a5a7c8343bac, _Dog);
+TriggerUnregisterForCharacter(_Trigger, _Dog);
+
+PROC
+PROC_WYR_Posthouse_GroomFlees()
+AND
+QRY_OnlyOnce("WYR_Posthouse_GroomFlees")
+THEN
+SetFlag((FLAG)WYR_Posthouse_State_GroomRanAway_ac724a83-f780-4275-82c0-a4092390ba81);
+PROC_DisappearOutOfSightTo((CHARACTER)S_WYR_Posthouse_Groom_1b61a7e3-0973-4bb1-9793-7735a8ea12b3, S_WYR_Posthouse_KennelEntrance_dbe8cde1-296d-4852-b77b-dc48ca037f6d, "Run", 0, "");
+
+// This will get interrupted by combat, if the dog sees Mar'hyah, they will fight to the death first.
+PROC
+PROC_WYR_Posthouse_DogFlees((CHARACTER)_Dog)
+THEN
+PROC_CharacterMoveTo(_Dog, S_WYR_Posthouse_KennelEntrance_dbe8cde1-296d-4852-b77b-dc48ca037f6d, "Run", "WYR_Posthouse_DogRunAway");
+
+IF
+EntityEvent((CHARACTER)_Dog, "WYR_Posthouse_DogRunAway")
+AND
+_Dog != S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901
+THEN
+PROC_DisappearOutOfSightTo(_Dog, S_WYR_Posthouse_KennelEntrance_dbe8cde1-296d-4852-b77b-dc48ca037f6d, "Run", 0, "");
+
+IF
+EntityEvent((CHARACTER)_Dog, "WYR_Posthouse_DogRunAway")
+AND
+_Dog == S_FOR_Courier_Dog_3059f69c-068d-4e28-8491-55953c027901
+THEN
+PROC_WYR_Posthouse_ScratchReleased();
+//END_REGION
+
+//REGION Player attacks Equerry
+IF
+EnteredCombat(S_WYR_Posthouse_Equerry_800e7e52-64f1-4a52-a2a2-5a409e8aab53, _)
+AND
+NOT DB_GlobalFlag((FLAG)WYR_Posthouse_State_PlayerAttacksEquerry_98a9b541-a924-1a4c-b7d0-b384fd2281f7)
+THEN
+PROC_WYR_Posthouse_GroomFlees();
+//END_REGION
+
+//REGION Postmaster
+PROC
+PROC_SpotPlayers_Spotted(S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6, "WYR_Posthouse_Postmaster_WelcomeSpotting", _Player)
+THEN
+LookAtEntity(S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6, _Player, 2.0);
+PROC_TryStartAD(WYR_Posthouse_AD_Postmaster_Welcome_261f25c1-0a86-3a72-2f15-d1d4914d712d, S_WYR_Posthouse_Postmaster_2217e349-33c9-4450-ada8-2bd04e2604a6);
+//END_REGION
+
+//REGION Debug
+IF
+TextEvent("FOR_courier_letter")
+AND
+GetHostCharacter(_Character)
+THEN
+ToInventory((ITEM)S_FOR_Courier_Letter3_0cca612d-0e08-48fe-8011-ca050aa5569b, _Character, 1, 0, 1);
+
+IF
+TextEvent("WYR_Posthouse_ShipmentSent")
+AND
+QRY_OnlyOnce_Reset("WYR_Posthouse_Init_MissingLetters")
+THEN
+PROC_Posthouse_Reset_MissingLetters();
+SetFlag(PLA_ZhentShipment_State_ChestSentAway_5d9f274d-a38b-4d81-bc9f-bc8c1fcb59ca);
+PROC_Posthouse_Init_MissingLetters();
+
+IF
+TextEvent("WYR_Posthouse_ShipmentNotSent")
+AND
+QRY_OnlyOnce_Reset("WYR_Posthouse_Init_MissingLetters")
+THEN
+PROC_Posthouse_Reset_MissingLetters();
+ClearFlag(PLA_ZhentShipment_State_ChestSentAway_5d9f274d-a38b-4d81-bc9f-bc8c1fcb59ca);
+PROC_Posthouse_Init_MissingLetters();
+
+PROC
+PROC_Posthouse_Reset_MissingLetters()
+AND
+DB_HasItemEvent(_MissingLetter, (FLAG)WYR_Posthouse_State_PlayerHasMissingLetters_09a6f570-68aa-4961-981e-0c63096d84b4)
+AND
+DB_GiveItemToEvent(_MissingLetter, (FLAG)WYR_Posthouse_Event_GiveMissingLettersToPostmaster_0e8ee1a6-a8d6-4055-95fe-dac6986aaa20)
+AND
+DB_HasItemEvent(_MissingLetterOpened, (FLAG)WYR_Posthouse_State_PlayerHasOpenedMissingLetters_eb82f5be-a1ff-49b1-b14d-f26f199e62f1)
+AND
+DB_GiveItemToEvent(_MissingLetterOpened, (FLAG)WYR_Posthouse_Event_GiveOpenedMissingLettersToPostmaster_80eb7f59-147e-44e0-83db-2b6e651515ba)
+THEN
+NOT DB_HasItemEvent(_MissingLetter, (FLAG)WYR_Posthouse_State_PlayerHasMissingLetters_09a6f570-68aa-4961-981e-0c63096d84b4);
+NOT DB_GiveItemToEvent(_MissingLetter, (FLAG)WYR_Posthouse_Event_GiveMissingLettersToPostmaster_0e8ee1a6-a8d6-4055-95fe-dac6986aaa20);
+NOT DB_HasItemEvent(_MissingLetterOpened, (FLAG)WYR_Posthouse_State_PlayerHasOpenedMissingLetters_eb82f5be-a1ff-49b1-b14d-f26f199e62f1);
+NOT DB_GiveItemToEvent(_MissingLetterOpened, (FLAG)WYR_Posthouse_Event_GiveOpenedMissingLettersToPostmaster_80eb7f59-147e-44e0-83db-2b6e651515ba);
+
+IF
+TextEvent("WYR_Posthouse_CaptureScratch")
+THEN
+SetFlag(WYR_Posthouse_State_EquerryReclaimedDog_56d9cc7b-861d-9ffd-7eed-d83f95419e4d);
+
+IF
+TextEvent("WYR_Posthouse_ResetTaraTrigger")
+THEN
+PROC_WYR_Posthouse_InitTressym_NoticeTressym();
+ClearFlag((FLAG)WYR_Posthouse_State_Tressym_PlayersSeesGaleSymbol_722a4065-ee43-4ee8-b235-bc4a904d62c3);
+ClearFlag((FLAG)ORI_Gale_State_TressymJoined_c46cfbb6-2aad-47a9-81a1-bdd28a7919fb);
+SetFlag((FLAG)ORI_Gale_State_WasRecruited_a56d3a51-2983-5f82-25f4-ad142948b133);
+
+IF
+TextEvent("WYR_Posthouse_TaraFliesAway")
+THEN
+PROC_WYR_Posthouse_Tara_FliesAway();
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "Act3"
