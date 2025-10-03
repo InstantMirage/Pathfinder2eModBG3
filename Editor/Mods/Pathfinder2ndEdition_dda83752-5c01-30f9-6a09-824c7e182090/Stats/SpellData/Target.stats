@@ -88,7 +88,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Trip" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="2b4dcefd-3a65-4a59-9e21-0f89a57f117d" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,ReflexDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);IF(IsCritical()):DealDamage(1d6,Bludgeoning);IF(HasPassive('TheHarderTheyFall',context.Source)):DealDamage(1d6,Bludgeoning);IF(IsCritical() and HasPassive('TheHarderTheyFall',context.Source)):DealDamage(LevelMapValue(SneakAttack),Bludgeoning);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and Unarmed()):DealDamage((UnarmedDamage)*2, Bludgeoning);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);IF(SkillCrit()):DealDamage(1d6,Bludgeoning);IF(HasPassive('TheHarderTheyFall',context.Source)):DealDamage(1d6,Bludgeoning);IF(SkillCrit() and HasPassive('TheHarderTheyFall',context.Source)):DealDamage(LevelMapValue(SneakAttack),Bludgeoning);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and Unarmed()):DealDamage((UnarmedDamage)*2, Bludgeoning);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Trip" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h74c1d4beg7d7ag1187ga161gbbfe154dfb6a" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h34fdb843g1703gf48ege2e4g3413d2ba3432" version="1" />
@@ -131,7 +131,7 @@
         <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Deception,context.Target.GetPassiveSkill(Skill.Perception));" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not IsCritical() and not HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(FEINT_ONCE,100,1);IF(IsCritical() or HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(FEINT_ROUND,100,2);IF(IsCritical() and HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(OFF_BALANCED,100,2);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and Unarmed()):DealDamage((UnarmedDamage)*2, Bludgeoning);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SkillCrit() and not HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(FEINT_ONCE,100,1);IF(SkillCrit() or HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(FEINT_ROUND,100,2);IF(SkillCrit() and HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(OFF_BALANCED,100,2);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and Unarmed()):DealDamage((UnarmedDamage)*2, Bludgeoning);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_PrecisionAttack" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h15bb997bg9006g85abg8ff9gd550240e6d40" version="1" />
@@ -168,7 +168,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="681e9ae8-5e47-4cb1-924d-3f4ce4ae8868" />
         <field name="Name" type="NameTableFieldDefinition" value="Disarm" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,ReflexDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsCritical()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and Unarmed()):DealDamage((UnarmedDamage)*2, Bludgeoning);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(SkillCrit()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and Unarmed()):DealDamage((UnarmedDamage)*2, Bludgeoning);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Unarmed();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_HinderingStrike" />
@@ -301,7 +301,7 @@
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="SpellSchool" version="1" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="9" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Intimidation,WillDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsCritical()):ApplyStatus(FRIGHTENED,100,2);ApplyStatus(FRIGHTENED,100,1);AI_ONLY:DealDamage(2d6,Psychic);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(SkillCrit()):ApplyStatus(FRIGHTENED,100,2);ApplyStatus(FRIGHTENED,100,1);AI_ONLY:DealDamage(2d6,Psychic);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4845ffbege7a4g7886g8599gd416c7f43108" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha09b2bd8gd4f8g8137g31d9g57fc02febde3" version="2" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(FRIGHTENED,100,1)" />
@@ -400,7 +400,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="694bfca3-e80e-42b7-9910-2f8df4da6734" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(HEALER_HEALED,100,-1);" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Medicine,15);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8);IF(IsCritical()):RegainHitPoints(2d8);AI_ONLY:RegainHitPoints(2d8);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8);IF(SkillCrit()):RegainHitPoints(2d8);AI_ONLY:RegainHitPoints(2d8);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Enemy() and not HasStatus('HEALER_HEALED',context.Target,context.Source)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Skill_Fighter_SecondWind" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfa19d710gf7a7g1f15g2742gd799c71c6f45" version="1" />
@@ -435,7 +435,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="731d594f-f8e7-4ad4-b426-f59d35b90c1a" />
         <field name="Owner" type="CommentTableFieldDefinition" value="DC 20" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Medicine,20);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8+10);IF(IsCritical()):RegainHitPoints(2d8+10);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8+10);IF(SkillCrit()):RegainHitPoints(2d8+10);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6cd76f63g40dage631gc38bg9c4fe75eabe9" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="RegainHitPoints(12~26)" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="RegainHitPoints(2d8+10)" />
@@ -449,7 +449,7 @@
         <field name="Owner" type="CommentTableFieldDefinition" value="DC 25" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasPassive('MedicineIncrease');" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Medicine,25);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8+30);IF(IsCritical()):RegainHitPoints(2d8+30);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(2d8+30);IF(SkillCrit()):RegainHitPoints(2d8+30);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8620d188g829bgb0f0g465cg348b15f8e774" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="RegainHitPoints(32~46)" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="RegainHitPoints(2d8+30)" />
@@ -834,7 +834,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('SG_Rage');" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeWeaponAttack)" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(SkillCheck(Skill.Athletics,ReflexDC())):ApplyStatus(HINDERED, 100, 1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(SkillCheck(Skill.Athletics,ReflexDC())):ApplyStatus(HINDERED, 100, 1);IF(SkillCrit()):ApplyStatus(DISARM, 100, 1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and not Dead();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Bear_StickyPaws" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6d3fdfdbg095cg5b78gd354g9835c3c0c6f7" version="1" />
@@ -9817,7 +9817,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="6707901c-81b4-4e77-8b0c-4eb486b44976" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h17217106g659dg7c9bgda36g9dcc064fd69e" version="1" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(not HasStatus('DISENGAGE',context.Source)):ApplyStatus(SELF,DISENGAGE_USESTEP,100,1)" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(not HasStatus('DISENGAGE',context.Source)):ApplyStatus(SELF,DISENGAGE_USESTEP,100,1);IF(not HasStatus('DISENGAGE_USESTEP',context.Source)):ApplyStatus(SELF,DEBUG_RESET_MOVE,100,-1);RemoveStatus(SELF,DISENGAGE);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_ManeuveringAttack_Melee" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h980da400gafa6g28edgab06g225350aa1a1b" version="1" />
@@ -9838,7 +9838,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="SlyDisarm" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="681e9ae8-5e47-4cb1-924d-3f4ce4ae8868" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.SleightOfHand,ReflexDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsCritical()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);ApplyStatus(FEINT_ONCE,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(SkillCrit()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);ApplyStatus(FEINT_ONCE,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf78885b4g863cg11e3ge05cgdc1b0a580cd2" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf91c2050gdc78g0b1bg3133gb9990d70ca7f" version="1" />
         <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="h6df80d83g0065g2e01g84e3ga82c4a2c2293" version="2" />

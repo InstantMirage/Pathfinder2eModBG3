@@ -9522,7 +9522,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAG_BardicInspiration_Heal_Hat_Passive" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0e9d4ea1g23f7ged93gcb68ga8c6ae180f41" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1243517ag6387g2e67gdda2g94d3e5c69e13" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Target_BardicInspiration') or SpellId('Target_BardicInspiration_Combat') or SpellId('Shout_CourageousAnthem') or SpellId('Shout_CourageousAnthem_Lingering') or SpellId('Shout_SongOfStrength_Lingering') or SpellId('Shout_RallyingAnthem_Lingering') or SpellId('Shout_TripleTime_Lingering');" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasUseCosts('BardicInspiration') and Ally();" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RegainHitPoints(1d6)" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="RegainHitPoints(1d6)" />
@@ -9664,7 +9664,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAG_OfDefense_Gloves_Passive" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h305a4e11g56cdg2d57g5085gf3e2cda37aa7" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf1956ad4g2340g376ag1ba3gebf8136edd86" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="AC(1);RollBonus(SavingThrow,1,Dexterity);RollBonus(SavingThrow,1,Wisdom);RollBonus(SavingThrow,2,Constitution);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(ITEM_BON_1AC);Tag(ITEM_BON_1SAVES);" />
         <field name="BoostConditions" type="StringTableFieldDefinition" value="not WearingArmor(context.Source);" />
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnEquip;OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
@@ -10190,6 +10190,55 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h19b7bf63gade0gd80agd765g940c43d025a9" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,SleightOfHand);ProficiencyBonus(Skill,Stealth)" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5f7d3042g6f0agbf10gfb6cg541d8a3cbc2c" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="90924b39-6068-4be5-ba57-83f0d1a49c53" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_PF2e_ExtraShield" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha9672e5dg94cdg3c36gc56cg0b38a9d7a4c9" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he4763a3ag2e2bg22c5g0bddg1aac543d5b0b" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Shield" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="OncePerShortRestPerItem" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="StatusId('SHIELD_SPELL_BROKEN');" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SHIELD_SPELL_BROKEN)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="34cb55ce-0e68-42e0-87cc-186fee0daf5d" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_DarkJusticiar_Armor_Protection_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="965ba9c8-c2f5-44b7-a208-ee8165314f6d" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf89ea777gccaega120gd680gc71692aa2355" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(context.HasContextFlag(StatsFunctorContext.OnDamaged) and HasStatus('SHIELD') and not Self()):DealDamage(SELF, 1d4, Necrotic,Magical);IF(context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('SHIELD')):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION, 100, -1);IF(context.HasContextFlag(StatsFunctorContext.OnDamaged) and HasStatus('SHIELD_OF_FAITH') and not Self()):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION_DAMAGE, 100, 0);IF(context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('SHIELD')):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION_DAMAGE, 100, 0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="bfca00fb-44c5-41c8-9a02-cf8a70348e0c" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Paladin_LayOnHandsSupport_Gloves_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1058c60e-6dd5-49d6-87e3-836c9e7bc8f7" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hefa9a4c6g906eg13b8gceaegac8e90233019" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasUseCosts('KiPoint');" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b60e7d58-af41-4a20-9347-7d9fb0f63eef" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_BardicInspiration_TempHP_Armor_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="c30a8d18-5c98-445a-9c44-5fbb52fbf9d6" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasUseCosts('BardicInspiration');" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="64b0ea31-806d-43b9-9e35-7811c5627d37" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Rage_TempHPOnExit_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8040c50d-448f-4e8d-b478-006c0024bc42" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="HasStatus('SG_Rage');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_EndRage);" />
       </fields>
     </stat_object>
   </stat_objects>
