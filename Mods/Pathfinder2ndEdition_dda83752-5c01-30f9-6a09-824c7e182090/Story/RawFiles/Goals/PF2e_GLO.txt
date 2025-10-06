@@ -102,6 +102,17 @@ RemoveStatus(_Char,"SANDFORM");
 RemoveStatus(_Char,"SANDFORM_5");
 
 //END_REGION
+
+//REGION Implements an aura that prevents Frightened reducing past 1
+
+IF
+StatusRemoved((GUIDSTRING)_Character, "FRIGHTENED", (GUIDSTRING)_Causee, _)
+AND
+HasActiveStatus(_Character, "FEAR_LOCK", 1)
+THEN
+ApplyStatus(_Character, "FRIGHTENED", 6.0, 0, _Causee);
+
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
