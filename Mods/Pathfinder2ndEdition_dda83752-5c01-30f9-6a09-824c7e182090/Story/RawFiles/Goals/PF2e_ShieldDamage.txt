@@ -1,0 +1,415 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ShieldBlockInterrupts("Interrupt_ShieldBlock");
+DB_ShieldBlockInterrupts("QuickShieldBlockInterrupt");
+DB_ShieldBlockInterrupts("ShieldWardenBlock");
+DB_ShieldBlockInterrupts("MetalShieldBlock");
+
+DB_ShieldPassives("ShieldBreakJunk", 3, 6, "REPAIR_COMMON");
+DB_ShieldPassives("ShieldBreakCommon", 10, 20, "REPAIR_COMMON");
+DB_ShieldPassives("ShieldBreakUncommon", 32, 64, "REPAIR_UNCOMMON");
+DB_ShieldPassives("ShieldBreakRare", 40, 80, "REPAIR_RARE");
+DB_ShieldPassives("ShieldBreakVeryRare", 52, 104, "REPAIR_VERYRARE");
+DB_ShieldPassives("ShieldBreakLegendary", 60, 120, "REPAIR_LEGENDARY");
+
+DB_ShieldStatuses("REINFORCING_RUNE_TEST", 5, 10, 20, 40);
+//DB_ShieldStatuses("REINFORCING_RUNE_MINOR", 22, 44, 32, 64);
+//DB_ShieldStatuses("REINFORCING_RUNE_LESSER", 26, 52, 40, 80);
+//DB_ShieldStatuses("REINFORCING_RUNE_MODERATE", 32, 64, 52, 104);
+//DB_ShieldStatuses("REINFORCING_RUNE_GREATER", 40, 80, 60, 120);
+
+DB_AnvilTemplates(TOOL_Smith_Anvil_A_a79a6a96-0ce7-4f17-b915-1c381dfa0edf);
+DB_AnvilTemplates(INTERACT_TOOL_Smith_Anvil_B_73039cac-3746-4fd3-9361-06b630662d13);
+DB_AnvilTemplates(TOOL_Ketheric_Anvil_A_d029bf99-3dcb-4682-b67d-215011c8fef6);
+DB_AnvilTemplates(TOOL_Ketheric_Anvil_B_4873848c-a509-4890-9c0f-4e6489410874);
+DB_AnvilTemplates(TOOL_Smith_Anvil_B_84dc46a0-eb7e-43fb-b3cd-9200bd017a15);
+DB_AnvilTemplates(TOOL_Smith_Anvil_CombatThrowable_2bb3ae90-316a-476c-8af3-507940aa7467);
+KBSECTION
+//REGION Shield block interrupt listeners
+// Whenever we use shield block, store it.
+IF
+ReactionInterruptUsed((CHARACTER)_Defender, (STRING)_Interrupt, _)
+AND
+DB_ShieldBlockInterrupts(_Interrupt)
+AND
+GetEquippedShield(_Defender, (ITEM)_Shield)
+THEN
+DB_ShieldBlockUsed(_Defender, _Shield);
+
+// Fallback: If we somehow manage to shield block with a shield that wasn't in our DB, add it.
+// This will also catch NPC shield usage, as they never equip their shields.
+IF
+ReactionInterruptUsed((CHARACTER)_Defender, (STRING)_Interrupt, _)
+AND
+DB_ShieldBlockInterrupts(_Interrupt)
+AND
+GetEquippedShield(_Defender, (ITEM)_Shield)
+AND
+NOT DB_ShieldDamage(_Shield, _, _, _)
+AND
+DB_ShieldPassives((STRING)_Passive, (INTEGER)_BT, (INTEGER)_ShieldMaxHealth, _)
+AND
+HasPassive(_Defender, _Passive, 1)
+THEN
+DB_ShieldDamage(_Shield, 0, _BT, _ShieldMaxHealth);
+PROC_CheckForShieldBuffStatuses(_Shield, _Shield);
+
+// Run through all shield buff statuses (runes) and if present on the shield,
+// calculate a new BT and HP. Note that these execute in DB order, so a rune
+// later in the DB can be stacked on top of earlier runes. This means runes
+// should be added in MaxHP order.
+PROC
+PROC_CheckForShieldBuffStatuses((GUIDSTRING)_ShieldGUID, (ITEM)_Shield)
+AND
+DB_ShieldStatuses((STRING)_Status, (INTEGER)_BuffBT, (INTEGER)_BuffHP, (INTEGER)_MaxBT, (INTEGER)_MaxHP)
+AND
+HasActiveStatus(_ShieldGUID, _Status, 1)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_Damage, (INTEGER)_OldBT, (INTEGER)_OldHP)
+AND
+IntegerSum(_OldHP, _BuffHP, (INTEGER)_SumHP)
+AND
+IntegerMin(_SumHP, _MaxHP, (INTEGER)_NewHP)
+AND
+IntegerSum(_OldBT, _BuffBT, (INTEGER)_SumBT)
+AND
+IntegerMin(_SumBT, _MaxBT, (INTEGER)_NewBT)
+THEN
+NOT DB_ShieldDamage(_Shield, _Damage, _OldBT, _OldHP);
+DB_ShieldDamage(_Shield, _Damage, _NewBT, _NewHP);
+
+//END_REGION
+
+//REGION Damage listener
+// If the character takes damage (including 0) after using shield block, calculate the new total damage and apply.
+IF
+AttackedBy((CHARACTER)_Defender, _, (CHARACTER)_Attacker, (STRING)_DamageType, (INTEGER)_DamageAmount, _, _)
+AND
+GetEquippedShield(_Defender, (ITEM)_Shield)
+AND
+DB_ShieldBlockUsed(_Defender, _Shield)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_Damage, (INTEGER)_BT, (INTEGER)_ShieldMaxHealth)
+AND
+IntegerSum(_Damage, _DamageAmount, (INTEGER)_NewDamage)
+THEN
+NOT DB_ShieldDamage(_Shield, _Damage, _BT, _ShieldMaxHealth);
+DB_ShieldDamage(_Shield, _NewDamage, _BT, _ShieldMaxHealth);
+PROC_RemoveShieldStatuses(_Shield);
+PROC_ApplyNewShieldStatus(_Shield, _Shield, _Defender);
+PROC_CheckShieldDamaged(_Shield);
+PROC_CheckShieldBreak(_Shield, _Shield, _Defender);
+PROC_CheckShieldDestroy(_Shield, _Shield, _Defender, _Attacker);
+NOT DB_ShieldBlockUsed(_Defender, _Shield);
+
+//REGION Status update procs
+// Don't trust overwrite behaviour to always play nice, just remove the statuses.
+PROC
+PROC_RemoveShieldStatuses((GUIDSTRING)_ShieldGUID)
+THEN
+RemoveStatus(_ShieldGUID, "SHIELD_BROKEN");
+RemoveStatus(_ShieldGUID, "SHIELD_HEALTH");
+RemoveStatus(_ShieldGUID, "SHIELD_DAMAGED");
+
+// Apply a frozen duration status with a duration to indicate current shield HP.
+// Some calculations are required to get to a duration in seconds.
+// Note that no status is applied if a shield is broken.
+PROC
+PROC_ApplyNewShieldStatus((GUIDSTRING)_ShieldGUID, (ITEM)_Shield, (GUIDSTRING)_Owner)
+AND
+DB_ShieldDamage((ITEM)_Shield, (INTEGER)_Damage, _, (INTEGER)_HP)
+AND
+IntegerSubtract(_HP, _Damage, (INTEGER)_Current)
+AND
+IntegerToReal(_Current, (REAL)_CurrentReal)
+AND
+_CurrentReal > 0.5
+AND
+RealProduct(_CurrentReal, 6.0, (REAL)_Duration)
+THEN
+ApplyStatus(_ShieldGUID, "SHIELD_HEALTH", _Duration, 1);
+
+// If the damage is more than 0, apply the damaged condition.
+PROC
+PROC_CheckShieldDamaged((GUIDSTRING)_ShieldGUID)
+AND
+DB_ShieldDamage((ITEM)_ShieldGUID, (INTEGER)_Damage, _, _)
+AND
+HasActiveStatus((GUIDSTRING)_ShieldGUID, "SHIELD_DAMAGED", 0)
+AND
+_Damage > 0
+THEN
+ApplyStatus(_ShieldGUID, "SHIELD_DAMAGED", -1.0, 1);
+
+// If the damage exceeds the threshold, apply the broken condition and unequip.
+PROC
+PROC_CheckShieldBreak((GUIDSTRING)_ShieldGUID, (ITEM)_Shield, (GUIDSTRING)_Owner)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_Damage, (INTEGER)_BT, _)
+AND
+IntegerSubtract(_BT, 1, (INTEGER)_BTMinusOne)
+AND
+HasActiveStatus(_ShieldGUID, "SHIELD_BROKEN", 0)
+AND
+_Damage > _BTMinusOne
+THEN
+ApplyStatus(_ShieldGUID, "SHIELD_BROKEN", -1.0, 1);
+Unequip((CHARACTER)_Owner, _Shield);
+
+PROC
+PROC_CheckShieldDestroy((GUIDSTRING)_ShieldGUID, (ITEM)_Shield, (GUIDSTRING)_Owner, (GUIDSTRING)_Attacker)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_Damage, _, (INTEGER)_HP)
+AND
+_Damage > _HP
+THEN
+Unequip((CHARACTER)_Owner, _Shield);
+Die(_ShieldGUID, DEATHTYPE.None, _Attacker, 0, 0, 1.0);
+//END_REGION
+
+//REGION Equipping listeners.
+// When we first equip a shield, add it to the damage DB.
+IF
+Equipped((ITEM)_Item, (CHARACTER)_Owner)
+AND
+GetEquippedShield(_Owner, (ITEM)_Shield)
+AND
+_Shield == _Item
+AND
+NOT DB_ShieldDamage(_Shield, _, _, _)
+THEN
+DB_ShieldTimerStatusInit(_Shield, _Owner);
+TimerLaunch("ShieldEquipStatusInitTimer", 30);
+
+IF
+TimerFinished("ShieldEquipStatusInitTimer")
+AND
+DB_ShieldTimerStatusInit((ITEM)_Shield, (CHARACTER)_Owner)
+AND
+DB_ShieldPassives((STRING)_Passive, (INTEGER)_BT, (INTEGER)_ShieldMaxHealth, _)
+AND
+HasPassive(_Owner, _Passive, 1)
+THEN
+NOT DB_ShieldTimerStatusInit(_Shield, _Owner);
+DB_ShieldDamage(_Shield, 0, _BT, _ShieldMaxHealth);
+PROC_CheckForShieldBuffStatuses(_Shield, _Shield);
+PROC_RemoveShieldStatuses(_Shield);
+PROC_ApplyNewShieldStatus(_Shield, _Shield, _Owner);
+PROC_CheckShieldDamaged(_Shield);
+PROC_CheckShieldBreak(_Shield, _Shield, _Owner);
+
+// When we equip a shield, update its statuses and reinitialise its stats,
+// keep we keep its damage value if we've initialised it before.
+IF
+Equipped((ITEM)_Item, (CHARACTER)_Owner)
+AND
+GetEquippedShield(_Owner, (ITEM)_Shield)
+AND
+_Shield == _Item
+AND
+DB_ShieldDamage(_Shield, _, _, _)
+THEN
+DB_ShieldTimerStatusUpdate(_Shield, _Owner);
+TimerLaunch("ShieldEquipStatusUpdateTimer", 30);
+
+IF
+TimerFinished("ShieldEquipStatusUpdateTimer")
+AND
+DB_ShieldTimerStatusUpdate((ITEM)_Shield, (CHARACTER)_Owner)
+AND
+DB_ShieldPassives((STRING)_Passive, (INTEGER)_BT, (INTEGER)_ShieldMaxHealth, _)
+AND
+HasPassive(_Owner, _Passive, 1)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_Damage, (INTEGER)_OldBT, (INTEGER)_OldHP)
+THEN
+NOT DB_ShieldDamage(_Shield, _Damage, _OldBT, _OldHP);
+DB_ShieldDamage(_Shield, _Damage, _BT, _ShieldMaxHealth);
+PROC_CheckForShieldBuffStatuses(_Shield, _Shield);
+PROC_RemoveShieldStatuses(_Shield);
+PROC_ApplyNewShieldStatus(_Shield, _Shield, _Owner);
+PROC_CheckShieldDamaged(_Shield);
+PROC_CheckShieldBreak(_Shield, _Shield, _Owner);
+//END_REGION
+
+//REGION Repair
+// Repair shield by 5 HP every time it receives SHIELD_REPAIR condition, and reapply statuses.
+IF
+StatusApplied((ITEM)_Shield, "SHIELD_REPAIR", (CHARACTER)_Cause, _)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_Damage, (INTEGER)_BT, (INTEGER)_HP)
+AND
+IntegerSubtract(_Damage, 5, (INTEGER)_NewDamage)
+THEN
+NOT DB_ShieldDamage(_Shield, _Damage, _BT, _HP);
+DB_ShieldDamage(_Shield, _NewDamage, _BT, _HP);
+PROC_RemoveShieldStatuses(_Shield);
+PROC_ApplyNewShieldStatus(_Shield, _Shield, _Cause);
+PROC_CheckShieldDamaged(_Shield);
+PROC_CheckShieldBreak(_Shield, _Shield, _Cause);
+PROC_CheckNegativeShieldDamage(_Shield, _Cause);
+
+// Make sure we never have negative shield damage.
+PROC
+PROC_CheckNegativeShieldDamage((ITEM)_Shield, (CHARACTER)_Owner)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_Damage, (INTEGER)_BT, (INTEGER)_HP)
+AND
+_Damage < 0
+THEN
+NOT DB_ShieldDamage(_Shield, _Damage, _BT, _HP);
+DB_ShieldDamage(_Shield, 0, _BT, _HP);
+PROC_RemoveShieldStatuses(_Shield);
+PROC_ApplyNewShieldStatus(_Shield, _Shield, _Owner);
+//END_REGION
+
+//REGION Shield repair action
+// Listen for the user to combine an anvil and a damaged shield. Apply a rarity-adjusted status to make skill check.
+IF
+RequestCanCombine((CHARACTER)_Player, (ITEM)_Tool, (ITEM)_Shield, _, _, _, (INTEGER)_RequestID)
+AND
+QRY_IsAnvil(_Tool)
+AND
+DB_ShieldDamage(_Shield, _Damage, _, _)
+AND
+_Damage > 0
+THEN
+PROC_ClearOutRepairDB();
+PROC_CheckInsufficientGold(_Shield, _Player, _RequestID);
+PROC_ChargeGold(_Shield, _Player, _RequestID, _Tool);
+
+QRY
+QRY_IsAnvil((GUIDSTRING)_Anvil)
+AND
+GetTemplate(_Anvil, (GUIDSTRING)_Template)
+AND
+DB_AnvilTemplates(_Template)
+THEN
+DB_NOOP(1);
+
+PROC
+PROC_ClearOutRepairDB()
+AND
+DB_ShieldToRepair((CHARACTER)_Player, (ITEM)_Shield)
+THEN
+NOT DB_ShieldToRepair(_Player, _Shield);
+
+// Putting this in a proc allows us to have diverging behaviours.
+PROC
+PROC_CheckInsufficientGold((ITEM)_Shield, (CHARACTER)_Player, (INTEGER)_RequestID)
+AND
+ItemGetGoldValue(_Shield, (INTEGER)_Value)
+AND
+IntegerDivide(_Value, 4, (INTEGER)_RepairCost)
+AND
+UserGetGold((CHARACTER)_Player, (INTEGER)_Gold)
+AND
+_Gold < _RepairCost
+THEN
+RequestProcessed(_Player, _RequestID, 0);
+ApplyStatus(_Player, "INSUFFICIENT_GOLD", 0.0, 1);
+
+// Opposite conditions to PROC_CheckInsufficientGold.
+PROC
+PROC_ChargeGold((ITEM)_Shield, (CHARACTER)_Player, (INTEGER)_RequestID, (ITEM)_Tool)
+AND
+ItemGetGoldValue(_Shield, (INTEGER)_Value)
+AND
+IntegerDivide(_Value, 2, (INTEGER)_RepairCost)
+AND
+UserGetGold((CHARACTER)_Player, (INTEGER)_Gold)
+AND
+IntegerSubtract(_RepairCost, 1, (INTEGER)_RepairCostSubOne)
+AND
+_Gold > _RepairCostSubOne
+AND
+IntegerSubtract(0, _RepairCost, (INTEGER)_RepairCostNegative)
+THEN
+RequestProcessed(_Player, _RequestID, 1);
+UserAddGold(_Player, _RepairCostNegative);
+DB_ShieldToRepair(_Player, _Shield);
+PROC_CastRepairSpell(_Shield, _Player, _Tool);
+
+PROC
+PROC_CastRepairSpell((GUIDSTRING)_ShieldGUID, (GUIDSTRING)_Player, (GUIDSTRING)_Tool)
+AND
+DB_ShieldPassives((STRING)_Passive, _, _, (STRING)_Status)
+AND
+HasPassive(_Player, _Passive, 1)
+THEN
+ApplyStatus(_Player, _Status, 2.0, 0, _Player);
+UseSpell(_Player, "Target_Repair", _Tool);
+
+// The player receives this condition one time for each 5 HP that should be repaired.
+IF
+StatusApplied((CHARACTER)_Player, "REPAIR_PROC", _, _)
+AND
+DB_ShieldToRepair(_Player, (ITEM)_Shield)
+THEN
+PROC_ApplyRepair(_Shield, _Player);
+
+// Casts to GUIDSTRING
+PROC
+PROC_ApplyRepair((GUIDSTRING)_Shield, (GUIDSTRING)_Player)
+THEN
+ApplyStatus(_Shield, "SHIELD_REPAIR", 0.0, 1, _Player);
+
+// The player receives this condition if the thing they are repairing should be damaged 2d6.
+IF
+StatusApplied((CHARACTER)_Player, "REPAIR_FAILED", _, _)
+AND
+DB_ShieldToRepair(_Player, (ITEM)_Shield)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_OldDamage, (INTEGER)_BT, (INTEGER)_HP)
+AND
+Random(6, (INTEGER)_DiceOne)
+AND
+Random(6, (INTEGER)_DiceTwo)
+AND
+IntegerSum(_DiceOne, _DiceTwo, (INTEGER)_DiceTotal)
+AND
+IntegerSum(_DiceTotal, 2, (INTEGER)_DamageDealt)
+AND
+IntegerSum(_DamageDealt, _OldDamage, (INTEGER)_NewDamage)
+THEN
+NOT DB_ShieldDamage(_Shield, _OldDamage, _BT, _HP);
+DB_ShieldDamage(_Shield, _NewDamage, _BT, _HP);
+NOT DB_ShieldToRepair(_Player, _Shield);
+PROC_RemoveShieldStatuses(_Shield);
+PROC_ApplyNewShieldStatus(_Shield, _Shield, _Player);
+PROC_CheckShieldDamaged(_Shield);
+PROC_CheckShieldBreak(_Shield, _Shield, _Player);
+PROC_CheckShieldDestroy(_Shield, _Shield, _Player, _Player);
+//END_REGION
+
+//REGION Testing Tools
+// Status to damage a shield for testing
+IF
+StatusApplied((CHARACTER)_Player, "SHIELD_DAMAGE_TEST", (CHARACTER)_Cause, _)
+AND
+GetEquippedShield(_Player, (ITEM)_Shield)
+AND
+DB_ShieldDamage(_Shield, (INTEGER)_Damage, (INTEGER)_BT, (INTEGER)_HP)
+AND
+IntegerSum(_Damage, 5, (INTEGER)_NewDamage)
+THEN
+NOT DB_ShieldDamage(_Shield, _Damage, _BT, _HP);
+DB_ShieldDamage(_Shield, _NewDamage, _BT, _HP);
+PROC_RemoveShieldStatuses(_Shield);
+PROC_ApplyNewShieldStatus(_Shield, _Shield, _Cause);
+PROC_CheckShieldDamaged(_Shield);
+PROC_CheckShieldBreak(_Shield, _Shield, _Cause);
+PROC_CheckNegativeShieldDamage(_Shield, _Cause);
+
+// Status to apply reinforcing rune test to shield.
+IF
+StatusApplied((CHARACTER)_Player, "REINFORCE_SHIELD_TEST", (CHARACTER)_Cause, _)
+AND
+GetEquippedShield(_Player, (ITEM)_Shield)
+THEN
+ApplyStatus((GUIDSTRING)_Shield, "REINFORCING_RUNE_TEST", -1.0, 0, _Cause);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
