@@ -6,10 +6,14 @@ local __util = require 'larian.util'
 --Returns if it is currently possible to Stride, if not, movement will be cleared
 function AutoStride()
 	local canMove = ~Immobilized() | HasStatus('SG_Prone')
-	local hasActions = HasActionResource('ActionPoint', 1 , 0, false, false) or HasStatus('HASTE_ATTACK')
+	local hasActions = HasActionResource('ActionPoint', 1 , 0, false, false) | QuickenedStride()
 	local automaticStride = ~HasStatus('MANUAL_STRIDE')
 	
 	return canMove & hasActions & automaticStride
+end
+
+function QuickenedStride()
+	return HasStatus('HASTE_ATTACK') | HasStatus('HASTE_ATTACK_EMERGENCY') | HasStatus('LOOSE_TIMES_ACTION')
 end
 
 -- Can~Step into Difficult Terrain
@@ -23,7 +27,12 @@ end
 
 function HasDashStatus(entity)
     entity = entity or context.Source
-	return HasStatus('DASH', entity ) | HasStatus('DASH_STACKED', entity ) | HasStatus('DASH_STACKED_2', entity )
+	return HasAnyStatus({'DASH','DASH_STACKED','DASH_STACKED_2'}, {}, {}, entity )
+end
+
+function HasAnyMovementStatus(entity)
+    entity = entity or context.Source
+	return HasAnyStatus({'DASH','DASH_STACKED','DASH_STACKED_2','STRIDE','DISENGAGE','DISENGAGE_USESTEP','DISENGAGE_TAP'}, {}, {}, entity )
 end
 
 function StrideCostSpellCheck()
@@ -106,7 +115,7 @@ function TrainedArmor() --Proficient or unarmored
 	if ~WearingArmor(context.Source) then
 		return ConditionResult(true)
 	end
-
+	
 	--Armor test from Community Library
 	local armor = GetActiveArmor(context.Source)
 	
@@ -119,7 +128,7 @@ function TrainedArmor() --Proficient or unarmored
     | armor.ArmorType == ArmorType.ScaleMail 
     | armor.ArmorType == ArmorType.BreastPlate
     | armor.ArmorType == ArmorType.HalfPlate 
-
+	
 	return HasProficiency('HeavyArmor',context.Source) | (HasProficiency('LightArmor',context.Source) & hasLightArmor) | (HasProficiency('MediumArmor',context.Source) & hasMediumArmor)
 end
 
@@ -162,37 +171,40 @@ end
 
 function Flanking(target, source)
 	local distance = 2
-    target = target or context.Target
-    source = source or context.Source
-
-    local errorTrue = {ConditionError("HasAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
-    local errorFalse = {ConditionError("HasNotAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
-
+	target = target or context.Target
+	source = source or context.Source
+	
+	local errorTrue = {ConditionError("HasAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+	local errorFalse = {ConditionError("HasNotAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+	
 	--Source must face target
 	
-    local allies = GetAlliesWithinRange(distance, target, source)
-    if allies ~= nil then
-        for _, entity in ipairs(allies.Allies) do
-
+	local allies = GetAlliesWithinRange(distance, target, source)
+	if allies ~= nil then
+		for _, entity in ipairs(allies.Allies) do
+			
 			-- cannot be incapacitated
-			local incapacitated = ~HasStatus('SG_Incapacitated', entity) & ~HasStatus('SG_Prone', entity)
+			local capacitated = ~HasStatus('SG_Incapacitated', entity) & ~HasStatus('SG_Prone', entity)
 			
-			-- ally must be facing source (but not necessarily reciprocally) and the target
-            local facing = (FacingMe(entity,source) & FacingMe(entity,target)).Result
-			
-			-- target must not be able to face both at the same time
-			local side_frontback = FacingMe(target,source) & ~FacingMe(target,entity)
-			local side_backfront = ~FacingMe(target,source) & FacingMe(target,entity)
-			
-			local on_both_sides = ( side_frontback | side_backfront ).Result
-			
-			if incapacitated.Result and facing and on_both_sides then
-                return ConditionResult(true, errorFalse, errorTrue)
-            end
-        end
-    end
-
-    return ConditionResult(false, errorFalse, errorTrue)
+			if capacitated.Result then
+				local sourcePos = context.SourcePosition
+				local targetPos = context.TargetPosition
+				
+				local sourceDist = DistanceToEntityHitBounds(sourcePos, target)
+				local allyDist = DistanceToEntityHitBounds(targetPos, entity)
+				local hypotenuseDist = DistanceToEntityHitBounds(sourcePos, entity)
+				--Must form an obtuse triangle
+				local isObtuse = sourceDist^2 + allyDist^2 < hypotenuseDist^2
+				--At 180 degrees, a+b=c
+				local tightAngle = ( sourceDist + allyDist < 1.001*hypotenuseDist)
+				if isObtuse and tightAngle then
+					return ConditionResult(true, errorFalse, errorTrue)
+				end
+			end
+		end
+	end
+	
+	return ConditionResult(false, errorFalse, errorTrue)
 end
 
 -- Status MAP_X_ATTACKS
@@ -250,7 +262,7 @@ function HasFreeHand()
 	local result = (unarmed & offhand).Result
 	return ConditionResult(result,{ConditionError('FreeHand')})
 end
-	
+
 --Bard
 
 function HasMartialExtendableComposition(source)
@@ -275,24 +287,24 @@ function AdjacentToBeastMinion()
     local distance = 2
     local target = context.Target
     local source = context.Source
-
+	
     local errorTrue = {ConditionError("HasAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
     local errorFalse = {ConditionError("HasNotAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
-
+	
     local allies = GetAlliesWithinRange(distance, target, source)
     if allies ~= nil then
         for _, entity in ipairs(allies.Allies) do
-
+			
 			-- must be a beast summoned by the caster
             local isSummon = (GetSummoner(entity) == source)
             local hasTag = Tagged('BEAST', entity)
-
+			
             if isSummon and hasTag.Result then
                 return ConditionResult(true, errorFalse, errorTrue)
-            end
-        end
-    end
-
+			end
+		end
+	end
+	
     return ConditionResult(false, errorFalse, errorTrue)
 end
 
@@ -309,7 +321,7 @@ function RetributiveStrikeRange()
 	
 	local reach = WieldingWeapon('Reach', false, false, source) & DistanceToTargetLessThan(3.5)
 	local melee = ~WieldingWeapon('Ammunition', false, false, source) & DistanceToTargetLessThan(2)
-
+	
 	return HasPassive('JusticeCause',source) & (nimble_reprisal | reach | melee)
 end
 
@@ -335,10 +347,10 @@ function HealLive(size)
 	local target = context.Target
 	local has_feat = HasPassive('HealingHands',source) & (HasPassive('VersatileFont',source)|HasPassive('DivineFontHeal',source))
 	local heal_living = ~( Tagged('UNDEAD',target) | DivineCastigation(target) )
-
+	
 	if size == 10 then
 		return has_feat & heal_living
-	else
+		else
 		return ~has_feat & heal_living
 	end
 end
@@ -351,7 +363,7 @@ function HealVoid(size)
 	
 	if size == 10 then
 		return has_feat & damage_undead
-	else
+		else
 		return ~has_feat & damage_undead
 	end
 end
@@ -369,7 +381,7 @@ function HarmLive(size)
 	
 	if size == 10 then
 		return has_feat & damage_living
-	else
+		else
 		return ~has_feat & damage_living
 	end
 end
@@ -382,7 +394,7 @@ function HarmVoid(size)
 	
 	if size == 10 then
 		return has_feat & heal_undead
-	else
+		else
 		return ~has_feat & heal_undead
 	end
 end
@@ -395,7 +407,7 @@ function HealSavingThrow()
     if CanTargetHeal().Result then
         st = ~SavingThrow(Ability.Constitution,SourceSpellDC())
         return ConditionResult(st.Result,{},{},st.Chance)
-    end
+	end
     return ConditionResult(true)
 end
 
@@ -403,7 +415,7 @@ function HarmSavingThrow()
     if CanTargetHarm().Result then
         st = ~SavingThrow(Ability.Constitution,SourceSpellDC())
         return ConditionResult(st.Result,{},{},st.Chance)
-    end
+	end
     return ConditionResult(true)
 end
 
@@ -447,7 +459,7 @@ function ClassDC(source)
 	
 	if Tagged('STAT_PEN_2DC',source).Result then
 		stat_pen = 2
-	elseif Tagged('STAT_PEN_1DC',source).Result then
+		elseif Tagged('STAT_PEN_1DC',source).Result then
 		stat_pen = 1
 	end
 	
@@ -467,27 +479,27 @@ function FortitudeDC(entity)
 	
 	if HasPassive('FortitudeLegend',target).Result then
 		prof = 8
-	elseif HasPassive('FortitudeMaster',target).Result then
+		elseif HasPassive('FortitudeMaster',target).Result then
 		prof = 6
-	elseif HasPassive('FortitudeExpert',target).Result then
+		elseif HasPassive('FortitudeExpert',target).Result then
 		prof = 4
 	end
 	
 	if HasAnyTags({'CIRC_BON_2SAVES'}).Result then
 		circ_bon = 2
-	elseif HasAnyTags({'CIRC_BON_1FORT'}).Result then
+		elseif HasAnyTags({'CIRC_BON_1FORT'}).Result then
 		circ_bon = 1
 	end
 	
 	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2FORT'}).Result then
 		item_bon = 2
-	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1FORT'}).Result then
+		elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1FORT'}).Result then
 		item_bon = 1
 	end
 	
 	if HasAnyTags({'STAT_BON_2SAVES'}).Result then
 		stat_bon = 2
-	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+		elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
 		stat_bon = 1
 	end
 	
@@ -495,13 +507,13 @@ function FortitudeDC(entity)
 	
 	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
 		item_pen = 2
-	elseif HasAnyTags({'ITEM_PEN_1SAVES'}).Result then
+		elseif HasAnyTags({'ITEM_PEN_1SAVES'}).Result then
 		item_pen = 1
 	end
 	
 	if HasAnyTags({'STAT_PEN_2SAVES'}).Result then
 		stat_pen = 2
-	elseif HasAnyTags({'STAT_PEN_1SAVES'}).Result then
+		elseif HasAnyTags({'STAT_PEN_1SAVES'}).Result then
 		stat_pen = 1
 	end
 	
@@ -521,9 +533,9 @@ function ReflexDC(entity)
 	
 	if HasPassive('ReflexLegend',target).Result then
 		prof = 8
-	elseif HasPassive('ReflexMaster',target).Result then
+		elseif HasPassive('ReflexMaster',target).Result then
 		prof = 6
-	elseif HasPassive('ReflexExpert',target).Result then
+		elseif HasPassive('ReflexExpert',target).Result then
 		prof = 4
 	end
 	
@@ -533,13 +545,13 @@ function ReflexDC(entity)
 	
 	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2REFLEX'}).Result then
 		item_bon = 2
-	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1REFLEX'}).Result then
+		elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1REFLEX'}).Result then
 		item_bon = 1
 	end
 	
 	if HasAnyTags({'STAT_BON_2SAVES'}).Result then
 		stat_bon = 2
-	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+		elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
 		stat_bon = 1
 	end
 	
@@ -547,13 +559,13 @@ function ReflexDC(entity)
 	
 	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
 		item_pen = 2
-	elseif HasAnyTags({'ITEM_PEN_1SAVES'}).Result then
+		elseif HasAnyTags({'ITEM_PEN_1SAVES'}).Result then
 		item_pen = 1
 	end
 	
 	if HasAnyTags({'STAT_PEN_2SAVES', 'STAT_PEN_2REFLEX'}).Result then
 		stat_pen = 2
-	elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1REFLEX'}).Result then
+		elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1REFLEX'}).Result then
 		stat_pen = 1
 	end
 	
@@ -573,9 +585,9 @@ function WillDC(entity)
 	
 	if HasPassive('WillLegend',target).Result then
 		prof = 8
-	elseif HasPassive('WillMaster',target).Result then
+		elseif HasPassive('WillMaster',target).Result then
 		prof = 6
-	elseif HasPassive('WillExpert',target).Result then
+		elseif HasPassive('WillExpert',target).Result then
 		prof = 4
 	end
 	
@@ -585,13 +597,13 @@ function WillDC(entity)
 	
 	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2WILL'}).Result then
 		item_bon = 2
-	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1WILL'}).Result then
+		elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1WILL'}).Result then
 		item_bon = 1
 	end
 	
 	if HasAnyTags({'STAT_BON_2SAVES', 'STAT_BON_2WILL'}).Result then
 		stat_bon = 2
-	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+		elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
 		stat_bon = 1
 	end
 	
@@ -599,13 +611,13 @@ function WillDC(entity)
 	
 	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
 		item_pen = 2
-	elseif HasAnyTags({'ITEM_PEN_1SAVES', 'ITEM_PEN_1WILL'}).Result then
+		elseif HasAnyTags({'ITEM_PEN_1SAVES', 'ITEM_PEN_1WILL'}).Result then
 		item_pen = 1
 	end
 	
 	if HasAnyTags({'STAT_PEN_2SAVES', 'STAT_PEN_2WILL'}).Result then
 		stat_pen = 2
-	elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1WILL'}).Result then
+		elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1WILL'}).Result then
 		stat_pen = 1
 	end
 	
@@ -617,7 +629,7 @@ function ShoveCheck()
     if not result.Result then
         local skillCheck = SkillCheck(Skill.Athletics,FortitudeDC())
         return ConditionResult(skillCheck.Result,{},{},skillCheck.Chance)
-    end
+	end
     return result
 end
 
@@ -1079,17 +1091,17 @@ end
 function ElementalGate(element)
 	if element == 'Fire' then
 		return HasPassive('FireGate')
-	elseif element == 'Water' then
+		elseif element == 'Water' then
 		return HasPassive('WaterGate')
-	elseif element == 'Air' then
+		elseif element == 'Air' then
 		return HasPassive('AirGate')
-	elseif element == 'Earth' then
+		elseif element == 'Earth' then
 		return HasPassive('EarthGate')
-	elseif element == 'Wood' then
+		elseif element == 'Wood' then
 		return HasPassive('WoodGate')
-	elseif element == 'Metal' then
+		elseif element == 'Metal' then
 		return HasPassive('MetalGate')
-	else
+		else
 		return ConditionResult(false)
 	end
 end
@@ -1097,17 +1109,17 @@ end
 function ElementalInstinct(element)
 	if element == 'Fire' then
 		return HasPassive('ElemBarbFire')
-	elseif element == 'Water' then
+		elseif element == 'Water' then
 		return HasPassive('ElemBarbWater')
-	elseif element == 'Air' then
+		elseif element == 'Air' then
 		return HasPassive('ElemBarbAir')
-	elseif element == 'Earth' then
+		elseif element == 'Earth' then
 		return HasPassive('ElemBarbEarth')
-	elseif element == 'Wood' then
+		elseif element == 'Wood' then
 		return HasPassive('ElemBarbWood')
-	elseif element == 'Metal' then
+		elseif element == 'Metal' then
 		return HasPassive('ElemBarbMetal')
-	else
+		else
 		return ConditionResult(false)
 	end
 end
@@ -1115,23 +1127,23 @@ end
 function IsSingleGate(element)
 	if element == 'Fire' then
 		return ~HasPassive('WaterGate') & ~HasPassive('AirGate') & ~HasPassive('EarthGate') & ~HasPassive('WoodGate') & ~HasPassive('MetalGate')
-	elseif element == 'Water' then
+		elseif element == 'Water' then
 		return ~HasPassive('FireGate') & ~HasPassive('AirGate') & ~HasPassive('EarthGate') & ~HasPassive('WoodGate') & ~HasPassive('MetalGate')
-	elseif element == 'Air' then
+		elseif element == 'Air' then
 		return ~HasPassive('FireGate') & ~HasPassive('WaterGate') & ~HasPassive('EarthGate') & ~HasPassive('WoodGate') & ~HasPassive('MetalGate')
-	elseif element == 'Earth' then
+		elseif element == 'Earth' then
 		return ~HasPassive('FireGate') & ~HasPassive('WaterGate') & ~HasPassive('AirGate') & ~HasPassive('WoodGate') & ~HasPassive('MetalGate')
-	elseif element == 'Wood' then
+		elseif element == 'Wood' then
 		return ~HasPassive('FireGate') & ~HasPassive('WaterGate') & ~HasPassive('AirGate') & ~HasPassive('EarthGate') & ~HasPassive('MetalGate')
-	elseif element == 'Metal' then
+		elseif element == 'Metal' then
 		return ~HasPassive('FireGate') & ~HasPassive('WaterGate') & ~HasPassive('AirGate') & ~HasPassive('EarthGate') & ~HasPassive('WoodGate')
-	else
+		else
 		return ConditionResult(false)
 	end
 end
 
 function IsKineticistFree()
--- Can be a free action with Channel Elements
+	-- Can be a free action with Channel Elements
 	local fire_blast = SpellId('Target_ElementalBlast_Fire_Fire') | SpellId('Target_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Projectile_ElementalBlast_Fire_Cold')
 	
 	local water_blast = SpellId('Target_ElementalBlast_Water_Bludgeoning') | SpellId('Target_ElementalBlast_Water_Cold') | SpellId('Target_ElementalBlast_Water_Acid') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning') | SpellId('Projectile_ElementalBlast_Water_Cold') | SpellId('Projectile_ElementalBlast_Water_Acid')
@@ -1206,7 +1218,7 @@ function CritThresholdSuccess()
     local notCrit = context.InterruptedRoll.NaturalRoll < 20 & context.InterruptedRoll.NaturalRoll > 1
 	local critDC = context.InterruptedRoll.Difficulty + 10
     local exceededBy10 = context.InterruptedRoll.Total >= critDC
-
+	
     return ConditionResult(notCrit & exceededBy10)
 end
 
@@ -1214,7 +1226,7 @@ function CritThresholdFail()
     local notCrit = context.InterruptedRoll.NaturalRoll < 20 & context.InterruptedRoll.NaturalRoll > 1
 	local critTotal = context.InterruptedRoll.Total + 10
     local failedBy10 = critTotal <= context.InterruptedRoll.Difficulty
-
+	
     return ConditionResult(notCrit & failedBy10)
 end
 
@@ -1226,7 +1238,7 @@ function SaveCrit(save_type)
 	
 	if difficulty >= thresholdtotal then
         return ConditionResult(difficulty > total)
-    end
+	end
     return ConditionResult(false)
 end
 
@@ -1239,31 +1251,41 @@ function SaveCritMiss(save_type)
         local target = context.Target
         if save_type == 'Fort' and (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)).Result then
             return ConditionResult(true)
-        elseif save_type == 'Reflex' and (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)).Result then
+			elseif save_type == 'Reflex' and (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)).Result then
             return ConditionResult(true)
-        elseif save_type == 'Fear' and (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
+			elseif save_type == 'Fear' and (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
             return ConditionResult(true)
-        elseif save_type == 'Will' and (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
+			elseif save_type == 'Will' and (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
             return ConditionResult(true)
-        end
-    end
+		end
+	end
     if difficulty < thresholdtotal then
         return ConditionResult(difficulty < total)
-    end
+	end
+    return ConditionResult(false)
+end
+
+function SkillCrit()
+    local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
+    local thresholdtotal = total - 10
+	
+    if difficulty <= thresholdtotal then
+        return ConditionResult(difficulty < total)
+	end
     return ConditionResult(false)
 end
 
 function LastConditionRollValues(conditionRollType)
     try
-        conditionRoll = context.HitDescription.GetLastConditionRoll(conditionRollType)
+	conditionRoll = context.HitDescription.GetLastConditionRoll(conditionRollType)
     catch e then
-        if ls.CheckType(e, ls.error.UnsupportedAttributeType) or ls.CheckType(e, ls.error.NotFound) then
-            return ConditionResult(false)
+	if ls.CheckType(e, ls.error.UnsupportedAttributeType) or ls.CheckType(e, ls.error.NotFound) then
+		return ConditionResult(false)
         else
-            return ConditionResult(false)
-        end
-    end
-    return conditionRoll.Total, conditionRoll.Difficulty
+		return ConditionResult(false)
+	end
+end
+return conditionRoll.Total, conditionRoll.Difficulty
 end
 
 function IsWeaponDamageDieD4(weapon)
@@ -1298,33 +1320,34 @@ function CheckCriticalTen(max, entity)
     local max = max or 0
     if context.InterruptedRoll.RollCritical ~= RollCritical.None then
         return ConditionResult(false, {ConditionError("IsCriticalFailSuccess")})
-    end
-
+	end
+	
     local rollSuccess = context.InterruptedRoll.Total >= context.InterruptedRoll.Difficulty
-
+	
 	local result = rollSuccess and ((context.InterruptedRoll.Total - context.InterruptedRoll.Difficulty) >= max)
-        return ConditionResult(result)
+	return ConditionResult(result)
 end
+
 function CheckCriticalMissTen(max, entity)
     local entity = entity or context.Target
     local max = max or 0
     if context.InterruptedRoll.RollCritical ~= RollCritical.None then
         return ConditionResult(false, {ConditionError("IsCriticalFailSuccess")})
-    end
-
+	end
+	
     local rollSuccess = context.InterruptedRoll.Total >= context.InterruptedRoll.Difficulty
-
+	
 	local result = not rollSuccess and ((context.InterruptedRoll.Total - context.InterruptedRoll.Difficulty) <= max)
-        return ConditionResult(result)
+	return ConditionResult(result)
 end
 
 function IsMeleeWeaponInfusion()
--- Can be adjusted with Weapon Infusion
+	-- Can be adjusted with Weapon Infusion
 	return SpellId('Target_ElementalBlast_Fire_Fire') | SpellId('Target_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Target_ElementalBlast_Fire_Fire_2Action') | SpellId('Target_ElementalBlast_Fire_Cold_2Action') | SpellId('Target_ElementalBlast_Water_Bludgeoning') | SpellId('Target_ElementalBlast_Water_Cold') | SpellId('Target_ElementalBlast_Water_Acid') | SpellId('Target_ElementalBlast_Water_Bludgeoning_2Action') | SpellId('Target_ElementalBlast_Water_Cold_2Action') | SpellId('Target_ElementalBlast_Water_Acid_2Action') | SpellId('Target_ElementalBlast_Air_Electric') | SpellId('Target_ElementalBlast_Air_Slashing') | SpellId('Target_ElementalBlast_Air_Cold') | SpellId('Target_ElementalBlast_Air_Electric_2Action') | SpellId('Target_ElementalBlast_Air_Slashing_2Action') | SpellId('Target_ElementalBlast_Air_Cold_2Action') | SpellId('Target_ElementalBlast_Earth_Bludgeoning') | SpellId('Target_ElementalBlast_Earth_Piercing') | SpellId('Target_ElementalBlast_Earth_Poison') | SpellId('Target_ElementalBlast_Earth_Bludgeoning_2Action') | SpellId('Target_ElementalBlast_Earth_Piercing_2Action') | SpellId('Target_ElementalBlast_Earth_Poison_2Action') | SpellId('Target_ElementalBlast_Wood_Bludgeoning') | SpellId('Target_ElementalBlast_Wood_Vitality') | SpellId('Target_ElementalBlast_Wood_Poison') | SpellId('Target_ElementalBlast_Wood_Bludgeoning_2Action') | SpellId('Target_ElementalBlast_Wood_Vitality_2Action') | SpellId('Target_ElementalBlast_Wood_Poison_2Action') | SpellId('Target_ElementalBlast_Metal_Piercing') | SpellId('Target_ElementalBlast_Metal_Slashing') | SpellId('Target_ElementalBlast_Metal_Lightning') | SpellId('Target_ElementalBlast_Metal_Piercing_2Action') | SpellId('Target_ElementalBlast_Metal_Slashing_2Action') | SpellId('Target_ElementalBlast_Metal_Lightning_2Action')
 end
 
 function IsRangedWeaponInfusion()
--- Can be adjusted with Weapon Infusion
+	-- Can be adjusted with Weapon Infusion
 	return SpellId('Projectile_ElementalBlast_Fire_Fire') | SpellId('Projectile_ElementalBlast_Fire_Cold') | SpellId('Projectile_ElementalBlast_Fire_Fire_2Action') | SpellId('Projectile_ElementalBlast_Fire_Cold_2Action') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning') | SpellId('Projectile_ElementalBlast_Water_Cold') | SpellId('Projectile_ElementalBlast_Water_Acid') | SpellId('Projectile_ElementalBlast_Water_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Water_Cold_2Action') | SpellId('Projectile_ElementalBlast_Water_Acid_2Action') | SpellId('Projectile_ElementalBlast_Air_Electric') | SpellId('Projectile_ElementalBlast_Air_Slashing') | SpellId('Projectile_ElementalBlast_Air_Cold') | SpellId('Projectile_ElementalBlast_Air_Electric_2Action') | SpellId('Projectile_ElementalBlast_Air_Slashing_2Action') | SpellId('Projectile_ElementalBlast_Air_Cold_2Action') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning') | SpellId('Projectile_ElementalBlast_Earth_Piercing') | SpellId('Projectile_ElementalBlast_Earth_Poison') | SpellId('Projectile_ElementalBlast_Earth_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Earth_Piercing_2Action') | SpellId('Projectile_ElementalBlast_Earth_Poison_2Action') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning') | SpellId('Projectile_ElementalBlast_Wood_Vitality') | SpellId('Projectile_ElementalBlast_Wood_Poison') | SpellId('Projectile_ElementalBlast_Wood_Bludgeoning_2Action') | SpellId('Projectile_ElementalBlast_Wood_Vitality_2Action') | SpellId('Projectile_ElementalBlast_Wood_Poison_2Action') | SpellId('Projectile_ElementalBlast_Metal_Piercing') | SpellId('Projectile_ElementalBlast_Metal_Slashing') | SpellId('Projectile_ElementalBlast_Metal_Lightning') | SpellId('Projectile_ElementalBlast_Metal_Piercing_2Action') | SpellId('Projectile_ElementalBlast_Metal_Slashing_2Action') | SpellId('Projectile_ElementalBlast_Metal_Lightning_2Action')
 end
 

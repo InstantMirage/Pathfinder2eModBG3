@@ -62,10 +62,10 @@
         <field name="Name" type="NameTableFieldDefinition" value="PathfinderDCBoost" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdff3f897gdee6g3ed9g0b28gd06945f0f08f" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h07f7b560gf34dgdf73g3d1dg9a5369f5689e" version="3" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(SavingThrow, Constitution);ProficiencyBonus(SavingThrow, Dexterity);ProficiencyBonus(SavingThrow, Wisdom);ProficiencyBonus(Skill, Perception);IF(IsProficientWith(context.Source, GetActiveArmor()) or not (IsOfProficiencyGroup('LightArmor', GetActiveArmor()) or IsOfProficiencyGroup('MediumArmor', GetActiveArmor()) or IsOfProficiencyGroup('HeavyArmor', GetActiveArmor()))):AddProficiencyToAC();UnlockSpellVariant(HasUseCosts('BonusActionPoint'),ModifyUseCosts(Replace,ActionPoint,1,0,BonusActionPoint));ActionResource(Stride,9,0);ActionResource(Flourish,1,0);IF((IsMeleeWeaponAttack() or IsUnarmedAttack()) and IsCritical() and not HasPassive('Thief_Finesse',context.Source)):DamageBonus(StrengthModifier);UnlockInterrupt(CriticalHit_10);UnlockInterrupt(CriticalMiss_10);IF(HasStatus('RemoveDisadvantage',context.Source) and (IsRangedAttack() or IsRangedSpellAttack())):Advantage(AttackRoll);UnlockSpell(Shout_Stand_PF2);UnlockSpell(Target_EscapeGrapple_Container);UnlockSpell(Target_SkillActions);UnlockSpell(Shout_Regrip);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(SavingThrow, Constitution);ProficiencyBonus(SavingThrow, Dexterity);ProficiencyBonus(SavingThrow, Wisdom);ProficiencyBonus(Skill, Perception);IF(IsProficientWith(context.Source, GetActiveArmor()) or not (IsOfProficiencyGroup('LightArmor', GetActiveArmor()) or IsOfProficiencyGroup('MediumArmor', GetActiveArmor()) or IsOfProficiencyGroup('HeavyArmor', GetActiveArmor()))):AddProficiencyToAC();UnlockSpellVariant(HasUseCosts('BonusActionPoint'),ModifyUseCosts(Replace,ActionPoint,1,0,BonusActionPoint));ActionResource(Stride,9,0);ActionResource(Flourish,1,0);IF((IsMeleeWeaponAttack() or IsUnarmedAttack()) and IsCritical() and not HasPassive('Thief_Finesse',context.Source)):DamageBonus(StrengthModifier);UnlockInterrupt(CriticalHit_10);UnlockInterrupt(CriticalMiss_10);IF(HasStatus('RemoveDisadvantage',context.Source) and (IsRangedAttack() or IsRangedSpellAttack())):Advantage(AttackRoll);IF(not HasPassive('SkillActions')):UnlockSpell(Target_SkillActions);" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="TurnBased()" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="AI_IGNORE:IF( not (HasDashStatus() or HasStatus('STRIDE') or HasStatus('DISENGAGE')) ):ApplyStatus(DEBUG_RESET_MOVE,100,-1); IF( HasDashStatus() or HasStatus('STRIDE') or HasStatus('DISENGAGE') ):UseActionResource(ActionPoint,0.5,0)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="AI_IGNORE:IF( not HasAnyMovementStatus() ):ApplyStatus(DEBUG_RESET_MOVE,100,-1); IF( HasDashStatus() ):UseActionResource(ActionPoint,1,0)" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Skilled" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
@@ -174,7 +174,8 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h875530a1g65a8ge743gd546ga077f488bdeb" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF((IsWeaponAttack() and IsProficientWith(context.Source, GetAttackWeapon())) or IsUnarmedAttack()):RollBonus(Attack, 4);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h21bf58b0gbad5g686bg631egc89b6613d247" version="1" />
-        <field name="Using" type="BaseClassTableFieldDefinition" value="18343b20-f823-49e3-a74b-235bbd5f374f" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_ExtraAttack" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC;IsHidden" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2517,7 +2518,6 @@
         <field name="Name" type="NameTableFieldDefinition" value="DoubleSlice" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h35b5d70ag7791gea6cg55a1g0e8af3e9aa4a" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf82b47eagd3bfg352ag60f4gcfded8eafe3e" version="1" />
-        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_SweepingAttack" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_DoubleSlice); IF(not WieldingWeapon('Light', true, true, context.Source) and SpellId('Target_DoubleSlice')):RollBonus(MeleeOffHandWeaponAttack,-2); DualWielding(true); DualWielding(false);" />
         <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="ActionPoint:2" />
@@ -2541,11 +2541,8 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h76a9272bge580g1339g87f6g8f163b9a8476" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf2cc5982g92edg9c76g9097g96e72128376b" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Rush_New" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_SuddenCharge)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_SuddenCharge);" />
         <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="ActionPoint:2" />
-        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="BoostConditions" type="StringTableFieldDefinition" value="HasDashStatus() and HasActionResource('Flourish', 1 , 0, false, false)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -5462,6 +5459,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="0d37adda-9ee3-4c0b-8c06-ae91d57504d0" />
         <field name="Name" type="NameTableFieldDefinition" value="Sorcerer" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResource(SorceryPoint,1,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6176,6 +6174,7 @@
         <field name="Conditions" type="StringTableFieldDefinition" value="IsSpell();" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(SpellDamageTypeIs(DamageType.Acid) and AutoHeighten()):ApplyStatus(ACI_RESIST_INPUT,100,LevelMapValue(H1Plus1));&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Acid) and not AutoHeighten()):ApplyStatus(ACI_RESIST_INPUT,100,SpellPowerLevel);&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Cold) and AutoHeighten()):ApplyStatus(CLD_RESIST_INPUT,100,LevelMapValue(H1Plus1));&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Cold) and not AutoHeighten()):ApplyStatus(CLD_RESIST_INPUT,100,SpellPowerLevel);&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Fire) and AutoHeighten()):ApplyStatus(FIR_RESIST_INPUT,100,LevelMapValue(H1Plus1));&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Fire) and not AutoHeighten()):ApplyStatus(FIR_RESIST_INPUT,100,SpellPowerLevel);&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Force) and AutoHeighten()):ApplyStatus(FOR_RESIST_INPUT,100,LevelMapValue(H1Plus1));&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Force) and not AutoHeighten()):ApplyStatus(FOR_RESIST_INPUT,100,SpellPowerLevel);&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Lightning) and AutoHeighten()):ApplyStatus(LGT_RESIST_INPUT,100,LevelMapValue(H1Plus1));&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Lightning) and not AutoHeighten()):ApplyStatus(LGT_RESIST_INPUT,100,SpellPowerLevel);&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Necrotic) and AutoHeighten()):ApplyStatus(NEC_RESIST_INPUT,100,LevelMapValue(H1Plus1));&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Necrotic) and not AutoHeighten()):ApplyStatus(NEC_RESIST_INPUT,100,SpellPowerLevel);&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Radiant) and AutoHeighten()):ApplyStatus(RAD_RESIST_INPUT,100,LevelMapValue(H1Plus1));&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Radiant) and not AutoHeighten()):ApplyStatus(RAD_RESIST_INPUT,100,SpellPowerLevel);&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Thunder) and AutoHeighten()):ApplyStatus(THN_RESIST_INPUT,100,LevelMapValue(H1Plus1));&#xD;&#xA;IF(SpellDamageTypeIs(DamageType.Thunder) and not AutoHeighten()):ApplyStatus(THN_RESIST_INPUT,100,SpellPowerLevel);" />
         <field name="ToggleGroup" type="StringTableFieldDefinition" value="Metamagic" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Skill_Sorcerer_Passive_Metamagic_EmpoweredSpell" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6187,6 +6186,7 @@
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="MetaMagic;ToggledDefaultAddToHotbar;IsToggled" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(HasUseCosts('ActionPoint') and IsSpell(),ModifyUseCosts(Add,ActionPoint,1,0),ModifyIconGlow());IF(Character() and not Self() and not Summon() and not HasAnyTags({'UNDEAD', 'CONSTRUCT', 'CREATURE_SPORE_SERVANT'}) and not HasAnyStatus({'SG_Polymorph','HAG_DISGUISE','HAG_DISGUISE_PIG','HAG_DISGUISE_SHEEP'}) and not IsImmuneToStatus('KNOCKED_OUT') and IsSpell()):NonLethal();" />
         <field name="ToggleGroup" type="StringTableFieldDefinition" value="Metamagic" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Skill_Sorcerer_Passive_Metamagic_CarefulSpell" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7227,7 +7227,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="LessonOfSnow" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h60dc9883g3ef8g3d77g8dafgca065c7cbd43" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha063bde7g2826geed3g33eag7545cf53dec6" version="2" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_PersonalBlizzard);ActionResource(KiPoint,1,0);UnlockSpellTarget_SandForm_Rank3,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_PersonalBlizzard);ActionResource(KiPoint,1,0);UnlockSpell(Target_SandForm_Rank3,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9443,7 +9443,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsRangedWeaponAttack() and not HasStatus('BANE', context.Target)" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(StatusPenalty1Attack, 100, 1,,,,not SavingThrow(Ability.Wisdom,13))" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(StatusPenalty1Attack, 100, 1,,,,not SavingThrow(Ability.Wisdom,13));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9522,7 +9522,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAG_BardicInspiration_Heal_Hat_Passive" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0e9d4ea1g23f7ged93gcb68ga8c6ae180f41" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1243517ag6387g2e67gdda2g94d3e5c69e13" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Target_BardicInspiration') or SpellId('Target_BardicInspiration_Combat') or SpellId('Shout_CourageousAnthem') or SpellId('Shout_CourageousAnthem_Lingering') or SpellId('Shout_SongOfStrength_Lingering') or SpellId('Shout_RallyingAnthem_Lingering') or SpellId('Shout_TripleTime_Lingering');" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasUseCosts('BardicInspiration') and Ally();" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RegainHitPoints(1d6)" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="RegainHitPoints(1d6)" />
@@ -9556,7 +9556,7 @@
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamaged" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="TotalDamageDoneGreaterThan(0)" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not SavingThrow(Ability.Wisdom, 13, false, false, context.Source)):ApplyStatus(SWAP,CONFUSION,100,2)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not SavingThrow(Ability.Wisdom, 13, false, false, context.Source)):ApplyStatus(SWAP,CONFUSION,100,2);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9565,7 +9565,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="DEN_RaidingParty_GoblinCaptain_Gloves_Passive" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd0a98a0agdc22g2c80gb4d4g91cbb245b98e" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h0248c837g6142gca8dg7688gcf75634a27a4" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('BRANDED',context.Source)):ApplyStatus(BANE,100,2,,,,not SavingThrow(Ability.Wisdom,11))" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('BRANDED',context.Source)):ApplyStatus(BANE,100,2,,,,not SavingThrow(Ability.Wisdom,11));" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsWeaponAttack() and Character() and not Item()" />
         <field name="TooltipSave" type="StringTableFieldDefinition" value="Wisdom" />
@@ -9579,7 +9579,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h65eedea6gea49g31cbgec1dgaacbf5049da6" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he6a363b2g3dc1ge5d3g0deag293904e00b3e" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="AttackedWithPassiveSourceWeapon()" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GOB_TORTURED,100,2,,,,not SavingThrow(Ability.Wisdom,10))" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GOB_TORTURED,100,2,,,,not SavingThrow(Ability.Wisdom,10));" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="TooltipSave" type="StringTableFieldDefinition" value="Wisdom" />
       </fields>
@@ -9664,7 +9664,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAG_OfDefense_Gloves_Passive" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h305a4e11g56cdg2d57g5085gf3e2cda37aa7" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf1956ad4g2340g376ag1ba3gebf8136edd86" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="AC(1);RollBonus(SavingThrow,1,Dexterity);RollBonus(SavingThrow,1,Wisdom);RollBonus(SavingThrow,2,Constitution);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(ITEM_BON_1AC);Tag(ITEM_BON_1SAVES);" />
         <field name="BoostConditions" type="StringTableFieldDefinition" value="not WearingArmor(context.Source);" />
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnEquip;OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
@@ -10356,6 +10356,19 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="90924b39-6068-4be5-ba57-83f0d1a49c53" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_PF2e_ExtraShield" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha9672e5dg94cdg3c36gc56cg0b38a9d7a4c9" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he4763a3ag2e2bg22c5g0bddg1aac543d5b0b" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Shield" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="OncePerShortRestPerItem" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="StatusId('SHIELD_SPELL_BROKEN');" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SHIELD_SPELL_BROKEN)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="55cef116-0582-42ee-8298-570e78a5af98" />
         <field name="Name" type="NameTableFieldDefinition" value="ShieldBreakUncommon" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="71ad745a-ee25-4f9b-a111-05a00168c97b" />
@@ -10509,6 +10522,42 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3bf421c8g7272g7f2agd740g5d49086d263d" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(5)" />
       </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="bfca00fb-44c5-41c8-9a02-cf8a70348e0c" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Paladin_LayOnHandsSupport_Gloves_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1058c60e-6dd5-49d6-87e3-836c9e7bc8f7" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hefa9a4c6g906eg13b8gceaegac8e90233019" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasUseCosts('KiPoint');" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="64b0ea31-806d-43b9-9e35-7811c5627d37" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Rage_TempHPOnExit_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8040c50d-448f-4e8d-b478-006c0024bc42" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="HasStatus('SG_Rage');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_EndRage);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b60e7d58-af41-4a20-9347-7d9fb0f63eef" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_BardicInspiration_TempHP_Armor_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="c30a8d18-5c98-445a-9c44-5fbb52fbf9d6" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasUseCosts('BardicInspiration');" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="34cb55ce-0e68-42e0-87cc-186fee0daf5d" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_DarkJusticiar_Armor_Protection_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="965ba9c8-c2f5-44b7-a208-ee8165314f6d" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf89ea777gccaega120gd680gc71692aa2355" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(context.HasContextFlag(StatsFunctorContext.OnDamaged) and HasStatus('SHIELD') and not Self()):DealDamage(SELF, 1d4, Necrotic,Magical);IF(context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('SHIELD')):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION, 100, -1);IF(context.HasContextFlag(StatsFunctorContext.OnDamaged) and HasStatus('SHIELD_OF_FAITH') and not Self()):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION_DAMAGE, 100, 0);IF(context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('SHIELD')):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION_DAMAGE, 100, 0)" />
+        </fields>
     </stat_object>
   </stat_objects>
 </stats>
