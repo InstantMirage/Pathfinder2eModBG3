@@ -1,0 +1,39 @@
+<ls:StateMachine xmlns:ls="clr-namespace:ls;assembly=Code"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ls:StateMachine.States>
+        <ls:State Name = "CharacterLevelUp" HideStatesBelow = "True" IsModal="True" IsModalCameraControlAllowed="True" ForceSplitscreen="True" Layout = "Player" Owner = "Player" ModType="Override">
+            <ls:State.Widgets>
+                <ls:StateWidget Filename="Notification_c.xaml" Layer="Notifications"/>
+                <ls:StateWidget Filename="CharacterLevelUpPF2e_c.xaml" Layer="HUD"/>
+                <ls:StateWidget Filename="ScreenFade.xaml" Layer="ScreenFade" BlockedLoading="True"/>
+            </ls:State.Widgets>
+
+            <ls:State.Events>
+                <ls:StateEvent Name = "IE.ToggleInGameMenu">
+                    <ls:StateEvent.Actions>
+                        <ls:PushState Name="Paused"/>
+                    </ls:StateEvent.Actions>
+                </ls:StateEvent>
+                <ls:StateEvent Name = "GE.OnDialogueShow">
+                    <ls:StateEvent.Actions>
+                        <ls:RemoveState/>
+                        <ls:PushState Name="Dialogue"/>
+                    </ls:StateEvent.Actions>
+                </ls:StateEvent>
+                <ls:StateEvent Name = "OpenPinnedTooltips">
+                    <ls:StateEvent.Actions>
+                        <ls:AddSubstate Name="PinnedTooltips"/>
+                    </ls:StateEvent.Actions>
+                </ls:StateEvent>
+                <!--HandlesEvent="False" let's the CloseWidget event to keep going up the state tree. Be *VERY* careful when using it, it's a last resort-->
+                <ls:StateEvent Name = "CloseWidget" HandlesEvent="False">
+                    <ls:StateEvent.Actions>
+                        <ls:RemoveState/>
+                    </ls:StateEvent.Actions>
+                </ls:StateEvent>
+            </ls:State.Events>
+        </ls:State>
+    </ls:StateMachine.States>
+</ls:StateMachine>
