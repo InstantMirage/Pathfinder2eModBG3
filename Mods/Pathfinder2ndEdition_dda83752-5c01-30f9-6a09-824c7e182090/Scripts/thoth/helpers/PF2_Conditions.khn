@@ -394,13 +394,13 @@ function HarmVoid(size)
 	
 	if size == 10 then
 		return has_feat & heal_undead
-		else
+	else
 		return ~has_feat & heal_undead
 	end
 end
 
 function SapLife()
-	return HasPassive('SapLife',source)
+	return HasPassive('SapLife',context.Source)
 end
 
 function HealSavingThrow()
@@ -1277,15 +1277,15 @@ end
 
 function LastConditionRollValues(conditionRollType)
     try
-	conditionRoll = context.HitDescription.GetLastConditionRoll(conditionRollType)
+		conditionRoll = context.HitDescription.GetLastConditionRoll(conditionRollType)
     catch e then
-	if ls.CheckType(e, ls.error.UnsupportedAttributeType) or ls.CheckType(e, ls.error.NotFound) then
-		return ConditionResult(false)
+		if ls.CheckType(e, ls.error.UnsupportedAttributeType) or ls.CheckType(e, ls.error.NotFound) then
+			return 10, 10
         else
-		return ConditionResult(false)
+			return 10, 10
+		end
 	end
-end
-return conditionRoll.Total, conditionRoll.Difficulty
+	return conditionRoll.Total, conditionRoll.Difficulty
 end
 
 function IsWeaponDamageDieD4(weapon)
