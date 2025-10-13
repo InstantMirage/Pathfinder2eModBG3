@@ -62,7 +62,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="PathfinderDCBoost" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdff3f897gdee6g3ed9g0b28gd06945f0f08f" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h07f7b560gf34dgdf73g3d1dg9a5369f5689e" version="3" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(SavingThrow, Constitution);ProficiencyBonus(SavingThrow, Dexterity);ProficiencyBonus(SavingThrow, Wisdom);ProficiencyBonus(Skill, Perception);IF(IsProficientWith(context.Source, GetActiveArmor()) or not (IsOfProficiencyGroup('LightArmor', GetActiveArmor()) or IsOfProficiencyGroup('MediumArmor', GetActiveArmor()) or IsOfProficiencyGroup('HeavyArmor', GetActiveArmor()))):AddProficiencyToAC();UnlockSpellVariant(HasUseCosts('BonusActionPoint'),ModifyUseCosts(Replace,ActionPoint,1,0,BonusActionPoint));ActionResource(Stride,9,0);ActionResource(Flourish,1,0);IF((IsMeleeWeaponAttack() or IsUnarmedAttack()) and IsCritical() and not HasPassive('Thief_Finesse',context.Source)):DamageBonus(StrengthModifier);UnlockInterrupt(CriticalHit_10);UnlockInterrupt(CriticalMiss_10);IF(HasStatus('RemoveDisadvantage',context.Source) and (IsRangedAttack() or IsRangedSpellAttack())):Advantage(AttackRoll);IF(not HasPassive('SkillActions')):UnlockSpell(Target_SkillActions);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(SavingThrow, Constitution);ProficiencyBonus(SavingThrow, Dexterity);ProficiencyBonus(SavingThrow, Wisdom);ProficiencyBonus(Skill, Perception);IF(IsProficientWith(context.Source, GetActiveArmor()) or not (IsOfProficiencyGroup('LightArmor', GetActiveArmor()) or IsOfProficiencyGroup('MediumArmor', GetActiveArmor()) or IsOfProficiencyGroup('HeavyArmor', GetActiveArmor()))):AddProficiencyToAC();UnlockSpellVariant(HasUseCosts('BonusActionPoint'),ModifyUseCosts(Replace,ActionPoint,1,0,BonusActionPoint));ActionResource(Stride,9,0);ActionResource(Flourish,1,0);IF((IsMeleeWeaponAttack() or IsUnarmedAttack()) and IsCritical() and not HasPassive('Thief_Finesse',context.Source)):DamageBonus(StrengthModifier);UnlockInterrupt(CriticalHit_10);UnlockInterrupt(CriticalMiss_10);IF(HasStatus('RemoveDisadvantage',context.Source) and (IsRangedAttack() or IsRangedSpellAttack())):Advantage(AttackRoll);IF(not HasPassive('SkillActions') and not Tagged('INTELLECT_DEVOURER')):UnlockSpell(Target_SkillActions);" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="TurnBased()" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="AI_IGNORE:IF( not HasAnyMovementStatus() ):ApplyStatus(DEBUG_RESET_MOVE,100,-1); IF( HasDashStatus() ):UseActionResource(ActionPoint,1,0)" />
@@ -7336,6 +7336,9 @@
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Physical" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Bludgeoning,Flat,3)" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamaged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeBludgeoning();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,ResistanceDisplay,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7366,6 +7369,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hce7dfcddgd2d3g9c6eg66eag3d89e0174242" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Slashing)" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Slashing,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeSlashing();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7396,6 +7400,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hff258e42g80bcg4e6ag470bg3eca4f4691d6" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Piercing)" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Piercing,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypePiercing();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7426,6 +7431,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Acid)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Acid" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Acid,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeAcid();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7457,6 +7463,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Cold)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Cold" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Cold,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeCold();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7488,6 +7495,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Fire)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Fire" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Fire,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeFire();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7519,6 +7527,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Force)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Force" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Force,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeForce();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7550,6 +7559,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Lightning)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Lightning" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Lightning,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeLightning();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7581,6 +7591,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Necrotic)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Necrotic" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Necrotic,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeNecrotic();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7612,6 +7623,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Poison)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Poison" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Poison,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypePoison();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7643,6 +7655,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Psychic)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Psychic" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Psychic,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypePsychic();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7674,6 +7687,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Radiant)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Radiant" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Radiant,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeRadiant();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7705,6 +7719,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="3;DealDamage(,Thunder)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Thunder" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Thunder,Flat,3)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsDamageTypeThunder();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7737,6 +7752,9 @@
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_Intent_Damage" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DamageReduction(Bludgeoning,Flat,5);DamageReduction(Slashing,Flat,5);DamageReduction(Piercing,Flat,5);DamageReduction(Acid,Flat,5);DamageReduction(Fire,Flat,5);DamageReduction(Lightning,Flat,5);DamageReduction(Necrotic,Flat,5);DamageReduction(Poison,Flat,5);DamageReduction(Psychic,Flat,5);DamageReduction(Thunder,Flat,5);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamaged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not IsDamageTypeRadiant() or not IsDamageTypeForce();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,ResistanceDisplay,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10558,6 +10576,18 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="965ba9c8-c2f5-44b7-a208-ee8165314f6d" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf89ea777gccaega120gd680gc71692aa2355" version="1" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(context.HasContextFlag(StatsFunctorContext.OnDamaged) and HasStatus('SHIELD') and not Self()):DealDamage(SELF, 1d4, Necrotic,Magical);IF(context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('SHIELD')):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION, 100, -1);IF(context.HasContextFlag(StatsFunctorContext.OnDamaged) and HasStatus('SHIELD_OF_FAITH') and not Self()):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION_DAMAGE, 100, 0);IF(context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('SHIELD')):ApplyStatus(MAG_DARK_JUSTICIAR_ARMOR_SHAR_PROTECTION_DAMAGE, 100, 0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="52ce025d-29e7-4d11-96ad-b142de15765b" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Paladin_SmiteSpellsSupport_Helmet_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4ccfa715g0204gbeffgd81cg92d0d2fc1f01" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5be09b9bg3eeeg421dg814cgf9953bc68514" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF, MAG_PALADIN_TEMP_HP, 100, 2)" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Target_SmitePathfinder') or IsSpellChildOrVariantFromContext('Target_ChannelSmiteBase');" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="8892b93b-721f-4b99-b9b4-05ac25aadb33" />
       </fields>
     </stat_object>
   </stat_objects>
