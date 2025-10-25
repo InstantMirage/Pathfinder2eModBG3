@@ -6,6 +6,7 @@ import uuid
 import subprocess
 from wand.image import Image
 from wand.drawing import Drawing
+import wand.exceptions as wand_exceptions
 
 globalKeys = {
     "ModName": "PF2",
@@ -148,8 +149,8 @@ if __name__ == '__main__':
     for tradition, traditionClass in spellListClasses.items():
         fullTraditionStrings[traditionClass] = ""
         fullTraditionLists[tradition] = set()
-    for each in listsData:
-        localFields = each.find("fields").findall("field")
+    for spellList in listsData:
+        localFields = spellList.find("fields").findall("field")
         for tradition, traditionClass in spellListClasses.items():
             for field in localFields:
                 if field.attrib["name"] == "Name":
@@ -158,9 +159,9 @@ if __name__ == '__main__':
                             if field2.attrib["name"] == "Spells":
                                 fullTraditionStrings[traditionClass] = fullTraditionStrings[traditionClass] + ";" + field2.attrib["value"]
     for tradition, traditionClass in spellListClasses.items():
-        for each in fullTraditionStrings[traditionClass].split(";"):
-            if each != "":
-                fullTraditionLists[tradition].add(each)
+        for string in fullTraditionStrings[traditionClass].split(";"):
+            if string != "":
+                fullTraditionLists[tradition].add(string)
 
     # Convert all of our mod's root templates to non-binary format for parsing using Divine and
     # look through the root templates to find scrolls that already exist, to avoid duplicates.
@@ -172,7 +173,7 @@ if __name__ == '__main__':
 
     spells = []
     icons = set()
-    icons.add("PF2_Item_LOOT_Scroll_Default.DDS")
+    icons.add("PF2_Item_LOOT_Scroll_Default.png")
     # Iterate over files in directory
     for fileName in os.listdir("../../Editor/Mods/" + globalKeys["ModFolder"] + "/Stats/SpellData"):
         # Skip SpellSet.stats
@@ -181,9 +182,12 @@ if __name__ == '__main__':
         # Open spell stats file
         spellsTree = ET.parse("../../Editor/Mods/" + globalKeys["ModFolder"] + "/Stats/SpellData/" + fileName).getroot()
         spellsData = spellsTree.find("stat_objects").findall("stat_object")
-        for each in spellsData:
+        for spell in spellsData:
+            # Put this here to catch a bug that seemingly stopped happening once I added the line. Should never trigger.
+            if isinstance(spell, str):
+                continue
             newSpellStats = {}
-            useCost = get_field(each, "UseCosts", spellsData, fileName)
+            useCost = get_field(spell, "UseCosts", spellsData, fileName)
             if useCost.find("SpellSlotsGroup") != -1:
                 newSpellStats["UseCosts"] = re.sub("SpellSlotsGroup:\d*:\d*:\d*", "", useCost)
             else:
@@ -197,19 +201,19 @@ if __name__ == '__main__':
                 newSpellStats["UseCosts"] = newSpellStats["UseCosts"][:-1]
 
             # Skip AI variants of spells, if titled as such
-            tempName = get_field(each, "Name", spellsData, fileName)
+            tempName = get_field(spell, "Name", spellsData, fileName)
             if tempName.find("_AI") != -1:
                 continue
             newSpellStats["Reference"] = fileName.replace(".stats", "") + "_" + tempName
 
             # If a spell is part of a container spell, skip it
-            if get_field(each, "SpellContainerID", spellsData, fileName):
+            if get_field(spell, "SpellContainerID", spellsData, fileName):
                 continue
 
             # Learning a spell should grant its base version
-            newSpellStats["LearnReference"] = get_field(each, "RootSpellID", spellsData, fileName)
+            newSpellStats["LearnReference"] = get_field(spell, "RootSpellID", spellsData, fileName)
             # Check the Owner field for manual learn reference overrides, used for ranked container spells
-            newSpellStats["LearnReference"] = get_field(each, "Owner", spellsData, fileName) or newSpellStats["LearnReference"]
+            newSpellStats["LearnReference"] = get_field(spell, "Owner", spellsData, fileName) or newSpellStats["LearnReference"]
             # If not found the spell should grant itself when learnt
             newSpellStats["LearnReference"] = newSpellStats["LearnReference"] or newSpellStats["Reference"]
 
@@ -226,78 +230,75 @@ if __name__ == '__main__':
                 continue
 
             # Container spells should be skipped if their list ends in a semicolon.
-            containerSpells = get_field(each, "ContainerSpells", spellsData, fileName)
+            containerSpells = get_field(spell, "ContainerSpells", spellsData, fileName)
             if containerSpells[-1:] == ";":
-                print("Warning: Container spell skipped due to semicolon terminated container spell list - " + newSpellStats["Reference"])
+                print("Warning: Container spell skipped due to semicolon-terminated container spell list - " + newSpellStats["Reference"])
                 continue
-            elif containerSpells != "":
-                print("Info: Container spell found - " + newSpellStats["Reference"])
 
-            spellIconSource = get_field(each, "Icon", spellsData, fileName)
+            spellIconSource = get_field(spell, "Icon", spellsData, fileName)
             try:
-                if not (os.path.isfile("../../Mods/" + globalKeys["ModFolder"] + "/GUI/Assets/ControllerUIIcons/items_png/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")
-                        and os.path.isfile("../../Mods/" + globalKeys["ModFolder"] + "/GUI/AssetsLowRes/ControllerUIIcons/items_png/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")):
-                    # Generate and save controller icons, which are also used as the basis for hotbar icons later
-                    with Image(filename="Input/Icons/" + spellIconSource + ".DDS") as spellIcon:
-                        spellIcon.resize(80, 83)
-                        spellIcon.rotate(6)
-                        # Make a blurry background copy of the spell icon for legibility
-                        with Image(filename="Input/Icons/" + spellIconSource + ".DDS") as spellIcon2:
-                            spellIcon2.resize(80, 83)
-                            spellIcon2.rotate(6)
-                            spellIcon2.blur(radius=5)
-                            spellIcon2.modulate(brightness=70.0, saturation=130.0)
-                            with Image(filename="Input/Icons/BlankScroll.png") as scrollImg:
-                                drawing2 = Drawing()
-                                drawing2.composite(operator='over', left=28, top=25, width=spellIcon2.width, height=spellIcon2.height, image=spellIcon2)
-                                drawing2(scrollImg)
-                                drawing = Drawing()
-                                drawing.composite(operator='over', left=28, top=25, width=spellIcon.width, height=spellIcon.height, image=spellIcon)
-                                drawing(scrollImg)
-                                scrollImg.compression = "dxt5"
-                                scrollImg.save(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/Assets/ControllerUIIcons/items_png/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")
-                                scrollImg.resize(72, 72)
-                                scrollImg.save(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/AssetsLowRes/ControllerUIIcons/items_png/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")
+                # Generate and save controller icons, which are also used as the basis for hotbar icons later
+                with Image(filename="Input/Icons/" + spellIconSource + ".DDS") as spellIcon:
+                    spellIcon.resize(80, 83)
+                    spellIcon.rotate(6)
+                    # Make a blurry background copy of the spell icon for legibility
+                    with Image(filename="Input/Icons/" + spellIconSource + ".DDS") as spellIcon2:
+                        spellIcon2.resize(80, 83)
+                        spellIcon2.rotate(6)
+                        spellIcon2.blur(radius=5)
+                        spellIcon2.modulate(brightness=70.0, saturation=130.0)
+                        with Image(filename="Input/Icons/BlankScroll.png") as scrollImg:
+                            drawing2 = Drawing()
+                            drawing2.composite(operator='over', left=28, top=25, width=spellIcon2.width, height=spellIcon2.height, image=spellIcon2)
+                            drawing2(scrollImg)
+                            drawing = Drawing()
+                            drawing.composite(operator='over', left=28, top=25, width=spellIcon.width, height=spellIcon.height, image=spellIcon)
+                            drawing(scrollImg)
+                            scrollImg.compression = "no"
+                            scrollImg.save(filename="Output/ControllerUIIcons/items_png/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".png")
+                            # Previously, we were saving directly to game files as .DDS, but these were failing to
+                            # register far too often. Should we ever intend to move back to that, we'd need to
+                            # manually resize to low res and save those assets too.
                 newSpellStats["ScrollIcon"] = globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource
-                if not (os.path.isfile("../../Mods/" + globalKeys["ModFolder"] + "/GUI/Assets/Tooltips/ItemIcons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")
-                        and os.path.isfile("../../Mods/" + globalKeys["ModFolder"] + "/GUI/AssetsLowRes/Tooltips/ItemIcons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")):
-                    with Image(filename="Input/Icons/" + spellIconSource + ".DDS") as spellIcon:
-                        spellIcon.resize(200, 220)
-                        spellIcon.rotate(8)
-                        with Image(filename="Input/Icons/" + spellIconSource + ".DDS") as spellIcon2:
-                            spellIcon2.resize(200, 220)
-                            spellIcon2.rotate(8)
-                            spellIcon2.blur(radius=12)
-                            spellIcon2.modulate(brightness=70.0, saturation=130.0)
-                            with Image(filename="Input/Icons/Large/BlankScroll.png") as scrollImg:
-                                drawing2 = Drawing()
-                                drawing2.composite(operator='over', left=73, top=53, width=spellIcon2.width, height=spellIcon2.height, image=spellIcon2)
-                                drawing2(scrollImg)
-                                drawing = Drawing()
-                                drawing.composite(operator='over', left=73, top=53, width=spellIcon.width, height=spellIcon.height, image=spellIcon)
-                                drawing(scrollImg)
-                                scrollImg.compression = "dxt5"
-                                scrollImg.save(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/Assets/Tooltips/ItemIcons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")
-                                scrollImg.resize(192, 192)
-                                scrollImg.save(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/AssetsLowRes/Tooltips/ItemIcons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")
-                icons.add(globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".DDS")
-            except:
+                with Image(filename="Input/Icons/" + spellIconSource + ".DDS") as spellIcon:
+                    spellIcon.resize(200, 220)
+                    spellIcon.rotate(6)
+                    with Image(filename="Input/Icons/" + spellIconSource + ".DDS") as spellIcon2:
+                        spellIcon2.resize(200, 220)
+                        spellIcon2.rotate(6)
+                        spellIcon2.blur(radius=12)
+                        spellIcon2.modulate(brightness=70.0, saturation=130.0)
+                        with Image(filename="Input/Icons/Large/BlankScroll.png") as scrollImg:
+                            drawing2 = Drawing()
+                            drawing2.composite(operator='over', left=82, top=55, width=spellIcon2.width, height=spellIcon2.height, image=spellIcon2)
+                            drawing2(scrollImg)
+                            drawing = Drawing()
+                            drawing.composite(operator='over', left=82, top=55, width=spellIcon.width, height=spellIcon.height, image=spellIcon)
+                            drawing(scrollImg)
+                            scrollImg.compression = "no"
+                            scrollImg.save(filename="Output/Tooltips/ItemIcons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".png")
+                            # Previously, we were saving directly to game files as .DDS, but these were failing to
+                            # register far too often. Should we ever intend to move back to that, we'd need to
+                            # manually resize to low res and save those assets too.
+                icons.add(globalKeys["ModName"] + "_Item_LOOT_Scroll_" + spellIconSource + ".png")
+            except wand_exceptions.BlobError:
                 print("Warning: Spell icon not present in provided icons - " + newSpellStats["Reference"])
                 newSpellStats["ScrollIcon"] = globalKeys["ModName"] + "_Item_LOOT_Scroll_Default"
 
             newSpellStats["RootTemplateUUID"] = ""
             for rootName in os.listdir("Temp/RootTemplates"):
-                rootTree = ET.parse("Temp/RootTemplates/" + rootName).getroot()
-                rootData = rootTree.find("region").find("node").find("children").find("node").findall("attribute")
-                match = ""
-                for attribute in rootData:
-                    if attribute.attrib["id"] == "Name":
-                        if attribute.attrib["value"] == globalKeys["ModName"] + "_LOOT_SCROLL_" + newSpellStats["Reference"]:
-                            match = rootName.replace(".lsx", "")
+                if rootName != ".gitignore":
+                    rootTree = ET.parse("Temp/RootTemplates/" + rootName).getroot()
+                    rootData = rootTree.find("region").find("node").find("children").find("node").findall("attribute")
+                    match = ""
+                    for attribute in rootData:
+                        if attribute.attrib["id"] == "Name":
+                            if attribute.attrib["value"] == globalKeys["ModName"] + "_LOOT_SCROLL_" + newSpellStats["Reference"]:
+                                match = rootName.replace(".lsx", "")
+                            break
+                    if match:
+                        newSpellStats["RootTemplateUUID"] = match
                         break
-                if match:
-                    newSpellStats["RootTemplateUUID"] = match
-                    break
 
             # Generate UUIDs if the searches failed
             newSpellStats["RootTemplateUUID"] = newSpellStats["RootTemplateUUID"] or str(uuid.uuid4())
@@ -307,7 +308,7 @@ if __name__ == '__main__':
 
             # Find the spell's display name
             displayName = ""
-            displayNameKey = get_field(each, "DisplayName", spellsData, fileName, handle=True)
+            displayNameKey = get_field(spell, "DisplayName", spellsData, fileName, handle=True)
             for entry in translationDict:
                 if translationDict[entry] == displayNameKey:
                     displayName = entry
@@ -325,7 +326,7 @@ if __name__ == '__main__':
                 add_translation_to_file(newSpellStats["TranslationKeyDisplayName"], "Scroll of " + displayName)
 
             # Some data requires us know the spell's level
-            tempRank = get_field(each, "Level", spellsData, fileName)
+            tempRank = get_field(spell, "Level", spellsData, fileName)
             try:
                 tempRankInt = int(tempRank)
             except:
@@ -347,7 +348,7 @@ if __name__ == '__main__':
                 newSpellStats["RarityValue"] = ""
 
             # Some spell schools have specialised additional loot lists
-            tempSpellSchool = get_field(each, "SpellSchool", spellsData, fileName)
+            tempSpellSchool = get_field(spell, "SpellSchool", spellsData, fileName)
             if tempSpellSchool == "Necromancy":
                 extraString = newSpellStats["Categories"].replace("MagicScroll", "MagicScroll_Necro")
                 newSpellStats["Categories"] = newSpellStats["Categories"] + ";" + extraString
@@ -360,7 +361,7 @@ if __name__ == '__main__':
 
             # Utility spells also have an additional loot table, so we check the cast intent, but only if
             # the spell is not already in another list
-            if get_field(each, "VerbalIntent", spellsData, fileName) == "Utility":
+            if get_field(spell, "VerbalIntent", spellsData, fileName) == "Utility":
                 if newSpellStats["Categories"].find(";") == -1:
                     newSpellStats["Categories"] = newSpellStats["Categories"] + ";" + "MagicScroll_Utility"
                     # There is also a loot table for rare utility scrolls
@@ -421,13 +422,17 @@ if __name__ == '__main__':
         objectBase.write(f, encoding="utf-8", xml_declaration=True)
 
     with Image(filename="Input/Icons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_Default.DDS") as source:
-        source.save(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/Assets/ControllerUIIcons/items_png/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_Default.DDS")
-        source.resize(72, 72)
-        source.save(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/AssetsLowRes/ControllerUIIcons/items_png/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_Default.DDS")
+        source.compression = "no"
+        source.save(filename="Output/ControllerUIIcons/items_png/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_Default.png")
+        # Previously, we were saving directly to game files as .DDS, but these were failing to
+        # register far too often. Should we ever intend to move back to that, we'd need to
+        # manually resize to low res and save those assets too.
     with Image(filename="Input/Icons/Large/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_Default.DDS") as source:
-        source.save(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/Assets/Tooltips/ItemIcons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_Default.DDS")
-        source.resize(192, 192)
-        source.save(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/AssetsLowRes/Tooltips/ItemIcons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_Default.DDS")
+        source.compression = "no"
+        source.save(filename="Output/Tooltips/ItemIcons/" + globalKeys["ModName"] + "_Item_LOOT_Scroll_Default.png")
+        # Previously, we were saving directly to game files as .DDS, but these were failing to
+        # register far too often. Should we ever intend to move back to that, we'd need to
+        # manually resize to low res and save those assets too.
 
     with Image(filename="Input/Icons/BlankAtlas.png") as blank:
         x = 0
@@ -435,9 +440,9 @@ if __name__ == '__main__':
         atlasBase = ET.parse("Templates/Icons_Items_Scrolls_Template.lsx")
         atlasTree = atlasBase.getroot()
         atlasRegions = atlasTree.findall("region")
-        for each in atlasRegions:
-            if each.attrib["id"] == "TextureAtlasInfo":
-                node = ET.SubElement(each.find("node").find("children"), "node")
+        for region in atlasRegions:
+            if region.attrib["id"] == "TextureAtlasInfo":
+                node = ET.SubElement(region.find("node").find("children"), "node")
                 node.set("id", "TextureAtlasPath")
                 attribute = ET.SubElement(node, "attribute")
                 attribute.set("id", "Path")
@@ -447,10 +452,10 @@ if __name__ == '__main__':
                 attribute.set("id", "UUID")
                 attribute.set("type", "FixedString")
                 attribute.set("value", globalKeys["AtlasUUID"])
-            if each.attrib["id"] == "IconUVList":
-                atlasUVList = each
-        for each in icons:
-            with Image(filename="../../Mods/" + globalKeys["ModFolder"] + "/GUI/Assets/ControllerUIIcons/items_png/" + each) as scrollImg:
+            if region.attrib["id"] == "IconUVList":
+                atlasUVList = region
+        for icon in icons:
+            with Image(filename="Output/ControllerUIIcons/items_png/" + icon) as scrollImg:
                 scrollImg.resize(64, 64)
                 drawing = Drawing()
                 drawing.composite(operator='over', left=x, top=y, width=scrollImg.width, height=scrollImg.height, image=scrollImg)
@@ -461,7 +466,7 @@ if __name__ == '__main__':
                 attribute = ET.SubElement(node, "attribute")
                 attribute.set("id", "MapKey")
                 attribute.set("type", "FixedString")
-                attribute.set("value", each.replace(".DDS", ""))
+                attribute.set("value", icon.replace(".png", ""))
                 attribute = ET.SubElement(node, "attribute")
                 attribute.set("id", "U1")
                 attribute.set("type", "float")
@@ -486,15 +491,15 @@ if __name__ == '__main__':
         mergedBase = ET.parse("Templates/template_merged.lsx")
         mergedTree = mergedBase.getroot()
         mergedNode = mergedTree.find("region").find("node").find("children").find("node")
-        for each in mergedNode.findall("attribute"):
-            if each.attrib["id"] == "ID":
-                each.attrib["value"] = globalKeys["AtlasUUID"]
-            if each.attrib["id"] == "Name":
-                each.attrib["value"] = "Icons_Items_Scrolls_" + globalKeys["ModName"]
-            if each.attrib["id"] == "SourceFile":
-                each.attrib["value"] = "Public/" + globalKeys["ModFolder"] + "/Assets/Textures/Icons/Icons_Items_Scrolls_" + globalKeys["ModName"] + ".dds"
-            if each.attrib["id"] == "Template":
-                each.attrib["value"] = "Icons_Items_Scrolls_" + globalKeys["ModName"]
+        for node in mergedNode.findall("attribute"):
+            if node.attrib["id"] == "ID":
+                node.attrib["value"] = globalKeys["AtlasUUID"]
+            if node.attrib["id"] == "Name":
+                node.attrib["value"] = "Icons_Items_Scrolls_" + globalKeys["ModName"]
+            if node.attrib["id"] == "SourceFile":
+                node.attrib["value"] = "Public/" + globalKeys["ModFolder"] + "/Assets/Textures/Icons/Icons_Items_Scrolls_" + globalKeys["ModName"] + ".dds"
+            if node.attrib["id"] == "Template":
+                node.attrib["value"] = "Icons_Items_Scrolls_" + globalKeys["ModName"]
         blank.compression = "dxt5"
         blank.save(filename="../../Public/" + globalKeys["ModFolder"] + "/Assets/Textures/Icons/Icons_Items_Scrolls_" + globalKeys["ModName"] + ".dds")
         ET.indent(atlasTree)
@@ -505,10 +510,11 @@ if __name__ == '__main__':
 
     # Delete any files that we intend to replace in RootTemplates
     for rootName in os.listdir("Output/RootTemplates"):
-        try:
-            os.remove("../../Public/" + globalKeys["ModFolder"] + "/RootTemplates/" + rootName.replace(".lsx", ".lsf"))
-        except:
-            pass
+        if rootName != ".gitignore":
+            try:
+                os.remove("../../Public/" + globalKeys["ModFolder"] + "/RootTemplates/" + rootName.replace(".lsx", ".lsf"))
+            except:
+                pass
     try:
         os.remove("../../Public/" + globalKeys["ModFolder"] + "/Content/[PAK]_" + globalKeys["ModFolder"] + "/" + globalKeys["AtlasUUID"] + ".lsf")
     except:

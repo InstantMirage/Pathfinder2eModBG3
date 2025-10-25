@@ -6,4 +6,5 @@ Spell Support Tool PF2 specifics:
 - Ensure that Divine.exe, the backend to the Export Tool, is in your path, in order to convert LSF files.
 - You will need to manually provide the controllerUI-sized DDS icons for any spell icons you might be using, and place them in the Input/Icons folder. Do the same for the full-sized icons with fade effects in Input/Icons/Large.
 - You will need ImageMagick installed for image manipulation, and the python library Wand to interface with it.
-- When finished runnign the script, start up TK and open the object.stats file. If it doesn't yet have the new scrolls added, close the stats editor and reloat stats. Once those additionas are visible, export the object.stats file. Restart TK, and the linkages between the new root templates and the stats elements should be resolved.
+- When finished running the script, start up TK and open the object.stats file. If it doesn't yet have the new scrolls added, close the stats editor and reloat stats. Once those additionas are visible, export the object.stats file. Restart TK, and the linkages between the new root templates and the stats elements should be resolved.
+- UI icons will need to be imported manually using toolkit, as directly saving as DDS was too finicky to get working. Should be able to target the folders and import the whole lot.
