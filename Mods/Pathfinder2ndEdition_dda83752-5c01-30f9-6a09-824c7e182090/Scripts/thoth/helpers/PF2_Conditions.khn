@@ -26,12 +26,12 @@ function HasDifficultTerrainStatus()
 end
 
 function HasDashStatus(entity)
-    entity = entity or context.Source
+	entity = entity or context.Source
 	return HasAnyStatus({'DASH','DASH_STACKED','DASH_STACKED_2'}, {}, {}, entity )
 end
 
 function HasAnyMovementStatus(entity)
-    entity = entity or context.Source
+	entity = entity or context.Source
 	return HasAnyStatus({'DASH','DASH_STACKED','DASH_STACKED_2','STRIDE','DISENGAGE','DISENGAGE_USESTEP','DISENGAGE_TAP'}, {}, {}, entity )
 end
 
@@ -92,12 +92,12 @@ function IsAnyActionStatusEvent()
 end
 
 function HasMindSanctuary(entity)
-    entity = entity or context.Source
+	entity = entity or context.Source
 	return HasStatus('MF_MIND_SANCTUARY', entity) | HasStatus('TAD_MIND_SANCTUARY', entity) | HasPassive('TAD_MindSanctuary', entity)
 end
 
 function DashClearsMove(entity)
-    entity = entity or context.Source
+	entity = entity or context.Source
 	return ~HasActionResource('Movement', 1 , 0, false, false, entity) | (~HasMindSanctuary(entity) & ~HasDashStatus(entity) & ~HasStatus('AUTO_STRIDE_MOVE',entity))
 end
 
@@ -118,16 +118,16 @@ function TrainedArmor() --Proficient or unarmored
 	
 	--Armor test from Community Library
 	local armor = GetActiveArmor(context.Source)
-	
-    local hasLightArmor = armor.ArmorType == ArmorType.Padded 
-    | armor.ArmorType == ArmorType.Leather 
-    | armor.ArmorType == ArmorType.StuddedLeather
+
+	local hasLightArmor = armor.ArmorType == ArmorType.Padded 
+	| armor.ArmorType == ArmorType.Leather 
+	| armor.ArmorType == ArmorType.StuddedLeather
 	
 	local hasMediumArmor = armor.ArmorType == ArmorType.Hide 
-    | armor.ArmorType == ArmorType.ChainShirt 
-    | armor.ArmorType == ArmorType.ScaleMail 
-    | armor.ArmorType == ArmorType.BreastPlate
-    | armor.ArmorType == ArmorType.HalfPlate 
+	| armor.ArmorType == ArmorType.ChainShirt 
+	| armor.ArmorType == ArmorType.ScaleMail 
+	| armor.ArmorType == ArmorType.BreastPlate
+	| armor.ArmorType == ArmorType.HalfPlate 
 	
 	return HasProficiency('HeavyArmor',context.Source) | (HasProficiency('LightArmor',context.Source) & hasLightArmor) | (HasProficiency('MediumArmor',context.Source) & hasMediumArmor)
 end
@@ -139,14 +139,14 @@ end
 -- Off-guard
 
 function OffGuard(target,source)
-    target = target or context.Target
-    source = source or context.Source
+	target = target or context.Target
+	source = source or context.Source
 	return OffGuardNoFlanking(target,source) | OffGuardFlanking(target, source)
 end
 
 function OffGuardNoFlanking(target,source)
-    target = target or context.Target
-    source = source or context.Source
+	target = target or context.Target
+	source = source or context.Source
 	local feint = IsMeleeAttack() & HasAnyStatus({'FEINT_ROUND','FEINT_ONCE'},{},{},target,source)
 	local hidden = HasStatus('SG_Invisible',source) | HasStatus('SNEAKING',source)
 	--You aren't off-guard to hidden, undetected, or flanking creatures of your level or lower
@@ -163,8 +163,8 @@ function OffGuardNoFlanking(target,source)
 end
 
 function OffGuardFlanking(target, source)
-    target = target or context.Target
-    source = source or context.Source
+	target = target or context.Target
+	source = source or context.Source
 	local denyadvantage = Tagged('ROGUE_DENYADVANTAGE',target) & (target.Level >= source.Level)
 	return ~Ally() & ~denyadvantage & DistanceToTargetLessThan(2) & IsMeleeAttack() & Flanking(target, source)
 end
@@ -234,12 +234,12 @@ end
 -- Weapons
 
 function WeaponDieSizeNum(num)
-    --local weaponEntity = GetActiveWeapon(entity, true)
+	--local weaponEntity = GetActiveWeapon(entity, true)
 	--if IsWeaponOfProficiencyGroup('Clubs|Quarterstaffs',weaponEntity) then
 	--end
 	--GetModifier(context.Source.WeaponAttackRollAbility)
 	--DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType)
-    return ConditionResult(true)
+	return ConditionResult(true)
 end
 
 --Barbarian
@@ -250,9 +250,9 @@ end
 
 -- Fix for redefined armor
 function HasHeavyArmor(entity)
-    entity = entity or context.Target
-    local armor = GetActiveArmor(entity)
-    return IsOfProficiencyGroup("HeavyArmor", armor)
+	entity = entity or context.Target
+	local armor = GetActiveArmor(entity)
+	return IsOfProficiencyGroup("HeavyArmor", armor)
 end
 
 function HasFreeHand()
@@ -284,28 +284,28 @@ function EndRallyingAnthemDR()
 end
 
 function AdjacentToBeastMinion()
-    local distance = 2
-    local target = context.Target
-    local source = context.Source
+	local distance = 2
+	local target = context.Target
+	local source = context.Source
 	
-    local errorTrue = {ConditionError("HasAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
-    local errorFalse = {ConditionError("HasNotAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+	local errorTrue = {ConditionError("HasAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+	local errorFalse = {ConditionError("HasNotAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
 	
-    local allies = GetAlliesWithinRange(distance, target, source)
-    if allies ~= nil then
-        for _, entity in ipairs(allies.Allies) do
+	local allies = GetAlliesWithinRange(distance, target, source)
+	if allies ~= nil then
+		for _, entity in ipairs(allies.Allies) do
 			
 			-- must be a beast summoned by the caster
-            local isSummon = (GetSummoner(entity) == source)
-            local hasTag = Tagged('BEAST', entity)
+				local isSummon = (GetSummoner(entity) == source)
+				local hasTag = Tagged('BEAST', entity)
 			
-            if isSummon and hasTag.Result then
-                return ConditionResult(true, errorFalse, errorTrue)
+				if isSummon and hasTag.Result then
+					return ConditionResult(true, errorFalse, errorTrue)
 			end
 		end
 	end
 	
-    return ConditionResult(false, errorFalse, errorTrue)
+	return ConditionResult(false, errorFalse, errorTrue)
 end
 
 --Champion
@@ -404,19 +404,19 @@ function SapLife()
 end
 
 function HealSavingThrow()
-    if CanTargetHeal().Result then
-        st = ~SavingThrow(Ability.Constitution,SourceSpellDC())
-        return ConditionResult(st.Result,{},{},st.Chance)
+	if CanTargetHeal().Result then
+		st = ~SavingThrow(Ability.Constitution,SourceSpellDC())
+		return ConditionResult(st.Result,{},{},st.Chance)
 	end
-    return ConditionResult(true)
+	return ConditionResult(true)
 end
 
 function HarmSavingThrow()
-    if CanTargetHarm().Result then
-        st = ~SavingThrow(Ability.Constitution,SourceSpellDC())
-        return ConditionResult(st.Result,{},{},st.Chance)
+	if CanTargetHarm().Result then
+		st = ~SavingThrow(Ability.Constitution,SourceSpellDC())
+		return ConditionResult(st.Result,{},{},st.Chance)
 	end
-    return ConditionResult(true)
+	return ConditionResult(true)
 end
 
 --Damage the undead and unholy
@@ -625,12 +625,12 @@ function WillDC(entity)
 end
 
 function ShoveCheck()
-    local result = Dead() | Item() | Ally()
-    if not result.Result then
-        local skillCheck = SkillCheck(Skill.Athletics,FortitudeDC())
-        return ConditionResult(skillCheck.Result,{},{},skillCheck.Chance)
+	local result = Dead() | Item() | Ally()
+	if not result.Result then
+		local skillCheck = SkillCheck(Skill.Athletics,FortitudeDC())
+		return ConditionResult(skillCheck.Result,{},{},skillCheck.Chance)
 	end
-    return result
+	return result
 end
 
 function ArmorCheck()
@@ -644,7 +644,7 @@ function ArmorCheck()
 end
 
 function ExactingStrikeFX()
-    return (SpellId('Target_ExactingStrike') | SpellId('Projectile_ExactingStrike')) & HasStatus('MAP_2_ATTACKS',SELF)
+	return (SpellId('Target_ExactingStrike') | SpellId('Projectile_ExactingStrike')) & HasStatus('MAP_2_ATTACKS',SELF)
 end
 
 function Press()
@@ -773,7 +773,7 @@ end
 --Rogue
 
 function CanPrecisionDamage(target)
-    target = target or context.Target
+	target = target or context.Target
 	local result = ~(Tagged('OOZE',target)|Tagged('SHADOW',target)|Tagged('GHOST',target)|Tagged('DISPLACER_BEAST',target)|Tagged('SCRYING_EYE',target)|Tagged('GASEOUS_FORM',target)|HasPassive('Ethereal',target))
 	
 	return ConditionResult( result.Result,{ConditionError("PrecisionImmune")})
@@ -796,8 +796,8 @@ function SneakAttackWeapon(entity, weapon)
 end
 
 function WieldingSneakAttackWeapon(entity)
-    entity = entity or context.Target
-    local weaponEntity = GetActiveWeapon(entity, true)
+	entity = entity or context.Target
+	local weaponEntity = GetActiveWeapon(entity, true)
 	
 	-- Agile or finesse
 	local standard_weapon = WieldingWeapon('Finesse', false, true, entity) | WieldingWeapon('Light', false, true, entity)
@@ -999,13 +999,13 @@ function OngoingMisery()
 end
 
 function OwnerCanSustain(status)
-    local source = context.Source
-    return ConditionResult(GetStatusDuration(status, source) < 2,{ConditionError("SustainCooldown")})
+	local source = context.Source
+	return ConditionResult(GetStatusDuration(status, source) < 2,{ConditionError("SustainCooldown")})
 end
 
 function CanSustainTarget(status)
-    local source = context.Source
-    local target = context.Target
+	local source = context.Source
+	local target = context.Target
 	return HasStatus(status,target,source) & ConditionResult(GetStatusDuration(status) < 2,{ConditionError("SustainCooldown")})
 end
 
@@ -1185,8 +1185,8 @@ end
 --Incap - treats DC as 10 higher
 
 function IncapDC(dc,target,source)
-    target = target or context.Target
-    source = source or context.Source
+	target = target or context.Target
+	source = source or context.Source
 	dc = dc or SourceSpellDC(10,source)
 	
 	if target.Level > source.Level then
@@ -1196,8 +1196,8 @@ function IncapDC(dc,target,source)
 end
 
 function IncapSpellSlotDC(dc,target,source)
-    target = target or context.Target
-    source = source or context.Source
+	target = target or context.Target
+	source = source or context.Source
 	dc = dc or SourceSpellDC(10,source)
 	
 	if target.Level > 2*context.HitDescription.SpellPowerLevel then
@@ -1207,81 +1207,81 @@ function IncapSpellSlotDC(dc,target,source)
 end
 
 function IncapClassDC(target,source)
-    target = target or context.Target
-    source = source or context.Source
+	target = target or context.Target
+	source = source or context.Source
 	return IncapDC(ClassDC(source),target,source)
 end
 
 -- Crit threshold interrupt
 
 function CritThresholdSuccess()
-    local notCrit = context.InterruptedRoll.NaturalRoll < 20 & context.InterruptedRoll.NaturalRoll > 1
+	local notCrit = context.InterruptedRoll.NaturalRoll < 20 & context.InterruptedRoll.NaturalRoll > 1
 	local critDC = context.InterruptedRoll.Difficulty + 10
-    local exceededBy10 = context.InterruptedRoll.Total >= critDC
+	local exceededBy10 = context.InterruptedRoll.Total >= critDC
 	
-    return ConditionResult(notCrit & exceededBy10)
+	return ConditionResult(notCrit & exceededBy10)
 end
 
 function CritThresholdFail()
-    local notCrit = context.InterruptedRoll.NaturalRoll < 20 & context.InterruptedRoll.NaturalRoll > 1
+	local notCrit = context.InterruptedRoll.NaturalRoll < 20 & context.InterruptedRoll.NaturalRoll > 1
 	local critTotal = context.InterruptedRoll.Total + 10
-    local failedBy10 = critTotal <= context.InterruptedRoll.Difficulty
+	local failedBy10 = critTotal <= context.InterruptedRoll.Difficulty
 	
-    return ConditionResult(notCrit & failedBy10)
+	return ConditionResult(notCrit & failedBy10)
 end
 
 -- Critical hits for non-attack spells
 
 function SaveCrit(save_type)
-    local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
-    local thresholdtotal = 10 + total
+	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
+	local thresholdtotal = 10 + total
 	
 	if difficulty >= thresholdtotal then
-        return ConditionResult(difficulty > total)
+		return ConditionResult(difficulty > total)
 	end
-    return ConditionResult(false)
+	return ConditionResult(false)
 end
 
 function SaveCritMiss(save_type)
-    local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
-    local thresholdtotal = total - 10
-    
-    -- Basic critical conversion prevents damage on a miss
-    if save_type then
-        local target = context.Target
-        if save_type == 'Fort' and (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)).Result then
-            return ConditionResult(true)
+	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
+	local thresholdtotal = total - 10
+	
+	-- Basic critical conversion prevents damage on a miss
+	if save_type then
+		local target = context.Target
+		if save_type == 'Fort' and (HasPassive('CritConvert_Juggernaut',target) | HasPassive('PathToPerfectionFort',target)).Result then
+				return ConditionResult(true)
 			elseif save_type == 'Reflex' and (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)).Result then
-            return ConditionResult(true)
+				return ConditionResult(true)
 			elseif save_type == 'Fear' and (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
-            return ConditionResult(true)
+				return ConditionResult(true)
 			elseif save_type == 'Will' and (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
-            return ConditionResult(true)
+				return ConditionResult(true)
 		end
 	end
-    if difficulty < thresholdtotal then
-        return ConditionResult(difficulty < total)
+	if difficulty < thresholdtotal then
+		return ConditionResult(difficulty < total)
 	end
-    return ConditionResult(false)
+	return ConditionResult(false)
 end
 
 function SkillCrit()
-    local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
-    local thresholdtotal = total - 10
+	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
+	local thresholdtotal = total - 10
 	
-    if difficulty <= thresholdtotal then
-        return ConditionResult(difficulty < total)
+	if difficulty <= thresholdtotal then
+		return ConditionResult(difficulty < total)
 	end
-    return ConditionResult(false)
+	return ConditionResult(false)
 end
 
 function LastConditionRollValues(conditionRollType)
-    try
+	try
 		conditionRoll = context.HitDescription.GetLastConditionRoll(conditionRollType)
-    catch e then
+	catch e then
 		if ls.CheckType(e, ls.error.UnsupportedAttributeType) or ls.CheckType(e, ls.error.NotFound) then
 			return 10, 10
-        else
+		else
 			return 10, 10
 		end
 	end
@@ -1316,26 +1316,26 @@ function IsWeaponDamageDieD12(weapon)
 end
 
 function CheckCriticalTen(max, entity)
-    local entity = entity or context.Target
-    local max = max or 0
-    if context.InterruptedRoll.RollCritical ~= RollCritical.None then
-        return ConditionResult(false, {ConditionError("IsCriticalFailSuccess")})
+	local entity = entity or context.Target
+	local max = max or 0
+	if context.InterruptedRoll.RollCritical ~= RollCritical.None then
+		return ConditionResult(false, {ConditionError("IsCriticalFailSuccess")})
 	end
 	
-    local rollSuccess = context.InterruptedRoll.Total >= context.InterruptedRoll.Difficulty
+	local rollSuccess = context.InterruptedRoll.Total >= context.InterruptedRoll.Difficulty
 	
 	local result = rollSuccess and ((context.InterruptedRoll.Total - context.InterruptedRoll.Difficulty) >= max)
 	return ConditionResult(result)
 end
 
 function CheckCriticalMissTen(max, entity)
-    local entity = entity or context.Target
-    local max = max or 0
-    if context.InterruptedRoll.RollCritical ~= RollCritical.None then
-        return ConditionResult(false, {ConditionError("IsCriticalFailSuccess")})
+	local entity = entity or context.Target
+	local max = max or 0
+	if context.InterruptedRoll.RollCritical ~= RollCritical.None then
+		return ConditionResult(false, {ConditionError("IsCriticalFailSuccess")})
 	end
 	
-    local rollSuccess = context.InterruptedRoll.Total >= context.InterruptedRoll.Difficulty
+	local rollSuccess = context.InterruptedRoll.Total >= context.InterruptedRoll.Difficulty
 	
 	local result = not rollSuccess and ((context.InterruptedRoll.Total - context.InterruptedRoll.Difficulty) <= max)
 	return ConditionResult(result)
@@ -1352,13 +1352,13 @@ function IsRangedWeaponInfusion()
 end
 
 function IsCriticalMissSkill()
-   conditionRoll = context.HitDescription.GetLastConditionRoll(ConditionRollType.ConditionSkillCheck)
-   return ConditionResult(conditionRoll.NaturalRoll == 1)
-   | ConditionResult(conditionRoll.Total <= (conditionRoll.Difficulty - 10))
+	conditionRoll = context.HitDescription.GetLastConditionRoll(ConditionRollType.ConditionSkillCheck)
+	return ConditionResult(conditionRoll.NaturalRoll == 1)
+	| ConditionResult(conditionRoll.Total <= (conditionRoll.Difficulty - 10))
 end
 
 function IsCriticalSkill()
-   conditionRoll = context.HitDescription.GetLastConditionRoll(ConditionRollType.ConditionSkillCheck)
-   return ConditionResult(conditionRoll.NaturalRoll == 20)
-   | ConditionResult(conditionRoll.Total >= (conditionRoll.Difficulty + 10))
+	conditionRoll = context.HitDescription.GetLastConditionRoll(ConditionRollType.ConditionSkillCheck)
+	return ConditionResult(conditionRoll.NaturalRoll == 20)
+	| ConditionResult(conditionRoll.Total >= (conditionRoll.Difficulty + 10))
 end
