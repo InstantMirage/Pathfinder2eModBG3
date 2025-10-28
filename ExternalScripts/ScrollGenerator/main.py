@@ -20,12 +20,18 @@ keys = [
     "RootTemplateUUID",
     "TranslationKeyDisplayName",
     "Traditions",
+    "TraditionsLearn",
+    "TranslationKeyTraditionsTooltip",
     "LearnReference",
     "UseCosts",
     "Categories",
     "RarityValue",
     "CharacterLevel",
-    "ScrollIcon"
+    "ScrollIcon",
+    "Arcane",
+    "Divine",
+    "Occult",
+    "Primal"
 ]
 
 spellListClasses = {
@@ -44,6 +50,27 @@ spellStatSources = [
 ]
 
 hasTraditionString = "HasPassive(&quot;Tradition_$$$&quot;, context.Source)"
+TMICode = " or (HasStatus(\"TRICK_MAGIC_ITEM\", context.Source) and not HasStatus(\"TRICK_MAGIC_ITEM_DENY\", context.Source, context.Target) and not HasStatus(\"TRICK_MAGIC_ITEM_BLOCK\", context.Source, context.Target)) or HasStatus(\"TRICK_MAGIC_ITEM_PASS\", context.Source, context.Target)"
+
+TraditionsTranslationKeys = {
+    "Arcane": "h1888ee54g5f06g7bdfgac83g3075f1f96ed9",
+    "Divine": "hd9c35b71gdb0dg3f66g1c66gad4a616cbdc3",
+    "Occult": "h5d65001agb04cg4ab3gd31ag8d9e91841797",
+    "Primal": "hc7ac0229g6cf8g5bc7g3b61gb9ac5c580ebc",
+    "ArcaneDivine": "h432e1f23g9c19g8c40gcd8egc809ddab856a",
+    "ArcaneOccult": "h3b6edebfg7d6bg2762gcfa3g02cd267e1375",
+    "ArcanePrimal": "haa6a79d5gcebegb5b1g79cbg111b04d52fbe",
+    "DivineOccult": "h62027396g486fg12f3gfe35gbba71bc3edc1",
+    "DivinePrimal": "h0fd417d1gcc72g5650gb896gd61070fee6e1",
+    "OccultPrimal": "h35b11e57g0f2dg825fg2562g700b3e5a9be3",
+    "ArcaneDivineOccult": "ha1cb6a0cgd510g67cfgb309g7a56d5f8b640",
+    "ArcaneDivinePrimal": "h1711a0c5g2f77g15e9g5258g0e48d2ba1dda",
+    "ArcaneOccultPrimal": "ha8b4d990gd138gcd88g74b8gec3d219991e4",
+    "DivineOccultPrimal": "ha77053b6g7037gaaacg492bgdcf63f69916d",
+    "ArcaneDivineOccultPrimal": "h70efb27bg6c73g54e4gb07dg02814f61b92f"
+}
+
+OsirisTMITemplate = "DB_SpellScroll((GUIDSTRING)%ModName%_LOOT_SCROLL_%Reference%_%RootTemplateUUID%, %CharacterLevel%, %Arcane%, %Divine%, %Occult%, %Primal%);\n"
 
 outputSpells = []
 
@@ -219,15 +246,27 @@ if __name__ == '__main__':
 
             # Check the spell lists calculated earlier to work out each spell's traditions
             newSpellStats["Traditions"] = ""
+            TraditionsCheck = ""
+            newSpellStats["Arcane"] = "0"
+            newSpellStats["Divine"] = "0"
+            newSpellStats["Occult"] = "0"
+            newSpellStats["Primal"] = "0"
             for tradition in fullTraditionLists:
                 for listSpell in fullTraditionLists[tradition]:
                     if newSpellStats["LearnReference"] == listSpell:
+                        newSpellStats[tradition] = "1"
                         if newSpellStats["Traditions"] != "":
                             newSpellStats["Traditions"] = newSpellStats["Traditions"] + " or "
                         newSpellStats["Traditions"] = newSpellStats["Traditions"] + hasTraditionString.replace("$$$", tradition)
+                        TraditionsCheck = TraditionsCheck + tradition
                         break
             if newSpellStats["Traditions"] == "":
                 continue
+            newSpellStats["TranslationKeyTraditionsTooltip"] = TraditionsTranslationKeys[TraditionsCheck]
+            # Duplicate the traditions code into traditions learn, as learning cares not for TMI
+            newSpellStats["TraditionsLearn"] = newSpellStats["Traditions"]
+            # Add the Trick Magic Item Code block to the end of the traditions string
+            newSpellStats["Traditions"] = newSpellStats["Traditions"] + TMICode
 
             # Container spells should be skipped if their list ends in a semicolon.
             containerSpells = get_field(spell, "ContainerSpells", spellsData, fileName)
@@ -377,6 +416,20 @@ if __name__ == '__main__':
 
     for spell in outputSpells:
         generate_root_template(spell)
+
+    combinedOsirisTMIBlock = ""
+    for spell in outputSpells:
+        newOsirisTMILine = OsirisTMITemplate
+        for key in keys:
+            newOsirisTMILine = newOsirisTMILine.replace("%" + key + "%", spell[key])
+        for key, value in globalKeys.items():
+            newOsirisTMILine = newOsirisTMILine.replace("%" + key + "%", value)
+        combinedOsirisTMIBlock = combinedOsirisTMIBlock + newOsirisTMILine
+    # Open Osiris template, replace $$$ with combined string, and save to mod files.
+    with open("Templates/templateGeneratedScrolls.txt", "r") as TMITemplateFile:
+        newTMIContents = TMITemplateFile.read().replace("$$$", combinedOsirisTMIBlock)
+        with open("../../Mods/" + globalKeys["ModFolder"] + "/Story/RawFiles/Goals/" + globalKeys["ModName"] + "_GeneratedScrolls.txt", "w") as TMIOutputFile:
+            TMIOutputFile.write(newTMIContents)
 
     # Open original XML stats file to append to
     objectBase = ET.parse("../../Editor/Mods/" + globalKeys["ModFolder"] + "/Stats/Stats/Object.stats")
