@@ -347,6 +347,31 @@ THEN
 ApplyStatus(_Character, "FRIGHTENED", 6.0, 0, _Causee);
 
 //END_REGION
+
+//REGION This Proc simplifies the process of requesting a skill check via a status effect
+// In order to have Osiris skill checks support -10/+10 crits, we can't use RequestPassiveRoll.
+// Instead, we can use the duration of a hidden status to set the DC. This Proc takes some of
+// labour out of that process. Look at TRICK_MAGIC_ITEM_CHECK to see how to set up the skill
+// check status. Reference string can be anything, it just serves to support the timer call.
+// N.B. This will fail if one tries to make multiple uses concurrently on the same character.
+PROC
+PROC_RequestSkillCheckStatus((STRING)_CheckStatus, (INTEGER)_DC, (CHARACTER)_Character, (STRING)_ReferenceString)
+AND
+IntegerProduct(_DC, 6, (INTEGER)_DCConvertInt)
+AND
+IntegerToReal(_DCConvertInt, (REAL)_DCConvertReal)
+THEN
+ApplyStatus(_Character, "SKILL_CHECK_DC", _DCConvertReal, 1);
+DB_SkillCheckTimerData(_Character, _CheckStatus, _ReferenceString);
+TimerLaunch(_ReferenceString, 15);
+
+IF
+TimerFinished((STRING)_ReferenceString)
+AND
+DB_SkillCheckTimerData((CHARACTER)_Character, (STRING)_Status, _ReferenceString)
+THEN
+ApplyStatus(_Character, _Status, 0.0, 0, _Character);
+NOT DB_SkillCheckTimerData(_Character, _Status, _ReferenceString);
 EXITSECTION
 
 ENDEXITSECTION

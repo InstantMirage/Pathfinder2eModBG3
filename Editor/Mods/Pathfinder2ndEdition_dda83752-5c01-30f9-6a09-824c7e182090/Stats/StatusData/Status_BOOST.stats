@@ -12083,5 +12083,106 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="05132d5d-c98d-400e-b39b-abd10a887d2b" />
+        <field name="Name" type="NameTableFieldDefinition" value="SKILL_CHECK_DC" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h238be7efg19dcgb709g8756g623a2d380c61" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h49bd3191g623eg7ed4g1538gf04f49306342" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_EggBearer" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2ce54b4d-8e75-4bc5-81fd-bd71648a08d9" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h38a11191gda1bg26b3g2181g5c9aee4d6200" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hfa00015egecc4g29d9gc971g21034b9cc867" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_UncannySight" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="143682c1-12ed-4b5e-9e59-41bafb81766f" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_SUCCESS" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfccd79cfg50d8g1976gb885gb48f655a7d48" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hfac91fe8gf649g2d6cg1b15ga8cdd624c53f" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_UncannySight" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="976da57f-a9e0-44c3-866f-828057eca4c0" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_FAIL" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="143682c1-12ed-4b5e-9e59-41bafb81766f" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="53310b80-6fa8-42c0-a9a4-2566021a7520" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_CRIT_FAIL" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="143682c1-12ed-4b5e-9e59-41bafb81766f" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="888d2488-afe0-4f91-aca1-e5736fbe0b06" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_ARCANE_CHECK" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Arcana,SkillCheckStatusDuration());" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SKILL_CHECK_DC)" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(TRICK_MAGIC_ITEM_SUCCESS, 100, 0)" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not IsCriticalMissSkill()):ApplyStatus(TRICK_MAGIC_ITEM_FAIL, 100, 0);IF(IsCriticalMissSkill()):ApplyStatus(TRICK_MAGIC_ITEM_CRIT_FAIL, 100, 0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7795759e-fba8-4f53-9d99-a75b393d0c9e" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_PRIMAL_CHECK" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="888d2488-afe0-4f91-aca1-e5736fbe0b06" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.AnimalHandling,SkillCheckStatusDuration());" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="eb927baf-0827-4c13-8a64-eaff14b22fe0" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_DIVINE_CHECK" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="888d2488-afe0-4f91-aca1-e5736fbe0b06" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Insight,SkillCheckStatusDuration());" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6aadf1ff-9beb-4b3a-87ae-4869146b12ec" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_OCCULT_CHECK" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="888d2488-afe0-4f91-aca1-e5736fbe0b06" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Investigation,SkillCheckStatusDuration());" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="45477287-85ca-4158-8f2c-9e1ebec5a928" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_PERMIT" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="143682c1-12ed-4b5e-9e59-41bafb81766f" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="91c6c271-7565-481e-850c-c0691d0d280f" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_DENY" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="143682c1-12ed-4b5e-9e59-41bafb81766f" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8c926272-d5ef-445c-9242-a7441a0c5eb8" />
+        <field name="Name" type="NameTableFieldDefinition" value="TRICK_MAGIC_ITEM_BLOCK" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="143682c1-12ed-4b5e-9e59-41bafb81766f" />
+      </fields>
+    </stat_object>
   </stat_objects>
 </stats>
