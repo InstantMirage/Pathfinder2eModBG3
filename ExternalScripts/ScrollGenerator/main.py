@@ -50,7 +50,7 @@ spellStatSources = [
 ]
 
 hasTraditionString = "HasPassive(&quot;Tradition_$$$&quot;, context.Source)"
-TMICode = " or (HasStatus(\"TRICK_MAGIC_ITEM\", context.Source) and not HasStatus(\"TRICK_MAGIC_ITEM_DENY\", context.Source, context.Target) and not HasStatus(\"TRICK_MAGIC_ITEM_BLOCK\", context.Source, context.Target)) or HasStatus(\"TRICK_MAGIC_ITEM_PASS\", context.Source, context.Target)"
+TMICode = " or (HasStatus(&quot;TRICK_MAGIC_ITEM&quot;, context.Source) and not HasStatus(&quot;TRICK_MAGIC_ITEM_DENY&quot;, context.Source, context.Target) and not HasStatus(&quot;TRICK_MAGIC_ITEM_BLOCK&quot;, context.Source, context.Target)) or HasStatus(&quot;TRICK_MAGIC_ITEM_PASS&quot;, context.Source, context.Target)"
 
 TraditionsTranslationKeys = {
     "Arcane": "h1888ee54g5f06g7bdfgac83g3075f1f96ed9",
@@ -210,6 +210,7 @@ if __name__ == '__main__':
         spellsTree = ET.parse("../../Editor/Mods/" + globalKeys["ModFolder"] + "/Stats/SpellData/" + fileName).getroot()
         spellsData = spellsTree.find("stat_objects").findall("stat_object")
         for spell in spellsData:
+            tempRankInt = 0
             # Put this here to catch a bug that seemingly stopped happening once I added the line. Should never trigger.
             if isinstance(spell, str):
                 continue
@@ -217,6 +218,7 @@ if __name__ == '__main__':
             useCost = get_field(spell, "UseCosts", spellsData, fileName)
             if useCost.find("SpellSlotsGroup") != -1:
                 newSpellStats["UseCosts"] = re.sub("SpellSlotsGroup:\d*:\d*:\d*", "", useCost)
+                tempRankInt = int(re.search(r"SpellSlotsGroup:(\d*):(\d*):(\d*)", useCost)[3])
             else:
                 newSpellStats["UseCosts"] = useCost
             # Clear any trailing ;s in our useCost. Lazy but just running the test three time does the job
@@ -365,13 +367,8 @@ if __name__ == '__main__':
                 add_translation_to_file(newSpellStats["TranslationKeyDisplayName"], "Scroll of " + displayName)
 
             # Some data requires us know the spell's level
-            tempRank = get_field(spell, "Level", spellsData, fileName)
-            try:
-                tempRankInt = int(tempRank)
-            except:
-                tempRankInt = 0
             if tempRankInt > 1:
-                newSpellStats["Categories"] = "MagicScroll_" + tempRank
+                newSpellStats["Categories"] = "MagicScroll_" + str(tempRankInt)
             else:
                 newSpellStats["Categories"] = "MagicScroll"
             # Sets the shop value, not that values over 12 seem to break the stats file, so we cap it.
