@@ -27,6 +27,7 @@ keys = [
     "Categories",
     "RarityValue",
     "CharacterLevel",
+    "Rank",
     "ScrollIcon",
     "Arcane",
     "Divine",
@@ -70,7 +71,9 @@ TraditionsTranslationKeys = {
     "ArcaneDivineOccultPrimal": "h70efb27bg6c73g54e4gb07dg02814f61b92f"
 }
 
-OsirisTMITemplate = "DB_SpellScroll((GUIDSTRING)%ModName%_LOOT_SCROLL_%Reference%_%RootTemplateUUID%, %CharacterLevel%, %Arcane%, %Divine%, %Occult%, %Primal%);\n"
+OsirisTMITemplate = "DB_SpellScroll((GUIDSTRING)%ModName%_LOOT_SCROLL_%Reference%_%RootTemplateUUID%, %Rank%, %Arcane%, %Divine%, %Occult%, %Primal%);\n"
+OsirisCraftingTemplate = "DB_ScrollCraftingTable(\"%Reference%\", (GUIDSTRING)%ModName%_LOOT_SCROLL_%Reference%_%RootTemplateUUID%, %Rank%);\n"
+OsirisContainedCraftingTemplate = "DB_ScrollCraftingTable(\"%Reference%\", (GUIDSTRING)%ModName%_LOOT_SCROLL_%LearnReference%_%RootTemplateUUID%, %Rank%);\n"
 
 outputSpells = []
 
@@ -166,7 +169,22 @@ if __name__ == '__main__':
     root = tree.getroot()
     translationContent = root.findall("content")
     for content in translationContent:
-        translationDict[content.text] = content.attrib["contentuid"]
+        if content.attrib["contentuid"] in translationDict:
+            if int(content.attrib["version"]) > translationDict[content.attrib["contentuid"]][0]:
+                translationDict[content.attrib["contentuid"]] = (int(content.attrib["version"]), content.text)
+        else:
+            translationDict[content.attrib["contentuid"]] = (int(content.attrib["version"]), content.text)
+
+    # Repeat for the base game localisation file, provided manually after unpacking.
+    tree = ET.parse("Input/Translation/english.loca.xml")
+    root = tree.getroot()
+    translationContent = root.findall("content")
+    for content in translationContent:
+        if content.attrib["contentuid"] in translationDict:
+            if int(content.attrib["version"]) > translationDict[content.attrib["contentuid"]][0]:
+                translationDict[content.attrib["contentuid"]] = (int(content.attrib["version"]), content.text)
+        else:
+            translationDict[content.attrib["contentuid"]] = (int(content.attrib["version"]), content.text)
 
     # Generate a list of all the spell names we are looking for based on the tradition lists.
     listsTree = ET.parse("../../Editor/Mods/" + globalKeys["ModFolder"] + "/Lists/SpellLists.tbl")
@@ -199,6 +217,7 @@ if __name__ == '__main__':
     subprocess.check_call("Divine.exe -a convert-resources -g bg3 -s \"" + absolutePathInput + "\" -d \"" + absolutePathOutput + "\" -i lsf -o lsx -l off")
 
     spells = []
+    containedSpells = []
     icons = set()
     icons.add("PF2_Item_LOOT_Scroll_Default.png")
     # Iterate over files in directory
@@ -215,10 +234,12 @@ if __name__ == '__main__':
             if isinstance(spell, str):
                 continue
             newSpellStats = {}
+            newSpellStats["Rank"] = "0"
             useCost = get_field(spell, "UseCosts", spellsData, fileName)
             if useCost.find("SpellSlotsGroup") != -1:
                 newSpellStats["UseCosts"] = re.sub("SpellSlotsGroup:\d*:\d*:\d*", "", useCost)
-                tempRankInt = int(re.search(r"SpellSlotsGroup:(\d*):(\d*):(\d*)", useCost)[3])
+                newSpellStats["Rank"] = re.search(r"SpellSlotsGroup:(\d*):(\d*):(\d*)", useCost)[3]
+                tempRankInt = int(newSpellStats["Rank"])
             else:
                 newSpellStats["UseCosts"] = useCost
             # Clear any trailing ;s in our useCost. Lazy but just running the test three time does the job
@@ -233,11 +254,8 @@ if __name__ == '__main__':
             tempName = get_field(spell, "Name", spellsData, fileName)
             if tempName.find("_AI") != -1:
                 continue
-            newSpellStats["Reference"] = fileName.replace(".stats", "") + "_" + tempName
 
-            # If a spell is part of a container spell, skip it
-            if get_field(spell, "SpellContainerID", spellsData, fileName):
-                continue
+            newSpellStats["Reference"] = fileName.replace(".stats", "") + "_" + tempName
 
             # Learning a spell should grant its base version
             newSpellStats["LearnReference"] = get_field(spell, "RootSpellID", spellsData, fileName)
@@ -245,6 +263,16 @@ if __name__ == '__main__':
             newSpellStats["LearnReference"] = get_field(spell, "Owner", spellsData, fileName) or newSpellStats["LearnReference"]
             # If not found the spell should grant itself when learnt
             newSpellStats["LearnReference"] = newSpellStats["LearnReference"] or newSpellStats["Reference"]
+
+            # If a spell is part of a container spell, skip it, but we need it to be picked up by the scroll crafting
+            # system.
+            tempContainerSpell = get_field(spell, "SpellContainerID", spellsData, fileName)
+            if tempContainerSpell:
+                newSpellStats["LearnReference"] = tempContainerSpell
+                # The use of Owner to override the learnt spell should still take priority.
+                newSpellStats["LearnReference"] = get_field(spell, "Owner", spellsData, fileName) or newSpellStats["LearnReference"]
+                containedSpells.append(newSpellStats)
+                continue
 
             # Check the spell lists calculated earlier to work out each spell's traditions
             newSpellStats["Traditions"] = ""
@@ -269,6 +297,12 @@ if __name__ == '__main__':
             newSpellStats["TraditionsLearn"] = newSpellStats["Traditions"]
             # Add the Trick Magic Item Code block to the end of the traditions string
             newSpellStats["Traditions"] = newSpellStats["Traditions"] + TMICode
+
+            # Create warnings where the number in a spell's name does not match its calculated level. We also strip out
+            # any instance of 'PF2' in the name before searching to avoid false positives.
+            rankFromName = re.search(r"(\d)", tempName.replace("PF2", ""))
+            if rankFromName and (rankFromName[0] != newSpellStats["Rank"]):
+                print("Warning: Spell rank does not match spell reference - " + newSpellStats["Reference"] + " - " + newSpellStats["Rank"])
 
             # Container spells should be skipped if their list ends in a semicolon.
             containerSpells = get_field(spell, "ContainerSpells", spellsData, fileName)
@@ -350,16 +384,18 @@ if __name__ == '__main__':
             # Find the spell's display name
             displayName = ""
             displayNameKey = get_field(spell, "DisplayName", spellsData, fileName, handle=True)
-            for entry in translationDict:
-                if translationDict[entry] == displayNameKey:
-                    displayName = entry
+            try:
+                displayName = translationDict[displayNameKey][1]
+            except:
+                print("Warning: Translated name not found - " + newSpellStats["Reference"])
+                continue
             if displayName == "":
                 continue
 
             # Check for existing translation string key
             newSpellStats["TranslationKeyDisplayName"] = ""
-            for text, key in translationDict.items():
-                if text == "Scroll of " + displayName:
+            for key, text in translationDict.items():
+                if text[1] == "Scroll of " + displayName:
                     newSpellStats["TranslationKeyDisplayName"] = key
             if newSpellStats["TranslationKeyDisplayName"] == "":
                 newSpellStats["TranslationKeyDisplayName"] = "h" + str(uuid.uuid4()).replace("-", "g")
@@ -414,17 +450,44 @@ if __name__ == '__main__':
     for spell in outputSpells:
         generate_root_template(spell)
 
+    # Build out our Osiris DBs for Trick Magic Item and Scroll Crafting
     combinedOsirisTMIBlock = ""
+    combinedOsirisCraftingBlock = ""
     for spell in outputSpells:
         newOsirisTMILine = OsirisTMITemplate
+        newOsirisCraftingLine = OsirisCraftingTemplate
         for key in keys:
             newOsirisTMILine = newOsirisTMILine.replace("%" + key + "%", spell[key])
+            newOsirisCraftingLine = newOsirisCraftingLine.replace("%" + key + "%", spell[key])
         for key, value in globalKeys.items():
             newOsirisTMILine = newOsirisTMILine.replace("%" + key + "%", value)
+            newOsirisCraftingLine = newOsirisCraftingLine.replace("%" + key + "%", value)
         combinedOsirisTMIBlock = combinedOsirisTMIBlock + newOsirisTMILine
-    # Open Osiris template, replace $$$ with combined string, and save to mod files.
+        combinedOsirisCraftingBlock = combinedOsirisCraftingBlock + newOsirisCraftingLine
+
+    # Add container spells that were otherwise skipped, but still need to craft into scrolls
+    for spell in containedSpells:
+        for learnSpell in outputSpells:
+            if learnSpell["Reference"] == spell["LearnReference"]:
+                spell["RootTemplateUUID"] = learnSpell["RootTemplateUUID"]
+                continue
+        if "RootTemplateUUID" not in spell:
+            continue
+        newOsirisCraftingLine = OsirisContainedCraftingTemplate
+        # Contained spells will be lacking lots of keys, so we use a lazy try
+        for key in keys:
+            try:
+                newOsirisCraftingLine = newOsirisCraftingLine.replace("%" + key + "%", spell[key])
+            except:
+                pass
+        for key, value in globalKeys.items():
+            newOsirisCraftingLine = newOsirisCraftingLine.replace("%" + key + "%", value)
+        combinedOsirisCraftingBlock = combinedOsirisCraftingBlock + newOsirisCraftingLine
+
+    # Open Osiris template, replace $TMI$ with combined string, and save to mod files.
     with open("Templates/templateGeneratedScrolls.txt", "r") as TMITemplateFile:
-        newTMIContents = TMITemplateFile.read().replace("$$$", combinedOsirisTMIBlock)
+        newTMIContents = TMITemplateFile.read().replace("$TMI$", combinedOsirisTMIBlock)
+        newTMIContents = newTMIContents.replace("$Crafting$", combinedOsirisCraftingBlock)
         with open("../../Mods/" + globalKeys["ModFolder"] + "/Story/RawFiles/Goals/" + globalKeys["ModName"] + "_GeneratedScrolls.txt", "w") as TMIOutputFile:
             TMIOutputFile.write(newTMIContents)
 

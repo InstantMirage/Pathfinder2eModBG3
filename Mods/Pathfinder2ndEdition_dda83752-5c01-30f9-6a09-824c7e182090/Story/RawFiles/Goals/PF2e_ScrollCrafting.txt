@@ -1,0 +1,199 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ScrollLevelToSlotStatus(0, "NONE");
+DB_ScrollLevelToSlotStatus(1, "SPELL_SLOT_RANK_1_REMOVE");
+DB_ScrollLevelToSlotStatus(2, "SPELL_SLOT_RANK_2_REMOVE");
+DB_ScrollLevelToSlotStatus(3, "SPELL_SLOT_RANK_3_REMOVE");
+DB_ScrollLevelToSlotStatus(4, "SPELL_SLOT_RANK_4_REMOVE");
+DB_ScrollLevelToSlotStatus(5, "SPELL_SLOT_RANK_5_REMOVE");
+DB_ScrollLevelToSlotStatus(6, "SPELL_SLOT_RANK_6_REMOVE");
+KBSECTION
+// Store our current scroll crafter so they can later make a skill check
+IF
+StatusApplied((CHARACTER)_Source, "SCROLL_CRAFT_SOURCE", _, _)
+AND
+CreateAtObject((GUIDSTRING)PF2_ScrollCraftingNexus_efc1078f-e961-45ee-bccd-81131f8aa54f, _Source, 1, 0, "ScrollCraftTargetSummon", 0, (GUIDSTRING)_CraftTarget)
+THEN
+PROC_RemovePreviousCrafter();
+DB_ScrollCrafter(_Source, _CraftTarget);
+
+// When Finished summoning the scrying eye, make it hostile.
+IF
+EntityEvent(_CraftTarget, "ScrollCraftTargetSummon")
+AND
+DB_ScrollCrafter((CHARACTER)_Crafter, _CraftTarget)
+THEN
+SetRelationTemporaryHostile(_Crafter, (CHARACTER)_CraftTarget);
+
+// When finsihed summoning the scrying eye, give it a visual status effect
+IF
+EntityEvent(_CraftTarget, "ScrollCraftTargetSummon")
+THEN
+ApplyStatus(_CraftTarget, "SCROLL_CRAFT_EYE", 60.0, 1, _CraftTarget);
+ApplyStatus(_CraftTarget, "SCROLL_CRAFT_EYE_INVISIBLE", -1.0, 1, _CraftTarget);
+
+// When we stop scroll crafting, remove the visual effect, wait for the animation
+// and then move the target off stage because we don't want to award XP.
+IF
+StatusRemoved((CHARACTER)_Source, "SCROLL_CRAFT_SOURCE", _, _)
+AND
+DB_ScrollCrafter(_Source, (GUIDSTRING)_CraftTarget)
+THEN
+NOT DB_ScrollCrafter(_Source, _CraftTarget);
+Die(_CraftTarget, DEATHTYPE.lifetime, _CraftTarget, 0, 0, 0.0);
+
+// If the 60 second status on the scrying eye expires, do cleanup
+IF
+StatusRemoved((GUIDSTRING)_CraftTarget, "SCROLL_CRAFT_EYE", _, _)
+AND
+DB_ScrollCrafter((CHARACTER)_Crafter, _CraftTarget)
+THEN
+RemoveStatus(_Crafter, "SCROLL_CRAFT_SOURCE", _Crafter);
+
+// Ensure only one scroll crafting is active at a time to avoid doubling up
+PROC
+PROC_RemovePreviousCrafter()
+AND
+DB_ScrollCrafter((CHARACTER)_Old, (GUIDSTRING)_CraftTarget)
+THEN
+RemoveStatus(_Old, "SCROLL_CRAFT_SOURCE");
+NOT DB_ScrollCrafter(_Old, _CraftTarget);
+Die(_CraftTarget, DEATHTYPE.lifetime, _CraftTarget, 0, 0, 0.0);
+
+// If a character uses a scroll in the circle, we block them from
+// being the source of scroll crafting, to prevent scroll duplication
+// (which could potentially avoid costs).
+IF
+RequestCanUse((CHARACTER)_Character, (ITEM)_Item, _)
+AND
+GetTemplate((GUIDSTRING)_Item, (GUIDSTRING)_Template)
+AND
+DB_SpellScroll(_Template, (INTEGER)_Level, (INTEGER)_A, (INTEGER)_D, (INTEGER)_O, (INTEGER)_P)
+AND
+HasActiveStatus(_Character, "SCROLL_CRAFT_IN_RANGE", 1)
+THEN
+ApplyStatus(_Character, "SCROLL_CRAFT_BLOCKED", -1.0, 1);
+
+// If someone we blocked for trying to duplicate a scroll
+// leave the aura (or the aura leaves), clear their block.
+IF
+StatusRemoved((CHARACTER)_Character, "SCROLL_CRAFT_IN_RANGE", _, _)
+AND
+HasActiveStatus(_Character, "SCROLL_CRAFT_BLOCKED", 1)
+THEN
+RemoveStatus(_Character, "SCROLL_CRAFT_BLOCKED");
+
+// Being the active scroll caster gives off an aura that we can use to watch
+// for spell previews, which we will then interrupt and steal for the scroll.
+// Note we have to give the caster a status to remove the spell slot, as the
+// spell fails.
+IF
+UsingSpell((CHARACTER)_Character, (STRING)_Spell, _, _, _)
+AND
+DB_ScrollCraftingTable(_Spell, (GUIDSTRING)_Template, (INTEGER)_)
+AND
+HasActiveStatus(_Character, "SCROLL_CRAFT_BLOCK", 0)
+AND
+HasActiveStatus(_Character, "SCROLL_CRAFT_IN_RANGE", 1)
+AND
+DB_ScrollCrafter((CHARACTER)_Crafter, (GUIDSTRING)_CraftTarget)
+AND
+GetPosition(_Character, _X, _Y, _Z)
+AND
+RealSum(_X, 0.01, _NewX)
+AND
+CreateAt(_Template, 0.0, 0.0, 0.0, 0, 0, "ScrollCraftingSpawnEvent", (GUIDSTRING)_Item)
+THEN
+TeleportToPosition(_Character, _NewX, _Y, _Z, "TMI_Cancelled", 0, 0, 0, 1, 1);
+DB_ScrollCraftGoldCheck(_Crafter, _Spell, _Character);
+
+// If the crafter has insufficient gold, inform them and don't burn the spell slot,
+// and keep the condition in place such that they may select a different spell.
+IF
+EntityEvent((GUIDSTRING)_Scroll, "ScrollCraftingSpawnEvent")
+AND
+DB_ScrollCraftGoldCheck((CHARACTER)_Crafter, (STRING)_Spell, (CHARACTER)_Character)
+AND
+ItemGetGoldValue((ITEM)_Scroll, (INTEGER)_Value)
+AND
+UserGetGold(_Crafter, (INTEGER)_Gold)
+AND
+_Gold < _Value
+THEN
+ApplyStatus(_Crafter, "INSUFFICIENT_GOLD_CRAFT", 1.0, 1, _Crafter);
+Die((GUIDSTRING)_Scroll, DEATHTYPE.None, _Crafter, 0, 1);
+
+// Opposite conditions to Previous, handling the case where the crafter is sufficiently wealthy.
+IF
+EntityEvent((GUIDSTRING)_Scroll, "ScrollCraftingSpawnEvent")
+AND
+DB_ScrollCraftGoldCheck((CHARACTER)_Crafter, (STRING)_Spell, (CHARACTER)_Character)
+AND
+ItemGetGoldValue((ITEM)_Scroll, (INTEGER)_Value)
+AND
+UserGetGold(_Crafter, (INTEGER)_Gold)
+AND
+IntegerSubtract(_Value, 1, (INTEGER)_ValueSubOne)
+AND
+_Gold > _ValueSubOne
+AND
+IntegerSubtract(0, _Value, (INTEGER)_ValueNegative)
+AND
+DB_ScrollCraftingTable(_Spell, _, (INTEGER)_Level)
+AND
+DB_ScrollLevelToSlotStatus(_Level, (STRING)_SlotStatus)
+AND
+DB_SpellScrollDifficulties(_Level, (INTEGER)_BaseDC)
+AND
+IntegerSum(_BaseDC, 3, (INTEGER)_Difficulty)
+AND
+GetTemplate(_Scroll, (GUIDSTRING)_Template)
+AND
+DB_ScrollCrafter(_Crafter, (GUIDSTRING)_CraftTarget)
+THEN
+ApplyStatus(_Character, _SlotStatus, 0.0);
+RemoveStatus(_Crafter, "SCROLL_CRAFT_SOURCE");
+Die((GUIDSTRING)_Scroll, DEATHTYPE.None, _Crafter, 0, 1);
+DB_ScrollCraftCheckData(_Crafter, (ITEMROOT)_Template, _ValueNegative);
+PROC_RequestSkillCheckStatus("SCROLL_CRAFT_CHECK", _Difficulty, _Character, "ScrollCraftCheck");
+
+// Cleanup
+IF
+EntityEvent((GUIDSTRING)_Scroll, "ScrollCraftingSpawnEvent")
+AND
+DB_ScrollCraftGoldCheck((CHARACTER)_Crafter, (STRING)_Spell, (CHARACTER)_Character)
+THEN
+NOT DB_ScrollCraftGoldCheck(_Crafter, _Spell, _Character);
+
+// Status applied if crafting check passed - charge gold cost.
+IF
+StatusApplied((CHARACTER)_Crafter, "SCROLL_CRAFT_SUCCESS", _, _)
+AND
+DB_ScrollCraftCheckData(_Crafter, (ITEMROOT)_Template, (INTEGER)_ValueNegative)
+THEN
+NOT DB_ScrollCraftCheckData(_Crafter, _Template, _ValueNegative);
+UserAddGold(_Crafter, _ValueNegative);
+TemplateAddTo(_Template, _Crafter, 1, 1);
+
+// Status if failed - Remove scroll, no charge.
+IF
+StatusApplied((CHARACTER)_Crafter, "SCROLL_CRAFT_FAIL", _, _)
+AND
+DB_ScrollCraftCheckData(_Crafter, (ITEMROOT)_Template, (INTEGER)_ValueNegative)
+THEN
+NOT DB_ScrollCraftCheckData(_Crafter, _Template, _ValueNegative);
+
+// Status if crit failed - Remove scroll, charge 10%.
+IF
+StatusApplied((CHARACTER)_Crafter, "SCROLL_CRAFT_CRIT_FAIL", _, _)
+AND
+DB_ScrollCraftCheckData(_Crafter, (ITEMROOT)_Template, (INTEGER)_ValueNegative)
+AND
+IntegerDivide(_ValueNegative, 10, (INTEGER)_CritFailValueNegative)
+THEN
+NOT DB_ScrollCraftCheckData(_Crafter, _Template, _ValueNegative);
+UserAddGold(_Crafter, _CritFailValueNegative);
+EXITSECTION
+
+ENDEXITSECTION
