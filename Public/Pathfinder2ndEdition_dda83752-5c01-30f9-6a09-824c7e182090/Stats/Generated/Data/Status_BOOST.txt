@@ -10176,3 +10176,31 @@ data "StatusType" "BOOST"
 using "SPELL_SLOT_RANK_1_REMOVE"
 data "OnApplyFunctors" "UseActionResource(SpellSlot,1,6)"
 
+new entry "HARVEST_CHECK"
+type "StatusData"
+data "StatusType" "BOOST"
+using "TRICK_MAGIC_ITEM_ARCANE_CHECK"
+data "OnApplyRoll" "SkillCheck(Skill.Survival,SkillCheckStatusDuration());"
+data "OnApplySuccess" "IF(not IsCriticalSkill()):ApplyStatus(HARVEST_CHECK_SUCCESS, 100, 0);IF(IsCriticalSkill()):ApplyStatus(HARVEST_CHECK_CRIT_SUCCESS, 100, 0)"
+data "OnApplyFail" "IF(not IsCriticalMissSkill()):ApplyStatus(HARVEST_CHECK_FAIL, 100, 0);IF(IsCriticalMissSkill()):ApplyStatus(HARVEST_CHECK_CRIT_FAIL, 100, 0)"
+
+new entry "HARVEST_CHECK_SUCCESS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+new entry "HARVEST_CHECK_CRIT_SUCCESS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+new entry "HARVEST_CHECK_FAIL"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+new entry "HARVEST_CHECK_CRIT_FAIL"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
