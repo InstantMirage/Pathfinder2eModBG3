@@ -369,21 +369,9 @@ IF
 TimerFinished((STRING)_ReferenceString)
 AND
 DB_SkillCheckTimerData((CHARACTER)_Character, (STRING)_Status, _ReferenceString)
-AND
-Concatenate(_ReferenceString, "_Cleanup", (STRING)_NewReferenceString)
 THEN
 ApplyStatus(_Character, _Status, 0.0, 0, _Character);
 NOT DB_SkillCheckTimerData(_Character, _Status, _ReferenceString);
-DB_SkillCheckTimerCleanup(_Character, _NewReferenceString);
-TimerLaunch(_NewReferenceString, 15);
-
-IF
-TimerFinished((STRING)_NewReferenceString)
-AND
-DB_SkillCheckTimerCleanup((CHARACTER)_Character, _NewReferenceString)
-THEN
-RemoveStatus(_Character, "SKILL_CHECK_DC");
-NOT DB_SkillCheckTimerCleanup(_Character, _NewReferenceString);
 EXITSECTION
 
 ENDEXITSECTION
