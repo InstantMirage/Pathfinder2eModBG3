@@ -1,0 +1,122 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_HarvestableItems((GUIDSTRING)LOOT_Mushroom_Bonecap_A_7ea30dc7-4ccd-465a-b91f-9fd2d31c38c0);
+DB_HarvestableItems((GUIDSTRING)LOOT_Mushroom_Bonecap_B_e9f6d6d3-bd95-414d-903a-b697bb222ae7);
+DB_HarvestableItems((GUIDSTRING)LOOT_Alchemy_Crystal_Viridian_A_8037a20b-a2bf-41c9-b509-bb6b455c778c);
+DB_HarvestableItems((GUIDSTRING)CONS_Mushroom_Swarmingtoadstool_A_0180607d-dbf8-48e6-98d9-89e67aa9f13a);
+DB_HarvestableItems((GUIDSTRING)LOOT_Alchemy_Crystal_LolthsCandle_A_6f023cc2-467c-4931-90af-ba0c3f751eee);
+DB_HarvestableItems((GUIDSTRING)CONS_Herbs_Daggeroot_Plant_A_374c2898-cea4-43c9-9687-6d99a0c92ad7);
+DB_HarvestableItems((GUIDSTRING)LOOT_Alchemy_Crystal_SylvanStone_A_1524e46d-179d-4785-99ce-f515e1c52e32);
+DB_HarvestableItems((GUIDSTRING)LOOT_Mushroom_Bullywugtrumpet_A_aef13d72-15d7-4e1a-a0db-402b77596b14);
+DB_HarvestableItems((GUIDSTRING)LOOT_Mushroom_Bullywugtrumpet_B_4c7df0ef-2262-472f-af6e-9289a78cf371);
+DB_HarvestableItems((GUIDSTRING)DEC_GEN_Corpse_Rose_A_61edb466-ed1c-4225-aed6-ebeae9c19247);
+DB_HarvestableItems((GUIDSTRING)ALCH_Ingredient_Part_MyconidSpore_Poison_e9d39b0d-bcd6-4b5b-9d54-c68b3b650b54);
+DB_HarvestableItems((GUIDSTRING)LOOT_Underdark_Mushroom_Nightlight_Piece_7a164775-4a77-47a4-a8b2-5bd5bdc311cf);
+DB_HarvestableItems((GUIDSTRING)CONS_Mushrooms_SporeTimmask_8e2dd06c-c62f-4235-b0f8-f353c6b1ec9d);
+DB_HarvestableItems((GUIDSTRING)LOOT_Mushroom_Dragonegg_A_ca00a2d6-3108-4868-b295-7729e8aafabf);
+DB_HarvestableItems((GUIDSTRING)LOOT_Mushroom_Dragonegg_B_19c9becf-ab0e-4e2f-9253-12456ff9b465);
+DB_HarvestableItems((GUIDSTRING)ALCH_Ingredient_Herb_BlackOleander_bc79fef0-6e8d-4703-9ed6-caa9abda3212);
+DB_HarvestableItems((GUIDSTRING)LOOT_Alchemy_Crystal_ChasmCreeper_A_b964697f-1f1d-48d5-8772-d5edfdd0ed39);
+DB_HarvestableItems((GUIDSTRING)ALCH_Ingredient_Mushroom_ShadowrootSac_44eaf801-ed52-4322-ae70-31258dd93c82);
+DB_HarvestableItems((GUIDSTRING)CONS_Mushrooms_TongueOfMadness_714a8375-9eb4-438d-a191-f5b4b1e86cc3);
+DB_HarvestableItems((GUIDSTRING)CONS_Herbs_Belladonna_Plant_A_1a7d3387-3c57-4ae7-9e7a-eb0eb0199dc3);
+DB_HarvestableItems((GUIDSTRING)ALCH_Ingredient_Herb_NightOrchid_11f6de17-4682-419c-808f-8a328d2cce15);
+DB_HarvestableItems((GUIDSTRING)LOOT_Underdark_Mushroom_Roguemorsel_A_93705907-9366-478f-8ff7-a23862e1884b);
+DB_HarvestableItems((GUIDSTRING)LOOT_Underdark_Mushroom_Roguemorsel_B_a09f8033-f5d8-44de-97ad-09499d967989);
+DB_HarvestableItems((GUIDSTRING)CONS_Herbs_Balsam_Plant_A_9a524608-1ad1-4d01-ae99-76fb3c513b3c);
+DB_HarvestableItems((GUIDSTRING)CONS_Herbs_Mergrass_Plant_A_3e518433-1923-43f5-856f-848028ac3bad);
+KBSECTION
+//REGION Harvesting Plants
+// If we go to harvest a plant and it's not already been picked up, make a
+// survival roll, with DC adjusted to the price of the item.
+// DC = Min(GoldValue, 30)/2 + 10
+IF
+RequestCanPickup((CHARACTER)_Character, (GUIDSTRING)_Object, (INTEGER)_RequestID)
+AND
+ItemGetGoldValue((ITEM)_Object, (INTEGER)_Value)
+AND
+IntegerMin(_Value, 30, (INTEGER)_Capped)
+AND
+IntegerDivide(_Capped, 2, (INTEGER)_Halved)
+AND
+IntegerSum(_Halved, 10, (INTEGER)_DC)
+AND
+GetTemplate((GUIDSTRING)_Object, (GUIDSTRING)_Template)
+AND
+DB_HarvestableItems(_Template)
+AND
+NOT DB_HarvestedItems(_Object)
+THEN
+RequestProcessed(_Character, _RequestID, 1);
+DB_HarvestCheck(_Character, _Object);
+PROC_RequestSkillCheckStatus("HARVEST_CHECK", _DC, _Character, "HarvestCheck");
+
+// If the harvest check crit fails, delete the item and remove it from the harvested
+// DB as cleanup.
+IF
+StatusApplied((CHARACTER)_Character, "HARVEST_CHECK_CRIT_FAIL", _, _)
+AND
+DB_HarvestCheck(_Character, (GUIDSTRING)_Item)
+THEN
+Die(_Item, DEATHTYPE.None, _Character, 0, 0);
+NOT DB_HarvestCheck(_Character, _Item);
+NOT DB_HarvestedItems(_Item);
+
+// If the harvest check fails, just do cleanup.
+IF
+StatusApplied((CHARACTER)_Character, "HARVEST_CHECK_FAIL", _, _)
+AND
+DB_HarvestCheck(_Character, (GUIDSTRING)_Item)
+THEN
+NOT DB_HarvestCheck(_Character, _Item);
+
+// If the harvest check succeeds, double the loot.
+IF
+StatusApplied((CHARACTER)_Character, "HARVEST_CHECK_SUCCESS", _, _)
+AND
+DB_HarvestCheck(_Character, (GUIDSTRING)_Item)
+AND
+GetTemplate(_Item, (GUIDSTRING)_Template)
+THEN
+NOT DB_HarvestCheck(_Character, _Item);
+TemplateAddTo((ITEMROOT)_Template, _Character, 1, 0);
+
+// If the harvest check crit succeeds, triple the loot.
+IF
+StatusApplied((CHARACTER)_Character, "HARVEST_CHECK_CRIT_SUCCESS", _, _)
+AND
+DB_HarvestCheck(_Character, (GUIDSTRING)_Item)
+AND
+GetTemplate(_Item, (GUIDSTRING)_Template)
+THEN
+NOT DB_HarvestCheck(_Character, _Item);
+TemplateAddTo((ITEMROOT)_Template, _Character, 2, 0);
+
+// If it's already been harvested once, then we just give the item, to prevent
+// duplication cycles.
+IF
+RequestCanPickup((CHARACTER)_Character, (GUIDSTRING)_Object, (INTEGER)_RequestID)
+AND
+GetTemplate(_Object, (GUIDSTRING)_Template)
+AND
+DB_HarvestableItems(_Template)
+AND
+DB_HarvestedItems(_Object)
+THEN
+RequestProcessed(_Character, _RequestID, 1);
+
+// Whenever a harvestable item instance enters an inventory, add it to the DB of
+// items that can no longer be harvested.
+IF
+AddedTo((GUIDSTRING)_Object, _, _)
+AND
+GetTemplate(_Object, (GUIDSTRING)_Template)
+AND
+DB_HarvestableItems(_Template)
+THEN
+DB_HarvestedItems(_Object);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
