@@ -577,6 +577,18 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ba4ebe69-7daf-4262-89b6-c627d5ad727f" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty3WillSaves" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="b72b055a-22ba-4395-85c1-0252a26db28e" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcd847007g92f0g181ag0f26g334369c26ccb" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('STAT_PEN_3SAVES') and not Tagged('STAT_PEN_2SAVES') and not Tagged('STAT_PEN_1SAVES') ):RollBonus(SavingThrow,-3,Wisdom);IF(HasStatus('StatusPenalty2Saves')):RollBonus(SavingThrow,-1,Wisdom);IF(HasStatus('StatusPenalty1Saves')):RollBonus(SavingThrow,-2,Wisdom);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_3WILL')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_2WILL')):ApplyStatus(StatusPenalty2WillSaves,100,-1);IF(Tagged('STAT_PEN_1WILL') and not Taged('STAT_PEN_2WILL')):ApplyStatus(StatusPenalty1WillSaves,100,-1)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="9c634c2c-8d24-451f-9433-81ba0b339f84" />
         <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1WillSaves" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="b72b055a-22ba-4395-85c1-0252a26db28e" />
@@ -609,6 +621,42 @@
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2REFLEX')" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1REFLEX')):ApplyStatus(StatusPenalty1ReflexSave,100,-1)" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3940780aga974g9249g1c42g35c1cd3c1b99" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0709874b-3665-49c3-9db7-403e884ef352" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Perception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9ba99daag1073g5811g980fgc00934242aca" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h396db869g77e5g5126g92e1g1bad4362e2ea" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_PERCEPTION" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Perception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1PERC')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="61354076-043f-4efc-bb9a-d540f25d73b0" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Perception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="0709874b-3665-49c3-9db7-403e884ef352" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd08d8c9dgdfb8gc30bg2c7cg707ec34e51e4" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Perception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2PERC')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1PERC')):ApplyStatus(StatusPenalty1Perception,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="780d4698-5ab3-490d-aebf-0f093d310739" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty3Perception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="61354076-043f-4efc-bb9a-d540f25d73b0" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb39bec62g524ag4759g2491g63c1ed16af50" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-3,Perception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_3PERC')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_2PERC')):ApplyStatus(StatusPenalty2Perception,100,-1);IF(Tagged('STAT_PEN_1PERC') and not Taged('STAT_PEN_2PERC')):ApplyStatus(StatusPenalty1Perception,100,-1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -12359,6 +12407,50 @@
         <field name="UUID" type="IdTableFieldDefinition" value="c4a26579-fb57-4e7f-b2c6-1171e95e28e2" />
         <field name="Name" type="NameTableFieldDefinition" value="HARVEST_CHECK_CRIT_FAIL" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="cbf5154c-ab04-472c-bbc5-1290f13be2f2" />
+        <field name="Name" type="NameTableFieldDefinition" value="BON_MOT_2" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9e34423bg76cfgc228g1fd2ge6f44fcd3f50" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7ae4d78dgef78g1218g813fgd30a0c8f5d9c" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Bard_CuttingWords" />
+        <field name="StackId" type="StringTableFieldDefinition" value="BON_MOT_2" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_BonMotRetort);Tag(STAT_PEN_2PERC);Tag(STAT_PEN_2WILL);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9ab6fed4-f7e2-4b9d-bac2-59ac54a7fdad" />
+        <field name="Name" type="NameTableFieldDefinition" value="BON_MOT_2_SELF" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="cbf5154c-ab04-472c-bbc5-1290f13be2f2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="BON_MOT_2_SELF" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_2PERC);Tag(STAT_PEN_2WILL);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1633f2c4-e557-4907-b050-e42dcda78e6a" />
+        <field name="Name" type="NameTableFieldDefinition" value="BON_MOT_3" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="cbf5154c-ab04-472c-bbc5-1290f13be2f2" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="BON_MOT_3" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_BonMotRetort);Tag(STAT_PEN_3PERC);Tag(STAT_PEN_3WILL);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f790ce10-0910-4e37-87ed-bc0444748ca7" />
+        <field name="Name" type="NameTableFieldDefinition" value="CLUMSY_DIRTY_TRICK" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="adf03886-96e1-4420-839e-a1f64d0dcbea" />
+        <field name="StackId" type="StringTableFieldDefinition" value="CLUMSY_DIRTY_TRICK" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_1AC);Tag(STAT_PEN_1REFLEX);Skill(Acrobatics,-1);Skill(Stealth,-1);Skill(SleightOfHand,-1);UnlockSpell(Shout_DirtyTrickRemove);" />
       </fields>
     </stat_object>
   </stat_objects>
