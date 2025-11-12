@@ -14351,7 +14351,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Enlarge_Rank2" />
         <field name="Level" type="IntegerTableFieldDefinition" value="2" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Transmutation" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(ENLARGE,100,50);ApplyStatus(CLUMSY,100,50)" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(ENLARGE,100,50);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="9" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and Ally()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_Enlarge" />
@@ -21098,9 +21098,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e1b34c88-6cb2-4988-b0da-9c2b971988fb" />
         <field name="Name" type="NameTableFieldDefinition" value="ScorchingColumn" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="ff736f9d-3563-4d2f-a343-16a3cf33230c" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:SurfaceChange(Melt);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(ScorchingColumnDamage),Fire,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(ScorchingColumnDamage))*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(ScorchingColumnDamage)/2,Fire,Magical);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:SurfaceChange(Melt);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);GROUND:CreateSurface(3,10,Fire);GROUND:IF(CharacterLevelGreaterThan(6)):Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 10,,,,AshCloudAura_Rank2);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('FireJunction',context.Source) and not SaveCrit()):DealDamage(LevelMapValue(ScorchingColumnDamage),Fire,Magical);IF(not HasPassive('FireJunction',context.Source) and SaveCrit()):DealDamage((LevelMapValue(ScorchingColumnDamage))*2,Fire,Magical);IF(HasPassive('FireJunction',context.Source) and not SaveCrit()):DealDamage(LevelMapValue(ScorchingColumnDamageJunction),Fire,Magical);IF(HasPassive('FireJunction',context.Source) and SaveCrit()):DealDamage((LevelMapValue(ScorchingColumnDamageJunction))*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not HasPassive('FireJunction',context.Source) and not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(ScorchingColumnDamage)/2,Fire,Magical);IF(HasPassive('FireJunction',context.Source) and not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(ScorchingColumnDamageJunction)/2,Fire,Magical);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbbb329b7g80d3g62f3gad5dgd1db58a36abb" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1126a079g5acbg52b8g0e25g563e56fe59f4" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(ScorchingColumnDamage),Fire);" />
