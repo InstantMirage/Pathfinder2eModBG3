@@ -75,7 +75,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAP_PENALTY_3RD" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="7f2a0ac0-dbb2-4771-8640-c3a272c7f0bf" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdf07cfbagb2a2g69e5g7b6fg7d7bea381275" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not AgileMAP()):RollBonus(Attack, -10);IF(AgileMAP()):RollBonus(Attack, -8);IF(SpellId('Target_Grapple') or SpellId('Target_Trip') or SpellId('Target_FreeTrip') or SpellId('Target_Disarm') or SpellId('Target_EscapeGrapple_Athletics') or SpellId('Target_EscapeGrapple_Acrobatics') or SpellId('Target_EscapeGrapple_UnarmedAttack') or SpellId('Target_Shove') or SpellId('Target_Shove_Linked')):RollBonus(SkillCheck, -8);UnlockSpellVariant(HasStringInSpellRoll('Attack') or (HasStringInSpellRoll('Check') and HasSpellFlag(SpellFlags.Attack)),ModifyTooltipDescription());AI_ONLY:Disadvantage(AttackRoll);AI_ONLY:RollBonus(SkillCheck,-8);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not AgileMAP()):RollBonus(Attack, -10);IF(AgileMAP()):RollBonus(Attack, -8);IF(SpellId('Target_Grapple') or SpellId('Target_Trip') or SpellId('Target_FreeTrip') or SpellId('Target_Disarm') or SpellId('Target_EscapeGrapple_Athletics') or SpellId('Target_EscapeGrapple_Acrobatics') or SpellId('Target_EscapeGrapple_UnarmedAttack') or SpellId('Target_Shove') or SpellId('Target_Shove_Linked')):RollBonus(SkillCheck, -8);UnlockSpellVariant(HasStringInSpellRoll('Attack') or (HasStringInSpellRoll('Check') and HasSpellFlag(SpellFlags.Attack)),ModifyTooltipDescription());AI_ONLY:RollBonus(Attack,-3);AI_ONLY:RollBonus(SkillCheck,-8);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -105,6 +105,18 @@
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:ApplyStatus(AI_HELPER_HUNTERSMARK,100,1)" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:ApplyStatus(AI_HELPER_HUNTERSMARK,100,1)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('CIRC_PEN_1AC')):ApplyStatus(CircumstancePenalty1AC,100,-1); IF(Tagged('CIRC_PEN_2AC')):ApplyStatus(CircumstancePenalty2AC,100,-1)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6fba086b-94f3-4206-bf00-b1c6b9efac5e" />
+        <field name="Name" type="NameTableFieldDefinition" value="ADVANTAGE_DISABLER" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4da7fac3g30f6ga983gd9d2g1a2bfcb229cd" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="ADVANTAGE_DISABLER" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AttackRoll);Disadvantage(AttackRoll);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9564,7 +9576,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="9e0b16d6-1efd-47df-9760-404b9b837a20" />
         <field name="Name" type="NameTableFieldDefinition" value="SHA_NECROMANCER_FLESH_BERSERK" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="ba782ee3-9673-46ec-a928-aad960b62467" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="AiArchetypeOverride(madness,99);Advantage(Ability, Strength); Advantage(SavingThrow, Strength); DamageBonus(1d8)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AiArchetypeOverride(madness,99);Advantage(Ability, Strength);DamageBonus(1d8);" />
         <field name="Passives" type="StringTableFieldDefinition" value="BldResist_10;SlaResist_10;PrcResist_10" />
       </fields>
     </stat_object>
