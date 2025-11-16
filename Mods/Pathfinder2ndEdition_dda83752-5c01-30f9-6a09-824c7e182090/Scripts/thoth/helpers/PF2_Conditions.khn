@@ -626,7 +626,7 @@ end
 
 function DemoralizeDC(entity)
 	local willDC = WillDC(entity)
-	if IsIntelligent(entity).Result then
+	if LinguisticSpell(entity).Result then
 		willDC = willDC + 4
 	end
 	return willDC
@@ -1411,4 +1411,28 @@ end
 
 function IsSkillLegend(skill, ability)
 	return ConditionResult(getSkillProficiencyScore(skill, ability) > 3, {ConditionError(skill .. "Legend")})
+end
+
+function MentalSpell(target)
+	target = target or context.Target
+	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Mindless")})
+end
+
+function EmotionSpell(target)
+	target = target or context.Target
+	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Emotionless")})
+end
+
+function LinguisticSpell(target)
+	target = target or context.Target
+	return ConditionResult((~HasAnyTags({'CANTSPEAK'}, target)).Result, {ConditionError("LanguageBarrier")})
+end
+
+function ConcentrateSpell(source)
+	source = source or context.Source
+	return ConditionResult((~HasAnyStatus({'SG_RAGE'}, source)).Result, {ConditionError("CantConcentrate")})
+end
+
+function SpellIgnoresConcealed()
+	return SpellId('Projectile_IncredibleAim') | SpellId('Projectile_HuntersAim')
 end

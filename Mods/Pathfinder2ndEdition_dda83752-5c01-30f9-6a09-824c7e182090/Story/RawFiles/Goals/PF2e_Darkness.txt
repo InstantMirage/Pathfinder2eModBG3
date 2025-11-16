@@ -1,0 +1,102 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ConcealedTags((TAG)CONCEALED_9b389131-5c4f-4aff-afcf-4a4d2723e385);
+DB_ConcealedTags((TAG)CONCEALED_NO_HIDE_6379ad1e-499f-4dde-9b43-07f1b2c27ec8);
+KBSECTION
+//REGION On change of obscurity, apply statuses
+IF
+ObscuredStateChanged((GUIDSTRING)_Character, (STRING)_State)
+AND
+_State == "HeavilyObscured"
+THEN
+ApplyStatus(_Character, "IN_DARKNESS", -1.0);
+RemoveStatus(_Character, "IN_DIM_LIGHT");
+
+IF
+ObscuredStateChanged((GUIDSTRING)_Character, (STRING)_State)
+AND
+_State == "LightlyObscured"
+THEN
+ApplyStatus(_Character, "IN_DIM_LIGHT", -1.0);
+RemoveStatus(_Character, "IN_DARKNESS");
+
+IF
+ObscuredStateChanged((GUIDSTRING)_Character, (STRING)_State)
+AND
+_State == "Clear"
+THEN
+RemoveStatus(_Character, "IN_DARKNESS");
+RemoveStatus(_Character, "IN_DIM_LIGHT");
+//END_REGION
+
+//REGION Concealment stacking
+// Lots of possible sources of concealment exist with various durations.
+// Using tags to track whether a character should be concealed allows
+// for cleaner handling of cases where one source of concealment
+// disappears whilst another is still active.
+IF
+TagSet((GUIDSTRING)_Character, (TAG)_Tag)
+AND
+DB_ConcealedTags(_Tag)
+THEN
+ApplyStatus(_Character, "CONCEALED", -1.0);
+
+// If a tag is removed, we have to check if any other concealment tag
+// is still present before removing the condition. We do this by
+// clearing out the value 1 from a DB, then running a check for the
+// possible concealment tags, adding the value 1 back into the DB
+// on success. We then check if the value 1 is present in the DB to
+// determine if we should remove the status.
+IF
+TagCleared((GUIDSTRING)_Character, (TAG)_Tag)
+AND
+DB_ConcealedTags(_Tag)
+THEN
+NOT DB_ConcealedTagSuccess(1);
+PROC_TestConcealedAll(_Character);
+PROC_ResultConcealedTag(_Character);
+
+PROC
+PROC_TestConcealedAll((GUIDSTRING)_Character)
+AND
+DB_ConcealedTags((TAG)_AllTags)
+THEN
+PROC_TestConcealedTag(_AllTags, _Character);
+
+PROC
+PROC_TestConcealedTag((TAG)_Tag, (GUIDSTRING)_Character)
+AND
+IsTagged(_Character, _Tag, 1)
+THEN
+DB_ConcealedTagSuccess(1);
+
+PROC
+PROC_ResultConcealedTag((GUIDSTRING)_Character)
+AND
+NOT DB_ConcealedTagSuccess(1)
+THEN
+RemoveStatus(_Character, "CONCEALED");
+
+IF
+TagSet((GUIDSTRING)_Character, DAZZLED_5453990a-f917-4b7e-a324-b1de320de33e)
+THEN
+ApplyStatus(_Character, "DAZZLED", -1.0);
+
+IF
+TagCleared((GUIDSTRING)_Character, DAZZLED_5453990a-f917-4b7e-a324-b1de320de33e)
+THEN
+RemoveStatus(_Character, "DAZZLED");
+//END_REGION
+
+//REGION Dazzled for 1 hour is implemented as a removal on short rest
+IF
+ShortRested((CHARACTER)_Character)
+AND
+HasActiveStatus((GUIDSTRING)_Character, "DAZZLED_APPLY", 1)
+THEN
+RemoveStatus(_Character, "DAZZLED_APPLY");
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION

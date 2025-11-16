@@ -62,7 +62,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="PathfinderDCBoost" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdff3f897gdee6g3ed9g0b28gd06945f0f08f" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h07f7b560gf34dgdf73g3d1dg9a5369f5689e" version="3" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(SavingThrow, Constitution);ProficiencyBonus(SavingThrow, Dexterity);ProficiencyBonus(SavingThrow, Wisdom);ProficiencyBonus(Skill, Perception);IF(IsProficientWith(context.Source, GetActiveArmor()) or not (IsOfProficiencyGroup('LightArmor', GetActiveArmor()) or IsOfProficiencyGroup('MediumArmor', GetActiveArmor()) or IsOfProficiencyGroup('HeavyArmor', GetActiveArmor()))):AddProficiencyToAC();UnlockSpellVariant(HasUseCosts('BonusActionPoint'),ModifyUseCosts(Replace,ActionPoint,1,0,BonusActionPoint));ActionResource(Stride,9,0);ActionResource(Flourish,1,0);IF((IsMeleeWeaponAttack() or IsUnarmedAttack()) and IsCritical() and not HasPassive('Thief_Finesse',context.Source)):DamageBonus(StrengthModifier);UnlockInterrupt(CriticalHit_10);UnlockInterrupt(CriticalMiss_10);IF(HasStatus('RemoveDisadvantage',context.Source) and (IsRangedAttack() or IsRangedSpellAttack())):Advantage(AttackRoll);UnlockSpell(Target_SkillActions);UnlockSpell(Target_AidAnother);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(SavingThrow, Constitution);ProficiencyBonus(SavingThrow, Dexterity);ProficiencyBonus(SavingThrow, Wisdom);ProficiencyBonus(Skill, Perception);IF(IsProficientWith(context.Source, GetActiveArmor()) or not (IsOfProficiencyGroup('LightArmor', GetActiveArmor()) or IsOfProficiencyGroup('MediumArmor', GetActiveArmor()) or IsOfProficiencyGroup('HeavyArmor', GetActiveArmor()))):AddProficiencyToAC();UnlockSpellVariant(HasUseCosts('BonusActionPoint'),ModifyUseCosts(Replace,ActionPoint,1,0,BonusActionPoint));ActionResource(Stride,9,0);ActionResource(Flourish,1,0);IF((IsMeleeWeaponAttack() or IsUnarmedAttack()) and IsCritical() and not HasPassive('Thief_Finesse',context.Source)):DamageBonus(StrengthModifier);UnlockInterrupt(CriticalHit_10);UnlockInterrupt(CriticalMiss_10);UnlockSpell(Target_SkillActions);UnlockSpell(Target_AidAnother);" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="TurnBased()" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="AI_IGNORE:IF( not HasAnyMovementStatus() ):ApplyStatus(DEBUG_RESET_MOVE,100,-1); IF( HasDashStatus() ):UseActionResource(ActionPoint,1,0)" />
@@ -134,6 +134,15 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8dc4ab6eg2401gdb8fgfe89g9f26fb9fda22" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Skilled" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6d64824c-e0a8-47be-9a7f-53804997b484" />
+        <field name="Name" type="NameTableFieldDefinition" value="DarknessRules" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnLongRest;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ADVANTAGE_DISABLER,100,-1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -848,8 +857,6 @@
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_DarkveilPrecision" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden;DisplayBoostInTooltip" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF( OffGuard() and not (Tagged('CIRC_PEN_1AC',context.Target) or Tagged('CIRC_PEN_2AC',context.Target)) ):RollBonus(Attack, 2); IF( OffGuard() and Tagged('CIRC_PEN_1AC',context.Target) ):RollBonus(Attack, 1);" />
-        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(Flanked_2,100,-1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1501,12 +1508,10 @@
         <field name="Name" type="NameTableFieldDefinition" value="ElementalRage" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="983ce52d-4af6-4e0d-940c-d807f332b85f" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf2f3e0eeg7f9bgf367g4e88g3dad21485e04" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha364f837g476eg220bge0a7gddbc596e9cea" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha364f837g476eg220bge0a7gddbc596e9cea" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Mag_SelfImmolation" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(DistanceToTargetGreaterThan(3)):Disadvantage(AttackTarget);" />
-        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="BoostConditions" type="StringTableFieldDefinition" value="HasStatus('SG_Rage');" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4499,8 +4504,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="fa009d20-b9f3-4414-87b8-544d2af9fc77" />
         <field name="Name" type="NameTableFieldDefinition" value="Domain_Death" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h26ef9bcbg664eg8839g095dg6865eae92e1e" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h0df8f443g4e25g367cg29d2g3e3da767e1de" version="2" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Grants the Death's Call reaction. &lt;br&gt;Trigger An enemy misses you with a melee attack &lt;br&gt;Duration until the end of your next turn &lt;br&gt;You swiftly move from a dangerous spot and veil yourself. You Step and become concealed." />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h0df8f443g4e25g367cg29d2g3e3da767e1de" version="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Cleric_TurnUndead" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(DeathCallInterrupt);ActionResource(KiPoint,1,0);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Target_Fear_Rank1,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Target_RouseSkeletons_Rank3,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Target_VampiricMaiden_Rank4,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);" />
         <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="KiPoint:1" />
@@ -4632,8 +4636,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="fcd8ad56-89f5-4653-a219-512ef106f272" />
         <field name="Name" type="NameTableFieldDefinition" value="Domain_Protection" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd0a83567g696cgb2aag44a7g606a2eae6e6a" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h773afdedgc4d2g086fg5e9dg04e7b2ebaf4e" version="2" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Grants the Protector's Sacrifice reaction. &lt;br&gt;Trigger An ally within 30 feet takes damage &lt;br&gt;Range 30 feet &lt;br&gt;You protect your ally by suffering in their stead. Reduce the damage the ally would take by 3. You redirect this damage to yourself, but your immunities, weaknesses, resistances and so on do not apply You aren't subject to any conditions or other effects of whatever damaged your ally (such as poison from a venomous bite). Your ally is still subject to those effects even if you redirect all of the triggering damage to yourself." />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h773afdedgc4d2g086fg5e9dg04e7b2ebaf4e" version="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_ProjectedWard" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(ProtectorsSacrificeInterrupt);ActionResource(KiPoint,1,0);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Target_Endure_Rank1,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Target_ResistEnergyPF2_Container_Rank2,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Wall_WallOfIce_Rank5,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);" />
         <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="KiPoint:1" />
@@ -4655,8 +4658,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="523b08ca-7a8a-4e5e-9a9d-55a0aa4fbcc7" />
         <field name="Name" type="NameTableFieldDefinition" value="Domain_Trickery" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3be981f7g4024gb3ecg1ac3g0638c923a713" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd243e5dfg698cg3e4egbe32g7fdd383f87d2" version="2" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Grants the Sudden Shift reaction. &lt;br&gt;Trigger An enemy misses you with a melee attack &lt;br&gt;Duration until the end of your next turn &lt;br&gt;You swiftly move from a dangerous spot and veil yourself. You Step and become concealed." />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd243e5dfg698cg3e4egbe32g7fdd383f87d2" version="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_HagsTrickery" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(SuddenShiftInterrupt);ActionResource(KiPoint,1,0);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Target_Grease,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Target_Invisibility,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Target_Confusion_Rank4,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);" />
         <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="KiPoint:1" />
@@ -10672,6 +10674,28 @@
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Target_SmitePathfinder') or IsSpellChildOrVariantFromContext('Target_ChannelSmiteBase');" />
         <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="8892b93b-721f-4b99-b9b4-05ac25aadb33" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0d86a260-edf3-452c-a6a6-c0ff0b278fa5" />
+        <field name="Name" type="NameTableFieldDefinition" value="Darkvision" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5a2c4f60g6f9cgb1e2gd226g01299df4c633" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h13bd37ffg0cf7gc5fegf3a3g50653f80fce2" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="DarkvisionRangeMin(999);ActiveCharacterLight(051648e6-f05a-e41f-e398-ffd5cd148989);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Darkvision" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1ab1847d-60bd-445e-8f17-f4eef05f535a" />
+        <field name="Name" type="NameTableFieldDefinition" value="SuperiorDarkvision" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9f01b3bcgaa4ag15c9g2589g7ff043015d82" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h91276a3bgfc19gf8f6g637fge920beee34ec" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="DarkvisionRangeMin(999);ActiveCharacterLight(c46e7ba8-e746-7020-5146-287474d7b9f7);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_SuperiorDarkvision" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
   </stat_objects>
