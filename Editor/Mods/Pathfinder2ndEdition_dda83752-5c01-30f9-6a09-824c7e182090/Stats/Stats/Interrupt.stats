@@ -1089,11 +1089,24 @@
         <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnSpellCast" enumeration_type_name="InterruptContext" version="1" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Observer, context.Target) and not Tagged('CONCEALED_DISABLE', context.Observer) and not HasStatus('CONCEALED_BLOCK', context.Source, context.Observer) and not SpellIgnoresConcealed() and not (HasPassive('Darkvision', context.Source) and not Tagged('CONCEALED_TO_DARKVISION', context.Observer));" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Observer, context.Target) and not Self(context.Observer, context.Source) and not Tagged('CONCEALED_DISABLE', context.Observer) and not HasStatus('CONCEALED_BLOCK', context.Source, context.Observer) and not SpellIgnoresConcealed() and not (HasPassive('Darkvision', context.Source) and not Tagged('CONCEALED_TO_DARKVISION', context.Observer));" />
         <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,16)" />
         <field name="Success" type="StringTableFieldDefinition" value="Counterspell();" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="InterruptFlags" type="EnumerationListTableFieldDefinition" value="InterruptWhileInvisible" enumeration_type_name="InterruptFlagsList" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f7e1abb0-3dcf-4d61-8f80-61868012a2db" />
+        <field name="Name" type="NameTableFieldDefinition" value="HiddenReaction" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="90fb3676-de8f-4a84-8bf9-f19a5ff7db63" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he8199ab7gbac7g17c5g62d3gd9dcce7aba13" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h444d9b9dg29ecg4c52g2574g8795167ec4de" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Portent_11" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Observer, context.Target) and not Self(context.Observer, context.Source) and HasStatus('HIDDEN_FROM', context.Source, context.Observer);" />
+        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,10)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1106,11 +1119,12 @@
         <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnSpellCast" enumeration_type_name="InterruptContext" version="1" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Self" enumeration_type_name="InterruptContextScope" version="1" />
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Source,context.Observer) and  and not HasStatus('DAZZLED_BLOCK', context.Target, context.Observer) and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile));" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Source,context.Observer) and not Self(context.Observer, context.Target) and not HasStatus('DAZZLED_BLOCK', context.Target, context.Observer) and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile));" />
         <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,16)" />
         <field name="Success" type="StringTableFieldDefinition" value="Counterspell();" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="InterruptFlags" type="EnumerationListTableFieldDefinition" value="InterruptWhileInvisible" enumeration_type_name="InterruptFlagsList" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1141,12 +1155,13 @@
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Portent_6" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Self" enumeration_type_name="InterruptContextScope" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Source, context.Observer) and IsSpell() and not HasStringInSpellRoll('WeaponAttack');" />
-        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,6)" />
+        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,5)" />
         <field name="Success" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="Failure" type="StringTableFieldDefinition" value="Counterspell();" />
         <field name="Cost" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableCondition" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="InterruptFlags" type="EnumerationListTableFieldDefinition" value="InterruptWhileInvisible" enumeration_type_name="InterruptFlagsList" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1155,7 +1170,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Stupefied2Reaction" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="8f17f398-6ecd-4725-853c-d98b564a8191" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="7" />
-        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,7)" />
+        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,6)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1164,7 +1179,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Stupefied3Reaction" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="8f17f398-6ecd-4725-853c-d98b564a8191" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="8" />
-        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,8)" />
+        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,7)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1173,7 +1188,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Stupefied4Reaction" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="8f17f398-6ecd-4725-853c-d98b564a8191" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="9" />
-        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,9)" />
+        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,8)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

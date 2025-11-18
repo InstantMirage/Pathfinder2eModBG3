@@ -1436,3 +1436,32 @@ end
 function SpellIgnoresConcealed()
 	return SpellId('Projectile_IncredibleAim') | SpellId('Projectile_HuntersAim')
 end
+
+function SkillCheckModifier(skill, ability, entity)
+	entity = entity or context.Source
+	local prof = GetModifier(entity.Dexterity)
+	local stat_bon = 0
+
+	if HasProficiencyBonus(Ability[ability],Skill[skill],entity).Result then
+		prof = prof + 2
+	end
+	if HasPassive(skill .. 'Expert',entity).Result then
+		prof = prof + 2
+	end
+	if HasPassive(skill .. 'Increase',entity).Result then
+		prof = prof + 2
+	end
+	if HasPassive(skill .. 'Increase2',entity).Result then
+		prof = prof + 2
+	end
+
+	if HasAnyTags({'STAT_BON_1SKILLS'},entity).Result then
+		stat_bon = 1
+	end
+
+	return prof + stat_bon
+end
+
+function HideCheckStatusDuration(entity)
+	return math.ceil(GetStatusDuration("HIDE_CHECK_RESULT", entity))
+end

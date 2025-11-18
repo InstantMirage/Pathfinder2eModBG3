@@ -97,6 +97,319 @@ HasActiveStatus((GUIDSTRING)_Character, "DAZZLED_APPLY", 1)
 THEN
 RemoveStatus(_Character, "DAZZLED_APPLY");
 //END_REGION
+
+//REGION Base Game Sneaking
+// Whenever a character enters combat while sneaking, remove the base
+// game sneaking effect and immediately trigger a hide check.
+IF
+EnteredCombat((GUIDSTRING)_Character, _)
+AND
+HasActiveStatus(_Character, "SNEAKING", 1)
+THEN
+RemoveStatus(_Character, "SNEAKING");
+ApplyStatus(_Character, "HIDDEN", -1.0);
+//END_REGION
+
+//REGION Hide Checks
+// When the player gains the HIDDEN condition, start a timer to trigger
+// checks on all entities the shout spell marked.
+IF
+StatusApplied((GUIDSTRING)_Cause, "HIDDEN", _, _)
+THEN
+TimerLaunch("HideCheckTimer", 30);
+
+// If the player uses Shout_Hide and already has the HIDDEN condition,
+// trigger a new check.
+IF
+CastedSpell((GUIDSTRING)_Cause, "Shout_Hide", _, _, _)
+AND
+HasActiveStatus(_Cause, "HIDDEN", 1)
+THEN
+TimerLaunch("HideCheckTimer", 30);
+
+// Marked characters are saved for after the timer expires.
+IF
+StatusApplied((GUIDSTRING)_Character, "HIDDEN_FROM_TECHNICAL", (GUIDSTRING)_Cause, _)
+THEN
+DB_HideCheckSchedule(_Character, _Cause);
+
+// Allows Osiris to detect which characters are immune to the
+// cause's concealment.
+IF
+StatusApplied((GUIDSTRING)_Character, "HIDDEN_FROM_CONCEALED_BLOCK", (GUIDSTRING)_Cause, _)
+THEN
+DB_HideCheckConcealedBlock(_Character, _Cause);
+
+// Allows Osiris to detect which causes are not affected by the
+// character's dazzled.
+IF
+StatusApplied((GUIDSTRING)_Character, "HIDDEN_FROM_DAZZLED_BLOCK", (GUIDSTRING)_Cause, _)
+THEN
+DB_HideCheckDazzledBlock(_Character, _Cause);
+
+// Check every marked character to see if their passive perception beats
+// the hidden roll value. We can skip all checks if the raw roll is 1.
+IF
+TimerFinished("HideCheckTimer")
+AND
+DB_HideCheckSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+CalculatePassiveSkill(_Cause, "Stealth", (INTEGER)_PassiveSkill)
+AND
+IntegerSubtract(_PassiveSkill, 10, (INTEGER)_ModifierSkill)
+AND
+GetStatusTurns(_Cause, "HIDE_CHECK_RESULT", (INTEGER)_Roll)
+AND
+IntegerSum(_Roll, _ModifierSkill, (INTEGER)_TotalRoll)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+THEN
+NOT DB_HideCheckSchedule(_Character, _Cause);
+NOT DB_CheckConditionsForHideResult(_Character, _Cause);
+PROC_CheckConditionsForHide(_Character, _Cause, _TotalRoll, _PassivePerception);
+PROC_ApplyHiddenFromConditional(_Character, _Cause, _Roll);
+
+PROC
+PROC_ApplyHiddenFromConditional((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll)
+AND
+DB_CheckConditionsForHideResult(_Character, _Cause)
+AND
+_Roll > 1
+THEN
+ApplyStatus(_Character, "HIDDEN_FROM", -1.0, 0, _Cause);
+NOT DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// A number of circumstances need to be covered by PROC_CheckConditionsForHide
+
+// Character can't see Cause, presume standard cover, and
+// ignore concealment. We currently don't have any bonuses
+// that would need to stack cleverly with this.
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
+AND
+HasLineOfSight(_Character, _Cause, 0)
+AND
+IntegerSum(_Roll, 2, (INTEGER)_TotalRoll)
+AND
+_TotalRoll >= _PassivePerception
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// Cause is concealed from Character, by a means that doesn't
+// care about darkvision.
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
+AND
+HasActiveStatus(_Cause, "CONCEALED", 1)
+AND
+NOT DB_HideCheckConcealedBlock(_Character, _Cause)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_DISABLE_b9f18995-a30d-4dd0-b009-9fa832acb8e1, 0)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_TO_DARKVISION_3b4fb323-8d19-441d-b256-1fa359a9bbcd, 1)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_TO_GREATER_DARKVISION_05fb05f0-84be-46c6-b772-90859a01c95d, 1)
+AND
+IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+AND
+_Roll >= _PassivePerception
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// Cause is concealed from Character, by a means that does care
+// about greater darkvision.
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
+AND
+HasActiveStatus(_Cause, "CONCEALED", 1)
+AND
+NOT DB_HideCheckConcealedBlock(_Character, _Cause)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_DISABLE_b9f18995-a30d-4dd0-b009-9fa832acb8e1, 0)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_TO_DARKVISION_3b4fb323-8d19-441d-b256-1fa359a9bbcd, 1)
+AND
+HasPassive(_Character, "SuperiorDarkvision", 0)
+AND
+IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+AND
+_Roll >= _PassivePerception
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// Cause is concealed from Character, by a means that does care
+// about all darkvision.
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
+AND
+HasActiveStatus(_Cause, "CONCEALED", 1)
+AND
+NOT DB_HideCheckConcealedBlock(_Character, _Cause)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_DISABLE_b9f18995-a30d-4dd0-b009-9fa832acb8e1, 0)
+AND
+HasPassive(_Character, "SuperiorDarkvision", 0)
+AND
+HasPassive(_Character, "Darkvision", 0)
+AND
+IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+AND
+_Roll >= _PassivePerception
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// Character is Dazzled
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
+AND
+HasActiveStatus(_Character, "DAZZLED", 1)
+AND
+NOT DB_HideCheckDazzledBlock(_Character, _Cause)
+AND
+IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+AND
+_Roll >= _PassivePerception
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// Character is Blinded
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Blinded", 1)
+AND
+IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+AND
+_Roll >= _PassivePerception
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+//END_REGION
+
+//REGION Sneak Checks
+//REGION Hide Checks
+// When the player gains the SNEAK_CHECK condition, start a timer to trigger
+// checks on all entities the aura marked.
+IF
+StatusApplied((GUIDSTRING)_Cause, "SNEAK_CHECK", _, _)
+THEN
+TimerLaunch("SneakCheckTimer", 30);
+
+// Marked characters are saved for after the timer expires.
+IF
+StatusApplied((GUIDSTRING)_Character, "SNEAK_TECHNICAL", (GUIDSTRING)_Cause, _)
+THEN
+DB_SneakCheckSchedule(_Character, _Cause);
+
+// Check every marked character to see if their passive perception beats
+// the hidden roll value.
+IF
+TimerFinished("SneakCheckTimer")
+AND
+DB_SneakCheckSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+CalculatePassiveSkill(_Cause, "Stealth", (INTEGER)_PassiveSkill)
+AND
+IntegerSubtract(_PassiveSkill, 10, (INTEGER)_ModifierSkill)
+AND
+GetStatusTurns(_Cause, "HIDE_CHECK_RESULT", (INTEGER)_Roll)
+AND
+IntegerSum(_Roll, _ModifierSkill, (INTEGER)_TotalRoll)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+THEN
+NOT DB_SneakCheckSchedule(_Character, _Cause);
+NOT DB_CheckConditionsForHideResult(_Character, _Cause);
+PROC_CheckConditionsForHide(_Character, _Cause, _TotalRoll, _PassivePerception);
+ApplyStatus(_Cause, "UNDETECTED_CLEANUP", 0.0, 0, _Cause);
+PROC_ApplyUndetectedFromConditional(_Character, _Cause, _Roll);
+PROC_CritFailRemoveHidden(_Character, _Cause, _TotalRoll, _PassivePerception, _Roll);
+
+PROC
+PROC_ApplyUndetectedFromConditional((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll)
+AND
+DB_CheckConditionsForHideResult(_Character, _Cause)
+AND
+_Roll > 1
+THEN
+ApplyStatus(_Character, "HIDDEN_FROM", -1.0, 0, _Cause);
+ApplyStatus(_Character, "UNDETECTED_FROM_HELPER_A", 0.0, 0, _Cause);
+DB_UndetectedHelperSchedule(_Character, _Cause);
+NOT DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// Critical failure without cover buff. To selectively remove hidden, we
+// apply a status on the hider caused by the target we want to remove it
+// from.
+PROC
+PROC_CritFailRemoveHidden((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_TotalRoll, (INTEGER)_PassivePerception, (INTEGER)_Roll)
+AND
+HasLineOfSight(_Character, _Cause, 1)
+AND
+IntegerMin(_Roll, 2, (INTEGER)_RollOneOrTwo)
+AND
+IntegerSubtract(_RollOneOrTwo, 1, (INTEGER)_RollZeroOrOne)
+AND
+IntegerProduct(_RollZeroOrOne, 10, (INTEGER)_CritModifier)
+AND
+IntegerSubtract(_PassivePerception, 11, (INTEGER)_CritBase)
+AND
+IntegerSum(_CritBase, _CritModifier, (INTEGER)_CritThreshold)
+AND
+_TotalRoll < _CritThreshold
+THEN
+ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+ApplyStatus(_Cause, "UNDETECTED_FROM_REMOVE", 0.0, 0, _Character);
+
+// Critical failure with cover buff
+PROC
+PROC_CritFailRemoveHidden((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_TotalRoll, (INTEGER)_PassivePerception, (INTEGER)_Roll)
+AND
+HasLineOfSight(_Character, _Cause, 0)
+AND
+IntegerMin(_Roll, 2, (INTEGER)_RollOneOrTwo)
+AND
+IntegerSubtract(_RollOneOrTwo, 1, (INTEGER)_RollZeroOrOne)
+AND
+IntegerProduct(_RollZeroOrOne, 10, (INTEGER)_CritModifier)
+AND
+IntegerSubtract(_PassivePerception, 11, (INTEGER)_CritBase)
+AND
+IntegerSum(_CritBase, _CritModifier, (INTEGER)_CritThreshold)
+AND
+_TotalRoll < _CritThreshold
+THEN
+ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+ApplyStatus(_Cause, "UNDETECTED_FROM_REMOVE", 0.0, 0, _Character);
+
+// I'm not entirely sure why, but directly applying the status breaks with
+// non-hostile NPCs, resulting in enormous stacks of UNDETECTED that can't
+// be removed. Applying it through a proxy like this fixes that. Sadly
+// Osiris can't detect the cause of an existing status, so A and B work
+// in tandem to make that condition check.
+IF
+StatusApplied((GUIDSTRING)_Character, "UNDETECTED_FROM_HELPER_B", _, _)
+AND
+DB_UndetectedHelperSchedule(_Character, (GUIDSTRING)_Cause)
+THEN
+ApplyStatus(_Character, "UNDETECTED_FROM", -1.0, 0, _Cause);
+NOT DB_UndetectedHelperSchedule(_Character, _Cause);
+//END_REGION
+
+//REGION Hide Rechecking
+// When a character sees another character, we check to see if that has
+// any impact upon the hidden condition. At this stage, we can't check if
+// the HIDDEN_FROM condition came from the entity the character saw, so we
+// must do that in a status.
+IF
+Saw((CHARACTER)_Character, (CHARACTER)_Cause, _)
+AND
+HasLineOfSight((GUIDSTRING)_Character, (GUIDSTRING)_Cause, 1)
+AND
+HasActiveStatus(_Cause, "HIDDEN", 1)
+AND
+HasActiveStatus(_Character, "HIDDEN_FROM", 1)
+THEN
+ApplyStatus(_Character, "HIDE_RECHECK", 0.0, 0, _Cause);
 EXITSECTION
 
 ENDEXITSECTION
