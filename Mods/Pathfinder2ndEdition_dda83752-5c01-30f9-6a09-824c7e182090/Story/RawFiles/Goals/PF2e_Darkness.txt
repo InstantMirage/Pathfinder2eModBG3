@@ -4,6 +4,29 @@ INITSECTION
 DB_ConcealedTags((TAG)CONCEALED_9b389131-5c4f-4aff-afcf-4a4d2723e385);
 DB_ConcealedTags((TAG)CONCEALED_NO_HIDE_6379ad1e-499f-4dde-9b43-07f1b2c27ec8);
 KBSECTION
+//REGION Flat Checks
+// When any character starts casting a spell (target selected)
+// give them a flat check value as a status. We will compare
+// this value when we fire interrupts, and thus all the
+// flat check conditions will automatically use the same roll
+// and not need any stacking logic.
+
+// Make flat check roll for caster
+IF
+UsingSpell((GUIDSTRING)_Caster, _, _, _, (INTEGER)_ID)
+AND
+Random(19, (INTEGER)_RollMinusOne)
+AND
+IntegerSum(_RollMinusOne, 1, (INTEGER)_Roll)
+AND
+IntegerProduct(_Roll, 6, _Duration)
+AND
+IntegerToReal(_Duration, (REAL)_DurationReal)
+THEN
+ApplyStatus(_Caster, "FLAT_CHECK_ROLL", _DurationReal, 1, _Caster);
+
+//END_REGION
+
 //REGION On change of obscurity, apply statuses
 IF
 ObscuredStateChanged((GUIDSTRING)_Character, (STRING)_State)
@@ -87,6 +110,16 @@ IF
 TagCleared((GUIDSTRING)_Character, DAZZLED_5453990a-f917-4b7e-a324-b1de320de33e)
 THEN
 RemoveStatus(_Character, "DAZZLED");
+
+IF
+TagSet((GUIDSTRING)_Character, INVISIBLE_457ab381-7903-463c-9507-8b7db47ac016)
+THEN
+ApplyStatus(_Character, "INVISIBLE", -1.0);
+
+IF
+TagCleared((GUIDSTRING)_Character, INVISIBLE_457ab381-7903-463c-9507-8b7db47ac016)
+THEN
+RemoveStatus(_Character, "INVISIBLE");
 //END_REGION
 
 //REGION Dazzled for 1 hour is implemented as a removal on short rest
@@ -107,23 +140,15 @@ AND
 HasActiveStatus(_Character, "SNEAKING", 1)
 THEN
 RemoveStatus(_Character, "SNEAKING");
-ApplyStatus(_Character, "HIDDEN", -1.0);
+UseSpell(_Character, "Shout_Hide", _Character);
 //END_REGION
 
 //REGION Hide Checks
-// When the player gains the HIDDEN condition, start a timer to trigger
-// checks on all entities the shout spell marked.
-IF
-StatusApplied((GUIDSTRING)_Cause, "HIDDEN", _, _)
-THEN
-TimerLaunch("HideCheckTimer", 30);
-
-// If the player uses Shout_Hide and already has the HIDDEN condition,
-// trigger a new check.
+// If the player uses Shout_Hide we begin the hidden check process
 IF
 CastedSpell((GUIDSTRING)_Cause, "Shout_Hide", _, _, _)
 AND
-HasActiveStatus(_Cause, "HIDDEN", 1)
+TimerExists("HideCheckTimer", 0)
 THEN
 TimerLaunch("HideCheckTimer", 30);
 
@@ -136,19 +161,19 @@ DB_HideCheckSchedule(_Character, _Cause);
 // Allows Osiris to detect which characters are immune to the
 // cause's concealment.
 IF
-StatusApplied((GUIDSTRING)_Character, "HIDDEN_FROM_CONCEALED_BLOCK", (GUIDSTRING)_Cause, _)
+StatusApplied((GUIDSTRING)_Character, "HIDE_CHECK_CONCEALED_BLOCK", (GUIDSTRING)_Cause, _)
 THEN
 DB_HideCheckConcealedBlock(_Character, _Cause);
 
 // Allows Osiris to detect which causes are not affected by the
 // character's dazzled.
 IF
-StatusApplied((GUIDSTRING)_Character, "HIDDEN_FROM_DAZZLED_BLOCK", (GUIDSTRING)_Cause, _)
+StatusApplied((GUIDSTRING)_Character, "HIDE_CHECK_DAZZLED_BLOCK", (GUIDSTRING)_Cause, _)
 THEN
 DB_HideCheckDazzledBlock(_Character, _Cause);
 
 // Check every marked character to see if their passive perception beats
-// the hidden roll value. We can skip all checks if the raw roll is 1.
+// the hidden roll value.
 IF
 TimerFinished("HideCheckTimer")
 AND
@@ -167,6 +192,8 @@ THEN
 NOT DB_HideCheckSchedule(_Character, _Cause);
 NOT DB_CheckConditionsForHideResult(_Character, _Cause);
 PROC_CheckConditionsForHide(_Character, _Cause, _TotalRoll, _PassivePerception);
+NOT DB_HideCheckConcealedBlock(_Character, _Cause);
+NOT DB_HideCheckDazzledBlock(_Character, _Cause);
 PROC_ApplyHiddenFromConditional(_Character, _Cause, _Roll);
 
 PROC
@@ -210,7 +237,7 @@ IsTagged(_Cause, (TAG)CONCEALED_TO_DARKVISION_3b4fb323-8d19-441d-b256-1fa359a9bb
 AND
 IsTagged(_Cause, (TAG)CONCEALED_TO_GREATER_DARKVISION_05fb05f0-84be-46c6-b772-90859a01c95d, 1)
 AND
-IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
 AND
 _Roll >= _PassivePerception
 THEN
@@ -231,7 +258,7 @@ IsTagged(_Cause, (TAG)CONCEALED_TO_DARKVISION_3b4fb323-8d19-441d-b256-1fa359a9bb
 AND
 HasPassive(_Character, "SuperiorDarkvision", 0)
 AND
-IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
 AND
 _Roll >= _PassivePerception
 THEN
@@ -252,9 +279,24 @@ HasPassive(_Character, "SuperiorDarkvision", 0)
 AND
 HasPassive(_Character, "Darkvision", 0)
 AND
-IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
 AND
 _Roll >= _PassivePerception
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// If the cause is in full darkness, or otherwise persistently hidden,
+// they automatically succeed against non-darkvision characters.
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
+AND
+IsTagged(_Cause, (TAG)DARKNESS_badb91be-7a47-4898-beed-d0e3a7083783, 1)
+AND
+HasPassive(_Character, "SuperiorDarkvision", 0)
+AND
+HasPassive(_Character, "Darkvision", 0)
+AND
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
 THEN
 DB_CheckConditionsForHideResult(_Character, _Cause);
 
@@ -266,7 +308,7 @@ HasActiveStatus(_Character, "DAZZLED", 1)
 AND
 NOT DB_HideCheckDazzledBlock(_Character, _Cause)
 AND
-IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
 AND
 _Roll >= _PassivePerception
 THEN
@@ -278,20 +320,29 @@ PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER
 AND
 HasActiveStatusWithGroup(_Character, "SG_Blinded", 1)
 AND
-IsTagged(_Character, (TAG)CONCEALED_IMMUNE_ff5982a1-5bb0-4344-8535-0f85e2a5d8b2, 0)
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// Cause is Invisible
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
 AND
-_Roll >= _PassivePerception
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "SEE_INVISIBILITY", 0)
 THEN
 DB_CheckConditionsForHideResult(_Character, _Cause);
 
 //END_REGION
 
 //REGION Sneak Checks
-//REGION Hide Checks
 // When the player gains the SNEAK_CHECK condition, start a timer to trigger
 // checks on all entities the aura marked.
 IF
 StatusApplied((GUIDSTRING)_Cause, "SNEAK_CHECK", _, _)
+AND
+TimerExists("SneakCheckTimer", 0)
 THEN
 TimerLaunch("SneakCheckTimer", 30);
 
@@ -332,7 +383,6 @@ DB_CheckConditionsForHideResult(_Character, _Cause)
 AND
 _Roll > 1
 THEN
-ApplyStatus(_Character, "HIDDEN_FROM", -1.0, 0, _Cause);
 ApplyStatus(_Character, "UNDETECTED_FROM_HELPER_A", 0.0, 0, _Cause);
 DB_UndetectedHelperSchedule(_Character, _Cause);
 NOT DB_CheckConditionsForHideResult(_Character, _Cause);
@@ -357,7 +407,7 @@ IntegerSum(_CritBase, _CritModifier, (INTEGER)_CritThreshold)
 AND
 _TotalRoll < _CritThreshold
 THEN
-ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+PROC_ApplyHiddenFrom(_Character, _Cause);
 ApplyStatus(_Cause, "UNDETECTED_FROM_REMOVE", 0.0, 0, _Character);
 
 // Critical failure with cover buff
@@ -378,8 +428,26 @@ IntegerSum(_CritBase, _CritModifier, (INTEGER)_CritThreshold)
 AND
 _TotalRoll < _CritThreshold
 THEN
-ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+PROC_ApplyHiddenFrom(_Character, _Cause);
 ApplyStatus(_Cause, "UNDETECTED_FROM_REMOVE", 0.0, 0, _Character);
+
+// These two procs handle the invisibility interaction, as invisible creatures
+// (usually) can't be spotted.
+PROC
+PROC_ApplyHiddenFrom((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 0)
+THEN
+ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+
+PROC
+PROC_ApplyHiddenFrom((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "SEE_INVISIBILITY", 1)
+THEN
+ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
 
 // I'm not entirely sure why, but directly applying the status breaks with
 // non-hostile NPCs, resulting in enormous stacks of UNDETECTED that can't
@@ -410,6 +478,262 @@ AND
 HasActiveStatus(_Character, "HIDDEN_FROM", 1)
 THEN
 ApplyStatus(_Character, "HIDE_RECHECK", 0.0, 0, _Cause);
+//END_REGION
+
+//REGION Free Hide
+IF
+StatusApplied((GUIDSTRING)_Character, "HIDE_FREE", (GUIDSTRING)_Cause, _)
+AND
+TimerExists("HideCheckTimer", 0)
+THEN
+TimerLaunch("HideCheckTimer", 30);
+//END_REGION
+
+//REGION NPC Hide DC Calculation
+// Originally we did these calcs in Khonsu, but the CPU load on NPC
+// turns was untenably large. Instead, we calculate the hide DC once
+// on the start of an NPC's turn, and just assume that that will be
+// close enough throughout that turn. All the complexity here is just
+// to ensure that the calculations for multiple entities with
+// concurrent turns don't step on each other.
+IF
+TurnStarted((GUIDSTRING)_Character)
+AND
+IsPlayer((CHARACTER)_Character, 0)
+THEN
+ApplyStatus(_Character, "HIDE_NPC_CALC", 0.0);
+
+IF
+StatusApplied((GUIDSTRING)_Character, "HIDE_NPC_CALC", _, _)
+AND
+GUIDToString(_Character, (STRING)_GUIDString)
+AND
+Concatenate("HideCalculationGetDC", _GUIDString, (STRING)_HideDCString)
+AND
+Concatenate("HideCalculationFinal", _GUIDString, (STRING)_HideFinalString)
+THEN
+DB_HideCalculationNPC(_Character, 0, _HideDCString, _HideFinalString);
+IteratePlayerCharacters(_HideDCString, _HideFinalString);
+
+// Allows Osiris to detect which characters are immune to the
+// cause's concealment.
+IF
+StatusApplied((GUIDSTRING)_Character, "HIDE_CHECK_NPC_CONCEALED_BLOCK", (GUIDSTRING)_Cause, _)
+THEN
+DB_HideCalculationNPCConcealedBlock(_Character, _Cause);
+
+// Allows Osiris to detect which causes are not affected by the
+// character's dazzled.
+IF
+StatusApplied((GUIDSTRING)_Character, "HIDE_CHECK_NPC_DAZZLED_BLOCK", (GUIDSTRING)_Cause, _)
+THEN
+DB_HideCalculationNPCDazzledBlock(_Character, _Cause);
+
+// Character can't see Cause, presume standard cover, and
+// ignore concealment. We currently don't have any bonuses
+// that would need to stack cleverly with this.
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+HasLineOfSight(_Character, _Cause, 0)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_RawPerception)
+AND
+IntegerSum(_RawPerception, 2, (INTEGER)_PassivePerception)
+AND
+_PassivePerception > _Current
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, _PassivePerception, _HideDCString, _HideFinalString);
+
+// Cause is concealed from Character, by a means that doesn't
+// care about darkvision.
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+HasActiveStatus(_Cause, "CONCEALED", 1)
+AND
+NOT DB_HideCalculationNPCConcealedBlock(_Character, _Cause)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_DISABLE_b9f18995-a30d-4dd0-b009-9fa832acb8e1, 0)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_TO_DARKVISION_3b4fb323-8d19-441d-b256-1fa359a9bbcd, 1)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_TO_GREATER_DARKVISION_05fb05f0-84be-46c6-b772-90859a01c95d, 1)
+AND
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+AND
+_PassivePerception > _Current
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, _PassivePerception, _HideDCString, _HideFinalString);
+
+// Cause is concealed from Character, by a means that does care
+// about greater darkvision.
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+HasActiveStatus(_Cause, "CONCEALED", 1)
+AND
+NOT DB_HideCalculationNPCConcealedBlock(_Character, _Cause)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_DISABLE_b9f18995-a30d-4dd0-b009-9fa832acb8e1, 0)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_TO_DARKVISION_3b4fb323-8d19-441d-b256-1fa359a9bbcd, 1)
+AND
+HasPassive(_Character, "SuperiorDarkvision", 0)
+AND
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+AND
+_PassivePerception > _Current
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, _PassivePerception, _HideDCString, _HideFinalString);
+
+// Cause is concealed from Character, by a means that does care
+// about all darkvision.
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+HasActiveStatus(_Cause, "CONCEALED", 1)
+AND
+NOT DB_HideCalculationNPCConcealedBlock(_Character, _Cause)
+AND
+IsTagged(_Cause, (TAG)CONCEALED_DISABLE_b9f18995-a30d-4dd0-b009-9fa832acb8e1, 0)
+AND
+HasPassive(_Character, "SuperiorDarkvision", 0)
+AND
+HasPassive(_Character, "Darkvision", 0)
+AND
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+AND
+_PassivePerception > _Current
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, _PassivePerception, _HideDCString, _HideFinalString);
+
+// If the cause is in full darkness, or otherwise persistently hidden,
+// they automatically succeed against non-darkvision characters.
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+IsTagged(_Cause, (TAG)DARKNESS_badb91be-7a47-4898-beed-d0e3a7083783, 1)
+AND
+HasPassive(_Character, "SuperiorDarkvision", 0)
+AND
+HasPassive(_Character, "Darkvision", 0)
+AND
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, 1, _HideDCString, _HideFinalString);
+
+// Character is Dazzled
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+HasActiveStatus(_Character, "DAZZLED", 1)
+AND
+NOT DB_HideCalculationNPCDazzledBlock(_Character, _Cause)
+AND
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+AND
+_PassivePerception > _Current
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, _PassivePerception, _HideDCString, _HideFinalString);
+
+// Character is Blinded
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Blinded", 1)
+AND
+IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, 1, _HideDCString, _HideFinalString);
+
+// Cause is Invisible
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "SEE_INVISIBILITY", 0)
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, 1, _HideDCString, _HideFinalString);
+
+// Characters that are allied with the player cannot hide
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+IsAlly((CHARACTER)_Character, (CHARACTER)_Cause, 1)
+THEN
+NOT DB_HideCalculationNPC((GUIDSTRING)_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, 100, _HideDCString, _HideFinalString);
+
+// Cleanup
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+THEN
+NOT DB_HideCalculationNPCConcealedBlock(_Character, _Cause);
+NOT DB_HideCalculationNPCDazzledBlock(_Character, _Cause);
+
+// Once every entity is checked, if no valid sources of DC were found, hiding
+// is either impossible due to direct sight, or irrelevent. Set DC to 100.
+IF
+EntityEvent(_, _HideFinalString)
+AND
+DB_HideCalculationNPC(_Cause, (INTEGER)_Current, (STRING)_HideDCString, (STRING)_HideFinalString)
+AND
+_Current == 0
+THEN
+NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_HideCalculationNPC(_Cause, 100, _HideDCString, _HideFinalString);
+
+// Set a status to store the DC for the character.
+IF
+EntityEvent(_, _HideFinalString)
+AND
+DB_HideCalculationNPC((GUIDSTRING)_Character, (INTEGER)_DC, (STRING)_HideDCString, _HideFinalString)
+AND
+IntegerProduct(_DC, 6, (INTEGER)_DCMult)
+AND
+IntegerToReal(_DCMult, (REAL)_DCReal)
+THEN
+ApplyStatus(_Character, "HIDE_NPC_DC", _DCReal, 1, _Character);
+NOT DB_HideCalculationNPC(_Character, _DC, _HideDCString, _HideFinalString);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

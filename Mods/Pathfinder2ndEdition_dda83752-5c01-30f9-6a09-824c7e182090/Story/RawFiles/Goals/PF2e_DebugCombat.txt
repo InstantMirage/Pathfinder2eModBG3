@@ -1,0 +1,32 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+// By using oe debug_encounter you can spawn a combat containing the enemies
+// listed below. Change these root IDs to whatever you need as you go, but try
+// to avoid committing those changes into the repo.
+// Integer variable allows the same UUID to be entered multiple times for multiple spawns.
+DB_DebugEncounterTemplates(1, (GUIDSTRING)SHA_Skeleton_Melee_d7812957-2478-48ff-856c-d0cf27d24c55);
+DB_DebugEncounterTemplates(2, (GUIDSTRING)SHA_Skeleton_Melee_d7812957-2478-48ff-856c-d0cf27d24c55);
+DB_DebugEncounterTemplates(3, (GUIDSTRING)SHA_Skeleton_Ranger_01483a31-8851-4d2b-a36c-8caadc2d2863);
+KBSECTION
+IF
+TextEvent("debug_encounter")
+AND
+DB_DebugEncounterTemplates((INTEGER)_Dummy, (GUIDSTRING)_Template)
+AND
+GetClosestPlayerToPosition(0.0, 0.0, 0.0, (CHARACTER)_Player, _)
+AND
+CreateAtObject(_Template, (GUIDSTRING)_Player, 1, 0, "DebugEncounterSpawnEvent", 0, (GUIDSTRING)_Object)
+THEN
+DB_DebugEncounterParticipants(_Player, _Object);
+
+IF
+EntityEvent((GUIDSTRING)_Entity, "DebugEncounterSpawnEvent")
+AND
+DB_DebugEncounterParticipants((GUIDSTRING)_Player, _Entity)
+THEN
+RequestAutoLevel((CHARACTER)_Entity);
+SetRelationTemporaryHostile((CHARACTER)_Entity, (CHARACTER)_Player);
+EXITSECTION
+
+ENDEXITSECTION

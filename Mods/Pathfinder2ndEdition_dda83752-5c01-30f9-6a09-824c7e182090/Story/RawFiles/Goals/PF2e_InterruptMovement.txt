@@ -66,9 +66,18 @@ CharacterMoveToPosition((CHARACTER)_Caster, _XCN, _YCN, _ZCN, "Run", "ClearStrid
 // stride, which is very bad.
 IF
 EntityEvent((GUIDSTRING)_Caster, "ClearStrideConditionOffTurn")
+AND
+DB_InterruptStepAwayActive((INTEGER)_ActionID, (REAL)_Distance, _Caster, (GUIDSTRING)_Target)
 THEN
+NOT DB_InterruptStepAwayActive(_ActionID, _Distance, _Caster, _Target);
 RemoveStatus(_Caster, "STRIDE");
 RemoveStatus(_Caster, "INTERRUPT_FREE_MOVEMENT");
+PROC_SteerToCause(_Caster, _Target);
+
+PROC
+PROC_SteerToCause((GUIDSTRING)_Caster, (GUIDSTRING)_Target)
+THEN
+SteerTo((CHARACTER)_Caster, (CHARACTER)_Target, 0);
 //END_REGION
 EXITSECTION
 

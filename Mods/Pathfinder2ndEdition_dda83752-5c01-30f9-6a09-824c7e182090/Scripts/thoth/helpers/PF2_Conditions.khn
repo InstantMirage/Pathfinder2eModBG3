@@ -148,7 +148,7 @@ function OffGuardNoFlanking(target,source)
 	target = target or context.Target
 	source = source or context.Source
 	local feint = IsMeleeAttack() & HasAnyStatus({'FEINT_ROUND','FEINT_ONCE'},{},{},target,source)
-	local hidden = HasStatus('SG_Invisible',source) | HasStatus('SNEAKING',source)
+	local hidden = HasStatus('SG_Invisible',source) | HasStatus('HIDDEN_FROM',target,source) | HasStatus('HIDDEN_NPC',source)
 	--You aren't off-guard to hidden, undetected, or flanking creatures of your level or lower
 	local denyadvantage = Tagged('ROGUE_DENYADVANTAGE',target) & (target.Level >= source.Level)
 	
@@ -1430,11 +1430,15 @@ end
 
 function ConcentrateSpell(source)
 	source = source or context.Source
-	return ConditionResult((~HasAnyStatus({'SG_RAGE'}, source)).Result, {ConditionError("CantConcentrate")})
+	return ConditionResult((~HasAnyStatus({'SG_RAGE'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
 end
 
 function SpellIgnoresConcealed()
 	return SpellId('Projectile_IncredibleAim') | SpellId('Projectile_HuntersAim')
+end
+
+function SpellIgnoresHidden()
+	return SpellId('Target_PointOut_NPC')
 end
 
 function SkillCheckModifier(skill, ability, entity)
@@ -1464,4 +1468,73 @@ end
 
 function HideCheckStatusDuration(entity)
 	return math.ceil(GetStatusDuration("HIDE_CHECK_RESULT", entity))
+end
+
+function IsConcealedTo(source, target)
+	if (HasStatus('CONCEALED', source).Result
+			and not (HasPassive('SuperiorDarkvision', target).Result and not Tagged('CONCEALED_TO_GREATER_DARKVISION', source).Result)
+			and not (HasPassive('Darkvision', target).Result and not (Tagged('CONCEALED_TO_DARKVISION', source).Result or Tagged('CONCEALED_TO_GREATER_DARKVISION', source).Result))
+			and not HasStatus('CONCEALED_BLOCK', target, source).Result
+			and not Tagged('BLINDSIGHT', target).Result) then
+		return ConditionResult(true, {ConditionError("Concealed")}, {ConditionError("NotConcealed")}, 0.75)
+	end
+	if (HasStatus('DAZZLED', target).Result and not (HasStatus('DAZZLED_BLOCK', source, target).Result)) then
+		return ConditionResult(true, {ConditionError("Concealed")}, {ConditionError("NotConcealed")}, 0.75)
+	end
+	if (HasStatus('SG_Blind', target).Result and not Tagged('BLINDSIGHT', target).Result) then
+		return ConditionResult(true, {ConditionError("Concealed")}, {ConditionError("NotConcealed")}, 0.75)
+	end
+	return ConditionResult(false, {ConditionError("NotConcealed")}, {ConditionError("Concealed")}, 1.0)
+end
+
+function NPCHideGetDC(entity)
+	return math.ceil(GetStatusDuration("HIDE_NPC_DC", entity))
+end
+
+function NPCHideRecheckSight(source, sourcePosition)
+	source = source or context.Source
+	sourcePosition = sourcePosition or context.SourcePosition
+
+	local inSight = false
+	local enemies = GetEnemiesWithinRange(100, source, source)
+	if enemies ~= nil then
+		if #enemies.Enemies >= 1 then
+			for _, entity in ipairs(enemies.Enemies) do
+				local skip = false
+				if IsConcealedTo(source, entity).Result then
+					skip = true
+				end
+				if (not skip) and (IsInSightPyramid(entity, sourcePosition).Result) then
+					inSight = true
+				end
+            end
+        end
+    end
+    return ConditionResult(inSight)
+end
+
+function NPCHideDarknessCheck(source, sourcePosition)
+	source = source or context.Source
+	sourcePosition = sourcePosition or context.SourcePosition
+
+	local inSight = true
+	local enemies = GetEnemiesWithinRange(100, source, source)
+	if enemies ~= nil then
+		if #enemies.Enemies >= 1 then
+			for _, entity in ipairs(enemies.Enemies) do
+				if HasPassive('Darkvision', entity).Result then
+					inSight = false
+				end
+				if HasPassive('SuperiorDarkvision', entity).Result then
+					inSight = false
+				end
+            end
+        end
+    end
+    return ConditionResult(inSight)
+end
+
+function FlatCheckFailed(DC, entity)
+	entity = entity or context.Source
+	return ConditionResult(math.ceil(GetStatusDuration("FLAT_CHECK_ROLL", entity)) <= DC)
 end
