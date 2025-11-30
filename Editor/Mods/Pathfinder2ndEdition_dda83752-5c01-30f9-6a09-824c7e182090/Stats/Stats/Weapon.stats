@@ -2823,6 +2823,7 @@
         <field name="PassivesOnEquip" type="StringTableFieldDefinition" value="MAG_Thorn_Blade_Passive" />
         <field name="ValueUUID" type="GuidObjectTableFieldDefinition" value="9b6a4ab2-323b-4030-89ab-030252bb6214" />
         <field name="Rarity" type="EnumerationTableFieldDefinition" value="Rare" enumeration_type_name="Rarity" version="1" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="IF( not HasPassive('Thief_Finesse') ):BlockAbilityModifierDamageBonus();IF( not HasPassive('Thief_Finesse') ):WeaponDamage(StrengthModifier,Slashing);WeaponAttackRollBonus(1);WeaponProperty(Magical);IF(IsConcentrating(context.Source)):WeaponDamage(1d4,Poison);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3026,6 +3027,7 @@
         <field name="Unique" type="IntegerTableFieldDefinition" value="1" />
         <field name="PassivesOnEquip" type="StringTableFieldDefinition" value="DeadlyD10;UND_Elder_Warpick_Passive;" />
         <field name="ValueUUID" type="GuidObjectTableFieldDefinition" value="86e7e503-a225-4b48-819e-2e24de1f904a" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(1);WeaponProperty(Magical);IF(HasStatus('UND_HARDWORK_TARGET', context.Target)):WeaponDamage(1d4, Piercing);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3065,7 +3067,7 @@
         <field name="PassivesMainHand" type="StringTableFieldDefinition" value="MAG_TheCrimson_Vicious_Passive" />
         <field name="PassivesOffHand" type="StringTableFieldDefinition" value="MAG_TheCrimson_TwoWeapon_Passive" />
         <field name="ValueUUID" type="GuidObjectTableFieldDefinition" value="d24c441f-7ebe-4229-8522-cf34c257ff20" />
-        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="IF( not HasPassive('Thief_Finesse') ):BlockAbilityModifierDamageBonus();IF( not HasPassive('Thief_Finesse') ):WeaponDamage(StrengthModifier,Piercing);WeaponAttackRollBonus(1);WeaponProperty(Magical);IF(HasHPPercentageEqualOrLessThan(50, context.Target)):WeaponDamage(1d4, Piercing);" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="IF( not HasPassive('Thief_Finesse') ):BlockAbilityModifierDamageBonus();IF( not HasPassive('Thief_Finesse') ):WeaponDamage(StrengthModifier,Piercing);WeaponAttackRollBonus(1);WeaponProperty(Magical);IF(HasStatus('MAG_THE_CRIMSON_VICIOUS', GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand, context.Source)) and OffGuard()):WeaponDamage(7, Piercing);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3123,7 +3125,7 @@
         <field name="RootTemplate" type="RootTemplateTableFieldDefinition" value="20bd2850-f6b3-4f13-bf96-c566d8df0de4" />
         <field name="Damage" type="DiceTableFieldDefinition" value="2d12" />
         <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
-        <field name="UseConditions" type="StringTableFieldDefinition" value="IsNotHumanoid(context.Source) or HasPassive('GiantInstinct');" />
+        <field name="UseConditions" type="StringTableFieldDefinition" value="HasPassive('GiantInstinct',context.Source) or IsNotHumanoid(context.Source);" />
         <field name="Weight" type="FloatTableFieldDefinition" value="8.5" />
         <field name="BoostsOnEquipMainHand" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(1);WeaponProperty(Magical);" />
@@ -3134,9 +3136,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="3f754547-1f7b-4c7a-a02b-a0626758712a" />
         <field name="Name" type="NameTableFieldDefinition" value="WPN_Ogre_Club" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="06b6288f-a943-4b3d-b408-c9585083da2c" />
-        <field name="RootTemplate" type="RootTemplateTableFieldDefinition" value="3186614b-537e-44f1-82bc-c9edba59e593" />
+        <field name="RootTemplate" type="RootTemplateTableFieldDefinition" value="1fdc0473-8d0f-4e59-8ef8-9bd67568c002" />
         <field name="Damage" type="DiceTableFieldDefinition" value="2d8" />
-        <field name="UseConditions" type="StringTableFieldDefinition" value="IsNotHumanoid(context.Source) or HasPassive('GiantInstinct');" />
+        <field name="UseConditions" type="StringTableFieldDefinition" value="HasPassive('GiantInstinct',context.Source) or IsNotHumanoid(context.Source);" />
         <field name="Weapon Properties" type="EnumerationListTableFieldDefinition" value="Melee;Dippable" enumeration_type_name="WeaponFlags" version="1" />
         <field name="Weight" type="FloatTableFieldDefinition" value="8.5" />
         <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(1);WeaponProperty(Magical);" />
@@ -3149,7 +3151,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="06b6288f-a943-4b3d-b408-c9585083da2c" />
         <field name="RootTemplate" type="RootTemplateTableFieldDefinition" value="01da5a5b-97cd-4989-9ae3-af646eb35bc9" />
         <field name="Damage" type="DiceTableFieldDefinition" value="2d8" />
-        <field name="UseConditions" type="StringTableFieldDefinition" value="IsNotHumanoid(context.Source) or HasPassive('GiantInstinct');" />
+        <field name="UseConditions" type="StringTableFieldDefinition" value="HasPassive('GiantInstinct',context.Source) or IsNotHumanoid(context.Source);" />
         <field name="Weapon Properties" type="EnumerationListTableFieldDefinition" value="Melee;Dippable" enumeration_type_name="WeaponFlags" version="1" />
         <field name="Weight" type="FloatTableFieldDefinition" value="8.5" />
         <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(1);WeaponProperty(Magical);" />
@@ -3159,10 +3161,9 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="9bce4484-b112-498c-9409-750cf66e4c90" />
         <field name="Name" type="NameTableFieldDefinition" value="WPN_Gnoll_Sword" />
-        <field name="Using" type="BaseClassTableFieldDefinition" value="5bfcf7ef-39ba-441b-b4c7-807771d740d1" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="c8a58aa6-155c-4bc3-b90e-02ba8aaecd78" />
         <field name="ItemGroup" type="StringTableFieldDefinition" value="Shortsword" />
         <field name="RootTemplate" type="RootTemplateTableFieldDefinition" value="3af0f251-36b5-425f-8d2a-f81559a70967" />
-        <field name="UseConditions" type="StringTableFieldDefinition" value="Tagged('GNOLL', context.Source) or HasPassive('GiantInstinct');" />
         <field name="DefaultBoosts" type="StringTableFieldDefinition" value="IF( not HasPassive('Thief_Finesse') ):BlockAbilityModifierDamageBonus();IF( not HasPassive('Thief_Finesse') ):WeaponDamage(StrengthModifier,Piercing);WeaponAttackRollBonus(1);WeaponProperty(Magical);" />
       </fields>
     </stat_object>
@@ -3173,7 +3174,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="247c99f7-30b2-4e49-b421-ac3e77e7880e" />
         <field name="ItemGroup" type="StringTableFieldDefinition" value="Flail_Flind" />
         <field name="RootTemplate" type="RootTemplateTableFieldDefinition" value="608e265d-f81b-4c13-a786-e5602852fcf4" />
-        <field name="UseConditions" type="StringTableFieldDefinition" value="Tagged('GNOLL', context.Source) or HasPassive('GiantInstinct');" />
+        <field name="UseConditions" type="StringTableFieldDefinition" value="HasPassive('GiantInstinct'.context.Source) or Tagged('GNOLL', context.Source);" />
         <field name="Weapon Group" type="EnumerationTableFieldDefinition" value="SimpleMeleeWeapon" enumeration_type_name="Weapon Group" version="1" />
         <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(1);WeaponProperty(Magical);" />
       </fields>
@@ -3188,7 +3189,7 @@
         <field name="Damage" type="DiceTableFieldDefinition" value="1d8" />
         <field name="BoostsOnEquipMainHand" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="WeaponRange" type="IntegerTableFieldDefinition" value="220" />
-        <field name="UseConditions" type="StringTableFieldDefinition" value="Tagged('BREWER_CREATURE', context.Source) or HasPassive('GiantInstinct');" />
+        <field name="UseConditions" type="StringTableFieldDefinition" value="HasPassive('GiantInstinct'.context.Source) or Tagged('BREWER_CREATURE', context.Source);" />
         <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(1);WeaponProperty(Magical);" />
       </fields>
     </stat_object>
@@ -3198,7 +3199,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="WPN_Apostle_Scythe" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="06bb3875-3807-48ad-a95e-4b897379f9e5" />
         <field name="RootTemplate" type="RootTemplateTableFieldDefinition" value="3112f0f5-4073-45d2-8e37-eeafa1558896" />
-        <field name="UseConditions" type="StringTableFieldDefinition" value="Tagged('APOSTLE_OF_MYRKUL', context.Source) or HasPassive('GiantInstinct');" />
+        <field name="UseConditions" type="StringTableFieldDefinition" value="HasPassive('GiantInstinct'.context.Source) or Tagged('APOSTLE_OF_MYRKUL', context.Source);" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_Critspec_Polearm);IF(IsNotHumanoid(context.Source)):UnlockSpell(Zone_Cleave_Apostle);" />
         <field name="BoostsOnEquipMainHand" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="BoostsOnEquipOffHand" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
@@ -3215,11 +3216,98 @@
         <field name="RootTemplate" type="RootTemplateTableFieldDefinition" value="c25e9381-7fbd-4e07-9383-9df8aa43d4ed" />
         <field name="Damage" type="DiceTableFieldDefinition" value="2d12" />
         <field name="Weight" type="FloatTableFieldDefinition" value="100" />
-        <field name="Weapon Properties" type="EnumerationListTableFieldDefinition" value="Heavy;Melee" enumeration_type_name="WeaponFlags" version="1" />
         <field name="GameSize" type="EnumerationTableFieldDefinition" value="Huge" enumeration_type_name="ObjectSize" version="1" />
-        <field name="UseConditions" type="StringTableFieldDefinition" value="Tagged('STEEL_WATCHER', context.Source) or HasPassive('GiantInstinct');" />
+        <field name="UseConditions" type="StringTableFieldDefinition" value="HasPassive('GiantInstinct'.context.Source) or Tagged('STEEL_WATCHER', context.Source);" />
         <field name="BoostsOnEquipMainHand" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(2);WeaponProperty(Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a6ca1f3c-ddf9-410f-b21e-0a5e1595257d" />
+        <field name="Name" type="NameTableFieldDefinition" value="WPN_Watcher_Greatsword_B" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="31c1cc21-fc44-41a0-8fe3-446792bd3bd6" />
+        <field name="Weapon Properties" type="EnumerationListTableFieldDefinition" value="Twohanded;Heavy;Melee;Dippable" enumeration_type_name="WeaponFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="805fd8a7-dcd1-464d-ba2f-3a02b10c5e2d" />
+        <field name="Name" type="NameTableFieldDefinition" value="WPN_Watcher_HeavyCrossbow" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="52b5614e-46c6-4737-aea9-ffcd0c8ecfd6" />
+        <field name="UseConditions" type="StringTableFieldDefinition" value="HasPassive('GiantInstinct'.context.Source) or Tagged('STEEL_WATCHER', context.Source);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c5ad2341-6b7e-4aa4-b230-9b8b8dcc9bac" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEN_CapturedGoblin_MurderDagger" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="dd3d27ba-93ac-4f14-848a-f6235c3953d7" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="IF( not HasPassive('Thief_Finesse') ):BlockAbilityModifierDamageBonus();IF( not HasPassive('Thief_Finesse') ):WeaponDamage(StrengthModifier,Piercing);WeaponAttackRollBonus(1);WeaponProperty(Magical);IF(HasStatus('SG_Sleeping', context.Target)):WeaponDamage(1d4, Necrotic);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="48ccbf9e-1c3b-4034-a7ee-884592bf56d1" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEN_Apprentice_DaggerOfShar" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="63bae374-a00f-4712-9749-d73aed58fb1e" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);IF(not IsInSunlight(context.Target)):WeaponDamage(1d6,Necrotic);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a5525595-d583-4bf1-b270-0594de3e9b24" />
+        <field name="Name" type="NameTableFieldDefinition" value="UND_DuergarRaft_PestKillerAxe" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a13380dc-ba21-488c-94af-4c9b4363a981" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);IF(TargetSizeEqualOrSmaller(Size.Small) or Tagged('PLANT',context.Target) or Tagged('MYCONID',context.Target)):WeaponDamage(1d6, Fire);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e0fc61b5-48cc-4ea0-bba0-13a034e77bb3" />
+        <field name="Name" type="NameTableFieldDefinition" value="UND_Duergar_ShortswordOfFirstBlood" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e8d4a358-53f7-4218-a595-9fa4900b4bd4" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="IF( not HasPassive('Thief_Finesse') ):BlockAbilityModifierDamageBonus();IF( not HasPassive('Thief_Finesse') ):WeaponDamage(StrengthModifier,Piercing);WeaponProperty(Magical);IF(HasMaxHPWithoutTemporaryHP(context.Target)):WeaponDamage(1d8, Piercing);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7b5a74da-4ebe-47df-a782-f240c32d27fb" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_LowHP_IncreaseDamage_Greataxe" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8dcce963-8b4f-4eac-aa70-da83ed6f3d32" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(1);WeaponProperty(Magical);IF(HasHPPercentageWithoutTemporaryHPEqualOrLessThan(50, context.Source)):WeaponDamage(1d4,Slashing);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d307e590-a57c-4439-800b-95811e835470" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Fire_IncreaseSlashingDamageToBurning_Handaxe" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="b11bb4d4-ab8f-43bc-b6f8-b1894bc25758" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);IF(HasStatus('BURNING',context.Target)):WeaponDamage(1d4, Slashing);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e5cffbed-2c36-44b0-a55b-e6efe9d170df" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Fire_IncreasePiercingDamageToBurning_HandCrossbow" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5eb1120a-492b-4f6f-9746-66279c112914" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);IF(HasStatus('BURNING',context.Target)):WeaponDamage(1d4, Piercing);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8673b17b-5faf-4333-b097-7cdaf0d7e12b" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Blindside_Shortsword" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8b004026-e65b-4510-b404-b8e2ebd8ae66" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="IF( not HasPassive('Thief_Finesse') ):BlockAbilityModifierDamageBonus();IF( not HasPassive('Thief_Finesse') ):WeaponDamage(StrengthModifier,Piercing);WeaponAttackRollBonus(1);WeaponProperty(Magical);IF(OffGuard()):WeaponDamage(1d8, Psychic);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="dbbe28e9-2a9c-4c91-b44b-b068698f0f4a" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_TheImpaler_Pike" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="69e56c13-ccdd-4f05-b722-212c53f99069" />
+        <field name="DefaultBoosts" type="StringTableFieldDefinition" value="WeaponAttackRollBonus(1);WeaponProperty(Magical);IF(HasMaxHPWithoutTemporaryHP(context.Target)):WeaponDamage(1d10, Piercing);" />
       </fields>
     </stat_object>
   </stat_objects>
