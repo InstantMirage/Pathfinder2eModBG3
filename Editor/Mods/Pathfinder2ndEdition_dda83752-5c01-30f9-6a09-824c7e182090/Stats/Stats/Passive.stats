@@ -15,7 +15,7 @@
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('MAP_PENALTY_2ND', context.Source) and IsAttack()):ApplyStatus(SELF,MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and IsAttack()):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)" />
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_Goaded" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="not IsReactionAttack();" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="(IsCurrentTurnInCombat() or not Combat()) and not IsReactionAttack();" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
@@ -1510,11 +1510,13 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="ad404d09-39a0-4bbe-b15d-dd10901fa63c" />
         <field name="Name" type="NameTableFieldDefinition" value="GiantInstinct" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha33da1f9gd8b6gc956g04b2g7a1a4548d6b2" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Action_Barbarian_Rage" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he42a5fdeg4519g2d87g75cdg6fadc708d6d5" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha33da1f9gd8b6gc956g04b2g7a1a4548d6b2" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_PactOfTheBlade_Warhammer" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he42a5fdeg4519g2d87g75cdg6fadc708d6d5" version="3" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_GiantRage)" />
         <field name="DynamicAnimationTag" type="GuidObjectTableFieldDefinition" value="07234f31-c239-4a57-aeb4-868f3e1a318e" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(RageDamage);LevelMapValue(GiantRageDamage)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1719,8 +1721,18 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e7d50d0c-b16d-44cb-9233-75332c6b1907" />
         <field name="Name" type="NameTableFieldDefinition" value="GiantRageBoosts" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="820668c6-5bc5-4277-91cd-4a136d885abc" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeAttack() and not AgileMAP()):DamageBonus(LevelMapValue(GiantRageDamage));IF(IsMeleeAttack() and AgileMAP()):DamageBonus(LevelMapValue(GiantRageDamage)/2);IF(HasStatus('MightyRage',context.Source) and IsMeleeAttack() and not AgileMAP()):DamageBonus(LevelMapValue(GiantRageDamage));IF(HasStatus('MightyRage',context.Source) and IsMeleeAttack() and AgileMAP()):DamageBonus(LevelMapValue(GiantRageDamage)/2);IF(IsMeleeAttack() and not AgileMAP() and IsCritical()):DamageBonus(LevelMapValue(GiantRageDamage));IF(IsMeleeAttack() and AgileMAP() and IsCritical()):DamageBonus(LevelMapValue(GiantRageDamage)/2);IF(IsMeleeAttack() and not AgileMAP() and IsCritical() and HasPassive('MightyRage',context.Source)):DamageBonus(LevelMapValue(GiantRageDamage));IF(IsMeleeAttack() and AgileMAP() and IsCritical() and HasPassive('MightyRage',context.Source)):DamageBonus(LevelMapValue(GiantRageDamage)/2);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeAttack() and GiantRage()):DamageBonus(LevelMapValue(GiantRageDamage));IF(HasStatus('MightyRage',context.Source) and IsMeleeAttack() and GiantRage()):DamageBonus(LevelMapValue(GiantRageDamage));IF(IsMeleeAttack() and GiantRage() and IsCritical()):DamageBonus(LevelMapValue(GiantRageDamage));IF(IsMeleeAttack() and GiantRage() and IsCritical() and HasPassive('MightyRage',context.Source)):DamageBonus(LevelMapValue(GiantRageDamage));" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(LevelMapValue(GiantRageDamage));IF(HasStatus('MightyRageStatus')):DealDamage(LevelMapValue(GiantRageDamage))" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Target_Thrash') and GiantRage();" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ea9e64d8-b472-4e27-8c49-321e7850d082" />
+        <field name="Name" type="NameTableFieldDefinition" value="GiantRageBoosts_NoHeavy" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8af84c51-35e2-42e9-8443-eb2ae781c822" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeAttack() and not GiantRage() and not AgileMAP()):DamageBonus(LevelMapValue(RageDamage));IF(IsMeleeAttack() and AgileMAP()):DamageBonus(LevelMapValue(RageDamage)/2);IF(HasStatus('MightyRage',context.Source) and IsMeleeAttack() and not GiantRage() and not AgileMAP()):DamageBonus(LevelMapValue(RageDamage));IF(HasStatus('MightyRage',context.Source) and IsMeleeAttack() and AgileMAP()):DamageBonus(LevelMapValue(RageDamage)/2);IF(IsMeleeAttack() and not GiantRage() and not AgileMAP() and IsCritical()):DamageBonus(LevelMapValue(RageDamage));IF(IsMeleeAttack() and AgileMAP() and IsCritical()):DamageBonus(LevelMapValue(RageDamage)/2);IF(IsMeleeAttack() and not GiantRage() and not AgileMAP() and IsCritical() and HasPassive('MightyRage',context.Source)):DamageBonus(LevelMapValue(RageDamage));IF(IsMeleeAttack() and AgileMAP() and IsCritical() and HasPassive('MightyRage',context.Source)):DamageBonus(LevelMapValue(RageDamage)/2);" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Target_Thrash') and not GiantRage();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2089,9 +2101,6 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h265f1f2dgab13g0e23gc53dgeb699dd6f796" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_Enlarge" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Shout_GiantsStature')" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,EnlargeStack,100,10)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6164,7 +6173,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0da43722g6990g86dfg0e29g5791be2ad395" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hfa15b475g8177gab34g5e17g9723191c8478" version="1" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted;DisplayBoostInTooltip;OncePerAttack" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsSpell() and not AutoHeighten()):DamageBonus(SpellPowerLevel);IF(IsSpell() and HasUseCosts('KiPoint')):DamageBonus(LevelMapValue(H1Plus1));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsSpell() and not IsCantrip()):DamageBonus(SpellPowerLevel);IF(IsSpell() and HasUseCosts('KiPoint')):DamageBonus(LevelMapValue(H1Plus1));" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_PotentSpellcasting" />
       </fields>
     </stat_object>
@@ -6174,7 +6183,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="SorcerousPotencyHealing" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnHeal" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsSpell() and not IsCantrip()" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HealDoneGreaterThan(0) and IsSpell() and not IsCantrip();" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasUseCosts('KiPoint')):RegainHitPoints(SpellPowerLevel); IF(HasUseCosts('KiPoint')):RegainHitPoints(LevelMapValue(H1Plus1))" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="0a2995d8-a76d-4a3b-837a-3bf331f8e2cc" />
         <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
@@ -8590,6 +8599,8 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4e7fd7e7g58acg8545gf519g0455bb6988be" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3f49016dgd813g7dcbg9171gaed92e3a7622" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_ChannelElements);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(ChannelingStatus)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8762,6 +8773,14 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h051201ddgcaadgba75gb964g06aac61fa3e8" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc34661f5g5d2eg11b7gdf80g08f557973cd2" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_ArmorInEarth);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a43875b2-044c-4615-a242-b6f03a8db863" />
+        <field name="Name" type="NameTableFieldDefinition" value="RemoveArmorKineticist" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_DismissElements);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9127,9 +9146,10 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h62c30779g2098gb3begdee0g150714ef4353" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h15e9723dg2a61g7ad1gc3bdgab5246c61e97" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_MartialArts_BonusUnarmedStrike" />
-        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted;OncePerTurn" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(SpellId('Shout_ChannelElements')):ApplyStatus(SELF,KineticistFreeStatus,100,1); IF(IsKineticistFree()):ApplyStatus(SELF,ChannelingStatus,100,-1)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="TurnBased() and not (HasStatus('ChannelingStatus')) and ( SpellId('Shout_ChannelElements') or IsKineticistFree());" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
