@@ -215,7 +215,7 @@
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
         <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Loop" />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Buff" enumeration_type_name="VerbalIntent" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(Combat(context.Source)):ApplyStatus(SELF,HIDDEN,100,-1);IF(Combat(context.Source)):ApplyStatus(SELF,HIDE_CHECK_RESULT,100,1d20);AOE:IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and not HasStatus('HIDDEN_FROM', context.Target, context.Source)):ApplyStatus(HIDDEN_FROM_TECHNICAL,100,0);AOE:IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and HasStatus('CONCEALED_BLOCK', context.Target, context.Source)):ApplyStatus(HIDE_CHECK_CONCEALED_BLOCK,100,0);AOE:IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and HasStatus('DAZZLED_BLOCK', context.Source, context.Target)):ApplyStatus(HIDE_CHECK_DAZZLED_BLOCK,100,0);IF(not Combat(context.Source)):ApplyStatus(SNEAKING,100,-1);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(Combat(context.Source)):ApplyStatus(SELF,HIDDEN,100,-1);IF(Combat(context.Source)):ApplyStatus(SELF,HIDE_CHECK_RESULT,100,1d20);AOE:IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and not HasStatus('HIDDEN_FROM', context.Target, context.Source)):ApplyStatus(HIDDEN_FROM_TECHNICAL,100,0);AOE:IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and IsConcealedTo(context.Source, context.Target, true)):ApplyStatus(HIDE_CHECK_CONCEALED,100,0);IF(not Combat(context.Source)):ApplyStatus(SNEAKING,100,-1);" />
         <field name="RequirementEvents" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved;OnTurn" enumeration_type_name="StatusEvent" version="1" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="100" />
         <field name="AoEConditions" type="StringTableFieldDefinition" value="Character() and not Ally();" />
@@ -1544,6 +1544,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9c5a8fd3gb1bdgbf37g083dg2a2a92827355" version="3" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="BardicInspiration:1;KiPoint:1" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="5e57443f-284e-47b2-915e-5b6417db269c,,;,,;3b1ecad1-dd85-4073-8799-e353e2460691,,;d172e037-7041-4352-9a20-5f4b185f9ef1,,;5bcdefbb-2194-46c2-ac77-0b2d8472a5f7,,;,,;5fdb66be-7506-411a-a7ea-c4783288aac8,,;,,;,," />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

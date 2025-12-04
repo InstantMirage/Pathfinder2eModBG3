@@ -142,7 +142,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="DarknessRules" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnLongRest;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ADVANTAGE_DISABLER,100,-1);ApplyStatus(DISPLAY_HIDDEN,100,-1);ApplyStatus(DISPLAY_CONCEALED,100,-1);ApplyStatus(DISPLAY_DAZZLED,100,-1);ApplyStatus(DISPLAY_STUPEFIED_1,100,-1);ApplyStatus(DISPLAY_STUPEFIED_2,100,-1);ApplyStatus(DISPLAY_STUPEFIED_3,100,-1);ApplyStatus(DISPLAY_STUPEFIED_4,100,-1)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ADVANTAGE_DISABLER,100,-1);ApplyStatus(DISPLAY_HIDDEN,100,-1);ApplyStatus(DISPLAY_CONCEALED,100,-1);ApplyStatus(DISPLAY_STUPEFIED_1,100,-1);ApplyStatus(DISPLAY_STUPEFIED_2,100,-1);ApplyStatus(DISPLAY_STUPEFIED_3,100,-1);ApplyStatus(DISPLAY_STUPEFIED_4,100,-1)" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(FlatCheckReaction);" />
       </fields>
     </stat_object>
@@ -2292,7 +2292,19 @@
         <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="ReactionActionPoint:1;KiPoint:1;BardicInspiration:1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Bard_Countercharm" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResource(KiPoint,1,0);UnlockInterrupt(Interrupt_CounterPerformance)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResource(KiPoint,1,0);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(COUNTER_PERFORMANCE_SOURCE,100,-1);ApplyStatus(COUNTER_PERFORMANCE_ROLL,100,1d20);ApplyStatus(COUNTER_PERFORMANCE_ALLY,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c659c631-8c02-46d9-a048-3b4d95124682" />
+        <field name="Name" type="NameTableFieldDefinition" value="CounterPerformanceTechnical" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnActionResourcesChanged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not (HasActionResource('ReactionActionPoint', 1, 0, false, false, context.Source) and HasActionResource('KiPoint', 1, 0, false, false, context.Source) and HasActionResource('BardicInspiration', 1, 0, false, false, context.Source));" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(COUNTER_PERFORMANCE_SOURCE)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -5431,10 +5443,10 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e4c73ad4-b343-40ca-9a87-a7afddfb58c1" />
         <field name="Name" type="NameTableFieldDefinition" value="InspiredStratagem" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc6134047ga9f9g8279gc25fg2c495ce9849a" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h31a5998fga068gea39g295dgbaf6ac42fc5b" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h31a5998fga068gea39g295dgbaf6ac42fc5b" version="2" />
         <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Action_KnowledgeOfTheAges" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(InspiredStratagemInterrupt);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_CosmicOmen" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(Interrupt_InspiredStratagem);" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>

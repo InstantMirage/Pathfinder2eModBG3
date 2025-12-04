@@ -1,0 +1,148 @@
+local __util = require 'larian.util'
+--Conditions for Baldur's Path hiding and concealment
+
+function SpellIgnoresConcealed()
+	return SpellId('Projectile_IncredibleAim') | SpellId('Projectile_HuntersAim')
+end
+
+function SpellIgnoresHidden()
+	return SpellId('Target_PointOut_NPC')
+end
+
+function HideCheckStatusDuration(entity)
+	return math.ceil(GetStatusDuration("HIDE_CHECK_RESULT", entity))
+end
+
+-- Concealed statuses that have conditions can be implemented by
+-- adding them to these lists. Give the blocking status to the immune
+-- character from the concealed character.
+function HasConditionalConcealed(source, target, hide)
+	local concealmentTypes =
+	{
+		["CONCEALED_SONGBIRDS_CALL"] = "CONCEALED_BLOCK_SONGBIRDS_CALL",
+		["CONCEALED_QUICKEN_TIME"] = "CONCEALED_BLOCK_QUICKEN_TIME"
+	}
+
+	local concealmentNoHideTypes =
+	{
+		["CONCEALED_ELEMENTAL_RAGE"] = "CONCEALED_BLOCK_ELEMENTAL_RAGE"
+	}
+
+	local dazzledTypes =
+	{
+		["DAZZLED_SONGBIRDS_CALL"] = "DAZZLED_BLOCK_SONGBIRDS_CALL",
+		["DAZZLED_QUICKEN_TIME"] = "DAZZLED_BLOCK_QUICKEN_TIME"
+	}
+
+	for status, blocker in pairs(concealmentTypes) do
+		if HasStatus(status, source).Result and not HasStatus(blocker, source, target).Result then
+			return ConditionResult(true)
+		end
+	end
+
+	for status, blocker in pairs(dazzledTypes) do
+		if HasStatus(status, target).Result and not HasStatus(blocker, source, target).Result then
+			return ConditionResult(true)
+		end
+	end
+
+	if not hide then
+		for status, blocker in pairs(concealmentNoHideTypes) do
+			if HasStatus(status, source).Result and not HasStatus(blocker, source, target).Result then
+				return ConditionResult(true)
+			end
+		end
+	end
+
+	return ConditionResult(false)
+end
+
+function IsConcealedTo(source, target, hide)
+	resultFalse = ConditionResult(false, {ConditionError("NotConcealed")}, {ConditionError("Concealed")}, 1.0)
+	resultTrue = ConditionResult(true, {ConditionError("Concealed")}, {ConditionError("NotConcealed")}, 0.80)
+
+	if Tagged('BLINDSIGHT', target).Result then
+		return resultFalse
+	end
+	if Tagged('CONCEALED_DISABLE', source).Result then
+		return resultFalse
+	end
+
+	if Tagged('CONCEALED_TO_GREATER_DARKVISION', source).Result then
+		return resultTrue
+	end
+	if Tagged('CONCEALED_TO_DARKVISION', source).Result and not HasPassive('SuperiorDarkvision', target).Result then
+		return resultTrue
+	end
+	if Tagged('CONCEALED', source).Result then
+		return resultTrue
+	end
+	if Tagged('CONCEALED_NO_HIDE', source).Result and not hide then
+		return resultTrue
+	end
+	if HasStatus('DAZZLED', target).Result then
+		return resultTrue
+	end
+	if HasStatus('SG_Blind', target).Result then
+		return resultTrue
+	end
+	if HasStatus('SG_Invisible', source).Result and not HasStatus('SEE_INVISIBILITY', target).Result then
+		return resultTrue
+	end
+	if HasConditionalConcealed(source, target, hide).Result then
+		return resultTrue
+	end
+	return resultFalse
+end
+
+function NPCHideGetDC(entity)
+	return math.ceil(GetStatusDuration("HIDE_NPC_DC", entity))
+end
+
+function NPCHideRecheckSight(source, sourcePosition)
+	source = source or context.Source
+	sourcePosition = sourcePosition or context.SourcePosition
+
+	local inSight = false
+	local enemies = GetEnemiesWithinRange(100, source, source)
+	if enemies ~= nil then
+		if #enemies.Enemies >= 1 then
+			for _, entity in ipairs(enemies.Enemies) do
+				local skip = false
+				if IsConcealedTo(source, entity, true).Result then
+					skip = true
+				end
+				if (not skip) and (IsInSightPyramid(entity, sourcePosition).Result) then
+					inSight = true
+				end
+            end
+        end
+    end
+    return ConditionResult(inSight)
+end
+
+function NPCHideDarknessCheck(source, sourcePosition)
+	source = source or context.Source
+	sourcePosition = sourcePosition or context.SourcePosition
+
+	local inSight = true
+	local enemies = GetEnemiesWithinRange(100, source, source)
+	if enemies ~= nil then
+		if #enemies.Enemies >= 1 then
+			for _, entity in ipairs(enemies.Enemies) do
+				if HasPassive('Darkvision', entity).Result then
+					inSight = false
+				end
+				if HasPassive('SuperiorDarkvision', entity).Result then
+					inSight = false
+				end
+            end
+        end
+    end
+    return ConditionResult(inSight)
+end
+
+function FlatCheckFailed(DC, entity)
+	entity = entity or context.Source
+	return ConditionResult(math.ceil(GetStatusDuration("FLAT_CHECK_ROLL", entity)) <= DC)
+end

@@ -1,0 +1,628 @@
+<ls:UIWidget x:Name="CursorText_c"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
+             xmlns:ls="clr-namespace:ls;assembly=Code"
+             Template="{StaticResource Hud.Root}"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type ls:Widget}, IsDesignTimeCreatable=True}"
+             ContextName="CursorText"
+             ls:TooltipExtender.Owner="{Binding CurrentPlayer.SelectedCharacter}">
+    <ls:UIWidget.ContentTemplate>
+        <DataTemplate>
+            <DataTemplate.Resources>
+                <Style x:Key="CursorTextStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource HUD.DefaultTextStyle}">
+                    <Setter Property="FontSize" Value="{StaticResource ScaledTitleFontSize}"/>
+                    <Setter Property="FontWeight" Value="DemiBold" />
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                    <Setter Property="Foreground" Value="{StaticResource LS_tint100}"/>
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="CollapsedNameStyle" TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="Effect" Value="{StaticResource HUD.DropShadow}"/>
+                    <Setter Property="Foreground" Value="{StaticResource LS_tint100}"/>
+                    <Setter Property="FontSize" Value="{StaticResource ScaledMediumFontSize}"/>
+                    <Setter Property="FontWeight" Value="DemiBold"/>
+                </Style>
+                <Style x:Key="CursorErrorTextStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource CursorTextStyle}">
+                    <Setter Property="FontSize" Value="{StaticResource ScaledSmallishFontSize}"/>
+                    <Setter Property="FontWeight" Value="DemiBold"/>
+                    <Setter Property="TextAlignment" Value="Left"/>
+                    <Setter Property="Foreground" Value="{StaticResource LS_alertTxtColor}"/>
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                    <Setter Property="Width" Value="900" />
+                </Style>
+
+                <Style x:Key="ModifierTextBlockStatus" TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="{StaticResource ScaledMediumFontSize}"/>
+                    <Setter Property="Foreground" Value="Yellow"/>
+                    <Setter Property="FontWeight" Value="DemiBold"/>
+                    <Setter Property="Effect" Value="{StaticResource HUD.DropShadow}"/>
+                </Style>
+
+                <DataTemplate x:Key="StatusItemTemplate" DataType="ls:VMAdvantage">
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock x:Name="cStatusDisplay" Style="{StaticResource ModifierTextBlockStatus}" Text="{Binding Description}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="cStatusDisplayHidden" Style="{StaticResource ModifierTextBlockStatus}" Foreground="DarkOrange" Text="{Binding Description}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="cHiddenChance" Style="{StaticResource ModifierTextBlockStatus}" Foreground="DarkOrange" Text=" (50%) " Visibility="Collapsed"/>
+                        <TextBlock x:Name="cConcealedChance" Style="{StaticResource ModifierTextBlockStatus}" Text=" (80%) " Visibility="Collapsed"/>
+                        <TextBlock x:Name="cStupefied1Chance" Style="{StaticResource ModifierTextBlockStatus}" Text=" (75%) " Visibility="Collapsed"/>
+                        <TextBlock x:Name="cStupefied2Chance" Style="{StaticResource ModifierTextBlockStatus}" Text=" (70%) " Visibility="Collapsed"/>
+                        <TextBlock x:Name="cStupefied3Chance" Style="{StaticResource ModifierTextBlockStatus}" Text=" (65%) " Visibility="Collapsed"/>
+                        <TextBlock x:Name="cStupefied4Chance" Style="{StaticResource ModifierTextBlockStatus}" Text=" (60%) " Visibility="Collapsed"/>
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Description, Converter={StaticResource CompareStringConverter}, ConverterParameter='Hidden'}" Value="True">
+                            <Setter TargetName="cStatusDisplayHidden" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="cHiddenChance" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Description, Converter={StaticResource CompareStringConverter}, ConverterParameter='Concealed'}" Value="True">
+                            <Setter TargetName="cStatusDisplay" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="cConcealedChance" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Description, Converter={StaticResource CompareStringConverter}, ConverterParameter='Stupefied 1'}" Value="True">
+                            <Setter TargetName="cStatusDisplay" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="cStupefied1Chance" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Description, Converter={StaticResource CompareStringConverter}, ConverterParameter='Stupefied 2'}" Value="True">
+                            <Setter TargetName="cStatusDisplay" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="cStupefied2Chance" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Description, Converter={StaticResource CompareStringConverter}, ConverterParameter='Stupefied 3'}" Value="True">
+                            <Setter TargetName="cStatusDisplay" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="cStupefied3Chance" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Description, Converter={StaticResource CompareStringConverter}, ConverterParameter='Stupefied 4'}" Value="True">
+                            <Setter TargetName="cStatusDisplay" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="cStupefied4Chance" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+
+                <Style x:Key="StatusItemStyle" TargetType="ContentPresenter">
+                    <Setter Property="Margin" Value="0,0"/>
+                </Style>
+            </DataTemplate.Resources>
+
+            <Grid>
+                <Grid x:Name="infoPanel" Visibility="{Binding HasInputEnabled, ElementName=CursorText_c, Converter={StaticResource BoolToVisibleConverter}}">
+                    <Grid.Tag>
+                        <!--Calculate if HightDefense needs to be shown-->
+                        <MultiBinding Converter="{StaticResource LessThanOrEqualMultiConverter}">
+                            <Binding Path="CurrentPlayer.CurrentTarget.Stats.ArmorClass.Value" Converter="{StaticResource AddConverter}" ConverterParameter="-18"/>
+                            <Binding Path="CurrentPlayer.SelectedCharacter.Stats.Level.Value" Converter="{StaticResource DivideConverter}" ConverterParameter="2"/>
+                        </MultiBinding>
+                    </Grid.Tag>
+
+                    <!-- Right of cursor -->
+                    <Grid x:Name="CursorTextRight" Height="1000" Width="1000" Margin="0,1038,-1195,0" HorizontalAlignment="Center" VerticalAlignment="Top" DataContext="{Binding CurrentPlayer.UIData}" d:DataContext="{d:DesignInstance Type=ls:UIData}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <!-- Obscured Indicator -->
+                            <Image x:Name="ObscuredIndicator" Stretch="UniformToFill" Height="64" Width="64" Visibility="Collapsed" Effect="{StaticResource HUD.DropShadow}" Margin="-12,14,12,0" VerticalAlignment="Top"/>
+                            <StackPanel>
+                                <!-- Hit Chance -->
+                                <Border x:Name="hitChance" HorizontalAlignment="Left" Visibility="{Binding HitChanceDesc.ShowDescription, Converter={StaticResource BoolToVisibleConverter}}" Margin="0,0,0,-24">
+                                    <TextBlock x:Name="hitChanceText" VerticalAlignment="Top" Margin="0,2,0,0" Text="{Binding HitChanceDesc.TotalHitChance, StringFormat={}{0}%}" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledTitleFontSize}" TextAlignment="Left"/>
+                                </Border>
+
+                                <!-- Distance -->
+                                <TextBlock x:Name="distance" Panel.ZIndex="9" Text="{Binding Cursor.Distance,Converter={StaticResource UnitConverter}, ConverterParameter='Distance N1 Short'}" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledBigFontSize}" VerticalAlignment="Top"  Visibility="{Binding Cursor.Distance,Converter={StaticResource CountToVisibilityConverter}}" Margin="0,0,0,-24"/>
+
+                                <StackPanel x:Name="AdditionalDetails" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="0,16,0,0" >
+
+                                    <!-- Encumberance -->
+                                    <Grid HorizontalAlignment="Left" x:Name="EncumbranceIndicator" >
+                                        <Image Source="pack://application:,,,/Core;component/Assets/Tooltips/weightInfo_BG.png" Stretch="None" ClipToBounds="False" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-6,0,0"/>
+                                        <Control Template="{StaticResource EncumbranceStateWarningTemplate}" DataContext="{Binding Cursor.EncumbranceStateWarning}" VerticalAlignment="Center" Margin="60,0,0,0"/>
+                                    </Grid>
+
+                                    <!-- Concealment -->
+                                    <StackPanel Orientation="Horizontal">
+                                        <ItemsControl ItemsSource="{Binding HitChanceDesc.Advantages}" AlternationCount="{Binding HitChanceDesc.Advantages.Count}" ItemTemplate="{StaticResource StatusItemTemplate}" ItemContainerStyle="{StaticResource StatusItemStyle}" VerticalAlignment="Bottom">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </StackPanel>
+
+                                    <!-- Advantage / Disadvantage -->
+                                    <StackPanel x:Name="AdvantagesList" Orientation="Horizontal" Visibility="{Binding HitChanceDesc.Advantages.Count, Converter={StaticResource CountToVisibilityConverter}}" HorizontalAlignment="Left" >
+                                        <Border>
+                                            <Border.RenderTransform>
+                                                <ScaleTransform ScaleX="1.15" ScaleY="1.15" />
+                                            </Border.RenderTransform>
+                                            <Image Source="{StaticResource IconAdvantage}" Height="54"  Stretch="Uniform" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding Source='h986f906agb172g4956g9567g5cbd32150349', Converter={StaticResource TranslatedStringConverter}, StringFormat='\ {0}'}" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledMediumFontSize}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                    </StackPanel>
+
+                                    <StackPanel x:Name="DisadvantagesList" Orientation="Horizontal" HorizontalAlignment="Left" Visibility="{Binding HitChanceDesc.Disadvantages.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                                        <Border>
+                                            <Border.RenderTransform>
+                                                <ScaleTransform ScaleX="1.15" ScaleY="1.15" />
+                                            </Border.RenderTransform>
+                                            <Image Source="{StaticResource IconDisadvantage}" Height="54"  Stretch="Uniform" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding Source='had6da506gedf2g4c86g9324g452e287e3c47', Converter={StaticResource TranslatedStringConverter}, StringFormat='\ {0}'}" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledMediumFontSize}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                    </StackPanel>
+
+                                    <!-- Relative Defense -->
+                                    <TextBlock x:Name="highDefText" Text="{Binding Source='hd135c195g1887g4ee4g85b8g586666685815', Converter={StaticResource TranslatedStringConverter}}" Visibility="Collapsed" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledSmallishFontSize}" TextAlignment="Left"/>
+
+                                    <!-- Error Messages -->
+                                    <StackPanel x:Name="Errors" VerticalAlignment="Top" HorizontalAlignment="Left">
+                                        <b:Interaction.Behaviors>
+                                            <ls:CapabilityListSelectorBehavior x:Name="CapabilityListSelectorBehavior" 
+                                                                   CapabilitiesCollection="{Binding DataContext.CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.ModifiedCapabilities, ElementName=CursorText_c}"
+                                                                   CharacterIsInTurnBasedMode="{Binding DataContext.CurrentPlayer.SelectedCharacter.InTurnBasedMode, ElementName=CursorText_c}"
+                                                                   CharacterIsShapeshifted="{Binding DataContext.CurrentPlayer.SelectedCharacter.IsShapeShifted, ElementName=CursorText_c}"
+                                                                   PlayerCurrentTaskType="{Binding DataContext.CurrentPlayer.UIData.ActiveTask.PreviewType, ElementName=CursorText_c}"/>
+                                        </b:Interaction.Behaviors>
+
+
+                                        <ItemsControl x:Name="CapabilitiesErrors" ItemsSource="{Binding DataContext.CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.ModifiedCapabilities, ElementName=CursorText_c}"
+                                                      AlternationCount="{Binding ItemsSource.Count, RelativeSource={RelativeSource Self}}">
+                                            <ItemsControl.ItemContainerStyle>
+                                                <Style TargetType="ContentPresenter">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <!-- Show only the first one -->
+                                                        <DataTrigger Value="True">
+                                                            <DataTrigger.Binding>
+                                                                <MultiBinding Converter="{StaticResource EqualConverter}">
+                                                                    <Binding Path="."/>
+                                                                    <Binding Path="FirstVisibleElement" ElementName="CapabilityListSelectorBehavior"/>
+                                                                </MultiBinding>
+                                                            </DataTrigger.Binding>
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ItemsControl.ItemContainerStyle>
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type ls:VMCapabilityModifier}">
+                                                    <TextBlock x:Name="CapabilityError" Style="{StaticResource CursorErrorTextStyle}" Visibility="Visible" MaxWidth="{Binding ActualWidth, ElementName=BelowTheCursorSection}">
+                                                        <Run x:Name="Message"/><Run x:Name="Cause"/>
+                                                    </TextBlock>
+
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding Cause, Converter={StaticResource NullToBoolFalseConverter}}" Value="True">
+                                                            <Setter TargetName="Cause" Property="Text">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                                                                        <Binding Source="hb19f530dgfeb2g4d13g8d64ga8216f364f67"/>
+                                                                        <Binding Path="Cause"/>
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Type}" Value="MovementBlocked">
+                                                            <Setter TargetName="Message" Property="Text" Value="{Binding Source='h7760a99cg8a58g4555gb0f1g0e3e2b872f66', Converter={StaticResource TranslatedStringConverter}}"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Type}" Value="MovementModification">
+                                                            <Setter TargetName="Message" Property="Text" Value="{Binding Source='h987efa83g0f3bg416dga3dfg7a588084af78', Converter={StaticResource TranslatedStringConverter}}"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Type}" Value="MovementMultiplier">
+                                                            <Setter TargetName="Message" Property="Text" Value="{Binding Source='h987efa83g0f3bg416dga3dfg7a588084af78', Converter={StaticResource TranslatedStringConverter}}"/>
+                                                        </DataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding Type}" Value="MovementMultiplier"/>
+                                                                <Condition Binding="{Binding Value}" Value="0.5"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter TargetName="Message" Property="Text" Value="{Binding Source='h709568ceg6653g4caag90afg57b5be47ca55', Converter={StaticResource TranslatedStringConverter}}"/>
+                                                        </MultiDataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Type}" Value="MovementCostMultiplier">
+                                                            <Setter TargetName="Message" Property="Text" Value="{Binding Source='hd5796d9fg7f28g4f61g9287g688eccd1b538', Converter={StaticResource TranslatedStringConverter}}"/>
+                                                        </DataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding Type}" Value="MovementCostMultiplier"/>
+                                                                <Condition Binding="{Binding Value}" Value="2"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter TargetName="Message" Property="Text" Value="{Binding Source='hb8b5ca34g224eg4ed0g8029g170746bef0f4', Converter={StaticResource TranslatedStringConverter}}"/>
+                                                        </MultiDataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Text, ElementName=Message}" Value="">
+                                                            <Setter TargetName="Cause" Property="Text" Value=""/>
+                                                            <Setter TargetName="CapabilityError" Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        
+                                        <ItemsControl x:Name="CursorTextList" ItemsSource="{Binding ActiveTask.Info}">
+
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Vertical"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="ls:VMText">
+                                                    <TextBlock x:Name="txt" ls:TextBlockFormatter.SourceText="{Binding Text}" Style="{StaticResource CursorErrorTextStyle}"/>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding TextContext}" Value="HitChance">
+                                                            <Setter TargetName="txt" Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- Active Concentration Warning -->
+                                        <TextBlock x:Name="ConcentrationWarningText" 
+                                                    Style="{StaticResource CursorTextStyle}" 
+                                                    Foreground="{StaticResource LS_warning100TxtColor}"
+                                                    FontSize="{StaticResource ScaledSmallishFontSize}" 
+                                                    VerticalAlignment="Center"
+                                                    Visibility="Collapsed">
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                                                    <Binding Source="h0604f01ag5d1eg4f62g8dcbg8cad97adbc59"/>
+                                                    <Binding Path="DataContext.CurrentPlayer.SelectedCharacter.ConcentrationSpell.Name" ElementName="CursorText_c"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <!-- Move preview receives an attack (attack of opportunity) -->
+                                        <TextBlock
+                                            Text="{Binding Source='ha622b8f7gecf0g44c8gb8abgca896b1c48ef', Converter={StaticResource TranslatedStringConverter}}"
+                                            Visibility="{Binding ActiveTask.AoOWarning, Converter={StaticResource BoolToVisibleConverter}}"
+                                            Style="{StaticResource CursorTextStyle}"
+                                            Foreground="{StaticResource LS_warning100TxtColor}"
+                                            FontSize="{StaticResource ScaledSmallishFontSize}"
+                                            VerticalAlignment="Center"/>
+
+                                        <!-- Move preview goes over a surface -->
+                                        <TextBlock 
+                                            Text="{Binding ActiveTask.SurfaceMessage}"
+                                            Visibility="{Binding ActiveTask.SurfaceMessage, Converter={StaticResource NullToCollapsedConverter}, ConverterParameter='EmptyString'}"
+                                            Style="{StaticResource CursorTextStyle}"
+                                            FontSize="{StaticResource ScaledSmallishFontSize}"
+                                            VerticalAlignment="Center"/>
+
+                                        <TextBlock x:Name="TargetCantBeHealedError" Style="{StaticResource CursorErrorTextStyle}" Visibility="{Binding DataContext.CurrentPlayer.UIData.ActiveTask.TargetCanBeHealed, ElementName=CursorText_c, Converter={StaticResource BoolToCollapsedConverter}}" MaxWidth="{Binding ActualWidth, ElementName=BelowTheCursorSection}">
+                                <Run x:Name="TargetCantBeHealedErrorMessage" Text="{Binding Source='h392eef12g97b6g47c8g858egd305c12f7dfd', Converter={StaticResource TranslatedStringConverter}}"/><Run 
+                                    x:Name="TargetCantBeHealedErrorCause"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Above the cursor -->
+                    <Grid x:Name="AboveTheCursorSection" Height="300" Width="1000" Margin="0,0,0,500" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel x:Name="TargetPanel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Visibility="Collapsed">
+                            <TextBlock x:Name="CloudInfo" Text="{Binding CurrentPlayer.UIData.CloudInformation.Header}" Style="{StaticResource CollapsedNameStyle}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="SurfaceInfo" Text="{Binding CurrentPlayer.UIData.SurfaceInformation.Header}" Style="{StaticResource CollapsedNameStyle}" Visibility="Collapsed"/>
+                        </StackPanel>
+
+                    </Grid>
+
+                    <!-- Below the cursor -->
+                    <StackPanel x:Name="BelowTheCursorSection" Height="1000" Width="1320" Margin="0,1188,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" >
+
+                        <StackPanel x:Name="ActionPrompts" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,120,0,0">
+                            <DockPanel x:Name="PreviewAction" HorizontalAlignment="Center" >
+                                <ls:LSButton x:Name="ActionButton" DockPanel.Dock="Left" SoundID="UI_Controller_Action" DataContext="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Style="{StaticResource ControllerButtonIconOnly}" Width="{StaticResource ScaledControllerHintSize}" Height="{StaticResource ScaledControllerHintSize}" Margin="-18,0,-18,0" EatInput="False" Effect="{StaticResource ShadowEffect}" VerticalAlignment="Center"/>
+                                <WrapPanel VerticalAlignment="Center" Margin="8,-2,0,0">
+                                    <Control DataContext="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask}" Margin="0,0,8,0" Template="{StaticResource MetamagicLabelTemplate}" FontSize="{StaticResource ScaledLargeFontSize}" FontFamily="{StaticResource SpecialFont}"/>
+                                    <TextBlock x:Name="TaskDescription" Text="{Binding CurrentPlayer.UIData.ActiveTask.PreviewDescription}" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledLargeFontSize}" FontFamily="{StaticResource SpecialFont}"/>
+                                    <TextBlock x:Name="ContainerInfo" VerticalAlignment="Center" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledLargeFontSize}" Visibility="Collapsed" FontFamily="{StaticResource SpecialFont}"/>
+                                    <TextBlock x:Name="UpcastInfo" Text="{Binding CurrentPlayer.UIData.ActiveTask.Upcast.SlotLevel, Converter={StaticResource DecimalToRomanConverter}}" Margin="10,0,0,0" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledLargeFontSize}" Visibility="{Binding CurrentPlayer.UIData.ActiveTask.RootCastSpell.SpellUpcast.Count, Converter={StaticResource CountToVisibilityConverter},ConverterParameter=1}" FontFamily="{StaticResource SpecialFont}"/>
+                                </WrapPanel>
+                            </DockPanel>
+
+                            <StackPanel Orientation="Horizontal" x:Name="PingCancelButton" HorizontalAlignment="Center" Visibility="Collapsed">
+                                <ls:LSButton SoundID="UI_Controller_Action" DataContext="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Style="{StaticResource ControllerButtonIconOnly}" Width="{StaticResource ScaledControllerHintSize}" Height="{StaticResource ScaledControllerHintSize}" Margin="-18,0,-18,0" EatInput="False" Effect="{StaticResource ShadowEffect}" VerticalAlignment="Center"/>
+                                <TextBlock Margin="8,-2,0,0" Text="{Binding Source='h01d5c470g61bfg498cgb17eg7be425444fa5', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledLargeFontSize}" FontFamily="{StaticResource SpecialFont}" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <Control x:Name="ActionDetails" Template="{StaticResource ActionDetailsTemplate}" DataContext="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask}" HorizontalAlignment="Center" />
+
+                            <Control x:Name="ExtraDescription" Visibility="Collapsed" />
+
+                            <StackPanel x:Name="FleeAction" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden">
+                                <ls:LSButton x:Name="FleeButton" Style="{StaticResource ControllerHoldButtonStyle}" Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Command="{Binding DataContext.Flee, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ls:UIWidget}}}" Tag="{Binding Source='h4f3e940eg341bg4f48gb10eg417fcfff1064', Converter={StaticResource TranslatedStringConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="False" EatInput="False"/>
+
+                                <Image Source="pack://application:,,,/Core;component/Assets/Shared_c/c_ico_flee_active.png" Stretch="None" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <DataTemplate.Triggers>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.CloudInformation.HasSurface}" Value="True">
+                    <Setter TargetName="TargetPanel" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="CloudInfo" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.SurfaceInformation.HasSurface}" Value="True">
+                    <Setter TargetName="TargetPanel" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="SurfaceInfo" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask,Converter={StaticResource NullToBoolFalseConverter}}" Value="True">
+                    <Setter TargetName="TargetPanel" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.ActiveTask.TargetHealBlockCause, Converter={StaticResource NullToBoolFalseConverter}}" Value="True">
+                    <Setter TargetName="TargetCantBeHealedErrorCause" Property="Text">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                                <Binding Source="hb19f530dgfeb2g4d13g8d64ga8216f364f67"/>
+                                <Binding Path="DataContext.CurrentPlayer.UIData.ActiveTask.TargetHealBlockCause" ElementName="CursorText_c"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.ActiveTask.PreviewType}" Value="ItemMove">
+                    <Setter TargetName="ExtraDescription" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="ExtraDescription" Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="-24,-24,24,0" >
+                                    <ls:LSButton DataContext="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='RotateItemRight'}" Style="{StaticResource ControllerButtonIconOnly}" Width="{StaticResource ScaledControllerHintSize}" Height="{StaticResource ScaledControllerHintSize}" EatInput="False" Margin="-20,0"/>
+                                    <ls:LSButton DataContext="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='RotateItemLeft'}" Style="{StaticResource ControllerButtonIconOnly}" Width="{StaticResource ScaledControllerHintSize}" Height="{StaticResource ScaledControllerHintSize}" EatInput="False"/>
+                                    <TextBlock Margin="-8,0,0,0" Text="{Binding Source='h0b4dfa81g8025g44d6ga01cg92a20555a1bc', Converter={StaticResource TranslatedStringConverter}}" VerticalAlignment="Center" Style="{StaticResource CursorTextStyle}" FontSize="{StaticResource ScaledLargeFontSize}"/>
+                                </StackPanel>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask, Converter={StaticResource NullToBoolTrueConverter}}" Value="True">
+                    <Setter TargetName="ActionDetails" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask, Converter={StaticResource NullToBoolTrueConverter}}" Value="False">
+                    <Setter TargetName="TaskDescription" Property="Text" Value="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask.Name}"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask.SpellType}" Value="Shout">
+                    <Setter TargetName="TaskDescription" Property="Text">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                                <Binding Source="h7fea28eagf13eg4420gb634gb85d3db03fbc"/>
+                                <Binding Path="CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask.Name"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask.ActionId}" Value="Throw">
+                    <Setter TargetName="TaskDescription" Property="Text" Value="{Binding Source='he2954eb6g6074g4b0ag90e9g8f14cc2ee21c', Converter={StaticResource TranslatedStringConverter}}"/>
+                </DataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask.ActionId}" Value="Throw"/>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.ActiveTask.TaskObject, Converter={StaticResource NullToBoolTrueConverter}}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="TaskDescription" Property="Text" Value="{Binding Source='h521c4991ge535g48dcg842dg26eb11b13c46', Converter={StaticResource TranslatedStringConverter}}"/>
+                </MultiDataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask.ActionId}" Value="ImprovisedWeapon">
+                    <Setter TargetName="TaskDescription" Property="Text" Value="{Binding Source='he2954eb6g6074g4b0ag90e9g8f14cc2ee21c', Converter={StaticResource TranslatedStringConverter}}"/>
+                </DataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask.ActionId}" Value="ImprovisedWeapon"/>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.ActiveTask.TaskObject, Converter={StaticResource NullToBoolTrueConverter}}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="TaskDescription" Property="Text" Value="{Binding Source='h521c4991ge535g48dcg842dg26eb11b13c46', Converter={StaticResource TranslatedStringConverter}}"/>
+                </MultiDataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.ActiveTask.PreviewType}" Value="None">
+                    <Setter TargetName="PreviewAction" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="ActionDetails" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CanFlee}" Value="True"/>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.CharacterMode}" Value="InCombat"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="FleeAction" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="FleeButton" Property="IsEnabled" Value="True"/>
+                </MultiDataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.ActiveTask.ContainerState}" Value="Empty">
+                    <Setter TargetName="ContainerInfo" Property="Text" Value="{Binding Source='h823595e6g550fg4614gb1ddgdcd323bb4c69',Converter={StaticResource TranslatedStringConverter}, StringFormat='{}({0})'}"/>
+                    <Setter TargetName="ContainerInfo" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="ContainerInfo" Property="Margin" Value="10,0,0,0"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.ActiveTask.ContainerState}" Value="NotExplored">
+                    <Setter TargetName="ContainerInfo" Property="Text" Value="*"/>
+                    <Setter TargetName="ContainerInfo" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.ActiveTask.PreviewType}" Value="MoveTo">
+                    <Setter TargetName="ActionButton" Property="SoundID" Value="UI_HUD_Controller_MoveTo"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.IsRequestingPing}" Value="True">
+                    <Setter TargetName="TaskDescription" Property="Text" Value="{Binding Source='hfe7d4028g2faag4431g974ag7cbf0c3ef163', Converter={StaticResource TranslatedStringConverter}}"/>
+                    <Setter TargetName="ContainerInfo" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="UpcastInfo" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="ActionDetails" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="PingCancelButton" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="PreviewAction" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="CursorTextRight" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.AreRadialsOpen}" Value="True">
+                    <Setter TargetName="infoPanel" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <!-- Triggers: HitChance and Primary messaging -->
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Advantages.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Disadvantages.Count}" Value="0"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="hitChanceText" Property="Foreground" Value="{StaticResource LS_bonusTxtColor}"/>
+                </MultiDataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Advantages.Count}" Value="0"/>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Disadvantages.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="hitChanceText" Property="Foreground" Value="{StaticResource LS_alertTxtColor}"/>
+                </MultiDataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.ModifiedCapabilities.Count}" Value="0"/>
+                        <Condition Binding="{Binding ActualHeight, ElementName=CursorTextList}" Value="0"/>
+                        <Condition Binding="{Binding Visibility, ElementName=TargetCantBeHealedError}" Value="Collapsed"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="AdditionalDetails" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="CursorTextList" Property="Visibility" Value="Visible"/>
+                </MultiDataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.Cursor.CursorObscuredState}" Value="Clear">
+                    <Setter TargetName="ObscuredIndicator" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="ObscuredIndicator" Property="Source" Value="pack://application:,,,/Core;component/Assets/HUD/ico_fullSun.png"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.Cursor.CursorObscuredState}" Value="LightlyObscured">
+                    <Setter TargetName="ObscuredIndicator" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="ObscuredIndicator" Property="Source" Value="pack://application:,,,/Core;component/Assets/HUD/ico_halfSun.png"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.Cursor.CursorObscuredState}" Value="HeavilyObscured">
+                    <Setter TargetName="ObscuredIndicator" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="ObscuredIndicator" Property="Source" Value="pack://application:,,,/Core;component/Assets/HUD/ico_hollowSun.png"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.Cursor.EncumbranceStateWarning }" Value="None">
+                    <Setter TargetName="EncumbranceIndicator" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <!-- Triggers: Extra messaging -->
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Advantages.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Disadvantages.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="AdvantagesList" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="DisadvantagesList" Property="Visibility" Value="Collapsed"/>
+                </MultiDataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.Cursor.IsOverUI}" Value="True"/>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.Cursor.TargetInUI}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter TargetName="Errors" Property="Visibility" Value="Collapsed" />
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.IsCurrentTurn}" Value="False"/>
+                        <Condition Binding="{Binding CurrentPlayer.CanEndTurn}" Value="False"/>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.CharacterMode}" Value="InFTB"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="CapabilitiesErrors" Property="Visibility" Value="Collapsed" />
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.IsCurrentTurn}" Value="False"/>
+                        <Condition Binding="{Binding CurrentPlayer.CanEndTurn}" Value="False"/>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.CharacterMode}" Value="InCombat"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="CapabilitiesErrors" Property="Visibility" Value="Collapsed" />
+                </MultiDataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.ShowDescription}" Value="True"/>
+                        <Condition Binding="{Binding ElementName=infoPanel,Path=Tag}" Value="False"/>
+                        <Condition Binding="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget.PlayerRelation}" Value="Enemy"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="highDefText" Property="Visibility" Value="Visible"/>
+                </MultiDataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.CurrentSpellTask.IsConcentrationSpell}" Value="True"/>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.ConcentrationSpell, Converter={StaticResource NullToBoolFalseConverter}}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="ConcentrationWarningText" Property="Visibility" Value="Visible" />
+                </MultiDataTrigger>
+                
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.WorldContextMenu.Visible}" Value="True">
+                    <Setter TargetName="BelowTheCursorSection" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.ActiveState}" Value="Book">
+                    <Setter TargetName="BelowTheCursorSection" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.ActiveState}" Value="MessageBox">
+                    <Setter TargetName="BelowTheCursorSection" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+
+                <!-- Hide info for player in merged split screen when it's not their turn -->
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Data.LocalPlayers.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=1}" Value="True"/>
+                        <Condition Binding="{Binding Layout}" Value="Common"/>
+                        <Condition Binding="{Binding Data.IsFullScreenSharedInitiativeEnabled}" Value="False"/>
+                        <Condition Binding="{Binding CurrentPlayer.IsControllerCursorActive}" Value="False"/>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.InTurnBasedMode}" Value="True"/>
+                        <Condition Binding="{Binding Data.IsCameraSplit}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="infoPanel" Property="Visibility" Value="Collapsed" />
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Data.LocalPlayers.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=1}" Value="True"/>
+                        <Condition Binding="{Binding Layout}" Value="Common"/>
+                        <Condition Binding="{Binding Data.IsFullScreenSharedInitiativeEnabled}" Value="True"/>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.IsOwnerActiveInSplitscreenFullscreenTurn}" Value="False"/>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.InTurnBasedMode}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="infoPanel" Property="Visibility" Value="Collapsed" />
+                </MultiDataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.InTurnBasedMode}" Value="True"/>
+                        <Condition Binding="{Binding CurrentPlayer.SelectedCharacter.IsCurrentTurn}" Value="False"/>
+                        <Condition Binding="{Binding Data.IsCameraSplit}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="infoPanel" Property="Visibility" Value="Visible" />
+                </MultiDataTrigger>
+
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </ls:UIWidget.ContentTemplate>
+</ls:UIWidget>
