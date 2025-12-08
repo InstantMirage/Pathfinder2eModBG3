@@ -75,7 +75,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAP_PENALTY_3RD" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="7f2a0ac0-dbb2-4771-8640-c3a272c7f0bf" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdf07cfbagb2a2g69e5g7b6fg7d7bea381275" version="2" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not AgileMAP()):RollBonus(Attack, -10);IF(AgileMAP()):RollBonus(Attack, -8);IF(SpellId('Target_Grapple') or SpellId('Target_Trip') or SpellId('Target_FreeTrip') or SpellId('Target_Disarm') or SpellId('Target_EscapeGrapple_Athletics') or SpellId('Target_EscapeGrapple_Acrobatics') or SpellId('Target_EscapeGrapple_UnarmedAttack') or SpellId('Target_Shove') or SpellId('Target_Shove_Linked')):RollBonus(SkillCheck, -8);UnlockSpellVariant(HasStringInSpellRoll('Attack') or (HasStringInSpellRoll('Check') and HasSpellFlag(SpellFlags.Attack)),ModifyTooltipDescription());AI_ONLY:RollBonus(Attack,-3);AI_ONLY:RollBonus(SkillCheck,-8);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not AgileMAP()):RollBonus(Attack, -10);IF(AgileMAP()):RollBonus(Attack, -8);IF(SpellId('Target_Grapple') or SpellId('Target_Trip') or SpellId('Target_FreeTrip') or SpellId('Target_Disarm') or SpellId('Target_EscapeGrapple_Athletics') or SpellId('Target_EscapeGrapple_Acrobatics') or SpellId('Target_EscapeGrapple_UnarmedAttack') or SpellId('Target_Shove') or SpellId('Target_Shove_Linked')):RollBonus(SkillCheck, -8);UnlockSpellVariant(HasStringInSpellRoll('Attack') or (HasStringInSpellRoll('Check') and HasSpellFlag(SpellFlags.Attack)),ModifyTooltipDescription());" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -834,25 +834,842 @@
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
-        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Skills" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Athletics" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="3b0076bb-a3fe-4aad-beac-5ae36ece6f1d" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd0210435g30a4g4551gb4dfgae72a5077f79" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h874e5390g56e0g4609g05e7gb2ca44981f84" version="2" />
-        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_SKILLS" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1)" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1SKILLS')" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd0210435g30a4g4551gb4dfgae72a5077f79" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h874e5390g56e0g4609g05e7gb2ca44981f84" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_ATH" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Athletics);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1ATHLETICS')" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="50dbfb75-3d7c-4f4e-b96f-09e25474d241" />
-        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Skills" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Athletics" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha0c90730gae75g176bgab75g72f0c07293a0" version="2" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2);" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha0c90730gae75g176bgab75g72f0c07293a0" version="3" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Athletics);" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2SKILLS')" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1SKILLS')):ApplyStatus(StatusBonus1Skills,100,-1);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2ATHLETICS')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1ATHLETICS')):ApplyStatus(StatusBonus1Athletics,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ecc882c9-c5c5-45eb-bd8a-d790e738162c" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Acrobatics" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h71f6423ag0b7dgeacdgafd7g62f58b7c54c9" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he10fbb9eg49a4g130dgc7f4g6b3456a20a28" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_ACR" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Acrobatics);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1ACROBATICS')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="01b08026-7765-433a-aaac-40d318cffa28" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Acrobatics" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="ecc882c9-c5c5-45eb-bd8a-d790e738162c" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7da6f180g7f40gff13g1f81g2f35bd0d7ead" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Acrobatics);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2ACROBATICS')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1ACROBATICS')):ApplyStatus(StatusBonus1Acrobatics,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1c5dae7a-7f64-44d4-b2e9-e46ce0ee7c0e" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Arcana" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf20724ceg7030g982cg908ege721e9d8d698" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9e9753a3gc623g5239gd9f3g4c4ca75fb5dd" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_ARC" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Arcana);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1ARCANA')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d45aa116-ceda-4927-ad2f-7750b9a52096" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Arcana" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1c5dae7a-7f64-44d4-b2e9-e46ce0ee7c0e" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h47fc460agd19bgdb71gd1beg31dc6ac5e3dc" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Arcana);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2ARCANA')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1ARCANA')):ApplyStatus(StatusBonus1Arcana,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1fc5befe-6709-4990-9ee3-5977f05c9742" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1AnimalHandling" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h66c7bf45g2080g2f15g179ag99030b51ac3a" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd9209b8fgef36geed9g777cgb6740bcb8320" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_ANH" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,AnimalHandling);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1ANIMALHANDLING')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b1cb7555-0417-4668-a6c5-e905bc67826b" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2AnimalHandling" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1fc5befe-6709-4990-9ee3-5977f05c9742" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdc5efe12ga7b9g6fa4ga914g4c4a425dce2a" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,AnimalHandling);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2ANIMALHANDLING')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1ANIMALHANDLING')):ApplyStatus(StatusBonus1AnimalHandling,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ca2033cd-5a43-416b-b42f-84e537b6c08d" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Deception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h03d5c5a0g6d03g2251gc9fcg274d36ac7543" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h76637dedg72a0g714ag1df5g384619e48f98" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_DEC" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Deception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1DECEPTION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4a5d9643-3750-4978-9fcc-73653d3c354a" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Deception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="ca2033cd-5a43-416b-b42f-84e537b6c08d" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h456a1232ge8dagbd4fgcca8g352370f626a9" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Deception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2DECEPTION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1DECEPTION')):ApplyStatus(StatusBonus1Deception,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1fb35c3e-767d-46f4-8d96-bb2527389a35" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Insight" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4aa8f81cgd3c5gf534g6fbegfabf8aff7ca5" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7f81d346g7357g8cedg587dg931ee541e268" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_INS" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Insight);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1INSIGHT')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ca78dbb2-fda0-4753-a8aa-2a38d19cfc2b" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Insight" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1fb35c3e-767d-46f4-8d96-bb2527389a35" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hee5b3f13g4acdgd1d7gdee1gaa9c6ff715b4" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Insight);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2INSIGHT')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1INSIGHT')):ApplyStatus(StatusBonus1Insight,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f0ab6da6-9091-4310-9f9a-f6fd63d86955" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Investigation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2f298560g566cgd0d7g64b2g0b564379ba2a" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1448adfag9412ga5cdg0b31g23bdab1bbedd" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_INV" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Investigation);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1INVESTIGATION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ea8d5ad4-fe40-4d07-b73d-f7e4a70831b9" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Investigation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="f0ab6da6-9091-4310-9f9a-f6fd63d86955" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h86ff704fg220agbf98ge41cgc8d60b771267" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Investigation);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2INVESTIGATION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1INVESTIGATION')):ApplyStatus(StatusBonus1Investigation,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="81f87475-efd4-4563-9b27-24cbde75f61c" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Intimidation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3796a108g4dd2g0910g2977g34a327a7bbac" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9fd3e128g500eg9d24g6aecgd16cba96dd9a" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_INT" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Intimidation);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1INTIMIDATION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="328153c0-59db-4e36-9c21-d255179c3f62" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Intimidation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="81f87475-efd4-4563-9b27-24cbde75f61c" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hfe9d6ee0gd0f1g16b6gbbb9g3f2bf8633168" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Intimidation);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2INTIMIDATION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1INTIMIDATION')):ApplyStatus(StatusBonus1Intimidation,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="aff1a2c5-8ee1-4c94-b3e0-67c3df7a64ac" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1History" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcf7fe4ccg477bg461bg8893g67159172b8cc" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h362f857dg861ag7f09g76c4g4a3650af4479" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_HIS" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,History);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1HISTORY')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="586eec4e-4ba4-4c2d-b895-0726d7fcb72b" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2History" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="aff1a2c5-8ee1-4c94-b3e0-67c3df7a64ac" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h96e443dag743fg4432gc34eg569f94a4afba" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,History);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2HISTORY')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1HISTORY')):ApplyStatus(StatusBonus1History,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="89f09b53-e158-43a2-8757-9d40db8b45a7" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Medicine" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h7372bfcdg6c10gea35g7673gece0eb774905" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h669bf0a2g7aaeg06c9g8d3egcc6abb5ad519" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_MED" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Medicine);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1MEDICINE')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ad805be5-8251-4230-b531-fdfe8e932a6f" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Medicine" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="89f09b53-e158-43a2-8757-9d40db8b45a7" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h089b06d2gaf21gb323g3812gaa9933a875e8" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Medicine);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2MEDICINE')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1MEDICINE')):ApplyStatus(StatusBonus1Medicine,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="dcf36239-81d9-42f9-84b3-c27ee2d5f111" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Nature" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0d68f2f0gc6cag2109g1b1dgaff53c68a7f0" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha2727261g7042g03c1g43eeg6a3b25bb3aca" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_NAT" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Nature);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1NATURE')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7be6e8c6-24d5-440a-9308-13ed0f86d8f9" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Nature" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="dcf36239-81d9-42f9-84b3-c27ee2d5f111" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h54c8c510g619fgfb41g47f0g3e619bd18477" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Nature);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2NATURE')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1NATURE')):ApplyStatus(StatusBonus1Nature,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="603ca04a-ef54-4d13-a7c7-b0f0916677f7" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Performance" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8cac2243g4b2bgdd42ge583g3f17777f2336" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h50d9fe85g39d0g3b8eg843fga2f911dc8d89" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_PEF" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Performance);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1PERFORMANCE')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8528e5d6-9de6-4a74-a999-662748645e3b" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Performance" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="603ca04a-ef54-4d13-a7c7-b0f0916677f7" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h923dfc3fga0a9gcc6eg5827g25bfb5092aea" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Performance);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2PERFORMANCE')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1PERFORMANCE')):ApplyStatus(StatusBonus1Performance,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8e35c663-1c4a-48f8-b891-0044578c8245" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Persuasion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h167ed349ga7f7gc2fcg35e2g7874a7ce3da5" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h78e983e4gbb31g4f42gbb99g0bc117c44bbf" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_PER" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Persuasion);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1PERSUASION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="bb08a84d-ee02-4a71-9607-21f01c665837" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Persuasion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8e35c663-1c4a-48f8-b891-0044578c8245" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h91eb8025g0c94g5a49g5426gaea46bfa1a4b" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Persuasion);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2PERSUASION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1PERSUASION')):ApplyStatus(StatusBonus1Persuasion,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5f71e1f0-37c8-4add-93cd-bfd2d9d4365f" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Religion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0fabdcaag7b31g8053g2b7ag819f004db562" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h378d10beg0836ga832g7508ge2a4bd349c22" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_REL" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Religion);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1RELIGION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7096cd02-8428-4b64-9229-ec2e1e48b058" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Religion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5f71e1f0-37c8-4add-93cd-bfd2d9d4365f" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5651ee79g6912ga156ge61egd25161ecfa78" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Religion);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2RELIGION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1RELIGION')):ApplyStatus(StatusBonus1Religion,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a0dd4110-4ab0-49ed-a182-eac155f07f6b" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1SleightOfHand" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2e3980d4g77aeg54e6g529fg29cc27a69932" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h561a0179g019egae0eg5e09g88c89bb7a733" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_SLE" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,SleightOfHand);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1SLEIGHTOFHAND')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0787b728-62f6-43b3-be44-7d8ceb551ed0" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2SleightOfHand" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a0dd4110-4ab0-49ed-a182-eac155f07f6b" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h12673439g0b83gc14cgc03fg3037e29f7f0c" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,SleightOfHand);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2SLEIGHTOFHAND')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1SLEIGHTOFHAND')):ApplyStatus(StatusBonus1SleightOfHand,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="48897aac-3d9e-4f90-b740-b6ff8dc5c488" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Stealth" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h646b078fg7f3dg01c4g41b4g4b783d4ec620" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5cafc826ga18cg0bf4ga5e7g6de277f7324f" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_STE" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Stealth);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1STEALTH')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="999b4c91-2d41-4c26-97b4-fcef5b6ef4df" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Stealth" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="48897aac-3d9e-4f90-b740-b6ff8dc5c488" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3981dc9bg4255gcb5fg71bfg0f8ca7e2989f" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Stealth);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2STEALTH')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1STEALTH')):ApplyStatus(StatusBonus1Stealth,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d2fd5585-230b-4893-84ac-e12ca436e3c4" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Survival" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="631576a2-fe88-4754-aacb-ba91ebcb571e" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc650b2bdg3dd8gd6fegc1b9ga3453b4f9e4e" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h520abfa3ge37dgfed2g9807gaf649d7f7f48" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_SUR" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Survival);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1SURVIVAL')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6c9a4598-e6d8-4e16-8a8d-70ce00c21c77" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Survival" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="d2fd5585-230b-4893-84ac-e12ca436e3c4" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h91eb2b17ga865g2686gda54g0c0ff7c5fa22" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Survival);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2SURVIVAL')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1SURVIVAL')):ApplyStatus(StatusBonus1Survival,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Athletics" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3b0076bb-a3fe-4aad-beac-5ae36ece6f1d" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd0210435g30a4g4551gb4dfgae72a5077f79" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h874e5390g56e0g4609g05e7gb2ca44981f84" version="4" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_ATH" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Athletics);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1ATHLETICS')" />
+        <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_Intent_Debuff" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a80bd652-4286-4dbf-9e7c-209914679d3f" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Athletics" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h19f2312eg8713g9aa9gb26dg74d329353dee" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Athletics);" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2ATHLETICS')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1ATHLETICS')):ApplyStatus(StatusPenalty1Athletics,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="39bc39fd-baef-48ce-b49c-35affe6a2bf3" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Acrobatics" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h71f6423ag0b7dgeacdgafd7g62f58b7c54c9" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he10fbb9eg49a4g130dgc7f4g6b3456a20a28" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_ACR" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Acrobatics);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1ACROBATICS')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ad3ee144-6696-4fde-a3e4-e768b6bf9b85" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Acrobatics" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="39bc39fd-baef-48ce-b49c-35affe6a2bf3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h49a37e0ag0bccgac52gb1b7g473c582107b9" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Acrobatics);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2ACROBATICS')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1ACROBATICS')):ApplyStatus(StatusPenalty1Acrobatics,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0890f4b2-6d64-464e-92f6-55b30fb3279b" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Arcana" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf20724ceg7030g982cg908ege721e9d8d698" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9e9753a3gc623g5239gd9f3g4c4ca75fb5dd" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_ARC" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Arcana);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1ARCANA')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="059dee7b-02ab-4f43-b6c3-60d356f53f76" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Arcana" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="0890f4b2-6d64-464e-92f6-55b30fb3279b" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he4d995f8g0990gee91g1962g7ca3c8fbcd65" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Arcana);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2ARCANA')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1ARCANA')):ApplyStatus(StatusPenalty1Arcana,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7b9b3353-b256-4f71-961b-a820d1f80217" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1AnimalHandling" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h66c7bf45g2080g2f15g179ag99030b51ac3a" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd9209b8fgef36geed9g777cgb6740bcb8320" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_ANH" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,AnimalHandling);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1ANIMALHANDLING')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b778e572-b3d6-429a-918d-c8d4d1170a47" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2AnimalHandling" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7b9b3353-b256-4f71-961b-a820d1f80217" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd0462883g29dfg51e8g0737g366a8c36e5f3" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,AnimalHandling);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2ANIMALHANDLING')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1ANIMALHANDLING')):ApplyStatus(StatusPenalty1AnimalHandling,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="40892d4d-9483-4389-9c62-187f48365177" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Deception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h03d5c5a0g6d03g2251gc9fcg274d36ac7543" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h76637dedg72a0g714ag1df5g384619e48f98" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_DEC" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Deception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1DECEPTION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="de8ac8bd-b3e5-4746-84c1-c9015e497ba2" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Deception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="40892d4d-9483-4389-9c62-187f48365177" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h81404a08g2d43g75deg7c34gcd3f0b952e80" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Deception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2DECEPTION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1DECEPTION')):ApplyStatus(StatusPenalty1Deception,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e20d6bf7-35c2-4a34-b3f9-e8e83e3d5ca7" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Insight" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4aa8f81cgd3c5gf534g6fbegfabf8aff7ca5" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7f81d346g7357g8cedg587dg931ee541e268" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_INS" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Insight);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1INSIGHT')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="70588f1c-cf36-488c-843b-1d1f8de817d5" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Insight" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e20d6bf7-35c2-4a34-b3f9-e8e83e3d5ca7" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h41221ce0g0cacg88b4gd551g9b6a1f22d1de" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Insight);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2INSIGHT')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1INSIGHT')):ApplyStatus(StatusPenalty1Insight,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="17f017fa-ae53-4762-8ef9-9381ba0843e1" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Investigation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2f298560g566cgd0d7g64b2g0b564379ba2a" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1448adfag9412ga5cdg0b31g23bdab1bbedd" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_INV" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Investigation);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1INVESTIGATION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="20b23345-9cf4-4ccd-9d07-d49e6a9ea344" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Investigation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="17f017fa-ae53-4762-8ef9-9381ba0843e1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2c4d5f86g2adcg6bd0ge916gb107e51b5e51" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Investigation);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2INVESTIGATION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1INVESTIGATION')):ApplyStatus(StatusPenalty1Investigation,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c7284af8-564e-4896-be27-f85f83575ad1" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Intimidation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3796a108g4dd2g0910g2977g34a327a7bbac" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9fd3e128g500eg9d24g6aecgd16cba96dd9a" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_INT" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Intimidation);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1INTIMIDATION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="bb621b7d-432a-401a-b9ac-c6e04f042c61" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Intimidation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="c7284af8-564e-4896-be27-f85f83575ad1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha38489abg952dg5f24g4e74g1891a8cfeb06" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Intimidation);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2INTIMIDATION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1INTIMIDATION')):ApplyStatus(StatusPenalty1Intimidation,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="fccdbbd8-206a-44cb-a165-979d04336b7a" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1History" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcf7fe4ccg477bg461bg8893g67159172b8cc" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h362f857dg861ag7f09g76c4g4a3650af4479" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_HIS" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,History);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1HISTORY')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8f0d8b19-3014-4086-986f-e5bf8505044e" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2History" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="fccdbbd8-206a-44cb-a165-979d04336b7a" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc468acf6g7d45g0deag3c0bg6b44bdb2755e" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,History);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2HISTORY')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1HISTORY')):ApplyStatus(StatusPenalty1History,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7eeed190-e75f-4ccf-a9d1-f1aceedf70e8" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Medicine" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h7372bfcdg6c10gea35g7673gece0eb774905" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h669bf0a2g7aaeg06c9g8d3egcc6abb5ad519" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_MED" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Medicine);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1MEDICINE')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="64a1d6b7-2498-4174-b855-27cdaf0b207f" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Medicine" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7eeed190-e75f-4ccf-a9d1-f1aceedf70e8" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h45b7b322g691cgcf7eg5d92g7b7743d96d32" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Medicine);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2MEDICINE')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1MEDICINE')):ApplyStatus(StatusPenalty1Medicine,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="41869b31-5c0b-45ac-9efb-cf628c8df656" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Nature" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0d68f2f0gc6cag2109g1b1dgaff53c68a7f0" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha2727261g7042g03c1g43eeg6a3b25bb3aca" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_NAT" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Nature);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1NATURE')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="56c56b8c-b701-4b59-baed-58bdbc8bc462" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Nature" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="41869b31-5c0b-45ac-9efb-cf628c8df656" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h68753969g88d0g5795g8148gdfb28d3df20e" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Nature);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2NATURE')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1NATURE')):ApplyStatus(StatusPenalty1Nature,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="aaee22f6-c01e-4f9d-a50e-9c06a68870fe" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Performance" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8cac2243g4b2bgdd42ge583g3f17777f2336" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h50d9fe85g39d0g3b8eg843fga2f911dc8d89" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_PEF" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Performance);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1PERFORMANCE')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4a590d2a-d17c-41b8-9dd3-54f197a9caa9" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Performance" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="aaee22f6-c01e-4f9d-a50e-9c06a68870fe" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9b9509c9g1a4cgce90g2367gdc0658a94724" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Performance);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2PERFORMANCE')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1PERFORMANCE')):ApplyStatus(StatusPenalty1Performance,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2cdfdc80-6319-43c5-8d02-3388bd057022" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Persuasion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h167ed349ga7f7gc2fcg35e2g7874a7ce3da5" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h78e983e4gbb31g4f42gbb99g0bc117c44bbf" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_PER" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Persuasion);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1PERSUASION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="74eb844f-b1da-404c-8238-16c80749464f" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Persuasion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="2cdfdc80-6319-43c5-8d02-3388bd057022" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he79bf5b3gaee2g5706g5132g112aa041ba1d" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Persuasion);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2PERSUASION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1PERSUASION')):ApplyStatus(StatusPenalty1Persuasion,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="377f4c8c-21f5-4c56-a45d-4734c7483762" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Religion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0fabdcaag7b31g8053g2b7ag819f004db562" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h378d10beg0836ga832g7508ge2a4bd349c22" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_REL" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Religion);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1RELIGION')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d4526b99-ab57-4ad6-a682-cf177dbc4a32" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Religion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="377f4c8c-21f5-4c56-a45d-4734c7483762" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hde266886g06bbg611fgcb7bgb78654ca1c9c" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Religion);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2RELIGION')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1RELIGION')):ApplyStatus(StatusPenalty1Religion,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e7925b39-4bfa-4b44-b082-90ae734d6b14" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1SleightOfHand" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2e3980d4g77aeg54e6g529fg29cc27a69932" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h561a0179g019egae0eg5e09g88c89bb7a733" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_SLE" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,SleightOfHand);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1SLEIGHTOFHAND')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2e16ff04-81d5-4f6b-a36b-6170ee036ce5" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2SleightOfHand" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e7925b39-4bfa-4b44-b082-90ae734d6b14" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha51daf4eg0717g58f0gf0dbg2fe80f19b157" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,SleightOfHand);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2SLEIGHTOFHAND')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1SLEIGHTOFHAND')):ApplyStatus(StatusPenalty1SleightOfHand,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="915a710a-4621-4138-adbb-32ab3ebab0d5" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Stealth" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h646b078fg7f3dg01c4g41b4g4b783d4ec620" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5cafc826ga18cg0bf4ga5e7g6de277f7324f" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_STE" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Stealth);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1STEALTH')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b6daf641-2bbe-4099-8738-362333ee84dc" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Stealth" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="915a710a-4621-4138-adbb-32ab3ebab0d5" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6caafd5cg4ae1g0b4bg65d1g08bb2a9556ba" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Stealth);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2STEALTH')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1STEALTH')):ApplyStatus(StatusPenalty1Stealth,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9dc98ef4-1d29-42ed-b083-639ef3ad108c" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty1Survival" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc650b2bdg3dd8gd6fegc1b9ga3453b4f9e4e" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h520abfa3ge37dgfed2g9807gaf649d7f7f48" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_PENALTY_SUR" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-1,Survival);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_1SURVIVAL')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c3533fe2-7eec-40bd-9584-c411c4acbbe3" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusPenalty2Survival" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="9dc98ef4-1d29-42ed-b083-639ef3ad108c" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6cc3a2d7g15aeg3695ge28eg0260be23ed64" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-2,Survival);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_2SURVIVAL')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_1SURVIVAL')):ApplyStatus(StatusPenalty1Survival,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="13ad65e1-febd-4794-8602-56d2201a483c" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus1Perception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="08933788-0444-46ed-831f-afcdff452fa6" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hffec2e39g8b2agaebeg5edcg779c0079ca7c" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcb964825ge305gcdc5g9f53gde7344df18b7" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="STATUS_BONUS_PERC" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,1,Perception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_1PERC')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5dd02d77-6d86-48a0-ae66-24ea9e7a3d1f" />
+        <field name="Name" type="NameTableFieldDefinition" value="StatusBonus2Perception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="13ad65e1-febd-4794-8602-56d2201a483c" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h573db004g1284g0749gdb6egb50c29a361ec" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,2,Perception);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_BON_2PERC')" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_BON_1PERC')):ApplyStatus(StatusBonus1Perception,100,-1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1379,6 +2196,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="bf500a2b-8370-40cb-b647-b4fc75f6b232" />
         <field name="Name" type="NameTableFieldDefinition" value="STEALTH_AND_CONCEALMENT" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8f9ef984gf4c2g2ea8g164bge327bf58624a" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1536,12 +2354,12 @@
         <field name="StackId" type="StringTableFieldDefinition" value="HIDDEN" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(HIDDEN_CLEANUP,100,0)" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(HIDDEN_CLEANUP,100,0);" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Sneaking" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Sneaking" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceConsumeMultiplier(Movement, 2,0);MovementSpeedLimit(Walk);Tag(VFX_SNEAKING);UnlockInterrupt(HiddenReaction);UnlockSpell(Shout_Unhide);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not HasStatus('SG_Invisible',context.Source) and not HasSpellFlag(SpellFlags.Stealth, context.Source)) or IsStatusEvent(StatusEvent.OnCombatEnded)" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnAttack;OnSpellCast;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnAttack;OnSpellCast" enumeration_type_name="StatusEvent" version="1" />
         <field name="Passives" type="StringTableFieldDefinition" value="SneakingRules;" />
       </fields>
     </stat_object>
@@ -1811,6 +2629,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="HIDE_FREE_DARKNESS_NPC" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(NPCHideDarknessCheck()):ApplyStatus(HIDDEN_NPC,100,-1);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2d7b39f3g5fb6ga67eg2a73g9154c8b20513" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1830,6 +2649,7 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="Passives" type="StringTableFieldDefinition" value="NPCFindingRules;" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb4918444g185ag9ac0gdb4eg6a2498ab2cf2" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1840,6 +2660,7 @@
         <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(HasStatus('HIDDEN_NPC',context.Target)):ApplyStatus(HIDDEN_NPC_RECHECK,100,0)" />
         <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems" enumeration_type_name="AuraFlags" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h993bff43g4b53gf39fge65fg5fe59a997fd8" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1848,6 +2669,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="HIDDEN_NPC_RECHECK" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(NPCHideRecheckSight(context.Source, context.SourcePosition)):RemoveStatus(HIDDEN_NPC)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h56311930g20dag921egf607g9164359f5564" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1863,6 +2685,7 @@
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Stealth,NPCHideGetDC(context.Target))" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(UNDETECTED_NPC,100,-1)" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="RemoveStatus(UNDETECTED_NPC);&#xD;&#xA;IF(IsCriticalMissSkill()):RemoveStatus(HIDDEN_NPC);" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3021a41ag89f2gd5bfg3de5g4e80329c750a" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1876,6 +2699,7 @@
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="SpellId('Shout_Dash')" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSpellCast" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1a7d873eg1d9egfc7eg803eg88db73949b72" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1888,6 +2712,7 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableImmunityOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(NPCHideRecheckSight(context.Source, context.SourcePosition)):RemoveStatus(HIDDEN_NPC)" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3560ca18g96f3g5e86g1dd1gedacb63b087f" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2368,6 +3193,7 @@
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not HasPassive('FlameOrder') and not Item() and RollDieAgainstDC(DiceType.d20,15) or (HasPassive('FlameOrder')) and not Item() and RollDieAgainstDC(DiceType.d20,10))" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value=";" />
+        <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Surface;SG_Light" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3540,6 +4366,7 @@
         <field name="Passives" type="StringTableFieldDefinition" value="CounterPerformanceTechnical;" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(COUNTER_PERFORMANCE_CLEANUP,100,0);ApplyStatus(COUNTER_PERFORMANCE_USED,100,1)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Uses Osiris PF2e_CounterPerformance" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4309,7 +5136,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e31f1a64-929c-4b52-830f-6f701aecbecc" />
         <field name="Name" type="NameTableFieldDefinition" value="HASTE" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf4c1659bg13b6g25a2gd3c1g32b6c8f7e244" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1bc978a1gd421gf070g663bgdda750761718" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1bc978a1gd421gf070g663bgdda750761718" version="3" />
         <field name="StackId" type="StringTableFieldDefinition" value="HASTE" />
         <field name="Boosts" type="StringTableFieldDefinition" value="ActionResource(BonusActionPoint,1,0);" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(HASTE_ATTACK)" />
@@ -4330,13 +5157,13 @@
         <field name="Name" type="NameTableFieldDefinition" value="HASTE_ATTACK" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_Haste" />
         <field name="StackId" type="StringTableFieldDefinition" value="HASTE_ATTACK" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(HasteSpellCheck(),ModifyUseCosts(Add,BonusActionPoint,1,0,ActionPoint),ModifyIconGlow());" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(HasteSpellCheck(),ModifyUseCosts(Replace,BonusActionPoint,1,0,ActionPoint),ModifyIconGlow());" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasActionResource('BonusActionPoint', 1, 0, false, false) or not HasActionResource('ActionPoint', 1, 0, false, false)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSpellCast" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF( RemoveCause(StatusRemoveCause.Condition) and HasActionResource('BonusActionPoint',1,0, false, true) ):ApplyStatus(HASTE_ATTACK_EMERGENCY,100,1); IF( RemoveCause(StatusRemoveCause.Condition) ):RestoreResource(ActionPoint,1,0); " />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfff35aa6gf8d8g2093gee35gbab40e250eb9" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h747500ffg942cg59eag9c9eg2e3d32eeb322" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h747500ffg942cg59eag9c9eg2e3d32eeb322" version="2" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4344,7 +5171,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e94032c8-cd15-4c7e-b87f-908a58626a6c" />
         <field name="Name" type="NameTableFieldDefinition" value="HASTE_ATTACK_EMERGENCY" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="c56c23c5-3cc7-445b-ab69-018b8001faf0" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(HasteSpellCheck(),ModifyUseCosts(Add,BonusActionPoint,1,0),ModifyIconGlow());UnlockSpellVariant(not HasteSpellCheck(),ModifyUseCosts(Add,Block,1,0));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(HasteSpellCheck(),ModifyUseCosts(Replace,BonusActionPoint,1,0,ActionPoint),ModifyIconGlow());UnlockSpellVariant(not HasteSpellCheck(),ModifyUseCosts(Add,Block,1,0));" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="UseActionResource(BonusActionPoint, 1);" />
       </fields>
     </stat_object>
@@ -4354,10 +5181,11 @@
         <field name="Name" type="NameTableFieldDefinition" value="LOOSE_TIMES_ARROW" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="e31f1a64-929c-4b52-830f-6f701aecbecc" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha467c4c5g7b09gecb5gf36fge2e1062577d4" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h757e5901g075fg0925gd9cbgf7491faedb4f" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hce76062dge8b3gf188gd7c0g19df918fe145" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="ActionResource(BonusActionPoint,1,0);" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(LOOSE_TIMES_ACTION,100,1)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(LOOSE_TIMES_ACTION)" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4365,8 +5193,10 @@
         <field name="UUID" type="IdTableFieldDefinition" value="cfd9a8ae-59db-498b-9860-d5e3d1e6ddc6" />
         <field name="Name" type="NameTableFieldDefinition" value="LOOSE_TIMES_ACTION" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="c56c23c5-3cc7-445b-ab69-018b8001faf0" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(SpellId('Shout_Disengage') or SpellId('Shout_Dash') or SpellId('Shout_Dash_NPC'),ModifyUseCosts(Add,BonusActionPoint,1,0,ActionPoint),ModifyIconGlow());" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(SpellId('Shout_Disengage') or SpellId('Shout_Dash') or SpellId('Shout_Dash_NPC'),ModifyUseCosts(Replace,BonusActionPoint,1,0,ActionPoint),ModifyIconGlow());" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF( RemoveCause(StatusRemoveCause.Condition) ):RestoreResource(ActionPoint,1,0); " />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1aaae8cfg8848g11ecg776egb796816d6bbc" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb135760dg47d6gafe4ga9c4g46d7d6033725" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4953,6 +5783,19 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="48b0abfe-cda4-4494-8f0c-4aa22bab0bd7" />
+        <field name="Name" type="NameTableFieldDefinition" value="SYNESTHESIA" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4a4d5d7cge514g3d98g2ed0g4f3496a32f41" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hfa022124g5b35g3976g96e0g596f8e40c5cd" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_IntellectDevourer_DevourIntellect" />
+        <field name="StackId" type="StringTableFieldDefinition" value="SYNESTHESIA" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="ffcef28f-c270-4e59-9f7f-b39e0fcad34d" />
         <field name="Name" type="NameTableFieldDefinition" value="BANE" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h12858ac3g428eg0e54g979bg56ba061511ba" version="1" />
@@ -5107,8 +5950,8 @@
         <field name="UUID" type="IdTableFieldDefinition" value="197a7e33-f9c5-458e-82ed-99e77aa430b2" />
         <field name="Name" type="NameTableFieldDefinition" value="WEB_WALKER" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbdcae465gb121g9a81gdca6g6fa7b2a6f291" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he40728d8ga896g7ca3gee73g47ec6b7c978f" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Disadvantage(AttackTarget)" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he40728d8ga896g7ca3gee73g47ec6b7c978f" version="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_BON_1AC);Tag(STAT_BON_1REFLEX);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyConditions" type="StringTableFieldDefinition" value="HasPassive('SpiderWalk',context.Source)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_Intent_Buff" />
@@ -5987,7 +6830,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="DIABOLIC_EDICT_BUFF" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd39ddc72g92e0gebd7g4e88g8319ccc91440" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h94ec663egf821g3828g0b58gd9e212906326" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_BON_1ATTACK);Tag(STAT_BON_1SKILLS)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_BON_1ATTACK);Tag(STAT_BON_1ATHLETICS);Tag(STAT_BON_1ACROBATICS);Tag(STAT_BON_1ARCANA);Tag(STAT_BON_1ANIMALHANDLING);Tag(STAT_BON_1DECEPTION);Tag(STAT_BON_1HISTORY);Tag(STAT_BON_1INSIGHT);Tag(STAT_BON_1INVESTIGATION);Tag(STAT_BON_1INTIMIDATION);Tag(STAT_BON_1MEDICINE);Tag(STAT_BON_1NATURE);Tag(STAT_BON_1PERSUASION);Tag(STAT_BON_1PERFORMANCE);Tag(STAT_BON_1RELIGION);Tag(STAT_BON_1SLEIGHTOFHAND);Tag(STAT_BON_1STEALTH);Tag(STAT_BON_1SURVIVAL);" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="6337f290-99b3-43d6-9bb4-51334cb56359" />
@@ -8310,7 +9153,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h68aa0cdfgf5ccgc2f5g33e8gbaf882cc14e1" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Charmed" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="3" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(HyponotizeStatus,100,0)" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and VisualSpell()):ApplyStatus(HyponotizeStatus,100,0)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="cecc9bf7-f89f-4f23-b540-325fefa3b2a7" />
         <field name="StackId" type="StringTableFieldDefinition" value="HypnotizeAura" />
@@ -10399,7 +11242,8 @@
         <field name="UUID" type="IdTableFieldDefinition" value="71e2ef5f-aedc-4076-9ef8-b02a7ebfbd40" />
         <field name="Name" type="NameTableFieldDefinition" value="HAG_FLESHROT" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="3a15095e-616c-4a8f-82d8-bef92cf5c693" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Disadvantage(Ability, Charisma);Disadvantage(SavingThrow,Charisma)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_2PERSUASION);Tag(STAT_PEN_2INTIMIDATION);Tag(STAT_PEN_2PERFORMANCE);" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h766cc973g4e25g1a48g93a5g7e440385a3bb" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10488,8 +11332,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="9e0b16d6-1efd-47df-9760-404b9b837a20" />
         <field name="Name" type="NameTableFieldDefinition" value="SHA_NECROMANCER_FLESH_BERSERK" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="ba782ee3-9673-46ec-a928-aad960b62467" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="AiArchetypeOverride(madness,99);Advantage(Ability, Strength);DamageBonus(1d8);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AiArchetypeOverride(madness,99);Tag(STAT_BON_1ATHLETICS);DamageBonus(1d8);" />
         <field name="Passives" type="StringTableFieldDefinition" value="BldResist_10;SlaResist_10;PrcResist_10" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6999b968gc0begbc6bg731ag654c56573c6a" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -12456,14 +13301,15 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbe426f7cge67fge3a0g8891g85c74e0d00ff" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="heb851c67gb312gb8e2g3b14gdfd956ae2cc5" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_FaerieFire" />
-        <field name="StackId" type="StringTableFieldDefinition" value="INVISIBILITY" />
-        <field name="StackPriority" type="IntegerTableFieldDefinition" value="10" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="GameplayLight(3,false,0.1);StatusImmunity(SG_Invisible);Tag(CONCEALED_DISABLE);Tag(DAZZLED);" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FAERIE_FIRE" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="GameplayLight(3,false,0.1);Tag(DAZZLED);" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Light" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="423ef553-a009-40d0-b110-1f5398b1b774" />
         <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="887e86db-a1a5-4ea2-8b96-e3195e66b24c" />
         <field name="SoundLoop" type="StringTableFieldDefinition" value="Spell_Status_FaerieFire_MO" />
         <field name="SoundStop" type="StringTableFieldDefinition" value="Spell_Status_FaerieFire_MO_Stop" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -13002,7 +13848,6 @@
         <field name="Name" type="NameTableFieldDefinition" value="RAGE_MUTE" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf1ce24a5g101dg93fag3bfag752a5af20eb9" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h827c7b48g8dd5g54f3g2a51g011567bd62fc" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="BlockVerbalComponent();" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="BreakConcentration()" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasStatus('SG_Rage')" />
@@ -13434,6 +14279,29 @@
         <field name="SoundLoop" type="StringTableFieldDefinition" value="Misc_Status_AdamantineGolem_SuperHeated_MO" />
         <field name="SoundStop" type="StringTableFieldDefinition" value="Misc_Status_AdamantineGolem_SuperHeated_Stop" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SICKENED_2,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8d50f327-8202-40ad-bcae-7517e8ffb93d" />
+        <field name="Name" type="NameTableFieldDefinition" value="SLOW" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h87fecb9dgdeb8g4a7ega838g98377389ad64" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd8a98c41g1a3fgc6b4gfe36g583e20b92edc" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_Slow" />
+        <field name="StackId" type="StringTableFieldDefinition" value="SLOW" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AC(-2);RollBonus(SavingThrow,0-2,Dexterity);ActionResourceBlock(ReactionActionPoint);ActionResourceMultiplier(Movement,50,0);MovementSpeedLimit(Walk);Tag(EXTRA_ATTACK_BLOCKED);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="SavingThrow(Ability.Wisdom, SourceSpellDC())" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
+        <field name="Passives" type="StringTableFieldDefinition" value="Slow_ActionPoint;Slow_Casting" />
+        <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="WEAK" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="1e34754f-17e3-4aeb-9db9-a34f682c1c45" />
+        <field name="ManagedStatusEffectType" type="EnumerationTableFieldDefinition" value="Negative" enumeration_type_name="ManagedStatusEffectType" version="1" />
+        <field name="ManagedStatusEffectGroup" type="GuidObjectTableFieldDefinition" value="d787f666-8ee6-4185-9365-6aac9ebe76ae" />
+        <field name="SoundLoop" type="StringTableFieldDefinition" value="Spell_Status_Slow_MO" />
+        <field name="SoundStop" type="StringTableFieldDefinition" value="Spell_Status_Slow_MO_Stop" />
+        <field name="TooltipSave" type="StringTableFieldDefinition" value="Wisdom" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(EXTRA_ATTACK);RemoveStatus(EXTRA_ATTACK_2);RemoveStatus(EXTRA_ATTACK_WAR_MAGIC);RemoveStatus(EXTRA_ATTACK_WAR_PRIEST);RemoveStatus(MAG_MARTIAL_EXERTION);RemoveStatus(WILDSTRIKE_EXTRA_ATTACK);RemoveStatus(WILDSTRIKE_2_EXTRA_ATTACK);RemoveStatus(STALKERS_FLURRY);RemoveStatus(EXTRA_ATTACK_THIRSTING_BLADE);RemoveStatus(COMMANDERS_STRIKE_D8);RemoveStatus(COMMANDERS_STRIKE_D10)" />
       </fields>
     </stat_object>
   </stat_objects>
