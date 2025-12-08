@@ -90,9 +90,52 @@ IF
 EnteredCombat((GUIDSTRING)_Character, _)
 AND
 HasActiveStatus(_Character, "SNEAKING", 1)
+AND
+IsPlayer((CHARACTER)_Character, 1)
 THEN
-RemoveStatus(_Character, "SNEAKING");
+RemoveStatus((GUIDSTRING)_Character, "SNEAKING");
 UseSpell(_Character, "Shout_Hide", _Character);
+
+// Whenever a character enters combat while invisible, immediately trigger 
+// a hide check.
+IF
+EnteredCombat((GUIDSTRING)_Character, _)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
+AND
+IsPlayer((CHARACTER)_Character, 1)
+THEN
+UseSpell((GUIDSTRING)_Character, "Shout_Hide", _Character);
+
+// Repeat for NPCs
+IF
+EnteredCombat((GUIDSTRING)_Character, _)
+AND
+HasActiveStatus(_Character, "SNEAKING", 1)
+AND
+IsPlayer((CHARACTER)_Character, 0)
+THEN
+RemoveStatus((GUIDSTRING)_Character, "SNEAKING");
+UseSpell(_Character, "Shout_Hide_NPC", _Character);
+
+IF
+EnteredCombat((GUIDSTRING)_Character, _)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
+AND
+IsPlayer((CHARACTER)_Character, 0)
+THEN
+UseSpell((GUIDSTRING)_Character, "Shout_Hide_NPC", _Character);
+
+// When combat ends, the character needs to sneak again if it
+// was hidden
+IF
+LeftCombat((CHARACTER)_Character, _)
+AND
+HasActiveStatus((GUIDSTRING)_Character, "HIDDEN", 1)
+THEN
+ApplyStatus(_Character, "SNEAKING", -1.0);
+RemoveStatus(_Character, "HIDDEN");
 //END_REGION
 
 //REGION Hide Checks
@@ -521,6 +564,15 @@ IntegerToReal(_DCMult, (REAL)_DCReal)
 THEN
 ApplyStatus(_Character, "HIDE_NPC_DC", _DCReal, 1, _Character);
 NOT DB_HideCalculationNPC(_Character, _DC, _HideDCString, _HideFinalString);
+//END_REGION
+
+//REGION Faerie Fire
+// Faerie fire interactions are complex because they usually
+// disavle concealed, but for an invisible character make them
+// not invisible but only concealed. We use a technical status
+// that is applied alongside invisible statuses to achieve this.
+
+
 //END_REGION
 EXITSECTION
 

@@ -624,9 +624,9 @@ function WillDC(entity)
 	return base + prof + circ_bon + item_bon + stat_bon - circ_pen - item_pen - stat_pen
 end
 
-function DemoralizeDC(entity)
-	local willDC = WillDC(entity)
-	if LinguisticSpell(entity).Result then
+function DemoralizeDC()
+	local willDC = WillDC(context.Target)
+	if (LinguisticSpell(context.Target).Result or LinguisticSpell(context.Source).Result) then
 		willDC = willDC + 4
 	end
 	return willDC
@@ -1430,7 +1430,32 @@ end
 
 function ConcentrateSpell(source)
 	source = source or context.Source
-	return ConditionResult((~HasAnyStatus({'SG_RAGE'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
+	return ConditionResult((~HasAnyStatus({'SG_Rage'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
+end
+
+function RageConcentrateSpell(source)
+	source = source or context.Source
+	return ConditionResult(true, {ConditionError("CantConcentrate")})
+end
+
+function AuditorySpell(target)
+	target = target or context.Target
+	return ConditionResult(true, {ConditionError("CantHearSpell")})
+end
+
+function VisualSpell(target)
+	target = target or context.Target
+	return ConditionResult(true, {ConditionError("CantSeeSpell")})
+end
+
+function OlfactorySpell(target)
+	target = target or context.Target
+	return ConditionResult(true, {ConditionError("CantSeeSpell")})
+end
+
+function FearSpell(target)
+	target = target or context.Target
+	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result and ~IsImmuneToStatus('FEARED').Result, {ConditionError("CantFear")})
 end
 
 function SkillCheckModifier(skill, ability, entity)

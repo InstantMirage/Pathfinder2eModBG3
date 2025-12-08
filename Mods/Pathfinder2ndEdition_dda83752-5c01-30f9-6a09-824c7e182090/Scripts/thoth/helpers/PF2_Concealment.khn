@@ -64,7 +64,7 @@ function IsConcealedTo(source, target, hide)
 	if Tagged('BLINDSIGHT', target).Result then
 		return resultFalse
 	end
-	if Tagged('CONCEALED_DISABLE', source).Result then
+	if HasStatus('FAERIE_FIRE', source).Result then
 		return resultFalse
 	end
 
@@ -145,4 +145,8 @@ end
 function FlatCheckFailed(DC, entity)
 	entity = entity or context.Source
 	return ConditionResult(math.ceil(GetStatusDuration("FLAT_CHECK_ROLL", entity)) <= DC)
+end
+
+function IsSneakingOrInvisible()
+    return HasAnyStatus({'SNEAKING', 'SG_Invisible', 'HIDDEN', 'HIDDEN_NPC'}, {}, {}, source)
 end
