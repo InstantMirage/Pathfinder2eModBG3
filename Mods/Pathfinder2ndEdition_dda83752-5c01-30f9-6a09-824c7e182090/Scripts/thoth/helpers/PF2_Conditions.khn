@@ -1455,7 +1455,8 @@ end
 
 function FearSpell(target)
 	target = target or context.Target
-	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result and ~IsImmuneToStatus('FEARED').Result, {ConditionError("CantFear")})
+	local result = not (HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target) or IsImmuneToStatus('FEARED')).Result
+	return ConditionResult(result, {ConditionError("CantFear")})
 end
 
 function SkillCheckModifier(skill, ability, entity)

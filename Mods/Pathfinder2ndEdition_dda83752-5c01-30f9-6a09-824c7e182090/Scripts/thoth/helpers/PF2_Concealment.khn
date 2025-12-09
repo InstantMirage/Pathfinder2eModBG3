@@ -58,7 +58,7 @@ function HasConditionalConcealed(source, target, hide)
 end
 
 function IsConcealedTo(source, target, hide)
-	resultFalse = ConditionResult(false, {ConditionError("NotConcealed")}, {ConditionError("Concealed")}, 1.0)
+	resultFalse = ConditionResult(false, {ConditionError("NotConcealed")}, {ConditionError("Concealed")})
 	resultTrue = ConditionResult(true, {ConditionError("Concealed")}, {ConditionError("NotConcealed")}, 0.80)
 
 	if Tagged('BLINDSIGHT', target).Result then
@@ -74,7 +74,7 @@ function IsConcealedTo(source, target, hide)
 	if Tagged('CONCEALED_TO_DARKVISION', source).Result and not HasPassive('SuperiorDarkvision', target).Result then
 		return resultTrue
 	end
-	if Tagged('CONCEALED', source).Result then
+	if Tagged('CONCEALED', source).Result and not HasPassive('SuperiorDarkvision', target).Result and not HasPassive('Darkvision', target).Result then
 		return resultTrue
 	end
 	if Tagged('CONCEALED_NO_HIDE', source).Result and not hide then
