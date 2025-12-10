@@ -19,9 +19,13 @@
         <field name="UUID" type="IdTableFieldDefinition" value="0743cbde-7b6c-442f-8f04-678c962a8ff2" />
         <field name="Name" type="NameTableFieldDefinition" value="SLEEPING" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5c7b15bd-fae8-4612-b432-ca4e76d1cfe8" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(OFF_GUARD);DetectDisturbancesBlock(true);SightRangeOverride(0);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_3REFLEX);Tag(STAT_PEN_3AC);Tag(STAT_PEN_3PERC);Tag(OFF_GUARD);DetectDisturbancesBlock(true);SightRangeOverride(0);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="TotalDamageDoneGreaterThan(0) or HasStatus('SG_Prone') or IsStatusEvent(StatusEvent.OnHeal)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage;OnStatusApplied;OnHeal" enumeration_type_name="StatusEvent" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DisarmWeapon()" />
+        <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Perception, SourceSpellDC())" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="RemoveStatus(SG_Sleeping)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -37,6 +41,10 @@
         <field name="UseLyingPickingState" type="EnumerationTableFieldDefinition" value="No" enumeration_type_name="YesNo" version="1" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Perception, SourceSpellDC())" />
         <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="RemoveStatus(SG_Sleeping)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_3REFLEX);Tag(STAT_PEN_3AC);Tag(STAT_PEN_3PERC);Tag(OFF_GUARD);DetectDisturbancesBlock(true);SightRangeOverride(0);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="TotalDamageDoneGreaterThan(0) or HasStatus('SG_Prone') or IsStatusEvent(StatusEvent.OnHeal)" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage;OnStatusApplied;OnHeal" enumeration_type_name="StatusEvent" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DisarmWeapon()" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -47,7 +55,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h618b939eg9695g2b7bgd468g36a913fc040f" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(OFF_GUARD);DetectDisturbancesBlock(true);SightRangeOverride(0);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="IsStatusEvent(StatusEvent.OnHeal)" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="BreakConcentration();DisarmWeapon()" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DisarmWeapon()" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -106,7 +114,7 @@
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="FreezeTime" type="IntegerTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="StackId" type="StringTableFieldDefinition" value="ENTOMBED" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Resistance(Piercing,Resistant);Resistance(Bludgeoning,Resistant);Resistance(Slashing,Resistant);Resistance(Acid,Resistant);Resistance(Cold,Resistant);Resistance(Fire,Resistant);Resistance(Force,Resistant);Resistance(Lightning,Resistant);Resistance(Necrotic,Resistant);Resistance(Poison,Resistant);Resistance(Psychic,Resistant);Resistance(Radiant,Resistant);Resistance(Thunder,Resistant);Attribute(Grounded);StatusImmunity(SG_Poisoned);Advantage(AttackTarget);Disadvantage(SavingThrow,Strength);AbilityFailedSavingThrow(Dexterity);DetectDisturbancesBlock(true);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_3REFLEX);Tag(STAT_PEN_2AC);Tag(STAT_PEN_1PERC);Tag(OFF_GUARD);Attribute(Grounded);DetectDisturbancesBlock(true);" />
         <field name="TooltipSave" type="StringTableFieldDefinition" value="Strength" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Constitution,12)" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="RemoveStatus(ENTOMBED)" />

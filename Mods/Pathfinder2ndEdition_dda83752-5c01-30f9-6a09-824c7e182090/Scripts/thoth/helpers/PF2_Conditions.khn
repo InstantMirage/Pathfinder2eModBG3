@@ -132,10 +132,6 @@ function TrainedArmor() --Proficient or unarmored
 	return HasProficiency('HeavyArmor',context.Source) | (HasProficiency('LightArmor',context.Source) & hasLightArmor) | (HasProficiency('MediumArmor',context.Source) & hasMediumArmor)
 end
 
-function TrainedSkill() --Proficient
-	return HasProficiencyBonus(context.CheckedAbility,context.CheckedSkill,context.Source)
-end
-
 -- Off-guard
 
 function OffGuard(target,source)
@@ -148,7 +144,7 @@ function OffGuardNoFlanking(target,source)
 	target = target or context.Target
 	source = source or context.Source
 	local feint = IsMeleeAttack() & HasAnyStatus({'FEINT_ROUND','FEINT_ONCE'},{},{},target,source)
-	local hidden = HasStatus('SG_Invisible',source) | HasStatus('SNEAKING',source)
+	local hidden = HasStatus('SG_Invisible',source) | HasStatus('HIDDEN_FROM',target,source) | HasStatus('HIDDEN_NPC',source)
 	--You aren't off-guard to hidden, undetected, or flanking creatures of your level or lower
 	local denyadvantage = Tagged('ROGUE_DENYADVANTAGE',target) & (target.Level >= source.Level)
 	
@@ -628,9 +624,9 @@ function WillDC(entity)
 	return base + prof + circ_bon + item_bon + stat_bon - circ_pen - item_pen - stat_pen
 end
 
-function DemoralizeDC(entity)
-	local willDC = WillDC(entity)
-	if IsIntelligent(entity).Result then
+function DemoralizeDC()
+	local willDC = WillDC(context.Target)
+	if (LinguisticSpell(context.Target).Result or LinguisticSpell(context.Source).Result) then
 		willDC = willDC + 4
 	end
 	return willDC
@@ -1415,4 +1411,92 @@ end
 
 function IsSkillLegend(skill, ability)
 	return ConditionResult(getSkillProficiencyScore(skill, ability) > 3, {ConditionError(skill .. "Legend")})
+end
+
+function MentalSpell(target)
+	target = target or context.Target
+	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Mindless")})
+end
+
+function EmotionSpell(target)
+	target = target or context.Target
+	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Emotionless")})
+end
+
+function LinguisticSpell(target)
+	target = target or context.Target
+	return ConditionResult((~HasAnyTags({'CANTSPEAK'}, target)).Result, {ConditionError("LanguageBarrier")})
+end
+
+function ConcentrateSpell(source)
+	source = source or context.Source
+	return ConditionResult((~HasAnyStatus({'SG_Rage'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
+end
+
+function RageConcentrateSpell(source)
+	source = source or context.Source
+	return ConditionResult(true, {ConditionError("CantConcentrate")})
+end
+
+function AuditorySpell(target)
+	target = target or context.Target
+	return ConditionResult(true, {ConditionError("CantHearSpell")})
+end
+
+function VisualSpell(target)
+	target = target or context.Target
+	return ConditionResult(true, {ConditionError("CantSeeSpell")})
+end
+
+function OlfactorySpell(target)
+	target = target or context.Target
+	return ConditionResult(true, {ConditionError("CantSeeSpell")})
+end
+
+function FearSpell(target)
+	target = target or context.Target
+	local result = not (HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target) or IsImmuneToStatus('FEARED')).Result
+	return ConditionResult(result, {ConditionError("CantFear")})
+end
+
+function SkillCheckModifier(skill, ability, entity)
+	entity = entity or context.Source
+	local prof = GetModifier(entity.Dexterity)
+	local stat_bon = 0
+
+	if HasProficiencyBonus(Ability[ability],Skill[skill],entity).Result then
+		prof = prof + 2
+	end
+	if HasPassive(skill .. 'Expert',entity).Result then
+		prof = prof + 2
+	end
+	if HasPassive(skill .. 'Increase',entity).Result then
+		prof = prof + 2
+	end
+	if HasPassive(skill .. 'Increase2',entity).Result then
+		prof = prof + 2
+	end
+
+	if HasAnyTags({'STAT_BON_1SKILLS'},entity).Result then
+		stat_bon = 1
+	end
+
+	return prof + stat_bon
+end
+
+function CounterPerformanceModifier(number)
+	local oldTotal = context.InterruptedRoll.Total
+	local newTotal = math.ceil(GetStatusDuration("COUNTER_PERFORMANCE_VALUE", context.Observer))
+	local modifier = newTotal - oldTotal
+	return ConditionResult(modifier == number)
+end
+
+function CounterPerformanceCrit()
+	local oldDifficulty = context.InterruptedRoll.Difficulty
+	local newTotal = math.ceil(GetStatusDuration("COUNTER_PERFORMANCE_VALUE", context.Observer))
+	local tenPlus = (newTotal - oldDifficulty) > 9
+	if (newTotal - oldDifficulty) > 9 then
+		return ConditionResult(true)
+	end
+	return HasStatus('COUNTER_PERFORMANCE_CRIT', context.Observer)
 end

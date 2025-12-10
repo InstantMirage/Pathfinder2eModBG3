@@ -1,0 +1,82 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+StatusApplied((GUIDSTRING)_Bard, "COUNTER_PERFORMANCE_SOURCE", _, _)
+AND
+TimerExists("CounterPerformanceTimer", 0)
+THEN
+TimerLaunch("CounterPerformanceTimer", 30);
+
+IF
+StatusApplied((GUIDSTRING)_Character, "COUNTER_PERFORMANCE_ALLY", (GUIDSTRING)_Bard, _)
+THEN
+DB_CounterPerformanceSchedule(_Character, _Bard);
+
+IF
+TimerFinished("CounterPerformanceTimer")
+AND
+DB_CounterPerformanceSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Bard)
+AND
+GetStatusCurrentLifetime(_Bard, "COUNTER_PERFORMANCE_ROLL", (REAL)_DurationSeconds)
+AND
+CalculatePassiveSkill(_Bard, "Performance", (INTEGER)_PassivePerformance)
+AND
+IntegerSubtract(_PassivePerformance, 10, (INTEGER)_PerformanceModifier)
+AND
+IntegerToReal(_PerformanceModifier, (REAL)_PerformanceReal)
+AND
+RealProduct(_PerformanceReal, 6.0, (REAL)_PerformanceDuration)
+AND
+RealSum(_PerformanceDuration, _DurationSeconds, (REAL)_DurationFinal)
+THEN
+DB_CounterPerformanceSource(_Character, _Bard);
+ApplyStatus(_Character, "COUNTER_PERFORMANCE_VALUE", _DurationFinal, 1, _Bard);
+
+IF
+TimerFinished("CounterPerformanceTimer")
+AND
+DB_CounterPerformanceSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Bard)
+AND
+GetStatusCurrentLifetime(_Bard, "COUNTER_PERFORMANCE_ROLL", (REAL)_DurationSeconds)
+AND
+RealToInteger(_DurationSeconds, (INTEGER)_DurationInt)
+AND
+_DurationInt == 120
+THEN
+ApplyStatus(_Character, "COUNTER_PERFORMANCE_CRIT", -1.0, 1, _Bard);
+
+IF
+TimerFinished("CounterPerformanceTimer")
+AND
+DB_CounterPerformanceSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Bard)
+THEN
+NOT DB_CounterPerformanceSchedule(_Character, _Bard);
+
+// When any character uses Counter Performance, we charge reactions and
+// focus points against the bard.
+IF
+ReactionInterruptUsed((GUIDSTRING)_Character, "Interrupt_CounterPerformance", _)
+AND
+DB_CounterPerformanceSource(_Character, (GUIDSTRING)_Bard)
+THEN
+ApplyStatus(_Bard, "COUNTER_PERFORMANCE_COST", 0.0, 1, _Character);
+ApplyStatus(_Bard, "COUNTER_PERFORMANCE_VISUALS", 1.0, 0, _Character);
+DB_CounterPerformanceCleanup(_Bard);
+
+// After the first use of Counter Performance, we clean out the DB,
+// which ensures that our bard doesn't lose multiple focus points if
+// multiple characters react.
+IF
+ReactionInterruptUsed(_, "Interrupt_CounterPerformance", _)
+AND
+DB_CounterPerformanceCleanup((GUIDSTRING)_Bard)
+AND
+DB_CounterPerformanceSource((GUIDSTRING)_Character, _Bard)
+THEN
+NOT DB_CounterPerformanceSource(_Character, _Bard);
+EXITSECTION
+
+ENDEXITSECTION

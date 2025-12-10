@@ -127,7 +127,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="9" />
         <field name="HitRadius" type="FloatTableFieldDefinition" value="1.5" />
         <field name="MovementSpeed" type="IntegerTableFieldDefinition" value="40000" />
-        <field name="SpellRoll" type="StringTableFieldDefinition" value="Dead() or SkillCheck(Skill.Athletics,math.max(context.Target.GetPassiveSkill(Skill.Athletics),context.Target.GetPassiveSkill(Skill.Acrobatics)), IsSneakingOrInvisible())" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="Dead() or SkillCheck(Skill.Athletics,math.max(context.Target.GetPassiveSkill(Skill.Athletics),context.Target.GetPassiveSkill(Skill.Acrobatics)))" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Ally()):Force(ShoveDistance,OriginToEntity,Aggressive);IF(Ally()):Force(ShoveDistance,OriginToEntity,Friendly)" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() and not Dead()) or Item() and DistanceToTargetGreaterThan(3.0) and CanShoveWeight() and IsMovable() and not Grounded()" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h48e0be6cg35dcg195eg081bg451b7541f1bb" version="1" />
@@ -255,10 +255,10 @@
         <field name="StopAtFirstContact" type="BoolTableFieldDefinition" value="False" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="DontChange" enumeration_type_name="SpellSheathing" version="1" />
         <field name="OnlyHit1Target" type="BoolTableFieldDefinition" value="False" />
-        <field name="Requirements" type="StringTableFieldDefinition" value="not HasStatus('Grappled') and not HasStatus('ENSNARED') and not HasStatus('WEB') and CanCastImpulse('Fire',true);" />
         <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="7e674dab-7226-423f-b4bf-4e006bc99cbd" />
         <field name="PreviewEffect" type="GuidObjectTableFieldDefinition" value="1615a7f7-21d9-4dd0-849b-d3c79a57c5ff" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire');" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and not HasStatus('Grappled') and not HasStatus('ENSNARED') and not HasStatus('WEB') and ConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -275,13 +275,12 @@
         <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Buff_ElementalWeaponFire_L1to3" />
         <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Cast" enumeration_type_name="CursorMode" version="1" />
         <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
-        <field name="Requirements" type="StringTableFieldDefinition" value="not HasStatus('Grappled') and not HasStatus('ENSNARED') and not HasStatus('WEB') and CanCastImpulse('Fire',true);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="e4c33fe4-af36-47b7-9f61-51f2f6924210,,;7bfeb9dd-1348-45c7-bff9-ed42f8cd43a1,,;b780092c-cc12-43d5-b60e-acbac3fdceed,,;abbeb7de-2128-4b16-95e5-7b9d7b1af2f9,,;6574bfb9-d601-4760-bd53-867747514006,,;,,;a28c0e11-6dc4-4f40-8e58-14e0d7ae4172,,;,,;,," />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsSpell" enumeration_type_name="SpellFlagList" version="1" />
         <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Peaceful" enumeration_type_name="SpellAnimationIntentType" version="1" />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire');" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and not HasStatus('Grappled') and not HasStatus('ENSNARED') and not HasStatus('WEB') and ConcentrateSpell();" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="a0458d31-f8ef-419a-8708-5715c81e91d3" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="154802bd-3dae-4bdc-9889-4addfdc0ca57" />
         <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="7e674dab-7226-423f-b4bf-4e006bc99cbd" />
@@ -289,6 +288,7 @@
         <field name="StopAtFirstContact" type="BoolTableFieldDefinition" value="False" />
         <field name="OnlyHit1Target" type="BoolTableFieldDefinition" value="False" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="DontChange" enumeration_type_name="SpellSheathing" version="1" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -299,7 +299,7 @@
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Rush_BurningJet_Level1" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="18" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8c68ecadg934fge6f5g8b30g03b6431dbbf6" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and CharacterLevelGreaterThan(5);" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and not HasStatus('Grappled') and not HasStatus('ENSNARED') and not HasStatus('WEB') and CharacterLevelGreaterThan(5) and ConcentrateSpell();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -320,7 +320,6 @@
         <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Monk_FistofFourThunders_L1to3" />
         <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Cast" enumeration_type_name="CursorMode" version="1" />
         <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
-        <field name="Requirements" type="StringTableFieldDefinition" value="not HasStatus('Grappled') and not HasStatus('ENSNARED') and not HasStatus('WEB') and CanCastImpulse('Air');" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="e4c33fe4-af36-47b7-9f61-51f2f6924210,,;7bfeb9dd-1348-45c7-bff9-ed42f8cd43a1,,;b780092c-cc12-43d5-b60e-acbac3fdceed,,;abbeb7de-2128-4b16-95e5-7b9d7b1af2f9,,;6574bfb9-d601-4760-bd53-867747514006,,;,,;a28c0e11-6dc4-4f40-8e58-14e0d7ae4172,,;,,;,," />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsSpell;IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
@@ -335,7 +334,8 @@
         <field name="PreviewEffect" type="GuidObjectTableFieldDefinition" value="1615a7f7-21d9-4dd0-849b-d3c79a57c5ff" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="DontChange" enumeration_type_name="SpellSheathing" version="1" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:IF(HasStatus('AIR_JUNCTION',context.Source)):ApplyStatus(DISENGAGE_USESTEP,100,1);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Air');" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Air') and not HasStatus('Grappled') and not HasStatus('ENSNARED') and not HasStatus('WEB') and ConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

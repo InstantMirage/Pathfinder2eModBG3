@@ -1,0 +1,529 @@
+<ls:UIWidget x:Name="TargetInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:ls="clr-namespace:ls;assembly=Code"
+             xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 mc:Ignorable="d"
+             Template="{StaticResource Hud.Root}"
+             d:DataContext="{d:DesignInstance {x:Type ls:Widget}, IsDesignTimeCreatable=True}"
+             d:DesignWidth="3840" d:DesignHeight="2160">
+    
+    <ls:UIWidget.ContentTemplate>
+        <DataTemplate>
+            <DataTemplate.Resources>
+                <BitmapImage x:Key="CastBarBackground" UriSource="pack://application:,,,/Core;component/Assets/TargetInfo/target_bar_cast.png"/>
+                <BitmapImage x:Key="EnemyCastBarBackground" UriSource="pack://application:,,,/Core;component/Assets/TargetInfo/target_bar_cast_enemy.png"/>
+                <BitmapImage x:Key="CoopCastBarBackground" UriSource="pack://application:,,,/Core;component/Assets/TargetInfo/target_bar_cast_coop.png"/>
+                <BitmapImage x:Key="DeltasPlus" UriSource="pack://application:,,,/Core;component/Assets/TargetInfo/targetInfo_deltas_plus.png"/>
+                <BitmapImage x:Key="DeltasMinus" UriSource="pack://application:,,,/Core;component/Assets/TargetInfo/targetInfo_deltas_minus.png"/>
+
+                <Storyboard x:Key="CastBarAppearAnim" FillBehavior="Stop">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="0"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+                    </DoubleAnimationUsingKeyFrames>
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" Storyboard.TargetName="CastInfoRoot">
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="100"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.18" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+
+                <Storyboard x:Key="CastBarDisappearAnim">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+                    <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin">
+                        <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,0,0" />
+                        <SplineThicknessKeyFrame KeyTime="0:0:0.8" Value="0,-100,0,0" />
+                    </ThicknessAnimationUsingKeyFrames>
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" Storyboard.TargetName="CastInfoRoot">
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-50"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+
+                <DataTemplate x:Key="DamageTypeItemTemplate" DataType="{x:Type ls:VMDamageRoll}">
+                    <StackPanel x:Name="DamageTypePanel" HorizontalAlignment="Center" Orientation="Horizontal" Width="Auto">
+                        <Image>
+                            <Image.Style>
+                                <Style TargetType="Image" BasedOn="{StaticResource DamageIconStyle}">
+                                    <Setter Property="Margin" Value="0,0,0,0"/>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Setter Property="MaxHeight" Value="48"/>
+                                    <Setter Property="MaxWidth" Value="48"/>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </StackPanel>
+                </DataTemplate>
+
+                <Style x:Key="HitTextBlock" TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource LS_PrimaryColor}"/>
+                    <Setter Property="noesis:Text.Stroke" Value="{StaticResource LS_PrimaryColorOutlineColor}"/>
+                    <Setter Property="noesis:Text.StrokeThickness" Value="4"/>
+                    <Setter Property="TextBlock.Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Direction="270" Color="{StaticResource LS_PrimaryColorDropShadowColor}" ShadowDepth="3.0" BlurRadius="5.0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <Style x:Key="ModifierTextBlock" TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource LS_PrimaryColor}"/>
+                    <Setter Property="noesis:Text.Stroke" Value="{StaticResource LS_PrimaryColorOutlineColor}"/>
+                    <Setter Property="noesis:Text.StrokeThickness" Value="4"/>
+                    <Setter Property="FontSize" Value="{StaticResource ScaledSmallishFontSize}"/>
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                    <Setter Property="MaxWidth" Value="600"/>
+                </Style>
+
+                <Style x:Key="ModifierBorder" TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Margin" Value="4,0"/>
+                    <Setter Property="Border.Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Direction="270" Color="{StaticResource LS_PrimaryColorDropShadowColor}" ShadowDepth="3.0" BlurRadius="5.0"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Border.BorderBrush">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{StaticResource tint100}" Opacity="0.7"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <ControlTemplate x:Key="ConcentrationTemplate">
+                    <StackPanel x:Name="ConcentrationPanel" Orientation="Horizontal" >
+                        <Grid x:Name="IconHolder" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Ellipse Fill="{Binding ConcentrationSpell.Icon}" Width="42" Height="42"/>
+                            <Image x:Name="BackgroundConcentrationImage" Source="{StaticResource ConcentrationBackground}" Stretch="Uniform" Width="82"/>
+                        </Grid>
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,0" FontWeight="Medium" FontSize="{StaticResource ScaledSmallFontSize}"
+                                   Style="{StaticResource HitTextBlock}">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                                    <Binding Source="hf5795482g056ag446fgb664gfe2b0007058e"/>
+                                    <Binding Source="hccfa6976gd950g49e0g88a3gbb0e8380175f" Converter="{StaticResource TranslatedStringConverter}"/>
+                                    <Binding Path="ConcentrationSpell.Name"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding CharacterType}" Value="Avatar">
+                            <Setter TargetName="BackgroundConcentrationImage" Property="Source" Value="{StaticResource AvatarConcentrationBackground}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding PlayerRelation}" Value="Enemy">
+                            <Setter TargetName="BackgroundConcentrationImage" Property="Source" Value="{StaticResource EnemyConcentrationBackground}"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+
+                <DataTemplate x:Key="AdvantageItemTemplate" DataType="ls:VMAdvantage">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ModifierTextBlock}" Text="{Binding Source='hd64bfe4cgadadg4468g8b0ag70330ffc717c', Converter={StaticResource TranslatedStringConverter}}" Visibility="{Binding Path='(ItemsControl.AlternationIndex)', RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CountToVisibilityConverter}}" VerticalAlignment="Center" Margin="-4,0,4,0"/>
+                        <TextBlock Style="{StaticResource ModifierTextBlock}" Text="{Binding Description}"/>
+                    </StackPanel>
+                </DataTemplate>
+
+                <Style x:Key="AdvantageItemStyle" TargetType="ContentPresenter">
+                    <Setter Property="Margin" Value="4,0"/>
+                </Style>
+                
+                <Style x:Key="CollapsableTextBlock" TargetType="TextBlock">
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                
+                <Style x:Key="TargetTitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource CollapsableTextBlock}">
+                    <Setter Property="TextAlignment" Value="Center"/>
+                    <Setter Property="noesis:Text.Stroke" Value="{StaticResource LS_PrimaryColorOutlineColor}"/>
+                    <Setter Property="noesis:Text.StrokeThickness" Value="4"/>
+                    <Setter Property="FontSize" Value="{StaticResource ScaledSmallishFontSize}"/>
+                    <Setter Property="Foreground" Value="{StaticResource LS_PrimaryColor}"/>
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                    <Setter Property="MaxWidth" Value="1400"/>
+                    <Setter Property="TextBlock.Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Direction="270" Color="{StaticResource LS_PrimaryColorDropShadowColor}" ShadowDepth="3.0" BlurRadius="5.0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <DataTemplate x:Key="StatusListItemTemplate" DataType="{x:Type ls:VMStatus}">
+                    <DataTemplate.Resources>
+                        <BitmapImage x:Key="statusBG" UriSource="pack://application:,,,/Core;component/Assets/TargetInfo/statusBG.png"/>
+                        <BitmapImage x:Key="statusBG_fill" UriSource="pack://application:,,,/Core;component/Assets/TargetInfo/statusBG_fill.png"/>
+                        <System:Double x:Key="Minus1260">-1260</System:Double>
+                    </DataTemplate.Resources>
+                    <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                        <Grid Width="72" Height="72">
+                            <Image Source="{StaticResource statusBG}" Stretch="None" VerticalAlignment="Center" Margin="-8,0"/>
+                            <ls:LSPie Value="{Binding RemainingPercentage}" SweepDirection="Clockwise">
+                                <Image Source="{StaticResource statusBG_fill}" Stretch="None"/>
+                            </ls:LSPie>
+                            <Rectangle Width="48" Height="48" RadiusX="24" RadiusY="24" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="{Binding Icon}"/>
+                            <TextBlock Text="{Binding Duration}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,-12" Foreground="{StaticResource LS_PrimaryColor}"
+                                       noesis:Text.Stroke="{StaticResource LS_PrimaryColorOutlineColor}" noesis:Text.StrokeThickness="6" Style="{StaticResource NarrowTooltipModifierText}"
+                                       Visibility="{Binding Duration, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter={StaticResource DoubleZeroValue}}" FontSize="{StaticResource ScaledSmallFontSize}"/>
+                        </Grid>
+                        <TextBlock x:Name="statusLabel" Style="{StaticResource HitTextBlock}" FontSize="{StaticResource ScaledSmallishFontSize}" Text="{Binding Name}" VerticalAlignment="Center" Margin="8,0"/>
+                    </StackPanel>
+
+                    <DataTemplate.Triggers>
+                        <DataTrigger Value="True">
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{StaticResource GreaterOrEqualThanMultiConverter}">
+                                    <Binding Path="ActualWidth" ElementName="StatusHolderHidden"/>
+                                    <Binding Path="ActualWidth" ElementName="Root" Converter="{StaticResource AddConverter}" ConverterParameter="{StaticResource Minus1260}"/>
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+                            <Setter TargetName="statusLabel" Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+
+                <DataTemplate x:Key="HiddenStatusListItemTemplate" DataType="{x:Type ls:VMStatus}">
+                    <TextBlock x:Name="statusLabel" Style="{StaticResource HitTextBlock}" FontSize="{StaticResource ScaledSmallishFontSize}" Text="{Binding Name}" VerticalAlignment="Center" Margin="88,0,16,0"/>
+                </DataTemplate>
+
+                <System:Double x:Key="Minus1200">-1200</System:Double>
+                <System:Double x:Key="Minus1300">-1300</System:Double>
+            </DataTemplate.Resources>
+            
+            <!-- Target Info Contents -->
+            <Grid x:Name="Root" d:DataContext="{d:DesignInstance {x:Type ls:Widget}, IsDesignTimeCreatable=True}">
+                <Border x:Name="TargetInfoRoot" Margin="0,80,0,0" Visibility="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget, Converter={StaticResource NullToHiddenConverter}}">
+                    <b:Interaction.Behaviors>
+                        <ls:CollectionFilterBehavior x:Name="PositiveModifierBehavior" ItemsSource="{Binding CurrentPlayer.UIData.HitChanceDesc.Modifiers}" Predicate="{Binding Data.PositiveModifierPredicate}"/>
+                        <ls:CollectionFilterBehavior x:Name="NegativeModifierBehavior" ItemsSource="{Binding CurrentPlayer.UIData.HitChanceDesc.Modifiers}" Predicate="{Binding Data.NegativeModifierPredicate}"/>
+                    </b:Interaction.Behaviors>
+                    <StackPanel x:Name="MainContainer" VerticalAlignment="Top" Visibility="{Binding CurrentPlayer.UIData.CanShowTargetInfo, Converter={StaticResource BoolToVisibleConverter}}">
+                        <StackPanel x:Name="TargetName" Panel.ZIndex="1" DataContext="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget}" Width="1400">
+
+                            <!-- Target Name and Level-->
+                            <Grid x:Name ="TargetStats">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="1" x:Name="CharacterName" Text="{Binding Name}" Style="{StaticResource TargetTitleTextBlockStyle}" FontSize="{StaticResource ScaledBigFontSize}"/>
+                                <TextBlock Grid.Column="2" x:Name="LevelText" Style="{StaticResource TargetTitleTextBlockStyle}" FontSize="{StaticResource ScaledSmallFontSize}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,7" Visibility="Collapsed">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                                            <Binding Source="hb5a0afd6g0041g45eagb4ecg2af0b5d00d53"/>
+                                            <Binding Path="Stats.Level.Value"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+
+                            <!-- Target Title -->
+                            <TextBlock Text="{Binding Title}" Style="{StaticResource TargetTitleTextBlockStyle}" HorizontalAlignment="Center" Margin="0,-4,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="BodyShort" HorizontalAlignment="Center">
+                            <StackPanel.RenderTransform>
+                                <ScaleTransform/>
+                            </StackPanel.RenderTransform>
+
+                            <!-- Health bar -->
+                            <Control x:Name="HPBarContainer" HorizontalAlignment="Center" DataContext="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget}" Template="{StaticResource TargetHealthBarTemplate}"/>
+
+                            <!-- Info Stack -->
+                            <StackPanel x:Name="DescriptionPanel" HorizontalAlignment="Center" Width="Auto">
+
+                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget}" MaxWidth="{Binding ActualWidth, ElementName=Root, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource Minus1200}}">
+                                    <Control x:Name="ConcentrationHolder" Template="{StaticResource ConcentrationTemplate}" Visibility="{Binding ConcentrationSpell, Converter={StaticResource NullToCollapsedConverter}, FallbackValue=Collapsed}" HorizontalAlignment="Center"/>
+
+                                    <!-- Status Effects -->
+                                    <ItemsControl x:Name="StatusHolder" ItemsSource="{Binding StatusEffects}" ItemTemplate="{StaticResource StatusListItemTemplate}" Background="Transparent" Template="{StaticResource MinimalItemsControlTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel IsItemsHost="True" HorizontalAlignment="Center" MaxWidth="{Binding ActualWidth, ElementName=Root, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource Minus1300}}" Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </WrapPanel>
+
+                                <!-- IF: Hit Chance and damage range preview, keeping it here as it's hidden as a test
+                                
+                                <StackPanel x:Name="HitChancePanel" HorizontalAlignment="Center" Orientation="Horizontal" Width="Auto" Height="52" Visibility="Collapsed" Background="Transparent" Margin="0,12,0,0">
+                                        Needs merging to a single icon with a source selection?
+                                    <Image x:Name="MeleeHitChanceIcon" Source="pack://application:,,,/Core;component/Assets/TargetInfo/ico_target.png" Stretch="None" Margin="-8,-2,0,0" VerticalAlignment="Center" Visibility="{Binding IsMelee , Converter={StaticResource BoolToVisibleConverter}}"/>
+
+                                    <Image x:Name="RangeHitChanceIcon" Source="pack://application:,,,/Core;component/Assets/TargetInfo/ico_target.png" Stretch="None" Margin="-8,-2,0,0" VerticalAlignment="Center" Visibility="{Binding IsMelee , Converter={StaticResource BoolToCollapsedConverter}}">
+                                        <Image.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                            </TransformGroup>
+                                        </Image.RenderTransform>
+                                    </Image>
+
+                                    <TextBlock VerticalAlignment="Center" Margin="4,0,0,0"  Text="{Binding TotalHitChance, StringFormat={}{0}%}" Width="Auto" Style="{StaticResource HitTextBlock}"/>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0"  HorizontalAlignment="Left">
+
+                                        <ItemsControl x:Name="DamageIcons" 
+                                                        DataContext="{Binding DataContext.CurrentPlayer.UIData, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"
+                                                        ItemsSource="{Binding ObservableDamagesPreview}" 
+                                                        Margin="-12,-2,0,0"
+                                                        BorderBrush="Blue"
+                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                                                        Background="Transparent"
+                                                        ItemTemplate="{StaticResource DamageTypeItemTemplate}" 
+                                                        FlowDirection="RightToLeft"
+                                                        VerticalAlignment="Center"
+                                                        AlternationCount="{Binding ObservableDamagesPreview.Count}" 
+                                                        Visibility="Collapsed">
+                                            <ItemsControl.Effect>
+                                                <DropShadowEffect Direction="270" Color="{StaticResource LS_PrimaryColorDropShadowColor}" ShadowDepth="3.0" BlurRadius="5.0"/>
+                                            </ItemsControl.Effect>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                <StackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+
+                                        <TextBlock x:Name="DamagePreview" VerticalAlignment="Center" Width="Auto" Background="Transparent" Margin="4,0,0,0" FontSize="{StaticResource ScaledBigFontSize}"  Visibility="{Binding ShowDescription,Converter={StaticResource BoolToVisibleConverter}}" Style="{StaticResource HitTextBlock}">
+                                        <ls:TextBlockFormatter.SourceText>
+	                                        <MultiBinding StringFormat="{}{0}~{1}">
+		                                        <Binding Path="DataContext.CurrentPlayer.UIData.DamagePreviewWithResistances.Min" RelativeSource="{RelativeSource AncestorType={x:Type ls:UIWidget}}"/>
+		                                        <Binding Path="DataContext.CurrentPlayer.UIData.DamagePreviewWithResistances.Max" RelativeSource="{RelativeSource AncestorType={x:Type ls:UIWidget}}"/>
+	                                        </MultiBinding>
+                                        </ls:TextBlockFormatter.SourceText>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </StackPanel> -->
+
+                                    <!-- Modifiers -->
+                                <Border x:Name="ModifiersPresenter" Visibility="Collapsed" >
+                                    <Border.Resources>
+                                        <SolidColorBrush x:Key="NegativeModiferColour" Color="{StaticResource alertColor}" Opacity="0.6"/>
+                                    </Border.Resources>
+                                    <StackPanel x:Name="ModifiersPanel" VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Horizontal" Height="Auto" Visibility="Collapsed" DataContext="{Binding CurrentPlayer.UIData.HitChanceDesc}" Margin="0,24,0,0">
+
+                                        <!-- Positive Modifier -->
+                                        <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=PositiveModifierBehavior}" Template="{StaticResource MinimalItemsControlTemplate}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="ls:VMBoost">
+                                                    <Border Style="{StaticResource ModifierBorder}">
+                                                        <Border.Background>
+                                                            <SolidColorBrush Color="{StaticResource bonusColor}" Opacity="0.6"/>
+                                                        </Border.Background>
+                                                        <StackPanel Orientation="Horizontal" Margin="8,0">
+                                                            <Image Source="{StaticResource DeltasPlus}" Stretch="None" Margin="-8,0" VerticalAlignment="Center"/>
+                                                            <TextBlock x:Name="Desc" Style="{StaticResource ModifierTextBlock}" Text="{Binding Name}" VerticalAlignment="Center" Margin="4,4"/>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <!-- If incoming text is empty, then we assume this is a Weapon Enchantment? Whaaaaa? -->
+                                                    <DataTemplate.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding Name}" Value=""/>
+                                                                <Condition Binding="{Binding BoostType}" Value="WeaponEnchantment"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter TargetName="Desc" Property="Text" Value="{Binding Source='had4b2edeg74a0g4bb0gac33g11c2ea95079e', Converter={StaticResource TranslatedStringConverter} }"/>
+                                                        </MultiDataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+
+                                        <!-- Negative Modifier -->
+                                        <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=NegativeModifierBehavior}" Template="{StaticResource MinimalItemsControlTemplate}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="ls:VMBoost">
+                                                    <Border Style="{StaticResource ModifierBorder}" Background="{StaticResource NegativeModiferColour}">
+                                                        <StackPanel Orientation="Horizontal" Margin="8,0">
+                                                            <Image Source="{StaticResource DeltasMinus}" Stretch="None" Margin="-8,0" VerticalAlignment="Center"/>
+                                                            <TextBlock Style="{StaticResource ModifierTextBlock}" Text="{Binding Name}" VerticalAlignment="Center" Margin="4,4"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- This is a hidden version of the panel so we can check it's width to collapse the visible status panels labels -->
+                                <StackPanel x:Name="StatusHolderHidden" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Hidden" >
+                                    <Control Template="{StaticResource ConcentrationTemplate}" DataContext="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget}" Visibility="{Binding ConcentrationSpell, Converter={StaticResource NullToCollapsedConverter}, FallbackValue=Collapsed}" HorizontalAlignment="Center"/>
+
+                                    <ItemsControl ItemsSource="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget.StatusEffects}" ItemTemplate="{StaticResource HiddenStatusListItemTemplate}" Background="Transparent" Template="{StaticResource MinimalItemsControlTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel IsItemsHost="True" HorizontalAlignment="Center" Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!--Cast notification for the target-->
+                <ItemsControl x:Name="CastInfoContainer" ItemsSource="{Binding CurrentPlayer.UIData.CastInfo}"  VerticalAlignment="Bottom" Margin="0,0,0,600">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="ls:VMCastInfo">
+                            <Grid x:Name="CastInfoRoot" MinWidth="660" HorizontalAlignment="Center">
+                                <Grid.Tag>
+                                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type ls:UIWidget}}" Path="DataContext.CurrentPlayer.UserId"/>
+                                        <Binding Path="OwnerUserID"/>
+                                    </MultiBinding>
+                                </Grid.Tag>
+                                <Grid.RenderTransform>
+                                    <TranslateTransform />
+                                </Grid.RenderTransform>
+
+                                <ls:LSNineSliceImage x:Name="BGImage" Slices="180,40" Padding="120,28" ImageSource="{StaticResource CastBarBackground}">
+                                    <Grid HorizontalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock x:Name="CastInfoConcentration" Grid.Column="0" Visibility="Collapsed" VerticalAlignment="Center" TextAlignment="Left" Margin="0,-6,12,0" Foreground="{StaticResource LS_accent100TxtColor}" noesis:Text.Stroke="Black" noesis:Text.StrokeThickness="4" FontSize="{StaticResource ScaledLargeFontSize}" FontWeight="DemiBold" >
+                                            <Run Text="{Binding Source='h7e8c24aeg8d1ag401ag9feag4fbb7cbde48d', Converter={StaticResource TranslatedStringConverter}}"/><Run Text="{Binding Source='hb897c56egaa6fg460bg8676g8ebfa0340954', Converter={StaticResource TranslatedStringConverter}}"/>
+                                        </TextBlock>
+                                        <Rectangle x:Name="casterIcon" Grid.Column="1"  Fill="{Binding Caster.Icon}" Width="68" Height="68" Visibility="Collapsed"/>
+                                        <Rectangle x:Name="actionIcon" Grid.Column="1" Fill="{Binding Icon}" Width="68" Height="68" />
+                                        <TextBlock x:Name="CastText" Grid.Column="2" HorizontalAlignment="Center" Margin="18,-2,20,0" TextAlignment="Left" Foreground="{StaticResource LS_PrimaryColor}" VerticalAlignment="Center" noesis:Text.Stroke="Black" noesis:Text.StrokeThickness="4" FontWeight="DemiBold" FontSize="{StaticResource ScaledLargeFontSize}">
+                                    <b:Interaction.Behaviors>
+                                        <ls:CtxTransStringRunGeneratorBehavior Source="{Binding CastText}"/>
+                                    </b:Interaction.Behaviors>
+                                        </TextBlock>
+                                    </Grid>
+                                </ls:LSNineSliceImage>
+                            </Grid>
+
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IconName}" Value="unknown">
+                                    <Setter TargetName="casterIcon" Property="Visibility" Value="Visible" />
+                                    <Setter TargetName="actionIcon" Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding IconName}" Value="{x:Null}">
+                                    <Setter TargetName="casterIcon" Property="Visibility" Value="Visible" />
+                                    <Setter TargetName="actionIcon" Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding IsConcentrationSpell}" Value="True">
+                                    <Setter TargetName="CastInfoConcentration" Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard  x:Name="AppearStoryboard" Storyboard="{StaticResource CastBarAppearAnim}" />
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="FrameworkElement.Unloaded">
+                                    <StopStoryboard BeginStoryboardName="AppearStoryboard" />
+                                    <StopStoryboard BeginStoryboardName="DisappearStoryboard" />
+                                </EventTrigger>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding Converter="{StaticResource GreaterOrEqualThanMultiConverter}">
+                                            <Binding Path="CastProgressPercentage"/>
+                                            <Binding Path="CastTime"/>
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard x:Name="DisappearStoryboard" Storyboard="{StaticResource CastBarDisappearAnim}" />
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding ElementName=CastInfoRoot, Path=Tag}" Value="False"/>
+                                        <Condition Binding="{Binding Caster.PlayerRelation}" Value="Player"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="BGImage" Property="ImageSource" Value="{StaticResource CoopCastBarBackground}"/>
+                                </MultiDataTrigger>
+                                <DataTrigger Binding="{Binding Caster.PlayerRelation}" Value="Enemy">
+                                    <Setter TargetName="BGImage" Property="ImageSource" Value="{StaticResource EnemyCastBarBackground}"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+
+            <DataTemplate.Triggers>
+
+                <!-- IF: Hidden as a test, see DamagePreview
+                
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.DamagePreviewWithResistances.Max}" Value="0">
+                    <Setter TargetName="DamagePreview" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='h3a320b9fg297dg4355g8622g24a2d9bdeed3',Converter={StaticResource TranslatedStringConverter}}"/>
+                    <Setter TargetName="DamagePreview" Property="Margin" Value="-30,0"/>
+                </DataTrigger>
+                
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.DamagePreviewWithResistances.Max,Converter={StaticResource GreaterThanConverter}, ConverterParameter={StaticResource DoubleZeroValue}}" Value="True">
+                    <Setter TargetName="DamageIcons" Property="Visibility" Value="Visible"/>
+                </DataTrigger>-->
+
+                <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.CharacterMode}" Value="InCombat">
+                    <Setter TargetName="TargetInfoRoot" Property="Margin" Value="0,228"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.CharacterMode}" Value="InFTB">
+                    <Setter TargetName="TargetInfoRoot" Property="Margin" Value="0,308"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget.Type}" Value="Character">
+                    <Setter TargetName="LevelText" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Path=CurrentPlayer.SelectedCharacter.InTurnBasedMode}" Value="True"/>
+                        <Condition Binding="{Binding Path=CurrentPlayer.SelectedCharacter.IsCurrentTurn}" Value="False"/>
+                        <Condition Binding="{Binding Path=CurrentPlayer.CurrentTarget, Converter={StaticResource NullToBoolFalseConverter}}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="LevelText" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="HPBarContainer" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="StatusHolder" Property="Visibility" Value="Collapsed"/>
+                </MultiDataTrigger>
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.ShowDescription}" Value="True"/>
+                        <Condition Binding="{Binding CurrentPlayer.CurrentRegularOrCombatTurnTarget.Stats.Health.Value, Converter={StaticResource GreaterThanConverter}, ConverterParameter=-1}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <!-- IF: Hidden as a test, see DamagePreview <Setter TargetName="HitChancePanel" Property="Visibility" Value="Visible"/>-->
+                    <Setter TargetName="ModifiersPresenter" Property="Visibility" Value="Visible"/>
+                </MultiDataTrigger>
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Modifiers.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter={StaticResource DoubleZeroValue}}" Value="True">
+                    <Setter TargetName="ModifiersPanel" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Advantages.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter={StaticResource DoubleZeroValue}}" Value="True">
+                    <Setter TargetName="ModifiersPanel" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentPlayer.UIData.HitChanceDesc.Disadvantages.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter={StaticResource DoubleZeroValue}}" Value="True">
+                    <Setter TargetName="ModifiersPanel" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </ls:UIWidget.ContentTemplate>
+</ls:UIWidget>

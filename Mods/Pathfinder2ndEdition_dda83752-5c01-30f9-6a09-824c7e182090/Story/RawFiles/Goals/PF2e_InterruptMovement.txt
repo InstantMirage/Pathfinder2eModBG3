@@ -1,0 +1,84 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_InterruptStepAwaySpells("Target_SuddenShift", 2.0);
+KBSECTION
+//REGION Spells that cause an immediate step away from a triggering attack
+IF
+UsingSpellOnTarget((GUIDSTRING)_Caster, (GUIDSTRING)_Target, (STRING)_Spell, _, _, (INTEGER)_ActionID)
+AND
+DB_InterruptStepAwaySpells(_Spell, (REAL)_Distance)
+THEN
+DB_InterruptStepAwayActive(_ActionID, _Distance, _Caster, _Target);
+ApplyStatus(_Caster, "INTERRUPT_FREE_MOVEMENT", 1.0);
+
+// This might look like a lot, but it really just calculates the unit vector
+// from target to caster, and adds that, multiplied by distance, to the caster's
+// position multiplied by distance.
+IF
+CastedSpell((GUIDSTRING)_Caster, _, _, _, (INTEGER)_ActionID)
+AND
+DB_InterruptStepAwayActive(_ActionID, (REAL)_Distance, _Caster, (GUIDSTRING)_Target)
+AND
+GetPosition(_Caster, (REAL)_XC, (REAL)_YC, (REAL)_ZC)
+AND
+GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+RealSubtract(_XC, _XT, (REAL)_XD)
+AND
+RealSubtract(_YC, _YT, (REAL)_YD)
+AND
+RealSubtract(_ZC, _ZT, (REAL)_ZD)
+AND
+RealProduct(_XD, _XD, (REAL)_XSq)
+AND
+RealProduct(_YD, _YD, (REAL)_YSq)
+AND
+RealProduct(_ZD, _ZD, (REAL)_ZSq)
+AND
+RealSum(_XSq, _YSq, (REAL)_Intermediate)
+AND
+RealSum(_Intermediate, _ZSq, (REAL)_HSq)
+AND
+RealSqrRoot(_HSq, (REAL)_D)
+AND
+RealDivide(_XD, _D, (REAL)_XU)
+AND
+RealDivide(_YD, _D, (REAL)_YU)
+AND
+RealDivide(_ZD, _D, (REAL)_ZU)
+AND
+RealProduct(_XU, _Distance, (REAL)_XDN)
+AND
+RealProduct(_YU, _Distance, (REAL)_YDN)
+AND
+RealProduct(_ZU, _Distance, (REAL)_ZDN)
+AND
+RealSum(_XDN, _XC, (REAL)_XCN)
+AND
+RealSum(_YDN, _YC, (REAL)_YCN)
+AND
+RealSum(_ZDN, _ZC, (REAL)_ZCN)
+THEN
+CharacterMoveToPosition((CHARACTER)_Caster, _XCN, _YCN, _ZCN, "Run", "ClearStrideConditionOffTurn");
+
+// Would otherwise leave characters starting their turn with
+// stride, which is very bad.
+IF
+EntityEvent((GUIDSTRING)_Caster, "ClearStrideConditionOffTurn")
+AND
+DB_InterruptStepAwayActive((INTEGER)_ActionID, (REAL)_Distance, _Caster, (GUIDSTRING)_Target)
+THEN
+NOT DB_InterruptStepAwayActive(_ActionID, _Distance, _Caster, _Target);
+RemoveStatus(_Caster, "STRIDE");
+RemoveStatus(_Caster, "INTERRUPT_FREE_MOVEMENT");
+PROC_SteerToCause(_Caster, _Target);
+
+PROC
+PROC_SteerToCause((GUIDSTRING)_Caster, (GUIDSTRING)_Target)
+THEN
+SteerTo((CHARACTER)_Caster, (CHARACTER)_Target, 0);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
