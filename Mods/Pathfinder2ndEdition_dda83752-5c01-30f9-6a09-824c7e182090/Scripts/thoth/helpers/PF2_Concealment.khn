@@ -150,3 +150,21 @@ end
 function IsSneakingOrInvisible()
     return HasAnyStatus({'SNEAKING', 'SG_Invisible', 'HIDDEN', 'HIDDEN_NPC'}, {}, {}, source)
 end
+
+function IsHidingSensible(entity)
+	entity = entity or context.Source
+
+	if HasAnyStatus({'HIDDEN_NPC', 'SG_Rage', 'SG_Mad'}, {}, {}, entity) then
+		return ConditionResult(false)
+	end
+
+	if MentalSpell(entity) == false then
+		return ConditionResult(false)
+	end
+
+	if WieldingWeapon('Melee', false, true, context.Observer).Result and not HasPassive('SneakAttackPassive', entity).Result then
+		return ConditionResult(false)
+	end
+
+	return ConditionResult(true)
+end
