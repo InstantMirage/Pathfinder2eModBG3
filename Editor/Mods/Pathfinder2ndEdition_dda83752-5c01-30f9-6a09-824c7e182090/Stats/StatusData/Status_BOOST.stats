@@ -81,6 +81,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="7f2a0ac0-dbb2-4771-8640-c3a272c7f0bf" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdf07cfbagb2a2g69e5g7b6fg7d7bea381275" version="2" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(not AgileMAP()):RollBonus(Attack, -10);IF(AgileMAP()):RollBonus(Attack, -8);IF(SpellId('Target_Grapple') or SpellId('Target_Trip') or SpellId('Target_FreeTrip') or SpellId('Target_Disarm') or SpellId('Target_EscapeGrapple_Athletics') or SpellId('Target_EscapeGrapple_Acrobatics') or SpellId('Target_EscapeGrapple_UnarmedAttack') or SpellId('Target_Shove') or SpellId('Target_Shove_Linked')):RollBonus(SkillCheck, -8);UnlockSpellVariant(HasStringInSpellRoll('Attack') or (HasStringInSpellRoll('Check') and HasSpellFlag(SpellFlags.Attack)),ModifyTooltipDescription());" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -90,13 +91,15 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="7f2a0ac0-dbb2-4771-8640-c3a272c7f0bf" />
         <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(Attack, 5)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5f4b5801g2851g6551g39d4g9ddeff522a13" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="MAP_BONUS" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="687995ca-c883-4c01-bcac-cb2704e4e496" />
         <field name="Name" type="NameTableFieldDefinition" value="MAP_INCREASE" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('MAP_PENALTY_2ND', context.Target)):ApplyStatus(MAP_PENALTY_3RD,100,1);IF(not HasStatus('MAP_PENALTY_3RD', context.Target) and not HasStatus('MAP_PENALTY_2ND', context.Target)):ApplyStatus(MAP_PENALTY_2ND,100,1);" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('MAP_PENALTY_2ND', context.Target)):ApplyStatus(MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Target) and not HasStatus('MAP_PENALTY_2ND', context.Target)):ApplyStatus(MAP_PENALTY_2ND,100,1);" />
         <field name="OnApplyConditions" type="StringTableFieldDefinition" value="IsCurrentTurnInCombat(context.Source)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableImmunityOverhead;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h559f3030ge124g5c55gb3dbg65527155067f" version="1" />
