@@ -2247,9 +2247,23 @@
         <field name="StackId" type="StringTableFieldDefinition" value="ADVANTAGE_DISABLER" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AttackRoll);Disadvantage(AttackRoll);Advantage(AllSavingThrows);Disadvantage(AllSavingThrows);Advantage(AllSkills);Disadvantage(AllSkills);" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoreResting;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasObscuredState(ObscuredState.HeavilyObscured,context.Source)):ApplyStatus(IN_DARKNESS,100,-1);IF(HasObscuredState(ObscuredState.HeavilyObscured,context.Source)):RemoveStatus(IN_DIM_LIGHT);IF(HasObscuredState(ObscuredState.LightlyObscured,context.Source)):RemoveStatus(IN_DARKNESS);IF(HasObscuredState(ObscuredState.LightlyObscured,context.Source)):ApplyStatus(IN_DIM_LIGHT,100,-1);IF(HasObscuredState(ObscuredState.Clear,context.Source)):RemoveStatus(IN_DARKNESS);IF(HasObscuredState(ObscuredState.Clear,context.Source)):RemoveStatus(IN_DIM_LIGHT)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AllSavingThrows);Disadvantage(AllSavingThrows);Advantage(AllSkills);Disadvantage(AllSkills);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ATTACK_ADV_DISABLER,100,-1);ApplyStatus(MAGICAL_DARKNESS_CHECK, 100, -1);IF(HasObscuredState(ObscuredState.HeavilyObscured,context.Source)):ApplyStatus(IN_DIM_LIGHT,100,-1);IF(HasObscuredState(ObscuredState.LightlyObscured,context.Source)):RemoveStatus(IN_DIM_LIGHT);IF(HasObscuredState(ObscuredState.Clear,context.Source)):RemoveStatus(IN_DIM_LIGHT);" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2adbed81-e34f-41ca-8e80-855e25990e7e" />
+        <field name="Name" type="NameTableFieldDefinition" value="ATTACK_ADV_DISABLER" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="6fba086b-94f3-4206-bf00-b1c6b9efac5e" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Unlike skills and saves, advantage is always disabled for attack rolls, even outside of combat" />
+        <field name="StackId" type="StringTableFieldDefinition" value="ATTACK_ADV_DISABLER" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AttackRoll);Disadvantage(AttackRoll);" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2356,6 +2370,7 @@
         <field name="Passives" type="StringTableFieldDefinition" value="DarknessHideFree;" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(Combat() and Player()):ApplyStatus(HIDE_FREE, 100, 0);IF(Combat() and not Player()):ApplyStatus(HIDE_FREE_DARKNESS_NPC, 100, 0);" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2726,7 +2741,7 @@
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SNEAK_IN_PROGRESS_NPC,100,1)" />
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Stealth,NPCHideGetDC(context.Target))" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(UNDETECTED_NPC,100,-1)" />
-        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="RemoveStatus(UNDETECTED_NPC);&#xD;&#xA;IF(IsCriticalMissSkill()):RemoveStatus(HIDDEN_NPC);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="RemoveStatus(UNDETECTED_NPC);IF(IsCriticalMissSkill()):RemoveStatus(HIDDEN_NPC);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3021a41ag89f2gd5bfg3de5g4e80329c750a" version="1" />
       </fields>
     </stat_object>
@@ -2780,6 +2795,30 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(DAZZLED);RemoveStatus(DAZZLED_APPLY);" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('DAZZLED')):ApplyStatus(DAZZLED, 100, -1)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c855817e-f72a-41a9-8f39-31097f7764b7" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAGICAL_DARKNESS_CHECK" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h161aaf87g6a1bg8e48g2ffbg5bd9e7159d22" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="MAGICAL_DARKNESS_CHECK" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Passives" type="StringTableFieldDefinition" value="MagicalDarknessCheck;" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(InSurface('SurfaceDarknessCloud',context.Target)):ApplyStatus(IN_DARKNESS,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0cc4c1ac-0b13-442c-9009-7a54df64e8dd" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAGICAL_DARKNESS_RECHECK" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="c855817e-f72a-41a9-8f39-31097f7764b7" />
+        <field name="StackId" type="StringTableFieldDefinition" value="MAGICAL_DARKNESS_RECHECK" />
+        <field name="Passives" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(InSurface('SurfaceDarknessCloud',context.Target)):ApplyStatus(IN_DARKNESS,100,-1);IF(not InSurface('SurfaceDarknessCloud',context.Target)):RemoveStatus(IN_DARKNESS);" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">

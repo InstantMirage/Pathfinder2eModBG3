@@ -26,29 +26,20 @@ ApplyStatus(_Caster, "FLAT_CHECK_ROLL", _DurationReal, 1, _Caster);
 
 //END_REGION
 
-//REGION On change of obscurity, apply statuses
+//REGION On change of obscurity, apply dim light status
 IF
-ObscuredStateChanged((GUIDSTRING)_Character, (STRING)_State)
-AND
-_State == "HeavilyObscured"
+ObscuredStateChanged((GUIDSTRING)_Character, "HeavilyObscured")
 THEN
-ApplyStatus(_Character, "IN_DARKNESS", -1.0);
+ApplyStatus(_Character, "IN_DIM_LIGHT", -1.0);
+
+IF
+ObscuredStateChanged((GUIDSTRING)_Character, "LightlyObscured")
+THEN
 RemoveStatus(_Character, "IN_DIM_LIGHT");
 
 IF
-ObscuredStateChanged((GUIDSTRING)_Character, (STRING)_State)
-AND
-_State == "LightlyObscured"
+ObscuredStateChanged((GUIDSTRING)_Character, "Clear")
 THEN
-ApplyStatus(_Character, "IN_DIM_LIGHT", -1.0);
-RemoveStatus(_Character, "IN_DARKNESS");
-
-IF
-ObscuredStateChanged((GUIDSTRING)_Character, (STRING)_State)
-AND
-_State == "Clear"
-THEN
-RemoveStatus(_Character, "IN_DARKNESS");
 RemoveStatus(_Character, "IN_DIM_LIGHT");
 //END_REGION
 
