@@ -1194,6 +1194,19 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_DirtyTrickPF);" />
       </fields>
     </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4ae1071b-b500-4330-9eb8-d885bdc843bf" />
+        <field name="Name" type="NameTableFieldDefinition" value="CatFall" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h455a2002gdae7g4300g88b3g901d459386c0" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd1279757gb263g7265g5a09gb1e4f2c19055" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_SecondStoryWork_Falling" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Acrobatics', 'Dexterity');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not IsSkillExpert('Acrobatics', 'Dexterity')):FallDamageMultiplier(0.5);IF(IsSkillExpert('Acrobatics', 'Dexterity')):FallDamageMultiplier(0);" />
+      </fields>
+    </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="3fda4f05-17de-4216-9735-da185abf5981" />
@@ -5307,12 +5320,12 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="09a3f6b9-4d38-41ec-a685-b12e0092a819" />
         <field name="Name" type="NameTableFieldDefinition" value="BrutalBeating" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4c7b8980gc45dg3be6ge636g6cf85e1a3724" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h17ebb01ag37f0g287bg6ecege93eefd2b045" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4c7b8980gc45dg3be6ge636g6cf85e1a3724" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h17ebb01ag37f0g287bg6ecege93eefd2b045" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_DirtyTrick_ViciousMockery" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsCritical()" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsCritical() and HasPassive('Ruffian',context.Source);" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FRIGHTENED,100,1)" />
       </fields>
     </stat_object>
