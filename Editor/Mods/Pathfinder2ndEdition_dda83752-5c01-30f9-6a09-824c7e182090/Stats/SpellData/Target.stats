@@ -5437,7 +5437,7 @@
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Abjuration" enumeration_type_name="SpellSchool" version="1" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SG_Cursed);RemoveStatus(SG_Poisoned);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="1.5" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and ConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="ConcentrateSpell() and (HasStatus('SG_Cursed') or HasStatus('SG_Poisoned');" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_RemoveCurse" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h82dad767gbe2cg5e32g4334g6592ba1bddc5" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h205b09a0gcd03g52fcgade5g83e2e325803e" version="1" />
@@ -28062,6 +28062,46 @@
         <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="07d87d1d-f99f-452d-8db3-3f91ee1949dd" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="DontChange" enumeration_type_name="SpellSheathing" version="1" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9804e840-6e77-4edd-b4d2-b6eb7500e07c" />
+        <field name="Name" type="NameTableFieldDefinition" value="GOB_DrowCommander_Buff" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="ApplyStatus(GOB_DROWCOM_BUFF,100,3);AI_ONLY:IF(not HasStatus('GOB_DROWCOM_BUFF')):ApplyStatus(AI_HELPER_BUFF,100,1)" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="12" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Ally() and not HasStatus('GLO_BLACKPOWDERKEG') and not HasStatus('GOB_DROWCOM_BUFF',context.Target) and not Unarmed() and not Dead() and not Tagged('ACT1_GOB_DROWCOMNOBUFF')" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_SoulBranding" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h71b64f44g60abg5d81g1f90g708dc9be5eb5" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h91f7cc79g0b5eg30c3g9cecg171b8627d5fb" version="1" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="BonusActionPoint:1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="DeathType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="Death Type" version="1" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Buff" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="25ce081c-3fdc-45d2-a883-2db61e61d225" />
+        <field name="Requirements" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="SpellFail" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Level" type="IntegerTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="SpellSchool" version="1" />
+        <field name="SpellContainerID" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="ContainerSpells" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="AIFlags" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="AIFlags" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(1.5);DealDamage(2d4+1,Fire)" />
+        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="hf7b1fdf1g776dg625cgdeecgb59b8a3ee7a2" version="1" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="CrSpell_Cast_BrandOfTheAbsolute" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="CrSpell_Impact_BrandOfTheAbsolute" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="c218f05b-1e12-4298-beff-e4d33a5fa5a5" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="954307f2-6216-4eff-aa7a-d87553bcee37" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="abb61fd9-813b-4112-933a-dbc1eb07194a" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalNonDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(GOB_DROWCOM_BUFF,100,3)" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="83fb0115-57dd-4cce-ac40-87182b2865e2,,;,,;2da41f71-3471-4ac8-a268-63983acbe88c,,;70c2d89d-98bd-4462-82e2-8e30e9c727be,,;42014429-21fb-412d-bba6-0f8216f5e502,,;,,;43fa5e31-ad7e-47a9-9ca2-f6d40ba8e1cf,,;032cf56a-3808-45ad-9991-740431d9c14f,,;4b385541-a3a3-429d-93ae-dffa6da50050,," />
+        <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
       </fields>
     </stat_object>
   </stat_objects>
