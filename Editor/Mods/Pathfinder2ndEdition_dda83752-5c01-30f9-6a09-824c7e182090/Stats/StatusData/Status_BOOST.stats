@@ -14430,11 +14430,20 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="2" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(FLAME_VORTEX_DAMAGE,100,1);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(FLAME_VORTEX_DAMAGE_APPLY,100,0);" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(FLAME_VORTEX);" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="b5b3c933-801e-461e-8d55-eb2790d4962b" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSourceStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('FLAME_VORTEX_CLEANUP',context.Source)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0e3e742b-505a-49e3-8369-b54b73bf3280" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_DAMAGE_APPLY" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he7c8abcag85a3g5a7agbf04g6b99bcbf7a8c" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLAME_VORTEX_DAMAGE,100,1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14469,6 +14478,28 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLAME_VORTEX_SUSTAINED',context.Source)):RemoveStatus(FLAME_VORTEX_SUSTAIN);" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLAME_VORTEX_CLEANUP,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="bb07f8d3-ed1a-4564-8c71-81058881334d" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_SUSTAINED" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbd9c11d1g2c36g5609g8de1g5df46b520f44" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLAME_VORTEX_SUSTAINED" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6e23b0c7-0fc4-459a-8157-35018862fbe2" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_CLEANUP" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h505dd283g0b39gcb4cg8647gf7fa948bd1de" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
   </stat_objects>
