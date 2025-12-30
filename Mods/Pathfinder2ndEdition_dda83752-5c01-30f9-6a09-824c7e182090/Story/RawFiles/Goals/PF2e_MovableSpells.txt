@@ -1,0 +1,65 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_MovableSpells("FLAME_VORTEX_AURA", 6.0, "Target_FlameVortex_Sustain");
+KBSECTION
+IF
+StatusApplied((GUIDSTRING)_Summon, (STRING)_Status, (GUIDSTRING)_Owner, _)
+AND
+DB_MovableSpells(_Status, (REAL)_MaxMoveDistance, (STRING)_Spell)
+THEN
+DebugText(_Summon, "Summon");
+DebugText(_Owner, "Owner");
+DB_ActiveMovableSpells(_Summon, _Owner, _Spell);
+
+IF
+UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Spell, _, _, _)
+AND
+DB_ActiveMovableSpells((GUIDSTRING)_Summon, _Owner, _Spell)
+AND
+DB_MovableSpells(_, (REAL)_Range, _Spell)
+AND
+GetPosition(_Summon, (REAL)_XS, (REAL)_YS, (REAL)_ZS)
+AND
+RealSubtract(_XT, _XS, (REAL)_XD)
+AND
+RealSubtract(_YT, _YS, (REAL)_YD)
+AND
+RealSubtract(_ZT, _ZS, (REAL)_ZD)
+AND
+RealProduct(_XD, _XD, (REAL)_XSq)
+AND
+RealProduct(_YD, _YD, (REAL)_YSq)
+AND
+RealProduct(_ZD, _ZD, (REAL)_ZSq)
+AND
+RealSum(_XSq, _YSq, (REAL)_Intermediate)
+AND
+RealSum(_Intermediate, _ZSq, (REAL)_HSq)
+AND
+RealSqrRoot(_HSq, (REAL)_DD)
+AND
+RealMin(_DD, _Range, (REAL)_DN)
+AND
+RealDivide(_XD, _DD, (REAL)_XU)
+AND
+RealDivide(_YD, _DD, (REAL)_YU)
+AND
+RealDivide(_ZD, _DD, (REAL)_ZU)
+AND
+RealProduct(_XU, _DN, (REAL)_XDN)
+AND
+RealProduct(_YU, _DN, (REAL)_YDN)
+AND
+RealProduct(_ZU, _DN, (REAL)_ZDN)
+AND
+RealSum(_XDN, _XS, (REAL)_XSN)
+AND
+RealSum(_YDN, _YS, (REAL)_YSN)
+AND
+RealSum(_ZDN, _ZS, (REAL)_ZSN)
+THEN
+ItemMoveToPosition((ITEM)_Summon, _XSN, _YSN, _ZSN, 4.0, 3.0, "MovableSpellEvent");
+EXITSECTION
+
+ENDEXITSECTION
