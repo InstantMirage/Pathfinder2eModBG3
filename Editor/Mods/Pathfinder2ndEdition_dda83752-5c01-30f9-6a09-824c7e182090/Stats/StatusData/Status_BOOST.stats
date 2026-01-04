@@ -2572,6 +2572,7 @@
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(UNDETECTED_CLEANUP,100,0)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h86c170b9gb2d5gc54dg35a3gb68a839de2a7" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf57586a5g7f49gf5ccg10e3gd08f0fea32ea" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2783,7 +2784,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcdfb0b1eg4e17g394fg05f6gfbc3961a17bb" version="4" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Blinded" />
         <field name="StackId" type="StringTableFieldDefinition" value="BLINDED" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="SightRangeMaximum(3);ActionResourceConsumeMultiplier(Movement, 2,0);Tag(STAT_PEN_3PERC);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="SightRangeMaximum(3);ActionResourceConsumeMultiplier(Movement, 2,0);Tag(STAT_PEN_3PERC);Tag(OFF_GUARD);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;Blind" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Blinded;SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StatusAnimationType" version="1" />
@@ -2808,7 +2809,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="MAGICAL_DARKNESS_CHECK" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Passives" type="StringTableFieldDefinition" value="MagicalDarknessCheck;" />
+        <field name="Passives" type="StringTableFieldDefinition" value="MagicalDarknessCheck;MagicalDarknessCheckObscurity;" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(InSurface('SurfaceDarknessCloud',context.Target)):ApplyStatus(IN_DARKNESS,100,-1);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
@@ -2904,45 +2905,59 @@
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="dbabfdb9-0ea3-40be-8cb4-cd56f99ebd85" />
-        <field name="Name" type="NameTableFieldDefinition" value="Grappled" />
+        <field name="Name" type="NameTableFieldDefinition" value="GRABBED" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbf1c3934gbe77g79a3gbbe4g6756a53ceae4" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd6a27cb8gf93agda7ageacagd3920480e68f" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd6a27cb8gf93agda7ageacagd3920480e68f" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_GOB_GoblinPriest_Chains" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="WEAK" enumeration_type_name="SoundVocalType" version="1" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;TickingWithSource;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Restrained;SG_Condition;SG_CanBePickedUp" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Tag(OFF_GUARD);UnlockSpell(Target_EscapeGrapple_Container);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('GRAPPLE_CLEANUP',context.Source)" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSourceStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GARROTE_VFX, 100, -1);" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GARROTE_VFX);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
-        <field name="UUID" type="IdTableFieldDefinition" value="a8bad376-244e-46d0-ac6d-f0f6efda48f6" />
-        <field name="Name" type="NameTableFieldDefinition" value="GrappledHelper" />
-        <field name="StackId" type="StringTableFieldDefinition" value="ENSNARED" />
-        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
-        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Tag(OFF_GUARD);UnlockSpell(Target_EscapeGrapple_Container);" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GARROTE_VFX, 100, -1)" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GARROTE_VFX);RemoveStatus(Grappled);" />
+        <field name="UUID" type="IdTableFieldDefinition" value="91623805-cc3b-4423-afc6-a21af5b92c3c" />
+        <field name="Name" type="NameTableFieldDefinition" value="RESTRAINED" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="dbabfdb9-0ea3-40be-8cb4-cd56f99ebd85" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9b914e28g12c1g8f13ge234g7fb10b22a569" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h685242a0ge6aag53e1g82e4g614e3d237bf7" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_GOB_GoblinPriest_Chains" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Tag(OFF_GUARD);UnlockSpell(Target_EscapeGrapple_Container);UnlockSpellVariant(RestrainedBlockSpells(),ModifyUseCosts(Add,RestrainedDisable,1,0));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="3d0aa1ce-0b97-46af-9776-add5b3b0a141" />
-        <field name="Name" type="NameTableFieldDefinition" value="GRAPPLED_SOURCE" />
-        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Channeling" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="Name" type="NameTableFieldDefinition" value="GRAPPLE_SOURCE" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Laughing" enumeration_type_name="StillAnimPriority" version="1" />
-        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not IsStatusEvent(StatusEvent.OnStatusApplied) or HasStatus('SG_Unconscious') or HasStatus('SG_Incapacitated') or HasStatus('SG_Frightened') or HasStatus('SG_Fleeing') or HasStatus('SG_Petrified') or HasStatus('SG_Stunned') or HasStatus('SG_Prone');" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not (IsStatusEvent(StatusEvent.OnStatusApplied) or IsStatusEvent(StatusEvent.OnEquip)) or HasStatus('SG_Unconscious') or HasStatus('SG_Incapacitated') or HasStatus('SG_Fleeing') or not HasFreeHand();" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnMove;OnCombatEnded;OnEquip;OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="DynamicAnimationTag" type="GuidObjectTableFieldDefinition" value="b6aa23c3-c96d-42d5-8ffa-8d441d18faa7" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h51bc8a64g708bg96b8g69a5g80e856c65876" version="1" />
-        <field name="AuraRadius" type="IntegerTableFieldDefinition" value="2" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Ally() and HasStatus('Grappled',context.Target,context.Source)):ApplyStatus(GrappledHelper)" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h51bc8a64g708bg96b8g69a5g80e856c65876" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="haef81ccdg2475gd98cg73b5g3aba638e8b7a" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_GOB_GoblinPriest_Chains" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,GRAPPLE_CLEANUP,100,0)" />
+        <field name="StackId" type="StringTableFieldDefinition" value="GRAPPLE_SOURCE" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ba254ba6-dde1-404d-9ada-3a60c1c563e8" />
+        <field name="Name" type="NameTableFieldDefinition" value="GRAPPLE_CLEANUP" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9a947ff1g2cacgfb95g7b6ag415b0fcb3025" version="2" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
