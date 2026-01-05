@@ -144,7 +144,7 @@ function OffGuardNoFlanking(target,source)
 	target = target or context.Target
 	source = source or context.Source
 	local feint = IsMeleeAttack() & HasAnyStatus({'FEINT_ROUND','FEINT_ONCE'},{},{},target,source)
-	local hidden = HasStatus('SG_Invisible',source) | HasStatus('HIDDEN_FROM',target,source) | HasStatus('HIDDEN_NPC',source)
+	local hidden = HasStatus('SG_Invisible',source) | HasStatus('HIDDEN_FROM',target,source) | HasStatus('HIDDEN_NPC',source) | HasStatus('SNEAKING',source)
 	--You aren't off-guard to hidden, undetected, or flanking creatures of your level or lower
 	local denyadvantage = Tagged('ROGUE_DENYADVANTAGE',target) & (target.Level >= source.Level)
 	
@@ -1499,6 +1499,17 @@ function CounterPerformanceCrit()
 		return ConditionResult(true)
 	end
 	return HasStatus('COUNTER_PERFORMANCE_CRIT', context.Observer)
+end
+
+function RestrainedBlockSpells()
+	local r1 = ~IsSpellChildOrVariantFromContext('EscapeGrapple_Container')
+	local r2 = HasStringInSpellRoll('Attack')
+	local r3 = HasSpellFlag(SpellFlags.Somatic)
+	return (r2 | r3) & r1
+end
+
+function TargetSizeGrapple()
+    return ConditionResult(context.Target.Size ~= Size.None and context.Target.Size.value <= (context.Source.Size.value + 1), {ConditionError("GrappleSize")})
 end
 
 function PersistentFireCheck()
