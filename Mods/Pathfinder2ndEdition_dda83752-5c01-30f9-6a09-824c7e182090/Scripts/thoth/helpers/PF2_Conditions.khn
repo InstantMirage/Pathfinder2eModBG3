@@ -219,7 +219,7 @@ function AgileMAP()
 end
 
 function AgileUnarmedSpell()
-	local standard = SpellId('Target_UnarmedAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist')
+	local standard = SpellId('Target_UnarmedAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist') | SpellId('Target_EscapeGrapple_UnarmedAttack')
 	local animal_instinct = SpellId('Target_AnimalSecondarySlashing') | SpellId('Target_AnimalSecondaryFrog')
 	local monk = SpellId('Target_CraneWing') | SpellId('Target_TigerClaw') | SpellId('Target_CobraFang') | SpellId('Target_WolfJaw') | SpellId('Target_ClingingShadowStance') | SpellId('Target_IronSweep') | SpellId('Target_WindCrash')
 	local witch = SpellId('Target_EldritchNails') | SpellId('Target_LivingHair') | SpellId('Target_SympatheticStrike_Nails') | SpellId('Target_SympatheticStrike_Hair')
@@ -481,7 +481,7 @@ function FortitudeDC(entity)
 		prof = 8
 	elseif HasPassive('FortitudeMaster',target).Result then
 		prof = 6
-	elseif HasPassive('FortitudeExpert',target).Result then
+	elseif HasPassive('FortitudeExpert',target).Result or HasPassive('CannyAcumenFortitude',target).Result then
 		prof = 4
 	end
 	
@@ -535,7 +535,7 @@ function ReflexDC(entity)
 		prof = 8
 	elseif HasPassive('ReflexMaster',target).Result then
 		prof = 6
-	elseif HasPassive('ReflexExpert',target).Result then
+	elseif HasPassive('ReflexExpert',target).Result or HasPassive('CannyAcumenReflex',target).Result then
 		prof = 4
 	end
 	
@@ -587,7 +587,7 @@ function WillDC(entity)
 		prof = 8
 	elseif HasPassive('WillMaster',target).Result then
 		prof = 6
-	elseif HasPassive('WillExpert',target).Result then
+	elseif HasPassive('WillExpert',target).Result or HasPassive('CannyAcumenWill',target).Result then
 		prof = 4
 	end
 	
@@ -626,7 +626,7 @@ end
 
 function DemoralizeDC()
 	local willDC = WillDC(context.Target)
-	if (LinguisticSpell(context.Target).Result or LinguisticSpell(context.Source).Result) then
+	if (LinguisticSpell(context.Target).Result or LinguisticSpell(context.Source).Result) and not (HasPassive('IntimidatingProwess',context.Source).Result or HasPassive('IntimidatingGlare',context.Source).Result) then
 		willDC = willDC + 4
 	end
 	return willDC
@@ -1510,4 +1510,10 @@ end
 
 function TargetSizeGrapple()
     return ConditionResult(context.Target.Size ~= Size.None and context.Target.Size.value <= (context.Source.Size.value + 1), {ConditionError("GrappleSize")})
+end
+
+function PersistentFireCheck()
+	local FlameOrder = HasPassive('FlameOrder', context.Source)
+	local StifleFlames = HasPassive('StifleFlames', context.Source) & (IsSkillTrained('AnimalHandling', 'Wisdom') | IsSkillTrained('Survival', 'Wisdom'))
+	return FlameOrder | StifleFlames
 end
