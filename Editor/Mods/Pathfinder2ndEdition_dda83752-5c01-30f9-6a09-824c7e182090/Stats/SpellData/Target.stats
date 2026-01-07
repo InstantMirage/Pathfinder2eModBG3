@@ -32,7 +32,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Shove" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="71a1860f-95ef-4b18-b8d8-9394adcfe37a" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
-        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;CombatLogSetSingleLineRoll;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Ally()):Force(ShoveDistance,OriginToEntity,Aggressive);IF(Ally()):Force(ShoveDistance,OriginToEntity,Friendly);IF(HasStatus('MAP_PENALTY_2ND', context.Source) and not Ally()):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not (HasStatus('MAP_PENALTY_3RD', context.Source) or HasStatus('MAP_PENALTY_2ND', context.Source) or Ally())):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
@@ -94,7 +94,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h34fdb843g1703gf48ege2e4g3413d2ba3432" version="1" />
         <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="hd2ee99d7gd961ge6bdgffbdg899dfa8bf65c" version="2" />
         <field name="CycleConditions" type="StringTableFieldDefinition" value="not Grounded()" />
-        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;CombatLogSetSingleLineRoll;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1)" />
@@ -118,7 +118,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="e208464f-f272-4bd8-a035-54fb296f3bb6" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="3" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:0" />
-        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;CombatLogSetSingleLineRoll;Temporary" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful;Temporary" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value=";" />
       </fields>
     </stat_object>
@@ -1736,9 +1736,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="97023ce4-02a4-42f1-bc54-dc274982e610" />
         <field name="Name" type="NameTableFieldDefinition" value="SlamDown" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="6d7dff78-bf2c-4ba7-a092-7f191758a7c6" />
-        <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
+        <field name="Cooldown" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="CooldownType" version="1" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('CrashingSlam',context.Source) and Character() and not SavingThrow(Ability.Dexterity, ClassDC())):ApplyStatus(PRONE_PF2,100,-1);IF(HasPassive('CrashingSlam',context.Source)):ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFF_BALANCED,100,1);DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('CrashingSlam',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d12, MainMeleeWeaponDamageType);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4d7921fbg4e25gc81bg895bg6289f3b848c9" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc6f33e7bgfcfcg8e57g4b9agd0106d0915a6" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType)" />

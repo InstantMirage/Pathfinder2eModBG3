@@ -4858,14 +4858,6 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
-        <field name="UUID" type="IdTableFieldDefinition" value="ce3dc773-d73d-470b-80d5-201879934f9e" />
-        <field name="Name" type="NameTableFieldDefinition" value="SlamDownStatus" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResource(ActionPoint,-1,0)" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h553dfae7g229cgfd6bg2af0gc5f831b3bfe0" version="1" />
-      </fields>
-    </stat_object>
-    <stat_object is_substat="false">
-      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="30ad14a1-0094-4748-bc08-585b4f7e90e4" />
         <field name="Name" type="NameTableFieldDefinition" value="POINT_BLANK" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4930ef75g3dc4gced3g7557g602520ce1b33" version="1" />
@@ -4948,6 +4940,49 @@
         <field name="StackId" type="StringTableFieldDefinition" value="STANCE" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Combat()" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded;OnEquip" enumeration_type_name="StatusEvent" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="91862f74-7a30-48c7-b011-41dc963c9716" />
+        <field name="Name" type="NameTableFieldDefinition" value="SLAM_DOWN_CHECK" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3c387642gd0d2g2c37g293cg0605a15ba9b3" version="1" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Athletics,SkillCheckStatusDuration());" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(IsCriticalSkill()):ApplyStatus(SLAM_DOWN_CRIT,100,-1);ApplyStatus(SLAM_DOWN_SUCCESS,100,-1);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="ApplyStatus(SLAM_DOWN_FAILURE, 100, -1);IF(IsCriticalMissSkill()):ApplyStatus(PRONE_PF2, 100, -1)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7bf6372f-8f34-41d5-b2bb-eecb31cf47d9" />
+        <field name="Name" type="NameTableFieldDefinition" value="SLAM_DOWN_SUCCESS" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3c387642gd0d2g2c37g293cg0605a15ba9b3" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0f628ed3-9b00-4eaa-94c4-29548125abf9" />
+        <field name="Name" type="NameTableFieldDefinition" value="SLAM_DOWN_FAILURE" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3c387642gd0d2g2c37g293cg0605a15ba9b3" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="cfeec2ef-bdc6-423f-9e2c-16b44e3bcb24" />
+        <field name="Name" type="NameTableFieldDefinition" value="SLAM_DOWN_CRIT" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3c387642gd0d2g2c37g293cg0605a15ba9b3" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2fec7578-e70d-491e-a602-bd8efe66692d" />
+        <field name="Name" type="NameTableFieldDefinition" value="SLAM_DOWN_CRIT_DAMAGE" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3c387642gd0d2g2c37g293cg0605a15ba9b3" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) or IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) or not HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)) or not HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d8, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d10, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d12, Bludgeoning);" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -14071,7 +14106,10 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h238be7efg19dcgb709g8756g623a2d380c61" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h49bd3191g623eg7ed4g1538gf04f49306342" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_EggBearer" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="FreezeDuration;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="SKILL_CHECK_DC" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14486,6 +14524,40 @@
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="SpellId('Target_Demoralize')" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e6b89c96-6d3c-44d8-b479-d5eda506bb62" />
+        <field name="Name" type="NameTableFieldDefinition" value="ACROBATICS_ROLL_TO_REFLEX_DC_1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb3addca1g3887gdeb5g5acbg714174b5b6f8" version="4" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_LongJump" />
+        <field name="StackId" type="StringTableFieldDefinition" value="ACROBATICS_ROLL_TO_REFLEX_DC_1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SkillCheck,-7);IF(HasProficiencyBonus(Ability.Dexterity,Skill.Acrobatics)):RollBonus(SkillCheck,-2);IF(HasPassive('AcrobaticsExpert')):RollBonus(SkillCheck,-2);IF(HasPassive('AcrobaticsIncrease')):RollBonus(SkillCheck,-2);IF(HasPassive('AcrobaticsIncrease2')):RollBonus(SkillCheck,-2);IF(HasPassive('ReflexExpert')):RollBonus(SkillCheck,2);IF(HasPassive('ReflexMaster')):RollBonus(SkillCheck,4);IF(HasPassive('ReflexLegend')):RollBonus(SkillCheck,6);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="92f8eb1d-38d9-4ade-b6df-08f3908c9802" />
+        <field name="Name" type="NameTableFieldDefinition" value="ACROBATICS_ROLL_TO_REFLEX_DC_2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_LongJump" />
+        <field name="StackId" type="StringTableFieldDefinition" value="ACROBATICS_ROLL_TO_REFLEX_DC_2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('CircumstanceBonus1ReflexSaves')):RollBonus(SkillCheck,1);IF(HasStatus('CircumstanceBonus2ReflexSaves')):RollBonus(SkillCheck,2);IF(HasStatus('CircumstanceBonus3ReflexSaves')):RollBonus(SkillCheck,3);IF(HasStatus('StatusBonus1ReflexSaves')):RollBonus(SkillCheck,1);IF(HasStatus('StatusBonus2ReflexSaves')):RollBonus(SkillCheck,2);IF(HasStatus('StatusBonus3ReflexSaves')):RollBonus(SkillCheck,3);IF(HasStatus('ItemBonus1ReflexSaves')):RollBonus(SkillCheck,1);IF(HasStatus('ItemBonus2ReflexSaves')):RollBonus(SkillCheck,2);IF(HasStatus('ItemBonus3ReflexSaves')):RollBonus(SkillCheck,3);IF(HasStatus('CircumstancePenalty1ReflexSaves')):RollBonus(SkillCheck,-1);IF(HasStatus('CircumstancePenalty2ReflexSaves')):RollBonus(SkillCheck,-2);IF(HasStatus('CircumstancePenalty3ReflexSaves')):RollBonus(SkillCheck,-3);IF(HasStatus('StatusPenalty1ReflexSaves')):RollBonus(SkillCheck,-1);IF(HasStatus('StatusPenalty2ReflexSaves')):RollBonus(SkillCheck,-2);IF(HasStatus('StatusPenalty3ReflexSaves')):RollBonus(SkillCheck,-3);IF(HasStatus('ItemPenalty1ReflexSaves')):RollBonus(SkillCheck,-1);IF(HasStatus('ItemPenalty2ReflexSaves')):RollBonus(SkillCheck,-2);IF(HasStatus('ItemPenalty3ReflexSaves')):RollBonus(SkillCheck,-3);IF(HasStatus('CircumstanceBonus1Saves')):RollBonus(SkillCheck,1);IF(HasStatus('CircumstanceBonus2Saves')):RollBonus(SkillCheck,2);IF(HasStatus('CircumstanceBonus3Saves')):RollBonus(SkillCheck,3);" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e6b89c96-6d3c-44d8-b479-d5eda506bb62" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="547870bd-9c98-43ef-baf3-31095320473d" />
+        <field name="Name" type="NameTableFieldDefinition" value="ACROBATICS_ROLL_TO_REFLEX_DC_3" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_LongJump" />
+        <field name="StackId" type="StringTableFieldDefinition" value="ACROBATICS_ROLL_TO_REFLEX_DC_3" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('StatusBonus1Saves')):RollBonus(SkillCheck,1);IF(HasStatus('StatusBonus2Saves')):RollBonus(SkillCheck,2);IF(HasStatus('StatusBonus3Saves')):RollBonus(SkillCheck,3);IF(HasStatus('ItemBonus1Saves')):RollBonus(SkillCheck,1);IF(HasStatus('ItemBonus2Saves')):RollBonus(SkillCheck,2);IF(HasStatus('ItemBonus3Saves')):RollBonus(SkillCheck,3);IF(HasStatus('CircumstancePenalty1Saves')):RollBonus(SkillCheck,-1);IF(HasStatus('CircumstancePenalty2Saves')):RollBonus(SkillCheck,-2);IF(HasStatus('CircumstancePenalty3Saves')):RollBonus(SkillCheck,-3);IF(HasStatus('StatusPenalty1Saves')):RollBonus(SkillCheck,-1);IF(HasStatus('StatusPenalty2Saves')):RollBonus(SkillCheck,-2);IF(HasStatus('StatusPenalty3Saves')):RollBonus(SkillCheck,-3);IF(HasStatus('ItemPenalty1Saves')):RollBonus(SkillCheck,-1);IF(HasStatus('ItemPenalty2Saves')):RollBonus(SkillCheck,-2);IF(HasStatus('ItemPenalty3Saves')):RollBonus(SkillCheck,-3);IF(HasStatus('StatusBonus1Acrobatics')):RollBonus(SkillCheck,-1);IF(HasStatus('StatusBonus2Acrobatics')):RollBonus(SkillCheck,-2);IF(HasStatus('StatusPenalty1Acrobatics')):RollBonus(SkillCheck,1);IF(HasStatus('StatusPenalty2Acrobatics')):RollBonus(SkillCheck,2);" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e6b89c96-6d3c-44d8-b479-d5eda506bb62" />
       </fields>
     </stat_object>
   </stat_objects>

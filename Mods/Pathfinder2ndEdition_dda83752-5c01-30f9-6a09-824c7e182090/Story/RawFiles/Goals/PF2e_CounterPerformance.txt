@@ -77,6 +77,13 @@ AND
 DB_CounterPerformanceSource((GUIDSTRING)_Character, _Bard)
 THEN
 NOT DB_CounterPerformanceSource(_Character, _Bard);
+
+// Counter performance is a composition. Note that INTERRUPT_COUNTERPERFORMANCE
+// doesn't exist.
+IF
+StatusApplied((GUIDSTRING)_Bard, "COUNTER_PERFORMANCE_COST", _, _)
+THEN
+PROC_RemovePastCompositionOwner((CHARACTER)_Bard, "INTERRUPT_COUNTERPERFORMANCE");
 EXITSECTION
 
 ENDEXITSECTION
