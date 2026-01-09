@@ -1,0 +1,140 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+//REGION Slam Down
+// Grab the target of the Slam Down strike to use later. Note our current MAP also.
+IF
+UsingSpellOnTarget((GUIDSTRING)_Character, (GUIDSTRING)_Target, "Target_SlamDown", _, _, (INTEGER)_StoryID)
+AND
+HasActiveStatus(_Character, "MAP_PENALTY_2ND", 0)
+AND
+HasActiveStatus(_Character, "MAP_PENALTY_3RD", 0)
+THEN
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_1", -1.0, 1, _Target);
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_2", -1.0, 1, _Target);
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_3", -1.0, 1, _Target);
+DB_SlamDownCast(_Character, _StoryID, _Target, 0);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Character, (GUIDSTRING)_Target, "Target_SlamDown", _, _, (INTEGER)_StoryID)
+AND
+HasActiveStatus(_Character, "MAP_PENALTY_2ND", 1)
+THEN
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_1", -1.0, 1, _Target);
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_2", -1.0, 1, _Target);
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_3", -1.0, 1, _Target);
+DB_SlamDownCast(_Character, _StoryID, _Target, 5);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Character, (GUIDSTRING)_Target, "Target_SlamDown", _, _, (INTEGER)_StoryID)
+AND
+HasActiveStatus(_Character, "MAP_PENALTY_3RD", 1)
+THEN
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_1", -1.0, 1, _Target);
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_2", -1.0, 1, _Target);
+ApplyStatus(_Target, "ACROBATICS_ROLL_TO_REFLEX_DC_3", -1.0, 1, _Target);
+DB_SlamDownCast(_Character, _StoryID, _Target, 10);
+
+// Missed strikes have no followup trip. Clean up.
+IF
+MissedBy((CHARACTER)_Target, _, (CHARACTER)_Character, (INTEGER)_StoryID)
+AND
+DB_SlamDownCast((GUIDSTRING)_Character, _StoryID, (GUIDSTRING)_Target, (INTEGER)_MAP)
+THEN
+PROC_SlamDownCleanup(_Character, _StoryID, _Target, _MAP);
+
+// If successful at strike, make an athletics check.
+IF
+CastedSpell((GUIDSTRING)_Character, "Target_SlamDown", _, _, (INTEGER)_StoryID)
+AND
+DB_SlamDownCast(_Character, _StoryID, (GUIDSTRING)_Target, (INTEGER)_MAP)
+AND
+HasPassive(_Character, "CrashingSlam", 0)
+AND
+CalculatePassiveSkill(_Target, "Acrobatics", (INTEGER)_BaseDifficulty)
+AND
+IntegerSum(_BaseDifficulty, _MAP, _Difficulty)
+THEN
+PROC_RequestSkillCheckStatus("SLAM_DOWN_CHECK", _Difficulty, (CHARACTER)_Character, "TumbleThroughAcrobaticsCheck");
+
+// If the character has crashing slam, just give them the success
+// and crit statuses on a delay.
+IF
+CastedSpell((GUIDSTRING)_Character, "Target_SlamDown", _, _, (INTEGER)_StoryID)
+AND
+DB_SlamDownCast(_Character, _StoryID, (GUIDSTRING)_Target, (INTEGER)_MAP)
+AND
+HasPassive(_Character, "CrashingSlam", 1)
+THEN
+DB_CrashingSlamStatusApply(_Character);
+TimerLaunch("CrashingSlamTimer", 15);
+
+IF
+TimerFinished("CrashingSlamTimer")
+AND
+DB_CrashingSlamStatusApply((GUIDSTRING)_Character)
+THEN
+ApplyStatus(_Character, "SLAM_DOWN_CRIT", -1.0, 1, _Character);
+ApplyStatus(_Character, "SLAM_DOWN_SUCCESS", -1.0, 1, _Character);
+NOT DB_CrashingSlamStatusApply(_Character);
+
+// If the athletics roll crit, apply trip damage.
+IF
+StatusApplied((GUIDSTRING)_Character, "SLAM_DOWN_CRIT", _, _)
+AND
+DB_SlamDownCast(_Character, (INTEGER)_StoryID, (GUIDSTRING)_Target, (INTEGER)_MAP)
+THEN
+ApplyStatus(_Target, "SLAM_DOWN_CRIT_DAMAGE", 0.0, 1, _Character);
+
+// On any success, use the trip spell. This plays animations.
+IF
+StatusApplied((GUIDSTRING)_Character, "SLAM_DOWN_SUCCESS", _, _)
+AND
+DB_SlamDownCast(_Character, (INTEGER)_StoryID, (GUIDSTRING)_Target, (INTEGER)_MAP)
+THEN
+UseSpell(_Character, "Target_Trip", _Target);
+PROC_SlamDownCleanup(_Character, _StoryID, _Target, _MAP);
+
+// If they did not succeed the secondary check, cleanup
+IF
+StatusApplied((GUIDSTRING)_Character, "SLAM_DOWN_FAILURE", _, _)
+AND
+DB_SlamDownCast(_Character, (INTEGER)_StoryID, (GUIDSTRING)_Target, (INTEGER)_MAP)
+AND
+HasActiveStatus(_Character, "SLAM_DOWN_SUCCESS", 0)
+THEN
+PROC_SlamDownCleanup(_Character, _StoryID, _Target, _MAP);
+
+// Cleanup to handle counterspelled strikes
+IF
+CastSpellFailed((GUIDSTRING)_Character, "Target_SlamDown", _, _, (INTEGER)_StoryID)
+AND
+DB_SlamDownCast(_Character, _StoryID, (GUIDSTRING)_Target, (INTEGER)_MAP)
+THEN
+PROC_SlamDownCleanup(_Character, _StoryID, _Target, _MAP);
+
+PROC
+PROC_SlamDownCleanup((GUIDSTRING)_Character, (INTEGER)_StoryID, (GUIDSTRING)_Target, (INTEGER)_MAP)
+THEN
+NOT DB_SlamDownCast(_Character, _StoryID, _Target, _MAP);
+RemoveStatus(_target, "ACROBATICS_ROLL_TO_REFLEX_DC_1");
+RemoveStatus(_target, "ACROBATICS_ROLL_TO_REFLEX_DC_2");
+RemoveStatus(_target, "ACROBATICS_ROLL_TO_REFLEX_DC_3");
+RemoveStatus(_Character, "SLAM_DOWN_SUCCESS");
+RemoveStatus(_Character, "SLAM_DOWN_FAILURE");
+RemoveStatus(_Character, "SLAM_DOWN_CRIT");
+PROC_CrushingSlamMAP(_Character);
+
+// All slam down strikes without crushing slam get MAP 3rd.
+PROC
+PROC_CrushingSlamMAP((GUIDSTRING)_Character)
+AND
+HasPassive(_Character, "CrashingSlam", 0)
+THEN
+ApplyStatus(_Character, "MAP_PENALTY_3RD", 12.0);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
