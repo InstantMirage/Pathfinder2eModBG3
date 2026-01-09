@@ -1517,3 +1517,47 @@ function PersistentFireCheck()
 	local StifleFlames = HasPassive('StifleFlames', context.Source) & (IsSkillTrained('AnimalHandling', 'Wisdom') | IsSkillTrained('Survival', 'Wisdom'))
 	return FlameOrder | StifleFlames
 end
+
+function TumbleThroughProximityCheck()
+    NumberOfEnemy = NumberOfEnemy or 1
+    target = target or context.Target
+    source = source or context.Source
+
+    local enemiesSmall = GetEnemiesWithinRange(1.5, target, source)
+    if enemiesSmall ~= nil then
+        for _, entity in ipairs(enemiesSmall.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 0) then
+                return ConditionResult(true)
+            end
+        end
+    end
+
+    local enemiesMedium = GetEnemiesWithinRange(2.0, target, source)
+    if enemiesMedium ~= nil then
+        for _, entity in ipairs(enemiesMedium.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 1) then
+                return ConditionResult(true)
+            end
+        end
+    end
+
+    local enemiesLarge = GetEnemiesWithinRange(2.5, target, source)
+    if enemiesLarge ~= nil then
+        for _, entity in ipairs(enemiesLarge.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 2) then
+                return ConditionResult(true)
+            end
+        end
+    end
+
+    local enemiesHuge = GetEnemiesWithinRange(3.0, target, source)
+    if enemiesHuge ~= nil then
+        for _, entity in ipairs(enemiesHuge.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 3) then
+                return ConditionResult(true)
+            end
+        end
+    end
+
+    return ConditionResult(false)
+end
