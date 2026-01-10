@@ -9090,8 +9090,6 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4e7fd7e7g58acg8545gf519g0455bb6988be" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3f49016dgd813g7dcbg9171gaed92e3a7622" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_ChannelElements);" />
-        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(ChannelingStatus)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9640,8 +9638,8 @@
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_MartialArts_BonusUnarmedStrike" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(SpellId('Shout_ChannelElements')):ApplyStatus(SELF,KineticistFreeStatus,100,1); IF(IsKineticistFree()):ApplyStatus(SELF,ChannelingStatus,100,-1)" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="TurnBased() and not (HasStatus('ChannelingStatus')) and ( SpellId('Shout_ChannelElements') or IsKineticistFree());" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(IsKineticistFree()):ApplyStatus(SELF,ChannelingStatus,100,-1); IF(SpellId('Shout_ChannelElements')):ApplyStatus(SELF,KineticistFreeStatus,100,1)" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="TurnBased() and (IsKineticistFree() or SpellId('Shout_ChannelElements'));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
