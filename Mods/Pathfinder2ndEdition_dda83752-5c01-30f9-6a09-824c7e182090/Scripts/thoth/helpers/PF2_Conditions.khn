@@ -144,7 +144,7 @@ function OffGuardNoFlanking(target,source)
 	target = target or context.Target
 	source = source or context.Source
 	local feint = IsMeleeAttack() & HasAnyStatus({'FEINT_ROUND','FEINT_ONCE'},{},{},target,source)
-	local hidden = HasStatus('SG_Invisible',source) | HasStatus('HIDDEN_FROM',target,source) | HasStatus('HIDDEN_NPC',source)
+	local hidden = HasStatus('SG_Invisible',source) | HasStatus('HIDDEN_FROM',target,source) | HasStatus('HIDDEN_NPC',source) | HasStatus('SNEAKING',source)
 	--You aren't off-guard to hidden, undetected, or flanking creatures of your level or lower
 	local denyadvantage = Tagged('ROGUE_DENYADVANTAGE',target) & (target.Level >= source.Level)
 	
@@ -219,7 +219,7 @@ function AgileMAP()
 end
 
 function AgileUnarmedSpell()
-	local standard = SpellId('Target_UnarmedAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist')
+	local standard = SpellId('Target_UnarmedAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist') | SpellId('Target_EscapeGrapple_UnarmedAttack')
 	local animal_instinct = SpellId('Target_AnimalSecondarySlashing') | SpellId('Target_AnimalSecondaryFrog')
 	local monk = SpellId('Target_CraneWing') | SpellId('Target_TigerClaw') | SpellId('Target_CobraFang') | SpellId('Target_WolfJaw') | SpellId('Target_ClingingShadowStance') | SpellId('Target_IronSweep') | SpellId('Target_WindCrash')
 	local witch = SpellId('Target_EldritchNails') | SpellId('Target_LivingHair') | SpellId('Target_SympatheticStrike_Nails') | SpellId('Target_SympatheticStrike_Hair')
@@ -481,39 +481,39 @@ function FortitudeDC(entity)
 		prof = 8
 	elseif HasPassive('FortitudeMaster',target).Result then
 		prof = 6
-	elseif HasPassive('FortitudeExpert',target).Result then
+	elseif HasPassive('FortitudeExpert',target).Result or HasPassive('CannyAcumenFortitude',target).Result then
 		prof = 4
 	end
 	
-	if HasAnyTags({'CIRC_BON_2SAVES'}).Result then
+	if HasAnyTags({'CIRC_BON_2SAVES'},target).Result then
 		circ_bon = 2
-	elseif HasAnyTags({'CIRC_BON_1FORT'}).Result then
+	elseif HasAnyTags({'CIRC_BON_1FORT'},target).Result then
 		circ_bon = 1
 	end
 	
-	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2FORT'}).Result then
+	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2FORT'},target).Result then
 		item_bon = 2
-	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1FORT'}).Result then
+	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1FORT'},target).Result then
 		item_bon = 1
 	end
 	
-	if HasAnyTags({'STAT_BON_2SAVES'}).Result then
+	if HasAnyTags({'STAT_BON_2SAVES'},target).Result then
 		stat_bon = 2
-	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+	elseif HasAnyTags({'STAT_BON_1SAVES'},target).Result then
 		stat_bon = 1
 	end
 	
 	--Circ pen
 	
-	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
+	if HasAnyTags({'ITEM_PEN_2SAVES'},target).Result then
 		item_pen = 2
-	elseif HasAnyTags({'ITEM_PEN_1SAVES'}).Result then
+	elseif HasAnyTags({'ITEM_PEN_1SAVES'},target).Result then
 		item_pen = 1
 	end
 	
-	if HasAnyTags({'STAT_PEN_2SAVES'}).Result then
+	if HasAnyTags({'STAT_PEN_2SAVES'},target).Result then
 		stat_pen = 2
-	elseif HasAnyTags({'STAT_PEN_1SAVES'}).Result then
+	elseif HasAnyTags({'STAT_PEN_1SAVES'},target).Result then
 		stat_pen = 1
 	end
 	
@@ -535,37 +535,37 @@ function ReflexDC(entity)
 		prof = 8
 	elseif HasPassive('ReflexMaster',target).Result then
 		prof = 6
-	elseif HasPassive('ReflexExpert',target).Result then
+	elseif HasPassive('ReflexExpert',target).Result or HasPassive('CannyAcumenReflex',target).Result then
 		prof = 4
 	end
 	
-	if HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_2REFLEX'}).Result then
+	if HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_2REFLEX'},target).Result then
 		circ_bon = 2
 	end
 	
-	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2REFLEX'}).Result then
+	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2REFLEX'},target).Result then
 		item_bon = 2
-	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1REFLEX'}).Result then
+	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1REFLEX'},target).Result then
 		item_bon = 1
 	end
 	
-	if HasAnyTags({'STAT_BON_2SAVES'}).Result then
+	if HasAnyTags({'STAT_BON_2SAVES'},target).Result then
 		stat_bon = 2
-	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+	elseif HasAnyTags({'STAT_BON_1SAVES'},target).Result then
 		stat_bon = 1
 	end
 	
 	--Circ pen
 	
-	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
+	if HasAnyTags({'ITEM_PEN_2SAVES'},target).Result then
 		item_pen = 2
-	elseif HasAnyTags({'ITEM_PEN_1SAVES'}).Result then
+	elseif HasAnyTags({'ITEM_PEN_1SAVES'},target).Result then
 		item_pen = 1
 	end
 	
-	if HasAnyTags({'STAT_PEN_2SAVES', 'STAT_PEN_2REFLEX'}).Result then
+	if HasAnyTags({'STAT_PEN_2SAVES', 'STAT_PEN_2REFLEX'},target).Result then
 		stat_pen = 2
-	elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1REFLEX'}).Result then
+	elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1REFLEX'},target).Result then
 		stat_pen = 1
 	end
 	
@@ -587,37 +587,37 @@ function WillDC(entity)
 		prof = 8
 	elseif HasPassive('WillMaster',target).Result then
 		prof = 6
-	elseif HasPassive('WillExpert',target).Result then
+	elseif HasPassive('WillExpert',target).Result or HasPassive('CannyAcumenWill',target).Result then
 		prof = 4
 	end
 	
-	if HasAnyTags({'CIRC_BON_2SAVES'}).Result then
+	if HasAnyTags({'CIRC_BON_2SAVES'},target).Result then
 		circ_bon = 2
 	end
 	
-	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2WILL'}).Result then
+	if HasAnyTags({'ITEM_BON_2SAVES', 'ITEM_BON_2WILL'},target).Result then
 		item_bon = 2
-	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1WILL'}).Result then
+	elseif HasAnyTags({'ITEM_BON_1SAVES', 'ITEM_BON_1WILL'},target).Result then
 		item_bon = 1
 	end
 	
-	if HasAnyTags({'STAT_BON_2SAVES', 'STAT_BON_2WILL'}).Result then
+	if HasAnyTags({'STAT_BON_2SAVES', 'STAT_BON_2WILL'},target).Result then
 		stat_bon = 2
-	elseif HasAnyTags({'STAT_BON_1SAVES'}).Result then
+	elseif HasAnyTags({'STAT_BON_1SAVES'},target).Result then
 		stat_bon = 1
 	end
 	
 	--Circ pen
 	
-	if HasAnyTags({'ITEM_PEN_2SAVES'}).Result then
+	if HasAnyTags({'ITEM_PEN_2SAVES'},target).Result then
 		item_pen = 2
-	elseif HasAnyTags({'ITEM_PEN_1SAVES', 'ITEM_PEN_1WILL'}).Result then
+	elseif HasAnyTags({'ITEM_PEN_1SAVES', 'ITEM_PEN_1WILL'},target).Result then
 		item_pen = 1
 	end
 	
-	if HasAnyTags({'STAT_PEN_2SAVES', 'STAT_PEN_2WILL'}).Result then
+	if HasAnyTags({'STAT_PEN_2SAVES', 'STAT_PEN_2WILL'},target).Result then
 		stat_pen = 2
-	elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1WILL'}).Result then
+	elseif HasAnyTags({'STAT_PEN_1SAVES', 'STAT_PEN_1WILL'},target).Result then
 		stat_pen = 1
 	end
 	
@@ -626,7 +626,7 @@ end
 
 function DemoralizeDC()
 	local willDC = WillDC(context.Target)
-	if (LinguisticSpell(context.Target).Result or LinguisticSpell(context.Source).Result) then
+	if (LinguisticSpell(context.Target).Result or LinguisticSpell(context.Source).Result) and not (HasPassive('IntimidatingProwess',context.Source).Result or HasPassive('IntimidatingGlare',context.Source).Result) then
 		willDC = willDC + 4
 	end
 	return willDC
@@ -1499,4 +1499,65 @@ function CounterPerformanceCrit()
 		return ConditionResult(true)
 	end
 	return HasStatus('COUNTER_PERFORMANCE_CRIT', context.Observer)
+end
+
+function RestrainedBlockSpells()
+	local r1 = ~IsSpellChildOrVariantFromContext('EscapeGrapple_Container')
+	local r2 = HasStringInSpellRoll('Attack')
+	local r3 = HasSpellFlag(SpellFlags.Somatic)
+	return (r2 | r3) & r1
+end
+
+function TargetSizeGrapple()
+    return ConditionResult(context.Target.Size ~= Size.None and context.Target.Size.value <= (context.Source.Size.value + 1), {ConditionError("GrappleSize")})
+end
+
+function PersistentFireCheck()
+	local FlameOrder = HasPassive('FlameOrder', context.Source)
+	local StifleFlames = HasPassive('StifleFlames', context.Source) & (IsSkillTrained('AnimalHandling', 'Wisdom') | IsSkillTrained('Survival', 'Wisdom'))
+	return FlameOrder | StifleFlames
+end
+
+function TumbleThroughProximityCheck()
+    NumberOfEnemy = NumberOfEnemy or 1
+    target = target or context.Target
+    source = source or context.Source
+
+    local enemiesSmall = GetEnemiesWithinRange(1.5, target, source)
+    if enemiesSmall ~= nil then
+        for _, entity in ipairs(enemiesSmall.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 0) then
+                return ConditionResult(true)
+            end
+        end
+    end
+
+    local enemiesMedium = GetEnemiesWithinRange(2.0, target, source)
+    if enemiesMedium ~= nil then
+        for _, entity in ipairs(enemiesMedium.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 1) then
+                return ConditionResult(true)
+            end
+        end
+    end
+
+    local enemiesLarge = GetEnemiesWithinRange(2.5, target, source)
+    if enemiesLarge ~= nil then
+        for _, entity in ipairs(enemiesLarge.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 2) then
+                return ConditionResult(true)
+            end
+        end
+    end
+
+    local enemiesHuge = GetEnemiesWithinRange(3.0, target, source)
+    if enemiesHuge ~= nil then
+        for _, entity in ipairs(enemiesHuge.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 3) then
+                return ConditionResult(true)
+            end
+        end
+    end
+
+    return ConditionResult(false)
 end

@@ -196,8 +196,17 @@
         <field name="UUID" type="IdTableFieldDefinition" value="19917784-4390-4827-9f01-7191342186f9" />
         <field name="Name" type="NameTableFieldDefinition" value="MagicalDarknessCheck" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnMovedDistance;OnObscurityChanged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnMovedDistance" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,MAGICAL_DARKNESS_RECHECK,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9e105797-123e-44b3-994c-daef43ab6052" />
+        <field name="Name" type="NameTableFieldDefinition" value="MagicalDarknessCheckObscurity" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="19917784-4390-4827-9f01-7191342186f9" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnObscurityChanged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(MAGICAL_DARKNESS_RECHECK,100,0)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -963,6 +972,16 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="66223f43-f2dc-4f77-92bc-b43e2fba460c" />
+        <field name="Name" type="NameTableFieldDefinition" value="TumbleThroughTerrainCheck" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnMovedDistance" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="TumbleThroughProximityCheck();" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceConsumeMultiplier(Movement,2.0,0);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="5b42f0bf-d565-4993-b30f-0f5ada1c5bff" />
         <field name="Name" type="NameTableFieldDefinition" value="FeatPrerequisites" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hafa56f10g3883g044bg8fc5g6163d75505d0" version="1" />
@@ -1144,6 +1163,58 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d92f21f4-0dcb-43b2-bfa5-41cc4eeaee1d" />
+        <field name="Name" type="NameTableFieldDefinition" value="CannyAcumenFortitude" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb38a5a0dg3d50gd58eg54fbgac5ade107c6c" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1f32f4a2g715eg56c8g361bg6a153ce20a51" version="2" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Fortitude saves" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not (HasPassive('FortitudeExpert',context.Source) or HasPassive('FortitudeMaster',context.Source) or HasPassive('PathToPerfectionFort',context.Source) or HasPassive('FortitudeLegend',context.Source))):RollBonus(SavingThrow,2,Constitution);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_EyesOftheDark" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1ffbca27-6680-4c9c-9574-7d1e5338faec" />
+        <field name="Name" type="NameTableFieldDefinition" value="CannyAcumenReflex" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="d92f21f4-0dcb-43b2-bfa5-41cc4eeaee1d" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5d73de0ag0af0g1a9bg891bg18a786b03bd6" version="2" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Reflex saves" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not (HasPassive('ReflexExpert',context.Source) or HasPassive('ReflexMaster',context.Source) or HasPassive('PathToPerfectionRef',context.Source) or HasPassive('ReflexLegend',context.Source))):RollBonus(SavingThrow,2,Dexterity);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3fcc7f28-7d22-4f63-a88f-f73219915e29" />
+        <field name="Name" type="NameTableFieldDefinition" value="CannyAcumenWill" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="d92f21f4-0dcb-43b2-bfa5-41cc4eeaee1d" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h7c3401b6g2f17g4ad6g943fgcbb360478fca" version="2" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Will saves" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not (HasPassive('WillExpert',context.Source) or HasPassive('WillMaster',context.Source) or HasPassive('PathToPerfectionWill',context.Source) or HasPassive('WillLegend',context.Source))):RollBonus(SavingThrow,2,Wisdom);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ef5c4b4f-b575-4ae2-ba21-1ec3c8cac2b5" />
+        <field name="Name" type="NameTableFieldDefinition" value="CannyAcumenPerception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="d92f21f4-0dcb-43b2-bfa5-41cc4eeaee1d" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1b4b1751g484fgedbfgdd5fg29cd8db39529" version="2" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Perception" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not (HasPassive('PerceptionIncrease',context.Source) or HasPassive('PerceptionIncrease2',context.Source) or HasPassive('PerceptionIncrease3',context.Source))):Skill(Perception,2);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="45ad08a3-cd58-4899-b7b7-fdb0876a0996" />
+        <field name="Name" type="NameTableFieldDefinition" value="RobustHealth" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h795b5600ga0e8gcf34g0241ge579381efee0" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf052f12fg43a2g1782gf309g845ab3c9de93" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Regeneration" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="fd0dfa16-4530-4647-a8a1-316f28ddd0a8" />
         <field name="Name" type="NameTableFieldDefinition" value="TrickMagicItem" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc6257835g9884gaad4gaa79gca052f9e7981" version="2" />
@@ -1153,6 +1224,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_TrickMagicItem);" />
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Arcana', 'Intelligence') or IsSkillTrained('AnimalHandling', 'Wisdom') or IsSkillTrained('Insight', 'Wisdom') or IsSkillTrained('Investigation', 'Intelligence');" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="6a68f266-7f92-4f6f-9305-4b7e6b5698c8" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1165,7 +1237,8 @@
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_CraftScroll);" />
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Nature', 'Intelligence');" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillExpert('Nature', 'Intelligence');" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="e9f92590-7abc-4b26-90b9-9f804152cce5" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1179,6 +1252,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_BonMot);" />
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Persuasion', 'Charisma');" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="3a0f2eaa-4287-45eb-9518-c73d54fac6e2" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1192,6 +1266,7 @@
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('SleightOfHand', 'Dexterity');" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_DirtyTrickPF);" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="80aa1130-1aff-4f01-85ea-f30f50aab5c8" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1205,6 +1280,371 @@
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Acrobatics', 'Dexterity');" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(not IsSkillExpert('Acrobatics', 'Dexterity')):FallDamageMultiplier(0.5);IF(IsSkillExpert('Acrobatics', 'Dexterity')):FallDamageMultiplier(0);" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="185bf69a-7bdd-42fc-9f1c-d2751a220964" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f2d8b381-dab7-4d76-9794-3a7d7f336b4e" />
+        <field name="Name" type="NameTableFieldDefinition" value="HeftyHauler" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5439b015gab06g13e4gb31eg904f2a13a590" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h99bd2a77g9eedg3cf6gac74g51228a1ca22d" version="5" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Athletics', 'Strength');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="CarryCapacityMultiplier(1.25);" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="0c017144-e374-4079-8696-5815f5e56b39;261a0f99-dcf1-4deb-b6fa-0b93c0b3d9bc" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_GiantsCarryCapacity" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3ed295cd-f751-4820-a778-919a2e0da853" />
+        <field name="Name" type="NameTableFieldDefinition" value="IntimidatingGlare" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hff975d21g91d1g322ag49e8gdd00178854d3" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3d4920c9gb790gd972ge3c6gec7d64e344ab" version="1" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="d312dc2f-5c19-4bdc-8772-11bbb9ee30cb" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Eyebite_Panicked" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Intimidation', 'Charisma');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_IntimidatingGlare);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d7f22c39-3ab5-4ee0-9ea6-39da2a193fc5" />
+        <field name="Name" type="NameTableFieldDefinition" value="SlipperyPrey" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h09f9b035gb0e6g12abg67d8g9b53915182dc" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hfb914137g94aagd2f5g5958g19a6f0cf963b" version="1" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="366378d4-26eb-4f0b-935b-32a4ac3c1c28" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Acrobatics', 'Dexterity') or IsSkillTrained('Athletics', 'Strength');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(((SpellId('Target_EscapeGrapple_Acrobatics') and not IsSkillMaster('Acrobatics', 'Dexterity')) or (SpellId('Target_EscapeGrapple_Athletics') and not IsSkillMaster('Athletics', 'Strength'))) and HasStatus('MAP_PENALTY_2ND', context.Source)):RollBonus(SkillCheck, 1);IF(((SpellId('Target_EscapeGrapple_Acrobatics') and IsSkillMaster('Acrobatics', 'Dexterity')) or (SpellId('Target_EscapeGrapple_Athletics') and IsSkillMaster('Athletics', 'Strength'))) and HasStatus('MAP_PENALTY_2ND', context.Source)):RollBonus(SkillCheck, 2);IF(((SpellId('Target_EscapeGrapple_Acrobatics') and not IsSkillMaster('Acrobatics', 'Dexterity')) or (SpellId('Target_EscapeGrapple_Athletics') and not IsSkillMaster('Athletics', 'Strength'))) and HasStatus('MAP_PENALTY_3RD', context.Source)):RollBonus(SkillCheck, 2);IF(((SpellId('Target_EscapeGrapple_Acrobatics') and IsSkillMaster('Acrobatics', 'Dexterity')) or (SpellId('Target_EscapeGrapple_Athletics') and IsSkillMaster('Athletics', 'Strength'))) and HasStatus('MAP_PENALTY_3RD', context.Source)):RollBonus(SkillCheck, 4);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Evasion" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e16a5d6b-7de1-41cf-8551-e0b9ad5b5e8c" />
+        <field name="Name" type="NameTableFieldDefinition" value="StifleFlames" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h737cf68ag8c99g36a1g941bg92867d5afafb" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4e15d0d5g5745g494eg9decg700b0d05f8a0" version="2" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="611a0c55-cb2d-4141-b9e6-59e2fa08d227" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_HarmonyOfFireAndWater" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="83105ca9-d908-4836-8bc0-bd6026c15124" />
+        <field name="Name" type="NameTableFieldDefinition" value="RootMagic" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h60633edegcf26g7021g5485g19a7c296f93b" version="2" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="43d4030b-f1e7-4d17-8669-8e027e62c75a" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Investigation', 'Intelligence');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_RootMagic);" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h53039da6ge8c1g9571gd90age7ee821a5431" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_GraspingVine" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingAthletics" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h523e8f44g7461g600ag6e16g1ddae7356bcb" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hdafbec3fg9c83ge41eg42e3ge238d7ba66ce" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Athletics" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="61460cfc-0080-40ec-ab32-b5241be62741" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="ConditionResult(context.Source.Intelligence &gt; 11);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Athletics);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_KnowledgeOfTheAges" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d4db6640-b1bd-42f3-bd9c-ac611ff6fdf5" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingAcrobatics" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3e3e7218g8cfbg3a2fg49fagb9dcdfce49bc" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Acrobatics" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Acrobatics);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b3ba249e-93d7-4201-8452-ce41533b188e" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingThievery" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb81688cagea6dgcfd6g82f2gcae31eb8a08f" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Thievery" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,SleightOfHand);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="dcff00bf-9878-4689-a133-5a6069953d7a" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingStealth" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h98da1611g5c6eg26aag69afg83192ee84848" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Stealth" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Stealth);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="181bfa7a-134b-44e7-b4c1-125405ffffb0" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingArcana" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h33147f8fgd271g9adegdc34g77a1c19d3455" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Arcana" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Arcana);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="26d1440e-a441-4f43-a67c-e211e87423b4" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingLore" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2e187c8cg6ce8g9cf1g14ccg9853a4edf37d" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Lore" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,History);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="31c76582-7bce-4ef5-a965-f1aba4f27388" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingOccultism" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdebce2b1g18e9gbf32g9bffg841de1a76c94" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Occultism" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Investigation);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="45f617ac-8538-44b9-adb2-1a97be0c723e" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingSociety" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2c345e84g782fg66adgcd61g46104e3f79a7" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Society" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Religion);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2934eb78-e48f-4707-838a-4a6dc874a006" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingCrafting" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0da9adb5g9ec1g3350gd353g9ed94e8f8ede" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Crafting" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Nature);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4eb64d3e-ab24-4f7c-b9fd-976c689c27a3" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingNature" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h95935d8dgfff2gaa91ge178g04627560e967" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Nature" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,AnimalHandling);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3f6206b5-6395-403c-b242-24a22325c15b" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingReligion" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf8284cacg4068g84d9g50f2gc4fbfdcdf82c" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Religion" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Insight);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a2d9dafc-746e-49a3-806e-719a670d6cda" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingMedicine" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc2a9c59bg013fga985g68c6g6cb8a8f774ba" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Medicine" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Medicine);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="be6f476a-2316-4e84-b7ff-d56ee5632354" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingSurvival" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2ca1d253g9f03gbbf5gd48bg200f19c11438" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Survival" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Survival);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2154d335-9fb6-4dec-ba20-bf453a8bbb12" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingDeception" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h45d67eb5g0ec9gb61eg3606gd8c2d2e9af55" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Deception" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Deception);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="94581c25-0318-4a71-8853-69fd366b6a04" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingIntimidation" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h92bc47a0g4c90g9784g1455gcb70cfff6eee" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Intimidation" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Intimidation);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="85cab65c-131b-4e47-922b-008379c899be" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingPerformance" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h28b2e5c0g7a85g99dcg82cdg309f66b691ac" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Performance" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Performance);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="447834f1-1a77-4ddb-a28b-24067ec59cd6" />
+        <field name="Name" type="NameTableFieldDefinition" value="SkillTrainingDiplomacy" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="269d598d-ae25-41ea-b08b-e1347e7b6b0f" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3502d3dag4919gf871g1e16g93f09cc6dbf0" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Diplomacy" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(Skill,Persuasion);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ebfad2ce-cec1-47c5-8081-ffbb0e0fc76f" />
+        <field name="Name" type="NameTableFieldDefinition" value="TerrainExpertise" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h54d7f3dcg24dfg1266g4c0agddf8e0da46cc" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h61213065g8514gf59bgbf86gebf30a20d1f1" version="1" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="ccb72dd2-b812-4029-86f7-55c1d4f0e028" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Survival', 'Wisdom');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Skill(Survival,1);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Land_Coast" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="51c73bee-862c-4886-9c75-137c1c7d0f2f" />
+        <field name="Name" type="NameTableFieldDefinition" value="VirtuosicPerformer" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he8000a51g6d4ag5c35g1901g47b796ac5569" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h81a1bf9dg2c4cgb505g53efg9086e420b0a2" version="1" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="310aebd4-df26-48d5-b5d4-3caedd9ef98f" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnProficiencyChange" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillTrained('Performance', 'Charisma');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not IsSkillExpert('Performance', 'Charisma')):Skill(Performance,1);IF(IsSkillExpert('Performance', 'Charisma')):Skill(Performance,2);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_BardicInspiration_Ability" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1622f6b1-1ae7-4ecd-92f1-ed17872bb246" />
+        <field name="Name" type="NameTableFieldDefinition" value="ArmoredStealth" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h49e9b0b0g9cacg159fg9090ga04cfb96c58e" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hefe9a5eeg6e27gbef1g156bgb473b51a0fee" version="2" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="526b1f68-b5ce-46a5-9a4d-fde2dbeb1d84" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillExpert('Stealth', 'Dexterity');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not IsSkillMaster('Stealth', 'Dexterity') and IsProficientWith(context.Source, GetActiveArmor()) and not HasPassive('Trait_Noisy') and (HasPassive('Armor_CheckPenalty_1', context.Source) or HasPassive('Armor_CheckPenalty_2', context.Source) or HasPassive('Armor_CheckPenalty_3', context.Source)) and ArmorCheck()):Skill(Stealth,1);IF(IsSkillMaster('Stealth', 'Dexterity') and IsProficientWith(context.Source, GetActiveArmor()) and not HasPassive('Trait_Noisy') and HasPassive('Armor_CheckPenalty_1', context.Source) and ArmorCheck()):Skill(Stealth,1);IF(IsSkillMaster('Stealth', 'Dexterity') and IsProficientWith(context.Source, GetActiveArmor()) and not HasPassive('Trait_Noisy') and (HasPassive('Armor_CheckPenalty_2', context.Source) or HasPassive('Armor_CheckPenalty_3', context.Source)) and ArmorCheck()):Skill(Stealth,2);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_SupremeSneak" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0bf264f9-b6c3-454b-b963-67daadf4fe91" />
+        <field name="Name" type="NameTableFieldDefinition" value="IntimidatingProwess" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd6a339c5g7d63gd090g08d3g0207633ed089" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h71fe3d29g7eb0g1de3g3090gedb7442fa840" version="2" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="756ceb94-11c4-4a15-9a05-d29f671308be" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillExpert('Intimidation', 'Charisma') and ConditionResult(context.Source.Strength &gt; 15);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not (IsSkillMaster('Intimidation', 'Charisma') and ConditionResult(context.Source.Strength &gt; 19)) and (SpellId('Target_Demoralize') or SpellId('Target_DemoralizeFree') or SpellId('Target_IntimidatingGlare'))):RollBonus(SkillCheck, 1, Intimidation);IF((IsSkillMaster('Intimidation', 'Charisma') and ConditionResult(context.Source.Strength &gt; 19)) and (SpellId('Target_Demoralize') or SpellId('Target_DemoralizeFree') or SpellId('Target_IntimidatingGlare'))):RollBonus(SkillCheck, 2, Intimidation);" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_WarPriest" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c591fbf7-eaed-400f-b732-4fa450d02b2a" />
+        <field name="Name" type="NameTableFieldDefinition" value="PowerfulLeap" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdc0f2d58g0e35g5d73g3573gbd6b6706e4a6" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h006122c7ga470g9868g638cgdeba6c59ead5" version="1" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="c6570d93-ba27-4b25-9bef-0834d78a1d30" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="JumpMaxDistanceBonus(1.5);" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillExpert('Athletics', 'Strength');" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_LongJump" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="70851137-1b20-4c03-a3f6-d2ab32dedc59" />
+        <field name="Name" type="NameTableFieldDefinition" value="BattleCry" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8f6b55f6ga920g1242g4982g52d846536323" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hee6d00d2g8d62ge28bg86c2g77e460362577" version="2" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="a4ce8634-8809-4cdc-84de-aa170a7d6973" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_Thaumaturgy" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsSkillMaster('Intimidation', 'Charisma');" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(BATTLECRY,100,1)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="03a7ba6a-930f-4c32-8a4e-6d671d241d0c" />
+        <field name="Name" type="NameTableFieldDefinition" value="KipUp" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3f46711cgbe45g9eabge109g9c3603619944" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h61d8a9bfgaa93gf994ga716g106dd47eb109" version="2" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="74181a1d-9733-45ce-b623-033ac5137411" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_LeapToYourFeet" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="IsSkillMaster('Acrobatics', 'Dexterity');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_KipUp);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="36f83fb3-f713-4822-ad3d-925e90ea7958" />
+        <field name="Name" type="NameTableFieldDefinition" value="SwiftSneak" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc79f4443g620ag8919g84e9g4c8bd202dfa2" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h77895432g041eg321eg768cg6d1c39548e2d" version="1" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="24e1c3cf-9237-469c-b329-aa45cf13fb85" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_SupremeSneak" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0ff31638-e83c-439c-817f-f54137f1636e" />
+        <field name="Name" type="NameTableFieldDefinition" value="TerrifiedRetreat" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf8e14f7dgf1d2g7208gb83cg03b90daf02bc" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6f133c27gb8feg94d8gd518g958e67ce3778" version="1" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="a4ce8634-8809-4cdc-84de-aa170a7d6973" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsSkillMaster('Intimidation', 'Charisma') and SkillCrit() and ConditionResult(context.Target.Level &lt; context.Source.Level) and (SpellId('Target_Demoralize') or SpellId('Target_DemoralizeFree') or SpellId('Target_IntimidatingGlare'));" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLEEING,100,1)" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Monster_Banite_AuraOfTerror" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -9954,7 +10394,8 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd743ecdegbcf3gb4e0ga358g5895b6b6c0d4" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h14439b7eg3b76g4326g5657gec5c53257321" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="-1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(ArmorCheck()):RollBonus(RawAbility,-1,Strength);IF(ArmorCheck()):RollBonus(RawAbility,-1,Dexterity);IF(ArmorCheck() and not HasPassive('Trait_Flexible',context.Source)):Skill(Acrobatics,-1);IF(ArmorCheck()):Skill(SleightOfHand,-1);IF(ArmorCheck() or HasPassive('Trait_Noisy',context.Source)):Skill(Stealth,-1);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(ArmorCheck()):RollBonus(RawAbility,-1,Strength);IF(ArmorCheck()):RollBonus(RawAbility,-1,Dexterity);IF(ArmorCheck() and not HasPassive('Trait_Flexible',context.Source)):Skill(Acrobatics,-1);IF(ArmorCheck()):Skill(SleightOfHand,-1);IF(ArmorCheck() or (HasPassive('Trait_Noisy',context.Source) and not (HasPassive('ArmoredStealth',context.Source) and IsSkillExpert('Stealth', 'Dexterity')))):Skill(Stealth,-1);" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9963,7 +10404,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Armor_CheckPenalty_2" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="ad1a4e77-2752-442f-9392-0ce8ccfb9d84" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="-2" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(ArmorCheck()):RollBonus(RawAbility,-2,Strength);IF(ArmorCheck()):RollBonus(RawAbility,-2,Dexterity);IF(ArmorCheck() and not HasPassive('Trait_Flexible',context.Source)):Skill(Acrobatics,-2);IF(ArmorCheck()):Skill(SleightOfHand,-2);IF(ArmorCheck() or HasPassive('Trait_Noisy',context.Source)):Skill(Stealth,-2);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(ArmorCheck()):RollBonus(RawAbility,-2,Strength);IF(ArmorCheck()):RollBonus(RawAbility,-2,Dexterity);IF(ArmorCheck() and not HasPassive('Trait_Flexible',context.Source)):Skill(Acrobatics,-2);IF(ArmorCheck()):Skill(SleightOfHand,-2);IF(ArmorCheck() or (HasPassive('Trait_Noisy',context.Source) and not (HasPassive('ArmoredStealth',context.Source) and IsSkillExpert('Stealth', 'Dexterity')))):Skill(Stealth,-2);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9972,7 +10413,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Armor_CheckPenalty_3" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="ad1a4e77-2752-442f-9392-0ce8ccfb9d84" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="-3" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(ArmorCheck()):RollBonus(RawAbility,-3,Strength);IF(ArmorCheck()):RollBonus(RawAbility,-3,Dexterity);IF(ArmorCheck() and not HasPassive('Trait_Flexible',context.Source)):Skill(Acrobatics,-3);IF(ArmorCheck()):Skill(SleightOfHand,-3);IF(ArmorCheck() or HasPassive('Trait_Noisy',context.Source)):Skill(Stealth,-3);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(ArmorCheck()):RollBonus(RawAbility,-3,Strength);IF(ArmorCheck()):RollBonus(RawAbility,-3,Dexterity);IF(ArmorCheck() and not HasPassive('Trait_Flexible',context.Source)):Skill(Acrobatics,-3);IF(ArmorCheck()):Skill(SleightOfHand,-3);IF(ArmorCheck() or (HasPassive('Trait_Noisy',context.Source) and not (HasPassive('ArmoredStealth',context.Source) and IsSkillExpert('Stealth', 'Dexterity')))):Skill(Stealth,-3);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

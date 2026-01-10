@@ -1,0 +1,92 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_TumbleThroughSpells("Target_TumbleThrough");
+KBSECTION
+//REGION Make enemies passable
+// When the character that applied Tumble Through to an NPC is
+// the actively controlled character, we need that NPC to gain
+// a status that makes them CanWalkThrough.
+IF
+StatusApplied((GUIDSTRING)_NPC, "TUMBLE_THROUGH_TARGET", (GUIDSTRING)_Character, _)
+AND
+HasActiveStatus(_Character, "TUMBLE_THROUGH_SOURCE", 1)
+THEN
+DB_ActiveTumbleThrough(_Character, _NPC);
+TimerLaunch("TumbleThroughUpdate", 100);
+
+IF
+TimerFinished("TumbleThroughUpdate")
+AND
+DB_ActiveTumbleThrough((GUIDSTRING)_Character, (GUIDSTRING)_NPC)
+AND
+GetReservedUserID((CHARACTER)_Character, (INTEGER)_User)
+AND
+GetCurrentCharacter(_User, _CurrentCharacter)
+AND
+_Character == _CurrentCharacter
+AND
+HasActiveStatus(_NPC, "TUMBLE_THROUGH_WALKABLE", 0)
+THEN
+ApplyStatus(_NPC, "TUMBLE_THROUGH_WALKABLE", -1.0, 1, (GUIDSTRING)_Character);
+
+IF
+TimerFinished("TumbleThroughUpdate")
+AND
+DB_ActiveTumbleThrough((GUIDSTRING)_Character, (GUIDSTRING)_NPC)
+AND
+GetReservedUserID((CHARACTER)_Character, (INTEGER)_User)
+AND
+GetCurrentCharacter(_User, _CurrentCharacter)
+AND
+_Character != _CurrentCharacter
+AND
+HasActiveStatus(_NPC, "TUMBLE_THROUGH_WALKABLE", 1)
+THEN
+RemoveStatus(_NPC, "TUMBLE_THROUGH_WALKABLE", (GUIDSTRING)_Character);
+
+IF
+TimerFinished("TumbleThroughUpdate")
+AND
+DB_ActiveTumbleThrough((GUIDSTRING)_Character, (GUIDSTRING)_NPC)
+AND
+HasActiveStatus(_NPC, "TUMBLE_THROUGH_TARGET", 1)
+THEN
+TimerLaunch("TumbleThroughUpdate", 100);
+
+IF
+TimerFinished("TumbleThroughUpdate")
+AND
+DB_ActiveTumbleThrough((GUIDSTRING)_Character, (GUIDSTRING)_NPC)
+AND
+HasActiveStatus(_NPC, "TUMBLE_THROUGH_TARGET", 0)
+THEN
+RemoveStatus(_NPC, "TUMBLE_THROUGH_WALKABLE", (GUIDSTRING)_Character);
+NOT DB_ActiveTumbleThrough(_Character, _NPC);
+//END_REGION
+
+//REGION Reactive Strike
+// Failing a TT check applies a status to let us trigger
+// AoO when casting TT is done.
+IF
+CastedSpell((GUIDSTRING)_Character, (STRING)_Spell, _, _, _)
+AND
+DB_TumbleThroughSpells(_Spell)
+THEN
+DB_TumbleThroughCastFinished(_Character);
+TimerLaunch("TumbleThroughCastFinished", 60);
+
+IF
+TimerFinished("TumbleThroughCastFinished")
+AND
+DB_TumbleThroughCastFinished((GUIDSTRING)_Character)
+AND
+HasActiveStatus(_Character, "TUMBLE_THROUGH_FAILED", 1)
+THEN
+NOT DB_TumbleThroughCastFinished((GUIDSTRING)_Character);
+UseSpell(_Character ,"Shout_ReactToMove", _Character , _Character, 0);
+RemoveStatus(_Character, "TUMBLE_THROUGH_FAILED");
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
