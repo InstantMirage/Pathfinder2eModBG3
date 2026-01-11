@@ -1,15 +1,25 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-DB_MovableSpells("FLAME_VORTEX_AURA", 6.6, "Target_FlameVortex_Sustain");
+DB_MovableSpells("FLAME_VORTEX_AURA", 7.0, "Target_FlameVortex_Sustain", "FLAME_VORTEX_MOVE_COMPLETE");
 KBSECTION
+// Using the BloodCloud surface, we can make spells that have summons
+// that move when sustained, passing through the battlefield applying
+// damage to every enemy they pass. See FLAME_VORTEX for example.
+IF
+StatusApplied(_, (STRING)_Status, (GUIDSTRING)_Owner, _)
+AND
+DB_MovableSpells(_Status, _, (STRING)_Spell, _)
+AND
+DB_ActiveMovableSpells((GUIDSTRING)_OldSummon, _Owner, _Spell)
+THEN
+NOT DB_ActiveMovableSpells(_OldSummon, _Owner, _Spell);
+
 IF
 StatusApplied((GUIDSTRING)_Summon, (STRING)_Status, (GUIDSTRING)_Owner, _)
 AND
-DB_MovableSpells(_Status, (REAL)_MaxMoveDistance, (STRING)_Spell)
+DB_MovableSpells(_Status, _, (STRING)_Spell, _)
 THEN
-DebugText(_Summon, "Summon");
-DebugText(_Owner, "Owner");
 DB_ActiveMovableSpells(_Summon, _Owner, _Spell);
 
 IF
@@ -17,7 +27,7 @@ UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRIN
 AND
 DB_ActiveMovableSpells((GUIDSTRING)_Summon, _Owner, _Spell)
 AND
-DB_MovableSpells(_, (REAL)_Range, _Spell)
+DB_MovableSpells(_, (REAL)_Range, _Spell, _)
 AND
 GetPosition(_Summon, (REAL)_XS, (REAL)_YS, (REAL)_ZS)
 AND
@@ -60,6 +70,15 @@ AND
 RealSum(_ZDN, _ZS, (REAL)_ZSN)
 THEN
 ItemMoveToPosition((ITEM)_Summon, _XSN, _YSN, _ZSN, 4.0, 3.0, "MovableSpellEvent");
+
+IF
+EntityEvent((GUIDSTRING)_Summon, "MovableSpellEvent")
+AND
+DB_ActiveMovableSpells(_Summon, (GUIDSTRING)_Owner, (STRING)_Spell)
+AND
+DB_MovableSpells(_, _, _Spell, (STRING)_MoveCompleteStatus)
+THEN
+ApplyStatus(_Summon, _MoveCompleteStatus, 0.0, 1, _Owner);
 EXITSECTION
 
 ENDEXITSECTION

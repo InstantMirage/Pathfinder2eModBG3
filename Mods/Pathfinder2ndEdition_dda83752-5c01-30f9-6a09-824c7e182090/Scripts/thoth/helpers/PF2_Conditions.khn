@@ -1523,37 +1523,10 @@ function TumbleThroughProximityCheck()
     target = context.Source
     source = context.Source
 
-    local enemiesSmall = GetEnemiesWithinRange(0.3, target, source)
-    if enemiesSmall ~= nil then
-        for _, entity in ipairs(enemiesSmall.Enemies) do
-            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 0) then
-                return ConditionResult(true)
-            end
-        end
-    end
-
-    local enemiesMedium = GetEnemiesWithinRange(0.5, target, source)
-    if enemiesMedium ~= nil then
-        for _, entity in ipairs(enemiesMedium.Enemies) do
-            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 1) then
-                return ConditionResult(true)
-            end
-        end
-    end
-
-    local enemiesLarge = GetEnemiesWithinRange(1.2, target, source)
-    if enemiesLarge ~= nil then
-        for _, entity in ipairs(enemiesLarge.Enemies) do
-            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 2) then
-                return ConditionResult(true)
-            end
-        end
-    end
-
-    local enemiesHuge = GetEnemiesWithinRange(2.0, target, source)
-    if enemiesHuge ~= nil then
-        for _, entity in ipairs(enemiesHuge.Enemies) do
-            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result and (entity.Size.value > 3) then
+    local enemies = GetEnemiesWithinRange(0.1, target, source)
+    if enemies ~= nil then
+        for _, entity in ipairs(enemies.Enemies) do
+            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result then
                 return ConditionResult(true)
             end
         end
