@@ -3295,7 +3295,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="TUMBLE_THROUGH_SOURCE" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSpellCast;OnCombatEnded;OnTurn" enumeration_type_name="StatusEvent" version="1" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(TUMBLE_THROUGH_CLEANUP,100,0)" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(TUMBLE_THROUGH_CLEANUP,100,0);IF(HasStatus('TUMBLE_THROUGH_PROXIMITY') and TumbleThroughProximityCheck()):ApplyStatus(TUMBLE_THROUGH_SHORT,100,0);" />
         <field name="StackId" type="StringTableFieldDefinition" value="TUMBLE_THROUGH_SOURCE" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
@@ -3320,7 +3320,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="TUMBLE_THROUGH_WALKABLE" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="CanWalkThrough(true);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="CanWalkThrough(true);CanShootThrough(true);" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="188ae949-6e46-485b-b7a8-c143a584f15e" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
@@ -3333,6 +3333,37 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="188ae949-6e46-485b-b7a8-c143a584f15e" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ef7c6fd9-29bf-4f3a-b4ce-2885ef1c5d91" />
+        <field name="Name" type="NameTableFieldDefinition" value="TUMBLE_THROUGH_PROXIMITY_TEST" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e657936f-f0e4-4983-a4f3-aeb426a8905f" />
+        <field name="StackId" type="StringTableFieldDefinition" value="TUMBLE_THROUGH_PROXIMITY_TEST" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(TumbleThroughProximityCheck()):ApplyStatus(TUMBLE_THROUGH_PROXIMITY,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1735a51b-f0e8-40cd-8197-5fca288704bd" />
+        <field name="Name" type="NameTableFieldDefinition" value="TUMBLE_THROUGH_PROXIMITY" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e657936f-f0e4-4983-a4f3-aeb426a8905f" />
+        <field name="StackId" type="StringTableFieldDefinition" value="TUMBLE_THROUGH_PROXIMITY" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('TUMBLE_THROUGH_CLEANUP')" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(TumbleThroughProximityCheck()):ApplyStatus(TUMBLE_THROUGH_SHORT,100,1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7d39f2ac-4a68-4f84-8d9e-2936a89c622f" />
+        <field name="Name" type="NameTableFieldDefinition" value="TUMBLE_THROUGH_SHORT" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e657936f-f0e4-4983-a4f3-aeb426a8905f" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
