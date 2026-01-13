@@ -11,8 +11,15 @@
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="cd839a09-936e-4b69-92b5-c003c3a2eb24" />
-        <field name="Name" type="NameTableFieldDefinition" value="AlchemyPoints" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResource(VersatileVial,2,0);ActionResource(InfusedReagent,4,0);IF(ConditionResult(context.Source.Intelligence&gt;=12)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=14)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=16)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=18)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=20)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=22)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=24)):ActionResource(InfusedReagent,1,0);" />
+        <field name="Name" type="NameTableFieldDefinition" value="AlchemicalAssessment" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_QuickAlchemy);IF(not HasPassive('OverwriteVersatileVial')):UnlockSpell(Projectile_VersatileVial);IF(ConditionResult(context.Source.Intelligence&gt;=12)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=14)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=16)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=18)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=20)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=22)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence&gt;=24)):ActionResource(InfusedReagent,1,0);" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="f162095b-3cb8-4436-bc5c-d45d37c7c13a" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdd8b7602gf9b8g5b1cgc26eg83c53cca70ab" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2b7e9db3g620dg14e5gf941g6ebe059bb15f" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted;ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="StatusId('TUT_RESTORATION') or StatusId('END_RESTORATION');" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RestoreResource(InfusedReagent,100%,0);RestoreResource(VersatileVial,100%,0)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -20,7 +27,83 @@
         <field name="UUID" type="IdTableFieldDefinition" value="3de301b4-a647-47d0-b31a-bcd1e0fcc8b8" />
         <field name="Name" type="NameTableFieldDefinition" value="VersatileVial" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb139a570g10f7g3f8bg5681gc3cdc6a24c8b" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Projectile_VersatileVial);UnlockSpell(Shout_AdvancedAlchemy);UnlockSpell(Throw_Alchemist);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(DoubleBrewFree(),ModifyUseCosts(Replace,VersatileVial,1,0,InfusedReagent));" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_AcidSplash" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Handles resource changes" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved;OnCreate;OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="HasStatus('USE_VERSATILE_VIAL') and HasActionResource('VersatileVial', 1, 0, false, false, context.Source);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="StatusId('DEBUG_RESET_MOVE') or context.HasContextFlag(StatsFunctorContext.OnTurn);" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(USE_VERSATILE_VIAL,100,-1)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ab89a95b-e905-46bd-a036-73bd45f0789b" />
+        <field name="Name" type="NameTableFieldDefinition" value="OverwriteVersatileVial" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3de301b4-a647-47d0-b31a-bcd1e0fcc8b8" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Bomber, Toxicologist" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e2fb028c-8427-4025-84f7-f8a6959bb164" />
+        <field name="Name" type="NameTableFieldDefinition" value="DoubleBrew" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="had12512bg7a01gcc7cg2cb5gff34e7b8e16c" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc138789dgfcdeg0d1ag6a1ageb9bec608cd5" version="1" />
+        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="h6cfc85a4gbf0fge646ge9cag430618d10537" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_ExperimentalAlchemy" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="TurnBased() and ThrownVialSpell();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DOUBLE_BREW);ApplyStatus(DOUBLE_BREW_DURATION_TECHNICAL,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="fbde2b83-8f77-41b4-82fb-65db3207d8c8" />
+        <field name="Name" type="NameTableFieldDefinition" value="PowerfulAlchemy" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_EmpoweredEvocation" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="73d59d05-bb42-4053-b99b-c187b33f22a2" />
+        <field name="Name" type="NameTableFieldDefinition" value="Alchemist_ThrowPotency_1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd70ed20dg45b7ga294gb3e9g44c858a4ac0f" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2449e583g7164g0fdeg5824g605a7cd41763" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_ReliableTalent" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(SpellTypeIs(SpellType.Throw) and not IsSpell()):RollBonus(Attack, 1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f0343609-0b7e-4194-a7e9-4999820d32f6" />
+        <field name="Name" type="NameTableFieldDefinition" value="Alchemist_ThrowPotency_2" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="73d59d05-bb42-4053-b99b-c187b33f22a2" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3848663dg89f1gaa7agf74bg6b44067bec81" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(SpellTypeIs(SpellType.Throw) and not IsSpell()):RollBonus(Attack, 2);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="973790e9-56b6-4520-b308-118698511229" />
+        <field name="Name" type="NameTableFieldDefinition" value="QuickBomber" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h470b0ee8ga9a0ga478g09c7gf3be3a743caf" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hbd9f95ccg9725g2a90g871fgf148de8fe119" version="1" />
+        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="hf0d6d84ag5904g212fg92f1gd77c3ed82e3b" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Throw_QuickBomber);UnlockSpellVariant(ThrownVialSpell(),ModifyUseCosts(Replace,ActionPoint,1,0,ActionPoint),ModifyTooltipDescription());" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Barbarian_FrenziedThrow" />
+        <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
