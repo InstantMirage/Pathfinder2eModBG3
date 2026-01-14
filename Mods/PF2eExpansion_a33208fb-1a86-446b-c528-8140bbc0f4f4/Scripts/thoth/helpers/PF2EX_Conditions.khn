@@ -26,5 +26,14 @@ function DoubleBrew1A()
 end
 
 function ThrownVialSpell()
-	return SpellId('Projectile_VersatileVial')
+	return SpellId('Projectile_VersatileVial')  | SpellId('Projectile_VersatileVial_Healing') | SpellId('Projectile_VersatileVial_Container') | SpellId('Projectile_VersatileVial_Acid') | SpellId('Projectile_VersatileVial_Cold') | SpellId('Projectile_VersatileVial_Lightning')  | SpellId('Projectile_VersatileVial_Fire') | SpellId('Projectile_VersatileVial_Vitality') | SpellId('Projectile_VersatileVial_Void') | SpellId('Projectile_VersatileVial_Poison')
+end
+
+--Starting formula
+function QuickAlchemyLevel(level)
+	return ConditionResult(context.Source.Level > level, {ConditionError("IsNotCharacterLevelGreaterThan")}) & HasFreeHand()
+end
+--Learned formula
+function QuickAlchemyFormula(level,status)
+	return HasStatus(status) & QuickAlchemyLevel(level)
 end
