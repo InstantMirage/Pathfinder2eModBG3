@@ -17,9 +17,9 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdd8b7602gf9b8g5b1cgc26eg83c53cca70ab" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2b7e9db3g620dg14e5gf941g6ebe059bb15f" version="1" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted;ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnStatusApply" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="StatusId('TUT_RESTORATION') or StatusId('END_RESTORATION');" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RestoreResource(InfusedReagent,100%,0);RestoreResource(VersatileVial,100%,0)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RestoreResource(InfusedReagent,100,0);RestoreResource(VersatileVial,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -32,7 +32,7 @@
         <field name="Owner" type="CommentTableFieldDefinition" value="Handles resource changes" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved;OnCreate;OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="BoostConditions" type="StringTableFieldDefinition" value="HasStatus('USE_VERSATILE_VIAL') and HasActionResource('VersatileVial', 1, 0, false, false, context.Source);" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="HasStatus('USE_VERSATILE_VIAL') and VersatileVialDifficulty();" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="StatusId('DEBUG_RESET_MOVE') or context.HasContextFlag(StatsFunctorContext.OnTurn);" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(USE_VERSATILE_VIAL,100,-1)" />

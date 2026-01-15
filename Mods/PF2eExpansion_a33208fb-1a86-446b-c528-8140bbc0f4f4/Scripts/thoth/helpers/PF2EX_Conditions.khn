@@ -2,6 +2,15 @@ local __util = require 'larian.util'
 
 -- Alchemist
 
+function VersatileVialDifficulty()
+	-- Replace Quick Alchemy resource with vial while turn-based
+	local resource = HasActionResource('VersatileVial', 1, 0, false, false, context.Source)
+	-- Will always require vials with Survivalist loot balancing, limiting use in combat 
+	local difficulty = CheckRulesetModifier('fccef0aa-8e28-4b7b-b661-c33094c5f3f7','RUTHLESS')
+	
+	return  difficulty | resource
+end
+
 function HasMutagenStatus(entity)
 	return HasElixirStatus(entity)
 end
