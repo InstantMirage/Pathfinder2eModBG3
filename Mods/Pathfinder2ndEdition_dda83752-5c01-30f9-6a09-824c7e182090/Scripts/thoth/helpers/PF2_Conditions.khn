@@ -1461,7 +1461,7 @@ end
 
 function SkillCheckModifier(skill, ability, entity)
 	entity = entity or context.Source
-	local prof = GetModifier(entity.Dexterity)
+	local prof = GetModifier(entity[ability])
 	local stat_bon = 0
 
 	if HasProficiencyBonus(Ability[ability],Skill[skill],entity).Result then
@@ -1482,6 +1482,42 @@ function SkillCheckModifier(skill, ability, entity)
 	end
 
 	return prof + stat_bon
+end
+
+-- If a skill action makes sense to use by the AI: has positive modifier
+
+function IsSkillPositive(skill, ability)
+	return ConditionResult(SkillCheckModifier(skill, ability) > 0, {ConditionError(skill .. "Trained")})
+end
+
+function SkillActionSensible(skill,ability)
+	return CanUseWeaponActions() & IsSkillPositive(skill,ability)
+end
+
+function TripSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability))
+end
+
+function GrappleSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability) & ~HasStatus('GRAPPLE_SOURCE'))
+end
+
+function DisarmSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability))
+end
+
+function TumbleThroughSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability))
+end
+
+function FeintSensible(skill,ability)
+	--Must have at least two actions to feint and attack
+	local attack = HasStatus('HASTE_ATTACK') | HasActionResource('ActionPoint', 1, 0, false, true, context.Source)
+	return Player() | (SkillActionSensible(skill,ability) & attack )
+end
+
+function DemoralizeSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability) )
 end
 
 function CounterPerformanceModifier(number)
