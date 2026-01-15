@@ -155,6 +155,9 @@ DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Supreme_PurpleWorm",9)
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingGreater_Balsam",3);
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingSuperior_YellowMuskCreeper",6);
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingSupreme_KiRinHair",12);
+
+//_Char,_Item
+DB_Alchemy_InfusedItem((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(ITEM)NULL_00000000-0000-0000-0000-000000000000);
 KBSECTION
 //REGION Automatic learning
 
@@ -235,6 +238,62 @@ AND
 HasRecipeUnlocked(_Char,_Recipe,0)
 THEN
 UnlockRecipe(_Char, _Recipe, 1);
+
+//END_REGION
+
+//REGION Destroy temporary potions
+
+IF
+StatusApplied((ITEM)_Item, "ALCH_INFUSED", (CHARACTER)_Char, _)
+THEN
+DB_Alchemy_InfusedItem(_Char,_Item);
+
+IF
+StatusRemoved((ITEM)_Item, "ALCH_INFUSED", _, _)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Char,_Item)
+THEN
+NOT DB_Alchemy_InfusedItem(_Char,_Item);
+
+
+//General cleanup: destroy items
+PROC
+PROC_CleanupAlchemicalInfusions((CHARACTER)_Char,(INTEGER)_UseDialog)
+AND
+DB_Alchemy_InfusedItem(_Char,(ITEM)_Item)
+THEN
+Die(_Item);
+
+//Restoration pod: Check for items and make dialog
+PROC
+PROC_CleanupAlchemicalInfusions((CHARACTER)_Char,(INTEGER)_UseDialog)
+AND
+_UseDialog == 1
+AND
+TaggedItemsGetCountInMagicPockets("ALCH_INFUSED_7374c8c8-d575-4e90-b1be-b9d54dc0baac",_Char,(INTEGER)_Amount)
+AND
+_Amount > 0
+AND
+PartyRemoveTaggedItems(_Char,"ALCH_INFUSED_7374c8c8-d575-4e90-b1be-b9d54dc0baac", _Amount, (INTEGER)_AmountRemoved)
+THEN
+//Remark on healing/lost items
+PROC_WildMagic_TryAD(_Char,"Shout_WildMagic_Heal");
+
+
+//Restoration pod
+IF
+StatusApplied((CHARACTER)_Char, "TUT_RESTORATION", _, _)
+AND
+QRY_AutoLearnAlchFormulas(_Char)
+THEN
+PROC_CleanupAlchemicalInfusions(_Char,1);
+
+//Respec from alchemist
+IF
+RespecCompleted((CHARACTER)_Char)
+THEN
+PROC_CleanupAlchemicalInfusions(_Char,0);
+
 
 //END_REGION
 EXITSECTION
