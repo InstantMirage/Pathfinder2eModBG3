@@ -1382,6 +1382,7 @@ end
 
 function getSkillProficiencyScore(skill, ability)
 	local score = 0
+	
 	if HasProficiencyBonus(Ability[ability],Skill[skill],context.Source).Result then
 		score = score + 1
 	end
@@ -1393,6 +1394,10 @@ function getSkillProficiencyScore(skill, ability)
 	end
 	if HasPassive(skill .. 'Increase2',context.Source).Result then
 		score = score + 1
+	end
+	-- Chirurgeon substitutes Crafting for Medicine
+	if skill == 'Medicine' and HasPassive('ChirurgeonBenefit',context.Source).Result then
+		score = math.max(score,getSkillProficiencyScore('Nature', 'Intelligence'))
 	end
 	return score
 end
@@ -1415,22 +1420,29 @@ end
 
 function MentalSpell(target)
 	target = target or context.Target
-	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Mindless")})
+	return ConditionResult((~HasAnyTags({'ZOMBIE','CREATURE_SPORE_SERVANT','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Mindless")})
 end
 
 function EmotionSpell(target)
 	target = target or context.Target
-	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Emotionless")})
+	return ConditionResult((~HasAnyTags({'ZOMBIE','CREATURE_SPORE_SERVANT','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Emotionless")})
 end
 
-function LinguisticSpell(target)
+function LinguisticSpell(target,source)
 	target = target or context.Target
-	return ConditionResult((~HasAnyTags({'CANTSPEAK'}, target)).Result, {ConditionError("LanguageBarrier")})
+	source = source or context.Source
+	local can_speak = HasNoTags({'CANTSPEAK','BEAST','PLANT'}, target)
+	local always_speak = HasAnyTags({'ILLITHID','INTELLECT_DEVOURER','NOT_MESSING_AROUND'},target) -- NOT_MESSING_AROUND has them punish crimes more harshly
+	local minion = SummonOwner(target,source)
+	local petpal = Tagged('BEAST',target) & Tagged('PETPAL',source)
+	
+	local result = (can_speak | always_speak | minion | petpal).Result
+	return ConditionResult( result, {ConditionError("LanguageBarrier")})
 end
 
 function ConcentrateSpell(source)
 	source = source or context.Source
-	return ConditionResult((~HasAnyStatus({'RAGE_MUTE'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
+	return ConditionResult((~HasAnyStatus({'RAGE_MUTE','HyponotizeStatus'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
 end
 
 function RageConcentrateSpell(source)
@@ -1440,22 +1452,28 @@ end
 
 function AuditorySpell(target)
 	target = target or context.Target
-	return ConditionResult(true, {ConditionError("CantHearSpell")})
+	local result = HasAnyStatus({'SILENCED','LOW_VoicelessPenitent_Silenced','SHA_SILENTLIBRARY_LIBRARIANSILENCE_STATUS','TWN_DISTILLERY_NUMB'}, {}, {}, target).Result
+	return ConditionResult(result, {ConditionError("CantHearSpell")})
 end
 
 function VisualSpell(target)
 	target = target or context.Target
-	return ConditionResult(true, {ConditionError("CantSeeSpell")})
+	local blind = HasStatus('SG_Blinded',target)
+	local creature_type = HasAnyTags({'SKELETON','OOZE','INTELLECT_DEVOURER','PLANT','SUMMONWITHOUTMOUTH'}, target) & ~Tagged('MYCONID')
+	local result = ( ~blind & creature_type ).Result
+	return ConditionResult(result, {ConditionError("CantSeeSpell")})
 end
 
 function OlfactorySpell(target)
 	target = target or context.Target
-	return ConditionResult(true, {ConditionError("CantSeeSpell")})
+	-- Flaming sphere, guardian of faith lack mouth
+	local result = HasNoTags({'CONSTRUCT','STONE_CREATURE','SKELETON','SUMMONWITHOUTMOUTH'}, target).Result
+	return ConditionResult( result, {ConditionError("CantSmellSpell")})
 end
 
 function FearSpell(target)
 	target = target or context.Target
-	local result = not (HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target) or IsImmuneToStatus('FEARED')).Result
+	local result = not (HasAnyTags({'ZOMBIE','CREATURE_SPORE_SERVANT','SKELETON','CONSTRUCT','OOZE'}, target) | IsImmuneToStatus('FEARED')).Result
 	return ConditionResult(result, {ConditionError("CantFear")})
 end
 
@@ -1484,40 +1502,56 @@ function SkillCheckModifier(skill, ability, entity)
 	return prof + stat_bon
 end
 
--- If a skill action makes sense to use by the AI: has positive modifier
-
-function IsSkillPositive(skill, ability)
+function IsSkillPositive(skill, ability, checkMAP)
+	if checkMAP and HasStatus('MAP_PENALTY_2ND').Result then
+		 return ConditionResult(SkillCheckModifier(skill, ability) > 4, {ConditionError(skill .. "Trained")})
+	elseif checkMAP and HasStatus('MAP_PENALTY_3RD').Result then
+		return ConditionResult(SkillCheckModifier(skill, ability) > 8, {ConditionError(skill .. "Trained")})
+	end
 	return ConditionResult(SkillCheckModifier(skill, ability) > 0, {ConditionError(skill .. "Trained")})
 end
 
-function SkillActionSensible(skill,ability)
-	return CanUseWeaponActions() & IsSkillPositive(skill,ability)
+-- If a skill action makes sense to use by the AI
+function SkillActionSensible(skill,ability,checkMAP)
+	-- Must have positive modifier
+	-- Cannot be prevented from using advanced weapon actions by difficulty/template
+	-- Goblins, bugbears, gnolls, skeletons will notably not use weapon actions
+	return IsSkillPositive(skill,ability,checkMAP) & CanUseWeaponActions() & HasNoTags({'ZOMBIE','CREATURE_SPORE_SERVANT','OOZE'})
+end
+
+-- Don't stack off-guarding skill actions
+function OffGuardTargetSensible(target,source)
+	target = target or context.Target
+	source = source or context.Source
+	return Player(source) | ~OffGuard(target,source)
 end
 
 function TripSensible(skill,ability)
-	return Player() | (SkillActionSensible(skill,ability))
+	return Player() | (SkillActionSensible(skill,ability,true))
 end
 
 function GrappleSensible(skill,ability)
-	return Player() | (SkillActionSensible(skill,ability) & ~HasStatus('GRAPPLE_SOURCE'))
+	-- Ranged enemies shouldn't try this
+	local weapon = ~(WieldingWeapon('Ammunition', false, false, context.Source) | Tagged('AI_HINT_CASTER'))
+	return Player() | (SkillActionSensible(skill,ability,true) & ~HasStatus('GRAPPLE_SOURCE') & weapon )
 end
 
 function DisarmSensible(skill,ability)
-	return Player() | (SkillActionSensible(skill,ability))
+	return Player() | (SkillActionSensible(skill,ability,true))
 end
 
 function TumbleThroughSensible(skill,ability)
-	return Player() | (SkillActionSensible(skill,ability))
+	return Player() | (SkillActionSensible(skill,ability,false))
 end
 
 function FeintSensible(skill,ability)
 	--Must have at least two actions to feint and attack
-	local attack = HasStatus('HASTE_ATTACK') | HasActionResource('ActionPoint', 1, 0, false, true, context.Source)
-	return Player() | (SkillActionSensible(skill,ability) & attack )
+	local attack = HasActionResource('ActionPoint', 2, 0, false, true, context.Source) | HasStatus('HASTE_ATTACK') | HasPassive('Scoundrel_Feint')
+	return Player() | (SkillActionSensible(skill,ability,false) & attack )
 end
 
 function DemoralizeSensible(skill,ability)
-	return Player() | (SkillActionSensible(skill,ability) )
+	return Player() | (SkillActionSensible(skill,ability,false))
 end
 
 function CounterPerformanceModifier(number)
