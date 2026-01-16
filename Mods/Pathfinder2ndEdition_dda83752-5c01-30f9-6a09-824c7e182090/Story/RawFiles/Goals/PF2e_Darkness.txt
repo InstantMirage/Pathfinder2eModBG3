@@ -557,12 +557,68 @@ ApplyStatus(_Character, "HIDE_NPC_DC", _DCReal, 1, _Character);
 NOT DB_HideCalculationNPC(_Character, _DC, _HideDCString, _HideFinalString);
 //END_REGION
 
-//REGION Faerie Fire
-// Faerie fire interactions are complex because they usually
-// disavle concealed, but for an invisible character make them
-// not invisible but only concealed. We use a technical status
-// that is applied alongside invisible statuses to achieve this.
+//REGION Flat Check Countering Conditions
+// If we use Counterspell as our means of cancelling spells that fail
+// their flat checks, we lose all functors of the spell, even those
+// that consume a status on the user or deplete some other status-based
+// resource. Instead, we want to manually block damage and certain
+// conditions. Thankfully, SG_Condition exists to identify statuses that
+// are broadly bad.
 
+// Wipe DB of tracked statuses whenever a new spell is cast, specific to
+// that combination of caster and target.
+IF
+UsingSpellOnTarget((GUIDSTRING)_Caster, (GUIDSTRING)_Target, _, _, _, _)
+AND
+DB_FlatCheckStatusesToClear(_Caster, _Target, (STRING)_Status)
+THEN
+NOT DB_FlatCheckStatusesToClear(_Caster, _Target, _Status);
+
+// If a condition status is added to a character by a caster, add
+// it to the DB if they have not already reacted.
+IF
+StatusApplied((GUIDSTRING)_Target, (STRING)_Status, (GUIDSTRING)_Caster, _)
+AND
+IsStatusFromGroup(_Status, "SG_Condition", 1)
+AND
+NOT DB_FlatCheckImmune(_Caster, _Target)
+THEN
+DB_FlatCheckStatusesToClear(_Caster, _Target, _Status);
+
+// If the reaction has already fired (FLAT_CHECK_IMMUNITY), remove
+// the status immediately.
+IF
+StatusApplied((GUIDSTRING)_Target, (STRING)_Status, (GUIDSTRING)_Caster, _)
+AND
+IsStatusFromGroup(_Status, "SG_Condition", 1)
+AND
+DB_FlatCheckImmune(_Caster, _Target)
+THEN
+RemoveStatus(_Target, _Status, _Target);
+
+// Immunity is applied from the caster using a SWAP intermediate status.
+// Add to a DB to track source.
+IF
+StatusApplied((GUIDSTRING)_Target, "FLAT_CHECK_IMMUNITY", (GUIDSTRING)_Caster, _)
+THEN
+DB_FlatCheckImmune(_Caster, _Target);
+
+// When applied, remove any previously received conditions.
+IF
+StatusApplied((GUIDSTRING)_Target, "FLAT_CHECK_IMMUNITY", (GUIDSTRING)_Caster, _)
+AND
+DB_FlatCheckStatusesToClear(_Caster, _Target, (STRING)_Status)
+THEN
+RemoveStatus(_Target, _Status, _Target);
+NOT DB_FlatCheckStatusesToClear(_Caster, _Target, _Status);
+
+// The immunity status will expire, at which point we clear the DB.
+IF
+StatusRemoved((GUIDSTRING)_Target, "FLAT_CHECK_IMMUNITY", _, _)
+AND
+DB_FlatCheckImmune((GUIDSTRING)_Caster, _Target)
+THEN
+NOT DB_FlatCheckImmune(_Caster, _Target);
 
 //END_REGION
 EXITSECTION
