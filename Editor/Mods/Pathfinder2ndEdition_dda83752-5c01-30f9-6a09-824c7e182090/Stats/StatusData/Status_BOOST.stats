@@ -2841,6 +2841,26 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5cd414c1-cb01-4bc5-882c-a06cb027edfe" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAT_CHECK_IMMUNITY_APPLY" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1baf8296-f93f-471c-b5f7-84464cd27436" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SWAP,FLAT_CHECK_IMMUNITY,100,0)" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0f72a5a1gc1f1g38e8g2574g0cdffcb99069" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1baf8296-f93f-471c-b5f7-84464cd27436" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAT_CHECK_IMMUNITY" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Resistance(All, Immune);" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf8cfd23bg8eadg9966g8677g031d320993cd" version="2" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="03f2ba03-f0c8-4769-ac64-fdb2dc9bb73a" />
@@ -3132,6 +3152,7 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="Unarmed()" />
+        <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Helpable_Condition;SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3295,7 +3316,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="TUMBLE_THROUGH_SOURCE" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSpellCast;OnCombatEnded;OnTurn" enumeration_type_name="StatusEvent" version="1" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(TUMBLE_THROUGH_CLEANUP,100,0)" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(TUMBLE_THROUGH_CLEANUP,100,0);IF(HasStatus('TUMBLE_THROUGH_PROXIMITY') and TumbleThroughProximityCheck()):ApplyStatus(TUMBLE_THROUGH_SHORT,100,0);" />
         <field name="StackId" type="StringTableFieldDefinition" value="TUMBLE_THROUGH_SOURCE" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
@@ -3320,7 +3341,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="TUMBLE_THROUGH_WALKABLE" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="CanWalkThrough(true);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="CanWalkThrough(true);CanShootThrough(true);" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="188ae949-6e46-485b-b7a8-c143a584f15e" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
@@ -3333,6 +3354,37 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="188ae949-6e46-485b-b7a8-c143a584f15e" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ef7c6fd9-29bf-4f3a-b4ce-2885ef1c5d91" />
+        <field name="Name" type="NameTableFieldDefinition" value="TUMBLE_THROUGH_PROXIMITY_TEST" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e657936f-f0e4-4983-a4f3-aeb426a8905f" />
+        <field name="StackId" type="StringTableFieldDefinition" value="TUMBLE_THROUGH_PROXIMITY_TEST" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(TumbleThroughProximityCheck()):ApplyStatus(TUMBLE_THROUGH_PROXIMITY,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1735a51b-f0e8-40cd-8197-5fca288704bd" />
+        <field name="Name" type="NameTableFieldDefinition" value="TUMBLE_THROUGH_PROXIMITY" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e657936f-f0e4-4983-a4f3-aeb426a8905f" />
+        <field name="StackId" type="StringTableFieldDefinition" value="TUMBLE_THROUGH_PROXIMITY" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('TUMBLE_THROUGH_CLEANUP')" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(TumbleThroughProximityCheck()):ApplyStatus(TUMBLE_THROUGH_SHORT,100,1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7d39f2ac-4a68-4f84-8d9e-2936a89c622f" />
+        <field name="Name" type="NameTableFieldDefinition" value="TUMBLE_THROUGH_SHORT" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e657936f-f0e4-4983-a4f3-aeb426a8905f" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -8518,8 +8570,8 @@
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value=";" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value=";" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Constitution,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(5d10,Slashing,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((5d10)*2,Slashing,Magical);&#xD;&#xA;IF(Tagged('METAL')):ApplyStatus(PERSIST_SLASHING_1D4,100,-1);" />
-        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((5d10)/2,Slashing,Magical);&#xD;&#xA;IF(not SaveCritMiss('Fort') and Tagged('METAL')):ApplyStatus(PERSIST_SLASHING_1D4,100,-1);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(5d10,Slashing,Magical);IF(SaveCrit()):DealDamage((5d10)*2,Slashing,Magical);IF(Tagged('METAL')):ApplyStatus(PERSIST_SLASHING_1D4,100,-1);" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((5d10)/2,Slashing,Magical);IF(not SaveCritMiss('Fort') and Tagged('METAL')):ApplyStatus(PERSIST_SLASHING_1D4,100,-1);" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CONCEALED);Tag(CONCEALED_TO_DARKVISION);Tag(CONCEALED_TO_GREATER_DARKVISION);Tag(DAZZLED);" />
@@ -8533,8 +8585,8 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="6" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(6d10,Slashing)" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(6d10,Slashing)" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d10,Slashing,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((6d10)*2,Slashing,Magical);&#xD;&#xA;IF(Tagged('METAL')):ApplyStatus(PERSIST_SLASHING_2D4,100,-1);" />
-        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((6d10)/2,Slashing,Magical);&#xD;&#xA;IF(not SaveCritMiss('Fort') and Tagged('METAL')):ApplyStatus(PERSIST_SLASHING_2D4,100,-1);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d10,Slashing,Magical);IF(SaveCrit()):DealDamage((6d10)*2,Slashing,Magical);IF(Tagged('METAL')):ApplyStatus(PERSIST_SLASHING_2D4,100,-1);" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((6d10)/2,Slashing,Magical);IF(not SaveCritMiss('Fort') and Tagged('METAL')):ApplyStatus(PERSIST_SLASHING_2D4,100,-1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8582,10 +8634,10 @@
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(2d10,Slashing,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((2d10)*2,Slashing,Magical);" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(2d10,Slashing,Magical);IF(SaveCrit()):DealDamage((2d10)*2,Slashing,Magical);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((2d10)/2,Slashing,Magical);" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(2d10,Slashing,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((2d10)*2,Slashing,Magical);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(2d10,Slashing,Magical);IF(SaveCrit()):DealDamage((2d10)*2,Slashing,Magical);" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((2d10)/2,Slashing,Magical);" />
       </fields>
     </stat_object>
@@ -8597,9 +8649,9 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="6" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(3d10,Slashing)" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(3d10,Slashing)" />
-        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d10,Slashing,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((3d10)*2,Slashing,Magical);" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d10,Slashing,Magical);IF(SaveCrit()):DealDamage((3d10)*2,Slashing,Magical);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((2d10)/2,Slashing,Magical);" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d10,Slashing,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((3d10)*2,Slashing,Magical);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d10,Slashing,Magical);IF(SaveCrit()):DealDamage((3d10)*2,Slashing,Magical);" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((2d10)/2,Slashing,Magical);" />
       </fields>
     </stat_object>
@@ -9491,7 +9543,7 @@
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Suffocating" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Constitution,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);&#xD;&#xA;ApplyStatus(DAZZLED_APPLY,100,1);&#xD;&#xA;DealDamage(2d4,Fire,Magical)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);ApplyStatus(DAZZLED_APPLY,100,1);DealDamage(2d4,Fire,Magical)" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((2d4)/2,Fire,Magical)" />
       </fields>
     </stat_object>
@@ -9501,7 +9553,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AshCloudAura_Status_Rank3" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5a557cd1-4b72-484c-9bf5-03d5c7ee4e5c" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);&#xD;&#xA;ApplyStatus(DAZZLED_APPLY,100,1);&#xD;&#xA;DealDamage(3d4,Fire,Magical)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);ApplyStatus(DAZZLED_APPLY,100,1);DealDamage(3d4,Fire,Magical)" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((3d4)/2,Fire,Magical)" />
       </fields>
     </stat_object>
@@ -9511,7 +9563,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AshCloudAura_Status_Rank4" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5a557cd1-4b72-484c-9bf5-03d5c7ee4e5c" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="4" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);&#xD;&#xA;ApplyStatus(DAZZLED_APPLY,100,1);&#xD;&#xA;DealDamage(4d4,Fire,Magical)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);ApplyStatus(DAZZLED_APPLY,100,1);DealDamage(4d4,Fire,Magical)" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((4d4)/2,Fire,Magical)" />
       </fields>
     </stat_object>
@@ -9521,7 +9573,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AshCloudAura_Status_Rank5" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5a557cd1-4b72-484c-9bf5-03d5c7ee4e5c" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="5" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);&#xD;&#xA;ApplyStatus(DAZZLED_APPLY,100,1);&#xD;&#xA;DealDamage(5d4,Fire,Magical)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);ApplyStatus(DAZZLED_APPLY,100,1);DealDamage(5d4,Fire,Magical)" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((5d4)/2,Fire,Magical)" />
       </fields>
     </stat_object>
@@ -9531,7 +9583,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AshCloudAura_Status_Rank6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5a557cd1-4b72-484c-9bf5-03d5c7ee4e5c" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="6" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);&#xD;&#xA;ApplyStatus(DAZZLED_APPLY,100,1);&#xD;&#xA;DealDamage(6d4,Fire,Magical)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(SaveCrit()):ApplyStatus(BLINDNESS,100,1);ApplyStatus(DAZZLED_APPLY,100,1);DealDamage(6d4,Fire,Magical)" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((6d4)/2,Fire,Magical)" />
       </fields>
     </stat_object>
@@ -10178,10 +10230,10 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d8,Acid,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((3d8)*2,Acid,Magical);" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d8,Acid,Magical);IF(SaveCrit()):DealDamage((3d8)*2,Acid,Magical);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((3d8)/2,Acid,Magical)" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d8,Acid,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((3d8)*2,Acid,Magical);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d8,Acid,Magical);IF(SaveCrit()):DealDamage((3d8)*2,Acid,Magical);" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((3d8)/2,Acid,Magical)" />
       </fields>
     </stat_object>
@@ -10207,10 +10259,10 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2c20ddadg013fgf8aaga7bcgd92d54941be2" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="CorrosiveMuck_Damage" />
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(8d6,Acid,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((8d6)*2,Acid,Magical);" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(8d6,Acid,Magical);IF(SaveCrit()):DealDamage((8d6)*2,Acid,Magical);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((8d6)/2,Acid,Magical)" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(8d6,Acid,Magical);&#xD;&#xA;IF(SaveCrit()):DealDamage((8d6)*2,Acid,Magical);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(8d6,Acid,Magical);IF(SaveCrit()):DealDamage((8d6)*2,Acid,Magical);" />
         <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((8d6)/2,Acid,Magical)" />
       </fields>
     </stat_object>
@@ -12132,16 +12184,6 @@
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Surface" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="ManagedStatusEffectType" type="EnumerationTableFieldDefinition" value="Negative" enumeration_type_name="ManagedStatusEffectType" version="1" />
         <field name="ManagedStatusEffectGroup" type="GuidObjectTableFieldDefinition" value="d787f666-8ee6-4185-9365-6aac9ebe76ae" />
-      </fields>
-    </stat_object>
-    <stat_object is_substat="false">
-      <fields>
-        <field name="UUID" type="IdTableFieldDefinition" value="4b6d7f6f-6f90-4640-a0fa-df4e72564429" />
-        <field name="Name" type="NameTableFieldDefinition" value="FlameVortex_Free" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hda5e23d8g803cg5137gb793g6d8be1a333a6" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1b5cbdcbgb14bg9129g864cg018da98bc4ae" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_FlameStrike" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlameVortex_FreeCast);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14564,6 +14606,291 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasSavingThrowWithAbility(Ability.Dexterity) and HasSpellFlag(SpellFlags.Spell) and not HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_1SAVES', 'CIRC_BON_2REFLEX', 'CIRC_BON_1REFLEX'}, context.Target)):RollBonus(SavingThrow,2,Dexterity);IF(HasSavingThrowWithAbility(Ability.Dexterity) and HasSpellFlag(SpellFlags.Spell) and not HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_2REFLEX'}, context.Target) and HasAnyTags({'CIRC_BON_1SAVES', 'CIRC_BON_1REFLEX'}, context.Target)):RollBonus(SavingThrow,1,Dexterity);IF(HasSavingThrowWithAbility(Ability.Constitution) and HasSpellFlag(SpellFlags.Spell) and not HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_1SAVES', 'CIRC_BON_2FORT', 'CIRC_BON_1FORT'}, context.Target)):RollBonus(SavingThrow,2,Constitution);IF(HasSavingThrowWithAbility(Ability.Constitution) and HasSpellFlag(SpellFlags.Spell) and not HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_2FORT'}, context.Target) and HasAnyTags({'CIRC_BON_1SAVES', 'CIRC_BON_1FORT'}, context.Target)):RollBonus(SavingThrow,1,Constitution);IF(HasSavingThrowWithAbility(Ability.Wisdom) and HasSpellFlag(SpellFlags.Spell) and not HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_1SAVES', 'CIRC_BON_2WILL', 'CIRC_BON_1WILL'}, context.Target)):RollBonus(SavingThrow,2,Wisdom);IF(HasSavingThrowWithAbility(Ability.Wisdom) and HasSpellFlag(SpellFlags.Spell) and not HasAnyTags({'CIRC_BON_2SAVES', 'CIRC_BON_2WILL'}, context.Target) and HasAnyTags({'CIRC_BON_1SAVES', 'CIRC_BON_1FORTWILL'}, context.Target)):RollBonus(SavingThrow,1,Wisdom);" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5afb5b14-9f01-4419-aff3-d76cbc145c12" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_AURA" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="2fbb447a-4a53-4cda-9d61-e4e8f9367238" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h06e2e42cgbe7bg4632g9c95g8f04bddac24e" version="1" />
+        <field name="SoundLoop" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="SoundStop" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLAME_VORTEX_AURA" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="AuraRadius" type="IntegerTableFieldDefinition" value="2" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(FLAME_VORTEX_DAMAGE_APPLY,100,0);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator;TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="a4aefae4-51ce-4e67-afa1-c329e6357f31" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSourceStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('FLAME_VORTEX_CLEANUP',context.Source)" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(7.0,1,BloodCloud)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(7.0,1,BloodCloud);" />
+        <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="DangerousForPathfinding" enumeration_type_name="AuraFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0e3e742b-505a-49e3-8369-b54b73bf3280" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_DAMAGE_APPLY" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he7c8abcag85a3g5a7agbf04g6b99bcbf7a8c" version="2" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLAME_VORTEX_DAMAGE,100,1);" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(3d6,Fire);DealDamage(3d4,Bludgeoning)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceConsumeMultiplier(Movement, 2,0);MovementSpeedLimit(Walk);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="baf54711-1d7e-41d6-a231-10d3c9b9eeb7" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_DAMAGE" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h93eb975dgfc64gda46g8a2bg64bfaba88c1b" version="3" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLAME_VORTEX_DAMAGE" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndRound" enumeration_type_name="TickType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;TickingWithSource;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(3d6,Fire);AI_ONLY:DealDamage(3d4,Bludgeoning);" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d6,Fire,Magical);IF(not SaveCrit()):DealDamage(3d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((3d6)*2,Fire,Magical);IF(SaveCrit()):DealDamage((3d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(3d6/2,Fire,Magical);IF(not SaveCritMiss('Reflex')):DealDamage(3d4/2,Bludgeoning,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4b6d7f6f-6f90-4640-a0fa-df4e72564429" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_SUSTAIN" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hda5e23d8g803cg5137gb793g6d8be1a333a6" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1b5cbdcbgb14bg9129g864cg018da98bc4ae" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_FlameStrike" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlameVortex_Sustain);" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLAME_VORTEX_SUSTAIN" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLAME_VORTEX_SUSTAINED',context.Source)):RemoveStatus(FLAME_VORTEX_SUSTAIN);" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLAME_VORTEX_CLEANUP,100,0)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="bb07f8d3-ed1a-4564-8c71-81058881334d" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_SUSTAINED" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbd9c11d1g2c36g5609g8de1g5df46b520f44" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLAME_VORTEX_SUSTAINED" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9ad5702a-7217-4383-95ee-c540535de378" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_MOVE_COMPLETE" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(7.0,1,BloodCloud);" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h85c39839g7751g946egd425g309502a26b4a" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6e23b0c7-0fc4-459a-8157-35018862fbe2" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_CLEANUP" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h505dd283g0b39gcb4cg8647gf7fa948bd1de" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a4fea708-1bd3-4b67-8a29-201b0bf1b05b" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_AURA" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5afb5b14-9f01-4419-aff3-d76cbc145c12" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfa83f91ega8d2g5ae2geb29g1a1491e0e69c" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_AURA" />
+        <field name="AuraRadius" type="IntegerTableFieldDefinition" value="1" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(FLOATING_FLAME_DAMAGE_APPLY,100,0);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('FLOATING_FLAME_CLEANUP',context.Source)" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(3.5,1,BloodCloud)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(3.5,1,BloodCloud);" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="088ec2fe-91c6-41af-9836-1934985a7f08" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="98f15fb1-c94d-4de5-9935-4689e02a463b" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_3_AURA" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a4fea708-1bd3-4b67-8a29-201b0bf1b05b" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="96832bc3-e988-4515-adc3-76a819a751b9" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_4_AURA" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a4fea708-1bd3-4b67-8a29-201b0bf1b05b" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1c0db26b-25e9-4fe8-b10e-ea447c9f90b5" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_5_AURA" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a4fea708-1bd3-4b67-8a29-201b0bf1b05b" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="4" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f50fcb8d-25e7-49ad-993d-3e20b1970c40" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_6_AURA" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a4fea708-1bd3-4b67-8a29-201b0bf1b05b" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="5" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8074b51c-80fa-4716-b81d-07f1017e0ee4" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_DAMAGE_APPLY" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="0e3e742b-505a-49e3-8369-b54b73bf3280" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3e2cfea9g8c87g0582ga77bg0ac347409771" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(3d6,Fire)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('FLOATING_FLAME_AURA',context.Source)):ApplyStatus(FLOATING_FLAME_DAMAGE,100,1);IF(HasStatus('FLOATING_FLAME_3_AURA',context.Source)):ApplyStatus(FLOATING_FLAME_3_DAMAGE,100,1);IF(HasStatus('FLOATING_FLAME_4_AURA',context.Source)):ApplyStatus(FLOATING_FLAME_4_DAMAGE,100,1);IF(HasStatus('FLOATING_FLAME_5_AURA',context.Source)):ApplyStatus(FLOATING_FLAME_5_DAMAGE,100,1);IF(HasStatus('FLOATING_FLAME_6_AURA',context.Source)):ApplyStatus(FLOATING_FLAME_6_DAMAGE,100,1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="de0609fc-6be0-4cf9-b9e8-a28f528613c4" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_DAMAGE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="baf54711-1d7e-41d6-a231-10d3c9b9eeb7" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h747e3941geb0fg47abg9370gee9ee00f2c14" version="2" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_DAMAGE" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(3d6,Fire)" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d6,Fire,Magical);IF(SaveCrit()):DealDamage((3d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(3d6/2,Fire,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="912a677f-e3d4-4bbc-b26e-5ae030d01532" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_3_DAMAGE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="de0609fc-6be0-4cf9-b9e8-a28f528613c4" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(4d6,Fire)" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(4d6,Fire,Magical);IF(SaveCrit()):DealDamage((4d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(4d6/2,Fire,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="abe235a9-aa33-43b5-9eb2-9a4caaa85191" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_4_DAMAGE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="de0609fc-6be0-4cf9-b9e8-a28f528613c4" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(5d6,Fire)" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(5d6,Fire,Magical);IF(SaveCrit()):DealDamage((5d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(5d6/2,Fire,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2db26669-0d91-4bc0-bd0f-fc98a4e9b79a" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_5_DAMAGE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="de0609fc-6be0-4cf9-b9e8-a28f528613c4" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(6d6,Fire)" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d6,Fire,Magical);IF(SaveCrit()):DealDamage((6d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(6d6/2,Fire,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7eaec533-f9c3-4c6b-95d8-1b87ebca2829" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_6_DAMAGE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="de0609fc-6be0-4cf9-b9e8-a28f528613c4" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(7d6,Fire)" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(7d6,Fire,Magical);IF(SaveCrit()):DealDamage((7d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(7d6/2,Fire,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_SUSTAIN" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="4b6d7f6f-6f90-4640-a0fa-df4e72564429" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha308ef39g8f85gd617g880agbb55f932fd50" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hbf57e775gb4c7gd571g3229ga6ddb9edd223" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_FlamingSphere" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_SUSTAIN" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_Sustain);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_SUSTAIN);" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLOATING_FLAME_CLEANUP,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="42ff28e2-a51f-4860-978c-edd7f5fc386e" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_3_SUSTAIN" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_3_Sustain);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_3_SUSTAIN);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0105be93-faa4-41e7-b1bb-fd61aa37af8a" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_4_SUSTAIN" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_4_Sustain);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_4_SUSTAIN);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3dfb313b-f914-4499-a9e0-2fb7c9e933d8" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_5_SUSTAIN" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="4" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_5_Sustain);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_5_SUSTAIN);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="728a8515-d66f-4f8d-b1ba-f67f69e603eb" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_6_SUSTAIN" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="5" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_6_Sustain);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_6_SUSTAIN);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5d841079-9f99-4e18-8d46-38d8616c7966" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_SUSTAINED" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="bb07f8d3-ed1a-4564-8c71-81058881334d" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_SUSTAINED" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ad23f405-79d0-4a80-bfc2-1766a532fa52" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_MOVE_COMPLETE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="9ad5702a-7217-4383-95ee-c540535de378" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(3.5,1,BloodCloud);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4b8f42d6-e93e-48e3-b317-8256d8d18947" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_CLEANUP" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="6e23b0c7-0fc4-459a-8157-35018862fbe2" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
