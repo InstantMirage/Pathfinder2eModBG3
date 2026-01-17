@@ -782,7 +782,7 @@ end
 
 function CanPrecisionDamage(target)
 	target = target or context.Target
-	local result = ~(Tagged('OOZE',target)|Tagged('SHADOW',target)|Tagged('GHOST',target)|Tagged('DISPLACER_BEAST',target)|Tagged('SCRYING_EYE',target)|Tagged('GASEOUS_FORM',target)|HasPassive('Ethereal',target))
+	local result = ~HasAnyTags({'OOZE','SHADOW','GHOST','DISPLACER_BEAST','SCRYING_EYE','GASEOUS_FORM','Ethereal'}, target)
 	
 	return ConditionResult( result.Result,{ConditionError("PrecisionImmune")})
 end
