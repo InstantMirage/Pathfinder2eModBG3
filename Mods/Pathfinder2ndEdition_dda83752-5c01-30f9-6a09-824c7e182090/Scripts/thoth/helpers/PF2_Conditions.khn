@@ -1561,3 +1561,9 @@ function TumbleThroughProximityCheck()
 
     return ConditionResult(false)
 end
+
+-- Base mod override, as SG_Restrained should not block reactions, 
+function IsAbleToReact(entity)
+    local entity = entity or context.Target
+    return ~HasAnyStatus({'SG_Fleeing','SG_Incapacitated','SG_Stunned','SG_Unconscious','RESTRAINED'}, {}, {}, entity) & ~Dead(entity) & ~(Self(context.Target, entity) & IsKillingBlow())
+end
