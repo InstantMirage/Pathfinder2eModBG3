@@ -68,55 +68,79 @@ data "Boosts" "IF(SpellTypeIs(SpellType.Throw) and not IsSpell()):RollBonus(Atta
 new entry "Bomber_Benefit"
 type "PassiveData"
 using "SculptSpells"
+data "DisplayName" "h6b75d14cgf3beg3976g1409g68f22ff86c83;1"
+data "Description" "h7b230bbcgda9fg7873gaa4fgca3073df8e4f;1"
 data "Icon" "PassiveFeature_Generic_Explosion"
 
 new entry "Bomber_Discovery"
 type "PassiveData"
+data "DisplayName" "h37441c7dgee16g2da8g8b23g5a646a9ba404;1"
+data "Description" "h741c6302g62d9g2329ga06dgf69c2a62d28a;1"
 data "Icon" "PassiveFeature_EmpoweredEvocation"
 
 new entry "Chirurgeon_Benefit"
 type "PassiveData"
+data "DisplayName" "ha40381cagaa83gba87g5ed7g8bac5deb549f;1"
+data "Description" "hb112cfccg71b5g4afegf030g8325e1d4a886;1"
 data "Icon" "PassiveFeature_Tough"
 data "Properties" "Highlighted"
-data "Boosts" "IF(ConditionResult(IntelligenceModifier > WisdomModifier)):Skill(Medicine,IntelligenceModifier - WisdomModifier);IF(IsSkillExpert('Nature','Intelligence') and not IsSkillExpert('Medicine','Wisdom',true)):Skill(Medicine(2));IF(IsSkillMaster('Nature','Intelligence') and not IsSkillMaster('Medicine','Wisdom',true)):Skill(Medicine(2));IF(IsSkillLegend('Nature','Intelligence') and not IsSkillLegend('Medicine','Wisdom',true)):Skill(Medicine(2));"
+data "Boosts" "IF(ConditionResult(context.Source.Intelligence > context.Source.Wisdom)):Skill(Medicine,IntelligenceModifier - WisdomModifier);IF(IsSkillExpert('Nature','Intelligence') and not IsSkillExpert('Medicine','Wisdom',true)):Skill(Medicine,2);IF(IsSkillMaster('Nature','Intelligence') and not IsSkillMaster('Medicine','Wisdom',true)):Skill(Medicine,2);IF(IsSkillLegend('Nature','Intelligence') and not IsSkillLegend('Medicine','Wisdom',true)):Skill(Medicine,2);"
 
 new entry "Chirurgeon_Discovery"
 type "PassiveData"
-data "Icon" "Action_Cleric_PreserveLife"
+data "DisplayName" "h86a39c50g500agd1bcgc6c0g516918bc990f;1"
+data "Description" "h8886d476g4e5ega443g2ef0g52cbc4b7afd6;1"
+data "Icon" "Spell_Abjuration_LesserRestoration"
 
 new entry "Chirurgeon_Advanced"
 type "PassiveData"
-data "Icon" "PassiveFeature_DiscipleOfLife"
+data "DisplayName" "h1e0613b1g5515ge115g19e0g7848db446d56;1"
+data "Description" "heddac2e3g162eg501egd279ge247ea08dd58;1"
+data "Icon" "Spell_Abjuration_GreaterRestoration"
 
 new entry "Toxicologist_Benefit"
 type "PassiveData"
 using "ElementalAdept_Acid"
+data "DisplayName" "h66c41210g1dfdgbe5bgabecg2ccd4dc3cbeb;1"
+data "Description" "h6582be19gc928g19c4g4376g9dec0dd291dc;1"
 data "Icon" "Action_MagicItem_PoisonLethality"
 data "Boosts" "IgnoreResistance(Poison,Resistant);IgnoreResistance(Poison,Immune);"
 
 new entry "Toxicologist_Benefit_Dip"
 type "PassiveData"
+data "DisplayName" "h9f6b25f7g8b7fg7f44g81a4gd1b7abd9a748;1"
+data "Description" "he1a80742g671bgc8d5gbc86g0310c20c42db;1"
 data "Icon" "Action_Dip"
+data "Boosts" "UnlockSpellVariant(SpellId('Target_Dip'),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint));"
 
 new entry "Toxicologist_Advanced"
 type "PassiveData"
+data "DisplayName" "h218a5c7eg96d1g03a0g3bd4gcb7fa4b7922f;1"
+data "Description" "hf513963dgb9c7g14a2gd228g6698927b53f5;1"
 data "Icon" "Action_DippedPoison_Melee"
 
 new entry "Mutagenist_Benefit"
 type "PassiveData"
+data "DisplayName" "hf925f11ag13b1gb178g0d10g9ee03a7835a7;1"
+data "Description" "h4b3f1686ge97dg1561ga5c6gab9d6914ecb9;1"
 data "Icon" "Action_Monk_StillnessOfMind"
 
 new entry "Mutagenist_Discovery"
 type "PassiveData"
+data "DisplayName" "haa7051bfg62f9gb308g720eg55743842dfab;1"
+data "Description" "hd9c33bedg4bb4gc5c8g9834g5c3f650e990a;1"
 data "Icon" "Action_Monster_Slayer_DismissSlayer"
 
 new entry "AlchemicalFamiliar"
 type "PassiveData"
 using "Familiar"
 
-new entry "ClottingElixir"
+new entry "ClottingElixirs"
 type "PassiveData"
+data "DisplayName" "h89e80e62g7cbag7ea8g82c0g0d5254b13d40;1"
+data "Description" "he166241fg0263g9b3bgf2f3g0ef3c299d3b6;1"
 data "Icon" "Action_Mag_Bloodfeeding"
+data "Properties" "Highlighted"
 
 new entry "FarLobber"
 type "PassiveData"
@@ -133,7 +157,24 @@ data "Boosts" "UnlockSpell(Throw_QuickBomber);UnlockSpellVariant(ThrownVialSpell
 
 new entry "QuarrelPoisoner"
 type "PassiveData"
+data "DisplayName" "h86180733gb6b6gd8c2g45f8gbf3c2c0af972;1"
+data "Description" "h148748e0g215dg13d4gfe43gf08cc1c6ad1c;1"
+data "ExtraDescription" "h2d41ffb5gd1c7g0c5eg3cf7gc0bf2b6caaee;1"
 data "Icon" "Action_DippedPoison_Ranged"
+data "Properties" "Highlighted"
+data "BoostContext" "OnEquip;OnTurn;OnCreate;OnAttack"
+data "BoostConditions" "IsWeaponOfProficiencyGroup('HandCrossbows', GetItemInEquipmentSlot(EquipmentSlot.RangedMainHand));"
+data "Boosts" "UnlockSpellVariant(QuarrelPoisonerSpell(),ModifySpellFlags(Stealth,1));"
+data "StatsFunctorContext" "OnAttack"
+data "Conditions" "IsWeaponOfProficiencyGroup('HandCrossbows',GetAttackWeapon());"
+data "StatsFunctors" "IF(HasStatus('HIDDEN',context.Source)):ApplyStatus(HIDE_RECHECK);
+IF(BlowgunPoisoner('POISON_SIMPLE_DIPPED')):ApplyStatus(POISON_SIMPLE_TECHNICAL_APPLIER); IF(BlowgunPoisoner('POISON_SIMPLE_DIPPED',true)):ApplyStatus(POISON_SIMPLE_CONDITION,100,-1);
+IF(BlowgunPoisoner('POISON_DROW_DIPPED')):ApplyStatus(POISON_TECHNICAL_APPLIER); IF(BlowgunPoisoner('POISON_DROW_DIPPED',true)):ApplyStatus(POISON_DROW_CONDITION,100,-1);
+IF(BlowgunPoisoner('POISON_MALICE_DIPPED')):ApplyStatus(POISON_MALICE_TECHNICAL_APPLIER); IF(BlowgunPoisoner('POISON_MALICE_CONDITION',true)):ApplyStatus(POISONED,100,-1);
+IF(BlowgunPoisoner('POISON_CRAWLER_MUCUS_DIPPED')):ApplyStatus(POISON_MALICE_TECHNICAL_APPLIER); IF(BlowgunPoisoner('POISON_CRAWLER_MUCUS_DIPPED',true)):ApplyStatus(POISONED,100,-1);
+IF(BlowgunPoisoner('ALCH_TOXIN_BASIC_DIPPED')):ApplyStatus(ALCH_TOXIN_BASIC_CONDITION); IF(BlowgunPoisoner('ALCH_TOXIN_BASIC_DIPPED',true)):ApplyStatus(ALCH_TOXIN_BASIC_CONDITION);
+IF(BlowgunPoisoner('TOXIN_PURPLEWORM_DIPPED')):ApplyStatus(ALCH_TOXIN_PURPLEWORM_CONDITION); IF(BlowgunPoisoner('TOXIN_PURPLEWORM_DIPPED',true)):ApplyStatus(ALCH_TOXIN_PURPLEWORM_CONDITION);
+IF(BlowgunPoisoner('TOXIN_WYVERN_DIPPED')):ApplyStatus(ALCH_TOXIN_WYVERN_CONDITION); IF(BlowgunPoisoner('TOXIN_WYVERN_DIPPED',true)):ApplyStatus(ALCH_TOXIN_WYVERN_CONDITION);"
 
 new entry "THAUMATURGE"
 type "PassiveData"

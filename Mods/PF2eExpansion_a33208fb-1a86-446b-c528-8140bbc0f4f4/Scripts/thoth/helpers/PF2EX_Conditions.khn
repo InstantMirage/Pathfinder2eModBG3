@@ -46,3 +46,15 @@ end
 function QuickAlchemyFormula(level,status)
 	return HasStatus(status) & QuickAlchemyLevel(level)
 end
+
+function QuarrelPoisonerSpell()
+	return HasStringInSpellRoll('RangedWeaponAttack') | HasStringInSpellRoll('RangedOffHandWeaponAttack')
+end
+
+function BlowgunPoisoner(dipped_status,crit)
+	if crit then
+		return IsCritical() & HasStatus(dipped_status, GetAttackWeapon())
+	else
+		return IsHit() & HasStatus(dipped_status, GetAttackWeapon()) & ~TotalAttackDamageDoneGreaterThan(0)
+	end
+end
