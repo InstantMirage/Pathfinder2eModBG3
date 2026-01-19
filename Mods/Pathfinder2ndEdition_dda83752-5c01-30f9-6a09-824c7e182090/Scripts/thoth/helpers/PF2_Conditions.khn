@@ -1534,3 +1534,25 @@ function TumbleThroughProximityCheck()
 
     return ConditionResult(false)
 end
+
+-- Base mod override, as SG_Restrained should not block reactions, 
+function IsAbleToReact(entity)
+    local entity = entity or context.Target
+    return ~HasAnyStatus({'SG_Fleeing','SG_Incapacitated','SG_Stunned','SG_Unconscious','RESTRAINED'}, {}, {}, entity) & ~Dead(entity) & ~(Self(context.Target, entity) & IsKillingBlow())
+end
+
+function Attack2e(attackType, source, sourcePos, target, targetPos)
+    source = source or context.Source
+    sourcePos = sourcePos or context.SourcePosition
+    target = target or context.Target
+    targetPos = targetPos or context.TargetPosition
+    local attack = Attack(attackType, false, false, source, sourcePos, target, targetPos);
+    local realChance = attack.Chance
+    if HasStatus('HIDDEN_NPC', context.Target).Result then
+        realChance = realChance * 0.5
+    elseif IsConcealedTo(context.Target, context.Source, false).Result then
+        realChance = realChance * 0.8
+    end
+    return ConditionResult(attack.Result,{},{},realChance)
+end
+

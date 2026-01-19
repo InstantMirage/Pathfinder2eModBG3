@@ -3,10 +3,28 @@
   <stat_objects>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6b435f5b-931f-4d26-aa61-656582325124" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_AttackOfOpportunity" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_AttackOfOpportunity" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8ae3a0c0gc6d7g257agd01bg2baf209f0714" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h00e8bdefg02f1gd8dcg1fb0g2d80984e9de8" version="1" />
+        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnLeaveAttackRange" enumeration_type_name="InterruptContext" version="1" />
+        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Self" enumeration_type_name="InterruptContextScope" version="1" />
+        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Observer, context.Target) and Enemy() and not HasStatus('SANCTUARY',context.Source) and not WieldingWeapon('Ammunition', false, false, context.Source) and not (not Player(context.Source) and Tagged('AI_IGNORED_TARGET')  and not HasStatus('GNOLL_SUDDENRUSH')) and not HasStatus('SHOCKWAVE') and not (HasStatus('MOBILE_NO_AOO', context.Source) and HasStatus('MOBILE_NO_AOO_SOURCE', context.Target)) and not HasStatus('FLAMING_SPHERE_AURA') and not HasStatus('SNEAKING',context.Target) and not HasStatus('SG_Ignore_AOO',context.Target)  and not AnyEntityIsItem() and not HasSpellFlag(SpellFlags.IgnoreAoO, context.Target);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="IF(not HasPassive('Sentinel_ZeroSpeed',context.Source)):UseAttack();IF(HasPassive('Sentinel_ZeroSpeed',context.Source)):UseSpell(Target_Sentinel_AttackOfOpportunity,true,true,true);TutorialEvent(SWAP,f658a860-7e3e-44fd-807b-88d3c0c31217);" />
+        <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
+        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled;Ask" enumeration_type_name="InterruptDefaultValue" version="1" />
+        <field name="EnableCondition" type="StringTableFieldDefinition" value="not HasStatus('SG_Blinded')" />
+        <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="5a8353bd-aa42-4191-b85e-2c48b17eba30" />
         <field name="Name" type="NameTableFieldDefinition" value="Interrupt_AttackOfOpportunity_OnCast" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcf244533g8a50g71dbge8aag2b24f55e0534" version="2" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7b342ca0gea2dgca07gb43fg7ad99f8143ba" version="2" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcf244533g8a50g71dbge8aag2b24f55e0534" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7b342ca0gea2dgca07gb43fg7ad99f8143ba" version="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_AttackOfOpportunity" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Source, context.Observer) and Enemy(context.Source, context.Observer) and not Uninterruptible() and not DistanceToEntityGreaterThan(2, context.ObserverPosition, context.Source) and not AnyEntityIsItem() and ((IsSpell() and HasSpellFlag(SpellFlags.Somatic)) or IsRangedAttack());" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
@@ -1300,24 +1318,6 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
-        <field name="UUID" type="IdTableFieldDefinition" value="6b435f5b-931f-4d26-aa61-656582325124" />
-        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_AttackOfOpportunity" />
-        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_AttackOfOpportunity" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8ae3a0c0gc6d7g257agd01bg2baf209f0714" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h00e8bdefg02f1gd8dcg1fb0g2d80984e9de8" version="1" />
-        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnLeaveAttackRange" enumeration_type_name="InterruptContext" version="1" />
-        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Self" enumeration_type_name="InterruptContextScope" version="1" />
-        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Observer, context.Target) and Enemy() and not HasStatus('SANCTUARY',context.Source) and not WieldingWeapon('Ammunition', false, false, context.Source) and not (not Player(context.Source) and Tagged('AI_IGNORED_TARGET')  and not HasStatus('GNOLL_SUDDENRUSH')) and not HasStatus('SHOCKWAVE') and not (HasStatus('MOBILE_NO_AOO', context.Source) and HasStatus('MOBILE_NO_AOO_SOURCE', context.Target)) and not HasStatus('FLAMING_SPHERE_AURA') and not HasStatus('SNEAKING',context.Target) and not HasStatus('SG_Ignore_AOO',context.Target)  and not AnyEntityIsItem() and not HasSpellFlag(SpellFlags.IgnoreAoO, context.Target);" />
-        <field name="Properties" type="StringTableFieldDefinition" value="IF(not HasPassive('Sentinel_ZeroSpeed',context.Source)):UseAttack();IF(HasPassive('Sentinel_ZeroSpeed',context.Source)):UseSpell(Target_Sentinel_AttackOfOpportunity,true,true,true);TutorialEvent(SWAP,f658a860-7e3e-44fd-807b-88d3c0c31217);" />
-        <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
-        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled;Ask" enumeration_type_name="InterruptDefaultValue" version="1" />
-        <field name="EnableCondition" type="StringTableFieldDefinition" value="not HasStatus('SG_Blinded')" />
-        <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
-      </fields>
-    </stat_object>
-    <stat_object is_substat="false">
-      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="80ae295d-0c62-4764-a339-2d34fa1da705" />
         <field name="Name" type="NameTableFieldDefinition" value="CalcifyingSandIntterupt" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3b9ce4b6g6e6dg004dgadc7g4979b34c73e4" version="1" />
@@ -1793,7 +1793,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="71ddc08c-24bc-4bd6-945b-552ee86f793e" />
         <field name="Name" type="NameTableFieldDefinition" value="ReachAoO" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="6b435f5b-931f-4d26-aa61-656582325124" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1d46ec93gd6e6g34afga462g3d2f554f489d" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1d46ec93gd6e6g34afga462g3d2f554f489d" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8596ca34gcdf7gcb01g0b16g668b43fc3722" version="1" />
         <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnEnterAttackRange" enumeration_type_name="InterruptContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and HasWeaponProperty(WeaponProperties.Reach, GetActiveWeapon(context.Source)) and not Self(context.Observer, context.Target) and Enemy() and not HasStatus('SANCTUARY',context.Source) and not WieldingWeapon('Ammunition', false, false, context.Source) and not (not Player(context.Source) and Tagged('AI_IGNORED_TARGET')  and not HasStatus('GNOLL_SUDDENRUSH')) and not HasStatus('SHOCKWAVE') and not (HasStatus('MOBILE_NO_AOO', context.Source) and HasStatus('MOBILE_NO_AOO_SOURCE', context.Target)) and not HasStatus('FLAMING_SPHERE_AURA') and not HasStatus('SNEAKING',context.Target) and not HasStatus('SG_Ignore_AOO',context.Target)  and not AnyEntityIsItem() and not HasSpellFlag(SpellFlags.IgnoreAoO, context.Target);" />
