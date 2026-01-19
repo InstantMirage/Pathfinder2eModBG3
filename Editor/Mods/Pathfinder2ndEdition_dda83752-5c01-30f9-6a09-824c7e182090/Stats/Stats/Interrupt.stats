@@ -43,16 +43,28 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="7a7a7b47-dac0-42a3-b2e9-a96a2dd26248" />
         <field name="Name" type="NameTableFieldDefinition" value="FlatCheckReaction" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h09fe9c5dg708cg9f1cgd621gbc0937e031bf" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h89beb024g9d49g119ag5062gaf2a6ebade13" version="2" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h09fe9c5dg708cg9f1cgd621gbc0937e031bf" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h89beb024g9d49g119ag5062gaf2a6ebade13" version="3" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Far" enumeration_type_name="InterruptContextScope" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="(HasStatus('GRABBED', context.Source) and HasSpellFlag(SpellFlags.Somatic) and FlatCheckFailed(5, context.Source)) or (HasStatus('SYNESTHESIA', context.Source) and HasStringInSpellConditions('ConcentrateSpell') and FlatCheckFailed(5, context.Source)) or (FlatCheckFailed(5, context.Source) and Self(context.Target,context.Observer) and not Self(context.Observer, context.Source) and IsConcealedTo(context.Target, context.Source, false) and not HasAoEConditions() and Enemy(context.Observer, context.Source) and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile))) or ((Self(context.Source, context.Observer) and IsSpell() and not HasStringInSpellRoll('WeaponAttack')) and ((FlatCheckFailed(6, context.Source) and HasStatus('STUPEFIED_1', context.Source)) or (FlatCheckFailed(7, context.Source) and HasStatus('STUPEFIED_2', context.Source)) or (FlatCheckFailed(8, context.Source) and HasStatus('STUPEFIED_3', context.Source)) or (FlatCheckFailed(9, context.Source) and HasStatus('STUPEFIED_4', context.Source))));" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="(FlatCheckFailed(5, context.Source) and not SpellIgnoresConcealed() and Self(context.Target,context.Observer) and not Self(context.Observer, context.Source) and IsConcealedTo(context.Target, context.Source, false) and not (HasStringInSpellConditions('AuditorySpell') or HasStringInSpellConditions('OlfactorySpell') or HasStringInSpellConditions('VisualSpell')) and not HasAoEConditions() and Enemy(context.Observer, context.Source) and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile)));" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Portent_5" />
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
-        <field name="Properties" type="StringTableFieldDefinition" value="Counterspell();IF(HasSpellFlag(SpellFlags.Attack) or SpellHasStatus('MAP_PENALTY_2ND') or SpellHasStatus('MAP_PENALTY_3RD') or SpellHasStatus('MAP_PENALTY_INCREASE')):ApplyStatus(OBSERVER_SOURCE,MAP_INCREASE,100,0);IF(not HasSpellFlag(SpellFlags.Stealth)):RemoveStatus(OBSERVER_SOURCE,HIDDEN,100,0);IF(not HasSpellFlag(SpellFlags.Stealth)):RemoveStatus(OBSERVER_SOURCE,HIDDEN_NPC,100,0);IF(not HasSpellFlag(SpellFlags.Invisible)):RemoveStatus(OBSERVER_SOURCE,INVISIBLE,100,0);IF(not HasSpellFlag(SpellFlags.Invisible)):RemoveStatus(OBSERVER_SOURCE,INVISIBILITY,100,0);ApplyStatus(OBSERVER_SOURCE,FLAT_CHECK_OVERHEAD,100,0);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,FLAT_CHECK_IMMUNITY_APPLY,100,0);ApplyStatus(OBSERVER_SOURCE,FLAT_CHECK_OVERHEAD,100,0);" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnSpellCast" enumeration_type_name="InterruptContext" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3d4ea4eb-1cd9-42e1-b581-496d9bf2f0c0" />
+        <field name="Name" type="NameTableFieldDefinition" value="StupefiedReaction" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7a7a7b47-dac0-42a3-b2e9-a96a2dd26248" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf85b682fg89b5g3fabg8effg2796ff2dd244" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h46391497g2891g58fdge189gfa374d70206c" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Portent_6" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="(HasStatus('GRABBED', context.Source) and HasSpellFlag(SpellFlags.Somatic) and FlatCheckFailed(5, context.Source)) or (HasStatus('SYNESTHESIA', context.Source) and HasStringInSpellConditions('ConcentrateSpell') and FlatCheckFailed(5, context.Source)) or ((Self(context.Source, context.Observer) and IsSpell() and not HasStringInSpellRoll('WeaponAttack')) and ((FlatCheckFailed(6, context.Source) and HasStatus('STUPEFIED_1', context.Source)) or (FlatCheckFailed(7, context.Source) and HasStatus('STUPEFIED_2', context.Source)) or (FlatCheckFailed(8, context.Source) and HasStatus('STUPEFIED_3', context.Source)) or (FlatCheckFailed(9, context.Source) and HasStatus('STUPEFIED_4', context.Source))));" />
+        <field name="Properties" type="StringTableFieldDefinition" value="Counterspell();ApplyStatus(OBSERVER_SOURCE,FLAT_CHECK_OVERHEAD,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -63,7 +75,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he8199ab7gbac7g17c5g62d3gd9dcce7aba13" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h444d9b9dg29ecg4c52g2574g8795167ec4de" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Portent_11" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="FlatCheckFailed(11, context.Source) and Self(context.Observer, context.Target) and not Self(context.Observer, context.Source) and Enemy(context.Observer, context.Source) and not HasAoEConditions() and (HasStatus('HIDDEN_FROM', context.Source, context.Observer) or HasStatus('HIDDEN_NPC', context.Observer))  and not SpellIgnoresHidden() and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile));" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="FlatCheckFailed(11, context.Source) and Self(context.Observer, context.Target) and not Self(context.Observer, context.Source) and Enemy(context.Observer, context.Source) and not HasAoEConditions() and (HasStatus('HIDDEN_FROM', context.Source, context.Observer) or HasStatus('HIDDEN_NPC', context.Observer))  and not SpellIgnoresHidden() and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile)) and not (HasStringInSpellConditions('AuditorySpell') or HasStringInSpellConditions('OlfactorySpell') or HasStringInSpellConditions('VisualSpell'));" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
       </fields>
     </stat_object>

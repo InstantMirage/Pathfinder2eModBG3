@@ -87,6 +87,48 @@ NOT DB_TumbleThroughCastFinished((GUIDSTRING)_Character);
 UseSpell(_Character ,"Shout_ReactToMove", _Character , _Character, 0);
 RemoveStatus(_Character, "TUMBLE_THROUGH_FAILED");
 //END_REGION
+
+//REGION Short Travel
+// When the TUMBLE_THROUGH_SHORT status is applied, it indicates
+// that the character ran out of movement before completing their
+// tumble through and short be shunted back to their original
+// position. Clear out previous casts from DB first.
+IF
+UsingSpellOnTarget((GUIDSTRING)_Character, _, (STRING)_Spell, _, _, _)
+AND
+DB_TumbleThroughSpells(_Spell)
+AND
+DB_TumbleThroughCastPositions(_Character, (GUIDSTRING)_OldTarget, (REAL)_OldX, (REAL)_OldY, (REAL)_OldZ)
+THEN
+NOT DB_TumbleThroughCastPositions(_Character, _OldTarget, _OldX, _OldY, _OldZ);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Character, (GUIDSTRING)_Target, (STRING)_Spell, _, _, _)
+AND
+DB_TumbleThroughSpells(_Spell)
+AND
+GetPosition(_Character, (REAL)_X, (REAL)_Y, (REAL)_Z)
+THEN
+DB_TumbleThroughCastPositions(_Character, _Target, _X, _Y, _Z);
+
+IF
+StatusApplied((GUIDSTRING)_Character, "TUMBLE_THROUGH_SHORT", _, _)
+AND
+DB_TumbleThroughCastPositions(_Character, (GUIDSTRING)_Target, (REAL)_X, (REAL)_Y, (REAL)_Z)
+THEN
+CreateExplosionAtPosition(_X, _Y, _Z, "Projectile_TumbleThroughKnockback", 1, _Target);
+NOT DB_TumbleThroughCastPositions(_Character, _Target, _X, _Y, _Z);
+DB_TumbleThroughKnockbackTarget(_Character);
+TimerLaunch("TumbleThroughKnockback", 60);
+
+IF
+TimerFinished("TumbleThroughKnockback")
+AND
+DB_TumbleThroughKnockbackTarget((GUIDSTRING)_Character)
+THEN
+RemoveStatus(_Character, "TUMBLE_THROUGH_SHORT");
+NOT DB_TumbleThroughKnockbackTarget(_Character);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
