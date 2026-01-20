@@ -8,7 +8,7 @@ using "RockGnome_ArtificersLore"
 data "DisplayName" "hdd8b7602gf9b8g5b1cgc26eg83c53cca70ab;1"
 data "Description" "h2b7e9db3g620dg14e5gf941g6ebe059bb15f;1"
 data "Properties" "Highlighted;ForceShowInCC"
-data "Boosts" "UnlockSpell(Shout_QuickAlchemy);IF(not HasPassive('OverwriteVersatileVial')):UnlockSpell(Projectile_VersatileVial);IF(ConditionResult(context.Source.Intelligence>=12)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=14)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=16)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=18)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=20)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=22)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=24)):ActionResource(InfusedReagent,1,0);"
+data "Boosts" "UnlockSpell(Shout_QuickAlchemy);IF(not HasPassive('OverwriteVersatileVial',context.Source)):UnlockSpell(Projectile_VersatileVial);IF(ConditionResult(context.Source.Intelligence>=12)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=14)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=16)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=18)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=20)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=22)):ActionResource(InfusedReagent,1,0);IF(ConditionResult(context.Source.Intelligence>=24)):ActionResource(InfusedReagent,1,0);"
 data "StatsFunctorContext" "OnStatusApply"
 data "Conditions" "StatusId('TUT_RESTORATION') or StatusId('END_RESTORATION');"
 data "StatsFunctors" "RestoreResource(InfusedReagent,100,0);RestoreResource(VersatileVial,100,0);"
@@ -68,21 +68,25 @@ data "Boosts" "IF(SpellTypeIs(SpellType.Throw) and not IsSpell()):RollBonus(Atta
 new entry "Bomber_Benefit"
 type "PassiveData"
 using "SculptSpells"
-data "DisplayName" "h6b75d14cgf3beg3976g1409g68f22ff86c83;1"
-data "Description" "h7b230bbcgda9fg7873gaa4fgca3073df8e4f;1"
-data "Icon" "PassiveFeature_Generic_Explosion"
+data "DisplayName" "he981c3b7g0735g7391gddc1ge4c511cf0b12;1"
+data "Description" "h7b230bbcgda9fg7873gaa4fgca3073df8e4f;3"
+data "ExtraDescription" "ha334fa19gebdcg04deg6d3dg7d8d7aa14b3c;1"
+data "Icon" "PassiveFeature_EmpoweredEvocation"
+data "Properties" "Highlighted;ForceShowInCC"
+data "Boosts" "UnlockSpell(Projectile_VersatileVial_Container);UnlockSpell(Projectile_VersatileVial_Acid);UnlockSpell(Projectile_VersatileVial_Cold);UnlockSpell(Projectile_VersatileVial_Lightning);UnlockSpell(Projectile_VersatileVial_Fire);"
 
 new entry "Bomber_Discovery"
 type "PassiveData"
-data "DisplayName" "h37441c7dgee16g2da8g8b23g5a646a9ba404;1"
+data "DisplayName" "h37441c7dgee16g2da8g8b23g5a646a9ba404;2"
 data "Description" "h741c6302g62d9g2329ga06dgf69c2a62d28a;1"
-data "Icon" "PassiveFeature_EmpoweredEvocation"
+data "Icon" "PassiveFeature_Generic_Explosion"
+data "Properties" "Highlighted"
 
 new entry "Chirurgeon_Benefit"
 type "PassiveData"
 data "DisplayName" "ha40381cagaa83gba87g5ed7g8bac5deb549f;1"
 data "Description" "hb112cfccg71b5g4afegf030g8325e1d4a886;1"
-data "Icon" "PassiveFeature_Tough"
+data "Icon" "Action_Mag_SoulCatching_Heal"
 data "Properties" "Highlighted"
 data "Boosts" "IF(ConditionResult(context.Source.Intelligence > context.Source.Wisdom)):Skill(Medicine,IntelligenceModifier - WisdomModifier);IF(IsSkillExpert('Nature','Intelligence') and not IsSkillExpert('Medicine','Wisdom',true)):Skill(Medicine,2);IF(IsSkillMaster('Nature','Intelligence') and not IsSkillMaster('Medicine','Wisdom',true)):Skill(Medicine,2);IF(IsSkillLegend('Nature','Intelligence') and not IsSkillLegend('Medicine','Wisdom',true)):Skill(Medicine,2);"
 
@@ -104,7 +108,8 @@ using "ElementalAdept_Acid"
 data "DisplayName" "h66c41210g1dfdgbe5bgabecg2ccd4dc3cbeb;1"
 data "Description" "h6582be19gc928g19c4g4376g9dec0dd291dc;1"
 data "Icon" "Action_MagicItem_PoisonLethality"
-data "Boosts" "IgnoreResistance(Poison,Resistant);IgnoreResistance(Poison,Immune);"
+data "Properties" "Highlighted;ForceShowInCC"
+data "Boosts" "IgnoreResistance(Poison,Resistant);IgnoreResistance(Poison,Immune);UnlockSpell(Projectile_VersatileVial_Poison);"
 
 new entry "Toxicologist_Benefit_Dip"
 type "PassiveData"
@@ -172,9 +177,10 @@ IF(BlowgunPoisoner('POISON_SIMPLE_DIPPED')):ApplyStatus(POISON_SIMPLE_TECHNICAL_
 IF(BlowgunPoisoner('POISON_DROW_DIPPED')):ApplyStatus(POISON_TECHNICAL_APPLIER); IF(BlowgunPoisoner('POISON_DROW_DIPPED',true)):ApplyStatus(POISON_DROW_CONDITION,100,-1);
 IF(BlowgunPoisoner('POISON_MALICE_DIPPED')):ApplyStatus(POISON_MALICE_TECHNICAL_APPLIER); IF(BlowgunPoisoner('POISON_MALICE_CONDITION',true)):ApplyStatus(POISONED,100,-1);
 IF(BlowgunPoisoner('POISON_CRAWLER_MUCUS_DIPPED')):ApplyStatus(POISON_MALICE_TECHNICAL_APPLIER); IF(BlowgunPoisoner('POISON_CRAWLER_MUCUS_DIPPED',true)):ApplyStatus(POISONED,100,-1);
-IF(BlowgunPoisoner('ALCH_TOXIN_BASIC_DIPPED')):ApplyStatus(ALCH_TOXIN_BASIC_CONDITION); IF(BlowgunPoisoner('ALCH_TOXIN_BASIC_DIPPED',true)):ApplyStatus(ALCH_TOXIN_BASIC_CONDITION);
-IF(BlowgunPoisoner('TOXIN_PURPLEWORM_DIPPED')):ApplyStatus(ALCH_TOXIN_PURPLEWORM_CONDITION); IF(BlowgunPoisoner('TOXIN_PURPLEWORM_DIPPED',true)):ApplyStatus(ALCH_TOXIN_PURPLEWORM_CONDITION);
-IF(BlowgunPoisoner('TOXIN_WYVERN_DIPPED')):ApplyStatus(ALCH_TOXIN_WYVERN_CONDITION); IF(BlowgunPoisoner('TOXIN_WYVERN_DIPPED',true)):ApplyStatus(ALCH_TOXIN_WYVERN_CONDITION);"
+IF(BlowgunPoisoner('ALCH_TOXIN_BASIC_DIPPED')):ApplyStatus(ALCH_TOXIN_BASIC_CONDITION,100,1,,,,not SavingThrow(Ability.Constitution,11, AdvantageOnPoisoned())); IF(BlowgunPoisoner('ALCH_TOXIN_BASIC_DIPPED',true)):ApplyStatus(ALCH_TOXIN_BASIC_CONDITION);
+IF(BlowgunPoisoner('TOXIN_SERPENTVENOM_DIPPED')):ApplyStatus(ALCH_TOXIN_SERPENTVENOM_CONDITION,100,1,,,,not SavingThrow(Ability.Constitution,13, AdvantageOnPoisoned())); IF(BlowgunPoisoner('TOXIN_SERPENTVENOM_DIPPED',true)):ApplyStatus(ALCH_TOXIN_SERPENTVENOM_CONDITION);
+IF(BlowgunPoisoner('TOXIN_WYVERN_DIPPED')):ApplyStatus(ALCH_TOXIN_WYVERN_CONDITION,100,1,,,,not SavingThrow(Ability.Constitution,15, AdvantageOnPoisoned())); IF(BlowgunPoisoner('TOXIN_WYVERN_DIPPED',true)):ApplyStatus(ALCH_TOXIN_WYVERN_CONDITION);
+IF(BlowgunPoisoner('TOXIN_PURPLEWORM_DIPPED')):ApplyStatus(ALCH_TOXIN_PURPLEWORM_CONDITION,100,1,,,,not SavingThrow(Ability.Constitution,19, AdvantageOnPoisoned())); IF(BlowgunPoisoner('TOXIN_PURPLEWORM_DIPPED',true)):ApplyStatus(ALCH_TOXIN_PURPLEWORM_CONDITION);"
 
 new entry "THAUMATURGE"
 type "PassiveData"
