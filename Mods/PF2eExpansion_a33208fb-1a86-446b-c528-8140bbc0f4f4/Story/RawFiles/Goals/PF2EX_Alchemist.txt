@@ -147,14 +147,14 @@ DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Greater_SnakeFang",4);
 DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Superior_WyvernStinger",6);
 DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Supreme_PurpleWorm",9);
 
-//DB_Alchemy_FormulaStatus("ALCH_FORMULA","ALCH_Grenade_Fire_FireAmber",1);
-
 //DB_Alchemy_GuaranteedFormulas((STRING)_Passive,(STRING)_Recipe,(INTEGER)_MinLevel);
 
 //Healing Potion
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingGreater_Balsam",3);
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingSuperior_YellowMuskCreeper",6);
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingSupreme_KiRinHair",12);
+
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Grenade_Fire_FireAmber",3);
 
 //_Char,_Item
 DB_Alchemy_InfusedItem((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(ITEM)NULL_00000000-0000-0000-0000-000000000000);
@@ -294,6 +294,47 @@ RespecCompleted((CHARACTER)_Char)
 THEN
 PROC_CleanupAlchemicalInfusions(_Char,0);
 
+
+//END_REGION
+
+//REGION Drink triggers
+
+//Chirurgeon discovery - temp HP on healing
+IF
+TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
+AND
+IsTagged(_Item,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Source,_Item)
+AND
+HasPassive(_Source,"Chirurgeon_Discovery",1)
+THEN
+ApplyStatus(_Character,"ALCH_INT_THP",60.0,0,_Source);
+
+//Mutagenist discovery - temp HP on mutagen
+IF
+TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
+AND
+IsTagged(_Item,(TAG)ALCH_SOLUTION_ELIXIR_71031c9c-eb3e-49b3-bf38-20ce078eff15,1)
+AND
+HasPassive(_Character,"Mutagenist_Discovery",1)
+AND
+HasAppliedStatus(_Character,"MUTAGENIST_THP_BLOCKED",0)
+THEN
+ApplyStatus(_Character,"ALCH_INT_THP",60.0,0,_Character);
+ApplyStatus(_Character,"MUTAGENIST_THP_BLOCKED",60.0,0,_Character);
+
+//Clotting Elixirs
+IF
+TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
+AND
+IsTagged(_Item,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Source,_Item)
+AND
+HasPassive(_Source,"ClottingElixirs",1)
+THEN
+ApplyStatus(_Character,"CLOTTING_ELIXIR_ROLL",0.0,0,_Source);
 
 //END_REGION
 EXITSECTION
