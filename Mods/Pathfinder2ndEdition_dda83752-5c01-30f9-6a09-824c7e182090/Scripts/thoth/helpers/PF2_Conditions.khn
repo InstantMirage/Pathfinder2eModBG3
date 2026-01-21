@@ -827,6 +827,11 @@ function WieldingSneakAttackWeapon(entity)
 	return standard_weapon | (is_ruffian & ruffian_weapon)
 end
 
+function StrongArmSpell()
+	-- Mundane throwing spells
+	return HasStringInSpellRoll('RangedUnarmedAttack') & ~HasSpellFlag(SpellFlags.Melee)
+end
+
 -- Sorcerer
 
 function SorcerousGift_Dragon_Arcane()
@@ -1600,7 +1605,7 @@ function CounterPerformanceCrit()
 end
 
 function RestrainedBlockSpells()
-	local r1 = ~(SpellId('Target_EscapeGrapple_Athletics') | SpellId('Target_EscapeGrapple_Acrobatics') | SpellId('Target_EscapeGrapple_UnarmedAttack'))
+	local r1 = ~(IsSpellChildOrVariantFromContext('Target_EscapeGrapple_Container') | SpellId('Target_EscapeGrapple_UnarmedAttack'))
 	local r2 = HasStringInSpellRoll('Attack')
 	local r3 = HasSpellFlag(SpellFlags.Somatic)
 	return (r2 | r3) & r1
