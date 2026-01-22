@@ -7,7 +7,7 @@ local __util = require 'larian.util'
 function AutoStride()
 	local canMove = ~Immobilized() | HasStatus('SG_Prone')
 	local hasActions = HasActionResource('ActionPoint', 1 , 0, false, false) | QuickenedStride()
-	local automaticStride = ~HasStatus('MANUAL_STRIDE')
+	local automaticStride = ~HasStatus('MANUAL_STRIDE') | HasStatus('SG_Mad') | HasStatus('SG_Dominated') | HasStatus('SG_Fleeing') | HasStatus('SG_Approaching') | HasStatus('SG_Taunted') | HasStatus('SG_Confused')
 	
 	return canMove & hasActions & automaticStride
 end

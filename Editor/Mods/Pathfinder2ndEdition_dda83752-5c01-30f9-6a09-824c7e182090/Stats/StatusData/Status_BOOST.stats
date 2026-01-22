@@ -2162,14 +2162,14 @@
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Dash_Bonus" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnMove" enumeration_type_name="StatusEvent" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF( AutoStride() ):RestoreResource(Movement,100%,0,true); IF( not AutoStride() ):UseActionResource(Movement,100%,0,true); IF( not AutoStride() ):RemoveStatus(DEBUG_RESET_MOVE)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(AutoStride()):RestoreResource(Movement,100%,0);IF(AutoStride()):RestoreResource(Movement,1,0);IF(not AutoStride()):UseActionResource(Movement,100%,0,true);IF(not AutoStride()):RestoreResource(Movement,1,0);IF(not AutoStride()):RemoveStatus(DEBUG_RESET_MOVE)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="AI_IGNORE:IF( RemoveCause(StatusRemoveCause.Condition) and TurnBased() ):ApplyStatus(DEBUG_CAST_STRIDE,100,1);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3827454fg0e76g2789ge413g8a8d4b4a037a" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h527b8bbdgc061gb0d8g2d22g3120893c5b7f" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(StrideCostSpellCheck(), ModifyTooltipDescription(), ModifyUseCosts(Add,ActionPoint,1,0))" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="MOVE_READY" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasActionResource('Movement',90,0,true,true)" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasActionResource('Movement',100,0,true,true)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2234,6 +2234,16 @@
         <field name="Name" type="NameTableFieldDefinition" value="ForestStoppedStatus" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="f4078f78-c7be-4bea-b449-a173313bbb38" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn;OnAttack;OnSpellCast;OnMove;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f09e42d0-4a38-4552-bacf-cf8bfdb1e601" />
+        <field name="Name" type="NameTableFieldDefinition" value="MANUAL_STRIDE" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he42cee01g642egd323gc84dg279c4420de44" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Fighter_EvasiveFootwork" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('DEBUG_RESET_MOVE')):UseActionResource(Movement,90%,0,true);RemoveStatus(DEBUG_RESET_MOVE)" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
