@@ -34,18 +34,21 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="4bf9b90c-7f60-48c6-9b9b-9bf0656760f6" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="0" />
         <field name="AddRangeFromAbility" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
-        <field name="SpellRoll" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RegainHitPoints(LevelMapValue(QuickVial));" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="RegainHitPoints(LevelMapValue(QuickVialSplash));" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not HasStatus('COAGULANT') or (HasPassive('Chirurgeon_Advanced',context.Source) and not HasHPPercentageWithoutTemporaryHPMoreThan(50,context.Target))" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF( not HasMaxHP() ):ApplyStatus(COAGULANT,100,-1);RegainHitPoints(LevelMapValue(QuickVial));" />
+        <field name="SpellFail" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="RegainHitPoints(LevelMapValue(QuickVial))" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasHighGroundRangeExtension;RangeIgnoreVerticalThreshold;CanAreaDamageEvade;HasSomaticComponent" enumeration_type_name="SpellFlagList" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(HasPassive('Chirurgeon_Discovery',context.Source)):ApplyStatus(ALCH_INT_THP,100,-1);IF(HasPassive('ClottingElixirs',context.Source)):ApplyStatus(CLOTTING_ELIXIR_ROLL,100,0);" />
         <field name="ExplodeRadius" type="IntegerTableFieldDefinition" value="0" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Tagged('UNDEAD') and not Enemy();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Dead() and CanRegainHP(HealingType.Living) and not Enemy();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_AuraOfVitality_Activate" />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Healing" enumeration_type_name="VerbalIntent" version="1" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalNonDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc4d454a8gce67g5811g9da0g5c4581a7b4c4" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4e68c25ag9de7g7732gac38gdea435b4bf3b" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(COAGULANT,100,-1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

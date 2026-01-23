@@ -1308,6 +1308,16 @@ function SkillCrit()
 	return ConditionResult(false)
 end
 
+function SkillCritMiss()
+	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
+	local thresholdtotal = 10 + total
+	
+	if difficulty > thresholdtotal then
+		return ConditionResult(difficulty > total)
+	end
+	return ConditionResult(false)
+end
+
 function LastConditionRollValues(conditionRollType)
 	try
 		conditionRoll = context.HitDescription.GetLastConditionRoll(conditionRollType)

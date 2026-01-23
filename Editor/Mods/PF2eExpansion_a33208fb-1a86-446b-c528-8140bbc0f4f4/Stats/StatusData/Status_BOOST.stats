@@ -12,7 +12,7 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="RemoveOnLongRest;DisableCombatlog;TickingWithSource;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(TurnBased(context.Source)):SetStatusDuration(ALCH_INFUSED,1,ForceSet)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(Combat(context.Source)):SetStatusDuration(ALCH_INFUSED,1,ForceSet);IF(HasStatus('ADDITIVE_SMOKE_OWNER',context.Source) and Tagged('GRENADE')):ApplyStatus(ADDITIVE_SMOKE,100,-1)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="Unsummon();Kill()" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="79eb91f2-1a1f-4749-87e3-a0cafc1f4ef6" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(ALCH_SOLUTION);Tag(ALCH_INFUSED);" />
@@ -117,6 +117,20 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="aa6885f1-8d28-469e-bb56-800eeab286f5" />
+        <field name="Name" type="NameTableFieldDefinition" value="COAGULANT" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9cd37241gdc2dg790fg9173g40ec530a9195" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h60ab2180g322dg8da8gaef9gc85fe495de92" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_BloodPotion" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalNonDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="StatusId('SHORT_REST')" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;RemoveOnLongRest" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="88385b52-04a0-453f-9c92-eb91489f7387" />
         <field name="Name" type="NameTableFieldDefinition" value="CLOTTING_ELIXIR_ROLL" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbc19d6b8g77cfgf561g5603g511dee74ebb7" version="1" />
@@ -139,6 +153,36 @@
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="SplatterBloodAmount" type="FloatTableFieldDefinition" value="-1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9cdc5f5e-607a-4131-941e-8711c4d3c41d" />
+        <field name="Name" type="NameTableFieldDefinition" value="REMOVE_MUTAGENS" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="cdb9fa67-ef38-444e-9a5f-03d508410fc7" />
+        <field name="StackId" type="StringTableFieldDefinition" value="ALCH_ELIXIR" />
+        <field name="SplatterBloodAmount" type="FloatTableFieldDefinition" clear_inherited_value="true" value="" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="fe23ab49-da93-4292-80fd-c5997b7f1497" />
+        <field name="Name" type="NameTableFieldDefinition" value="ADDITIVE_SMOKE_OWNER" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha2d4bdf1g3226gf558ge5bcgef6286cac075" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h0f25f945gca58g293eg0ccagee000d5b324a" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(3)" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_FogCloud" />
+        <field name="StackId" type="StringTableFieldDefinition" value="ADDITIVE" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6d850982-7f21-475d-a1e4-ddfda279905a" />
+        <field name="Name" type="NameTableFieldDefinition" value="ADDITIVE_SMOKE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="fe23ab49-da93-4292-80fd-c5997b7f1497" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(3,3,FogCloud)" />
       </fields>
     </stat_object>
     <stat_object color="#FF5F9EA0" is_substat="false">
