@@ -650,6 +650,52 @@ function ShoveCheck()
 	return result
 end
 
+function GetBestSkillCheck(dc)
+	local source = context.Source
+	
+	-- Highest on the list will take priority, ie use Theivery over Stealth
+	local preferred_skill = 'History'
+	local all_skills = {
+		'Athletics',
+		'SleightOfHand',
+		'Acrobatics',
+		'Stealth',
+		'Persuasion',
+		'Performance',
+		'Intimidation',
+		'Deception',
+		'Medicine',
+		'Survival',
+		'Religion',
+		'Arcana',
+		'Investigation',
+		'Insight',
+		'AnimalHandling',
+		'Nature'
+	}
+	local skills_override = {
+		Performance = 'BardSpellcasting',
+		Arcana = 'Tradition_Arcane',
+		Insight = 'Tradition_Divine',
+		Investigation = 'Tradition_Occult',
+		AnimalHandling = 'Tradition_Primal',
+		Nature = 'AlchemicalAssessment'
+	}
+	
+	for k,v in pairs(all_skills) do
+		local can_override_skill = skills_override[v] and HasPassive(skills_override[v],source).Result
+		-- Prefer class skills, with the last on all_skills taking priority (>=)
+		if can_override_skill and source.GetPassiveSkill(Skill[v]) >= source.GetPassiveSkill(Skill[preferred_skill]) then
+			preferred_skill = v
+		-- Otherwise use descending priority list (>)
+		elseif source.GetPassiveSkill(Skill[v]) > source.GetPassiveSkill(Skill[preferred_skill]) then
+			preferred_skill = v
+		end
+	end
+	
+	return SkillCheck(Skill[preferred_skill],dc)
+end
+
 function ArmorCheck()
 	local strength10 = HasPassive('Armor_Strength_10',context.Source) & ConditionResult(context.Source.Strength >= 10)
 	local strength12 = HasPassive('Armor_Strength_12',context.Source) & ConditionResult(context.Source.Strength >= 12)
@@ -1477,7 +1523,7 @@ end
 
 function ConcentrateSpell(source)
 	source = source or context.Source
-	return ConditionResult((~HasAnyStatus({'RAGE_MUTE','HyponotizeStatus'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
+	return ConditionResult((~HasAnyStatus({'RAGE_MUTE','HypnotizeFascinated'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
 end
 
 function RageConcentrateSpell(source)
@@ -1494,7 +1540,8 @@ end
 function VisualSpell(target)
 	target = target or context.Target
 	local blind = HasStatus('SG_Blinded',target)
-	local creature_type = HasAnyTags({'SKELETON','OOZE','INTELLECT_DEVOURER','PLANT','SUMMONWITHOUTMOUTH'}, target) & ~Tagged('MYCONID')
+	-- Must be a creature type with eyes
+	local creature_type = HasNoTags({'SKELETON','OOZE','INTELLECT_DEVOURER','PLANT','SUMMONWITHOUTMOUTH'}, target) | Tagged('MYCONID',target)
 	local result = ( ~blind & creature_type ).Result
 	return ConditionResult(result, {ConditionError("CantSeeSpell")})
 end
