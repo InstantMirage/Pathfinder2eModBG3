@@ -3471,7 +3471,25 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="TooltipSave" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,15)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;MultiplyEffectsByDuration" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BLEEDING',context.Target)" />
+        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BLEEDING')" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ed1891a9-f507-44e0-8d41-eacd2d63b22e" />
+        <field name="Name" type="NameTableFieldDefinition" value="STOP_BLEEDING" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3afd546c-6695-483f-9a61-f4feb91e64a8" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalNonDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="OnApplyConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="100" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="StatusImmunity(BLEEDING);" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusGroups" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="SplatterBloodAmount" type="FloatTableFieldDefinition" value="-1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3480,11 +3498,11 @@
         <field name="Name" type="NameTableFieldDefinition" value="BURNING" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="b285885e-32d0-4b35-8d54-6c95a8ad2bbb" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not PersistentFireCheck() and not Item() and RollDieAgainstDC(DiceType.d20,15)) or (PersistentFireCheck() and not Item() and RollDieAgainstDC(DiceType.d20,10))" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="PersistentFireRemove()" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn;OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value=";" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Surface;SG_Light" enumeration_type_name="StatusGroupFlags" version="1" />
-        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BURNING',context.Target)" />
+        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BURNING')" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8956,7 +8974,7 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="SurfaceChange" type="StringTableFieldDefinition" value="Ignite" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,15)) or (PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,10))" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="PersistentFireRemove(false)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(1d6,Fire)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not Tagged('TORCH')):DealDamage(1d6,Fire,Magical)" />
@@ -8964,6 +8982,7 @@
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Light;SG_Helpable_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="2156dd48-f83b-4060-9a4e-cab994da8857" />
         <field name="OnApplyConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="StatusImmunity(WET);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9032,7 +9051,7 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="SurfaceChange" type="StringTableFieldDefinition" value="Ignite" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,15)) or (PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,10))" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="PersistentFireRemove(false)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(1d6,Fire)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not Tagged('TORCH')):DealDamage(1d6,Fire,Magical)" />
@@ -9040,7 +9059,7 @@
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Light;SG_Helpable_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="2156dd48-f83b-4060-9a4e-cab994da8857" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="25b3df72-af8b-471c-9210-b8dd66b3195d" />
-        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BURNING',context.Target)" />
+        <field name="OnApplyConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9083,13 +9102,14 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="SurfaceChange" type="StringTableFieldDefinition" value="Ignite" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,15)) or (PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,10))" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="PersistentFireRemove(false)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(2d4,Fire)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not Tagged('TORCH')):DealDamage(2d4,Fire,Magical)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;Burning;DisableOverhead;IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Light;SG_Helpable_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="2156dd48-f83b-4060-9a4e-cab994da8857" />
+        <field name="OnApplyConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="not IsImmuneToStatus('BURNING')" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9320,14 +9340,14 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="SurfaceChange" type="StringTableFieldDefinition" value="Ignite" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,15)) or (PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,10))" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="PersistentFireRemove()" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn;OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(2d6,Fire)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(2d6,Fire,Magical)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Light;SG_Helpable_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="2156dd48-f83b-4060-9a4e-cab994da8857" />
-        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BURNING',context.Target)" />
+        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BURNING')" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9426,14 +9446,14 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="SurfaceChange" type="StringTableFieldDefinition" value="Ignite" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,15)) or (PersistentFireCheck() and RollDieAgainstDC(DiceType.d20,10))" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="PersistentFireRemove()" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn;OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(1d4,Fire)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(1d4,Fire,Magical)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Light;SG_Helpable_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="2156dd48-f83b-4060-9a4e-cab994da8857" />
-        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BURNING',context.Target)" />
+        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not IsImmuneToStatus('BURNING')" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14125,7 +14145,6 @@
         <field name="StackId" type="StringTableFieldDefinition" value="SHIELD_HEALTH" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Using" type="BaseClassTableFieldDefinition" value="25b3df72-af8b-471c-9210-b8dd66b3195d" />
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_DamageThreshold" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="FormatStringColor" version="1" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="HitAnimationType" version="1" />
@@ -14137,7 +14156,7 @@
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="Burning;DisableOverhead;IgnoreResting;FreezeDuration;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;IgnoreResting;FreezeDuration;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" clear_inherited_value="true" value="" />
       </fields>
@@ -14152,7 +14171,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="SHIELD_BROKEN" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="Burning;DisableOverhead;IgnoreResting;FreezeDuration" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;IgnoreResting;FreezeDuration" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

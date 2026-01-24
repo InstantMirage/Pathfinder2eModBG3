@@ -1523,7 +1523,8 @@ end
 
 function ConcentrateSpell(source)
 	source = source or context.Source
-	return ConditionResult((~HasAnyStatus({'RAGE_MUTE','HypnotizeFascinated'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
+	local result = not HasAnyStatus({'RAGE_MUTE','HypnotizeFascinated'}, {}, {}, source).Result
+	return ConditionResult(result, {ConditionError("CantConcentrate")})
 end
 
 function RageConcentrateSpell(source)
@@ -1533,7 +1534,7 @@ end
 
 function AuditorySpell(target)
 	target = target or context.Target
-	local result = HasAnyStatus({'SILENCED','LOW_VoicelessPenitent_Silenced','SHA_SILENTLIBRARY_LIBRARIANSILENCE_STATUS','TWN_DISTILLERY_NUMB'}, {}, {}, target).Result
+	local result = not HasAnyStatus({'SILENCED','LOW_VoicelessPenitent_Silenced','SHA_SILENTLIBRARY_LIBRARIANSILENCE_STATUS','TWN_DISTILLERY_NUMB'}, {}, {}, target).Result
 	return ConditionResult(result, {ConditionError("CantHearSpell")})
 end
 
@@ -1676,6 +1677,16 @@ function PersistentFireCheck()
 	local FlameOrder = HasPassive('FlameOrder', context.Source)
 	local StifleFlames = HasPassive('StifleFlames', context.Source) & (IsSkillTrained('AnimalHandling', 'Wisdom') | IsSkillTrained('Survival', 'Wisdom'))
 	return FlameOrder | StifleFlames
+end
+
+function PersistentFireRemove(check_immunity)
+	check_immunity = check_immunity or true
+	local dc_15 = ~PersistentFireCheck() & RollDieAgainstDC(DiceType.d20,15)
+	local dc_10 = PersistentFireCheck() & RollDieAgainstDC(DiceType.d20,10)
+	local on_turn = IsStatusEvent(StatusEvent.OnTurn) & ~Item() & (dc_15|dc_10)
+	local on_status = IsStatusEvent(StatusEvent.OnStatusApplied) & (HasStatus('WET') | IsImmuneToStatus('BURNING'))
+	
+	return on_turn | ( ConditionResult(check_immunity) & on_status )
 end
 
 function TumbleThroughProximityCheck()
