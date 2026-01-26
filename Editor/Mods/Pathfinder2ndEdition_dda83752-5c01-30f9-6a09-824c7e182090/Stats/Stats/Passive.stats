@@ -5824,12 +5824,22 @@
         <field name="Name" type="NameTableFieldDefinition" value="PoisonWeapon" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he680ab41g443eg432ege114g886ee4edfa16" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7e739d99gc25cg6ad3g3ac4g6b27994a1c79" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Status_Poisoned" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_DippedPoison_Melee" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_PoisonWeapon);UnlockSpell(Shout_PoisonCreation);ActionResource(Rage,1,0);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF( not HasPassive('ImprovedPoisonWeapon',context.Source)):UnlockSpell(Shout_PoisonWeapon);ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;1)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;2)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;3)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;4)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;5)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;6)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;7)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;8)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;9)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;10)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;11)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;12)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;13)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;14)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;15)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;16)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;17)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;18)):ActionResource(Rage,1,0);IF(ConditionResult(context.Source.Level&gt;19)):ActionResource(Rage,1,0);" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Shout_PoisonWeapon');" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="SetStatusDuration(SELF, PoisonWeaponCharges,-1,Add)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="22a05c70-815a-4de3-8ab2-8bb3f0df422a" />
+        <field name="Name" type="NameTableFieldDefinition" value="PoisonWeapon_Technical" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="ad9772d1-48e9-46b4-b287-9dd4f83ccdc6" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Removes coating" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="AttackedWithPassiveSourceWeapon();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(IsMainHandAttack()):ApplyEquipmentStatus(SELF,MainHand,PoisonWeaponRemove,100,0); IF(IsOffHandAttack())ApplyEquipmentStatus(SELF,OffHand,PoisonWeaponRemove,100,0)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -5934,6 +5944,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf4efac63g1aeeg544egb503g227e8f0cd3f4" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he8964f0fga5adg7972g904cg0b7e92a97b17" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Spider_Giant_PoisonousBite" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF( HasPassive('PoisonWeapon',context.Source) ):UnlockSpell(Shout_PoisonWeapon_2);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6044,8 +6055,9 @@
         <field name="Name" type="NameTableFieldDefinition" value="Preparation" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h108fc1bag217cgde11g2bc0gd84bc99c999e" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="had0dbe02gcbdegc3f1ge71age37d455bd28e" version="1" />
-        <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
+        <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="ActionPoint:1;Flourish:1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_Preparation)" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Paladin_DivineSense" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

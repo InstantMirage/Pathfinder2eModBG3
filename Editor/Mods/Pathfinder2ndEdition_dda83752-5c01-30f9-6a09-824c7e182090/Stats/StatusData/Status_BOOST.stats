@@ -6814,23 +6814,45 @@
         <field name="UUID" type="IdTableFieldDefinition" value="2746c5a3-b207-4afd-80d5-05abcd8c8423" />
         <field name="Name" type="NameTableFieldDefinition" value="PoisonWeaponStatus" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfe336de7g05d7g1dffg393bgf23db71105d5" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h544adf51g43f5g2963g5caeg5a5cc3af85b3" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Status_Poisoned" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not HasPassive('ImprovedPoisonWeapon')):CharacterWeaponDamage(1d4,Poison);IF(HasPassive('ImprovedPoisonWeapon')):CharacterWeaponDamage(2d4,Poison);" />
-        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h544adf51g43f5g2963g5caeg5a5cc3af85b3" version="2" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7a6e9be8-9754-4c29-ab6b-79cfed259775" />
+        <field name="Passives" type="StringTableFieldDefinition" value="PoisonWeapon_Technical;" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="RemoveOnLongRest" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="023d79b8-8325-44ac-80b7-b9ebeba5c483" />
+        <field name="Name" type="NameTableFieldDefinition" value="PoisonWeaponStatus_2" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="2746c5a3-b207-4afd-80d5-05abcd8c8423" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d4,Poison)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponDamage(2d4, Poison);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d8c0138f-b5ed-465b-a1c6-77baf72c7ee9" />
+        <field name="Name" type="NameTableFieldDefinition" value="PoisonWeaponRemove" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="2746c5a3-b207-4afd-80d5-05abcd8c8423" />
+        <field name="SoundStart" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="100" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Passives" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="c5c967b4-0480-4341-ba72-4ef6a00351c1" />
         <field name="Name" type="NameTableFieldDefinition" value="AnalyzeWeaknessStatus" />
-        <field name="Using" type="BaseClassTableFieldDefinition" value="2746c5a3-b207-4afd-80d5-05abcd8c8423" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6b2215b7g3eecg303ag1f16g84cd6bb47b4f" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc733e9e6g5940gf15agdca8g1866c54e97a4" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(SneakAttack)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Fighter_KnowYourEnemy" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsPhysicalDamage() and SneakAttackWeapon() and (OffGuard() or (IsMeleeAttack() and HasAllyWithinRange('SG_Incapacitated',1.5))) and CanPrecisionDamage() ):DamageBonus(LevelMapValue(SneakAttack));" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(SneakAttack))" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7010,6 +7032,20 @@
         <field name="StackId" type="StringTableFieldDefinition" value="INSPIRED_STRATEGEM_IMMUNE" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="93b6e5a7-71a3-4bab-a36a-561ab2c30397" />
+        <field name="Name" type="NameTableFieldDefinition" value="PREPARATION" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbaada354g59b1g6b1cg6048g8acac56b488f" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5433aa4bge31dgba1fg8a31g2a5408a59bb4" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_Ambushing" />
+        <field name="StackId" type="StringTableFieldDefinition" value="EXTRA_REACTION" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResource(ReactionActionPoint,1,0);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="0b1203e5-e826-4084-9df5-2a206e127e03" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -9109,7 +9145,7 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;Burning;DisableOverhead;IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Light;SG_Helpable_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="2156dd48-f83b-4060-9a4e-cab994da8857" />
-        <field name="OnApplyConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="not IsImmuneToStatus('BURNING')" />
+        <field name="OnApplyConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9902,6 +9938,14 @@
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(2d6,Poison,Magical)" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Poisoned;SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2d6" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="WEAK" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="SoundLoop" type="StringTableFieldDefinition" value="Misc_Status_Poison_MO" />
+        <field name="SoundStop" type="StringTableFieldDefinition" value="Misc_Status_Poison_MO_Stop" />
+        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="fa688204-319c-41b2-88d9-7b619d17aed4" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ceeda0ca-0739-4588-a449-d024389f0c2a" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9912,6 +9956,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h0c8e045egf83ag85c8g5160gdeaa1673cb1f" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage((2d6)/2,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage((2d6)/2,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9919,9 +9964,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="d6ed0fb6-ac7d-4746-a235-4b1eb5628561" />
         <field name="Name" type="NameTableFieldDefinition" value="FungalPersistent_Double_Rank2" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="cb32da89-abab-41a2-a556-3bfdeac9b5ca" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc170683dg2c75gb31eg2227g0921907a6ebf" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(4d6,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(4d6,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="4d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9929,9 +9974,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="39d7bf19-ffd9-439a-93dc-ac11438d8f1d" />
         <field name="Name" type="NameTableFieldDefinition" value="FungalPersistent_Rank4" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="cb32da89-abab-41a2-a556-3bfdeac9b5ca" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6ce785afg0650g83e0g3143g9af14340f777" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(4d6,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(4d6,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="4d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9942,6 +9987,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h93938ab6g7e72g81a6geffeg58af2fc60c94" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage((4d6)/2,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage((4d6)/2,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="4d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9949,9 +9995,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="2cac58af-b23b-4b37-856d-ee4ff6a3af71" />
         <field name="Name" type="NameTableFieldDefinition" value="FungalPersistent_Double_Rank4" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="d6ed0fb6-ac7d-4746-a235-4b1eb5628561" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7625f97bgbfcbgbf7eg9904g10bb600b25a6" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(8d6,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(8d6,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="8d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9959,9 +10005,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="7be160ee-211d-4f89-8ea0-7af40f8e1549" />
         <field name="Name" type="NameTableFieldDefinition" value="FungalPersistent_Rank6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="cb32da89-abab-41a2-a556-3bfdeac9b5ca" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8268b5d6ge7e6gf8b0g932bg001d86f54497" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(6d6,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(6d6,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="6d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9972,6 +10018,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h53e334dag15f7gef2bgb9f6g3de67c0adc7d" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage((6d6)/2,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage((6d6)/2,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="6d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9979,9 +10026,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="acb4bc72-dcdb-4295-a3a0-8b353ad7eb41" />
         <field name="Name" type="NameTableFieldDefinition" value="FungalPersistent_Double_Rank6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="d6ed0fb6-ac7d-4746-a235-4b1eb5628561" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6aef1bbbgb9c9gb2ebg623cg979716c0c2d2" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(12d6,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(12d6,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="12d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9990,10 +10037,10 @@
         <field name="Name" type="NameTableFieldDefinition" value="NoxiousMetalsPersistent_Rank3" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="cb32da89-abab-41a2-a556-3bfdeac9b5ca" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfce3ee22ge868g5e18gd3b4gf3c72bd3b53c" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3cc3117fga96fgade8g90fdg27461337354f" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(1d4,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(1d4,Poison,Magical)" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="606c9c50-83b7-4faf-9c59-f1f3199734c8" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="1d4" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10001,9 +10048,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="0e439521-ca68-4848-b68b-956f999ed12b" />
         <field name="Name" type="NameTableFieldDefinition" value="PersistentPoisonDamage_1" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="6e4da6b2-cfb7-43e0-a841-26cf876b3e9b" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h54ab5b36g57cbgd22ag4a10g50ffc09b1f49" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(1,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(1,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10011,9 +10058,9 @@
         <field name="UUID" type="IdTableFieldDefinition" value="96998b7c-40c4-4d77-9336-e3db12fe3765" />
         <field name="Name" type="NameTableFieldDefinition" value="PersistentPoisonDamage_1d6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="cb32da89-abab-41a2-a556-3bfdeac9b5ca" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha98913ddgba8fg8e60g95ddg4a85ff54b865" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(1d6,Poison)" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(1d6,Poison,Magical)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="1d6" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

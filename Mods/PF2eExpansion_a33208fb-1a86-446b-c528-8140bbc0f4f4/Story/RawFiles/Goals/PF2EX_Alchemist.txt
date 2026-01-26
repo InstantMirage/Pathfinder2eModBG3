@@ -324,7 +324,7 @@ THEN
 ApplyStatus(_Character,"ALCH_INT_THP",60.0,0,_Character);
 ApplyStatus(_Character,"MUTAGENIST_THP_BLOCKED",60.0,0,_Character);
 
-//Clotting Elixirs
+//Clotting Elixirs, drink
 IF
 TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
 AND
@@ -335,6 +335,39 @@ AND
 HasPassive(_Source,"ClottingElixirs",1)
 THEN
 ApplyStatus(_Character,"CLOTTING_ELIXIR_ROLL",0.0,0,_Source);
+
+
+//END_REGION
+
+//REGION Throw triggers
+
+//Chirurgeon discovery, thrown
+IF
+AttackedBy((ITEM)_Defender, _, _, _, (INTEGER)_DamageAmount, _, _)
+AND
+_DamageAmount > 0
+AND
+IsTagged(_Defender,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Source,_Defender)
+AND
+HasPassive(_Source,"Chirurgeon_Discovery",1)
+THEN
+CreateExplosion(_Defender, "Projectile_Potion_Destroy_Chirurgeon", 1, _Source);
+
+//Clotting Elixirs, thrown
+IF
+AttackedBy((ITEM)_Defender, _, _, _, (INTEGER)_DamageAmount, _, _)
+AND
+_DamageAmount > 0
+AND
+IsTagged(_Defender,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Source,_Defender)
+AND
+HasPassive(_Source,"ClottingElixirs",1)
+THEN
+CreateExplosion(_Defender, "Projectile_Potion_Destroy_ClottingElixir", 1, _Source);
 
 //END_REGION
 EXITSECTION
