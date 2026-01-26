@@ -21,9 +21,13 @@ function HasElixirStatus(entity)
 	return ConditionResult( elixirs.Result, {ConditionError("NeedsAlchElixir")})
 end
 
+-- Used for Quick Alchemy, Double Brew to replace resources in combat
 function InfusedReagentSpell()
-	local ignore_spells = SpellId('Target_DemolitionCharge')
-	return HasUseCosts('InfusedReagent',false) & ~ignore_spells
+	-- These spells can use infused reagents in combat
+	local ignore_spells_without_vials =  SpellId('Zone_ShapedContaminant') & ~HasActionResource('VersatileVial', 1, 0, false, false, context.Source)
+	-- Don't change Demolition Charge
+	local ignore_spells = SpellId('Target_DemolitionCharge') 
+	return HasUseCosts('InfusedReagent',false) & ~(ignore_spells|ignore_spells_without_vials)
 end
 
 function DoubleBrewFree()
@@ -46,7 +50,7 @@ function QuickAlchemyLevel(level)
 end
 --Learned formula
 function QuickAlchemyFormula(level,status)
-	return HasStatus(status) & QuickAlchemyLevel(level)
+	return (HasStatus(status) | HasPassive('Homebrewer')| HasPassive('ALCHEMIST')) & QuickAlchemyLevel(level)
 end
 
 function QuarrelPoisonerSpell()
@@ -59,4 +63,8 @@ function BlowgunPoisoner(dipped_status,crit)
 	else
 		return IsHit() & HasStatus(dipped_status, GetAttackWeapon()) & ~TotalAttackDamageDoneGreaterThan(0)
 	end
+end
+
+function AdditiveTrait(status,tag)
+	return HasStatus(status,context.Source) & Tagged(tag)
 end

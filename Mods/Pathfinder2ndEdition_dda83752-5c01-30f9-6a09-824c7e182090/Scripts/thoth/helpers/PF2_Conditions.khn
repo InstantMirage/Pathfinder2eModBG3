@@ -447,9 +447,12 @@ end
 
 --Fighter
 
-function ClassDC(source)
+function ClassDC(source,ability)
 	source = source or context.Source
 	local base = 10 + source.ProficiencyBonus + math.max(GetModifier(source.Strength), GetModifier(source.Dexterity))
+	if ability then
+		base = 10 + source.ProficiencyBonus + GetModifier(source[ability])
+	end
 	local expertise = 0
 	local stat_pen = 0
 	
