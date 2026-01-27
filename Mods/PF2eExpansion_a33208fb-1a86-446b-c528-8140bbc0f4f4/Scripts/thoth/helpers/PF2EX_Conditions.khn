@@ -24,7 +24,7 @@ end
 -- Used for Quick Alchemy, Double Brew to replace resources in combat
 function InfusedReagentSpell()
 	-- These spells can use infused reagents in combat
-	local ignore_spells_without_vials =  SpellId('Zone_ShapedContaminant') & ~HasActionResource('VersatileVial', 1, 0, false, false, context.Source)
+	local ignore_spells_without_vials = (SpellId('Teleportation_MiracleWorker')|SpellId('Zone_ShapedContaminant')) & ~HasActionResource('VersatileVial', 1, 0, false, false, context.Source)
 	-- Don't change Demolition Charge
 	local ignore_spells = SpellId('Target_DemolitionCharge') 
 	return HasUseCosts('InfusedReagent',false) & ~(ignore_spells|ignore_spells_without_vials)
@@ -36,8 +36,8 @@ function DoubleBrewFree()
 end
 
 function DoubleBrew1A()
-	local two_actions = SpellId('Zone_ShapedContaminant')
-	return ThrownVialSpell() | two_actions
+	--local two_actions = SpellId('Teleportation_MiracleWorker')
+	return ThrownVialSpell() --| two_actions
 end
 
 function ThrownVialSpell()
@@ -46,11 +46,11 @@ end
 
 --Starting formula
 function QuickAlchemyLevel(level)
-	return ConditionResult(context.Source.Level > level, {ConditionError("IsNotCharacterLevelGreaterThan")}) & HasFreeHand()
+	return ConditionResult(context.Source.Level > level, {ConditionError("AlchFormulaLevel")}) & HasFreeHand()
 end
 --Learned formula
 function QuickAlchemyFormula(level,status)
-	return (HasStatus(status) | HasPassive('Homebrewer')| HasPassive('ALCHEMIST')) & QuickAlchemyLevel(level)
+	return ConditionResult((HasStatus(status) | HasPassive('Homebrewer')| HasPassive('ALCHEMIST')).Result, {ConditionError("AlchFormula")}) & QuickAlchemyLevel(level)
 end
 
 function QuarrelPoisonerSpell()
@@ -67,4 +67,20 @@ end
 
 function AdditiveTrait(status,tag)
 	return HasStatus(status,context.Source) & Tagged(tag)
+end
+
+function HasInfusedItemInInventory(source,check_same_owner)
+	local source = source or context.Source
+	local items = GetItemsInInventory(source)
+	if items ~= nil then
+		for _, entity in ipairs(items.Items) do
+			if check_same_owner and HasStatus('ALCH_INFUSED',entity,source).Result then
+				return ConditionResult(true)
+			elseif Tagged('ALCH_INFUSED',entity).Result and not check_same_owner then
+				return ConditionResult(true)
+			end
+		end
+	end
+
+	return ConditionResult(false, {ConditionError("NeedsAlchInfused")})
 end

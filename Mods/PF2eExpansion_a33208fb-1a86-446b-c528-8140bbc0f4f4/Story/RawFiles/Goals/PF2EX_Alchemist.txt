@@ -232,6 +232,7 @@ AND
 DB_Alchemy_InfusedItem((CHARACTER)_Char,_Item)
 THEN
 NOT DB_Alchemy_InfusedItem(_Char,_Item);
+Die(_Item);
 
 
 //General cleanup: destroy items
@@ -272,6 +273,16 @@ RespecCompleted((CHARACTER)_Char)
 THEN
 PROC_CleanupAlchemicalInfusions(_Char,0);
 
+//Alter Admixture
+IF
+StatusApplied((ITEM)_Item,"ALTER_ADMIXTURE",(CHARACTER)_Char,_)
+AND
+IsItem(_Item,1)
+THEN
+Pickup(_Char, _Item, "AlterAdmixture", 1);
+SendToCampChest(_Item, _Char);
+Die(_Item);
+ApplyStatus(_Char,"ALTER_ADMIXTURE",0.0,1,_Char);
 
 //END_REGION
 
