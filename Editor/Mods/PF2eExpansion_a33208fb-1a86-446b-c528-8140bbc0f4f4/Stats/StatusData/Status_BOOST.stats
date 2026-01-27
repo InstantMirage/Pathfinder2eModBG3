@@ -12,7 +12,7 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="RemoveOnLongRest;DisableCombatlog;TickingWithSource;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(AdditiveTrait('ADDITIVE_SMOKE_OWNER','GRENADE')):ApplyStatus(ADDITIVE_SMOKE,100,-1); IF(AdditiveTrait('ADDITIVE_SOUR_OWNER','GRENADE')):ApplyStatus(ADDITIVE_SOUR,100,-1)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HealingElixirReminder('Chirurgeon_Discovery')):ApplyStatus(CHIRURGEON_REMINDER,100,-1); IF(HealingElixirReminder('ClottingElixirs')):ApplyStatus(CLOTTING_ELIXIR_REMINDER,100,-1); IF(FortifiedElixirReminder()):ApplyStatus(FORTIFIED_ELIXIR,100,-1); IF(AdditiveTrait('ADDITIVE_SMOKE_OWNER','GRENADE')):ApplyStatus(ADDITIVE_SMOKE,100,-1); IF(AdditiveTrait('ADDITIVE_SOUR_OWNER','GRENADE')):ApplyStatus(ADDITIVE_SOUR,100,-1)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="Unsummon();Kill()" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="79eb91f2-1a1f-4749-87e3-a0cafc1f4ef6" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(ALCH_SOLUTION);Tag(ALCH_INFUSED);ItemReturnToOwner();" />
@@ -152,6 +152,29 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog;DisablePortraitIndicator;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,10)" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(STOP_BLEEDING,100,0)" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd02be0f9g5766g2245g9320g201addc54eb7" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0ac0becc-7ced-4dbe-ae57-17f15e448d2c" />
+        <field name="Name" type="NameTableFieldDefinition" value="CLOTTING_ELIXIR_REMINDER" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="88385b52-04a0-453f-9c92-eb91489f7387" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_ScarletRemittance_1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="373b9e52-d53a-4655-89e5-c1882edb2472" />
+        <field name="Name" type="NameTableFieldDefinition" value="CHIRURGEON_REMINDER" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="0ac0becc-7ced-4dbe-ae57-17f15e448d2c" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h01f000c7g30f4g0606g8c04gc35ea7f84522" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h343b70bfgd838g3655g904bga733b62a030e" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_MAG_TemporaryHP" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="RestoreHitPoints(Cause.IntelligenceModifier)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -186,6 +209,26 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="1759f4e7-150f-4339-bb9c-cf3cbe6b006c" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RestoreResource(InfusedReagent,1,0);" />
         <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="03f303d9-a60c-43dd-aafb-f8dfee348eaa" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Applied via script" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="15a8dcdb-04d4-4cbc-8bd9-5587a18723e3" />
+        <field name="Name" type="NameTableFieldDefinition" value="FORTIFIED_ELIXIR" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5a9896b3g096fg6dabg4544g1aae341aa768" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6a4526c6g3b18g10efg32beg310a0057b57c" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_DrunkardsLuck" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF( not Item() ):Tag(ITEM_BON_1FORT);UnlockInterrupt(Interrupt_FortifiedElixir);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="59c5fd77-d86b-42cb-9ce2-d185907d9d8a" />
+        <field name="Name" type="NameTableFieldDefinition" value="ADDITIVE_COOLDOWN" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="84b69c04-945d-4ed3-ad1a-8638aabbf42b" />
+        <field name="StackId" type="StringTableFieldDefinition" value="ADDITIVE_USED" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -199,6 +242,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="ADDITIVE" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsQuickAlchemyOfType('Grenade'),ModifyTooltipDescription());" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

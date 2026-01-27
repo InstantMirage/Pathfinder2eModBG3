@@ -26,7 +26,7 @@ function InfusedReagentSpell()
 	-- These spells can use infused reagents in combat
 	local ignore_spells_without_vials = (SpellId('Teleportation_MiracleWorker')|SpellId('Zone_ShapedContaminant')) & ~HasActionResource('VersatileVial', 1, 0, false, false, context.Source)
 	-- Don't change Demolition Charge
-	local ignore_spells = SpellId('Target_DemolitionCharge') 
+	local ignore_spells = SpellId('Target_DemolitionCharge')
 	return HasUseCosts('InfusedReagent',false) & ~(ignore_spells|ignore_spells_without_vials)
 end
 
@@ -46,11 +46,23 @@ end
 
 --Starting formula
 function QuickAlchemyLevel(level)
-	return ConditionResult(context.Source.Level > level, {ConditionError("AlchFormulaLevel")}) & HasFreeHand()
+	return ConditionResult(context.Source.Level >= level, {ConditionError("AlchFormulaLevel")}) & HasFreeHand()
 end
 --Learned formula
 function QuickAlchemyFormula(level,status)
 	return ConditionResult((HasStatus(status) | HasPassive('Homebrewer')| HasPassive('ALCHEMIST')).Result, {ConditionError("AlchFormula")}) & QuickAlchemyLevel(level)
+end
+
+function QuickAlchemyFunctors(string)
+-- string is used in additive conditions, keys:
+-- 'Healing'
+-- 'Grenade'
+-- 'Drink'
+-- 'Elixir'
+-- 'Poison'
+-- 'Oil'
+-- Otherwise handles double brew
+	return TurnBased() & HasPassive('DoubleBrew') & ~HasStatus('DOUBLE_BREW')
 end
 
 function QuarrelPoisonerSpell()
@@ -63,6 +75,10 @@ function BlowgunPoisoner(dipped_status,crit)
 	else
 		return IsHit() & HasStatus(dipped_status, GetAttackWeapon()) & ~TotalAttackDamageDoneGreaterThan(0)
 	end
+end
+
+function IsQuickAlchemyOfType(string)
+	return HasStringInFunctorConditions('QuickAlchemy') & HasStringInFunctorConditions(string)
 end
 
 function AdditiveTrait(status,tag)
@@ -83,4 +99,12 @@ function HasInfusedItemInInventory(source,check_same_owner)
 	end
 
 	return ConditionResult(false, {ConditionError("NeedsAlchInfused")})
+end
+
+function HealingElixirReminder(string)
+	return HasPassive(string,context.Source) & Tagged('ALCH_INFUSED_HEALING')
+end
+
+function FortifiedElixirReminder()
+	return HasPassive('FortifiedElixirs',context.Source) & Tagged('ALCH_INFUSED_HEALING') & ~Tagged('HEALING_POTION')
 end

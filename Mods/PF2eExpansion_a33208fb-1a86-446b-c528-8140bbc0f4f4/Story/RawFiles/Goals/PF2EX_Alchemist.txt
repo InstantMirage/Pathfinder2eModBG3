@@ -195,6 +195,19 @@ THEN
 ApplyStatus(_Character,"ALCH_INT_THP",60.0,0,_Character);
 ApplyStatus(_Character,"MUTAGENIST_THP_BLOCKED",60.0,0,_Character);
 
+//Drink antidote, improved by Fortified Elixir
+IF
+TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
+AND
+IsTagged(_Item,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
+AND
+NOT IsTagged(_Item,(TAG)HEALING_POTION_1879a93d-2edf-4f54-85dd-81a3724d677f,1)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Source,_Item)
+AND
+HasPassive(_Source,"FortifiedElixirs",1)
+THEN
+ApplyStatus(_Character,"FORTIFIED_ELIXIR",60.0,0,_Source);
 
 //END_REGION
 
@@ -216,6 +229,21 @@ HasPassive(_Source,_Passive,1)
 THEN
 CreateExplosion(_Defender, _ProjectileID, 1, _Source);
 
+//Throw antidote, improved by Fortified Elixirs
+IF
+AttackedBy((ITEM)_Defender, _, _, _, (INTEGER)_DamageAmount, _, _)
+AND
+_DamageAmount > 0
+AND
+IsTagged(_Defender,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
+AND
+NOT IsTagged(_Defender,(TAG)HEALING_POTION_1879a93d-2edf-4f54-85dd-81a3724d677f,1)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Source,_Defender)
+AND
+HasPassive(_Source,"FortifiedElixirs",1)
+THEN
+CreateExplosion(_Defender, "Projectile_Potion_Destory_FortifiedElixirs", 1, _Source);
 
 //END_REGION
 
@@ -224,6 +252,7 @@ CreateExplosion(_Defender, _ProjectileID, 1, _Source);
 IF
 StatusApplied((ITEM)_Item, "ALCH_INFUSED", (CHARACTER)_Char, _)
 THEN
+ApplyStatus(_Item,"ALCH_INFUSED_TIMER",-1.0,1,_Char);
 DB_Alchemy_InfusedItem(_Char,_Item);
 
 IF

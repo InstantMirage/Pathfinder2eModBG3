@@ -81,7 +81,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_ReliableTalent" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(SpellTypeIs(SpellType.Throw) and not IsSpell()):RollBonus(Attack, 1);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(StrongArmSpell()):RollBonus(Attack, 1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -91,7 +91,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="73d59d05-bb42-4053-b99b-c187b33f22a2" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3848663dg89f1gaa7agf74bg6b44067bec81" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(SpellTypeIs(SpellType.Throw) and not IsSpell()):RollBonus(Attack, 2);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(StrongArmSpell()):RollBonus(Attack, 2);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -132,9 +132,10 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="eb509135-e096-41ee-9fb6-eee790594c15" />
         <field name="Name" type="NameTableFieldDefinition" value="Chirurgeon_Discovery" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_LesserRestoration" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Cleric_PreserveLife" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h86a39c50g500agd1bcgc6c0g516918bc990f" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8886d476g4e5ega443g2ef0g52cbc4b7afd6" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -144,6 +145,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_GreaterRestoration" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1e0613b1g5515ge115g19e0g7848db446d56" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="heddac2e3g162eg501egd279ge247ea08dd58" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -313,12 +315,18 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5d1ba9beg1f6bg5928gacc5g36534ee50378" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(3)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_FogCloud" />
-        <field name="EnabledConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="EnabledConditions" type="StringTableFieldDefinition" value="not HasStatus('ADDITIVE_COOLDOWN',context.Source);" />
         <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="ToggleOnFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ADDITIVE_SMOKE_OWNER,100,-1)" />
         <field name="ToggleOffFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(ADDITIVE_SMOKE_OWNER)" />
         <field name="ToggleGroup" type="StringTableFieldDefinition" value="Additive" />
         <field name="Owner" type="CommentTableFieldDefinition" value="Basis for all additives" />
+        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="h3968b15dg9669g7e34g8cb5g6fe07f5e7e95" version="1" />
+        <field name="EnabledContext" type="EnumerationListTableFieldDefinition" value="OnStatusApply;OnStatusRemove" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsToggled;ToggledDefaultAddToHotbar;OncePerTurn;MetaMagic" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsQuickAlchemyOfType('Grenade') and Combat();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,ADDITIVE_COOLDOWN,100,1);ApplyStatus(SELF,ACID,100,1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -362,13 +370,17 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="RegainHitPoints(Level*2)" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_LifeOfTheParty" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="h9020768bgc5aeg8d72g0312g9a8ce203ee7b" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="87eba590-01ef-43ff-a0c7-2270c0fb2dd1" />
         <field name="Name" type="NameTableFieldDefinition" value="InvigoratingElixir" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_Aid" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_LesserRestoration" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8fb3f2ef-200b-458c-969d-7ef780814f6c" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsQuickAlchemyOfType('Healing') and Combat();" />
+        <field name="ToggleOnEffect" type="StringTableFieldDefinition" value="VFX_Spells_Cast_Sorcerer_Metamagic_Careful_HeadFX_01:Dummy_HeadFX" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -427,7 +439,10 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="18f9ddc1-967d-4428-9aae-df83dc448a21" />
         <field name="Name" type="NameTableFieldDefinition" value="FortifiedElixirs" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_DispelEvilAndGood" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_DrunkardsLuck" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3aedf88agb387ga2b8g47ffge174d035824f" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hbed4eb30gbb53gf3cbgb205g2279e0aaebc6" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -448,7 +463,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AlterAdmixture" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hecd2821ag0d66gd674g02ffgaee649db7b9e" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h44693a58ga3e4g6964g3992gb382551d9c62" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_DrunkardsLuck" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_SoberingRealisation" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Throw_AlterAdmixture);" />
       </fields>
     </stat_object>
@@ -458,6 +473,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="InvigoratingElixir_Physical" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_EnhanceAbility" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="e5a62f49-5be8-427e-9a70-c01e6e04b7ac" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -481,6 +497,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="4ca44d61-f86b-4335-8862-7fa693e5c60a" />
         <field name="Name" type="NameTableFieldDefinition" value="DebilitatingBomb_Clumsy" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_OttosIrresistibleDance" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="78d267a1-6589-4152-b49d-b156f420df35" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -549,6 +566,7 @@
         <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnLongRest" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="BoostConditions" type="StringTableFieldDefinition" value="HasPassive('FarLobber',context.Source);" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(StrongArmSpell(),ModifyTargetRadius(Multiplicative,2));IF(StrongArmSpell() and HasAnyTags({'CIRC_BON_1AC','CIRC_BON_2AC'},context.Target)):RollBonus(1,Attack);IgnoreLowGroundPenalty(RangedUnarmedAttack);" />
+        <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="97216f68-2b34-447e-b813-9b2ddb25ab0b" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
