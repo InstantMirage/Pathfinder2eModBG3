@@ -16,7 +16,14 @@ DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)NULL_00000000-0000-0000-0000-0
 
 ////Creates projectile on explode, requires attack to have succeeded - (Debilitating bomb)
 //DB_Alchemy_ExplodeOnThrowHitStatus((STRING)_StatusID,(STRING)_ProjectileID)
-DB_Alchemy_ExplodeOnThrowHitStatus("FORTIFIED_ELIXIR_ADD","Projectile_Potion_Destroy_FortifiedElixirs");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_DAZZLED","Projectile_DebilitatingBomb_Dazzled");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_DEAFENED","Projectile_DebilitatingBomb_Deafened");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_OFFGUARD","Projectile_DebilitatingBomb_OffGuard");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_SPEED_5","Projectile_DebilitatingBomb_Speed_5");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_SPEED_10","Projectile_DebilitatingBomb_Speed_10");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_ENFEEBLED","Projectile_DebilitatingBomb_Enfeebled");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_CLUMSY","Projectile_DebilitatingBomb_Clumsy");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_STUPEFIED","Projectile_DebilitatingBomb_Stupefied");
 
 //DB_Alchemy_ThrownHitItem(_StoryActionID,(ITEM)_Item,(CHARACTER)_Alchemist,(STRING)_ProjectileID)
 DB_Alchemy_ThrownHitItem(0,(ITEM)NULL_00000000-0000-0000-0000-000000000000,(CHARACTER)NULL_00000000-0000-0000-0000-000000000000,"");
@@ -248,17 +255,20 @@ HasAppliedStatus(_ThrownObject,_StatusID,1)
 THEN
 DB_Alchemy_ThrownHitItem(_StoryActionID,_ThrownObject,_Source,_ProjectileID);
 
-//Explode on hit
 IF
-AttackedBy((ITEM)_Defender, _, _, _, (INTEGER)_DamageAmount, _, (INTEGER)_StoryActionID)
+StatusApplied((GUIDSTRING)_Object, "THROW_SUCCESS", (GUIDSTRING)_Causee, (INTEGER)_StoryActionID)
 AND
-_DamageAmount > 0
-AND
-DB_Alchemy_ThrownHitItem(_StoryActionID,_Defender,_Source,(STRING)_ProjectileID)
+DB_Alchemy_ThrownHitItem(_StoryActionID,(ITEM)_Item,(CHARACTER)_Source,(STRING)_ProjectileID)
 THEN
-CreateExplosion(_Defender, _ProjectileID, 1, _Source);
+CreateExplosion(_Object, _ProjectileID, 1, _Source);
 
-//Clean up throw
+//Clean up attack DBs on turn
+IF
+TurnEnded(_)
+AND
+DB_Alchemy_ThrownHitItem((INTEGER)_StoryActionID,(ITEM)_Item,(CHARACTER)_Source,(STRING)_ProjectileID)
+THEN
+NOT DB_Alchemy_ThrownHitItem(_StoryActionID,_Item,_Source,_ProjectileID);
 
 //END_REGION
 
