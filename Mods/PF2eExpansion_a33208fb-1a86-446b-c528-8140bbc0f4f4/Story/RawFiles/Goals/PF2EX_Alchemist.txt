@@ -1,18 +1,30 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-//_Char,_Item
+//_Source,_Item
 DB_Alchemy_InfusedItem((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(ITEM)NULL_00000000-0000-0000-0000-000000000000);
 
-//Adds status on drink and projectile on explode
-//DB_Alchemy_HealingElixirPassive((STRING)_Passive,(STRING)_StatusID,(REAL)_DurationID,(STRING)_ProjectileID)
-DB_Alchemy_HealingElixirPassive("Chirurgeon_Discovery","ALCH_INT_THP",60.0,"Projectile_Potion_Destroy_Chirurgeon");
-DB_Alchemy_HealingElixirPassive("ClottingElixirs","CLOTTING_ELIXIR_ROLL",0.0,"Projectile_Potion_Destroy_ClottingElixir");
+////Adds status on drink, creates this explosion on destroy
+//DB_Alchemy_HealingAdditive((STRING)_SourceStatus,(STRING)_TargetStatus,(REAL)_Duration,(STRING)_ProjectileID)
+DB_Alchemy_HealingAdditive("CHIRURGEON_ADD","ALCH_INT_THP",60.0,"Projectile_Potion_Destroy_Chirurgeon");
+DB_Alchemy_HealingAdditive("CLOTTING_ELIXIR_ADD","CLOTTING_ELIXIR_ROLL",0.0,"Projectile_Potion_Destroy_ClottingElixir");
+DB_Alchemy_HealingAdditive("FORTIFIED_ELIXIR_ADD","FORTIFIED_ELIXIR",60.0,"Projectile_Potion_Destroy_FortifiedElixirs");
+DB_Alchemy_HealingAdditive("ADDITIVE_VIGOR","INVIGORATING_ELIXIR_ROLL",60.0,"Projectile_Potion_Destroy_InvigoratingElixir");
 
+//_Source,_Item,_Status,_Duration
+DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(ITEM)NULL_00000000-0000-0000-0000-000000000000,"",0.0,"");
 
+////Creates projectile on explode, requires attack to have succeeded - (Debilitating bomb)
+//DB_Alchemy_ExplodeOnThrowHitStatus((STRING)_StatusID,(STRING)_ProjectileID)
+DB_Alchemy_ExplodeOnThrowHitStatus("FORTIFIED_ELIXIR_ADD","Projectile_Potion_Destroy_FortifiedElixirs");
+
+//DB_Alchemy_ThrownHitItem(_StoryActionID,(ITEM)_Item,(CHARACTER)_Alchemist,(STRING)_ProjectileID)
+DB_Alchemy_ThrownHitItem(0,(ITEM)NULL_00000000-0000-0000-0000-000000000000,(CHARACTER)NULL_00000000-0000-0000-0000-000000000000,"");
+
+////Flavor
 DB_SendStatusToWildMagic_AD("REMOVE_MUTAGENS","Shout_WildMagic_Heal");
 
-//Automatic learning DBs
+////Automatic learning DBs
 
 //DB_Alchemy_GuaranteedFormulas((STRING)_Passive,(STRING)_Recipe,(INTEGER)_MinLevel);
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingGreater_Balsam",3);
@@ -20,7 +32,7 @@ DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingSuperio
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingSupreme_KiRinHair",12);
 DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Grenade_Fire_FireAmber",3);
 
-////DB_Alchemy_FormulaStatus((ITEMROOT)_ObjectTemplate,(STRING)_Recipe);
+//DB_Alchemy_FormulaStatus((ITEMROOT)_ObjectTemplate,(STRING)_Recipe);
 DB_Alchemy_Templates((ITEMROOT)CONS_Potion_AnimalSpeaking_A_447ee8a9-9319-4758-9dc7-2d8ba94e45b5,"ALCH_Potion_AnimalSpeaking_AcornTruffle");
 DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Antitoxin_f0c7d8bb-85e9-4937-96bb-49ba69d28631,"ALCH_Potion_Antidote_Mugwort");
 DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Potion_DetectThoughts_91da7fe8-a5f7-4132-9096-e8da4916a42e,"ALCH_Potion_DetectThoughts_Mergrass");
@@ -168,19 +180,14 @@ DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Supreme_PurpleWorm",9)
 KBSECTION
 //REGION Drink triggers
 
-//Drink healing item, improved by passive
+//Drink healing item, gain status from additive
 IF
 TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
 AND
-IsTagged(_Item,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
-AND
-DB_Alchemy_InfusedItem((CHARACTER)_Source,_Item)
-AND
-DB_Alchemy_HealingElixirPassive((STRING)_Passive,(STRING)_StatusID,(REAL)_Duration,(STRING)_ProjectileID)
-AND
-HasPassive(_Source,_Passive,1)
+DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)_Source,_Item,(STRING)_StatusID,(REAL)_Duration,(STRING)_ProjectileID)
 THEN
 ApplyStatus(_Character,_StatusID,_Duration,0,_Source);
+
 
 //Mutagenist discovery - temp HP on mutagen
 IF
@@ -195,19 +202,24 @@ THEN
 ApplyStatus(_Character,"ALCH_INT_THP",60.0,0,_Character);
 ApplyStatus(_Character,"MUTAGENIST_THP_BLOCKED",60.0,0,_Character);
 
-//Drink antidote, improved by Fortified Elixir
+
+//Store healing item additive information
 IF
-TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
+StatusApplied((ITEM)_Item, (STRING)_SourceStatus, (CHARACTER)_Char, _)
 AND
-IsTagged(_Item,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
+IsItem(_Item,1)
 AND
-NOT IsTagged(_Item,(TAG)HEALING_POTION_1879a93d-2edf-4f54-85dd-81a3724d677f,1)
-AND
-DB_Alchemy_InfusedItem((CHARACTER)_Source,_Item)
-AND
-HasPassive(_Source,"FortifiedElixirs",1)
+DB_Alchemy_HealingAdditive(_SourceStatus,(STRING)_TargetStatus,(REAL)_Duration,(STRING)_ProjectileID)
 THEN
-ApplyStatus(_Character,"FORTIFIED_ELIXIR",60.0,0,_Source);
+DB_Alchemy_InfusedItem_HealingAdditive(_Char,_Item,_TargetStatus,_Duration,(STRING)_ProjectileID);
+
+//Clear healing item info
+IF
+StatusRemoved((ITEM)_Item, (STRING)_Status, _, _)
+AND
+DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)_Char,_Item,_Status,(REAL)_Duration,(STRING)_ProjectileID)
+THEN
+NOT DB_Alchemy_InfusedItem_HealingAdditive(_Char,_Item,_Status,_Duration,_ProjectileID);
 
 //END_REGION
 
@@ -219,31 +231,34 @@ AttackedBy((ITEM)_Defender, _, _, _, (INTEGER)_DamageAmount, _, _)
 AND
 _DamageAmount > 0
 AND
-IsTagged(_Defender,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
-AND
-DB_Alchemy_InfusedItem((CHARACTER)_Source,_Defender)
-AND
-DB_Alchemy_HealingElixirPassive((STRING)_Passive,(STRING)_StatusID,(REAL)_DurationID,(STRING)_ProjectileID)
-AND
-HasPassive(_Source,_Passive,1)
+DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)_Source,_Item,(STRING)_StatusID,(REAL)_Duration,(STRING)_ProjectileID)
 THEN
 CreateExplosion(_Defender, _ProjectileID, 1, _Source);
 
-//Throw antidote, improved by Fortified Elixirs
+////Debilitating bomb
+//Track throw
 IF
-AttackedBy((ITEM)_Defender, _, _, _, (INTEGER)_DamageAmount, _, _)
+OnThrown((ITEM)_ThrownObject, _, (GUIDSTRING)_Thrower, (INTEGER)_StoryActionID, _, _, _)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Source,_ThrownObject)
+AND
+DB_Alchemy_ExplodeOnThrowHitStatus((STRING)_StatusID,(STRING)_ProjectileID)
+AND
+HasAppliedStatus(_ThrownObject,_StatusID,1)
+THEN
+DB_Alchemy_ThrownHitItem(_StoryActionID,_ThrownObject,_Source,_ProjectileID);
+
+//Explode on hit
+IF
+AttackedBy((ITEM)_Defender, _, _, _, (INTEGER)_DamageAmount, _, (INTEGER)_StoryActionID)
 AND
 _DamageAmount > 0
 AND
-IsTagged(_Defender,(TAG)ALCH_INFUSED_HEALING_5c3a5f8f-a801-43cf-becf-01f7125b9bcb,1)
-AND
-NOT IsTagged(_Defender,(TAG)HEALING_POTION_1879a93d-2edf-4f54-85dd-81a3724d677f,1)
-AND
-DB_Alchemy_InfusedItem((CHARACTER)_Source,_Defender)
-AND
-HasPassive(_Source,"FortifiedElixirs",1)
+DB_Alchemy_ThrownHitItem(_StoryActionID,_Defender,_Source,(STRING)_ProjectileID)
 THEN
-CreateExplosion(_Defender, "Projectile_Potion_Destory_FortifiedElixirs", 1, _Source);
+CreateExplosion(_Defender, _ProjectileID, 1, _Source);
+
+//Clean up throw
 
 //END_REGION
 

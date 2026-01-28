@@ -12,7 +12,7 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="RemoveOnLongRest;DisableCombatlog;TickingWithSource;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HealingElixirReminder('Chirurgeon_Discovery')):ApplyStatus(CHIRURGEON_REMINDER,100,-1); IF(HealingElixirReminder('ClottingElixirs')):ApplyStatus(CLOTTING_ELIXIR_REMINDER,100,-1); IF(FortifiedElixirReminder()):ApplyStatus(FORTIFIED_ELIXIR,100,-1); IF(AdditiveTrait('ADDITIVE_SMOKE_OWNER','GRENADE')):ApplyStatus(ADDITIVE_SMOKE,100,-1); IF(AdditiveTrait('ADDITIVE_SOUR_OWNER','GRENADE')):ApplyStatus(ADDITIVE_SOUR,100,-1)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HealingElixirAdd('Chirurgeon_Discovery')):ApplyStatus(CHIRURGEON_ADD,100,-1); IF(HealingElixirAdd('ClottingElixirs')):ApplyStatus(CLOTTING_ELIXIR_ADD,100,-1); IF(FortifiedElixirAdd()):ApplyStatus(FORTIFIED_ELIXIR_ADD,100,-1); IF(AdditiveTrait('ADDITIVE_SMOKE_OWNER','GRENADE')):ApplyStatus(ADDITIVE_SMOKE,100,-1); IF(AdditiveTrait('ADDITIVE_SOUR_OWNER','GRENADE')):ApplyStatus(ADDITIVE_SOUR,100,-1); IF(AdditiveTrait('ADDITIVE_VIGOR_OWNER','ALCH_INFUSED_HEALING')):ApplyStatus(ADDITIVE_VIGOR,100,-1)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="Unsummon();Kill()" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="79eb91f2-1a1f-4749-87e3-a0cafc1f4ef6" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(ALCH_SOLUTION);Tag(ALCH_INFUSED);ItemReturnToOwner();" />
@@ -158,10 +158,10 @@
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="0ac0becc-7ced-4dbe-ae57-17f15e448d2c" />
-        <field name="Name" type="NameTableFieldDefinition" value="CLOTTING_ELIXIR_REMINDER" />
+        <field name="Name" type="NameTableFieldDefinition" value="CLOTTING_ELIXIR_ADD" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="88385b52-04a0-453f-9c92-eb91489f7387" />
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_ScarletRemittance_1" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
       </fields>
@@ -169,7 +169,7 @@
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="373b9e52-d53a-4655-89e5-c1882edb2472" />
-        <field name="Name" type="NameTableFieldDefinition" value="CHIRURGEON_REMINDER" />
+        <field name="Name" type="NameTableFieldDefinition" value="CHIRURGEON_ADD" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="0ac0becc-7ced-4dbe-ae57-17f15e448d2c" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h01f000c7g30f4g0606g8c04gc35ea7f84522" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h343b70bfgd838g3655g904bga733b62a030e" version="1" />
@@ -220,7 +220,16 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6a4526c6g3b18g10efg32beg310a0057b57c" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_DrunkardsLuck" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF( not Item() ):Tag(ITEM_BON_1FORT);UnlockInterrupt(Interrupt_FortifiedElixir);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(ITEM_BON_1FORT);UnlockInterrupt(Interrupt_FortifiedElixir);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1ace8868-89ea-4c76-8114-1429ed3d6018" />
+        <field name="Name" type="NameTableFieldDefinition" value="FORTIFIED_ELIXIR_ADD" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="15a8dcdb-04d4-4cbc-8bd9-5587a18723e3" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -270,6 +279,43 @@
         <field name="Name" type="NameTableFieldDefinition" value="ADDITIVE_SOUR" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="b15cdedb-d2d4-462f-b152-70f84be0ef89" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(3,1,StinkingCloud)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="33ad2e85-f581-4a69-81b4-213b75aafb01" />
+        <field name="Name" type="NameTableFieldDefinition" value="ADDITIVE_VIGOR_OWNER" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="fe23ab49-da93-4292-80fd-c5997b7f1497" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_LesserRestoration" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(IsQuickAlchemyOfType('Healing'),ModifyTooltipDescription());" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdfd12956g168eg958dg8d0age1e9a6a0ce68" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h447ad9d4gb74ag2724g41ecg0fc5905b0c5d" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f783d4cc-934a-4850-9ab1-da9f480caf98" />
+        <field name="Name" type="NameTableFieldDefinition" value="ADDITIVE_VIGOR" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="33ad2e85-f581-4a69-81b4-213b75aafb01" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="ce07dfcd-d67c-4c0f-aef7-cf0e1cfeb522" />
+        <field name="Name" type="NameTableFieldDefinition" value="INVIGORATING_ELIXIR_ROLL" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="33ad2e85-f581-4a69-81b4-213b75aafb01" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hac5b28f3g791egd0a4g0ef3gabe6a0856f8c" version="2" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalNonDamage" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="INVIGORATING_ELIXIR_ROLL" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="StatusImmunity(INVIGORATING_ELIXIR_ROLL);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="StatusId('SHORT_REST')" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="ApplyToDead;RemoveOnLongRest" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF( not InvigoratingElixirUseful()):RemoveStatus(INVIGORATING_ELIXIR_ROLL)" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,10)" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="RemoveStatus(CLUMSY);RemoveStatus(CLUMSY2);RemoveStatus(CLUMSY3);RemoveStatus(CLUMSY_DIRTY_TRICK);RemoveStatus(ENFEEBLED);RemoveStatus(ENFEEBLED_2);RemoveStatus(ENFEEBLED_3);RemoveStatus(DehydrateEnfeebled);RemoveStatus(SICKENED);RemoveStatus(SICKENED_2);RemoveStatus(SICKENED_OVERSTUFF);RemoveStatus(STUPEFIED_1);RemoveStatus(STUPEFIED_2);RemoveStatus(STUPEFIED_3);RemoveStatus(STUPEFIED_4);IF(HasPassive('InvigoratingElixir_Physical',context.Source) or HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Paralyzed);IF(HasPassive('InvigoratingElixir_Physical',context.Source) or HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SLOW);IF(HasPassive('InvigoratingElixir_Physical',context.Source)):RemoveStatus(SG_Blinded);IF(HasPassive('InvigoratingElixir_Physical',context.Source)):RemoveStatus(ASTARION_WEAK);IF(HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Confused);IF(HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Dominated);IF(HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Fleeing);IF(HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Frightened);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(SG_Petrified);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(STUNNED1);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(STUNNED2);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(STUNNED3);RemoveStatus(CLUMSY);RemoveStatus(CLUMSY2);RemoveStatus(CLUMSY3);RemoveStatus(CLUMSY_DIRTY_TRICK);RemoveStatus(ENFEEBLED);RemoveStatus(ENFEEBLED_2);RemoveStatus(ENFEEBLED_3);RemoveStatus(DehydrateEnfeebled);RemoveStatus(SICKENED);RemoveStatus(SICKENED_2);RemoveStatus(SICKENED_OVERSTUFF);RemoveStatus(STUPEFIED_1);RemoveStatus(STUPEFIED_2);RemoveStatus(STUPEFIED_3);RemoveStatus(STUPEFIED_4);IF(HasPassive('InvigoratingElixir_Physical',context.Source) or HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Paralyzed);IF(HasPassive('InvigoratingElixir_Physical',context.Source) or HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SLOW);IF(HasPassive('InvigoratingElixir_Physical',context.Source)):RemoveStatus(SG_Blinded);IF(HasPassive('InvigoratingElixir_Physical',context.Source)):RemoveStatus(ASTARION_WEAK);IF(HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Confused);IF(HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Dominated);IF(HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Fleeing);IF(HasPassive('InvigoratingElixir_Mental',context.Source)):RemoveStatus(SG_Frightened);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(SG_Petrified);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(STUNNED1);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(STUNNED2);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(STUNNED3);IF(HasPassive('InvigoratingElixir_Supreme',context.Source)):RemoveStatus(SG_Disease);" />
+        <field name="StatusGroups" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object color="#FF5F9EA0" is_substat="false">

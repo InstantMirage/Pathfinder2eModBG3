@@ -101,10 +101,22 @@ function HasInfusedItemInInventory(source,check_same_owner)
 	return ConditionResult(false, {ConditionError("NeedsAlchInfused")})
 end
 
-function HealingElixirReminder(string)
+function HealingElixirAdd(string)
 	return HasPassive(string,context.Source) & Tagged('ALCH_INFUSED_HEALING')
 end
 
-function FortifiedElixirReminder()
+function FortifiedElixirAdd()
 	return HasPassive('FortifiedElixirs',context.Source) & Tagged('ALCH_INFUSED_HEALING') & ~Tagged('HEALING_POTION')
+end
+
+function InvigoratingElixirUseful(target,source)
+	target = target or context.Target
+	source = source or context.Source
+	
+	local basic = HasAnyStatus({'CLUMSY','CLUMSY2','CLUMSY3','CLUMSY_DIRTY_TRICK','ENFEEBLED','ENFEEBLED_2','ENFEEBLED_3','DehydrateEnfeebled','SICKENED','SICKENED_2','SICKENED_OVERSTUFF','STUPEFIED_1','STUPEFIED_2','STUPEFIED_3','STUPEFIED_4'},{},{},target)
+	local physical = HasPassive('InvigoratingElixir_Physical',source) & HasAnyStatus({'SG_Paralyzed','SLOW','SG_Blinded','ASTARION_WEAK'},{},{},target)
+	local mental = HasPassive('InvigoratingElixir_Mental',source) & HasAnyStatus({'SG_Paralyzed','SLOW','SG_Confused','SG_Dominated','SG_Fleeing','SG_Frightened'},{},{},target)
+	local supreme = HasPassive('InvigoratingElixir_Supreme',source) & HasAnyStatus({'SG_Petrified','STUNNED1','STUNNED2','STUNNED3','SG_Disease'},{},{},target)
+	
+	return basic | physical | mental | supreme
 end
