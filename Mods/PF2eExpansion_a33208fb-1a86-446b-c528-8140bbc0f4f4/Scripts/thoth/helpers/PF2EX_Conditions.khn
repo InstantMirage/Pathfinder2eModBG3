@@ -49,8 +49,10 @@ function QuickAlchemyLevel(level)
 	return ConditionResult(context.Source.Level >= level, {ConditionError("AlchFormulaLevel")}) & HasFreeHand()
 end
 --Learned formula
-function QuickAlchemyFormula(level,status)
-	return ConditionResult((HasStatus(status) | HasPassive('Homebrewer')| HasPassive('ALCHEMIST')).Result, {ConditionError("AlchFormula")}) & QuickAlchemyLevel(level)
+function QuickAlchemyFormula(status,level)
+	local source = context.Source
+	local result = (HasStatus(status,source) | HasPassive('Homebrewer',source)| HasPassive('ALCHEMIST',source)).Result
+	return ConditionResult(result, {ConditionError("AlchFormula")}) & QuickAlchemyLevel(level)
 end
 
 function QuickAlchemyFunctors(string)
