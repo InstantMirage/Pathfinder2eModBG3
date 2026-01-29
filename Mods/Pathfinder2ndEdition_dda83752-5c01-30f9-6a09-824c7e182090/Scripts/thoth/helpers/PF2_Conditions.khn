@@ -1554,12 +1554,28 @@ function IsAbleToReact(entity)
     return ~HasAnyStatus({'SG_Fleeing','SG_Incapacitated','SG_Stunned','SG_Unconscious','RESTRAINED'}, {}, {}, entity) & ~Dead(entity) & ~(Self(context.Target, entity) & IsKillingBlow())
 end
 
-function Attack2e(attackType, source, sourcePos, target, targetPos)
-    source = source or context.Source
-    sourcePos = sourcePos or context.SourcePosition
-    target = target or context.Target
-    targetPos = targetPos or context.TargetPosition
-    local attack = Attack(attackType, false, false, source, sourcePos, target, targetPos);
+function Attack2e(attackType, adv, dis, source, sourcePos, target, targetPos)
+	local attack
+	if adv then
+		attack = Attack(attackType, adv)
+		if dis then
+			attack = Attack(attackType, adv, dis)
+			if source then
+				attack = Attack(attackType, adv, dis, source)
+				if sourcePos then
+					attack = Attack(attackType, adv, dis, source, sourcePos)
+					if target then
+						attack = Attack(attackType, adv, dis, source, sourcePos, target)
+						if targetPos then
+							attack = Attack(attackType, adv, dis, source, sourcePos, target, targetPos)
+						end
+					end
+				end
+			end
+		end
+	else
+		attack = Attack(attackType)
+	end
     local realChance = attack.Chance
     if HasStatus('HIDDEN_NPC', context.Target).Result then
         realChance = realChance * 0.5

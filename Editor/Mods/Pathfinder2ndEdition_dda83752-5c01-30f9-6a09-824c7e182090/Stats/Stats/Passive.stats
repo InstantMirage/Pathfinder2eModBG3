@@ -90,6 +90,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="SpellSaveDC(2);RollBonus(MeleeSpellAttack,2);RollBonus(RangedSpellAttack,2);" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_PotentCantrip" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -238,7 +239,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="IF((IsWeaponAttack() and IsProficientWith(context.Source, GetAttackWeapon())) or IsUnarmedAttack()):RollBonus(Attack, 2);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1b6ad58ag5ca3gd2eegda9fg01cd24f0f81a" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
-        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC;IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC;Highlighted" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -248,8 +249,11 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h875530a1g65a8ge743gd546ga077f488bdeb" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF((IsWeaponAttack() and IsProficientWith(context.Source, GetAttackWeapon())) or IsUnarmedAttack()):RollBonus(Attack, 4);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h21bf58b0gbad5g686bg631egc89b6613d247" version="1" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="18343b20-f823-49e3-a74b-235bbd5f374f" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Doesn't inherit, is it stupid?" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_ExtraAttack" />
-        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC;IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC;Highlighted" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -261,7 +265,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SavingThrow,2,Dexterity)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h50a30ce2ga08ag785fg347ag9177f1e32647" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
-        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC;IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -273,7 +277,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SavingThrow,2,Constitution)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1f6854f7g0005g47feg1097g94895d634963" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
-        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC;IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -285,7 +289,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(SavingThrow,2,Wisdom)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h13fd1f9eg346dgcc28gbf55gc0ee991d363e" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
-        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC;IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2229,7 +2233,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e7d50d0c-b16d-44cb-9233-75332c6b1907" />
         <field name="Name" type="NameTableFieldDefinition" value="GiantRageBoosts" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="820668c6-5bc5-4277-91cd-4a136d885abc" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeAttack() and GiantRage()):DamageBonus(LevelMapValue(GiantRageDamage));IF(HasStatus('MightyRage',context.Source) and IsMeleeAttack() and GiantRage()):DamageBonus(LevelMapValue(GiantRageDamage));IF(IsMeleeAttack() and GiantRage() and IsCritical()):DamageBonus(LevelMapValue(GiantRageDamage));IF(IsMeleeAttack() and GiantRage() and IsCritical() and HasPassive('MightyRage',context.Source)):DamageBonus(LevelMapValue(GiantRageDamage));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF((IsMeleeAttack() or (IsRangedUnarmedAttack() and HasPassive('RagingThrower',context.Source))) and GiantRage() and not AgileMAP()):DamageBonus(LevelMapValue(GiantRageDamage));IF(HasStatus('MightyRage',context.Source) and (IsMeleeAttack() or (IsRangedUnarmedAttack() and HasPassive('RagingThrower',context.Source))) and GiantRage() and not AgileMAP()):DamageBonus(LevelMapValue(GiantRageDamage));IF((IsMeleeAttack() or (IsRangedUnarmedAttack() and HasPassive('RagingThrower',context.Source))) and GiantRage() and not AgileMAP() and IsCritical()):DamageBonus(LevelMapValue(GiantRageDamage));IF((IsMeleeAttack() or (IsRangedUnarmedAttack() and HasPassive('RagingThrower',context.Source))) and GiantRage() and not AgileMAP() and IsCritical() and HasPassive('MightyRage',context.Source)):DamageBonus(LevelMapValue(GiantRageDamage));" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(LevelMapValue(GiantRageDamage));IF(HasStatus('MightyRageStatus')):DealDamage(LevelMapValue(GiantRageDamage))" />
         <field name="Conditions" type="StringTableFieldDefinition" value="SpellId('Target_Thrash') and GiantRage();" />
       </fields>
@@ -4827,12 +4831,12 @@
         <field name="UUID" type="IdTableFieldDefinition" value="c527f419-61b6-4f76-92d0-6103c29d07b7" />
         <field name="Name" type="NameTableFieldDefinition" value="ReachSpellshape" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h67f66e32g48f3g696dg5de2g5df0831c2083" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9eb4c626gf129gff69g17c7g2205ee9e5401" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9eb4c626gf129gff69g17c7g2205ee9e5401" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Skill_Sorcerer_Passive_Metamagic_DistantSpell" />
         <field name="EnabledConditions" type="StringTableFieldDefinition" value="HasActionResource('ActionPoint', 1, 0, false, false, context.Source)" />
         <field name="EnabledContext" type="EnumerationListTableFieldDefinition" value="OnCastResolved;OnLongRest;OnActionResourcesChanged" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsToggled;ToggledDefaultAddToHotbar;MetaMagic" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(DistantSpellCheck(),ModifyTargetRadius(Multiplicative,1.5),ModifyUseCosts(Add,ActionPoint,1,0));UnlockSpellVariant(DistantTouchSpellCheck(),ModifyTargetRadius(Override,9),ModifySpellFlags(Melee,0),ModifyUseCosts(Add,ActionPoint,1,0))" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(DistantSpellCheck(),ModifyTargetRadius(AdditiveFinal,9),ModifyUseCosts(Add,ActionPoint,1,0));UnlockSpellVariant(DistantTouchSpellCheck(),ModifyTargetRadius(AdditiveFinal,9),ModifySpellFlags(Melee,0),ModifyUseCosts(Add,ActionPoint,1,0));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -5677,7 +5681,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="habd7ffdcge1eeg5e4ag8831g6b59aff142f7" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_MartialArts_DextrousUnarmedAttacks" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted;ForceShowInCC" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(SneakAttackWeapon() and not IsRangedWeaponAttack()):DamageBonus(DexterityModifier-StrengthModifier);IF(IsCritical() and SneakAttackWeapon() and not IsRangedWeaponAttack()):DamageBonus(DexterityModifier-StrengthModifier);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(SneakAttackWeapon() and not IsRangedWeaponAttack()):DamageBonus(DexterityModifier-StrengthModifier);IF(IsCritical() and SneakAttackWeapon() and not IsRangedWeaponAttack()):DamageBonus(DexterityModifier);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
