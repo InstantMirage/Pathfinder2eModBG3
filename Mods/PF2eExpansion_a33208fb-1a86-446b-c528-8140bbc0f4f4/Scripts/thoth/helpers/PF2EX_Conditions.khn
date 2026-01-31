@@ -1,0 +1,124 @@
+local __util = require 'larian.util'
+
+-- Alchemist
+
+function VersatileVialDifficulty()
+	-- Replace Quick Alchemy resource with vial while turn-based
+	local resource = HasActionResource('VersatileVial', 1, 0, false, false, context.Source)
+	-- Will always require vials with Survivalist loot balancing, limiting use in combat 
+	local difficulty = CheckRulesetModifier('fccef0aa-8e28-4b7b-b661-c33094c5f3f7','RUTHLESS')
+	
+	return Combat() & (difficulty | resource)
+end
+
+function HasMutagenStatus(entity)
+	return HasElixirStatus(entity)
+end
+
+function HasElixirStatus(entity)
+	local entity = entity or context.Source
+	local elixirs = HasAnyStatus({'ALCH_ELIXIR_ENLARGE','ALCH_ELIXIR_DARKVISION','ALCH_ELIXIR_SEE_INVISIBILITY','ALCH_ELIXIR_BARKSKIN','ALCH_ELIXIR_MEDITATION','ALCH_ELIXIR_MEDITATION_GREATER','ALCH_ELIXIR_MEDITATION_SUPERIOR','ALCH_ELIXIR_MEDITATION_SUPREME','ALCH_ELIXIR_ALERTNESS','ALCH_ELIXIR_CRITICALS','ALCH_ELIXIR_BLOODLUST','ALCH_ELIXIR_FREEDOM','ALCH_ELIXIR_CONCENTRATION','ALCH_ELIXIR_ARCANE_ACUITY','POTION_OF_STRENGTH_HILL_GIANT','POTION_OF_STRENGTH_CLOUD_GIANT','POTION_OF_HEROISM','ALCH_ELIXIR_TADPOLE','POTION_OF_RESISTANCE','POTION_OF_RESISTANCE_COLD','POTION_OF_RESISTANCE_FORCE','POTION_OF_RESISTANCE_NECROTIC','POTION_OF_RESISTANCE_PSYCHIC','POTION_OF_RESISTANCE_RADIANT','POTION_OF_RESISTANCE_THUNDER','POTION_OF_RESISTANCE_ACID','POTION_OF_RESISTANCE_FIRE','POTION_OF_RESISTANCE_POISON','POTION_OF_RESISTANCE_LIGHTNING'},{},{},entity)
+	return ConditionResult( elixirs.Result, {ConditionError("NeedsAlchElixir")})
+end
+
+-- Used for Quick Alchemy, Double Brew to replace resources in combat
+function InfusedReagentSpell()
+	-- These spells can use infused reagents in combat
+	local ignore_spells_without_vials = (SpellId('Teleportation_MiracleWorker')|SpellId('Zone_ShapedContaminant')) & ~HasActionResource('VersatileVial', 1, 0, false, false, context.Source)
+	-- Don't change Demolition Charge
+	local ignore_spells = SpellId('Target_DemolitionCharge')
+	return HasUseCosts('InfusedReagent',false) & ~(ignore_spells|ignore_spells_without_vials)
+end
+
+function DoubleBrewFree()
+	local ignore_spells = SpellId('Zone_ShapedContaminant')
+	return InfusedReagentSpell() & ~ignore_spells
+end
+
+function DoubleBrew1A()
+	--local two_actions = SpellId('Teleportation_MiracleWorker')
+	return ThrownVialSpell() --| two_actions
+end
+
+function ThrownVialSpell()
+	return SpellId('Projectile_VersatileVial')  | SpellId('Projectile_VersatileVial_Healing') | SpellId('Projectile_VersatileVial_Container') | SpellId('Projectile_VersatileVial_Acid') | SpellId('Projectile_VersatileVial_Cold') | SpellId('Projectile_VersatileVial_Lightning')  | SpellId('Projectile_VersatileVial_Fire') | SpellId('Projectile_VersatileVial_Vitality') | SpellId('Projectile_VersatileVial_Void') | SpellId('Projectile_VersatileVial_Poison')
+end
+
+--Starting formula
+function QuickAlchemyLevel(level)
+	return ( ConditionResult(context.Source.Level >= level, {ConditionError("AlchFormulaLevel")}) & HasFreeHand() ) | HasPassive('ALCHEMIST',context.Source)
+end
+--Learned formula
+function QuickAlchemyFormula(status,level)
+	local source = context.Source
+	local result = (HasStatus(status,source) | HasPassive('Homebrewer',source)| HasPassive('ALCHEMIST',source)).Result
+	return ConditionResult(result, {ConditionError("AlchFormula")}) & QuickAlchemyLevel(level)
+end
+
+function QuickAlchemyFunctors(string)
+-- string is used in additive conditions, keys:
+-- 'Healing'
+-- 'Grenade'
+-- 'Drink'
+-- 'Elixir'
+-- 'Poison'
+-- 'Oil'
+-- Otherwise handles double brew
+	return TurnBased() & HasPassive('DoubleBrew') & ~HasStatus('DOUBLE_BREW')
+end
+
+function QuarrelPoisonerSpell()
+	return HasStringInSpellRoll('RangedWeaponAttack') | HasStringInSpellRoll('RangedOffHandWeaponAttack')
+end
+
+function BlowgunPoisoner(dipped_status,crit)
+	if crit then
+		return IsCritical() & HasStatus(dipped_status, GetAttackWeapon())
+	else
+		return IsHit() & HasStatus(dipped_status, GetAttackWeapon()) & ~TotalAttackDamageDoneGreaterThan(0)
+	end
+end
+
+function IsQuickAlchemyOfType(string)
+	return HasStringInFunctorConditions('QuickAlchemy') & HasStringInFunctorConditions(string)
+end
+
+function AdditiveTrait(status,tag)
+	return HasStatus(status,context.Source) & Tagged(tag)
+end
+
+function HasInfusedItemInInventory(source,check_same_owner)
+	local source = source or context.Source
+	local items = GetItemsInInventory(source)
+	if items ~= nil then
+		for _, entity in ipairs(items.Items) do
+			if check_same_owner and HasStatus('ALCH_INFUSED',entity,source).Result then
+				return ConditionResult(true)
+			elseif Tagged('ALCH_INFUSED',entity).Result and not check_same_owner then
+				return ConditionResult(true)
+			end
+		end
+	end
+
+	return ConditionResult(false, {ConditionError("NeedsAlchInfused")})
+end
+
+function HealingElixirAdd(string)
+	return HasPassive(string,context.Source) & Tagged('ALCH_INFUSED_HEALING')
+end
+
+function FortifiedElixirAdd()
+	return HasPassive('FortifiedElixirs',context.Source) & Tagged('ALCH_INFUSED_HEALING') & ~Tagged('HEALING_POTION')
+end
+
+function InvigoratingElixirUseful(target,source)
+	target = target or context.Target
+	source = source or context.Source
+	
+	local basic = HasAnyStatus({'CLUMSY','CLUMSY2','CLUMSY3','CLUMSY_DIRTY_TRICK','ENFEEBLED','ENFEEBLED_2','ENFEEBLED_3','DehydrateEnfeebled','SICKENED','SICKENED_2','SICKENED_OVERSTUFF','STUPEFIED_1','STUPEFIED_2','STUPEFIED_3','STUPEFIED_4'},{},{},target)
+	local physical = HasPassive('InvigoratingElixir_Physical',source) & HasAnyStatus({'SG_Paralyzed','SLOW','SG_Blinded','ASTARION_WEAK'},{},{},target)
+	local mental = HasPassive('InvigoratingElixir_Mental',source) & HasAnyStatus({'SG_Paralyzed','SLOW','SG_Confused','SG_Dominated','SG_Fleeing','SG_Frightened'},{},{},target)
+	local supreme = HasPassive('InvigoratingElixir_Supreme',source) & HasAnyStatus({'SG_Petrified','STUNNED1','STUNNED2','STUNNED3','SG_Disease'},{},{},target)
+	
+	return basic | physical | mental | supreme
+end

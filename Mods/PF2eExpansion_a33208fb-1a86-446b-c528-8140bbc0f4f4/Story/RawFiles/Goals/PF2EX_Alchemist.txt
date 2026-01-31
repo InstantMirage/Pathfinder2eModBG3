@@ -1,0 +1,429 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//_Source,_Item
+DB_Alchemy_InfusedItem((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(ITEM)NULL_00000000-0000-0000-0000-000000000000);
+
+////Adds status on drink, creates this explosion on destroy
+//DB_Alchemy_HealingAdditive((STRING)_SourceStatus,(STRING)_TargetStatus,(REAL)_Duration,(STRING)_ProjectileID)
+DB_Alchemy_HealingAdditive("CHIRURGEON_ADD","ALCH_INT_THP",60.0,"Projectile_Potion_Destroy_Chirurgeon");
+DB_Alchemy_HealingAdditive("CLOTTING_ELIXIR_ADD","CLOTTING_ELIXIR_ROLL",0.0,"Projectile_Potion_Destroy_ClottingElixir");
+DB_Alchemy_HealingAdditive("FORTIFIED_ELIXIR_ADD","FORTIFIED_ELIXIR",60.0,"Projectile_Potion_Destroy_FortifiedElixirs");
+DB_Alchemy_HealingAdditive("ADDITIVE_VIGOR","INVIGORATING_ELIXIR_ROLL",60.0,"Projectile_Potion_Destroy_InvigoratingElixir");
+
+//_Source,_Item,_Status,_Duration
+DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)NULL_00000000-0000-0000-0000-000000000000,(ITEM)NULL_00000000-0000-0000-0000-000000000000,"",0.0,"");
+
+////Creates projectile on explode, requires attack to have succeeded - (Debilitating bomb)
+//DB_Alchemy_ExplodeOnThrowHitStatus((STRING)_StatusID,(STRING)_ProjectileID)
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_DAZZLED","Projectile_DebilitatingBomb_Dazzled");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_DEAFENED","Projectile_DebilitatingBomb_Deafened");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_OFFGUARD","Projectile_DebilitatingBomb_OffGuard");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_SPEED_5","Projectile_DebilitatingBomb_Speed_5");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_SPEED_10","Projectile_DebilitatingBomb_Speed_10");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_ENFEEBLED","Projectile_DebilitatingBomb_Enfeebled");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_CLUMSY","Projectile_DebilitatingBomb_Clumsy");
+DB_Alchemy_ExplodeOnThrowHitStatus("ADDITIVE_STUPEFIED","Projectile_DebilitatingBomb_Stupefied");
+
+//DB_Alchemy_ThrownHitItem(_StoryActionID,(ITEM)_Item,(CHARACTER)_Alchemist,(STRING)_ProjectileID)
+DB_Alchemy_ThrownHitItem(0,(ITEM)NULL_00000000-0000-0000-0000-000000000000,(CHARACTER)NULL_00000000-0000-0000-0000-000000000000,"");
+
+////Flavor
+DB_SendStatusToWildMagic_AD("REMOVE_MUTAGENS","Shout_WildMagic_Heal");
+
+////Automatic learning DBs
+
+//DB_Alchemy_GuaranteedFormulas((STRING)_Passive,(STRING)_Recipe,(INTEGER)_MinLevel);
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingGreater_Balsam",3);
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingSuperior_YellowMuskCreeper",6);
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Potion_HealingSupreme_KiRinHair",12);
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Grenade_Fire_FireAmber",3);
+
+//DB_Alchemy_FormulaStatus((ITEMROOT)_ObjectTemplate,(STRING)_Recipe);
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_AnimalSpeaking_A_447ee8a9-9319-4758-9dc7-2d8ba94e45b5,"ALCH_Potion_AnimalSpeaking_AcornTruffle");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Antitoxin_f0c7d8bb-85e9-4937-96bb-49ba69d28631,"ALCH_Potion_Antidote_Mugwort");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Potion_DetectThoughts_91da7fe8-a5f7-4132-9096-e8da4916a42e,"ALCH_Potion_DetectThoughts_Mergrass");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Potion_FeatherFall_179cfdd4-40ef-4f5c-ba6e-8c13f20aadc9,"ALCH_Potion_FeatherFall_AutumnCrocus");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Potion_Flying_8b870692-8491-4f1b-9b5c-58cb0b47a62b,"ALCH_Potion_Flying_EagleFeather");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Healing_A_d47006e9-8a51-453d-b200-9e0d42e9bbab,"ALCH_Potion_Healing_RoguesMorsel");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Healing_A_Greater_e3b95c96-dc26-40fe-bfc0-baa05e1abd20,"ALCH_Potion_HealingGreater_Balsam");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Healing_A_Superior_df4f3495-abaf-4732-b82f-55bcccd561db,"ALCH_Potion_HealingSuperior_YellowMuskCreeper");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Healing_A_Supreme_7d78f227-e8d4-486d-8121-25cf0bee751d,"ALCH_Potion_HealingSupreme_KiRinHair");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Invisible_A_809d5026-4896-4b3a-986e-95da58da77e2,"ALCH_Potion_Invisibility_ImpPatagium");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Invulnerability_7eb0b7b6-97fa-4ff5-a7bb-570ca11a3c64,"ALCH_Potion_Invulnerability_DivineBoneShard");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Potion_Jump_7406ffa4-930c-437f-b201-57b951e5165f,"ALCH_Potion_Jump_Wispweed");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Potion_Remedy_ae9a9360-7cbe-4f72-8bea-1dd5747c180d,"ALCH_Potion_Remedy");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Potion_Rest_Lesser_b0ff8d30-5825-49d4-8cd4-ebf3a3d0a024,"ALCH_Potion_RestLesser_UnicornHorn");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Potion_Rest_Greater_4d801c1a-691e-47c8-88e7-78367b4e2c8e,"ALCH_Potion_RestGreater_PlanetarFeather");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Speed_ad9f3f24-d755-48b6-aa7b-c34da068209f,"ALCH_Potion_Speed_HyenaEar");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Alertness_17066367-7b64-402e-951d-9dcc1407c278,"ALCH_Elixir_Alertness_HookHorrorClaw");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_ArcaneAcuity_7d1699d9-c3fa-4761-9718-28230f78420b,"ALCH_Elixir_ArcaneAcuity_GauthEye");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Bloodlust_45a775f8-2cf9-440d-b9eb-4ee5f17efca8,"ALCH_Elixir_Bloodlust_WorgFang");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Soultion_Elixir_Barkskin_cc1a8802-675a-426b-a791-ec1d5a5b6328,"ALCH_Elixir_Barkskin_WoodBark");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Cloud_Giant_Strength_e6490cc8-7f81-4aac-95e8-a58ce5e88a31,"ALCH_Elixir_GiantStregthCloud_CloudGiantFinger");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Criticals_44cd95a7-4791-4ace-bea0-a5ca4421171b,"ALCH_Elixir_Criticals_ShadowrootSac");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Concentration_45cdcf69-bfd2-4311-a883-3f3631ab3959,"ALCH_Elixir_Concentration_Belladonna");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Darkvision_0f2ccca6-3ce8-4271-aec0-820f6581c551,"ALCH_Elixir_Darkvision_ScryingEye");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Enlarge_0aacb1f9-116a-45ec-9b0c-cb436301d4b2,"ALCH_Elixir_Enlarge_ChasmCreeper");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Freedom_b8a2f9e4-3b5e-4418-af05-5ca3cd40dd71,"ALCH_Elixir_Freedom_OchreJellySlime");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Hill_Giant_Strength_c69fb092-2f4f-4688-82b6-7d92405626b1,"ALCH_Elixir_GiantStregthHill_HillGiantFinger");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Heroism_A_bb27cc17-5af9-4d53-818b-3e620f3f59f2,"ALCH_Elixir_Heroism_PegasusFeather");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Meditation_6f328fc5-6f54-4aad-959d-0825290a2763,"ALCH_Elixir_Meditation_Weavemoss");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Meditation_Greater_8c7656f5-507a-4cee-8e15-320c968539f0,"ALCH_Elixir_Meditation_Greater_Laculite");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Meditation_Superior_fb16d5a8-866f-4c17-9591-0df1372b49c9,"ALCH_Elixir_Meditation_Superior_NightOrchid");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Meditation_Supreme_4f17f210-9cde-4dad-80b5-fc4f9ddb1e1f,"ALCH_Elixir_Meditation_Supreme_BeholderEye");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_SeeInvisible_d106106a-3905-4acb-a24a-764940b61d9c,"ALCH_Elixir_SeeInvisible_NothicEye");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Elixir_Tadpole_d44a454c-3a09-4b93-b982-79f7ee019703,"ALCH_Elixir_Tadpole_TongueOfMadness");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Fire_Resistance_2608c096-a0f5-4172-ad04-c1b170e10d95,"ALCH_Elixir_Resistance_Fire_DragonEggMushroom");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Lightning_Resistance_05257244-ab59-4eab-9745-d1fea7b8cd10,"ALCH_Elixir_Resistance_Lightning_ConstructPart");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Necrotic_Resistance_f3c0aefb-a399-42c6-8d85-7fdceb6d18f5,"ALCH_Elixir_Resistance_Necrotic_BlackOleander");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Poison_Resistance_ae28b14c-0881-45fe-8237-9fcb1c951d3d,"ALCH_Elixir_Resistance_Poison_MudMephitWing");
+DB_Alchemy_Templates((ITEMROOT)CONS_Potion_Psychic_Resistance_164ac6f3-8f93-4d74-9f72-e7c49723dedb,"ALCH_Elixir_Resistance_Psychic_IntellectDevourer");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Grenade_Light_c3236e6e-21e4-4e39-a5b4-fda105d8ce3f,"ALCH_Grenade_Light");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Grenade_SporesConfusion_cbc47f2b-b88a-4bd8-99cd-aacc2dc2ea44,"ALCH_Grenade_SporesConfusion");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Grenade_SporesHaste_6008231b-9f5a-44f6-8050-14586b7626fd,"ALCH_Grenade_SporesHaste");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Grenade_SporesToxic_9320005f-18c6-4c2b-be7f-e168d3b15573,"ALCH_Grenade_SporesToxic");
+DB_Alchemy_Templates((ITEMROOT)GRN_Sunflash_Grenade_A_5e282d02-6a10-44cb-9737-9d52aab0701c,"ALCH_Grenade_Sunflash_BehirScales");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Grenade_Web_a4d98266-948b-4467-96cd-6a316f37ceda,"ALCH_Grenade_Web_SpiderGland");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Oil_AttackBuff_3383e241-4d1c-41ad-bc81-fc548fa9062d,"ALCH_Oil_AttackBuff_Daggeroot");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Oil_Bane_08789f74-3f63-4e7c-8288-b8d873542c15,"ALCH_Oil_Bane_Shadowcursed");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Oil_Combustion_bb750807-895b-468d-81e1-4378797d11ca,"ALCH_Oil_Combustion_MagmaMephitHeart");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Oil_DamageAttackBuff_955d3880-3d10-4fb5-845b-96b6b52aef9a,"ALCH_Oil_DamageAttackBuff_ViridianCrystal");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Oil_Frost_3e4ce3e8-fbae-4e78-9198-e4c15485a928,"ALCH_Oil_Frost");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Oil_Reduce_01985597-fceb-47d1-93ae-9cc9928ed9e7,"ALCH_Oil_Reduce_SylvanStone");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Soultion_Oil_RemoveResistanceFire_bd118cc0-eb90-412d-8229-6749f42df5c6,"ALCH_Oil_RemoveResistanceFire_IceMephitEar");
+DB_Alchemy_Templates((ITEMROOT)ALCH_Solution_Oil_Wizardsbane_e4f7cb7f-1cb3-411b-b078-f4ac25b750a8,"ALCH_Oil_Wizardsbane_GremishkaTail");
+DB_Alchemy_Templates((ITEMROOT)CONS_Poison_Basic_28645376-e6e8-436a-8e9a-c62877fae07d,"ALCH_Poison_Simple_Bonecap");
+DB_Alchemy_Templates((ITEMROOT)CONS_Poison_Drow_f528a334-bdb3-4cf1-b74c-0e08942daeb1,"ALCH_Poison_Sleep_SwarmingToadstool");
+DB_Alchemy_Templates((ITEMROOT)CONS_Poison_Crawler_Mucus_5865caed-4a5d-45b7-b365-1113334a8e7b,"ALCH_Poison_Paralyze_CarrionCrawler");
+DB_Alchemy_Templates((ITEMROOT)CONS_Poison_Malice_d990fefe-e0f3-46ba-915e-35aebc6c6599,"ALCH_Poison_Blind_LolthsCandle");
+DB_Alchemy_Templates((ITEMROOT)UNI_Poison_Brewer_6db9ed3d-2d72-43ad-a2b8-02365728f29f,"ALCH_Poison_UNI_Brewer");
+DB_Alchemy_Templates((ITEMROOT)Solution_Toxin_Basic_8b5f7965-6cd1-42c1-8449-c6562a270ad9,"ALCH_Toxin_Basic_BullywugTrumpet");
+DB_Alchemy_Templates((ITEMROOT)CONS_Poison_Serpent_Venom_b0385b93-f525-4740-8126-471a76fa31a2,"ALCH_Toxin_Greater_SnakeFang");
+DB_Alchemy_Templates((ITEMROOT)CONS_Poison_Wyvern_eca393b0-3f8e-4862-814b-9e236a0d4129,"ALCH_Toxin_Superior_WyvernStinger");
+DB_Alchemy_Templates((ITEMROOT)CONS_Poison_Purple_Worm_56e531e9-78e4-430b-bc98-611c1b1ccd08,"ALCH_Toxin_Supreme_PurpleWorm");
+DB_Alchemy_Templates((ITEMROOT)GRN_FireFlask_A_0b1aa718-fe45-4e4c-8811-ced51c581075,"ALCH_Grenade_Fire_FireAmber");
+
+//DB_Alchemy_FormulaStatus((STRING)_Status,(STRING)_Recipe,(INTEGER)_MinLevel);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_DIALOG","ALCH_Potion_AnimalSpeaking_AcornTruffle",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_DIALOG","ALCH_Potion_DetectThoughts_Mergrass",1);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_AIR","ALCH_Potion_FeatherFall_AutumnCrocus",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_AIR","ALCH_Potion_Jump_Wispweed",5);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_AIR","ALCH_Potion_Flying_EagleFeather",8);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_ANTIDOTE","ALCH_Potion_Antidote_Mugwort",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_ANTIDOTE","ALCH_Potion_Remedy",6);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_REST","ALCH_Potion_RestLesser_UnicornHorn",6);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_REST","ALCH_Potion_RestGreater_PlanetarFeather",12);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPEED","ALCH_Elixir_Alertness_HookHorrorClaw",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPEED","ALCH_Elixir_Freedom_OchreJellySlime",6);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPEED","ALCH_Potion_Speed_HyenaEar",6);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPEED","ALCH_Grenade_SporesHaste",8);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_AC","ALCH_Elixir_Barkskin_WoodBark",4);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_MENTAL_BUFF","ALCH_Elixir_Concentration_Belladonna",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_MENTAL_BUFF","ALCH_Elixir_ArcaneAcuity_GauthEye",6);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_MENTAL_DEBUFF","ALCH_Oil_Wizardsbane_GremishkaTail",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_MENTAL_DEBUFF","ALCH_Grenade_SporesConfusion",6);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_MENTAL_DEBUFF","ALCH_Elixir_Tadpole_TongueOfMadness",9);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_ENLARGE","ALCH_Elixir_Enlarge_ChasmCreeper",4);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_GIANT_STR","ALCH_Elixir_GiantStregthCloud_CloudGiantFinger",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_GIANT_STR","ALCH_Elixir_GiantStregthHill_HillGiantFinger",9);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_THP","ALCH_Elixir_Heroism_PegasusFeather",4);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_THP","ALCH_Elixir_Bloodlust_WorgFang",6);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPELL","ALCH_Elixir_Meditation_Weavemoss",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPELL","ALCH_Elixir_Meditation_Greater_Laculite",6);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPELL","ALCH_Elixir_Meditation_Superior_NightOrchid",9);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPELL","ALCH_Elixir_Meditation_Supreme_BeholderEye",12);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SIGHT","ALCH_Elixir_Darkvision_ScryingEye",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SIGHT","ALCH_Elixir_SeeInvisible_NothicEye",6);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_INVIS","ALCH_Potion_Invisibility_ImpPatagium",4);
+
+//Potion of Resistance
+//DB_Alchemy_FormulaStatus("ALCH_FORMULA_RESISTANCE_FIR","ALCH_Elixir_Resistance_Fire_DragonEggMushroom",5);
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Elixir_Resistance_Lightning_ConstructPart",5);
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Elixir_Resistance_Fire_DragonEggMushroom",5);
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Elixir_Resistance_Poison_MudMephitWing",5);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_RESISTANCE_NEC","ALCH_Elixir_Resistance_Necrotic_BlackOleander",5);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_RESISTANCE_PSY","ALCH_Elixir_Resistance_Psychic_IntellectDevourer",5);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_RESISTANCE_ALL","ALCH_Potion_Invulnerability_DivineBoneShard",10);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_LIGHT","ALCH_Grenade_Light",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_LIGHT","ALCH_Grenade_Sunflash_BehirScales",9);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_SPORES_TOXIC","ALCH_Grenade_SporesToxic",3);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_WEB","ALCH_Grenade_Web_SpiderGland",1);
+
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Oil_DamageAttackBuff_ViridianCrystal",1);
+DB_Alchemy_GuaranteedFormulas("AlchemicalAssessment","ALCH_Oil_AttackBuff_Daggeroot",4);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_CRITICALS","ALCH_Elixir_Criticals_ShadowrootSac",6);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_OIL_DEBUFF","ALCH_Oil_Reduce_SylvanStone",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_OIL_DEBUFF","ALCH_Oil_Bane_Shadowcursed",6);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_OIL_FIRE","ALCH_Oil_RemoveResistanceFire_IceMephitEar",4);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_OIL_FIRE","ALCH_Oil_Combustion_MagmaMephitHeart",6);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_OIL_FIRE","ALCH_Oil_Frost",6);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_POISON","ALCH_Poison_Simple_Bonecap",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_POISON","ALCH_Poison_Sleep_SwarmingToadstool",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_POISON","ALCH_Poison_Paralyze_CarrionCrawler",6);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_POISON","ALCH_Poison_Blind_LolthsCandle",9);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_POISON_UNI","ALCH_Poison_UNI_Brewer",9);
+
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Basic_BullywugTrumpet",1);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Greater_SnakeFang",4);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Superior_WyvernStinger",6);
+DB_Alchemy_FormulaStatus("ALCH_FORMULA_TOXIN","ALCH_Toxin_Supreme_PurpleWorm",9);
+KBSECTION
+//REGION Drink triggers
+
+//Drink healing item, gain status from additive
+IF
+TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
+AND
+DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)_Source,_Item,(STRING)_StatusID,(REAL)_Duration,(STRING)_ProjectileID)
+THEN
+ApplyStatus(_Character,_StatusID,_Duration,0,_Source);
+
+
+//Mutagenist discovery - temp HP on mutagen
+IF
+TemplateUseStarted((CHARACTER)_Character, (ITEMROOT)_ItemTemplate, (ITEM)_Item)
+AND
+IsTagged(_Item,(TAG)ALCH_SOLUTION_ELIXIR_71031c9c-eb3e-49b3-bf38-20ce078eff15,1)
+AND
+HasPassive(_Character,"Mutagenist_Discovery",1)
+AND
+HasAppliedStatus(_Character,"MUTAGENIST_THP_BLOCKED",0)
+THEN
+ApplyStatus(_Character,"ALCH_INT_THP",60.0,0,_Character);
+ApplyStatus(_Character,"MUTAGENIST_THP_BLOCKED",60.0,0,_Character);
+
+
+//Store healing item additive information
+IF
+StatusApplied((ITEM)_Item, (STRING)_SourceStatus, (CHARACTER)_Char, _)
+AND
+IsItem(_Item,1)
+AND
+DB_Alchemy_HealingAdditive(_SourceStatus,(STRING)_TargetStatus,(REAL)_Duration,(STRING)_ProjectileID)
+THEN
+DB_Alchemy_InfusedItem_HealingAdditive(_Char,_Item,_TargetStatus,_Duration,(STRING)_ProjectileID);
+
+//Clear healing item info
+IF
+StatusRemoved((ITEM)_Item, (STRING)_Status, _, _)
+AND
+DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)_Char,_Item,_Status,(REAL)_Duration,(STRING)_ProjectileID)
+THEN
+NOT DB_Alchemy_InfusedItem_HealingAdditive(_Char,_Item,_Status,_Duration,_ProjectileID);
+
+//END_REGION
+
+//REGION Throw triggers
+
+//Throw healing item, improved by passive
+IF
+AttackedBy((ITEM)_Defender, _, _, _, (INTEGER)_DamageAmount, _, _)
+AND
+_DamageAmount > 0
+AND
+DB_Alchemy_InfusedItem_HealingAdditive((CHARACTER)_Source,_Item,(STRING)_StatusID,(REAL)_Duration,(STRING)_ProjectileID)
+THEN
+CreateExplosion(_Defender, _ProjectileID, 1, _Source);
+
+////Debilitating bomb
+//Track throw
+IF
+OnThrown((ITEM)_ThrownObject, _, (GUIDSTRING)_Thrower, (INTEGER)_StoryActionID, _, _, _)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Source,_ThrownObject)
+AND
+DB_Alchemy_ExplodeOnThrowHitStatus((STRING)_StatusID,(STRING)_ProjectileID)
+AND
+HasAppliedStatus(_ThrownObject,_StatusID,1)
+THEN
+DB_Alchemy_ThrownHitItem(_StoryActionID,_ThrownObject,_Source,_ProjectileID);
+
+IF
+StatusApplied((GUIDSTRING)_Object, "THROW_SUCCESS", (GUIDSTRING)_Causee, (INTEGER)_StoryActionID)
+AND
+DB_Alchemy_ThrownHitItem(_StoryActionID,(ITEM)_Item,(CHARACTER)_Source,(STRING)_ProjectileID)
+THEN
+CreateExplosion(_Object, _ProjectileID, 1, _Source);
+
+//Clean up attack DBs on turn
+IF
+TurnEnded(_)
+AND
+DB_Alchemy_ThrownHitItem((INTEGER)_StoryActionID,(ITEM)_Item,(CHARACTER)_Source,(STRING)_ProjectileID)
+THEN
+NOT DB_Alchemy_ThrownHitItem(_StoryActionID,_Item,_Source,_ProjectileID);
+
+//END_REGION
+
+//REGION Destroy temporary potions
+
+IF
+StatusApplied((ITEM)_Item, "ALCH_INFUSED", (CHARACTER)_Char, _)
+THEN
+ApplyStatus(_Item,"ALCH_INFUSED_TIMER",-1.0,1,_Char);
+DB_Alchemy_InfusedItem(_Char,_Item);
+
+IF
+StatusRemoved((ITEM)_Item, "ALCH_INFUSED", _, _)
+AND
+DB_Alchemy_InfusedItem((CHARACTER)_Char,_Item)
+THEN
+NOT DB_Alchemy_InfusedItem(_Char,_Item);
+Die(_Item);
+
+
+//General cleanup: destroy items
+PROC
+PROC_CleanupAlchemicalInfusions((CHARACTER)_Char,(INTEGER)_UseDialog)
+AND
+DB_Alchemy_InfusedItem(_Char,(ITEM)_Item)
+THEN
+Die(_Item);
+
+//Restoration pod: Check for items and make dialog
+PROC
+PROC_CleanupAlchemicalInfusions((CHARACTER)_Char,(INTEGER)_UseDialog)
+AND
+_UseDialog == 1
+AND
+TaggedItemsGetCountInMagicPockets("ALCH_INFUSED_7374c8c8-d575-4e90-b1be-b9d54dc0baac",_Char,(INTEGER)_Amount)
+AND
+_Amount > 0
+AND
+PartyRemoveTaggedItems(_Char,"ALCH_INFUSED_7374c8c8-d575-4e90-b1be-b9d54dc0baac", _Amount, (INTEGER)_AmountRemoved)
+THEN
+//Remark on healing/lost items
+PROC_WildMagic_TryAD(_Char,"Shout_WildMagic_Heal");
+
+
+//Restoration pod
+IF
+StatusApplied((CHARACTER)_Char, "TUT_RESTORATION", _, _)
+AND
+QRY_AutoLearnAlchFormulas(_Char)
+THEN
+PROC_CleanupAlchemicalInfusions(_Char,1);
+
+//Respec from alchemist
+IF
+RespecCompleted((CHARACTER)_Char)
+THEN
+PROC_CleanupAlchemicalInfusions(_Char,0);
+
+//Alter Admixture
+IF
+StatusApplied((ITEM)_Item,"ALTER_ADMIXTURE",(CHARACTER)_Char,_)
+AND
+IsItem(_Item,1)
+THEN
+Pickup(_Char, _Item, "AlterAdmixture", 1);
+SendToCampChest(_Item, _Char);
+Die(_Item);
+ApplyStatus(_Char,"ALTER_ADMIXTURE",0.0,1,_Char);
+
+//END_REGION
+
+//REGION Automatic learning
+
+//Must have the passive
+QRY
+QRY_AutoLearnAlchFormulas((CHARACTER)_Char)
+AND
+DB_Players(_Char)
+AND
+HasPassive(_Char,"AlchemicalAssessment",1)
+THEN
+DB_NOOP(1);
+
+
+//Add recipe from item
+IF
+TemplateAddedTo((ITEMROOT)_ObjectTemplate,_,(CHARACTER)_InventoryHolder,_)
+AND
+QRY_AutoLearnAlchFormulas(_InventoryHolder)
+AND
+DB_Alchemy_Templates(_ObjectTemplate,(STRING)_Recipe)
+AND
+HasRecipeUnlocked(_InventoryHolder,_Recipe,0)
+THEN
+UnlockRecipe(_InventoryHolder, _Recipe, 1);
+
+
+//Add status from recipe
+IF
+UnlockedRecipe((CHARACTER)_Char,(STRING)_Recipe)
+AND
+QRY_AutoLearnAlchFormulas(_Char)
+AND
+DB_Alchemy_FormulaStatus((STRING)_Status,_Recipe,(INTEGER)_MinLevel)
+THEN
+ApplyStatus(_Char, _Status, -1.0, 1, _Char);
+
+
+//Add all other recipes from status
+IF
+StatusApplied((CHARACTER)_Char,(STRING)_Status,_,_)
+AND
+QRY_AutoLearnAlchFormulas(_Char)
+AND
+DB_Alchemy_FormulaStatus(_Status,(STRING)_Recipe,(INTEGER)_MinLevel)
+AND
+GetLevel(_Char, (INTEGER)_Level)
+AND
+_Level >= _MinLevel
+THEN
+UnlockRecipe(_Char, _Recipe, 1);
+
+
+//On level up with passive, add all statuses
+IF
+LeveledUp(_Char)
+AND
+QRY_AutoLearnAlchFormulas(_Char)
+AND
+DB_Alchemy_FormulaStatus((STRING)_Status,(STRING)_Recipe,(INTEGER)_MinLevel)
+AND
+HasRecipeUnlocked(_Char,_Recipe,1)
+THEN
+ApplyStatus(_Char, _Status, -1.0, 1, _Char);
+
+//Add guaranteed formulas
+IF
+LeveledUp(_Char)
+AND
+QRY_AutoLearnAlchFormulas(_Char)
+AND
+DB_Alchemy_GuaranteedFormulas((STRING)_Recipe,(STRING)_Passive,(INTEGER)_MinLevel)
+AND
+GetLevel(_Char, (INTEGER)_Level)
+AND
+_Level >= _MinLevel
+AND
+HasRecipeUnlocked(_Char,_Recipe,0)
+THEN
+UnlockRecipe(_Char, _Recipe, 1);
+
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
