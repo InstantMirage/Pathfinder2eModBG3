@@ -225,7 +225,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Deception,context.Target.GetPassiveSkill(Skill.Perception));" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SkillCrit() and not HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(FEINT_ONCE,100,1);IF(SkillCrit() or HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(FEINT_ROUND,100,2);IF(SkillCrit() and HasPassive('Scoundrel_Feint',context.Source)):ApplyStatus(OFF_BALANCED,100,2);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling() and not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and not HasStatus('OFF_BALANCED',context.Target) and HasHPPercentageMoreThan(50,context.Target) and HasPassive('NPCIntimidation',context.Source)):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and Unarmed() and not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and not HasStatus('OFF_BALANCED',context.Target) and HasHPPercentageMoreThan(50,context.Target) and HasPassive('NPCIntimidation',context.Source)):DealDamage((UnarmedDamage)*2, Bludgeoning);" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and Creature() and MentalSpell() and OffGuardTargetSensible();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and Character() and MentalSpell() and OffGuardTargetSensible();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_PrecisionAttack" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h15bb997bg9006g85abg8ff9gd550240e6d40" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h50888d95gce9dg3a3cgbf8fg2df0f2bc77b7" version="1" />
@@ -10825,9 +10825,8 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="ba0fdc2c-5f90-4f4d-9f6d-3d50b23220ca" />
         <field name="Name" type="NameTableFieldDefinition" value="SoothingMist" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="RegainHitPoints(LevelMapValue(H1D8));RemoveStatus(BLEEDING);RemoveStatus(BURNING)" />
-        <field name="TargetRadius" type="StringTableFieldDefinition" value="12" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="RegainHitPoints(LevelMapValue(H1D8));ApplyStatus(STOP_BLEEDING);IF( not HasStatus('WET') )ApplyStatus(WET,100,0);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="12" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Dead() and not Tagged('UNDEAD') and not Tagged('CONSTRUCT') and ConcentrateSpell();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Mag_HealingIncenseAura" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb961838agdd49g06cfg4d32ge441bec32765" version="1" />
