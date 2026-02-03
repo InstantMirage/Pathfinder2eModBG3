@@ -1612,10 +1612,10 @@ end
 
 -- If a skill action makes sense to use by the AI
 function SkillActionSensible(skill,ability,checkMAP)
-	-- Must have positive modifier
-	-- Cannot be prevented from using advanced weapon actions by difficulty/template
-	-- Goblins, bugbears, gnolls, skeletons will notably not use weapon actions
-	return IsSkillPositive(skill,ability,checkMAP) & CanUseWeaponActions() & HasNoTags({'ZOMBIE','CREATURE_SPORE_SERVANT','OOZE'})
+    -- Must have positive modifier
+    -- Cannot be prevented from using advanced weapon actions by difficulty/template
+    -- Goblins, bugbears, gnolls, skeletons will notably not use weapon actions
+    return IsSkillPositive(skill,ability,checkMAP) & HasNoTags({'AI_BLOCKWEAPONACTIONS','ZOMBIE','CREATURE_SPORE_SERVANT','OOZE'},context.Source)
 end
 
 -- Don't stack off-guarding skill actions
