@@ -554,6 +554,15 @@ DB_ActiveComposition((CHARACTER)_Bard,_Char,_Status)
 THEN
 NOT DB_ActiveComposition(_Bard,_Char,_Status);
 //END_REGION
+
+//REGION Reloading Helper
+// Quick code to make sure all characters in combat definitely
+// have the RELOAD_CHECKER status, to prevent passing an
+// unloaded crossbow from character to character.
+IF
+TurnStarted((GUIDSTRING)_Character)
+THEN
+ApplyStatus(_Character, "RELOAD_CHECKER", -1.0);
 EXITSECTION
 
 ENDEXITSECTION
