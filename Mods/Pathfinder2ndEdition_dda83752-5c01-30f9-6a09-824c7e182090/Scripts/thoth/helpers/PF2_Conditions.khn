@@ -7,7 +7,7 @@ local __util = require 'larian.util'
 function AutoStride()
 	local canMove = ~Immobilized() | HasStatus('SG_Prone')
 	local hasActions = HasActionResource('ActionPoint', 1 , 0, false, false) | QuickenedStride()
-	local automaticStride = ~HasStatus('MANUAL_STRIDE')
+	local automaticStride = ~HasStatus('MANUAL_STRIDE') | HasStatus('SG_Mad') | HasStatus('SG_Dominated') | HasStatus('SG_Fleeing') | HasStatus('SG_Approaching') | HasStatus('SG_Taunted') | HasStatus('SG_Confused')
 	
 	return canMove & hasActions & automaticStride
 end
@@ -203,6 +203,19 @@ function Flanking(target, source)
 	return ConditionResult(false, errorFalse, errorTrue)
 end
 
+-- Volley Penalty
+function Volley(distance, targetPosition, sourcePosition)
+	targetPosition = targetPosition or context.TargetPosition
+	sourcePosition = sourcePosition or context.SourcePosition
+	local errorTrue = {ConditionError("VolleyRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+	local errorFalse = {ConditionError("NotVolleyRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+
+	if Distance(sourcePosition, targetPosition) < distance then
+		return ConditionResult(true, errorFalse, errorTrue)
+	end
+	return ConditionResult(false, errorFalse, errorTrue)
+end
+
 -- Status MAP_X_ATTACKS
 
 --~functional for Stats.
@@ -315,8 +328,8 @@ function RetributiveStrikeRange()
 	local target = context.Target
 	
 	local ranged = WieldingWeapon('Ammunition', false, false, source).Result & ~WieldingWeapon('Melee', false, false, source)
-	local reach_nimble = WieldingWeapon('Reach', false, false, source).Result & DistanceToTargetLessThan(5)
-	local melee_nimble = ~WieldingWeapon('Ammunition', false, false, source) & ~DistanceToTargetLessThan(3.5)
+	local reach_nimble = WieldingWeapon('Reach', false, false, source).Result & DistanceToTargetLessThan(5.5)
+	local melee_nimble = ~WieldingWeapon('Ammunition', false, false, source) & ~DistanceToTargetLessThan(4)
 	local nimble_reprisal = (ranged|reach_nimble|melee_nimble) & HasPassive('NimbleReprisal',source)
 	
 	local reach = WieldingWeapon('Reach', false, false, source) & DistanceToTargetLessThan(3.5)
@@ -840,7 +853,7 @@ end
 
 function CanPrecisionDamage(target)
 	target = target or context.Target
-	local result = ~HasAnyTags({'OOZE','SHADOW','GHOST','DISPLACER_BEAST','SCRYING_EYE','GASEOUS_FORM','Ethereal'}, target)
+	local result = ~HasAnyTags({'OOZE','SHADOW','GHOST','DISPLACER_BEAST','SCRYING_EYE','GASEOUS_FORM'}, target) & ~HasPassive('Ethereal', target)
 	
 	return ConditionResult( result.Result,{ConditionError("PrecisionImmune")})
 end

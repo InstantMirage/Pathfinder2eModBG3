@@ -1,0 +1,72 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_FlickerStatus("BLINK");
+DB_FlickerStatus("BLINK_6");
+
+DB_RandomVectors(4.0, 0.0);
+DB_RandomVectors(3.7, 1.5);
+DB_RandomVectors(2.8, 2.8);
+DB_RandomVectors(1.5, 3.7);
+DB_RandomVectors(-4.0, 0.0);
+DB_RandomVectors(-3.7, 1.5);
+DB_RandomVectors(-2.8, 2.8);
+DB_RandomVectors(-1.5, 3.7);
+DB_RandomVectors(4.0, -0.0);
+DB_RandomVectors(3.7, -1.5);
+DB_RandomVectors(2.8, -2.8);
+DB_RandomVectors(1.5, -3.7);
+DB_RandomVectors(-4.0, -0.0);
+DB_RandomVectors(-3.7, -1.5);
+DB_RandomVectors(-2.8, -2.8);
+DB_RandomVectors(-1.5, -3.7);
+KBSECTION
+// At the end of a character's turn, if they have the BLINK status,
+// teleport them in a random direction by 10 feet.
+IF
+TurnEnded((GUIDSTRING)_Character)
+AND
+DB_FlickerStatus((STRING)_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+PROC_FlickerTeleport(_Character);
+
+// If a character sustains the flicker spell, also telepor them
+// randomly.
+IF
+CastedSpell((GUIDSTRING)_Character, "Shout_Blink_Sustain", _, _, _)
+THEN
+PROC_FlickerTeleport(_Character);
+
+// Logic to choose a random direction and teleport.
+PROC
+PROC_FlickerTeleport((GUIDSTRING)_Character)
+AND
+GetPosition(_Character, (REAL)_XO, (REAL)_YO, (REAL)_ZO)
+AND
+QRY_GetRandom("DB_RandomVectors", 2, "DB_ChosenVector")
+AND
+DB_ChosenVector((REAL)_XD, (REAL)_ZD)
+AND
+RealSum(_XO, _XD, (REAL)_XN)
+AND
+RealSum(_ZO, _ZD, (REAL)_ZN)
+AND
+FindValidPosition(_XN, _YO, _ZN, 4.0, _Character, 0, (REAL)_XSafe, (REAL)_YSafe, (REAL)_ZSafe)
+THEN
+PlayEffectAtPosition(VFX_Cinematic_Daisy_Disappear_Flash_01_c6caf9c3-c787-f49f-838f-aef5f568270d, _XO, _YO, _ZO, 0.7);
+TeleportToPosition(_Character, _XSafe, _YSafe, _ZSafe, "FlickerTeleport", 0, 0, 0, 0, 1);
+PlayEffectAtPosition(VFX_Cinematic_Gale_Recruitment_Portal_Flash_01_a1f850e5-746a-0b0a-78b8-22b5a45dd809, _XSafe, _YSafe, _ZSafe, 1.0);
+NOT DB_ChosenVector(_XD, _ZD);
+
+// Dummy to hide warning about unused DB.
+PROC
+PROC_FlickerTeleport((GUIDSTRING)_Character)
+AND
+DB_RandomVectors((REAL)_X, (REAL)_Z)
+THEN
+DB_NOOP(1);
+EXITSECTION
+
+ENDEXITSECTION
