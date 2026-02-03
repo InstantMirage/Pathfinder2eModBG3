@@ -460,9 +460,12 @@ end
 
 --Fighter
 
-function ClassDC(source)
+function ClassDC(source,ability)
 	source = source or context.Source
 	local base = 10 + source.ProficiencyBonus + math.max(GetModifier(source.Strength), GetModifier(source.Dexterity))
+	if ability then
+		base = 10 + source.ProficiencyBonus + GetModifier(source[ability])
+	end
 	local expertise = 0
 	local stat_pen = 0
 	
@@ -645,6 +648,15 @@ function DemoralizeDC()
 	return willDC
 end
 
+function DisarmDC(entity)
+	entity = entity or context.Target
+	local reflexDC = ReflexDC(entity)
+	if HasStatus('HINDERED',entity) then
+		reflexDC = reflexDC - 2
+	end
+	return reflexDC
+end
+
 function ShoveCheck()
 	local result = Dead() | Item() | Ally()
 	if not result.Result then
@@ -652,6 +664,52 @@ function ShoveCheck()
 		return ConditionResult(skillCheck.Result,{},{},skillCheck.Chance)
 	end
 	return result
+end
+
+function GetBestSkillCheck(dc)
+	local source = context.Source
+	
+	-- Highest on the list will take priority, ie use Theivery over Stealth
+	local preferred_skill = 'History'
+	local all_skills = {
+		'Athletics',
+		'SleightOfHand',
+		'Acrobatics',
+		'Stealth',
+		'Persuasion',
+		'Performance',
+		'Intimidation',
+		'Deception',
+		'Medicine',
+		'Survival',
+		'Religion',
+		'Arcana',
+		'Investigation',
+		'Insight',
+		'AnimalHandling',
+		'Nature'
+	}
+	local skills_override = {
+		Performance = 'BardSpellcasting',
+		Arcana = 'Tradition_Arcane',
+		Insight = 'Tradition_Divine',
+		Investigation = 'Tradition_Occult',
+		AnimalHandling = 'Tradition_Primal',
+		Nature = 'AlchemicalAssessment'
+	}
+	
+	for k,v in pairs(all_skills) do
+		local can_override_skill = skills_override[v] and HasPassive(skills_override[v],source).Result
+		-- Prefer class skills, with the last on all_skills taking priority (>=)
+		if can_override_skill and source.GetPassiveSkill(Skill[v]) >= source.GetPassiveSkill(Skill[preferred_skill]) then
+			preferred_skill = v
+		-- Otherwise use descending priority list (>)
+		elseif source.GetPassiveSkill(Skill[v]) > source.GetPassiveSkill(Skill[preferred_skill]) then
+			preferred_skill = v
+		end
+	end
+	
+	return SkillCheck(Skill[preferred_skill],dc)
 end
 
 function ArmorCheck()
@@ -829,6 +887,11 @@ function WieldingSneakAttackWeapon(entity)
 	local ruffian_weapon = IsWeaponOfProficiencyGroup('SimpleWeapons', weaponEntity) | IsWeaponOfProficiencyGroup('Morningstars', weaponEntity) | ( onehand_check & IsWeaponOfProficiencyGroup('Tridents', weaponEntity) )
 	
 	return standard_weapon | (is_ruffian & ruffian_weapon)
+end
+
+function StrongArmSpell()
+	-- Mundane throwing spells
+	return HasStringInSpellRoll('RangedUnarmedAttack') & ~HasSpellFlag(SpellFlags.Melee)
 end
 
 -- Sorcerer
@@ -1036,6 +1099,17 @@ end
 
 function PoltergeistSustainSpell()
 	return SpellId('Target_PerniciousPoltergeist_Rank4_Recast') | SpellId('Target_PerniciousPoltergeist_Rank4_Recast_Negative') | SpellId('Shout_Poltergeist_Sustain_Force') | SpellId('Shout_Poltergeist_Sustain_Fear') | SpellId('Target_PerniciousPoltergeist_Rank6_Recast') | SpellId('Target_PerniciousPoltergeist_Rank6_Recast_Negative') | SpellId('Shout_Poltergeist_Sustain_Force_6') | SpellId('Shout_Poltergeist_Sustain_Fear_6')
+end
+
+-- Alchemist
+
+function AlchBombTarget()
+	return (Character()|Item()) & ~(HasPassive('Bomber_Benefit', context.Source) & Ally())
+end
+
+function CalculatedSplash()
+	-- Calculated Splash / Bomber Discovery
+	return HasPassive('Bomber_Discovery', context.Source)
 end
 
 -- Kineticist
@@ -1296,6 +1370,16 @@ function SkillCrit()
 	return ConditionResult(false)
 end
 
+function SkillCritMiss()
+	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
+	local thresholdtotal = 10 + total
+	
+	if difficulty > thresholdtotal then
+		return ConditionResult(difficulty > total)
+	end
+	return ConditionResult(false)
+end
+
 function LastConditionRollValues(conditionRollType)
 	try
 		conditionRoll = context.HitDescription.GetLastConditionRoll(conditionRollType)
@@ -1393,8 +1477,9 @@ function IsIntelligent(entity)
 	return ConditionResult(entity.Intelligence > 6, {ConditionError("LanguageBarrier")})
 end
 
-function getSkillProficiencyScore(skill, ability)
+function getSkillProficiencyScore(skill, ability, skipReplacements)
 	local score = 0
+	
 	if HasProficiencyBonus(Ability[ability],Skill[skill],context.Source).Result then
 		score = score + 1
 	end
@@ -1407,43 +1492,55 @@ function getSkillProficiencyScore(skill, ability)
 	if HasPassive(skill .. 'Increase2',context.Source).Result then
 		score = score + 1
 	end
+	-- Chirurgeon substitutes Crafting for Medicine
+	if not skipReplacements and skill == 'Medicine' and HasPassive('ChirurgeonBenefit',context.Source).Result then
+		score = math.max(score,getSkillProficiencyScore('Nature', 'Intelligence'))
+	end
 	return score
 end
 
-function IsSkillTrained(skill, ability)
-	return ConditionResult(getSkillProficiencyScore(skill, ability) > 0, {ConditionError(skill .. "Trained")})
+function IsSkillTrained(skill, ability, skipReplacements)
+	return ConditionResult(getSkillProficiencyScore(skill, ability, skipReplacements) > 0, {ConditionError(skill .. "Trained")})
 end
 
-function IsSkillExpert(skill, ability)
-	return ConditionResult(getSkillProficiencyScore(skill, ability) > 1, {ConditionError(skill .. "Expertise")})
+function IsSkillExpert(skill, ability, skipReplacements)
+	return ConditionResult(getSkillProficiencyScore(skill, ability, skipReplacements) > 1, {ConditionError(skill .. "Expertise")})
 end
 
-function IsSkillMaster(skill, ability)
-	return ConditionResult(getSkillProficiencyScore(skill, ability) > 2, {ConditionError(skill .. "Master")})
+function IsSkillMaster(skill, ability, skipReplacements)
+	return ConditionResult(getSkillProficiencyScore(skill, ability, skipReplacements) > 2, {ConditionError(skill .. "Master")})
 end
 
-function IsSkillLegend(skill, ability)
-	return ConditionResult(getSkillProficiencyScore(skill, ability) > 3, {ConditionError(skill .. "Legend")})
+function IsSkillLegend(skill, ability, skipReplacements)
+	return ConditionResult(getSkillProficiencyScore(skill, ability, skipReplacements) > 3, {ConditionError(skill .. "Legend")})
 end
 
 function MentalSpell(target)
 	target = target or context.Target
-	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Mindless")})
+	return ConditionResult((~HasAnyTags({'ZOMBIE','CREATURE_SPORE_SERVANT','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Mindless")})
 end
 
 function EmotionSpell(target)
 	target = target or context.Target
-	return ConditionResult((~HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Emotionless")})
+	return ConditionResult((~HasAnyTags({'ZOMBIE','CREATURE_SPORE_SERVANT','SKELETON','CONSTRUCT','OOZE'}, target)).Result, {ConditionError("Emotionless")})
 end
 
-function LinguisticSpell(target)
+function LinguisticSpell(target,source)
 	target = target or context.Target
-	return ConditionResult((~HasAnyTags({'CANTSPEAK'}, target)).Result, {ConditionError("LanguageBarrier")})
+	source = source or context.Source
+	local can_speak = HasNoTags({'CANTSPEAK','BEAST','PLANT'}, target)
+	local always_speak = HasAnyTags({'ILLITHID','INTELLECT_DEVOURER','NOT_MESSING_AROUND'},target) -- NOT_MESSING_AROUND has them punish crimes more harshly
+	local minion = SummonOwner(target,source)
+	local petpal = Tagged('BEAST',target) & Tagged('PETPAL',source)
+	
+	local result = (can_speak | always_speak | minion | petpal).Result
+	return ConditionResult( result, {ConditionError("LanguageBarrier")})
 end
 
 function ConcentrateSpell(source)
 	source = source or context.Source
-	return ConditionResult((~HasAnyStatus({'RAGE_MUTE'}, {}, {}, source)).Result, {ConditionError("CantConcentrate")})
+	local result = not HasAnyStatus({'RAGE_MUTE','HypnotizeFascinated'}, {}, {}, source).Result
+	return ConditionResult(result, {ConditionError("CantConcentrate")})
 end
 
 function RageConcentrateSpell(source)
@@ -1453,28 +1550,35 @@ end
 
 function AuditorySpell(target)
 	target = target or context.Target
-	return ConditionResult(true, {ConditionError("CantHearSpell")})
+	local result = not HasAnyStatus({'DEAFENED','SILENCED','LOW_VoicelessPenitent_Silenced','SHA_SILENTLIBRARY_LIBRARIANSILENCE_STATUS','TWN_DISTILLERY_NUMB'}, {}, {}, target).Result
+	return ConditionResult(result, {ConditionError("CantHearSpell")})
 end
 
 function VisualSpell(target)
 	target = target or context.Target
-	return ConditionResult(true, {ConditionError("CantSeeSpell")})
+	local blind = HasStatus('SG_Blinded',target)
+	-- Must be a creature type with eyes
+	local creature_type = HasNoTags({'SKELETON','OOZE','INTELLECT_DEVOURER','PLANT','SUMMONWITHOUTMOUTH'}, target) | Tagged('MYCONID',target)
+	local result = ( ~blind & creature_type ).Result
+	return ConditionResult(result, {ConditionError("CantSeeSpell")})
 end
 
 function OlfactorySpell(target)
 	target = target or context.Target
-	return ConditionResult(true, {ConditionError("CantSeeSpell")})
+	-- Flaming sphere, guardian of faith lack mouth
+	local result = HasNoTags({'CONSTRUCT','STONE_CREATURE','SKELETON','SUMMONWITHOUTMOUTH'}, target).Result
+	return ConditionResult( result, {ConditionError("CantSmellSpell")})
 end
 
 function FearSpell(target)
 	target = target or context.Target
-	local result = not (HasAnyTags({'ZOMBIE','SKELETON','CONSTRUCT','OOZE'}, target) or IsImmuneToStatus('FEARED')).Result
+	local result = not (HasAnyTags({'ZOMBIE','CREATURE_SPORE_SERVANT','SKELETON','CONSTRUCT','OOZE'}, target) | IsImmuneToStatus('FEARED')).Result
 	return ConditionResult(result, {ConditionError("CantFear")})
 end
 
 function SkillCheckModifier(skill, ability, entity)
 	entity = entity or context.Source
-	local prof = GetModifier(entity.Dexterity)
+	local prof = GetModifier(entity[ability])
 	local stat_bon = 0
 
 	if HasProficiencyBonus(Ability[ability],Skill[skill],entity).Result then
@@ -1497,6 +1601,66 @@ function SkillCheckModifier(skill, ability, entity)
 	return prof + stat_bon
 end
 
+function IsSkillPositive(skill, ability, checkMAP)
+	if checkMAP and HasStatus('MAP_PENALTY_2ND').Result then
+		 return ConditionResult(SkillCheckModifier(skill, ability) > 4, {ConditionError(skill .. "Trained")})
+	elseif checkMAP and HasStatus('MAP_PENALTY_3RD').Result then
+		return ConditionResult(SkillCheckModifier(skill, ability) > 8, {ConditionError(skill .. "Trained")})
+	end
+	return ConditionResult(SkillCheckModifier(skill, ability) > 0, {ConditionError(skill .. "Trained")})
+end
+
+-- If a skill action makes sense to use by the AI
+function SkillActionSensible(skill,ability,checkMAP)
+	-- Must have positive modifier
+	-- Cannot be prevented from using advanced weapon actions by difficulty/template
+	-- Goblins, bugbears, gnolls, skeletons will notably not use weapon actions
+	return IsSkillPositive(skill,ability,checkMAP) & CanUseWeaponActions() & HasNoTags({'ZOMBIE','CREATURE_SPORE_SERVANT','OOZE'})
+end
+
+-- Don't stack off-guarding skill actions
+function OffGuardTargetSensible(target,source)
+	target = target or context.Target
+	source = source or context.Source
+	return Player(source) | ~OffGuard(target,source)
+end
+
+function TripSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability,true))
+end
+
+function GrappleSensible(skill,ability)
+	-- Needs hands
+	local hands = ConditionResult(HasAnyTags({'HUMANOID','GIANT','FIEND','SCL_DRIDER','MINOTAUR','DEVA','REDCAP','MYCONID','MINDFLAYER'}).Result,{ConditionError('FreeHand')})
+	-- Ranged enemies shouldn't try this
+	local weapon = ~WieldingWeapon('Ammunition', false, false, context.Source) | Tagged('AI_HINT_CASTER')
+	return hands & ( Player() | (SkillActionSensible(skill,ability,true) & ~HasStatus('GRAPPLE_SOURCE') & weapon ))
+end
+
+function DisarmSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability,true))
+end
+
+function DisarmTargetSensible()
+	return Player(context.Source) | (CanDisarmWieldingWeapon() & ~IsImmuneToStatus('DISARM'))
+end
+
+function TumbleThroughSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability,false))
+end
+
+function FeintSensible(skill,ability)
+	--Must have at least two actions to feint and attack
+	local attack = HasActionResource('ActionPoint', 2, 0, false, true, context.Source) | HasStatus('HASTE_ATTACK') | HasPassive('Scoundrel_Feint')
+	-- Ranged enemies shouldn't try this
+	local weapon = ~WieldingWeapon('Ammunition', false, false, context.Source)
+	return Player() | (SkillActionSensible(skill,ability,false) & attack & weapon )
+end
+
+function DemoralizeSensible(skill,ability)
+	return Player() | (SkillActionSensible(skill,ability,false))
+end
+
 function CounterPerformanceModifier(number)
 	local oldTotal = context.InterruptedRoll.Total
 	local newTotal = math.ceil(GetStatusDuration("COUNTER_PERFORMANCE_VALUE", context.Observer))
@@ -1515,7 +1679,7 @@ function CounterPerformanceCrit()
 end
 
 function RestrainedBlockSpells()
-	local r1 = ~(SpellId('Target_EscapeGrapple_Athletics') | SpellId('Target_EscapeGrapple_Acrobatics') | SpellId('Target_EscapeGrapple_UnarmedAttack'))
+	local r1 = ~(IsSpellChildOrVariantFromContext('Target_EscapeGrapple_Container') | SpellId('Target_EscapeGrapple_UnarmedAttack'))
 	local r2 = HasStringInSpellRoll('Attack')
 	local r3 = HasSpellFlag(SpellFlags.Somatic)
 	return (r2 | r3) & r1
@@ -1529,6 +1693,16 @@ function PersistentFireCheck()
 	local FlameOrder = HasPassive('FlameOrder', context.Source)
 	local StifleFlames = HasPassive('StifleFlames', context.Source) & (IsSkillTrained('AnimalHandling', 'Wisdom') | IsSkillTrained('Survival', 'Wisdom'))
 	return FlameOrder | StifleFlames
+end
+
+function PersistentFireRemove(check_immunity)
+	check_immunity = check_immunity or true
+	local dc_15 = ~PersistentFireCheck() & RollDieAgainstDC(DiceType.d20,15)
+	local dc_10 = PersistentFireCheck() & RollDieAgainstDC(DiceType.d20,10)
+	local on_turn = IsStatusEvent(StatusEvent.OnTurn) & ~Item() & (dc_15|dc_10)
+	local on_status = IsStatusEvent(StatusEvent.OnStatusApplied) & (HasStatus('WET') | IsImmuneToStatus('BURNING'))
+	
+	return on_turn | ( ConditionResult(check_immunity) & on_status )
 end
 
 function TumbleThroughProximityCheck()
