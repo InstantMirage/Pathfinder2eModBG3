@@ -1580,6 +1580,26 @@ function SkillCheckModifier(skill, ability, entity)
 	entity = entity or context.Source
 	local prof = GetModifier(entity[ability])
 	local stat_bon = 0
+	local stat_pen = 0
+	local skillTagLookup = {
+		['Acrobatics']= 	{'STAT_BON_1ACROBATICS', 	'STAT_BON_2ACROBATICS', 	'STAT_PEN_1ACROBATICS', 	'STAT_PEN_2ACROBATICS'},
+		['Arcana']= 		{'STAT_BON_1ARCANA', 		'STAT_BON_2ARCANA', 		'STAT_PEN_1ARCANA', 		'STAT_PEN_2ARCANA'},
+		['Athletics']= 		{'STAT_BON_1ATHLETICS', 	'STAT_BON_2ATHLETICS', 		'STAT_PEN_1ATHLETICS', 		'STAT_PEN_2ATHLETICS'},
+		['Crafting']= 		{'STAT_BON_1CRAFTING', 		'STAT_BON_2CRAFTING', 		'STAT_PEN_1CRAFTING', 		'STAT_PEN_2CRAFTING'},
+		['Deception']= 		{'STAT_BON_1DECEPTION', 	'STAT_BON_2DECEPTION', 		'STAT_PEN_1DECEPTION', 		'STAT_PEN_2DECEPTION'},
+		['Diplomacy']= 		{'STAT_BON_1DIPLOMACY', 	'STAT_BON_2DIPLOMACY', 		'STAT_PEN_1DIPLOMACY', 		'STAT_PEN_2DIPLOMACY'},
+		['Intimidation']= 	{'STAT_BON_1INTIMIDATION', 	'STAT_BON_2INTIMIDATION', 	'STAT_PEN_1INTIMIDATION', 	'STAT_PEN_2INTIMIDATION'},
+		['Lore']= 			{'STAT_BON_1LORE', 			'STAT_BON_2LORE', 			'STAT_PEN_1LORE', 			'STAT_PEN_2LORE'},
+		['Medicine']= 		{'STAT_BON_1MEDICINE', 		'STAT_BON_2MEDICINE', 		'STAT_PEN_1MEDICINE', 		'STAT_PEN_2MEDICINE'},
+		['Nature']= 		{'STAT_BON_1NATURE', 		'STAT_BON_2NATURE', 		'STAT_PEN_1NATURE', 		'STAT_PEN_2NATURE'},
+		['Occultism']= 		{'STAT_BON_1OCCULTISM', 	'STAT_BON_2OCCULTISM', 		'STAT_PEN_1OCCULTISM', 		'STAT_PEN_2OCCULTISM'},
+		['Performance']= 	{'STAT_BON_1PERFORMANCE', 	'STAT_BON_2PERFORMANCE', 	'STAT_PEN_1PERFORMANCE', 	'STAT_PEN_2PERFORMANCE'},
+		['Religion']= 		{'STAT_BON_1RELIGION', 		'STAT_BON_2RELIGION', 		'STAT_PEN_1RELIGION', 		'STAT_PEN_2RELIGION'},
+		['Society']= 		{'STAT_BON_1SOCIETY', 		'STAT_BON_2SOCIETY', 		'STAT_PEN_1SOCIETY', 		'STAT_PEN_2SOCIETY'},
+		['Stealth']= 		{'STAT_BON_1STEALTH', 		'STAT_BON_2STEALTH', 		'STAT_PEN_1STEALTH', 		'STAT_PEN_2STEALTH'},
+		['Survival']= 		{'STAT_BON_1SURVIVAL', 		'STAT_BON_2SURVIVAL', 		'STAT_PEN_1SURVIVAL', 		'STAT_PEN_2SURVIVAL'},
+		['Thievery']= 		{'STAT_BON_1THIEVERY', 		'STAT_BON_2THIEVERY', 		'STAT_PEN_1THIEVERY', 		'STAT_PEN_2THIEVERY'}
+	}
 
 	if HasProficiencyBonus(Ability[ability],Skill[skill],entity).Result then
 		prof = prof + 2
@@ -1594,11 +1614,19 @@ function SkillCheckModifier(skill, ability, entity)
 		prof = prof + 2
 	end
 
-	if HasAnyTags({'STAT_BON_1SKILLS'},entity).Result then
+	if Tagged(skillTagLookup[skill][2],entity).Result then
+		stat_bon = 2
+	elseif Tagged(skillTagLookup[skill][1],entity).Result then
 		stat_bon = 1
 	end
 
-	return prof + stat_bon
+	if Tagged(skillTagLookup[skill][4],entity).Result then
+		stat_pen = 2
+	elseif Tagged(skillTagLookup[skill][3],entity).Result then
+		stat_pen = 1
+	end
+
+	return prof + stat_bon - stat_pen
 end
 
 function IsSkillPositive(skill, ability, checkMAP)
