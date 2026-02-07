@@ -162,9 +162,10 @@ function OffGuardFlanking(target, source)
 	target = target or context.Target
 	source = source or context.Source
 	local denyadvantage = Tagged('ROGUE_DENYADVANTAGE',target) & (target.Level >= source.Level)
-	return ~Ally() & ~denyadvantage & DistanceToTargetLessThan(2) & IsMeleeAttack() & Flanking(target, source)
+	return ~denyadvantage & IsMeleeAttack() & HasStatus('FLANKED_PF2E',target,source)
 end
 
+-- Deprecated, now implemented using auras and Osiris.
 function Flanking(target, source)
 	local distance = 2
 	target = target or context.Target
@@ -172,8 +173,6 @@ function Flanking(target, source)
 	
 	local errorTrue = {ConditionError("HasAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
 	local errorFalse = {ConditionError("HasNotAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
-	
-	--Source must face target
 	
 	local allies = GetAlliesWithinRange(distance, target, source)
 	if allies ~= nil then

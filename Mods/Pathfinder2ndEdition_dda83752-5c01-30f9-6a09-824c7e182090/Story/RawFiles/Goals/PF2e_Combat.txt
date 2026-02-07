@@ -563,6 +563,141 @@ IF
 TurnStarted((GUIDSTRING)_Character)
 THEN
 ApplyStatus(_Character, "RELOAD_CHECKER", -1.0);
+//END_REGION
+
+//REGION Flanking
+// On every character with the flanking aura, track every enemy
+// that is in that aura in a DB
+IF
+StatusApplied((GUIDSTRING)_Target, "FLANK_TARGET", (GUIDSTRING)_Cause, _)
+AND
+NOT DB_PotentialFlanker(_Cause, _Target)
+THEN
+DB_PotentialFlanker(_Cause, _Target);
+
+// A remove functor on FLANK_TARGET applies a SWAP status, so
+// we can track removal. This status has 0 duration.
+IF
+StatusApplied((GUIDSTRING)_Cause, "FLANK_REMOVE", (GUIDSTRING)_Target, _)
+AND
+DB_PotentialFlanker(_Cause, _Target)
+THEN
+NOT DB_PotentialFlanker(_Cause, _Target);
+
+// Run a periodic timer whenever the game is running.
+IF
+LevelGameplayReady(_, _)
+THEN
+TimerCancel("FlankingUpdate");
+TimerLaunch("FlankingUpdate", 500);
+
+IF
+TimerFinished("FlankingUpdate")
+THEN
+TimerLaunch("FlankingUpdate", 500);
+
+// Remove old list of old flanks.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_RemoveFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+THEN
+NOT DB_RemoveFlanking(_Source, _Target);
+
+// Copy previous results to a DB of statuses to remove, and clear
+// out old results.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_IsFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+THEN
+DB_RemoveFlanking(_Source, _Target);
+NOT DB_IsFlanking(_Source, _Target);
+
+// Go through previous list of flanks, and remove the display status
+// in any case where the flanker is not the active character for
+// that user.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_RemoveFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+GetReservedUserID((CHARACTER)_Source, (INTEGER)_User)
+AND
+GetCurrentCharacter(_User, _CurrentCharacter)
+AND
+_Source != _CurrentCharacter
+THEN
+RemoveStatus(_Target, "FLANKED_DISPLAY", (GUIDSTRING)_Source);
+
+// Periodically, check the matrix of flankers to see if any of
+// them meet the criteria for flanking. Create a DB that serves
+// as a loop break if an ally is found in an acceptable position.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+NOT DB_IsFlanking(_Source, _Target)
+AND
+DB_PotentialFlanker((GUIDSTRING)_Ally, _Target)
+AND
+GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+GetInnerDistanceToPosition(_Source, _XT, _YT, _ZT, (REAL)_ST)
+AND
+GetInnerDistanceToPosition(_Ally, _XT, _YT, _ZT, (REAL)_TA)
+AND
+GetInnerDistanceTo(_Ally, _Source, (REAL)_AS)
+AND
+RealSum(_ST, _TA, (REAL)_STA)
+AND
+// This constant value can be tuned to control flanking angle.
+RealProduct(_AS, 1.015, (REAL)_Threshold)
+AND
+_STA < _Threshold
+THEN
+DB_IsFlanking(_Source, _Target);
+
+// Remove statuses from characters that are no longer flanked.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_RemoveFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+NOT DB_IsFlanking(_Source, _Target)
+THEN
+RemoveStatus(_Target, "FLANKED_PF2E", _Source);
+
+// After all flanking characters are found, use that DB to
+// apply a status to the target from each of those characters,
+// which we can check for later in stats.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_IsFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+NOT DB_RemoveFlanking(_Source, _Target)
+THEN
+ApplyStatus(_Target, "FLANKED_PF2E", -1.0, 1, _Source);
+
+// After applying the FLANKED_PF2E status, we also need to
+// apply a display status if the actively selected character
+// is flanking the target.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_IsFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+GetReservedUserID((CHARACTER)_Source, (INTEGER)_User)
+AND
+GetCurrentCharacter(_User, _CurrentCharacter)
+AND
+_Source == _CurrentCharacter
+THEN
+ApplyStatus(_Target, "FLANKED_DISPLAY", -1.0, 1, (GUIDSTRING)_Source);
+
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
