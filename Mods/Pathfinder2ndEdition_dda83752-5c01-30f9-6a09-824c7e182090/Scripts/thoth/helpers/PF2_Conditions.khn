@@ -1639,10 +1639,10 @@ end
 
 -- If a skill action makes sense to use by the AI
 function SkillActionSensible(skill,ability,checkMAP)
-    -- Must have positive modifier
-    -- Cannot be prevented from using advanced weapon actions by difficulty/template
-    -- Goblins, bugbears, gnolls, skeletons will notably not use weapon actions
-    return IsSkillPositive(skill,ability,checkMAP) & HasNoTags({'AI_BLOCKWEAPONACTIONS','ZOMBIE','CREATURE_SPORE_SERVANT','OOZE'},context.Source)
+	-- Must have positive modifier
+	-- Cannot be prevented from using advanced weapon actions by difficulty/template
+	-- Goblins, bugbears, gnolls, skeletons will notably not use weapon actions
+	return IsSkillPositive(skill,ability,checkMAP) & HasNoTags({'AI_BLOCKWEAPONACTIONS','ZOMBIE','CREATURE_SPORE_SERVANT','OOZE'},context.Source)
 end
 
 -- Don't stack off-guarding skill actions
@@ -1713,7 +1713,7 @@ function RestrainedBlockSpells()
 end
 
 function TargetSizeGrapple()
-    return ConditionResult(context.Target.Size ~= Size.None and context.Target.Size.value <= (context.Source.Size.value + 1), {ConditionError("GrappleSize")})
+	return ConditionResult(context.Target.Size ~= Size.None and context.Target.Size.value <= (context.Source.Size.value + 1), {ConditionError("GrappleSize")})
 end
 
 function PersistentFireCheck()
@@ -1733,26 +1733,26 @@ function PersistentFireRemove(check_immunity)
 end
 
 function TumbleThroughProximityCheck()
-    NumberOfEnemy = NumberOfEnemy or 1
-    target = context.Source
-    source = context.Source
+	NumberOfEnemy = NumberOfEnemy or 1
+	target = context.Source
+	source = context.Source
 
-    local enemies = GetEnemiesWithinRange(0.1, target, source)
-    if enemies ~= nil then
-        for _, entity in ipairs(enemies.Enemies) do
-            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result then
-                return ConditionResult(true)
-            end
-        end
-    end
+	local enemies = GetEnemiesWithinRange(0.1, target, source)
+	if enemies ~= nil then
+		for _, entity in ipairs(enemies.Enemies) do
+			if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result then
+				return ConditionResult(true)
+			end
+		end
+	end
 
-    return ConditionResult(false)
+	return ConditionResult(false)
 end
 
 -- Base mod override, as SG_Restrained should not block reactions, 
 function IsAbleToReact(entity)
-    local entity = entity or context.Target
-    return ~HasAnyStatus({'SG_Fleeing','SG_Incapacitated','SG_Stunned','SG_Unconscious','RESTRAINED'}, {}, {}, entity) & ~Dead(entity) & ~(Self(context.Target, entity) & IsKillingBlow())
+	local entity = entity or context.Target
+	return ~HasAnyStatus({'SG_Fleeing','SG_Incapacitated','SG_Stunned','SG_Unconscious','RESTRAINED'}, {}, {}, entity) & ~Dead(entity) & ~(Self(context.Target, entity) & IsKillingBlow())
 end
 
 function Attack2e(attackType, adv, dis, source, sourcePos, target, targetPos)
@@ -1777,12 +1777,25 @@ function Attack2e(attackType, adv, dis, source, sourcePos, target, targetPos)
 	else
 		attack = Attack(attackType)
 	end
-    local realChance = attack.Chance
-    if HasStatus('HIDDEN_NPC', context.Target).Result then
-        realChance = realChance * 0.5
-    elseif IsConcealedTo(context.Target, context.Source, false).Result then
-        realChance = realChance * 0.8
-    end
-    return ConditionResult(attack.Result,{},{},realChance)
+	local realChance = attack.Chance
+	if HasStatus('HIDDEN_NPC', context.Target).Result then
+		realChance = realChance * 0.5
+	elseif IsConcealedTo(context.Target, context.Source, false).Result then
+		realChance = realChance * 0.8
+	end
+	return ConditionResult(attack.Result,{},{},realChance)
 end
 
+function HasMovableSpellInRange(status, range)
+	local allies = GetAlliesWithinRange(range,context.Target,context.Source)
+	local result = false
+	if allies ~= nil then
+		for _, ally in ipairs(allies.Allies) do
+			if HasStatus(status, ally, context.Source).Result then
+				result = true
+				break
+			end
+		end
+	end
+	return ConditionResult(result, {ConditionError("MovableSpellRange")})
+end

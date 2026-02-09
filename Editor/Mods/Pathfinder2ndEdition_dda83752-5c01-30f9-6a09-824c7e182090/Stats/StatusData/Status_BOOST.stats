@@ -15045,10 +15045,9 @@
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="a4aefae4-51ce-4e67-afa1-c329e6357f31" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSourceStatusApplied" enumeration_type_name="StatusEvent" version="1" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('FLAME_VORTEX_CLEANUP',context.Source)" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(8,1,BloodCloud)" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(8,1,BloodCloud);" />
         <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="DangerousForPathfinding" enumeration_type_name="AuraFlags" version="1" />
-        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="5470483e-f1cf-413b-9a41-93f16b58a30b" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Invulnerable();Resistance(All, Immune);" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(MOVABLE_SPELL_CLEANUP, 100, 0)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15111,18 +15110,16 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
-        <field name="UUID" type="IdTableFieldDefinition" value="9ad5702a-7217-4383-95ee-c540535de378" />
-        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_MOVE_COMPLETE" />
+        <field name="UUID" type="IdTableFieldDefinition" value="6e23b0c7-0fc4-459a-8157-35018862fbe2" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_CLEANUP" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h505dd283g0b39gcb4cg8647gf7fa948bd1de" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(8,1,BloodCloud);" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h85c39839g7751g946egd425g309502a26b4a" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
-        <field name="UUID" type="IdTableFieldDefinition" value="6e23b0c7-0fc4-459a-8157-35018862fbe2" />
-        <field name="Name" type="NameTableFieldDefinition" value="FLAME_VORTEX_CLEANUP" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h505dd283g0b39gcb4cg8647gf7fa948bd1de" version="1" />
+        <field name="UUID" type="IdTableFieldDefinition" value="8c9afeba-21b8-4520-84bb-4478e8500a03" />
+        <field name="Name" type="NameTableFieldDefinition" value="MOVABLE_SPELL_CLEANUP" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
@@ -15136,8 +15133,6 @@
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="2" />
         <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(FLOATING_FLAME_DAMAGE_APPLY,100,0);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('FLOATING_FLAME_CLEANUP',context.Source)" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(4,1,BloodCloud)" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(4,1,BloodCloud);" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="088ec2fe-91c6-41af-9836-1934985a7f08" />
       </fields>
     </stat_object>
@@ -15245,7 +15240,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hbf57e775gb4c7gd571g3229ga6ddb9edd223" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_FlamingSphere" />
         <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_SUSTAIN" />
-        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_Sustain);" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_SUSTAIN);" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLOATING_FLAME_CLEANUP,100,0)" />
@@ -15256,9 +15251,10 @@
         <field name="UUID" type="IdTableFieldDefinition" value="42ff28e2-a51f-4860-978c-edd7f5fc386e" />
         <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_3_SUSTAIN" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
-        <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_3_Sustain);" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_3_SUSTAIN);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_3_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_3_SUSTAIN);" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_3_SUSTAIN" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15266,9 +15262,10 @@
         <field name="UUID" type="IdTableFieldDefinition" value="0105be93-faa4-41e7-b1bb-fd61aa37af8a" />
         <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_4_SUSTAIN" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
-        <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_4_Sustain);" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_4_SUSTAIN);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_4_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_4_SUSTAIN);" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_4_SUSTAIN" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15276,9 +15273,10 @@
         <field name="UUID" type="IdTableFieldDefinition" value="3dfb313b-f914-4499-a9e0-2fb7c9e933d8" />
         <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_5_SUSTAIN" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
-        <field name="StackPriority" type="IntegerTableFieldDefinition" value="4" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_5_Sustain);" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_5_SUSTAIN);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_5_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_5_SUSTAIN);" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_5_SUSTAIN" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15286,9 +15284,10 @@
         <field name="UUID" type="IdTableFieldDefinition" value="728a8515-d66f-4f8d-b1ba-f67f69e603eb" />
         <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_6_SUSTAIN" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="1ed6af76-1012-4a9b-8f75-16ab5f491bf8" />
-        <field name="StackPriority" type="IntegerTableFieldDefinition" value="5" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_FlamingSphere_6_Sustain);" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_6_SUSTAIN);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('FLOATING_FLAME_6_SUSTAINED',context.Source)):RemoveStatus(FLOATING_FLAME_6_SUSTAIN);" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_6_SUSTAIN" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15297,14 +15296,43 @@
         <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_SUSTAINED" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="bb07f8d3-ed1a-4564-8c71-81058881334d" />
         <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_SUSTAINED" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
-        <field name="UUID" type="IdTableFieldDefinition" value="ad23f405-79d0-4a80-bfc2-1766a532fa52" />
-        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_MOVE_COMPLETE" />
-        <field name="Using" type="BaseClassTableFieldDefinition" value="9ad5702a-7217-4383-95ee-c540535de378" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="CreateSurface(4,1,BloodCloud);" />
+        <field name="UUID" type="IdTableFieldDefinition" value="f875c8a5-36d3-4ae7-9c74-446e52ead497" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_3_SUSTAINED" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5d841079-9f99-4e18-8d46-38d8616c7966" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_3_SUSTAINED" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1eddd6b9-765b-405e-8b7c-d38ecd76f5b3" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_4_SUSTAINED" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5d841079-9f99-4e18-8d46-38d8616c7966" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_4_SUSTAINED" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b9563637-9842-4720-a4cd-4dc2f86e95fd" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_5_SUSTAINED" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5d841079-9f99-4e18-8d46-38d8616c7966" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_5_SUSTAINED" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d4c6492e-d4a0-4690-b9c1-a04b0543d3a1" />
+        <field name="Name" type="NameTableFieldDefinition" value="FLOATING_FLAME_6_SUSTAINED" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5d841079-9f99-4e18-8d46-38d8616c7966" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FLOATING_FLAME_6_SUSTAINED" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
