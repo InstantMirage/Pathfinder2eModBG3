@@ -90,6 +90,13 @@ data "ToggleOnFunctors" "ApplyStatus(MANUAL_STRIDE,100,-1)"
 data "ToggleOffFunctors" "RemoveStatus(MANUAL_STRIDE)"
 data "ToggleGroup" "AnchorPosition"
 
+new entry "FreeStrideCostCheck"
+type "PassiveData"
+data "Properties" "IsHidden"
+data "BoostContext" "OnStatusApplied;OnStatusRemoved"
+data "BoostConditions" "not HasStatus('STRIDE',context.Source);"
+data "Boosts" "UnlockSpellVariant(HasStringInSpellConditions('FreeStrideSpell'),ModifyUseCosts(Add,ActionPoint,1,0));"
+
 new entry "PathfinderStatBoosts"
 type "PassiveData"
 data "DisplayName" "h8dc4ab6eg2401gdb8fgfe89g9f26fb9fda22;1"
