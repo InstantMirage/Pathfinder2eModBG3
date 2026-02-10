@@ -1787,13 +1787,15 @@ function Attack2e(attackType, adv, dis, source, sourcePos, target, targetPos)
 end
 
 function HasMovableSpellInRange(status, range)
-	local allies = GetAlliesWithinRange(range,context.Target,context.Source)
+	local allies = GetAlliesWithinRange(50,context.Source,context.Source)
 	local result = false
 	if allies ~= nil then
 		for _, ally in ipairs(allies.Allies) do
 			if HasStatus(status, ally, context.Source).Result then
-				result = true
-				break
+				if DistanceToEntityHitBounds(context.TargetPosition,ally) <= range then
+					result = true
+					break
+				end
 			end
 		end
 	end
