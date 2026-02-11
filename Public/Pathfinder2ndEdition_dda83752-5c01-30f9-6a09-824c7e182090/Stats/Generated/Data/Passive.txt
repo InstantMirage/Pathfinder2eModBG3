@@ -8,7 +8,7 @@ data "Icon" "statIcons_Goaded"
 data "Properties" "IsHidden"
 data "StatsFunctorContext" "OnAttack"
 data "Conditions" "(IsCurrentTurnInCombat(context.Source) or not Combat(context.Source)) and not IsReactionAttack();"
-data "StatsFunctors" "IF(HasStatus('MAP_PENALTY_2ND', context.Source) and IsAttack()):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and IsAttack()):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)"
+data "StatsFunctors" "IF(HasStatus('MAP_PENALTY_2ND', context.Source) and (IsAttack() or HasStringInSpellConditions('AttackSpell'))):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and (IsAttack() or HasStringInSpellConditions('AttackSpell'))):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1)"
 
 new entry "WeaponSpecialization"
 type "PassiveData"
