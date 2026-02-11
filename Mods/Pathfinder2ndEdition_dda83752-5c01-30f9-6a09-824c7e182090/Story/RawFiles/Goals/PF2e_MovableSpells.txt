@@ -80,43 +80,9 @@ DB_MovableSpells(_, (REAL)_Range, _, _Sustain, _, _)
 AND
 GetPosition(_Summon, (REAL)_XS, (REAL)_YS, (REAL)_ZS)
 AND
-RealSubtract(_XT, _XS, (REAL)_XD)
+QRY_VectorABByDistance(_XS, _YS, _ZS, _XT, _YT, _ZT, _Range)
 AND
-RealSubtract(_YT, _YS, (REAL)_YD)
-AND
-RealSubtract(_ZT, _ZS, (REAL)_ZD)
-AND
-RealProduct(_XD, _XD, (REAL)_XSq)
-AND
-RealProduct(_YD, _YD, (REAL)_YSq)
-AND
-RealProduct(_ZD, _ZD, (REAL)_ZSq)
-AND
-RealSum(_XSq, _YSq, (REAL)_Intermediate)
-AND
-RealSum(_Intermediate, _ZSq, (REAL)_HSq)
-AND
-RealSqrRoot(_HSq, (REAL)_DD)
-AND
-RealMin(_DD, _Range, (REAL)_DN)
-AND
-RealDivide(_XD, _DD, (REAL)_XU)
-AND
-RealDivide(_YD, _DD, (REAL)_YU)
-AND
-RealDivide(_ZD, _DD, (REAL)_ZU)
-AND
-RealProduct(_XU, _DN, (REAL)_XDN)
-AND
-RealProduct(_YU, _DN, (REAL)_YDN)
-AND
-RealProduct(_ZU, _DN, (REAL)_ZDN)
-AND
-RealSum(_XDN, _XS, (REAL)_XSN)
-AND
-RealSum(_YDN, _YS, (REAL)_YSN)
-AND
-RealSum(_ZDN, _ZS, (REAL)_ZSN)
+DB_QRYRTN_VectorABByDistance((REAL)_XSN, (REAL)_YSN, (REAL)_ZSN)
 THEN
 UseSpellAtPosition(_Summon, "Projectile_Fly", _XSN, _YSN, _ZSN, 1);
 EXITSECTION

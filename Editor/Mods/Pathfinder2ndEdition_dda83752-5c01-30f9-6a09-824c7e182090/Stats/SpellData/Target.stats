@@ -126,7 +126,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="71a1860f-95ef-4b18-b8d8-9394adcfe37a" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;AddFallDamageOnLand;IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SkillCrit() and not Ally()):Force(2,OriginToEntity,Aggressive);IF(SkillCrit() and not Ally()):Force(4,OriginToEntity,Aggressive);IF(Ally()):Force(2,OriginToEntity,Friendly);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(SHOVE_REACT,100,0);IF(not SkillCrit() and not Ally()):Force(2,OriginToEntity,Aggressive);IF(SkillCrit() and not Ally()):Force(4,OriginToEntity,Aggressive);IF(Ally()):Force(2,OriginToEntity,Friendly);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4b836534g07e5g3401g71afg6ec56097eb4e" version="1" />
@@ -1441,12 +1441,13 @@
         <field name="Name" type="NameTableFieldDefinition" value="UnbalancingSweepShove" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="ce4a1971-d90d-4ef8-bbee-d73f41e8458a" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="ShoveCheck();" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Ally()):Force(ShoveDistance,OriginToEntity,Aggressive);IF(Ally()):Force(ShoveDistance,OriginToEntity,Friendly);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);IF(HasPassive('ShoveDown',context.Source)):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(SHOVE_REACT,100,0);IF(not SkillCrit() and not Ally()):Force(2,OriginToEntity,Aggressive);IF(SkillCrit() and not Ally()):Force(4,OriginToEntity,Aggressive);IF(Ally()):Force(2,OriginToEntity,Friendly);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6c822e8eg3e97g1ba2gdd0eg7441886858c9" version="1" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="ShoveCheck()" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value=";" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="AttackSpell();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1693,7 +1694,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="BrutishShove" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);IF(not Ally()):Force(ShoveDistance,OriginToEntity,Aggressive);IF(Ally()):Force(ShoveDistance,OriginToEntity,Friendly);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED, 100, 1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED, 100, 1);ApplyStatus(SHOVE_REACT,100,0);IF(not IsCritical()):Force(2,OriginToEntity,Aggressive);IF(IsCritical()):Force(4,OriginToEntity,Aggressive);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(OFF_BALANCED, 100, 1)" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_HeartStopper" />
@@ -2569,7 +2570,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="592a9edd-4908-4663-a172-dd5278b3ef51" />
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_MixedManeuver" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Ally()):Force(ShoveDistance,OriginToEntity,Aggressive);IF(Ally()):Force(ShoveDistance,OriginToEntity,Friendly);IF(not HasStatus('MIXED_MANEUVER', context.Source)):ApplyStatus(SELF,MIXED_MANEUVER,100,1);IF(HasPassive('ShoveDown',context.Source)):ApplyStatus(SELF,ShoveDownStatus,100,1);IF(Character() and HasPassive('StunningBlows',context.Source) and not HasStatus('StunningBlowsImmune',context.Target) and not SavingThrow(Ability.Constitution, ClassDC())):ApplyStatus(STUNNED1,100,1);IF(HasPassive('StunningBlows',context.Source)):ApplyStatus(StunningBlowsImmune,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(SHOVE_REACT,100,0);IF(not SkillCrit() and not Ally()):Force(2,OriginToEntity,Aggressive);IF(SkillCrit() and not Ally()):Force(4,OriginToEntity,Aggressive);IF(Ally()):Force(2,OriginToEntity,Friendly);IF(not HasStatus('MIXED_MANEUVER', context.Source)):ApplyStatus(SELF,MIXED_MANEUVER,100,1);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);IF(Character() and HasPassive('StunningBlows',context.Source) and not HasStatus('StunningBlowsImmune',context.Target) and not SavingThrow(Ability.Constitution, ClassDC())):ApplyStatus(STUNNED1,100,1);IF(HasPassive('StunningBlows',context.Source)):ApplyStatus(StunningBlowsImmune,100,1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL, 100, 0);IF(not HasStatus('MIXED_MANEUVER', context.Source)):ApplyStatus(SELF,MIXED_MANEUVER,100,1)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Monk_OpenHandTechnique_Push" />
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Vocal_Component_Monk_Damage" />
@@ -10793,7 +10794,8 @@
         <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="1eee1ec0-263e-4f15-8909-84da438559e4" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('BloodMagicSelf') and ConcentrateSpell();" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and CanShoveWeight() and IsMovable() and not Grounded() and not Tagged('GASEOUS_FORM') and not (not Player(context.Source) and Combat(context.Source) and Character() and not (Enemy() or HasStatus('SG_Unconscious'))) and not Tagged('CANT_SHOVE_THROW') and ConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and CanShoveWeight() and IsMovable() and not Grounded() and not Tagged('GASEOUS_FORM') and not (not Player(context.Source) and Combat(context.Source) and Character() and not (Enemy() or HasStatus('SG_Unconscious'))) and not Tagged('CANT_SHOVE_THROW') and ConcentrateSpell() and AttackSpell();" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Ally()):Force(2,OriginToEntity,Aggressive);IF(Ally()):Force(2,OriginToEntity,Friendly);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -26197,7 +26199,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);IF(not Ally()):Force(ShoveDistance,OriginToEntity,Aggressive);IF(Ally()):Force(ShoveDistance,OriginToEntity,Friendly);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED, 100, 1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED, 100, 1);ApplyStatus(SHOVE_REACT,100,0);IF(not IsCritical()):Force(2,OriginToEntity,Aggressive);IF(IsCritical()):Force(4,OriginToEntity,Aggressive);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(OFF_BALANCED, 100, 1)" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead();" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf2711a1cg40aag6593g3a4cg52352e98cb80" version="1" />
