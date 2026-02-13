@@ -113,6 +113,12 @@ function DontClearAIMove()
 end
 
 --Level scaling
+
+function CharacterLevelBetween(atLeast, exclusiveMax, entity)
+    entity = entity or context.Source
+    return ConditionResult((entity.Level >= atLeast) and (entity.Level < exclusiveMax), {ConditionError("IsNotCharacterLevel")})
+end
+
 function TrainedWeapon() --Proficient
 	return IsProficientWith(context.Source, GetAttackWeapon(context.Source))
 end
