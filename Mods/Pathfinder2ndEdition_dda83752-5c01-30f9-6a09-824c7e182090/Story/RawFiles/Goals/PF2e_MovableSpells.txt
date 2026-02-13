@@ -1,89 +1,90 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-DB_MovableSpells("FLAME_VORTEX_AURA", 7.0, "Target_FlameVortex_Sustain", "FLAME_VORTEX_MOVE_COMPLETE");
-DB_MovableSpells("FLOATING_FLAME_AURA", 3.5, "Target_FlamingSphere_Sustain", "FLOATING_FLAME_MOVE_COMPLETE");
-DB_MovableSpells("FLOATING_FLAME_3_AURA", 3.5, "Target_FlamingSphere_3_Sustain", "FLOATING_FLAME_MOVE_COMPLETE");
-DB_MovableSpells("FLOATING_FLAME_4_AURA", 3.5, "Target_FlamingSphere_4_Sustain", "FLOATING_FLAME_MOVE_COMPLETE");
-DB_MovableSpells("FLOATING_FLAME_5_AURA", 3.5, "Target_FlamingSphere_5_Sustain", "FLOATING_FLAME_MOVE_COMPLETE");
-DB_MovableSpells("FLOATING_FLAME_6_AURA", 3.5, "Target_FlamingSphere_6_Sustain", "FLOATING_FLAME_MOVE_COMPLETE");
+DB_MovableSpells("FLAME_VORTEX_AURA", 8.0, "Target_FlameVortex", "Target_FlameVortex_Sustain", (GUIDSTRING)FlameVortex_Helper_9cabdc92-981b-417b-bada-f2b28e96474c, (EFFECTRESOURCE)VFX_Spell_FlameVortex_Position_989be05f-18fd-a032-f7f2-c05540554439);
+DB_MovableSpells("FLOATING_FLAME_AURA", 4.0, "Target_FlamingSphere", "Target_FlamingSphere_Sustain", (GUIDSTRING)FlamingSphere_Helper_78c92145-a08a-4e62-a958-aade4abf7932, (EFFECTRESOURCE)VFX_Spell_FloatingFlame_Position_c043a0f5-1cc0-54eb-ae5a-1da49a7eab6d);
+DB_MovableSpells("FLOATING_FLAME_3_AURA", 4.0, "Target_FlamingSphere_3", "Target_FlamingSphere_3_Sustain", (GUIDSTRING)FlamingSphere_Helper_78c92145-a08a-4e62-a958-aade4abf7932, (EFFECTRESOURCE)VFX_Spell_FloatingFlame_Position_c043a0f5-1cc0-54eb-ae5a-1da49a7eab6d);
+DB_MovableSpells("FLOATING_FLAME_4_AURA", 4.0, "Target_FlamingSphere_4", "Target_FlamingSphere_4_Sustain", (GUIDSTRING)FlamingSphere_Helper_78c92145-a08a-4e62-a958-aade4abf7932, (EFFECTRESOURCE)VFX_Spell_FloatingFlame_Position_c043a0f5-1cc0-54eb-ae5a-1da49a7eab6d);
+DB_MovableSpells("FLOATING_FLAME_5_AURA", 4.0, "Target_FlamingSphere_5", "Target_FlamingSphere_5_Sustain", (GUIDSTRING)FlamingSphere_Helper_78c92145-a08a-4e62-a958-aade4abf7932, (EFFECTRESOURCE)VFX_Spell_FloatingFlame_Position_c043a0f5-1cc0-54eb-ae5a-1da49a7eab6d);
+DB_MovableSpells("FLOATING_FLAME_6_AURA", 4.0, "Target_FlamingSphere_6", "Target_FlamingSphere_6_Sustain", (GUIDSTRING)FlamingSphere_Helper_78c92145-a08a-4e62-a958-aade4abf7932, (EFFECTRESOURCE)VFX_Spell_FloatingFlame_Position_c043a0f5-1cc0-54eb-ae5a-1da49a7eab6d);
 KBSECTION
-// Using the BloodCloud surface, we can make spells that have summons
+IF
+UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_MovableSpells(_, _, _Spell, _, _, _)
+THEN
+DB_MovableSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
+
+IF
+CastSpell((GUIDSTRING)_Owner, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_MovableSpellsSummonSequence(_StoryID, _Owner, _Spell, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+DB_MovableSpells((STRING)_Aura, _, _Spell, _, (GUIDSTRING)_Template, (EFFECTRESOURCE)_VFX)
+AND
+CreateAt(_Template, _XT, _YT, _ZT, 1, 0, "MovableSpellSpawnComplete", (GUIDSTRING)_Summon)
+THEN
+NOT DB_MovableSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
+PlayEffectAtPosition(_VFX, _XT, _YT, _ZT);
+ApplyStatus(_Summon, _Aura, 60.0, 0, _Owner);
+
+// If we delete the entity immediately the graphical effect stops
+// suddenly.
+IF
+StatusApplied((GUIDSTRING)_Summon, "MOVABLE_SPELL_CLEANUP", _, _)
+THEN
+TimerLaunch("MovableSpellCleanup", 2000);
+DB_MovableSpellCleanup(_Summon);
+
+IF
+TimerFinished("MovableSpellCleanup")
+AND
+DB_MovableSpellCleanup((GUIDSTRING)_Summon)
+THEN
+RequestDeleteTemporary((CHARACTER)_Summon);
+
+IF
+TimerFinished("MovableSpellCleanup")
+AND
+DB_MovableSpellCleanup((GUIDSTRING)_Summon)
+THEN
+NOT DB_MovableSpellCleanup(_Summon);
+
+// Using the above helper we can make spells that have summons
 // that move when sustained, passing through the battlefield applying
 // damage to every enemy they pass. See FLAME_VORTEX for example.
 IF
 StatusApplied(_, (STRING)_Status, (GUIDSTRING)_Owner, _)
 AND
-DB_MovableSpells(_Status, _, (STRING)_Spell, _)
+DB_MovableSpells(_Status, _, _, (STRING)_Sustain, _, _)
 AND
-DB_ActiveMovableSpells((GUIDSTRING)_OldSummon, _Owner, _Spell)
+DB_ActiveMovableSpells((GUIDSTRING)_OldSummon, _Owner, _Sustain)
 THEN
-NOT DB_ActiveMovableSpells(_OldSummon, _Owner, _Spell);
+NOT DB_ActiveMovableSpells(_OldSummon, _Owner, _Sustain);
 
 IF
 StatusApplied((GUIDSTRING)_Summon, (STRING)_Status, (GUIDSTRING)_Owner, _)
 AND
-DB_MovableSpells(_Status, _, (STRING)_Spell, _)
+DB_MovableSpells(_Status, _, _, (STRING)_Sustain, _, _)
 THEN
-DB_ActiveMovableSpells(_Summon, _Owner, _Spell);
+DB_ActiveMovableSpells(_Summon, _Owner, _Sustain);
 
+// We aren't able to limit the range that the sustain spell is cast
+// from the summon, so we have to do that math manually.
 IF
-UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Spell, _, _, _)
+UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Sustain, _, _, _)
 AND
-DB_ActiveMovableSpells((GUIDSTRING)_Summon, _Owner, _Spell)
+DB_ActiveMovableSpells((GUIDSTRING)_Summon, _Owner, _Sustain)
 AND
-DB_MovableSpells(_, (REAL)_Range, _Spell, _)
+DB_MovableSpells(_, (REAL)_Range, _, _Sustain, _, _)
 AND
 GetPosition(_Summon, (REAL)_XS, (REAL)_YS, (REAL)_ZS)
 AND
-RealSubtract(_XT, _XS, (REAL)_XD)
+QRY_VectorABByDistance(_XS, _YS, _ZS, _XT, _YT, _ZT, _Range)
 AND
-RealSubtract(_YT, _YS, (REAL)_YD)
-AND
-RealSubtract(_ZT, _ZS, (REAL)_ZD)
-AND
-RealProduct(_XD, _XD, (REAL)_XSq)
-AND
-RealProduct(_YD, _YD, (REAL)_YSq)
-AND
-RealProduct(_ZD, _ZD, (REAL)_ZSq)
-AND
-RealSum(_XSq, _YSq, (REAL)_Intermediate)
-AND
-RealSum(_Intermediate, _ZSq, (REAL)_HSq)
-AND
-RealSqrRoot(_HSq, (REAL)_DD)
-AND
-RealMin(_DD, _Range, (REAL)_DN)
-AND
-RealDivide(_XD, _DD, (REAL)_XU)
-AND
-RealDivide(_YD, _DD, (REAL)_YU)
-AND
-RealDivide(_ZD, _DD, (REAL)_ZU)
-AND
-RealProduct(_XU, _DN, (REAL)_XDN)
-AND
-RealProduct(_YU, _DN, (REAL)_YDN)
-AND
-RealProduct(_ZU, _DN, (REAL)_ZDN)
-AND
-RealSum(_XDN, _XS, (REAL)_XSN)
-AND
-RealSum(_YDN, _YS, (REAL)_YSN)
-AND
-RealSum(_ZDN, _ZS, (REAL)_ZSN)
+DB_QRYRTN_VectorABByDistance((REAL)_XSN, (REAL)_YSN, (REAL)_ZSN)
 THEN
-ItemMoveToPosition((ITEM)_Summon, _XSN, _YSN, _ZSN, 4.0, 3.0, "MovableSpellEvent");
-
-IF
-EntityEvent((GUIDSTRING)_Summon, "MovableSpellEvent")
-AND
-DB_ActiveMovableSpells(_Summon, (GUIDSTRING)_Owner, (STRING)_Spell)
-AND
-DB_MovableSpells(_, _, _Spell, (STRING)_MoveCompleteStatus)
-THEN
-ApplyStatus(_Summon, _MoveCompleteStatus, 0.0, 1, _Owner);
+UseSpellAtPosition(_Summon, "Projectile_Fly", _XSN, _YSN, _ZSN, 1);
 EXITSECTION
 
 ENDEXITSECTION

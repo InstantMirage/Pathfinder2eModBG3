@@ -26,7 +26,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcf244533g8a50g71dbge8aag2b24f55e0534" version="3" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7b342ca0gea2dgca07gb43fg7ad99f8143ba" version="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_AttackOfOpportunity" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Source, context.Observer) and Enemy(context.Source, context.Observer) and not Uninterruptible() and not DistanceToEntityGreaterThan(2, context.ObserverPosition, context.Source) and not AnyEntityIsItem() and ((IsSpell() and HasSpellFlag(SpellFlags.Somatic)) or IsRangedAttack());" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Source, context.Observer) and Enemy(context.Source, context.Observer) and not Uninterruptible() and not DistanceToEntityGreaterThan(2.5, context.ObserverPosition, context.Source) and not AnyEntityIsItem() and ((IsSpell() and HasSpellFlag(SpellFlags.Somatic)) or IsRangedAttack());" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnSpellCast;OnPostRoll" enumeration_type_name="InterruptContext" version="1" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
@@ -140,6 +140,36 @@
         <field name="EnableCondition" type="StringTableFieldDefinition" value="not HasStatus('SG_Polymorph') or Tagged('MINDFLAYER') or HasStatus('SG_Disguise')" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(Shield_Cantrip)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="731464c7-be7d-4d88-aef5-ad41ebaaabae" />
+        <field name="Name" type="NameTableFieldDefinition" value="VolleyReaction" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="had44ddafg1e58g731ag0f68gfcd6bb92336c" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h18ede37eg241cgc067gd729g0f7712d8a235" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_FightingStyle_Archery" />
+        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnPostRoll" enumeration_type_name="InterruptContext" version="1" />
+        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Far" enumeration_type_name="InterruptContextScope" version="1" />
+        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasPassive('Volley30',context.Source) and Volley(12,context.SourcePosition,context.TargetPosition) and IsRangedWeaponAttack() and SpellTypeIs(SpellType.Projectile) and not Self(context.Observer, context.Source) and Self(context.Observer, context.Target);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(-2);" />
+        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
+        <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2405bf15-f933-45ba-989f-048ed5ab46d8" />
+        <field name="Name" type="NameTableFieldDefinition" value="ShoveReaction" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h05d49f47gc78cg3a01g7e57g545a5993c0aa" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6f8490cfgd603gd9a7g29ecg0ca15b28e318" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Shove" />
+        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="InterruptContext" version="1" />
+        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
+        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('SHOVE_TRIGGER',context.Target) and IsCurrentTurnInCombat(context.Observer) and Self(context.Observer, context.Source) and ConditionResult(Distance(context.TargetPosition, context.SourcePosition) &lt; 5);" />
+        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -294,7 +324,7 @@
         <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,-(LevelMapValue(CharacterLevel)+2));ApplyStatus(OBSERVER_TARGET,WAR_GODS_BLESSING,100,0);UseAttack(OBSERVER_SOURCE);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_RighteousClarity" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not DistanceToEntityGreaterThan(2, context.ObserverPosition, context.Source) and not Self(context.Target,context.Observer) and Enemy(context.Source, context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Target,context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Source,context.Observer) and not AnyEntityIsItem();" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not DistanceToEntityGreaterThan(2.5, context.ObserverPosition, context.Source) and not Self(context.Target,context.Observer) and Enemy(context.Source, context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Target,context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Source,context.Observer) and not AnyEntityIsItem();" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="RestoreHitPoints(MainMeleeWeapon, MainMeleeWeaponDamageType);RestoreHitPoints(LevelMapValue(CharacterLevel)+2)" />
       </fields>
     </stat_object>
@@ -383,7 +413,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha621b52eg9e4bg6cd3g5c1cg7fee9c8a367d" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Cleric_TurnUndead" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="not Dead(context.Observer) and HasInterruptedSavingThrow() and Ally(context.Observer,context.Target) and not AnyEntityIsItem() and not DistanceToEntityGreaterThan(2, context.ObserverPosition, context.Source);" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not Dead(context.Observer) and HasInterruptedSavingThrow() and Ally(context.Observer,context.Target) and not AnyEntityIsItem() and not DistanceToEntityGreaterThan(2.5, context.ObserverPosition, context.Source);" />
         <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,2);UseAttack(OBSERVER_SOURCE)" />
       </fields>
     </stat_object>
@@ -415,7 +445,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_ProjectedWard" />
         <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,-(LevelMapValue(ProtectorsSacrifice)));ApplyStatus(OBSERVER_TARGET,WAR_GODS_BLESSING,100,0);DealDamage(OBSERVER_OBSERVER,LevelMapValue(ProtectorsSacrifice),Necrotic);ApplyStatus(OBSERVER_OBSERVER,DIVINESTRIKE_MELEE_VFX,100,1);" />
         <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1;KiPoint:1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Target,context.Observer) and Enemy(context.Source, context.Observer) and not AnyEntityIsItem() and not DistanceToEntityGreaterThan(9, context.ObserverPosition, context.Source);" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Target,context.Observer) and Enemy(context.Source, context.Observer) and not AnyEntityIsItem() and not DistanceToEntityGreaterThan(12, context.ObserverPosition, context.Source);" />
         <field name="EnableCondition" type="StringTableFieldDefinition" value="not HasStatus('SG_Polymorph') or Tagged('MINDFLAYER') or HasStatus('SG_Disguise')" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="RestoreHitPoints(LevelMapValue(ProtectorsSacrifice));DealDamage(LevelMapValue(ProtectorsSacrifice), Necrotic)" />
       </fields>
@@ -537,7 +567,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="c7444d60-f45a-4dbf-8bf6-203acf40af5b" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h72d4cd23gfcdbg494bg554bg36c6a96000e1" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf16a4a62g4777gc6c6ge587gb167f71efb70" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and Enemy(context.Source,context.Observer) and IsMeleeAttack() and IsMiss() and IsCriticalMiss() and not HasStatus('INVISIBILITY') and not AnyEntityIsItem() and not DistanceToEntityGreaterThan(2, context.ObserverPosition, context.Source) and HasLastAttackTriggered();" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and Enemy(context.Source,context.Observer) and IsMeleeAttack() and IsMiss() and IsCriticalMiss() and not HasStatus('INVISIBILITY') and not AnyEntityIsItem() and not DistanceToEntityGreaterThan(2.5, context.ObserverPosition, context.Source) and HasLastAttackTriggered();" />
         <field name="Properties" type="StringTableFieldDefinition" value="UseAttack(OBSERVER_SOURCE);ApplyStatus(OBSERVER_OBSERVER,INTERRUPT_RIPOSTE,100,0)" />
         <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
@@ -604,7 +634,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="08053482-fab5-4c0b-a95a-ace911f7b488" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0f92bae1g0c70g59e2g79f4gc83bee98c91e" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hfeea3dc6gf4d6gde75g8a91g97114dc30d49" version="1" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(3)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(4)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_PushingAttack_Melee" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and (IsWeaponOfProficiencyGroup('Clubs|Greatclubs|Maces|Morningstars|Quarterstaffs', GetAttackWeapon()) and IsMeleeAttack() and IsWeaponAttack()) and not Item() and Self(context.Source,context.Observer) and HasDamageEffectFlag(DamageFlags.Hit) and IsCritical() and not IsKillingBlow() and not AnyEntityIsItem();" />
         <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(CRITSPEC_CLUB,100,1)" />
@@ -690,7 +720,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="08053482-fab5-4c0b-a95a-ace911f7b488" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h13fe6950g8133g1af6ge1begee321886d267" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8878f354g7e5fgaeacge196gb7f7516f428d" version="2" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(1.5)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(2)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Monster_Gortash_ReelIn" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and (IsWeaponOfProficiencyGroup('Glaives|Halberds', GetAttackWeapon()) and IsMeleeAttack() and IsWeaponAttack()) and not Item() and Self(context.Source,context.Observer) and HasDamageEffectFlag(DamageFlags.Hit) and IsCritical() and not IsKillingBlow() and not AnyEntityIsItem();" />
         <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(CRITSPEC_POLE_TARGET,100,1);ApplyStatus(OBSERVER_OBSERVER,CRITSPEC_POLE_UNLOCK,100,1)" />
@@ -759,7 +789,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Interrupt_FreezingRime" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb6ee701cgc4c3g7c8ag0ee1gd1db09a81a66" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9680e04cg69cbgdfffg7054g8491af930bea" version="1" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(1.5)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(2)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Monster_ElementalWater_WintersBreath" />
         <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="InterruptContext" version="1" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Self" enumeration_type_name="InterruptContextScope" version="1" />
@@ -792,7 +822,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Interrupt_Debilitation_Speed" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h32a52a1cg0d5dg2f9bg816dg1dc9164d9b67" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8fb325f9g8353g6668gb33cg52450dc11d02" version="1" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(3)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(4)" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Sentinel_ZeroSpeed" />
         <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="InterruptContext" version="1" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
@@ -1106,7 +1136,7 @@
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableCondition" type="StringTableFieldDefinition" value="not HasStatus('SG_Polymorph') or Tagged('MINDFLAYER') or HasStatus('SG_Disguise')" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(18)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(24)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1147,7 +1177,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h406f41bcg1b65g0594g8a35g4d6db184d973" version="1" />
         <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnPostRoll" enumeration_type_name="InterruptContext" version="1" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Source,context.Observer) and HasInterruptedAttack() and IsMeleeAttack() and Ally(context.Source, context.Observer) and not DistanceToEntityGreaterThan(2, context.ObserverPosition, context.Source);" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Source,context.Observer) and HasInterruptedAttack() and IsMeleeAttack() and Ally(context.Source, context.Observer) and not DistanceToEntityGreaterThan(2.5, context.ObserverPosition, context.Source);" />
         <field name="Properties" type="StringTableFieldDefinition" value="UseAttack(OBSERVER_TARGET);" />
       </fields>
     </stat_object>
@@ -1413,8 +1443,8 @@
         <field name="UUID" type="IdTableFieldDefinition" value="a30b58cb-e237-4b2a-ac34-6d54ace5b8e2" />
         <field name="Name" type="NameTableFieldDefinition" value="NimbleRetribution" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="07de0c7d-782c-47fe-a3f9-f50559617423" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3a48df64g596bgc4a1gbd62gf543b6016d70" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not DistanceToEntityGreaterThan(4, context.ObserverPosition, context.Source) and not Self(context.Target,context.Observer) and Enemy(context.Source, context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Target,context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Source,context.Observer) and not AnyEntityIsItem();" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3a48df64g596bgc4a1gbd62gf543b6016d70" version="2" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not DistanceToEntityGreaterThan(4.5, context.ObserverPosition, context.Source) and not Self(context.Target,context.Observer) and Enemy(context.Source, context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Target,context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Source,context.Observer) and not AnyEntityIsItem();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1436,7 +1466,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3f18a6a3g621cg38fdga14cg96bd5fef8b0e" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he296e1c6g6c73ge48ag1138g008853ec5ef2" version="3" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not DistanceToEntityGreaterThan(2, context.ObserverPosition, context.Source) and not Self(context.Target,context.Observer) and not Eenmy(context.Target,context.Observer) and IsAttack() and not IsSpell() and (HasStatus('RAISE_SHIELD',context.Observer) or HasStatus('RAISE_SHIELD_SPIRIT',context.Observer) or HasStatus('ParagonShield',context.Observer));" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not DistanceToEntityGreaterThan(2.5, context.ObserverPosition, context.Source) and not Self(context.Target,context.Observer) and not Eenmy(context.Target,context.Observer) and IsAttack() and not IsSpell() and (HasStatus('RAISE_SHIELD',context.Observer) or HasStatus('RAISE_SHIELD_SPIRIT',context.Observer) or HasStatus('ParagonShield',context.Observer));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1724,7 +1754,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="5b07b76d-fa95-488c-a24b-404569472c47" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h20f9f5a6gc915g30ecg8c08ge151e9e9cba3" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he50cca36g2ec9g2a29ge14egba4a3cfe5cb7" version="1" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(1.5)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(2)" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_RepellingBlast" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and Self(context.Source,context.Observer) and IsSpell() and HasUseCosts('SorceryPoint',true) and not Item() and not AnyEntityIsItem() and not Self(context.Target,context.Observer) and (IsHit() or HasDamageEffectFlag(DamageFlags.SavingThrow)) and not IsKillingBlow();" />
         <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(BARB_KNOCKBACK,100,1);ApplyStatus(PASSIVE_REPELLING_BLAST,100,1);ApplyStatus(OBSERVER_SOURCE,BloodMagicSelf,100,1);" />

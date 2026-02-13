@@ -1,0 +1,111 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+//REGION Vector Math Helpers
+// Multiply a vector by a scalar
+QRY
+QRY_VectorMult((REAL)_XA, (REAL)_YA, (REAL)_ZA, (REAL)_Scalar)
+AND
+DB_QRYRTN_VectorMult((REAL)_XD, (REAL)_YD, (REAL)_ZD)
+THEN
+NOT DB_QRYRTN_VectorMult(_XD, _YD, _ZD);
+
+QRY
+QRY_VectorMult((REAL)_XA, (REAL)_YA, (REAL)_ZA, (REAL)_Scalar)
+AND
+RealProduct(_XA, _Scalar, (REAL)_XD)
+AND
+RealProduct(_YA, _Scalar, (REAL)_YD)
+AND
+RealProduct(_ZA, _Scalar, (REAL)_ZD)
+THEN
+DB_QRYRTN_VectorMult(_XD, _YD, _ZD);
+
+// Calculate the vector A->B
+QRY
+QRY_VectorAB((REAL)_XA, (REAL)_YA, (REAL)_ZA, (REAL)_XB, (REAL)_YB, (REAL)_ZB)
+AND
+DB_QRYRTN_VectorAB((REAL)_XD, (REAL)_YD, (REAL)_ZD)
+THEN
+NOT DB_QRYRTN_VectorAB(_XD, _YD, _ZD);
+
+QRY
+QRY_VectorAB((REAL)_XA, (REAL)_YA, (REAL)_ZA, (REAL)_XB, (REAL)_YB, (REAL)_ZB)
+AND
+RealSubtract(_XB, _XA, (REAL)_XD)
+AND
+RealSubtract(_YB, _YA, (REAL)_YD)
+AND
+RealSubtract(_ZB, _ZA, (REAL)_ZD)
+THEN
+DB_QRYRTN_VectorAB(_XD, _YD, _ZD);
+
+// Calculate the position vector along axis A->B of length Distance
+QRY
+QRY_VectorABByDistance((REAL)_XA, (REAL)_YA, (REAL)_ZA, (REAL)_XB, (REAL)_YB, (REAL)_ZB, (REAL)_Distance)
+AND
+DB_QRYRTN_VectorABByDistance((REAL)_XN, (REAL)_YN, (REAL)_ZN)
+THEN
+NOT DB_QRYRTN_VectorABByDistance(_XN, _YN, _ZN);
+
+QRY
+QRY_VectorABByDistance((REAL)_XA, (REAL)_YA, (REAL)_ZA, (REAL)_XB, (REAL)_YB, (REAL)_ZB, (REAL)_Distance)
+AND
+QRY_GetReal3SqrDistance(_XA, _YA, _ZA, _XB, _YB, _ZB)
+AND
+DB_QRYRTN_GetReal3SqrDistance((REAL)_ABSq)
+AND
+RealSqrRoot(_ABSq, (REAL)_ABDist)
+AND
+QRY_VectorAB(_XA, _YA, _ZA, _XB, _YB, _ZB)
+AND
+DB_QRYRTN_VectorAB((REAL)_XD, (REAL)_YD, (REAL)_ZD)
+AND
+RealDivide(1.0, _ABDist, (REAL)_Quotient)
+AND
+RealProduct(_Quotient, _Distance, _Multiplier)
+AND
+QRY_VectorMult(_XD, _YD, _ZD, _Multiplier)
+AND
+DB_QRYRTN_VectorMult((REAL)_XDN, (REAL)_YDN, (REAL)_ZDN)
+AND
+RealSum(_XDN, _XA, (REAL)_XN)
+AND
+RealSum(_YDN, _YA, (REAL)_YN)
+AND
+RealSum(_ZDN, _ZA, (REAL)_ZN)
+THEN
+DB_QRYRTN_VectorABByDistance(_XN, _YN, _ZN);
+
+// Calculate the position vector Ratio along axis A->B
+QRY
+QRY_VectorABByRatio((REAL)_XA, (REAL)_YA, (REAL)_ZA, (REAL)_XB, (REAL)_YB, (REAL)_ZB, (REAL)_Ratio)
+AND
+DB_QRYRTN_VectorABByRatio((REAL)_XN, (REAL)_YN, (REAL)_ZN)
+THEN
+NOT DB_QRYRTN_VectorABByRatio(_XN, _YN, _ZN);
+
+QRY
+QRY_VectorABByRatio((REAL)_XA, (REAL)_YA, (REAL)_ZA, (REAL)_XB, (REAL)_YB, (REAL)_ZB, (REAL)_Ratio)
+AND
+QRY_VectorAB(_XA, _YA, _ZA, _XB, _YB, _ZB)
+AND
+DB_QRYRTN_VectorAB((REAL)_XD, (REAL)_YD, (REAL)_ZD)
+AND
+QRY_VectorMult(_XD, _YD, _ZD, _Ratio)
+AND
+DB_QRYRTN_VectorMult((REAL)_XDN, (REAL)_YDN, (REAL)_ZDN)
+AND
+RealSum(_XDN, _XA, (REAL)_XN)
+AND
+RealSum(_YDN, _YA, (REAL)_YN)
+AND
+RealSum(_ZDN, _ZA, (REAL)_ZN)
+THEN
+DB_QRYRTN_VectorABByRatio(_XN, _YN, _ZN);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION

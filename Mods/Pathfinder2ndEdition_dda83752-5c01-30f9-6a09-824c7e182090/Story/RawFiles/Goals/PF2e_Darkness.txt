@@ -65,15 +65,6 @@ THEN
 RemoveStatus(_Character, "INVISIBLE");
 //END_REGION
 
-//REGION Dazzled for 1 hour is implemented as a removal on short rest
-IF
-ShortRested((CHARACTER)_Character)
-AND
-HasActiveStatus((GUIDSTRING)_Character, "DAZZLED_APPLY", 1)
-THEN
-RemoveStatus(_Character, "DAZZLED_APPLY");
-//END_REGION
-
 //REGION Base Game Sneaking
 // Whenever a character enters combat while sneaking, remove the base
 // game sneaking effect and immediately trigger a hide check.
@@ -425,6 +416,7 @@ AND
 Concatenate("HideCalculationFinal", _GUIDString, (STRING)_HideFinalString)
 THEN
 DB_HideCalculationNPC(_Character, 0, _HideDCString, _HideFinalString);
+DB_CreateDiversionCalculationNPC(_Character, 0, _HideDCString, _HideFinalString);
 IteratePlayerCharacters(_HideDCString, _HideFinalString);
 
 // Allows Osiris to detect which characters are immune to the
@@ -543,18 +535,42 @@ THEN
 NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
 DB_HideCalculationNPC(_Cause, 100, _HideDCString, _HideFinalString);
 
+// For Create a Diversion, we just grab the perception DC.
+IF
+EntityEvent((GUIDSTRING)_Character, (STRING)_HideDCString)
+AND
+DB_CreateDiversionCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STRING)_HideFinalString)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_RawPerception)
+AND
+IntegerSum(_RawPerception, -2, (INTEGER)_PassivePerception)
+AND
+_PassivePerception > _Current
+THEN
+NOT DB_CreateDiversionCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
+DB_CreateDiversionCalculationNPC(_Cause, _PassivePerception, _HideDCString, _HideFinalString);
+
 // Set a status to store the DC for the character.
 IF
 EntityEvent(_, _HideFinalString)
 AND
 DB_HideCalculationNPC((GUIDSTRING)_Character, (INTEGER)_DC, (STRING)_HideDCString, _HideFinalString)
 AND
+DB_CreateDiversionCalculationNPC((GUIDSTRING)_Character, (INTEGER)_DiversionDC, (STRING)_HideDCString, _HideFinalString)
+AND
 IntegerProduct(_DC, 6, (INTEGER)_DCMult)
 AND
 IntegerToReal(_DCMult, (REAL)_DCReal)
+AND
+IntegerProduct(_DiversionDC, 6, (INTEGER)_DCDiversionMult)
+AND
+IntegerToReal(_DCDiversionMult, (REAL)_DCDiversionReal)
 THEN
 ApplyStatus(_Character, "HIDE_NPC_DC", _DCReal, 1, _Character);
+ApplyStatus(_Character, "DIVERSION_NPC_DC", _DCDiversionReal, 1, _Character);
 NOT DB_HideCalculationNPC(_Character, _DC, _HideDCString, _HideFinalString);
+NOT DB_CreateDiversionCalculationNPC(_Character, _DiversionDC, _HideDCString, _HideFinalString);
+
 //END_REGION
 
 //REGION Flat Check Countering Conditions
@@ -620,6 +636,101 @@ DB_FlatCheckImmune((GUIDSTRING)_Caster, _Target)
 THEN
 NOT DB_FlatCheckImmune(_Caster, _Target);
 
+//END_REGION
+
+//REGION Create a Diversion
+// Reuses much of the same code as hiding, with some small changes.
+IF
+CastedSpell((GUIDSTRING)_Cause, "Target_CreateDiversion", _, _, _)
+AND
+TimerExists("DiversionCheckTimer", 0)
+THEN
+TimerLaunch("DiversionCheckTimer", 30);
+
+// Create a distraction spawns an invisible helper that
+// allows us to make humanoid enemies turn towards it. 
+IF
+EnteredLevel((GUIDSTRING)_Helper, CreateDiversionHelper_f08cb6ae-42b8-404f-a4c0-f57bd0347267, _)
+THEN
+DB_DiversionLocation(_Helper);
+
+// Create a Diversion always checks against every enemy, and does
+// not care about line of sight.
+IF
+TimerFinished("DiversionCheckTimer")
+AND
+DB_HideCheckSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+CalculatePassiveSkill(_Cause, "Deception", (INTEGER)_PassiveSkill)
+AND
+IntegerSubtract(_PassiveSkill, 10, (INTEGER)_ModifierSkill)
+AND
+GetStatusTurns(_Cause, "DIVERSION_CHECK_RESULT", (INTEGER)_Roll)
+AND
+IntegerSum(_Roll, _ModifierSkill, (INTEGER)_TotalRoll)
+AND
+DB_DiversionLocation((GUIDSTRING)_Helper)
+THEN
+PROC_ApplyHiddenDiversion(_Character, _Cause, _TotalRoll, _Roll);
+
+// Cleanup and apply the stale status to debuff future attempts.
+IF
+TimerFinished("DiversionCheckTimer")
+AND
+DB_HideCheckSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+DB_DiversionLocation((GUIDSTRING)_Helper)
+THEN
+NOT DB_HideCheckSchedule(_Character, _Cause);
+ApplyStatus(_Cause, "DIVERSION_STALE", 60.0, 1, _Character);
+NOT DB_DiversionLocation(_Helper);
+
+// A check of the roll against perception DC.
+PROC
+PROC_ApplyHiddenDiversion((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_Raw)
+AND
+HasActiveStatus(_Character, "DIVERSION_STALE", 0)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+AND
+_Roll >= _PassivePerception
+THEN
+ApplyStatus(_Character, "HIDDEN_FROM", -1.0, 0, _Cause);
+PROC_TurnToDiversion(_Character);
+
+// Crits always succeed
+PROC
+PROC_ApplyHiddenDiversion((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_Raw)
+AND
+_Raw == 20
+THEN
+ApplyStatus(_Character, "HIDDEN_FROM", -1.0, 0, _Cause);
+PROC_TurnToDiversion(_Character);
+
+// Characters that have recently used Create a Diversion are
+// penalised. This should be a cirumcstance bonus to enemy
+// perception DC, but we presently have nothing that would
+// stack against that anyway.
+PROC
+PROC_ApplyHiddenDiversion((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_Raw)
+AND
+HasActiveStatus(_Cause, "DIVERSION_STALE", 1)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+AND
+IntegerSum(_PassivePerception, 4, (INTEGER)_PerceptionDC)
+AND
+_Roll >= _PerceptionDC
+THEN
+ApplyStatus(_Character, "HIDDEN_FROM", -1.0, 0, _Cause);
+PROC_TurnToDiversion(_Character);
+
+PROC
+PROC_TurnToDiversion((GUIDSTRING)_Character)
+AND
+DB_DiversionLocation((GUIDSTRING)_Helper)
+THEN
+SteerTo((CHARACTER)_Character, _Helper, 0);
 //END_REGION
 EXITSECTION
 

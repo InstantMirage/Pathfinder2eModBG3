@@ -14,7 +14,7 @@ ApplyStatus(_Caster, "INTERRUPT_FREE_MOVEMENT", 1.0);
 
 // This might look like a lot, but it really just calculates the unit vector
 // from target to caster, and adds that, multiplied by distance, to the caster's
-// position multiplied by distance.
+// position.
 IF
 CastedSpell((GUIDSTRING)_Caster, _, _, _, (INTEGER)_ActionID)
 AND
@@ -24,41 +24,9 @@ GetPosition(_Caster, (REAL)_XC, (REAL)_YC, (REAL)_ZC)
 AND
 GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
 AND
-RealSubtract(_XC, _XT, (REAL)_XD)
+QRY_VectorABByDistance(_XC, _YC, _ZC, _XT, _YT, _ZT, -2.0)
 AND
-RealSubtract(_YC, _YT, (REAL)_YD)
-AND
-RealSubtract(_ZC, _ZT, (REAL)_ZD)
-AND
-RealProduct(_XD, _XD, (REAL)_XSq)
-AND
-RealProduct(_YD, _YD, (REAL)_YSq)
-AND
-RealProduct(_ZD, _ZD, (REAL)_ZSq)
-AND
-RealSum(_XSq, _YSq, (REAL)_Intermediate)
-AND
-RealSum(_Intermediate, _ZSq, (REAL)_HSq)
-AND
-RealSqrRoot(_HSq, (REAL)_D)
-AND
-RealDivide(_XD, _D, (REAL)_XU)
-AND
-RealDivide(_YD, _D, (REAL)_YU)
-AND
-RealDivide(_ZD, _D, (REAL)_ZU)
-AND
-RealProduct(_XU, _Distance, (REAL)_XDN)
-AND
-RealProduct(_YU, _Distance, (REAL)_YDN)
-AND
-RealProduct(_ZU, _Distance, (REAL)_ZDN)
-AND
-RealSum(_XDN, _XC, (REAL)_XCN)
-AND
-RealSum(_YDN, _YC, (REAL)_YCN)
-AND
-RealSum(_ZDN, _ZC, (REAL)_ZCN)
+DB_QRYRTN_VectorABByDistance((REAL)_XCN, (REAL)_YCN, (REAL)_ZCN)
 THEN
 CharacterMoveToPosition((CHARACTER)_Caster, _XCN, _YCN, _ZCN, "Run", "ClearStrideConditionOffTurn");
 
@@ -78,6 +46,83 @@ PROC
 PROC_SteerToCause((GUIDSTRING)_Caster, (GUIDSTRING)_Target)
 THEN
 SteerTo((CHARACTER)_Caster, (CHARACTER)_Target, 0);
+//END_REGION
+
+//REGION Shove
+// When a character shoves something, this status is applied
+// to the entity. Keep track of the current shove caster/target
+// pair in a DB. Clear it out first.
+IF
+StatusApplied((GUIDSTRING)_Target, "SHOVE_REACT", (GUIDSTRING)_Caster, _)
+AND
+DB_CurrentShoveAction((GUIDSTRING)_OldT, (GUIDSTRING)_OldC)
+THEN
+NOT DB_CurrentShoveAction(_OldT, _OldC);
+
+IF
+StatusApplied((GUIDSTRING)_Target, "SHOVE_REACT", (GUIDSTRING)_Caster, _)
+THEN
+DB_CurrentShoveAction(_Target, _Caster);
+
+// When a shove is finished, the shoved character loses this
+// status, and we have to apply another status that triggers
+// the interrupt, but we need Osiris to maintain cause data.
+IF
+StatusRemoved((GUIDSTRING)_Target, "SHOVE_REACT", _, _)
+AND
+DB_CurrentShoveAction(_Target, (GUIDSTRING)_Caster)
+THEN
+ApplyStatus(_Target, "SHOVE_TRIGGER", 0.0, 0, _Caster);
+
+// When the shove follow interrupt awaits user input, we
+// find a safe place to stand near the target, and ping it.
+IF
+ReactionInterruptActionNeeded((GUIDSTRING)_Caster)
+AND
+DB_CurrentShoveAction((GUIDSTRING)_Target, _Caster)
+AND
+GetPosition(_Caster, (REAL)_XC, (REAL)_YC, (REAL)_ZC)
+AND
+GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+QRY_VectorABByRatio(_XC, _YC, _ZC, _XT, _YT, _ZT, 0.8)
+AND
+DB_QRYRTN_VectorABByRatio((REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+FindValidPosition(_X, _Y, _Z, 1.0, _Caster, 0, (REAL)_SafeX, (REAL)_SafeY, (REAL)_SafeZ)
+THEN
+RequestPing(_SafeX, _SafeY, _SafeZ, NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+
+// When the interupt is actually used, we calculate the same
+// position again, but actually move to it.
+IF
+ReactionInterruptUsed((GUIDSTRING)_Caster, "ShoveReaction", _)
+AND
+DB_CurrentShoveAction((GUIDSTRING)_Target, _Caster)
+AND
+GetPosition(_Caster, (REAL)_XC, (REAL)_YC, (REAL)_ZC)
+AND
+GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+QRY_VectorABByRatio(_XC, _YC, _ZC, _XT, _YT, _ZT, 0.8)
+AND
+DB_QRYRTN_VectorABByRatio((REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+FindValidPosition(_X, _Y, _Z, 1.0, _Caster, 0, (REAL)_SafeX, (REAL)_SafeY, (REAL)_SafeZ)
+THEN
+ApplyStatus(_Caster, "INTERRUPT_FREE_MOVEMENT", -1.0, 1, _Caster);
+PROC_ShoveReactionMove(_Caster, _SafeX, _SafeY, _SafeZ);
+
+PROC
+PROC_ShoveReactionMove((GUIDSTRING)_Caster, (REAL)_SafeX, (REAL)_SafeY, (REAL)_SafeZ)
+THEN
+CharacterMoveToPosition((CHARACTER)_Caster, _SafeX, _SafeY, _SafeZ, "Run", "ShoveReactionMove");
+
+IF
+EntityEvent((GUIDSTRING)_Caster, "ShoveReactionMove")
+THEN
+ApplyStatus(_Caster, "DEBUG_RESET_MOVE", -1.0, 1, _Caster);
+RemoveStatus(_Caster, "INTERRUPT_FREE_MOVEMENT");
 //END_REGION
 EXITSECTION
 

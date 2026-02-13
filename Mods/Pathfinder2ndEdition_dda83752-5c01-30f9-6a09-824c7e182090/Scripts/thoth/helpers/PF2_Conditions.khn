@@ -7,7 +7,7 @@ local __util = require 'larian.util'
 function AutoStride()
 	local canMove = ~Immobilized() | HasStatus('SG_Prone')
 	local hasActions = HasActionResource('ActionPoint', 1 , 0, false, false) | QuickenedStride()
-	local automaticStride = ~HasStatus('MANUAL_STRIDE')
+	local automaticStride = ~HasStatus('MANUAL_STRIDE') | HasStatus('SG_Mad') | HasStatus('SG_Dominated') | HasStatus('SG_Fleeing') | HasStatus('SG_Approaching') | HasStatus('SG_Taunted') | HasStatus('SG_Confused')
 	
 	return canMove & hasActions & automaticStride
 end
@@ -28,6 +28,12 @@ end
 function HasDashStatus(entity)
 	entity = entity or context.Source
 	return HasAnyStatus({'DASH','DASH_STACKED','DASH_STACKED_2'}, {}, {}, entity )
+end
+
+function FreeStrideSpell()
+	-- Intentionally empty, allows the stride condition to modify the use cost for spells that
+	-- integrate a free stride.
+	return ConditionResult(true)
 end
 
 function HasAnyMovementStatus(entity)
@@ -107,6 +113,12 @@ function DontClearAIMove()
 end
 
 --Level scaling
+
+function CharacterLevelBetween(atLeast, exclusiveMax, entity)
+    entity = entity or context.Source
+    return ConditionResult((entity.Level >= atLeast) and (entity.Level < exclusiveMax), {ConditionError("IsNotCharacterLevel")})
+end
+
 function TrainedWeapon() --Proficient
 	return IsProficientWith(context.Source, GetAttackWeapon(context.Source))
 end
@@ -162,9 +174,10 @@ function OffGuardFlanking(target, source)
 	target = target or context.Target
 	source = source or context.Source
 	local denyadvantage = Tagged('ROGUE_DENYADVANTAGE',target) & (target.Level >= source.Level)
-	return ~Ally() & ~denyadvantage & DistanceToTargetLessThan(2) & IsMeleeAttack() & Flanking(target, source)
+	return ~denyadvantage & IsMeleeAttack() & HasStatus('FLANKED_PF2E',target,source)
 end
 
+-- Deprecated, now implemented using auras and Osiris.
 function Flanking(target, source)
 	local distance = 2
 	target = target or context.Target
@@ -172,8 +185,6 @@ function Flanking(target, source)
 	
 	local errorTrue = {ConditionError("HasAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
 	local errorFalse = {ConditionError("HasNotAllyWithinRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
-	
-	--Source must face target
 	
 	local allies = GetAlliesWithinRange(distance, target, source)
 	if allies ~= nil then
@@ -203,6 +214,19 @@ function Flanking(target, source)
 	return ConditionResult(false, errorFalse, errorTrue)
 end
 
+-- Volley Penalty
+function Volley(distance, targetPosition, sourcePosition)
+	targetPosition = targetPosition or context.TargetPosition
+	sourcePosition = sourcePosition or context.SourcePosition
+	local errorTrue = {ConditionError("VolleyRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+	local errorFalse = {ConditionError("NotVolleyRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+
+	if Distance(sourcePosition, targetPosition) < distance then
+		return ConditionResult(true, errorFalse, errorTrue)
+	end
+	return ConditionResult(false, errorFalse, errorTrue)
+end
+
 -- Status MAP_X_ATTACKS
 
 --~functional for Stats.
@@ -225,6 +249,14 @@ function AgileUnarmedSpell()
 	local witch = SpellId('Target_EldritchNails') | SpellId('Target_LivingHair') | SpellId('Target_SympatheticStrike_Nails') | SpellId('Target_SympatheticStrike_Hair')
 	
 	return standard | animal_instinct | monk | witch
+end
+
+function AttackSpell()
+	-- Intentionally empty, essentially adds the attack trait to a spell without
+	-- it needing to have an attack roll (i.e. shove/grapple), but also without
+	-- said spell overwriting basic strikes as it would if using the IsAttack
+	-- flag.
+	return ConditionResult(true)
 end
 
 -- Weapons
@@ -315,8 +347,8 @@ function RetributiveStrikeRange()
 	local target = context.Target
 	
 	local ranged = WieldingWeapon('Ammunition', false, false, source).Result & ~WieldingWeapon('Melee', false, false, source)
-	local reach_nimble = WieldingWeapon('Reach', false, false, source).Result & DistanceToTargetLessThan(5)
-	local melee_nimble = ~WieldingWeapon('Ammunition', false, false, source) & ~DistanceToTargetLessThan(3.5)
+	local reach_nimble = WieldingWeapon('Reach', false, false, source).Result & DistanceToTargetLessThan(5.5)
+	local melee_nimble = ~WieldingWeapon('Ammunition', false, false, source) & ~DistanceToTargetLessThan(4)
 	local nimble_reprisal = (ranged|reach_nimble|melee_nimble) & HasPassive('NimbleReprisal',source)
 	
 	local reach = WieldingWeapon('Reach', false, false, source) & DistanceToTargetLessThan(3.5)
@@ -840,7 +872,7 @@ end
 
 function CanPrecisionDamage(target)
 	target = target or context.Target
-	local result = ~HasAnyTags({'OOZE','SHADOW','GHOST','DISPLACER_BEAST','SCRYING_EYE','GASEOUS_FORM','Ethereal'}, target)
+	local result = ~HasAnyTags({'OOZE','SHADOW','GHOST','DISPLACER_BEAST','SCRYING_EYE','GASEOUS_FORM'}, target) & ~HasPassive('Ethereal', target)
 	
 	return ConditionResult( result.Result,{ConditionError("PrecisionImmune")})
 end
@@ -1567,6 +1599,26 @@ function SkillCheckModifier(skill, ability, entity)
 	entity = entity or context.Source
 	local prof = GetModifier(entity[ability])
 	local stat_bon = 0
+	local stat_pen = 0
+	local skillTagLookup = {
+		['Acrobatics']= 	{'STAT_BON_1ACROBATICS', 	'STAT_BON_2ACROBATICS', 	'STAT_PEN_1ACROBATICS', 	'STAT_PEN_2ACROBATICS'},
+		['Arcana']= 		{'STAT_BON_1ARCANA', 		'STAT_BON_2ARCANA', 		'STAT_PEN_1ARCANA', 		'STAT_PEN_2ARCANA'},
+		['Athletics']= 		{'STAT_BON_1ATHLETICS', 	'STAT_BON_2ATHLETICS', 		'STAT_PEN_1ATHLETICS', 		'STAT_PEN_2ATHLETICS'},
+		['Nature']= 		{'STAT_BON_1NATURE', 		'STAT_BON_2NATURE', 		'STAT_PEN_1NATURE', 		'STAT_PEN_2NATURE'},
+		['Deception']= 		{'STAT_BON_1DECEPTION', 	'STAT_BON_2DECEPTION', 		'STAT_PEN_1DECEPTION', 		'STAT_PEN_2DECEPTION'},
+		['Persuasion']= 	{'STAT_BON_1PERSUASION', 	'STAT_BON_2PERSUASION', 	'STAT_PEN_1PERSUASION', 	'STAT_PEN_2PERSUASION'},
+		['Intimidation']= 	{'STAT_BON_1INTIMIDATION', 	'STAT_BON_2INTIMIDATION', 	'STAT_PEN_1INTIMIDATION', 	'STAT_PEN_2INTIMIDATION'},
+		['History']= 		{'STAT_BON_1HISTORY', 		'STAT_BON_2HISTORY', 		'STAT_PEN_1HISTORY', 		'STAT_PEN_2HISTORY'},
+		['Medicine']= 		{'STAT_BON_1MEDICINE', 		'STAT_BON_2MEDICINE', 		'STAT_PEN_1MEDICINE', 		'STAT_PEN_2MEDICINE'},
+		['AnimalHandling']= {'STAT_BON_1ANIMALHANDLING','STAT_BON_2ANIMALHANDLING', 'STAT_PEN_1ANIMALHANDLING', 'STAT_PEN_2ANIMALHANDLING'},
+		['Investigation']= 	{'STAT_BON_1INVESTIGATION', 'STAT_BON_2INVESTIGATION', 	'STAT_PEN_1INVESTIGATION', 	'STAT_PEN_2INVESTIGATION'},
+		['Performance']= 	{'STAT_BON_1PERFORMANCE', 	'STAT_BON_2PERFORMANCE', 	'STAT_PEN_1PERFORMANCE', 	'STAT_PEN_2PERFORMANCE'},
+		['Religion']= 		{'STAT_BON_1RELIGION', 		'STAT_BON_2RELIGION', 		'STAT_PEN_1RELIGION', 		'STAT_PEN_2RELIGION'},
+		['Insight']= 		{'STAT_BON_1INSIGHT', 		'STAT_BON_2INSIGHT', 		'STAT_PEN_1INSIGHT', 		'STAT_PEN_2INSIGHT'},
+		['Stealth']= 		{'STAT_BON_1STEALTH', 		'STAT_BON_2STEALTH', 		'STAT_PEN_1STEALTH', 		'STAT_PEN_2STEALTH'},
+		['Survival']= 		{'STAT_BON_1SURVIVAL', 		'STAT_BON_2SURVIVAL', 		'STAT_PEN_1SURVIVAL', 		'STAT_PEN_2SURVIVAL'},
+		['SleightOfHand']= 	{'STAT_BON_1SLEIGHTOFHAND', 'STAT_BON_2SLEIGHTOFHAND', 	'STAT_PEN_1SLEIGHTOFHAND', 	'STAT_PEN_2SLEIGHTOFHAND'}
+	}
 
 	if HasProficiencyBonus(Ability[ability],Skill[skill],entity).Result then
 		prof = prof + 2
@@ -1581,11 +1633,19 @@ function SkillCheckModifier(skill, ability, entity)
 		prof = prof + 2
 	end
 
-	if HasAnyTags({'STAT_BON_1SKILLS'},entity).Result then
+	if Tagged(skillTagLookup[skill][2],entity).Result then
+		stat_bon = 2
+	elseif Tagged(skillTagLookup[skill][1],entity).Result then
 		stat_bon = 1
 	end
 
-	return prof + stat_bon
+	if Tagged(skillTagLookup[skill][4],entity).Result then
+		stat_pen = 2
+	elseif Tagged(skillTagLookup[skill][3],entity).Result then
+		stat_pen = 1
+	end
+
+	return prof + stat_bon - stat_pen
 end
 
 function IsSkillPositive(skill, ability, checkMAP)
@@ -1602,7 +1662,7 @@ function SkillActionSensible(skill,ability,checkMAP)
 	-- Must have positive modifier
 	-- Cannot be prevented from using advanced weapon actions by difficulty/template
 	-- Goblins, bugbears, gnolls, skeletons will notably not use weapon actions
-	return IsSkillPositive(skill,ability,checkMAP) & CanUseWeaponActions() & HasNoTags({'ZOMBIE','CREATURE_SPORE_SERVANT','OOZE'})
+	return IsSkillPositive(skill,ability,checkMAP) & HasNoTags({'AI_BLOCKWEAPONACTIONS','ZOMBIE','CREATURE_SPORE_SERVANT','OOZE'},context.Source)
 end
 
 -- Don't stack off-guarding skill actions
@@ -1666,14 +1726,15 @@ function CounterPerformanceCrit()
 end
 
 function RestrainedBlockSpells()
-	local r1 = ~(IsSpellChildOrVariantFromContext('Target_EscapeGrapple_Container') | SpellId('Target_EscapeGrapple_UnarmedAttack'))
+	local r1 = ~(SpellId('Target_EscapeGrapple_Athletics') | SpellId('Target_EscapeGrapple_Acrobatics') | SpellId('Target_EscapeGrapple_UnarmedAttack'))
 	local r2 = HasStringInSpellRoll('Attack')
 	local r3 = HasSpellFlag(SpellFlags.Somatic)
-	return (r2 | r3) & r1
+	local r4 = HasStringInSpellConditions('AttackSpell')
+	return (r2 | r3 | r4) & r1
 end
 
 function TargetSizeGrapple()
-    return ConditionResult(context.Target.Size ~= Size.None and context.Target.Size.value <= (context.Source.Size.value + 1), {ConditionError("GrappleSize")})
+	return ConditionResult(context.Target.Size ~= Size.None and context.Target.Size.value <= (context.Source.Size.value + 1), {ConditionError("GrappleSize")})
 end
 
 function PersistentFireCheck()
@@ -1693,26 +1754,26 @@ function PersistentFireRemove(check_immunity)
 end
 
 function TumbleThroughProximityCheck()
-    NumberOfEnemy = NumberOfEnemy or 1
-    target = context.Source
-    source = context.Source
+	NumberOfEnemy = NumberOfEnemy or 1
+	target = context.Source
+	source = context.Source
 
-    local enemies = GetEnemiesWithinRange(0.1, target, source)
-    if enemies ~= nil then
-        for _, entity in ipairs(enemies.Enemies) do
-            if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result then
-                return ConditionResult(true)
-            end
-        end
-    end
+	local enemies = GetEnemiesWithinRange(0.1, target, source)
+	if enemies ~= nil then
+		for _, entity in ipairs(enemies.Enemies) do
+			if HasStatus('TUMBLE_THROUGH_WALKABLE', entity).Result then
+				return ConditionResult(true)
+			end
+		end
+	end
 
-    return ConditionResult(false)
+	return ConditionResult(false)
 end
 
 -- Base mod override, as SG_Restrained should not block reactions, 
 function IsAbleToReact(entity)
-    local entity = entity or context.Target
-    return ~HasAnyStatus({'SG_Fleeing','SG_Incapacitated','SG_Stunned','SG_Unconscious','RESTRAINED'}, {}, {}, entity) & ~Dead(entity) & ~(Self(context.Target, entity) & IsKillingBlow())
+	local entity = entity or context.Target
+	return ~HasAnyStatus({'SG_Fleeing','SG_Incapacitated','SG_Stunned','SG_Unconscious','RESTRAINED'}, {}, {}, entity) & ~Dead(entity) & ~(Self(context.Target, entity) & IsKillingBlow())
 end
 
 function Attack2e(attackType, adv, dis, source, sourcePos, target, targetPos)
@@ -1737,12 +1798,27 @@ function Attack2e(attackType, adv, dis, source, sourcePos, target, targetPos)
 	else
 		attack = Attack(attackType)
 	end
-    local realChance = attack.Chance
-    if HasStatus('HIDDEN_NPC', context.Target).Result then
-        realChance = realChance * 0.5
-    elseif IsConcealedTo(context.Target, context.Source, false).Result then
-        realChance = realChance * 0.8
-    end
-    return ConditionResult(attack.Result,{},{},realChance)
+	local realChance = attack.Chance
+	if HasStatus('HIDDEN_NPC', context.Target).Result then
+		realChance = realChance * 0.5
+	elseif IsConcealedTo(context.Target, context.Source, false).Result then
+		realChance = realChance * 0.8
+	end
+	return ConditionResult(attack.Result,{},{},realChance)
 end
 
+function HasMovableSpellInRange(status, range)
+	local allies = GetAlliesWithinRange(50,context.Source,context.Source)
+	local result = false
+	if allies ~= nil then
+		for _, ally in ipairs(allies.Allies) do
+			if HasStatus(status, ally, context.Source).Result then
+				if DistanceToEntityHitBounds(context.TargetPosition,ally) <= range then
+					result = true
+					break
+				end
+			end
+		end
+	end
+	return ConditionResult(result, {ConditionError("MovableSpellRange")})
+end
