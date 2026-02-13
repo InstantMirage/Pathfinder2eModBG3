@@ -466,7 +466,7 @@ function DivineCastigation(target)
 	-- Their creature type is undead or fiend
 	-- Killing them won't violate an oath
 	-- They worship an evil deity or are devout Absolutists
-	local is_evil = ( UndeadOrFiend(target) | HasAnyTags({'PALADIN_BLOCK_OATHBREAK','ALIGN_EVIL','BRANDED'},target) )
+	local is_evil = ( UndeadOrFiend(target) | HasAnyTags({'PALADIN_BLOCK_OATHBREAK','GLO_GENERIC_CULTIST','ALIGN_EVIL','BRANDED'},target) )
 	
 	return HasPassive('DivineCastigation',context.Source) & Enemy() & is_evil
 end
@@ -474,7 +474,7 @@ end
 function CrisisOfFaithable()
 	local target = context.Target
 	-- Target must be able to cast divine spells, Monk ones count for this
-	return HasPassive('NPC_Divine',target) | HasPassive('Tradition_Divine',target) | QiSpellsInitiate(target)
+	return HasPassive('NPC_Divine',target) | HasPassive('Tradition_Divine',target) | QiSpellsInitiate(target) | Tagged('GLO_GENERIC_CULTIST',target)
 end
 
 --Fighter
