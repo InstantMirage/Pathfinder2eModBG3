@@ -314,6 +314,28 @@ CheckRulesetModifierBool((RULESETMODIFIER)SHORT_REST_FULLY_HEALS_1d9a608a-3885-4
 THEN
 PartyIncreaseActionResourceValue(_Char, "ShortRestPoint", 4.0);
 
+//Percentile short rest HP
+IF
+ShortRested(_Char)
+AND
+DB_PartyMembers(_Char)
+AND
+NOT CheckRulesetModifierInt((RULESETMODIFIER)PF2E_SHORT_REST_HP_MULT_4dbdac54-ebec-4905-8b7a-79b5b70e566d, 100, 1)
+AND
+GetRulesetModifierInt((RULESETMODIFIER)PF2E_SHORT_REST_HP_MULT_4dbdac54-ebec-4905-8b7a-79b5b70e566d,(INTEGER)_ShortRestMultiplier)
+AND
+GetMaxHitpoints(_Char,(INTEGER)_MaxHP)
+AND
+IntegerProduct(_MaxHP,_ShortRestMultiplier,(INTEGER)_ShortRestPercentile)
+AND
+IntegerDivide(_ShortRestPercentile,100,(INTEGER)_RestHP)
+AND
+GetHitpoints(_Char,(INTEGER)_CurrentHP)
+AND
+IntegerSum(_RestHP,_CurrentHP,(INTEGER)_NewHP)
+THEN
+SetHitpoints(_Char,_NewHP);
+
 //Restore short rests on tutorial end
 PROC
 PROC_TUT_Helm_EndTutorial()

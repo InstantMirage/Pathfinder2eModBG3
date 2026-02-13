@@ -676,7 +676,7 @@ data "Boosts" "Tag(STAT_PEN_2ATTACK);Tag(STAT_PEN_2AC);Tag(STAT_PEN_2DC);Tag(STA
 new entry "ShortResting"
 type "PassiveData"
 using "ShortResting"
-data "StatsFunctors" "RegainHitPoints(MaxHP); RestoreResource(KiPoint,100%,0); RemoveStatus(SG_Helpable_Condition); RemoveStatus(BURNING); RemoveStatus(BLEEDING);"
+data "StatsFunctors" "IF(CheckRulesetModifier('4dbdac54-ebec-4905-8b7a-79b5b70e566d', 100)):RegainHitPoints(MaxHP); RestoreResource(KiPoint,100%,0); RemoveStatus(SG_Helpable_Condition); RemoveStatus(BURNING); RemoveStatus(BLEEDING);"
 
 new entry "TumbleThroughTerrainCheck"
 type "PassiveData"
@@ -6563,6 +6563,9 @@ type "PassiveData"
 data "DisplayName" "h4e7fd7e7g58acg8545gf519g0455bb6988be;1"
 data "Description" "h3f49016dgd813g7dcbg9171gaed92e3a7622;1"
 data "Boosts" "UnlockSpell(Shout_ChannelElements);"
+data "StatsFunctorContext" "OnCombatStarted"
+data "Conditions" "CheckRulesetModifier('f2d9d868-1e84-4bc0-9939-95bb68fd533e', true);"
+data "StatsFunctors" "RemoveStatus(ChannelingStatus)"
 
 new entry "DismissElements"
 type "PassiveData"
