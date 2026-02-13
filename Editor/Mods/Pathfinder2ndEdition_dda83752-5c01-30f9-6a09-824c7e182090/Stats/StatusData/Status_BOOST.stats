@@ -13359,30 +13359,76 @@
         <field name="UUID" type="IdTableFieldDefinition" value="78d4226d-303b-4c53-97b4-be638629a622" />
         <field name="Name" type="NameTableFieldDefinition" value="RustAura" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h47472932g6d31g15c6g04f2g888db19512d0" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9cf39245g39e5gf67fg68aag9bf8fbeb9efa" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9cf39245g39e5gf67fg68aag9bf8fbeb9efa" version="2" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="PoisonGreen" enumeration_type_name="FormatStringColor" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="RainOfRust" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="4" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(RustDamage,100,1);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and (IsMetalCharacter(context.Target) or HasMetalArmor(context.Target)) and CharacterLevelBetween(1, 6, GetSummoner(context.Source))):ApplyStatus(RustDamage_4,100,0);IF(not Tagged('INVISIBLE_HELPER') and (IsMetalCharacter(context.Target) or HasMetalArmor(context.Target)) and CharacterLevelBetween(6, 8, GetSummoner(context.Source))):ApplyStatus(RustDamage_6,100,0);IF(not Tagged('INVISIBLE_HELPER') and (IsMetalCharacter(context.Target) or HasMetalArmor(context.Target)) and CharacterLevelBetween(8, 10, GetSummoner(context.Source))):ApplyStatus(RustDamage_8,100,0);IF(not Tagged('INVISIBLE_HELPER') and (IsMetalCharacter(context.Target) or HasMetalArmor(context.Target)) and CharacterLevelBetween(10, 12, GetSummoner(context.Source))):ApplyStatus(RustDamage_10,100,0);IF(not Tagged('INVISIBLE_HELPER') and (IsMetalCharacter(context.Target) or HasMetalArmor(context.Target)) and CharacterLevelBetween(12, 20, GetSummoner(context.Source))):ApplyStatus(RustDamage_12,100,0);" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndRound" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(3d6,Force);DealDamage(1d6,Force)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="2179a75e-e59d-44b5-b286-a5082d80608a" />
-        <field name="Name" type="NameTableFieldDefinition" value="RustDamage" />
+        <field name="Name" type="NameTableFieldDefinition" value="RustDamage_4" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h13adc1e0ga6b4g8b87gcf04g32c938cab79e" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h666a12e2g8082g6c1fgede6gd1e9f8ca39cc" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb0fc4157g382eg0785g64afg221189dfe471" version="1" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="PoisonGreen" enumeration_type_name="FormatStringColor" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="RainOfRustDamage" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
-        <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(RustScaling),Force);" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(3d6,Force);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Constitution,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
-        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="DealDamage(LevelMapValue(RustScaling),Force,Magical);ApplyStatus(PersistentForce_1d6,100,-1)" />
-        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="DealDamage(LevelMapValue(RustScaling)/2,Force,Magical);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d6,Force,Magical);IF(SaveCrit()):DealDamage(3d6*2,Force,Magical);ApplyStatus(PersistentForce_1d6,100,-1)" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(3d6/2,Force,Magical);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(3d6,Force);DealDamage(1d6,Force)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e90668a8-587c-408b-94e5-7bdadefa7b80" />
+        <field name="Name" type="NameTableFieldDefinition" value="RustDamage_6" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="2179a75e-e59d-44b5-b286-a5082d80608a" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(4d6,Force);DealDamage(1d6,Force)" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(4d6,Force);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(4d6,Force,Magical);IF(SaveCrit()):DealDamage(4d6*2,Force,Magical);ApplyStatus(PersistentForce_1d6,100,-1)" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(4d6/2,Force,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="83a1def7-695a-410d-a952-531f5472a8aa" />
+        <field name="Name" type="NameTableFieldDefinition" value="RustDamage_8" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="2179a75e-e59d-44b5-b286-a5082d80608a" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(5d6,Force);DealDamage(1d6,Force)" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(5d6,Force);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(5d6,Force,Magical);IF(SaveCrit()):DealDamage(5d6*2,Force,Magical);ApplyStatus(PersistentForce_1d6,100,-1)" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(5d6/2,Force,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="00d9cc3d-3534-4752-b0f0-1e124498d862" />
+        <field name="Name" type="NameTableFieldDefinition" value="RustDamage_10" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="2179a75e-e59d-44b5-b286-a5082d80608a" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(5d6,Force);DealDamage(1d6,Force)" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(6d6,Force);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d6,Force,Magical);IF(SaveCrit()):DealDamage(6d6*2,Force,Magical);ApplyStatus(PersistentForce_1d6,100,-1)" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(6d6/2,Force,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="26ac3530-45ef-4780-a247-774694e02846" />
+        <field name="Name" type="NameTableFieldDefinition" value="RustDamage_12" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="2179a75e-e59d-44b5-b286-a5082d80608a" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(5d6,Force);DealDamage(1d6,Force)" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(7d6,Force);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(7d6,Force,Magical);IF(SaveCrit()):DealDamage(7d6*2,Force,Magical);ApplyStatus(PersistentForce_1d6,100,-1)" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(7d6/2,Force,Magical);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
