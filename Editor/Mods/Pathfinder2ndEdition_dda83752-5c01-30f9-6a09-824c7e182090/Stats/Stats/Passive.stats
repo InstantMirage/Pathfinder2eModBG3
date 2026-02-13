@@ -1767,7 +1767,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_FeralInstinct" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted;OncePerCombat" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FREE_RAGE,100,1)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FREE_RAGE,100,1); IF(not Player()):UseSpell(Shout_FuryRage,true,true,true)" />
         <field name="Conditions" type="StringTableFieldDefinition" value="HasPassive('InvulnerableRager') or not HasHeavyArmor();" />
       </fields>
     </stat_object>
@@ -11283,6 +11283,14 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c9f70ce7-e5b2-410f-8e01-e7763a750914" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Selunite_LunarProtection_Passive" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="737c222f-8c0b-4058-873d-733a5198b5f6" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(context.HasContextFlag(StatsFunctorContext.OnAttacked) and (HasStatus('MysticArmorStatus_Rank_1') or HasStatus('MysticArmorStatus_Rank_4')) and IsLastConditionRollSuccess(ConditionRollType.ConditionSavingThrow) and not Self() and IsSavingThrow()):DealDamage(SWAP, 1d4, Radiant,Magical)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="0d86a260-edf3-452c-a6a6-c0ff0b278fa5" />
         <field name="Name" type="NameTableFieldDefinition" value="Darkvision" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5a2c4f60g6f9cgb1e2gd226g01299df4c633" version="1" />
@@ -11322,7 +11330,27 @@
         <field name="Name" type="NameTableFieldDefinition" value="WyllAIFix" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h8db7e15bg3028g8765g2ec8gbdfa891cd662" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc243492cg7497gc826g7cd0g50f9f1a97383" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_ArmsOfHadar,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf,,);" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8c85655e-e1a4-4f6a-b7ac-f6ac39d431c3" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8c85655e-e1a4-4f6a-b7ac-f6ac39d431c3" />
+        <field name="Name" type="NameTableFieldDefinition" value="NPC_RunicWeapon" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Gives runic weapon on combat start" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden;OncePerCombat" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyEquipmentStatus(MainHand,MAGIC_WEAPON,100,10);IF(DualWielder(context.Source)):ApplyEquipmentStatus(OffHand,MAGIC_WEAPON,100,10)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f93733be-5f7b-4e3b-92b0-c92eb86c9a7d" />
+        <field name="Name" type="NameTableFieldDefinition" value="NPC_MysticArmor" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8c85655e-e1a4-4f6a-b7ac-f6ac39d431c3" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Some NPCs already start with MAGE_ARMOR!" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnTurn;OnCreate;OnLongRest" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus('MysticArmorStatus_Rank_1',100,-1)" />
       </fields>
     </stat_object>
   </stat_objects>
