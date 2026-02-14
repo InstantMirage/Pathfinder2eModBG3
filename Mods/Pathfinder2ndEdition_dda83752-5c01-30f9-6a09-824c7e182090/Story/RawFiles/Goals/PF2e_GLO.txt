@@ -54,7 +54,6 @@ DB_ClearStatusOnShortRest("ShiftersClimb");
 DB_ClearStatusOnShortRest("ShiftersBite");
 DB_ClearStatusOnShortRest("CommunityRestoration");
 DB_ClearStatusOnShortRest("SpiralRecast");
-DB_ClearStatusOnShortRest("CommunityRestoration");
 DB_ClearStatusOnShortRest("INVISIBILITY");
 DB_ClearStatusOnShortRest("SEE_INVISIBILITY");
 //Non-sustained auras
@@ -94,7 +93,7 @@ DB_ClearStatusOnShortRest("HEALER_HEALED_SHORT");
 DB_ClearStatusOnShortRest("DISGUISE_SELF_HUMAN_FEMALE");
 DB_ClearStatusOnShortRest("DISGUISE_SELF_HUMAN_MALE");
 DB_ClearStatusOnShortRest("DISGUISE_SELF_HUMAN_STRONG_FEMALE");
-DB_ClearStatusOnShortRest("DISGUISE_SELF_HUMAN_STRONG_");
+DB_ClearStatusOnShortRest("DISGUISE_SELF_HUMAN_STRONG_MALE");
 DB_ClearStatusOnShortRest("DISGUISE_SELF_ELF_FEMALE");
 DB_ClearStatusOnShortRest("DISGUISE_SELF_ELF_MALE");
 DB_ClearStatusOnShortRest("DISGUISE_SELF_ELF_STRONG_FEMALE");
@@ -296,6 +295,55 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION
+
+//Unlimited short rests: Debug level
+IF
+ShortRested(_Char)
+AND
+DB_CurrentLevel(_LevelName)
+AND
+_LevelName == "Basic_Level_A"
+THEN
+PartyIncreaseActionResourceValue(_Char, "ShortRestPoint", 4.0);
+
+//Unlimited short rests: Easy difficulty
+IF
+ShortRested(_Char)
+AND
+CheckRulesetModifierBool((RULESETMODIFIER)SHORT_REST_FULLY_HEALS_1d9a608a-3885-4d48-8816-458e40d1136e, 1, 1)
+THEN
+PartyIncreaseActionResourceValue(_Char, "ShortRestPoint", 4.0);
+
+//Percentile short rest HP
+IF
+ShortRested(_Char)
+AND
+DB_PartyMembers(_Char)
+AND
+NOT CheckRulesetModifierInt((RULESETMODIFIER)PF2E_SHORT_REST_HP_MULT_4dbdac54-ebec-4905-8b7a-79b5b70e566d, 100, 1)
+AND
+GetRulesetModifierInt((RULESETMODIFIER)PF2E_SHORT_REST_HP_MULT_4dbdac54-ebec-4905-8b7a-79b5b70e566d,(INTEGER)_ShortRestMultiplier)
+AND
+GetMaxHitpoints(_Char,(INTEGER)_MaxHP)
+AND
+IntegerProduct(_MaxHP,_ShortRestMultiplier,(INTEGER)_ShortRestPercentile)
+AND
+IntegerDivide(_ShortRestPercentile,100,(INTEGER)_RestHP)
+AND
+GetHitpoints(_Char,(INTEGER)_CurrentHP)
+AND
+IntegerSum(_RestHP,_CurrentHP,(INTEGER)_NewHP)
+THEN
+SetHitpoints(_Char,_NewHP);
+
+//Restore short rests on tutorial end
+PROC
+PROC_TUT_Helm_EndTutorial()
+AND
+DB_Players(_Player)
+THEN
+PartyIncreaseActionResourceValue(_Player, "ShortRestPoint", 4.0);
+
 //Remove focus spell statuses - refocusing should take at least 10 in-game minutes.
 //This should make it so that prebuffing out of combat has the appropriate resource cost.
 IF
