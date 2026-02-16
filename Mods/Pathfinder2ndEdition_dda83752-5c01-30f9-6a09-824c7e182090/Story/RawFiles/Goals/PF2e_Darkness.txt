@@ -31,15 +31,18 @@ IF
 ObscuredStateChanged((GUIDSTRING)_Character, "HeavilyObscured")
 THEN
 ApplyStatus(_Character, "IN_DIM_LIGHT", -1.0);
+RemoveStatus(_Character, "NOT_IN_DARKNESS");
 
 IF
 ObscuredStateChanged((GUIDSTRING)_Character, "LightlyObscured")
 THEN
+ApplyStatus(_Character, "NOT_IN_DARKNESS", -1.0);
 RemoveStatus(_Character, "IN_DIM_LIGHT");
 
 IF
 ObscuredStateChanged((GUIDSTRING)_Character, "Clear")
 THEN
+ApplyStatus(_Character, "NOT_IN_DARKNESS", -1.0);
 RemoveStatus(_Character, "IN_DIM_LIGHT");
 //END_REGION
 
