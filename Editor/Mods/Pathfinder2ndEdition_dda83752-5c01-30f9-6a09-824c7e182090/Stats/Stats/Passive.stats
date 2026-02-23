@@ -153,8 +153,42 @@
         <field name="Name" type="NameTableFieldDefinition" value="DarknessRules" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnLongRest;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ADVANTAGE_DISABLER,100,-1);ApplyStatus(FLANK_AURA,100,-1);ApplyStatus(DISPLAY_HIDDEN,100,-1);ApplyStatus(DISPLAY_CONCEALED,100,-1);ApplyStatus(DISPLAY_STUPEFIED_1,100,-1);ApplyStatus(DISPLAY_STUPEFIED_2,100,-1);ApplyStatus(DISPLAY_STUPEFIED_3,100,-1);ApplyStatus(DISPLAY_STUPEFIED_4,100,-1)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLANK_AURA,100,-1);ApplyStatus(DISPLAY_HIDDEN,100,-1);ApplyStatus(DISPLAY_CONCEALED,100,-1);ApplyStatus(DISPLAY_STUPEFIED_1,100,-1);ApplyStatus(DISPLAY_STUPEFIED_2,100,-1);ApplyStatus(DISPLAY_STUPEFIED_3,100,-1);ApplyStatus(DISPLAY_STUPEFIED_4,100,-1)" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(FlatCheckReaction);UnlockInterrupt(StupefiedReaction);" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved;OnLongRest;OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="52b5bbf5-11e3-40fe-8eeb-eba2a3bcc61c" />
+        <field name="Name" type="NameTableFieldDefinition" value="AdvantageDisabler" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3702de64gd1c3g9f8ag9f07ge01fab0c8316" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved;OnLongRest;OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="not HasStatus('ADVANTAGE_DISABLER_BLOCK_ATTACKS');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AttackRoll);Disadvantage(AttackRoll);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnLongRest;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ADVANTAGE_DISABLER,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="fea4e85a-6434-476f-86b2-14d3bf4d1843" />
+        <field name="Name" type="NameTableFieldDefinition" value="AdvantageDisablerSkills" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="52b5bbf5-11e3-40fe-8eeb-eba2a3bcc61c" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AllSkills);Disadvantage(AllSkills);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="not HasStatus('ADVANTAGE_DISABLER_BLOCK_SKILLS');" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7cdd4604-3a7f-48f1-9e8e-910ef44310e1" />
+        <field name="Name" type="NameTableFieldDefinition" value="AdvantageDisablerSaves" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="fea4e85a-6434-476f-86b2-14d3bf4d1843" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="not HasStatus('ADVANTAGE_DISABLER_BLOCK_SAVES');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AllSavingThrows);Disadvantage(AllSavingThrows);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
