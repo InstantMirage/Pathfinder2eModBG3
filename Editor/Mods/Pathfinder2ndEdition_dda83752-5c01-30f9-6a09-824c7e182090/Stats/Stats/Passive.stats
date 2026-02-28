@@ -62,7 +62,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="PathfinderDCBoost" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hdff3f897gdee6g3ed9g0b28gd06945f0f08f" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h07f7b560gf34dgdf73g3d1dg9a5369f5689e" version="3" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(SavingThrow, Constitution);ProficiencyBonus(SavingThrow, Dexterity);ProficiencyBonus(SavingThrow, Wisdom);ProficiencyBonus(Skill, Perception);IF(IsProficientWith(context.Source, GetActiveArmor()) or not (IsOfProficiencyGroup('LightArmor', GetActiveArmor()) or IsOfProficiencyGroup('MediumArmor', GetActiveArmor()) or IsOfProficiencyGroup('HeavyArmor', GetActiveArmor()))):AddProficiencyToAC();UnlockSpellVariant(HasUseCosts('BonusActionPoint'),ModifyUseCosts(Replace,ActionPoint,1,0,BonusActionPoint));ActionResource(Stride,9,0);ActionResource(Flourish,1,0);IF((IsMeleeWeaponAttack() or IsUnarmedAttack()) and IsCritical() and not HasPassive('Thief_Finesse',context.Source)):DamageBonus(StrengthModifier);UnlockInterrupt(CriticalHit_10);UnlockInterrupt(CriticalMiss_10);UnlockInterrupt(VolleyReaction);UnlockSpell(Projectile_Leap);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ProficiencyBonus(SavingThrow, Constitution);ProficiencyBonus(SavingThrow, Dexterity);ProficiencyBonus(SavingThrow, Wisdom);ProficiencyBonus(Skill, Perception);IF(IsProficientWith(context.Source, GetActiveArmor()) or not (IsOfProficiencyGroup('LightArmor', GetActiveArmor()) or IsOfProficiencyGroup('MediumArmor', GetActiveArmor()) or IsOfProficiencyGroup('HeavyArmor', GetActiveArmor()))):AddProficiencyToAC();UnlockSpellVariant(HasUseCosts('BonusActionPoint'),ModifyUseCosts(Replace,ActionPoint,1,0,BonusActionPoint));ActionResource(Stride,9,0);ActionResource(Flourish,1,0);IF((IsMeleeWeaponAttack() or IsUnarmedAttack()) and IsCritical() and not HasPassive('Thief_Finesse',context.Source)):DamageBonus(StrengthModifier);UnlockInterrupt(CriticalHit_10);UnlockInterrupt(CriticalMiss_10);UnlockSpell(Projectile_Leap);" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="TurnBased()" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="AI_IGNORE:IF( not HasAnyMovementStatus() ):ApplyStatus(DEBUG_RESET_MOVE,100,-1); IF( HasDashStatus() ):UseActionResource(ActionPoint,1,0)" />
@@ -153,8 +153,42 @@
         <field name="Name" type="NameTableFieldDefinition" value="DarknessRules" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnLongRest;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ADVANTAGE_DISABLER,100,-1);ApplyStatus(FLANK_AURA,100,-1);ApplyStatus(DISPLAY_HIDDEN,100,-1);ApplyStatus(DISPLAY_CONCEALED,100,-1);ApplyStatus(DISPLAY_STUPEFIED_1,100,-1);ApplyStatus(DISPLAY_STUPEFIED_2,100,-1);ApplyStatus(DISPLAY_STUPEFIED_3,100,-1);ApplyStatus(DISPLAY_STUPEFIED_4,100,-1)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FLANK_AURA,100,-1);ApplyStatus(DISPLAY_HIDDEN,100,-1);ApplyStatus(DISPLAY_CONCEALED,100,-1);ApplyStatus(DISPLAY_STUPEFIED_1,100,-1);ApplyStatus(DISPLAY_STUPEFIED_2,100,-1);ApplyStatus(DISPLAY_STUPEFIED_3,100,-1);ApplyStatus(DISPLAY_STUPEFIED_4,100,-1)" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(FlatCheckReaction);UnlockInterrupt(StupefiedReaction);" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved;OnLongRest;OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="52b5bbf5-11e3-40fe-8eeb-eba2a3bcc61c" />
+        <field name="Name" type="NameTableFieldDefinition" value="AdvantageDisabler" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3702de64gd1c3g9f8ag9f07ge01fab0c8316" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="BoostContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved;OnLongRest;OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="not HasStatus('ADVANTAGE_DISABLER_BLOCK_ATTACKS');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AttackRoll);Disadvantage(AttackRoll);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnLongRest;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(ADVANTAGE_DISABLER,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="fea4e85a-6434-476f-86b2-14d3bf4d1843" />
+        <field name="Name" type="NameTableFieldDefinition" value="AdvantageDisablerSkills" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="52b5bbf5-11e3-40fe-8eeb-eba2a3bcc61c" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AllSkills);Disadvantage(AllSkills);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="not HasStatus('ADVANTAGE_DISABLER_BLOCK_SKILLS');" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7cdd4604-3a7f-48f1-9e8e-910ef44310e1" />
+        <field name="Name" type="NameTableFieldDefinition" value="AdvantageDisablerSaves" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="fea4e85a-6434-476f-86b2-14d3bf4d1843" />
+        <field name="BoostConditions" type="StringTableFieldDefinition" value="not HasStatus('ADVANTAGE_DISABLER_BLOCK_SAVES');" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Advantage(AllSavingThrows);Disadvantage(AllSavingThrows);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -978,13 +1012,41 @@
         <field name="UUID" type="IdTableFieldDefinition" value="8ba0d4bf-2a48-45a6-b3e6-d258325c5de7" />
         <field name="Name" type="NameTableFieldDefinition" value="Volley30" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5e8db560-3c0a-4b8a-b19b-fcbc34a9a2e3" />
-        <field name="Owner" type="CommentTableFieldDefinition" value="For some reason, position values of the source are lost for projectiles during the attack, so the boost within this passive always fails when the attack is made. It is left here to modify the hit chance, whilst an interrupt applies the debuff" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1232dcc1gc03dg22a6g5149g40de9ac719bb" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h98913f5cg31c5g4439g88a0g9f8c53020979" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(12)" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="DisplayBoostInTooltip" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(Volley(12)):RollBonus(RangedWeaponAttack, -2);" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_FightingStyle_Archery" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d4306092-d790-486e-8d1c-44c115621458" />
+        <field name="Name" type="NameTableFieldDefinition" value="Range60" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8ba0d4bf-2a48-45a6-b3e6-d258325c5de7" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h04de42e1gcdc7g097bg1236gdbf52242611d" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7d944ce7g0c5eg4f50g64c7g6e523e973a7b" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(24)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(Range(24)):RollBonus(RangedWeaponAttack, -2);IF(Range(48)):RollBonus(RangedWeaponAttack, -2);IF(Range(72)):RollBonus(RangedWeaponAttack, -2);IF(Range(96)):RollBonus(RangedWeaponAttack, -2);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c26bd77f-8cee-4720-880e-f896a44480b1" />
+        <field name="Name" type="NameTableFieldDefinition" value="Range100" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="d4306092-d790-486e-8d1c-44c115621458" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(40)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(Range(40)):RollBonus(RangedWeaponAttack, -2);IF(Range(80)):RollBonus(RangedWeaponAttack, -2);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f73e31dc-f26b-4183-9983-bc4eceb629cf" />
+        <field name="Name" type="NameTableFieldDefinition" value="Range120" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="d4306092-d790-486e-8d1c-44c115621458" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(48)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(Range(48)):RollBonus(RangedWeaponAttack, -2);IF(Range(96)):RollBonus(RangedWeaponAttack, -2);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2554,9 +2616,10 @@
         <field name="UUID" type="IdTableFieldDefinition" value="b37fe7d2-1d2f-4bfe-9f0b-14d2f70c3aa7" />
         <field name="Name" type="NameTableFieldDefinition" value="FuriousSprint" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h110bd205g6576g7664g6da9g0a51fa354a50" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h585d8168gbda7g940dg3024gb3a435c9f6a2" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_FastMovement" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_FuriousSprint);UnlockSpell(Shout_FuriousSprintThree)" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h585d8168gbda7g940dg3024gb3a435c9f6a2" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Monk_StepOfTheWind_Dash" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_FuriousSprint);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(60);Distance(100)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

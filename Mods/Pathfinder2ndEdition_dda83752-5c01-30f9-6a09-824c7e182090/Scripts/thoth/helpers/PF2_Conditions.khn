@@ -227,6 +227,19 @@ function Volley(distance, targetPosition, sourcePosition)
 	return ConditionResult(false, errorFalse, errorTrue)
 end
 
+-- Range Penalty
+function Range(distance, targetPosition, sourcePosition)
+	targetPosition = targetPosition or context.TargetPosition
+	sourcePosition = sourcePosition or context.SourcePosition
+	local errorTrue = {ConditionError("WeaponRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+	local errorFalse = {ConditionError("NotWeaponRange", {ConditionErrorData.MakeFromNumber(distance, EErrorDataType.Distance)})}
+
+	if Distance(sourcePosition, targetPosition) > distance then
+		return ConditionResult(true, errorFalse, errorTrue)
+	end
+	return ConditionResult(false, errorFalse, errorTrue)
+end
+
 -- Status MAP_X_ATTACKS
 
 --~functional for Stats.
