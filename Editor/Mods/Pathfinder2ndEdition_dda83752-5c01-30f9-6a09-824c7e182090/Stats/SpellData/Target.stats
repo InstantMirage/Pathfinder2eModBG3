@@ -12581,7 +12581,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Rank2" />
         <field name="Level" type="IntegerTableFieldDefinition" value="2" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_IGNORE:GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 10,,,,AnimatedAssault_Status_Aura);GROUND:ApplyStatus(SELF,AnimatedAssault_Owner,100,2)" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_IGNORE:GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 10,,,,AnimatedAssault_Status_Aura);GROUND:ApplyStatus(SELF,AnimatedAssault_Owner,100,2);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="4" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC());" />
@@ -21953,7 +21953,7 @@
         <field name="SpellPrepareCost" type="IntegerTableFieldDefinition" value="0" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Fire" enumeration_type_name="Damage Type" version="1" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and RageConcentrateSpell();" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="not (HasPassive('SculptSpells', context.Source) and Ally()) and RageConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
         <field name="CycleConditions" type="StringTableFieldDefinition" value="Enemy() and not Dead()" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(KineticistOverflow,100,1);" />
       </fields>
@@ -21968,7 +21968,7 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;EarthGate:1" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasSomaticComponent" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellPrepareCost" type="IntegerTableFieldDefinition" value="0" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(8e0aeac1-533b-4254-8a37-2357b430cf5f, 2);GROUND:IF(HasStatus('METAL_JUNCTION',context.Source)):ApplyStatus(SELF,MetalJunctionStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(8e0aeac1-533b-4254-8a37-2357b430cf5f, 2);GROUND:IF(HasStatus('EARTH_JUNCTION',context.Source)):ApplyStatus(SELF,EarthJunctionStatus);" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Earth',true) and RageConcentrateSpell();" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell();" />
       </fields>
@@ -21977,13 +21977,13 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="d970034d-48bd-4dd3-ba8b-84d38a4e1b07" />
         <field name="Name" type="NameTableFieldDefinition" value="Tremor" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:CreateSurface(4,1,Mud);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);GROUND:IF(HasStatus('METAL_JUNCTION',context.Source)):ApplyStatus(SELF,MetalJunctionStatus);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:CreateSurface(4,1,Mud);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);GROUND:IF(HasStatus('EARTH_JUNCTION',context.Source)):ApplyStatus(SELF,EarthJunctionStatus);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="12" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="4" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC());" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D8Cantrip),Bludgeoning,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D8Cantrip))*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(LevelMapValue(D8Cantrip)/2,Bludgeoning,Magical);ApplyStatus(SELF,KineticistOverflow,100,0);" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="not (HasPassive('SculptSpells', context.Source) and Ally()) and RageConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_SpikeGrowth" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6198ab41gc7bcg14cage840g47ed307d29a6" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h15016896g4534g0b95g8203gda130aaeef46" version="1" />
@@ -22016,7 +22016,7 @@
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC());" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D4AoeCantrip),Cold,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D4AoeCantrip))*2,Cold,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(D4AoeCantrip)/2,Cold,Magical);" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="not (HasPassive('SculptSpells', context.Source) and Ally()) and RageConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Cold" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h91ec8477g4afag0ac1gffb1g62c1bf4a54e5" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hbf0283a1gd042g1575g601eg6ae50155762a" version="1" />
@@ -23169,7 +23169,7 @@
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="f4aab3ad-a4ad-48e1-9052-3808e2b65981" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="36718a29-73d8-457c-af7a-229c821bc1a2" />
         <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="19a834a8-a378-4d0f-90e0-b8b9de1dc36c" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
         <field name="AoEConditions" type="StringTableFieldDefinition" value="IsMetalCharacter(context.Target) or HasMetalArmor(context.Target);" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(RustScaling),Force);DealDamage(1d6,Force)" />
       </fields>
@@ -23260,7 +23260,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="39cf45fb-2d08-4186-a7cb-aed9e2ee7377" />
         <field name="Name" type="NameTableFieldDefinition" value="DrivingRain" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 1,,,,DRIVING_RAIN_AURA);ApplyStatus(WET,100, 5);GROUND:CreateSurface(6,0, Water);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 1,,,,DRIVING_RAIN_AURA);ApplyStatus(WET,100, 5);GROUND:CreateSurface(6,0, Water);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="6" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood') and RageConcentrateSpell();" />
@@ -23288,7 +23288,238 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="b4221f40-bcc3-4703-acc5-1afaee284839" />
         <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="19a834a8-a378-4d0f-90e0-b8b9de1dc36c" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(KineticistOverflow,100,1);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="602e4fda-8caa-4986-bcdd-a693267f9600" />
+        <field name="Name" type="NameTableFieldDefinition" value="ImpenetrableFog" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, -1,,,,ImpenetrableFogAura);GROUND:ApplyStatus(SELF,ImpenetrableFog_Owner,100,2);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
+        <field name="AreaRadius" type="IntegerTableFieldDefinition" value="4" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Water') and RageConcentrateSpell();" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_WildMagic_GasCloud" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5bb87b26gd1c7g3b7dgd62dg982c22bf980e" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb8e205a9g183dg707eg2eb8gcea9994ab440" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(KineticistOverflow,100,1);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Control_Gen_L1to3_01" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Spell_Loop_Control_Gen_L1to3_01" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Control_FogCloud_L1to3" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Control_FogCloud_L1to3" />
+        <field name="VocalComponentSound" type="StringTableFieldDefinition" value="Vocal_Component_SurfaceCreationCloud" />
+        <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Cast" enumeration_type_name="CursorMode" version="1" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Character() and Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:3;WaterGate:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="554a18f7-952e-494a-b301-7702a85d4bc9,,;,,;09ae2f11-f5b4-42f5-ae16-687a5b57d500,,;10caea0e-c949-4d91-8ab7-3b50019dd054,,;22dfbbf4-f417-4c84-b39e-2039315961e6,,;,,;5bfbe9f9-4fc3-4f26-b112-43d404db6a89,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Control" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="2fa6b127-6f8a-4150-8be6-6f62b7a85911" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="b4221f40-bcc3-4703-acc5-1afaee284839" />
+        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="2de1821f-02b9-454d-8436-382c9879becd" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e63c2325-a809-4a71-9f65-3bf8ea2b88b4" />
+        <field name="Name" type="NameTableFieldDefinition" value="SolarDetonation" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Evocation" enumeration_type_name="SpellSchool" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
+        <field name="AreaRadius" type="IntegerTableFieldDefinition" value="10" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and RageConcentrateSpell();" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, IncapSpellSlotDC());" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit() and not HasPassive('FireJunction',context.Source)):DealDamage(LevelMapValue(SolarFireDamage),Fire,Magical);IF(not SaveCrit() and HasPassive('FireJunction',context.Source)):DealDamage(LevelMapValue(SolarJunctionDamage),Fire,Magical);IF(not SaveCrit() and Tagged('UNDEAD')):DealDamage(LevelMapValue(SolarVitality),Radiant,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);IF(SaveCrit() and not HasPassive('FireJunction',context.Source)):DealDamage((LevelMapValue(SolarFireDamage))*2,Fire,Magical);IF(SaveCrit() and HasPassive('FireJunction',context.Source)):DealDamage((LevelMapValue(SolarJunctionDamage))*2,Fire,Magical);IF(SaveCrit() and Tagged('UNDEAD')):DealDamage((LevelMapValue(SolarVitality))*2,Radiant,Magical);IF(not SaveCrit() and Tagged('UNDEAD')):ApplyStatus(BLINDED,100,1);IF(SaveCrit() and Tagged('UNDEAD')):ApplyStatus(BLINDED,100,10);ApplyStatus(DAYLIGHT,100,1);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex') and not HasPassive('FireJunction',context.Source)):DealDamage(LevelMapValue(SolarFireDamage)/2,Fire,Magical);IF(not SaveCritMiss('Reflex') and HasPassive('FireJunction',context.Source)):DealDamage(LevelMapValue(SolarJunctionDamage)/2,Fire,Magical);IF(not SaveCritMiss('Reflex') and Tagged('UNDEAD')):DealDamage(LevelMapValue(SolarVitality)/2,Radiant,Magical);IF(not SaveCritMiss('Reflex') and Tagged('UNDEAD')):ApplyStatus(DAZZLED,100,1);ApplyStatus(DAYLIGHT,100,1);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_Daylight" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6c022c01g2394gf58dgc00ag32ccd0ea821f" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8c5341c9ga29agaaf1g76d2gfd4f9b4ff523" version="1" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(SolarFireDamage),Fire,Magical);" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Dexterity" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(KineticistOverflow,100,1);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Damage_FlameStrike_L4to5" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Spell_Loop_Damage_FlameStrike_L4to5" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_FlameStrike_L4to5" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Damage_FlameStrike_L4to5" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Character() and Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:3;FireGate:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="3ff87abf-1ea1-4c32-aadf-c822d74c7dc0,,;,,;39daf365-ec06-49a8-81f3-9032640699d7,,;5c400e93-0266-499c-a2e1-75d53358460f,,;d8925ce4-d6d9-400c-92f5-ad772ef7f178,,;,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Damage" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="f2cc8572-ef49-414a-bc5d-0002e9f9fae3" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="bcdbef29-f309-4d72-b12b-aa264e676786" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="02511b69-2ccd-4fa6-a251-b4ee3437bcf0" />
+        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="5e97b8fc-680a-4155-b105-948be46f0f26" />
+        <field name="DamageType" type="EnumerationTableFieldDefinition" value="Fire" enumeration_type_name="Damage Type" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9b3a008a-75f0-40aa-8f4e-1b84dbd3dfa6" />
+        <field name="Name" type="NameTableFieldDefinition" value="StormSpiral" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Evocation" enumeration_type_name="SpellSchool" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);GROUND:IF(HasStatus('AIR_JUNCTION',context.Source)):ApplyStatus(DISENGAGE_USESTEP,100,1);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
+        <field name="AreaRadius" type="IntegerTableFieldDefinition" value="10" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Air') and RageConcentrateSpell();" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC());" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(StormSpiralDamage),Lightning,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(StormSpiralDamage))*2,Lightning,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);IF(not SaveCrit()):DealDamage(1d10,Thunder,Magical);IF(SaveCrit()):DealDamage((1d10)*2,Thunder,Magical);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(StormSpiralDamage)/2,Lightning,Magical);IF(not SaveCritMiss('Reflex')):DealDamage((1d10)/2,Thunder,Magical);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_HeartOfTheStorm_Lightning" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbdf5f5c5g6eafg3a9fg9d8eg6ca29fa401df" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4cd87c1bg7450g6da6gf54ag28f8ee8e8382" version="1" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(StormSpiralDamage),Lightning,Magical);&#xD;&#xA;DealDamage(1d10,Thunder,Magical);" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Dexterity" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(KineticistOverflow,100,1);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Damage_Lightning_Gen_L1to3" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Spell_Prepare_Damage_Lightning_Gen_L1to3_Loop" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_Lightning_CallLightning_L1to3" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Damage_Lightning_CallLightning_L1to3" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Character() and Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:3;AirGate:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="3ff87abf-1ea1-4c32-aadf-c822d74c7dc0,,;,,;39daf365-ec06-49a8-81f3-9032640699d7,,;5c400e93-0266-499c-a2e1-75d53358460f,,;d8925ce4-d6d9-400c-92f5-ad772ef7f178,,;,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Damage" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalDamage_Electric" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="77241e8c-ae8d-4402-92d8-a871ce64d86f" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="10fc784a-4312-47a8-a6b8-6b529c646ac4" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="a3e2368b-f486-4cfc-b04a-b02e23383280" />
+        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="de5e4e60-e2b7-44f4-aca8-c11390b4cc48" />
+        <field name="DamageType" type="EnumerationTableFieldDefinition" value="Lightning" enumeration_type_name="Damage Type" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d158592f-81fd-4e6f-9863-f6be5341fa03" />
+        <field name="Name" type="NameTableFieldDefinition" value="GlacialPrison" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Water') and RageConcentrateSpell();" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, IncapSpellSlotDC());" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):ApplyStatus(STUNNED2,100,1);IF(SaveCrit()):ApplyStatus(STUNNED3,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);ApplyStatus(GlacialImmune,100,1000);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):ApplyStatus(STUNNED1,100,1);ApplyStatus(GlacialImmune,100,1000);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and not HasStatus('GlacialImmune',context.Target);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_OtilukesFreezingSphere_Launch" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5e48fffcg535egcef4gfbdfg6c85618d704a" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb282242dg937dg9bd3g5541gdb1d788e8ab2" version="1" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Constitution" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(STUNNED2,100,1);&#xD;&#xA;ApplyStatus(GlacialImmune,100,1000);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Vocal_Component_Monk_Damage" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_IceStorm_L4to5" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Monk_WaterWhip_L1to3" />
+        <field name="VocalComponentSound" type="StringTableFieldDefinition" value="Vocal_Component_Stop" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Character() and Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;WaterGate:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="101629c4-d30c-4ae7-b316-9d6423e7298a,,;,,;1b48e605-d73d-48ab-8b69-6f7434f1cd28,,;4d111581-49d7-4820-b839-fa7e363a200c,,;9af429ab-54e8-455b-99d0-71c62e66ad64,,;,,;e550f983-faab-412b-a55d-237a1e17d4da,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Debuff" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="44b17546-f1c8-41c4-940e-2244ba5bc53c" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="98f9b895-4dae-4e8d-8348-948010e83255" />
+        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="dfa70660-5330-48a8-af94-05ceda8fab4c" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1006720a-9b10-4a7a-89e8-e84b2eb57594" />
+        <field name="Name" type="NameTableFieldDefinition" value="HedgeMaze" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
+        <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerCombat" enumeration_type_name="CooldownType" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(9004c1ab-342d-4da2-9a28-cc1313863529, 10);GROUND:CreateSurface(4,10,Mud);GROUND:IF(HasStatus('WOOD_JUNCTION',context.Source)):ApplyStatus(SELF,WoodTempJunction);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood') and RageConcentrateSpell();" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell();" />
+        <field name="AmountOfTargets" type="StringTableFieldDefinition" value="10" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Monster_Dryad_Entangle" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbc4ad487ge476gd702ge001gbde459131d3c" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h85fc631dg16a2gdb25g73ffg811616be81f6" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(KineticistOverflow,100,1);" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Druid_WallOfThorns_L6to8" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Control_Entangle_L1to3" />
+        <field name="VocalComponentSound" type="StringTableFieldDefinition" value="Vocal_Component_SurfaceCreationVines" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:3;WoodGate:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="554a18f7-952e-494a-b301-7702a85d4bc9,,;,,;6123de84-27e4-4e81-9e1f-8031cc0ebc0d,,;cb171bda-f065-4520-b470-e447f678ba1f,,;22dfbbf4-f417-4c84-b39e-2039315961e6,,;,,;5bfbe9f9-4fc3-4f26-b112-43d404db6a89,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Control" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasSomaticComponent" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="e8109f4b-2439-4424-9bc8-743270220f47" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="31e60ea0-1592-4e14-a1b5-5d32a9b36b76" />
+        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="0295bd38-d6e5-48cb-9544-8f38e10a1532" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3d92edd1-e2a4-482c-b5c0-5da2cc5bc47c" />
+        <field name="Name" type="NameTableFieldDefinition" value="RainofRazors" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:CreateSurface(10,10,SpikeGrowth,true);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);GROUND:IF(HasStatus('METAL_JUNCTION',context.Source)):ApplyStatus(SELF,MetalJunctionStatus);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
+        <field name="AreaRadius" type="IntegerTableFieldDefinition" value="10" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Metal') and RageConcentrateSpell();" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC());" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(9d6,Slashing,Magical);IF(SaveCrit()):DealDamage((9d6)*2,Slashing,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(9d6/2,Bludgeoning,Magical);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_ConjureBarrage" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h308cdc46ga6e2g9145g8d9eg7ec43aeb1c04" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6a86211agc040g1dfag908eg0f006440d273" version="1" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(9d6,Slashing,Magical);" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Dexterity" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(KineticistOverflow,100,1);" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_Physical_CloudOfDaggers_L1to3" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Damage_Physical_CloudOfDaggers_L1to3" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:3;MetalGate:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="dd86aa43-8189-4d9f-9a5c-454b5fe4a197,,;,,;7abe77ed-9c77-4eac-872c-5b8caed070b6,,;cb171bda-f065-4520-b470-e447f678ba1f,,;cc5b0caf-3ed1-4711-a50d-11dc3f1fdc6a,,;,,;1715b877-4512-472e-9bd0-fd568a112e90,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Damage" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="77241e8c-ae8d-4402-92d8-a871ce64d86f" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="31e60ea0-1592-4e14-a1b5-5d32a9b36b76" />
+        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="0295bd38-d6e5-48cb-9544-8f38e10a1532" />
+        <field name="DamageType" type="EnumerationTableFieldDefinition" value="Slashing" enumeration_type_name="Damage Type" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="66bf8610-42a7-4f9e-8d61-1a3a4fbc0d95" />
+        <field name="Name" type="NameTableFieldDefinition" value="WitchwoodSeed" />
+        <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);GROUND:IF(HasStatus('WOOD_JUNCTION',context.Source)):ApplyStatus(SELF,WoodTempJunction);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="2" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood') and RageConcentrateSpell();" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC());" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(5d10,Piercing,Magical);IF(SaveCrit()):DealDamage((5d10)*2,Piercing,Magical);ApplyStatus(CLUMSY2,100,1);ApplyStatus(ENSNARED,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(5d10/2,Piercing,Magical);IF(not SaveCritMiss('Fort')):ApplyStatus(DEBILITATING_SPEED,100,1);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and not HasStatus('WitchwoodImmune',context.Target);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_AuraOfVitality" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1732c52ag7c07gfc88g3f32gaae89d7f7fee" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2e69eee7gff3eg3aafg9ec1g5f4a224fee6a" version="1" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(5d10,Piercing,Magical);" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Constitution" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(CLUMSY2,100,1);&#xD;&#xA;ApplyStatus(ENSNARED,100,1);" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_ThornWhip_L0" />
+        <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Damage_ThornWhip_L0" />
+        <field name="VocalComponentSound" type="StringTableFieldDefinition" value="Vocal_Component_DamagePiercingWhip" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Enemy() and not Dead()" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;WoodGate:1" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="554a18f7-952e-494a-b301-7702a85d4bc9,,;,,;70a28457-dba7-46f7-b03c-ceb3b9e12bad,,;68868848-6341-448a-97e3-94aa43ad5faf,,;22dfbbf4-f417-4c84-b39e-2039315961e6,,;,,;5bfbe9f9-4fc3-4f26-b112-43d404db6a89,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Damage" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="1fd909e1-e291-468e-8c70-c0cf44564870" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="f9eb379f-108c-443d-bf29-886774d0fb63" />
+        <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="037dc8e8-15e0-439f-ae4d-ad6a93e85cfd" />
+        <field name="BeamEffect" type="GuidObjectTableFieldDefinition" value="32b12e6c-7b91-4dab-aeb6-061578dbdf51" />
+        <field name="DamageType" type="EnumerationTableFieldDefinition" value="Piercing" enumeration_type_name="Damage Type" version="1" />
       </fields>
     </stat_object>
     <stat_object color="#FFFF0000" is_substat="false">
