@@ -252,7 +252,7 @@ function CalculateMAP()
 end
 
 function AgileMAP()
-	return HasWeaponProperty(WeaponProperties.Light, context.AttackWeapon) | AgileUnarmedSpell()
+	return HasWeaponProperty(WeaponProperties.Light, context.AttackWeapon) | AgileUnarmedSpell() | AgileThrowSpell()
 end
 
 function AgileUnarmedSpell()
@@ -262,6 +262,54 @@ function AgileUnarmedSpell()
 	local witch = SpellId('Target_EldritchNails') | SpellId('Target_LivingHair') | SpellId('Target_SympatheticStrike_Nails') | SpellId('Target_SympatheticStrike_Hair')
 	
 	return standard | animal_instinct | monk | witch
+end
+
+function AgileThrowSpell()
+	return SpellId('Throw_Dart') | SpellId('Throw_Dagger') | SpellId('Throw_Hatchet') | SpellId('Throw_Hammer') | SpellId('Throw_DartOH') | SpellId('Throw_DaggerOH') | SpellId('Throw_HatchetOH') | SpellId('Throw_HammerOH')
+end
+
+function ThrowWeaponSpell(hands, weapon)
+	local searches = {}
+	local possibleWeapons = {
+		"Javelin",
+		"Dart",
+		"Dagger",
+		"Hatchet",
+		"Hammer",
+		"Club",
+		"Spear",
+		"Trident"
+	}
+
+	if weapon then
+		table.insert(searches, "Throw_" .. weapon)
+		if hands == "Main" then
+			table.insert(searches, "Throw_" .. weapon)
+		elseif hands == "Off" then
+			table.insert(searches, "Throw_" .. weapon .. "OH")
+		else
+			table.insert(searches, "Throw_" .. weapon)
+			table.insert(searches, "Throw_" .. weapon .. "OH")
+		end
+	else
+		for k, v in pairs(possibleWeapons) do
+			if hands == "Main" then
+				table.insert(searches, "Throw_" .. v)
+			elseif hands == "Off" then
+				table.insert(searches, "Throw_" .. v .. "OH")
+			else
+				table.insert(searches, "Throw_" .. v)
+				table.insert(searches, "Throw_" .. v .. "OH")
+			end
+		end
+	end
+
+	for k, v in pairs(searches) do
+		if SpellId(v).Result() then
+			return ConditionResult(true)
+		end
+	end
+	return ConditionResult(false)
 end
 
 function AttackSpell()
