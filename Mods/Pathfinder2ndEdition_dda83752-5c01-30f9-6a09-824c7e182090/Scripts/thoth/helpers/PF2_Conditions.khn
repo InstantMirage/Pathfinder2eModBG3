@@ -1883,3 +1883,15 @@ function HasMovableSpellInRange(status, range)
 	end
 	return ConditionResult(result, {ConditionError("MovableSpellRange")})
 end
+
+function MovableSpellDC(status)
+	local allies = GetAlliesWithinRange(50,context.Source,context.Source)
+	if allies ~= nil then
+		for _, ally in ipairs(allies.Allies) do
+			if HasStatus(status, ally).Result then
+				return math.max(CalculateSpellDC(Ability.Wisdom, ally), CalculateSpellDC(Ability.Intelligence, ally), CalculateSpellDC(Ability.Charisma, ally))
+			end
+		end
+	end
+	return 14
+end

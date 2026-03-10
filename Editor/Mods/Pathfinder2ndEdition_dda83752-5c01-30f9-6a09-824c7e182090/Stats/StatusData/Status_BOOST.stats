@@ -2167,6 +2167,21 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_Critspec_Hammer);" />
       </fields>
     </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="42d6cbd5-5d0c-4aab-ba4a-041914cf1e92" />
+        <field name="Name" type="NameTableFieldDefinition" value="THROW_AUTO_EQUIP" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoreResting;DisableOverhead;DisableCombatlog;ApplyToDead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4720e219-17fd-4960-a9d7-48fa9a0c75ec" />
+        <field name="Name" type="NameTableFieldDefinition" value="THROW_AUTO_EQUIP_ACTION" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="UseActionResource(ActionPoint,1,0,false)" />
+      </fields>
+    </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="127dcd46-d038-46bd-9be1-6e5e9270cef8" />
@@ -2387,6 +2402,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="ADVANTAGE_DISABLER_BLOCKED" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3229,6 +3245,7 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GRAPPLE_SOURCE)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15567,7 +15584,7 @@
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndRound" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;TickingWithSource;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(3d6,Fire);AI_ONLY:DealDamage(3d4,Bludgeoning);" />
-        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,CalculateSpellDC(context.PreferredCastingAbility, GetSummoner(context.Source)));" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,MovableSpellDC('FLAME_VORTEX_SUSTAIN'));" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d6,Fire,Magical);IF(not SaveCrit()):DealDamage(3d4,Bludgeoning,Magical);IF(SaveCrit()):DealDamage((3d6)*2,Fire,Magical);IF(SaveCrit()):DealDamage((3d4)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(3d6/2,Fire,Magical);IF(not SaveCritMiss('Reflex')):DealDamage(3d4/2,Bludgeoning,Magical);" />
       </fields>
@@ -15682,6 +15699,7 @@
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(3d6,Fire)" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d6,Fire,Magical);IF(SaveCrit()):DealDamage((3d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(3d6/2,Fire,Magical);" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,MovableSpellDC('FLOATING_FLAME_SUSTAIN'));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15692,6 +15710,7 @@
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(4d6,Fire)" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(4d6,Fire,Magical);IF(SaveCrit()):DealDamage((4d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(4d6/2,Fire,Magical);" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,MovableSpellDC('FLOATING_FLAME_3_SUSTAIN'));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15702,6 +15721,7 @@
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(5d6,Fire)" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(5d6,Fire,Magical);IF(SaveCrit()):DealDamage((5d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(5d6/2,Fire,Magical);" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,MovableSpellDC('FLOATING_FLAME_4_SUSTAIN'));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15712,6 +15732,7 @@
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(6d6,Fire)" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d6,Fire,Magical);IF(SaveCrit()):DealDamage((6d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(6d6/2,Fire,Magical);" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,MovableSpellDC('FLOATING_FLAME_5_SUSTAIN'));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15722,6 +15743,7 @@
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:DealDamage(7d6,Fire)" />
         <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(7d6,Fire,Magical);IF(SaveCrit()):DealDamage((7d6)*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(7d6/2,Fire,Magical);" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity,MovableSpellDC('FLOATING_FLAME_6_SUSTAIN'));" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

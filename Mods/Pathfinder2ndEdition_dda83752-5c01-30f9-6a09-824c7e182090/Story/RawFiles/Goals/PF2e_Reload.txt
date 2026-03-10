@@ -1,0 +1,26 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+LeftCombat((GUIDSTRING)_Player, _)
+THEN
+IterateInventory(_Player, "ReloadCheck", "");
+
+IF
+EntityEvent((GUIDSTRING)_Item, "ReloadCheck")
+AND
+HasActiveStatus(_Item, "RELOAD_1", 1)
+THEN
+RemoveStatus(_Item, "RELOAD_1");
+
+IF
+EntityEvent((GUIDSTRING)_Item, "ReloadCheck")
+AND
+HasActiveStatus(_Item, "RELOAD_2", 1)
+THEN
+RemoveStatus(_Item, "RELOAD_2");
+EXITSECTION
+
+ENDEXITSECTION

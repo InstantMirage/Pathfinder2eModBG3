@@ -1,0 +1,197 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ThrowSpellProficiencyMap("Throw_Javelin", "Javelins");
+DB_ThrowSpellProficiencyMap("Throw_JavelinOH", "Javelins");
+DB_ThrowSpellProficiencyMap("Throw_Dagger", "Daggers");
+DB_ThrowSpellProficiencyMap("Throw_DaggerOH", "Daggers");
+DB_ThrowSpellProficiencyMap("Throw_Club", "Clubs");
+DB_ThrowSpellProficiencyMap("Throw_ClubOH", "Clubs");
+DB_ThrowSpellProficiencyMap("Throw_Hammer", "LightHammers");
+DB_ThrowSpellProficiencyMap("Throw_HammerOH", "LightHammers");
+DB_ThrowSpellProficiencyMap("Throw_Hatchet", "Handaxes");
+DB_ThrowSpellProficiencyMap("Throw_HatchetOH", "Handaxes");
+DB_ThrowSpellProficiencyMap("Throw_Spear", "Spears");
+DB_ThrowSpellProficiencyMap("Throw_SpearOH", "Spears");
+DB_ThrowSpellProficiencyMap("Throw_Trident", "Tridents");
+DB_ThrowSpellProficiencyMap("Throw_TridentOH", "Tridents");
+DB_ThrowSpellProficiencyMap("Throw_Dart", "Darts");
+DB_ThrowSpellProficiencyMap("Throw_DartOH", "Darts");
+KBSECTION
+/*
+Whenever a character throws a thrown weapon, and has the
+passive enabled, we want them to automatically equip a
+weapon from their inventory of the same proficiency group.
+*/
+
+//REGION Equipment Tracking
+// Clear out the DBs first whenever a throw spell is used.
+IF
+UsingSpell(_, _, "throw", _, _)
+AND
+DB_CurrentMainWeapon((GUIDSTRING)_Caster, (GUIDSTRING)_MainItem)
+THEN
+NOT DB_CurrentMainWeapon(_Caster, _MainItem);
+
+IF
+UsingSpell(_, _, "throw", _, _)
+AND
+DB_CurrentOffhandWeapon((GUIDSTRING)_Caster, (GUIDSTRING)_OffhandItem)
+THEN
+NOT DB_CurrentOffhandWeapon(_Caster, _OffhandItem);
+
+// Whenever a character starts casting a throw spell, store
+// what item they have equipped in each of their melee slots.
+IF
+UsingSpell((GUIDSTRING)_Caster, _, "throw", _, _)
+AND
+GetEquippedItem((CHARACTER)_Caster, "Melee Main Weapon", (ITEM)_MainItem)
+THEN
+DB_CurrentMainWeapon((GUIDSTRING)_Caster, (GUIDSTRING)_MainItem);
+
+IF
+UsingSpell((GUIDSTRING)_Caster, _, "throw", _, _)
+AND
+GetEquippedItem((CHARACTER)_Caster, "Melee Offhand Weapon", (ITEM)_OffhandItem)
+THEN
+DB_CurrentOffhandWeapon((GUIDSTRING)_Caster, (GUIDSTRING)_OffhandItem);
+//END_REGION
+
+//REGION Throw Tracking
+// We only want to catch items removed from inventories during
+// a throw spell, so we need to track that mode with UsingSpell
+// and CastedSpell/CastFailed.
+IF
+UsingSpell((GUIDSTRING)_Caster, (STRING)_Spell, "throw", _, (INTEGER)_StoryID)
+AND
+DB_ThrowSpellProficiencyMap(_Spell, _)
+THEN
+DB_IsThrowing(_Caster, _Spell, _StoryID);
+
+// Remove if spell succeeded
+IF
+CastedSpell((GUIDSTRING)_Caster, (STRING)_Spell, "throw", _, (INTEGER)_StoryID)
+THEN
+NOT DB_IsThrowing(_Caster, _Spell, _StoryID);
+
+// Remove if spell failed
+IF
+CastSpellFailed((GUIDSTRING)_Caster, (STRING)_Spell, "throw", _, (INTEGER)_StoryID)
+THEN
+NOT DB_IsThrowing(_Caster, _Spell, _StoryID);
+
+// End of turn cleanup as fallback.
+IF
+TurnEnded(_)
+AND
+DB_IsThrowing((GUIDSTRING)_Caster, (STRING)_Spell, (INTEGER)_StoryID)
+THEN
+NOT DB_IsThrowing(_Caster, _Spell, _StoryID);
+//END_REGION
+
+//REGION Detect thrown weapons
+IF
+RemovedFrom((GUIDSTRING)_ThrownItem, (GUIDSTRING)_Caster)
+AND
+HasActiveStatus(_Caster, "THROW_AUTO_EQUIP", 1)
+AND
+DB_IsThrowing(_Caster, (STRING)_Spell, (INTEGER)_StoryID)
+AND
+DB_ThrowSpellProficiencyMap(_Spell, (STRING)_Proficiency)
+AND
+DB_CurrentMainWeapon(_Caster, _ThrownItem)
+AND
+IsEquipmentWithProficiency((ITEM)_ThrownItem, _Proficiency, 1)
+THEN
+DB_CurrentThrow(_Caster, _Spell, _StoryID);
+DB_BestCandidate((GUIDSTRING)NULL_00000000-0000-0000-0000-000000000000, 0);
+IterateInventory(_Caster, "AutoEquipIterateMain", "AutoEquipComplete");
+
+IF
+RemovedFrom((GUIDSTRING)_ThrownItem, (GUIDSTRING)_Caster)
+AND
+HasActiveStatus(_Caster, "THROW_AUTO_EQUIP", 1)
+AND
+DB_IsThrowing((GUIDSTRING)_Caster, (STRING)_Spell, (INTEGER)_StoryID)
+AND
+DB_ThrowSpellProficiencyMap(_Spell, (STRING)_Proficiency)
+AND
+DB_CurrentOffhandWeapon(_Caster, _ThrownItem)
+AND
+IsEquipmentWithProficiency((ITEM)_ThrownItem, _Proficiency, 1)
+THEN
+DB_CurrentThrow(_Caster, _Spell, _StoryID);
+DB_BestCandidate((GUIDSTRING)NULL_00000000-0000-0000-0000-000000000000, 0);
+IterateInventory(_Caster, "AutoEquipIterateOffhand", "AutoEquipComplete");
+//END_REGION
+
+//REGION Auto-Equip Logic
+// Iterate over the character's inventory looking for the most
+// valuable item with the same proficiency group. Don't equip
+// am ite, that was already equipped.
+IF
+EntityEvent((GUIDSTRING)_Candidate, "AutoEquipIterateMain")
+AND
+DB_CurrentThrow((GUIDSTRING)_Caster, (STRING)_Spell, (INTEGER)_StoryID)
+AND
+DB_ThrowSpellProficiencyMap(_Spell, (STRING)_Proficiency)
+AND
+IsEquipmentWithProficiency((ITEM)_Candidate, _Proficiency, 1)
+AND
+NOT DB_CurrentMainWeapon(_Caster, _Candidate)
+AND
+NOT DB_CurrentOffhandWeapon(_Caster, _Candidate)
+AND
+ItemGetGoldValue(_Candidate, (INTEGER)_Value)
+AND
+DB_BestCandidate((GUIDSTRING)_OldItem, (INTEGER)_OldValue)
+AND
+_Value > _OldValue
+THEN
+NOT DB_BestCandidate(_OldItem, _OldValue);
+DB_BestCandidate((GUIDSTRING)_Candidate, _Value);
+
+IF
+EntityEvent((GUIDSTRING)_Candidate, "AutoEquipIterateOffhand")
+AND
+DB_CurrentThrow((GUIDSTRING)_Caster, (STRING)_Spell, (INTEGER)_StoryID)
+AND
+DB_ThrowSpellProficiencyMap(_Spell, (STRING)_Proficiency)
+AND
+IsEquipmentWithProficiency((ITEM)_Candidate, _Proficiency, 1)
+AND
+NOT DB_CurrentMainWeapon(_Caster, _Candidate)
+AND
+NOT DB_CurrentOffhandWeapon(_Caster, _Candidate)
+AND
+ItemGetGoldValue(_Candidate, (INTEGER)_Value)
+AND
+DB_BestCandidate((GUIDSTRING)_OldItem, (INTEGER)_OldValue)
+AND
+_Value > _OldValue
+THEN
+NOT DB_BestCandidate(_OldItem, _OldValue);
+DB_BestCandidate((GUIDSTRING)_Candidate, _Value);
+
+// Equip the most valuable item found once iteration is complete.
+IF
+EntityEvent(_, "AutoEquipComplete")
+AND
+DB_CurrentThrow((GUIDSTRING)_Caster, (STRING)_Spell, (INTEGER)_StoryID)
+AND
+DB_BestCandidate((GUIDSTRING)_Candidate, (INTEGER)_Value)
+AND
+_Value > 0
+AND
+GetActionResourceValuePersonal((CHARACTER)_Caster, "ActionPoint", 0, (REAL)_Actions)
+AND
+_Actions > 0.0
+THEN
+Equip((CHARACTER)_Caster, (ITEM)_Candidate);
+ApplyStatus(_Caster, "THROW_AUTO_EQUIP_ACTION", 0.0);
+NOT DB_CurrentThrow(_Caster, _Spell, _StoryID);
+NOT DB_BestCandidate(_Candidate, _Value);
+
+EXITSECTION
+
+ENDEXITSECTION

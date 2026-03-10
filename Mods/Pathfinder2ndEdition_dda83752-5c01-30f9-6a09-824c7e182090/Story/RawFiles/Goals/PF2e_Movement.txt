@@ -77,6 +77,17 @@ THEN
 RemoveStatus(_Char, "DEBUG_RESET_MOVE");
 ApplyStatus(_Char, "DEBUG_RESET_MOVE", -1.0, 0);
 
+// Also need to catch failed casts
+IF
+CastSpellFailed((CHARACTER)_Char, (STRING)_Spell, _, _, _)
+AND
+NOT DB_MovementSpell(_Spell)
+AND
+NOT QRY_ExplorationMode(_Char)
+THEN
+RemoveStatus(_Char, "DEBUG_RESET_MOVE");
+ApplyStatus(_Char, "DEBUG_RESET_MOVE", -1.0, 0);
+
 //Remove reset move if movement status acquired
 IF
 StatusApplied((CHARACTER)_Char, (STRING)_Status, _, _)
