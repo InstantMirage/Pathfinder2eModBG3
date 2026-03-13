@@ -14,7 +14,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="MainHandAttack" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="RangedMainWeaponRange" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.RangedWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainRangedWeapon), MainRangedWeaponDamageType); ExecuteWeaponFunctors(MainHand)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainRangedWeapon), MainRangedWeaponDamageType);ExecuteWeaponFunctors(MainHand);IF(Character() and HasPassive('StunningBlows',context.Source) and not HasStatus('StunningBlowsImmune',context.Target) and not SavingThrow(Ability.Constitution, ClassDC())):ApplyStatus(STUNNED1,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead()" />
         <field name="ProjectileCount" type="StringTableFieldDefinition" value="1" />
         <field name="Trajectories" type="StringTableFieldDefinition" value="ff93ba9c-124c-454e-ac8c-436c136bcef2,75d615be-9277-6e22-6c17-fa51981d7560,8c00238b-549d-dc71-8fcb-42ba68bae142" />
@@ -361,6 +361,7 @@
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_ElementalBlast_Fire_Dedi" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(1d6,Fire,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Fire',context.Source)):ApplyStatus(PersistentFire_1d6,100,1);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(1d6,Fire);" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1;FireGate:1;" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -371,6 +372,7 @@
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_ElementalBlast_Fire_Dedi" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(1d6+ConstitutionModifier,Fire,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Fire',context.Source)):ApplyStatus(PersistentFire_1d6,100,1);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(1d6+ConstitutionModifier,Fire);" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;FireGate:1;" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -381,6 +383,7 @@
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_ElementalBlast_Fire_Dedi" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(1d6,Cold,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Fire',context.Source)):ApplyStatus(PersistentFire_1d6,100,1);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(1d6,Cold);" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1;FireGate:1;" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -391,6 +394,7 @@
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_ElementalBlast_Fire_Dedi" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(1d6+ConstitutionModifier,Cold,Magical);IF(IsCritical() and HasPassive('CriticalBlast_Fire',context.Source)):ApplyStatus(PersistentFire_1d6,100,1);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(1d6+ConstitutionModifier,Cold);" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;FireGate:1;" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -845,6 +849,7 @@
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.RangedWeaponAttack)" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:0" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsAttack;HasHighGroundRangeExtension;RangeIgnoreVerticalThreshold;IsHarmful;CanDualWield;Temporary" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainRangedWeapon), MainRangedWeaponDamageType);ExecuteWeaponFunctors(MainHand);IF(Character() and HasPassive('StunningBlows',context.Source) and not HasStatus('StunningBlowsImmune',context.Target) and not SavingThrow(Ability.Constitution, ClassDC())):ApplyStatus(STUNNED1,100,1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
