@@ -1497,3 +1497,16 @@ type "InterruptData"
 using "Interrupt_MirrorImage3"
 data "Conditions" "Self(context.Observer,context.Target) and (IsAttack() or HasStringInSpellConditions('AttackSpell'));"
 
+new entry "Interrupt_MAG_CriticalExecution"
+type "InterruptData"
+using "Interrupt_MAG_CriticalExecution"
+data "Conditions" "IsAbleToReact(context.Observer) and not Item() and Self(context.Source,context.Observer) and HasInterruptedAttack() and LuckOfTheFarRealmCheck() and not CheckCriticalTen(10) and not HasStatus('ForcedCritImmune',context.Target) and not AnyEntityIsItem();"
+data "Properties" "SetRoll(20);ApplyStatus(ForcedCritImmune);RemoveStatus(SELF, MAG_CRITICAL_CRITICAL_EXECUTION);"
+
+new entry "Interrupt_TAD_LuckOfTheFarRealms"
+type "InterruptData"
+using "Interrupt_TAD_LuckOfTheFarRealms"
+data "Conditions" "IsAbleToReact(context.Observer) and not Item() and Self(context.Source,context.Observer) and HasInterruptedAttack() and LuckOfTheFarRealmCheck() and not CheckCriticalTen(10) and not HasStatus('ForcedCritImmune',context.Target) and not AnyEntityIsItem();"
+data "Properties" "SetRoll(20);ApplyStatus(ForcedCritImmune);"
+data "Cooldown" "OncePerRest"
+
