@@ -1409,6 +1409,8 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAG_LightningArrow_Shot" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="915fb136-65b2-480f-94bf-f59703671edb" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d8,Lightning,Magical);IF(SaveCrit()):DealDamage(6d8,Lightning,Magical);TARGET:IF(Attack(AttackType.RangedSpellAttack)):DealDamage(5d8,Lightning,Magical);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((3d8)/2,Lightning,Magical);TARGET:IF(Attack(AttackType.RangedSpellAttack)):DealDamage(5d8,Lightning,Magical);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -1425,6 +1427,47 @@
         <field name="Name" type="NameTableFieldDefinition" value="MAG_FlamingFist_StaffOfFire_Fireball" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="37ac264c-86a5-4115-9ffa-711202b53db7" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7a52ddab-a6e5-4a38-913b-1669da0dd2e1" />
+        <field name="Name" type="NameTableFieldDefinition" value="ArrowOfRicochet" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="83b7c4c2-bc81-4c4a-9d8c-3b3c2350e6c4" />
+        <field name="ExplodeRadius" type="IntegerTableFieldDefinition" value="4" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, 16)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d8,MainRangedWeaponDamageType);IF(SaveCrit()):DealDamage(12d8,MainRangedWeaponDamageType);ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((6d8)/2,MainRangedWeaponDamageType);" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h87eee043g2748g16fag460dg39adda3b93a8" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(4)" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(6d8, MainRangedWeaponDamageType)" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Dexterity" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful;DisplayInItemTooltip" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="685b2fe8-6409-4a3b-83fe-33fe599450cd" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0a854d88-e3b2-498a-9dc4-c378e5bcedbe" />
+        <field name="Name" type="NameTableFieldDefinition" value="ArrowOfSmokepowder" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="0849160e-a412-4b18-a98b-d4d9c602d9b7" />
+        <field name="ExplodeRadius" type="IntegerTableFieldDefinition" value="4" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, 16)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(3d6,Fire,Magical);IF(not SaveCrit()):DealDamage(3d6,Force,Magical);IF(SaveCrit()):DealDamage(6d6,Fire,Magical);IF(SaveCrit()):DealDamage(6d6,Force,Magical);Force(3, TargetToEntity);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(3d6/2,Fire,Magical);IF(not SaveCritMiss('Reflex')):DealDamage(3d6/2,Force,Magical);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(4)" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(3d6,Fire);DealDamage(3d6,Force)" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e416bb7c-0170-42da-84fc-381f82dd073d" />
+        <field name="Name" type="NameTableFieldDefinition" value="_ArrowOfXSlaying" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="fc76bc1a-da4c-4051-9d79-c07a507acd32" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source))):DealDamage(MainRangedWeapon+1d4, MainRangedWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source))):DealDamage(MainRangedWeapon+1d6, MainRangedWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source))):DealDamage(MainRangedWeapon+1d8, MainRangedWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source))):DealDamage(MainRangedWeapon+1d10, MainRangedWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source))):DealDamage(MainRangedWeapon+1d12, MainRangedWeaponDamageType);ExecuteWeaponFunctors(MainHand);" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainRangedWeapon*2, MainRangedWeaponDamageType)" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -1500,7 +1543,7 @@
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Damage_Lightning_Gen_L1to3" />
         <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Spell_Prepare_Damage_Lightning_Gen_L1to3_Loop" />
         <field name="CastTargetHitDelay" type="IntegerTableFieldDefinition" value="100" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage((LevelMapValue(D4AoeCantrip))/2,Lightning,Magical);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((LevelMapValue(D4AoeCantrip))/2,Lightning,Magical);" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Electrify)" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalDamage_Electric" enumeration_type_name="HitAnimationType" version="1" />
         <field name="AmountOfTargets" type="StringTableFieldDefinition" value="2" />
@@ -1517,7 +1560,7 @@
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="2" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC())" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D4AoeCantrip),Bludgeoning,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D4AoeCantrip))*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D4AoeCantrip)/2,Bludgeoning,Magical)" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(D4AoeCantrip)/2,Bludgeoning,Magical);" />
         <field name="Trajectories" type="StringTableFieldDefinition" value="b3d955f2-33d7-4146-98e8-8b953cbc060d,48c3ebe8-ac38-da5b-ede4-ed0bb706ab2d" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Monster_Boar_KickUp" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hea14e1adgd975gef42g9f62g59dfdff514e8" version="1" />
@@ -1899,7 +1942,7 @@
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Constitution" />
         <field name="CycleConditions" type="StringTableFieldDefinition" value="Enemy() and not Dead()" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalDamage_Internal" enumeration_type_name="HitAnimationType" version="1" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage((LevelMapValue(D8Cantrip))/2,Poison,Magical)" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((LevelMapValue(D8Cantrip))/2,Poison,Magical);" />
         <field name="TargetFloor" type="StringTableFieldDefinition" value="-1" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="61249cfa-bb68-4fd4-9517-b527fe7dbdce" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="11f94ff7-9c1b-431a-a26b-99e157026dee" />
@@ -1982,7 +2025,7 @@
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="ee97e6e4-90a1-4181-b7fa-f6fe8b2af2d0" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="f3d3763c-1cbb-4d7a-94da-d9f703b7d67a" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Cold" enumeration_type_name="Damage Type" version="1" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage((LevelMapValue(D4AoeCantrip))/2,Cold,Magical)" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((LevelMapValue(D4AoeCantrip))/2,Cold,Magical);" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
       </fields>
     </stat_object>
@@ -2013,7 +2056,7 @@
         <field name="CycleConditions" type="StringTableFieldDefinition" value="Enemy() and not Dead()" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D8AoeCantrip),Acid)" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalDamage_External" enumeration_type_name="HitAnimationType" version="1" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage((LevelMapValue(D8AoeCantrip))/2,Acid,Magical)" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((LevelMapValue(D8AoeCantrip))/2,Acid,Magical);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead() and ConcentrateSpell();" />
         <field name="TargetFloor" type="StringTableFieldDefinition" value="-1" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="41193b01-e0c2-4945-ba40-7c3464b71bc0" />
@@ -2030,7 +2073,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AcidSplash_Cold" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="169e0c64-52bc-435d-be9b-be25ecab9a1c" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D8AoeCantrip),Cold,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D8AoeCantrip))*2,Cold,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage((LevelMapValue(D8AoeCantrip))/2,Cold,Magical);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((LevelMapValue(D8AoeCantrip))/2,Cold,Magical);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D8AoeCantrip),Cold)" />
       </fields>
     </stat_object>
@@ -2040,7 +2083,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AcidSplash_Fire" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="169e0c64-52bc-435d-be9b-be25ecab9a1c" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D8AoeCantrip),Fire,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D8AoeCantrip))*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage((LevelMapValue(D8AoeCantrip))/2,Fire,Magical);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((LevelMapValue(D8AoeCantrip))/2,Fire,Magical);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D8AoeCantrip),Fire)" />
       </fields>
     </stat_object>
@@ -2050,7 +2093,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AcidSplash_Electric" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="169e0c64-52bc-435d-be9b-be25ecab9a1c" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D8AoeCantrip),Lightning,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D8AoeCantrip))*2,Lightning,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage((LevelMapValue(D8AoeCantrip))/2,Lightning,Magical);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((LevelMapValue(D8AoeCantrip))/2,Lightning,Magical);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D8AoeCantrip),Electric)" />
       </fields>
     </stat_object>

@@ -3667,11 +3667,11 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="2" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(Ally()):ApplyStatus(RELOAD_1_UNLOCK,100,0)" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(Ally() and TurnBased()):ApplyStatus(RELOAD_1_UNLOCK,100,0)" />
         <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems;ShouldCheckLOS;CanAffectInvisibleItems" enumeration_type_name="AuraFlags" version="1" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('RELOADING')" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog;DisableOverhead;FreezeDuration" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="HitAnimationType" version="1" />
       </fields>
     </stat_object>
@@ -3681,7 +3681,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="RELOAD_2" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="f89fca04-7c7f-4ff2-b289-12ef2fc8ebba" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(Ally()):ApplyStatus(RELOAD_2_UNLOCK,100,0)" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(Ally() and TurnBased()):ApplyStatus(RELOAD_2_UNLOCK,100,0)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3727,10 +3727,12 @@
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_CrossbowExpert_Loading" />
         <field name="StackId" type="StringTableFieldDefinition" value="RELOAD_CHECK" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
-        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('RELOAD_1', GetItemInEquipmentSlot(EquipmentSlot.RangedMainHand, context.Source))):UnlockSpellVariant(HasStringInSpellRoll('RangedWeaponAttack'),ModifyUseCosts(Add,ActionPoint,1,0));IF(HasStatus('RELOAD_1', GetItemInEquipmentSlot(EquipmentSlot.RangedOffHand, context.Source))):UnlockSpellVariant(HasStringInSpellRoll('RangedOffHandWeaponAttack'),ModifyUseCosts(Add,ActionPoint,1,0));IF(HasStatus('RELOAD_2', GetItemInEquipmentSlot(EquipmentSlot.RangedMainHand, context.Source))):UnlockSpellVariant(HasStringInSpellRoll('RangedWeaponAttack'),ModifyUseCosts(Add,ActionPoint,2,0));IF(HasStatus('RELOAD_2', GetItemInEquipmentSlot(EquipmentSlot.RangedOffHand, context.Source))):UnlockSpellVariant(HasStringInSpellRoll('RangedOffHandWeaponAttack'),ModifyUseCosts(Add,ActionPoint,2,0));" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator;IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not (TurnBased() or Combat() )):ApplyEquipmentStatus(RangedMainHand,RELOADING,100,-1);&#xD;&#xA;IF(not (TurnBased() or Combat() )):ApplyEquipmentStatus(RangedOffHand,RELOADING,100,-1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -12258,6 +12260,22 @@
         <field name="Name" type="NameTableFieldDefinition" value="POTION_OF_RESISTANCE_THUNDER" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="2650ad74-6e51-43f4-801f-92b14eab5607" />
         <field name="Boosts" type="StringTableFieldDefinition" value=";" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="568c4ff9-223c-4cde-8936-1a9313ada840" />
+        <field name="Name" type="NameTableFieldDefinition" value="POTION_OF_STRENGTH_HILL_GIANT" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="68504766-7da4-4f75-91ff-25aa61eac83e" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Ability(Strength, 2, 18);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5b26d6a5-0eda-490c-bfba-1efacc6ccc94" />
+        <field name="Name" type="NameTableFieldDefinition" value="POTION_OF_STRENGTH_CLOUD_GIANT" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="9f57d793-a628-4985-931e-e25af7fac8a0" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Ability(Strength, 2, 20);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
