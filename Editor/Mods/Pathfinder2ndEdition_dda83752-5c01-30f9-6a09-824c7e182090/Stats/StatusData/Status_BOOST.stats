@@ -3466,6 +3466,7 @@
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('CLUMSY_GIANT')):ApplyStatus(CLUMSY_GIANT,100,-1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8196,16 +8197,17 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1584ffd4g030agc6e7g35d1gd934c9f8f683" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_Enlarge" />
         <field name="StackId" type="StringTableFieldDefinition" value="SIZE" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeAttack()):DamageBonus(2);ObjectSize(+1);WeightCategory(+1);ScaleMultiplier(1.33);CarryCapacityMultiplier(1.25);UnlockSpellVariant(HasSpellFlag(SpellFlags.Melee),ModifyTargetRadius(AdditiveBase,1.5),ModifyTooltipDescription());" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeAttack()):DamageBonus(2);ObjectSize(+1);WeightCategory(+1);ScaleMultiplier(1.33);CarryCapacityMultiplier(1.25);UnlockSpellVariant(HasSpellFlag(SpellFlags.Melee),ModifyTargetRadius(AdditiveBase,1.5),ModifyTooltipDescription());Tag(CLUMSY_GIANT);" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ead75c6a-806e-4db7-8d51-f06beca00fe2" />
         <field name="SoundLoop" type="StringTableFieldDefinition" value="MAG_Status_EnlargeSelf_Loop" />
         <field name="SoundStop" type="StringTableFieldDefinition" value="MAG_Status_EnlargeSelf_End" />
         <field name="Passives" type="StringTableFieldDefinition" value="EnlargeWeightMedium;EnlargeWeightLarge" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(CLUMSY,100,1)" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(CLUMSY,100,1)" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(CLUMSY_GIANT,100,-1)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(CLUMSY_GIANT,100,-1)" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(_PASSIVES,100,0)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8215,7 +8217,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h885856b3g194cg09cfgbb01g91aa1e4474d8" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6823b731g6705g80bfgece1g3b4f5e1bc91c" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_Enlarge" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeAttack()):DamageBonus(4);ObjectSize(+2);WeightCategory(+1);ScaleMultiplier(1.75);CarryCapacityMultiplier(1.5);UnlockSpellVariant(HasSpellFlag(SpellFlags.Melee),ModifyTargetRadius(AdditiveBase,3),ModifyTooltipDescription());" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeAttack()):DamageBonus(4);ObjectSize(+2);WeightCategory(+1);ScaleMultiplier(1.75);CarryCapacityMultiplier(1.5);UnlockSpellVariant(HasSpellFlag(SpellFlags.Melee),ModifyTargetRadius(AdditiveBase,3),ModifyTooltipDescription());Tag(CLUMSY_GIANT);" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="9dff998f-0cb3-4ce2-abb3-74d7c63ab673" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
       </fields>
@@ -13327,10 +13329,11 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="Passives" type="StringTableFieldDefinition" value="DismissElements;" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('SG_Unconscious') or IsStatusEvent(StatusEvent.OnCombatEnded) " />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('SG_Unconscious') or (IsStatusEvent(StatusEvent.OnCombatEnded) and CheckRulesetModifier('f2d9d868-1e84-4bc0-9939-95bb68fd533e', true))" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasPassive('AirGate',context.Source) or HasPassive('ElemBarbAir',context.Source)):ApplyStatus(ChannelElementsStatusAir);IF(HasPassive('EarthGate',context.Source) or HasPassive('ElemBarbEarth',context.Source)):ApplyStatus(ChannelElementsStatusEarth);IF(HasPassive('FireGate',context.Source) or HasPassive('ElemBarbFire',context.Source)):ApplyStatus(ChannelElementsStatusFire);IF(HasPassive('WaterGate',context.Source) or HasPassive('ElemBarbWater',context.Source)):ApplyStatus(ChannelElementsStatusWater);IF(HasPassive('WoodGate',context.Source) or HasPassive('ElemBarbWood',context.Source)):ApplyStatus(ChannelElementsStatusWood);IF(HasPassive('MetalGate',context.Source) or HasPassive('ElemBarbMetal',context.Source)):ApplyStatus(ChannelElementsStatusMetal);" />
         <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceConsumeMultiplier(AirGate,0,0);ActionResourceConsumeMultiplier(EarthGate,0,0);ActionResourceConsumeMultiplier(FireGate,0,0);ActionResourceConsumeMultiplier(MetalGate,0,0);ActionResourceConsumeMultiplier(WaterGate,0,0);ActionResourceConsumeMultiplier(WoodGate,0,0);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15585,7 +15588,45 @@
         <field name="Name" type="NameTableFieldDefinition" value="CLUMSY_DIRTY_TRICK" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="adf03886-96e1-4420-839e-a1f64d0dcbea" />
         <field name="StackId" type="StringTableFieldDefinition" value="CLUMSY_DIRTY_TRICK" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_1AC);Tag(STAT_PEN_1REFLEX);Skill(Acrobatics,-1);Skill(Stealth,-1);Skill(SleightOfHand,-1);UnlockSpell(Shout_DirtyTrickRemove);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CLUMSY_GIANT);UnlockSpell(Shout_DirtyTrickRemove);" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(CLUMSY_GIANT,100,-1)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(CLUMSY_GIANT,100,-1);ApplyStatus(DIRT_COVERED_FULL)" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(_PASSIVES,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="49f5a48e-6d70-4517-a8fe-2edc93dc2f8c" />
+        <field name="Name" type="NameTableFieldDefinition" value="CLUMSY_GIANT" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="adf03886-96e1-4420-839e-a1f64d0dcbea" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('CLUMSY_GIANT')" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved;OnEquip;OnUnequip" enumeration_type_name="StatusEvent" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8f4541ef-851a-41e4-9da1-b33bad20672a" />
+        <field name="Name" type="NameTableFieldDefinition" value="CLUMSY_GIANT_BARB_TECHNICAL" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="f790ce10-0910-4e37-87ed-bc0444748ca7" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="CLUMSY_GIANT_BARB" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CLUMSY_GIANT);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not GiantRage()" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved;OnEquip;OnUnequip" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator;IgnoreResting;ApplyToDead" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(CLUMSY_GIANT,100,-1)" />
+        <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
