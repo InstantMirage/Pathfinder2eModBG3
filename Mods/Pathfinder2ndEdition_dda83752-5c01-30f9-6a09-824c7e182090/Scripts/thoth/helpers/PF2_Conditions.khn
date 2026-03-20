@@ -13,7 +13,7 @@ function AutoStride()
 end
 
 function QuickenedStride()
-	return HasStatus('HASTE_ATTACK') | HasStatus('HASTE_ATTACK_EMERGENCY') | HasStatus('LOOSE_TIMES_ACTION')
+	return HasStatus('HASTE_ATTACK') | HasStatus('LOOSE_TIMES_ACTION')
 end
 
 -- Can~Step into Difficult Terrain
@@ -42,11 +42,19 @@ function HasAnyMovementStatus(entity)
 end
 
 function StrideCostSpellCheck()
-	return SpellCategoryIs(SpellCategory.Dash) | HasUseCosts('Movement',true) | (HasUseCosts('Stride',true) & ~SpellTypeIs(SpellType.Rush))
+	return ~(QuickenedStride() & (SpellId('Shout_Dash')|SpellId('Shout_Dash_NPC'))) & ( SpellCategoryIs(SpellCategory.Dash) | HasUseCosts('Movement',true) | (HasUseCosts('Stride',true) & ~SpellTypeIs(SpellType.Rush)))
 end
 
 function HasteSpellCheck()
-	return ( ExtraAttackSpellCheck() | SpellCategoryIs(SpellCategory.Dash) | HasUseCosts('Movement',false) | HasUseCosts('Stride',false) ) & HasUseCosts('ActionPoint',true)
+	local strike = HasStringInSpellConditions('BasicUnarmedStrike') | SpellId('Target_MainHandAttack') | SpellId('Target_OffHandAttack') | SpellId('Projectile_MainHandAttack') | SpellId('Projectile_OffHandAttack')
+	local stride = SpellId('Shout_Dash') | SpellId('Shout_Dash_NPC')
+	return ( strike | stride )
+end
+
+function LooseTimesArrowSpellCheck()
+	local step = SpellId('Shout_Disengage')
+	local stride = SpellId('Shout_Dash') | SpellId('Shout_Dash_NPC')
+	return ( step | stride )
 end
 
 --Chance of a crit on an opportunity attack
@@ -252,16 +260,17 @@ function CalculateMAP()
 end
 
 function AgileMAP()
-	return HasWeaponProperty(WeaponProperties.Light, context.AttackWeapon) | AgileUnarmedSpell() | AgileThrowSpell()
+	return HasWeaponProperty(WeaponProperties.Light, context.AttackWeapon) | HasStringInSpellConditions('AgileSpell') | AgileThrowSpell()
 end
 
-function AgileUnarmedSpell()
-	local standard = SpellId('Target_UnarmedAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist') | SpellId('Target_EscapeGrapple_UnarmedAttack')
-	local animal_instinct = SpellId('Target_AnimalSecondarySlashing') | SpellId('Target_AnimalSecondaryFrog')
-	local monk = SpellId('Target_CraneWing') | SpellId('Target_TigerClaw') | SpellId('Target_CobraFang') | SpellId('Target_WolfJaw') | SpellId('Target_ClingingShadowStance') | SpellId('Target_IronSweep') | SpellId('Target_WindCrash')
-	local witch = SpellId('Target_EldritchNails') | SpellId('Target_LivingHair') | SpellId('Target_SympatheticStrike_Nails') | SpellId('Target_SympatheticStrike_Hair')
+function AgileSpell()
+	-- local standard = SpellId('Target_UnarmedAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist') | SpellId('Target_EscapeGrapple_UnarmedAttack')
+	-- local animal_instinct = SpellId('Target_AnimalSecondarySlashing') | SpellId('Target_AnimalSecondaryFrog')
+	-- local monk = SpellId('Target_CraneWing') | SpellId('Target_TigerClaw') | SpellId('Target_CobraFang') | SpellId('Target_WolfJaw') | SpellId('Target_ClingingShadowStance') | SpellId('Target_IronSweep') | SpellId('Target_WindCrash')
+	-- local witch = SpellId('Target_EldritchNails') | SpellId('Target_LivingHair') | SpellId('Target_SympatheticStrike_Nails') | SpellId('Target_SympatheticStrike_Hair')
 	
-	return standard | animal_instinct | monk | witch
+	-- return standard | animal_instinct | monk | witch
+	return ConditionResult(true)
 end
 
 function AgileThrowSpell()
@@ -818,11 +827,12 @@ end
 
 -- Can be part of Flurry of Blows
 function IsMonkUnarmedSpell()
-	return MonkUnarmedStrike() | MonasticWeaponry() | MonasticArcher() | FlurryOfManeuvers()
+	return HasStringInSpellConditions('BasicUnarmedStrike') | MonasticWeaponry() | MonasticArcher() | FlurryOfManeuvers()
 end
 
-function MonkUnarmedStrike()
-	return SpellId('Target_UnarmedAttack') | SpellId('Target_IronFist') | SpellId('Target_CraneWing') | SpellId('Target_TigerClaw') | SpellId('Target_CobraFang') | SpellId('Target_FallingStone') | SpellId('Target_DragonStance') | SpellId('Target_WolfJaw') | SpellId('Target_ClingingShadowStance') | SpellId('Target_IronSweep') | SpellId('Target_LashingBranch') | SpellId('Target_WindCrash')
+function BasicUnarmedStrike()
+	--return SpellId('Target_UnarmedAttack') | SpellId('Target_IronFist') | SpellId('Target_CraneWing') | SpellId('Target_TigerClaw') | SpellId('Target_CobraFang') | SpellId('Target_FallingStone') | SpellId('Target_DragonStance') | SpellId('Target_WolfJaw') | SpellId('Target_ClingingShadowStance') | SpellId('Target_IronSweep') | SpellId('Target_LashingBranch') | SpellId('Target_WindCrash')
+	return ConditionResult(true)
 end
 
 function MonasticWeaponry()

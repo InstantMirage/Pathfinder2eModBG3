@@ -31,7 +31,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="e0fd05f4-0b0d-4663-beec-21d2b5de7928" />
         <field name="Name" type="NameTableFieldDefinition" value="Dash" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(HasStatus('DASH_STACKED')):ApplyStatus(DASH_STACKED_2,100,1);IF(not HasStatus('DASH_STACKED_2') and HasStatus('DASH')):ApplyStatus(DASH_STACKED,100,1);AI_IGNORE:IF(not HasDashStatus() and (HasStatus('STRIDE') or HasStatus('DEBUG_RESET_MOVE')) ):ApplyStatus(DASH,100,1);AI_IGNORE:IF(not HasDashStatus() and not HasStatus('DEBUG_RESET_MOVE') ):ApplyStatus(STRIDE,100,1);AI_ONLY:IF(not HasStatus('DASH_STACKED_2') and not HasStatus('DASH_STACKED') and not HasStatus('DASH')):ApplyStatus(DASH,100,1);AI_IGNORE:IF(not TurnBased()):ApplyStatus(DEBUG_STRIDE_NONCOMBAT,100,0);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(HasStatus('DASH_STACKED')):ApplyStatus(DASH_STACKED_2,100,1);IF(not HasStatus('DASH_STACKED_2') and HasStatus('DASH')):ApplyStatus(DASH_STACKED,100,1);AI_IGNORE:IF(not HasDashStatus() and (HasStatus('STRIDE') or HasStatus('DEBUG_RESET_MOVE')) and not QuickenedStride() ):ApplyStatus(DASH,100,1);AI_IGNORE:IF(not HasDashStatus() and ( QuickenedStride() or not HasStatus('DEBUG_RESET_MOVE')) ):ApplyStatus(STRIDE,100,1);AI_ONLY:IF(not HasStatus('DASH_STACKED_2') and not HasStatus('DASH_STACKED') and not HasStatus('DASH')):ApplyStatus(DASH,100,1);AI_IGNORE:IF(not TurnBased()):ApplyStatus(DEBUG_STRIDE_NONCOMBAT,100,0);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Self()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Dash" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h406305d5g3ccagbb27g5863g0946ef257b5d" version="2" />
@@ -8285,7 +8285,6 @@
         <field name="UUID" type="IdTableFieldDefinition" value="2bff2b84-93d7-409e-94bb-01ae57fd47eb" />
         <field name="Name" type="NameTableFieldDefinition" value="Disengage_Goblin" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="701b4f79-15bf-4da8-a70b-bfe613bee61f" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="TARGET:ApplyStatus(DISENGAGE,100,1);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfc9729adgde59g5461gd930g21e97bdac335" version="1" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Self() and HasStatus('FLANKED') and not Immobilized()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Disengage" />
