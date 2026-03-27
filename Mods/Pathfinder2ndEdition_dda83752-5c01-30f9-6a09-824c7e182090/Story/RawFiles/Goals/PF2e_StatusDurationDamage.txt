@@ -1,0 +1,71 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_DurationDamageStatus("BLAZING_BOLT_DAMAGE_D6", 6, "Fire");
+
+DB_DurationCount(1);
+DB_DurationCount(2);
+DB_DurationCount(3);
+DB_DurationCount(4);
+DB_DurationCount(5);
+DB_DurationCount(6);
+DB_DurationCount(7);
+DB_DurationCount(8);
+DB_DurationCount(9);
+DB_DurationCount(10);
+DB_DurationCount(11);
+DB_DurationCount(12);
+DB_DurationCount(13);
+DB_DurationCount(14);
+DB_DurationCount(15);
+DB_DurationCount(16);
+KBSECTION
+// Some spells, such as blazing bolt, specify that each target
+// of the spell must be unique. Other spells will place multiple
+// bursts but shoudl effect each entity only once. The obvious
+// way to handle this is for those spells to apply statuses that
+// then deal the damage, but this results in a large number of
+// statuses for each of the possible damage quanities as the
+// spell is upcast. To keep things clean, this script allows
+// a spell to deal damage multiplied by its duration, without
+// running into the issue that all statuses have zero duration
+// at the moment of their application.
+
+// When the status is applied, set up a unique timer to finish next tick.
+IF
+StatusApplied((GUIDSTRING)_Target, (STRING)_Status, (GUIDSTRING)_Cause, _)
+AND
+DB_DurationDamageStatus(_Status, (INTEGER)_RollSize, (STRING)_Type)
+AND
+GetUUID(_Target, (STRING)_UUID)
+AND
+Concatenate(_Status, _UUID, (STRING)_EventString)
+THEN
+DB_DurationDamageDelay(_Target, _Cause, _Status, _RollSize, _Type, _EventString);
+TimerLaunch(_EventString, 30);
+
+// Find the duration in turns, then roll a die of damage for each.
+IF
+TimerFinished((STRING)_EventString)
+AND
+DB_DurationDamageDelay((GUIDSTRING)_Target, (GUIDSTRING)_Cause, (STRING)_Status, (INTEGER)_RollSize, (STRING)_Type, _EventString)
+AND
+GetStatusCurrentLifetime(_Target, _Status, (REAL)_DurationReal)
+AND
+RealToInteger(_DurationReal, (INTEGER)_DurationInteger)
+AND
+IntegerDivide(_DurationInteger, 6, (INTEGER)_Multiplier)
+AND
+DB_DurationCount((INTEGER)_TestNumber)
+AND
+_TestNumber <= _Multiplier
+AND
+Random(_RollSize, (INTEGER)_RollMinusOne)
+AND
+IntegerSum(_RollMinusOne, 1, (INTEGER)_Roll)
+THEN
+ApplyDamage(_Target, _Roll, _Type, _Cause);
+RemoveStatus(_Target, _Status);
+EXITSECTION
+
+ENDEXITSECTION
