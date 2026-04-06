@@ -8377,9 +8377,9 @@
         <field name="SpellProperties" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="30" />
         <field name="DeathType" type="EnumerationTableFieldDefinition" value="Necrotic" enumeration_type_name="Death Type" version="1" />
-        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC(),AdvantageOnFrightened(), DisadvantageOnFrightened())" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(4d8+SpellCastingAbilityModifier,Necrotic,Magical);IF(SaveCrit()):DealDamage((4d8+SpellCastingAbilityModifier)*2,Necrotic,Magical);ApplyStatus(FRIGHTENED,100,2);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((4d8+SpellCastingAbilityModifier)/2,Necrotic,Magical);" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Wisdom, SourceSpellDC(),AdvantageOnFrightened(), DisadvantageOnFrightened())" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(4d8,Necrotic,Magical);IF(SaveCrit()):DealDamage((4d8)*2,Necrotic,Magical);ApplyStatus(FRIGHTENED,100,2);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fear')):DealDamage((4d8)/2,Necrotic,Magical);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6002a181gf58cg7166g33fagc7f124fb91db" version="1" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful;IsEnemySpell" enumeration_type_name="SpellFlagList" version="1" />
         <field name="TargetFloor" type="StringTableFieldDefinition" value="18" />
@@ -8387,8 +8387,8 @@
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value=",,;279d4e05-f7a2-4527-8e43-0774b9624b9b,279d4e05-f7a2-4527-8e43-0774b9624b9b,279d4e05-f7a2-4527-8e43-0774b9624b9b;a56ce253-4279-4c90-b40a-43c373705f8c,6bef5456-a239-481d-bbd5-73fc857b1607,ce6d4198-7190-41bc-8ad9-21a33945bc42;6bf49674-0155-4c60-a825-f4606d59baa6,6bf49674-0155-4c60-a825-f4606d59baa6,6bf49674-0155-4c60-a825-f4606d59baa6;,,;,,;,,;,,;,," />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_Intent_Control" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(4d8,Necrotic)" />
-        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(4d8+SpellCastingAbilityModifier,Necrotic)" />
-        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Constitution" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(4d8,Necrotic)" />
+        <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Wisdom" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="2b5e2346-eb4f-4820-accd-18b2511e48ee" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="6551486e-5407-4732-a64a-84b2e8992cd2" />
@@ -8399,6 +8399,16 @@
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
         <field name="TooltipOnSave" type="StringTableFieldDefinition" value="961753f4-c345-4bc4-b408-1d5b87a5ab0c" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Sheathed" enumeration_type_name="SpellSheathing" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="cf3f1339-4157-47e7-badd-56451846337a" />
+        <field name="Name" type="NameTableFieldDefinition" value="ClawsOfTheGrave_Necromite" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1389c3d3-44bc-4bcf-a526-56eb8701f7b8" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D4AoeCantrip), Necrotic,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D4AoeCantrip))*2, Necrotic,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((LevelMapValue(D4AoeCantrip))/2,Necrotic,Magical);ApplyStatus(SAVED_AGAINST_HOSTILE_SPELL,100,0);" />
+        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D4AoeCantrip), Necrotic)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
