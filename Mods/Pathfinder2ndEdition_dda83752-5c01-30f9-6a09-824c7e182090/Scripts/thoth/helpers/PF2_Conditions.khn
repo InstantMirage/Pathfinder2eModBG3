@@ -801,6 +801,13 @@ function GetBestSkillCheck(dc)
 	return SkillCheck(Skill[preferred_skill],dc)
 end
 
+function WeaponSpec(passive)
+	return IsWeaponAttack() & IsProficientWith(context.Source, GetAttackWeapon()) & HasPassive(passive,context.Source)
+end
+function ThrownWeaponSpec(passive)
+	return SpellTypeIs(SpellType.Throw) & HasWeaponProperty(WeaponProperties.Thrown,context.HitDescription.ThrownObject) & IsProficientWith(context.Source, context.HitDescription.ThrownObject) & HasPassive(passive,context.Source)
+end
+
 function ArmorCheck()
 	local strength10 = HasPassive('Armor_Strength_10',context.Source) & ConditionResult(context.Source.Strength >= 10)
 	local strength12 = HasPassive('Armor_Strength_12',context.Source) & ConditionResult(context.Source.Strength >= 12)
