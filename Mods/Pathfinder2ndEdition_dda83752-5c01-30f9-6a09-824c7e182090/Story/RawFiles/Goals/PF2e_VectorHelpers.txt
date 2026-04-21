@@ -1,6 +1,24 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
+// Useful for random direction effects.
+DB_RandomVectors(4.0, 0.0);
+DB_RandomVectors(3.7, 1.5);
+DB_RandomVectors(2.8, 2.8);
+DB_RandomVectors(1.5, 3.7);
+DB_RandomVectors(-4.0, 0.0);
+DB_RandomVectors(-3.7, 1.5);
+DB_RandomVectors(-2.8, 2.8);
+DB_RandomVectors(-1.5, 3.7);
+DB_RandomVectors(4.0, -0.0);
+DB_RandomVectors(3.7, -1.5);
+DB_RandomVectors(2.8, -2.8);
+DB_RandomVectors(1.5, -3.7);
+DB_RandomVectors(-4.0, -0.0);
+DB_RandomVectors(-3.7, -1.5);
+DB_RandomVectors(-2.8, -2.8);
+DB_RandomVectors(-1.5, -3.7);
+
 // I heartily recommend adding any additional init code
 // before this DB, as it is 6000 lines long.
 DB_SineValue(-2700, 1.000000);
@@ -6467,6 +6485,97 @@ AND
 DB_QRYRTN_Cosine((REAL)_Z)
 THEN
 DB_QRYRTN_UnitVectorAtAngle(_X, _Z);
+
+// Test if 2D line A->B intersects with C->D
+// Note that this does not return the point of
+// intersection, in large part because to do so
+// comes with potential divide by zero issues.
+QRY
+QRY_LinesIntersect((REAL)_AX, (REAL)_AZ, (REAL)_BX, (REAL)_BZ, (REAL)_CX, (REAL)_CZ, (REAL)_DX, (REAL)_DZ)
+AND
+DB_QRYRTN_LinesIntersect((INTEGER)_Intersects)
+THEN
+NOT DB_QRYRTN_LinesIntersect(_Intersects);
+
+QRY
+QRY_LinesIntersect((REAL)_AX, (REAL)_AZ, (REAL)_BX, (REAL)_BZ, (REAL)_CX, (REAL)_CZ, (REAL)_DX, (REAL)_DZ)
+AND
+RealSubtract(_BX, _AX, (REAL)_dX0)
+AND
+RealSubtract(_DX, _CX, (REAL)_dX1)
+AND
+RealSubtract(_BZ, _AZ, (REAL)_dZ0)
+AND
+RealSubtract(_DZ, _CZ, (REAL)_dZ1)
+AND
+RealSubtract(_DX, _AX, (REAL)_dXDA)
+AND
+RealSubtract(_DZ, _AZ, (REAL)_dZDA)
+AND
+RealSubtract(_DX, _BX, (REAL)_dXDB)
+AND
+RealSubtract(_DZ, _BZ, (REAL)_dZDB)
+AND
+RealSubtract(_BX, _CX, (REAL)_dXBC)
+AND
+RealSubtract(_BZ, _CZ, (REAL)_dZBC)
+AND
+RealSubtract(_BX, _DX, (REAL)_dXBD)
+AND
+RealSubtract(_BZ, _DZ, (REAL)_dZBD)
+AND
+RealProduct(_dZ1, _dXDA, (REAL)_p00)
+AND
+RealProduct(_dZ1, _dXDB, (REAL)_p10)
+AND
+RealProduct(_dX1, _dZDA, (REAL)_p01)
+AND
+RealProduct(_dX1, _dZDB, (REAL)_p11)
+AND
+RealProduct(_dZ0, _dXBC, (REAL)_p20)
+AND
+RealProduct(_dZ0, _dXBD, (REAL)_p30)
+AND
+RealProduct(_dX0, _dZBC, (REAL)_p21)
+AND
+RealProduct(_dX0, _dZBD, (REAL)_p31)
+AND
+RealSubtract(_p00, _p01, (REAL)_p0)
+AND
+RealSubtract(_p10, _p11, (REAL)_p1)
+AND
+RealSubtract(_p20, _p21, (REAL)_p2)
+AND
+RealSubtract(_p30, _p31, (REAL)_p3)
+AND
+RealProduct(_p0, _p1, (REAL)_c0)
+AND
+RealProduct(_p2, _p3, (REAL)_c1)
+THEN
+PROC_LinesIntersectCheckSigns(_c0, _c1);
+
+PROC
+PROC_LinesIntersectCheckSigns((REAL)_c0, (REAL)_c1)
+AND
+NOT _c0 > 0.0
+AND
+NOT _c1 > 0.0
+THEN
+DB_QRYRTN_LinesIntersect(1);
+
+PROC
+PROC_LinesIntersectCheckSigns((REAL)_c0, (REAL)_c1)
+AND
+_c0 > 0.0
+THEN
+DB_QRYRTN_LinesIntersect(0);
+
+PROC
+PROC_LinesIntersectCheckSigns((REAL)_c0, (REAL)_c1)
+AND
+_c1 > 0.0
+THEN
+DB_QRYRTN_LinesIntersect(0);
 //END_REGION
 EXITSECTION
 

@@ -26,7 +26,14 @@ AND
 DB_DebugEncounterParticipants((GUIDSTRING)_Player, _Entity)
 THEN
 RequestAutoLevel((CHARACTER)_Entity);
-SetRelationTemporaryHostile((CHARACTER)_Entity, (CHARACTER)_Player);
+
+IF
+EntityEvent((GUIDSTRING)_Entity, "DebugEncounterSpawnEvent")
+AND
+DB_DebugEncounterParticipants((GUIDSTRING)_Player, _Entity)
+THEN
+NOT DB_DebugEncounterParticipants(_Player, _Entity);
+SetFaction(_Entity, (FACTION)IntellectDevourer_d13691ff-444f-5f07-2459-6a0db64881eb);
 EXITSECTION
 
 ENDEXITSECTION
