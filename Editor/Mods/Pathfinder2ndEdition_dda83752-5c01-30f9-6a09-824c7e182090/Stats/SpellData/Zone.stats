@@ -26,7 +26,7 @@
         <field name="Shape" type="StringTableFieldDefinition" value="Cone" />
         <field name="Range" type="IntegerTableFieldDefinition" value="2" />
         <field name="Angle" type="IntegerTableFieldDefinition" value="120" />
-        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;Flourish:1;" />
         <field name="WeaponType" type="EnumerationListTableFieldDefinition" value="Melee" enumeration_type_name="WeaponFlags" version="1" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="79e47203-3855-4837-8673-ddb708d86962,,;711781fb-5f5a-4b9a-bd8b-e0b4ff9dec46,,;a17a7bf3-7381-4191-83f4-304d37c738e0,,;1172e0b6-08d1-4f28-a651-a01681b84ee6,,;863fabe7-d990-42a3-8961-7898c207bcb1,,;0002afee-5ad9-4109-ae64-9b2571601226,,;0b07883a-08b8-43b6-ac18-84dc9e84ff50,,;,,;,," />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Sweep" />
@@ -4519,11 +4519,11 @@
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(2d12+UnarmedMeleeAbilityModifier,Slashing);DealDamage(3d6,Necrotic);IF(not SavingThrow(Ability.Constitution, 18)):Force(4);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Dead() and not Self()" />
-        <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_Intent_Damage" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Cleave_New" />
         <field name="Range" type="IntegerTableFieldDefinition" value="6" />
         <field name="WeaponType" type="EnumerationListTableFieldDefinition" value="Melee" enumeration_type_name="WeaponFlags" version="1" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IgnoreVisionBlock;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="(HasStatus('SG_Rage') and not HasStatus('MAG_SCYTHE_USED', GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand, context.Source))) or IsNotHumanoid(context.Source)" />
         <field name="Angle" type="IntegerTableFieldDefinition" value="120" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="8b8bb757-21ce-4e02-a2f3-97d55cf2f90b,,;6606c30b-be1c-4f17-ae6b-1a591c80b18c,,;f4ac302b-1569-404f-bd52-1fe443e265df,,;e8a5c57f-855b-4227-acaa-11e8ce8d7d64,,;7bb52cd4-0b1c-4926-9165-fa92b75876a3,,;2b81c18b-9698-4262-a623-932c2bb1296d,,;0b07883a-08b8-43b6-ac18-84dc9e84ff50,,;,,;,," />
         <field name="SpellActionType" type="EnumerationTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="SpellActionType" version="1" />
@@ -4541,6 +4541,7 @@
         <field name="CastSound" type="StringTableFieldDefinition" value="Vocal_Component_Stop" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf1ff4555g1b0egd29dg54d2g46ebd2bc154d" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(3)" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ExecuteWeaponFunctors(MainHand);GROUND:IF(not IsNotHumanoid(context.Source)):ApplyEquipmentStatus(SELF,MainHand,MAG_SCYTHE_USED,100,-1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

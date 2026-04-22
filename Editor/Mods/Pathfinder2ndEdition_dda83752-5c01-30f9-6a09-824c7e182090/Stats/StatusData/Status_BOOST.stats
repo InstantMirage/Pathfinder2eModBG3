@@ -3183,7 +3183,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="6bc84cb7-f8c9-4718-b501-11b3a3db63e8" />
         <field name="Name" type="NameTableFieldDefinition" value="GARROTE_TARGET" />
-        <field name="Using" type="BaseClassTableFieldDefinition" value="8aac9828-e428-4431-bd53-2f8a4e02d28f" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="aecb96c4-fc8a-4cee-a164-e7b691cd3113" />
         <field name="Boosts" type="StringTableFieldDefinition" value="BlockVerbalComponent();DialogueBlock();UnlockSpell(Target_EscapeGrapple_Container);" />
       </fields>
     </stat_object>
@@ -4154,7 +4154,7 @@
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Combat()):ApplyStatus(RAGE_HP_COOLDOWN,100,10);RemoveStatus(RAGE_MUTE);RemoveStatus(RAGE_STOP_REMOVE);RemoveStatus(RAGE_NO_HEAVY_ARMOUR_VFX);IF(RemoveCause(StatusRemoveCause.TimeOut) or RemoveCause(StatusRemoveCause.Condition)):ApplyStatus(RAGE_ENDED,100,1);IF(RemoveCause(StatusRemoveCause.TimeOut) or RemoveCause(StatusRemoveCause.Condition)):UseSpell(Shout_EndRage,true,true,true)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded;OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
-        <field name="Passives" type="StringTableFieldDefinition" value="Rage_Rage_Boosts" />
+        <field name="Passives" type="StringTableFieldDefinition" value="Rage_Rage_Boosts;Rage_Rage_Unarmed;Rage_Rage_Boosts_Thrown;" />
         <field name="StackId" type="StringTableFieldDefinition" value="RAGE" />
         <field name="SoundLoop" type="StringTableFieldDefinition" value="Spell_Status_Rage" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(RageDamage)" />
@@ -4249,7 +4249,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="RAGE_FURY" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="855fb809-8a50-44a1-98fc-911b67ed0f33" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(FuryRageDamage)" />
-        <field name="Passives" type="StringTableFieldDefinition" value="FuryRageBoosts" />
+        <field name="Passives" type="StringTableFieldDefinition" value="FuryRageBoosts;FuryRageBoosts_Unarmed;FuryRageBoosts_Thrown;" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="f4a46a83-330f-4725-afdb-da710283d888" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(VFX_RAGE);Attribute(ForceMainhandAlternativeEquipBones);IF(SpellId('Target_FuriousFinish')):CharacterWeaponDamage(RAGE_FURY.Duration);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h20c67a2ag2f30g2913ge249gc7989d26c230" version="1" />
@@ -4623,6 +4623,17 @@
         <field name="UUID" type="IdTableFieldDefinition" value="5b3b1535-3b80-4db3-ab97-aa00d051e1f6" />
         <field name="Name" type="NameTableFieldDefinition" value="RAGING_RESIST_CLD" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="663bf12f-7007-4a3a-aab2-85c1748fc253" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c76309af-1b2b-4e49-9130-67b1a15a2382" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_SCYTHE_USED" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1dab48cc-0a2e-45eb-b8a1-cfe98f9b7966" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h214e8cbcgc00egd873gd212g23d2f42451b6" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="haab95d38gc3e3g0fc5gfb74g6dfc05948c12" version="2" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Combat()" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -12965,6 +12976,14 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="86153e48-5f73-42b9-933a-1b20bc595435" />
+        <field name="Name" type="NameTableFieldDefinition" value="SCL_SHADOW_CURSE_UNDEAD" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1f8ff002-0bae-4124-aff1-31f7de12c840" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="BlockTravel();Resistance(Necrotic,Immune);ActionResourceOverride(ActionPoint,2,0);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="bac04478-376b-47ee-bea9-8a163961b751" />
         <field name="Name" type="NameTableFieldDefinition" value="ForcedCritImmune" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="3caa45e2-f6b1-4e70-a2f1-d8e04520e5d9" />
@@ -14522,6 +14541,43 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2c777184-b19d-4d25-b463-9e21334b4358" />
+        <field name="Name" type="NameTableFieldDefinition" value="BANITES_IRONCONSUL_HARD" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a3b3ca56-a24d-4778-9d57-5aa77e228d06" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_GoadingAttack);ActionResource(SuperiorityDie,5,0);UnlockSpell(Shout_DuelingStance);" />
+        <field name="Passives" type="StringTableFieldDefinition" value="AttackOfOpportunity;NPC_RunicWeapon;FearsomeBrute;YoureNext;" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="904a806d-ca34-4563-816c-b9656f82554e" />
+        <field name="Name" type="NameTableFieldDefinition" value="BANITES_FIST_HARD" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="f79c2eae-91c0-432a-8652-892d5f4bbb52" />
+        <field name="Passives" type="StringTableFieldDefinition" value="FearsomeBrute;" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a7b0094c-49f7-4108-be75-aab826919c66" />
+        <field name="Name" type="NameTableFieldDefinition" value="BHAALCULTISTS_DEATHSHEAD_HARD" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="cd84f6bc-4219-4727-9e0d-036afdbd1e78" />
+        <field name="Passives" type="StringTableFieldDefinition" value="YoureNext;" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b594a8d2-9002-4913-ad88-e3f9ebb7ca0a" />
+        <field name="Name" type="NameTableFieldDefinition" value="LEGENDARY_RESISTANCE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="ee9188ba-e237-43bd-8fe0-919a0428426f" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Removed, Incapacitation trait already does this" />
+        <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Passives" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnApply;OnTurn" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="96d3c99e-c92d-4944-b4ff-99b4027e0d6a" />
         <field name="Name" type="NameTableFieldDefinition" value="MUDMEPHIT_HARD" />
         <field name="Boosts" type="StringTableFieldDefinition" value="AC(3);IncreaseMaxHP(5)" />
@@ -15693,7 +15749,6 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="AC(-2);RollBonus(SavingThrow,0-2,Dexterity);ActionResourceBlock(ReactionActionPoint);ActionResourceMultiplier(Movement,50,0);MovementSpeedLimit(Walk);Tag(EXTRA_ATTACK_BLOCKED);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="SavingThrow(Ability.Wisdom, SourceSpellDC())" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
-        <field name="Passives" type="StringTableFieldDefinition" value="Slow_ActionPoint;Slow_Casting" />
         <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="WEAK" enumeration_type_name="SoundVocalType" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="1e34754f-17e3-4aeb-9db9-a34f682c1c45" />
         <field name="ManagedStatusEffectType" type="EnumerationTableFieldDefinition" value="Negative" enumeration_type_name="ManagedStatusEffectType" version="1" />
