@@ -20594,13 +20594,6 @@
         <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 1,,,,GEYSER_AURA);GROUND:CreateSurface(4,10,Water);" />
       </fields>
     </stat_object>
-    <stat_object color="#FFFFA500" is_substat="false">
-      <fields>
-        <field name="UUID" type="IdTableFieldDefinition" value="28e29209-0eb7-4455-bcd2-59d7e2948841" />
-        <field name="Name" type="NameTableFieldDefinition" value="NEEDS VISUALS" />
-        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="554a18f7-952e-494a-b301-7702a85d4bc9,,;,,;3e441d3f-11f9-432d-877c-c0ba4d92c74a,,;8b7ae969-2a04-4720-9685-3bde54c18ffe,,;22dfbbf4-f417-4c84-b39e-2039315961e6,,;,,;1715b877-4512-472e-9bd0-fd568a112e90,,;,,;,," />
-      </fields>
-    </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="dcc764dc-bd6c-47b1-b747-c5fb2bffd966" />
@@ -20609,9 +20602,9 @@
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Transmutation" enumeration_type_name="SpellSchool" version="1" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(10d6,Piercing,Magical);IF(not SaveCrit()):DealDamage((10d6)*2,Piercing,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((10d6)/2,Piercing,Magical);" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Dead() and not Tagged('UNDEAD') and not Tagged('CONSTRUCT') and ConcentrateSpell();" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="TARGET:IF(not SaveCrit()):DealDamage(10d6,Piercing,Magical);TARGET:IF(SaveCrit()):DealDamage((10d6)*2,Piercing,Magical);TARGET:ApplyStatus(GRISLY_GROWTHS,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="TARGET:IF(not SaveCritMiss('Fort')):DealDamage((10d6)/2,Piercing,Magical);TARGET:IF(not SaveCritMiss('Fort')):ApplyStatus(GRISLY_GROWTHS,100,1);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Dead() and not Tagged('OOZE') and ConcentrateSpell();" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha0eba4cbge77ag61c3g9a4fg81849e72e850" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha8da42cdg5ed7g90d6g48d7g174378c07a65" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(10d6,Piercing)" />
@@ -20621,11 +20614,15 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:5" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="dd86aa43-8189-4d9f-9a5c-454b5fe4a197,,;,,;7abe77ed-9c77-4eac-872c-5b8caed070b6,,;cb171bda-f065-4520-b470-e447f678ba1f,,;cc5b0caf-3ed1-4711-a50d-11dc3f1fdc6a,,;,,;1715b877-4512-472e-9bd0-fd568a112e90,,;499b7945-9eff-40a2-9911-73b8963108e4,,;1d3a29f0-9409-462e-81cd-3f24944f63ca,," />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Damage" enumeration_type_name="VerbalIntent" version="1" />
-        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent;IsSpell;IsHarmful;HasSomaticComponent" enumeration_type_name="SpellFlagList" version="1" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent;IsSpell;IsHarmful;HasSomaticComponent;CannotTargetTerrain;CannotTargetItems" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellPrepareCost" type="IntegerTableFieldDefinition" value="1" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Piercing" enumeration_type_name="Damage Type" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_SpreadingSpores" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
+        <field name="AreaRadius" type="IntegerTableFieldDefinition" value="12" />
+        <field name="AoEConditions" type="StringTableFieldDefinition" value="Character() and MentalSpell() and VisualSpell();" />
+        <field name="TooltipUpcastDescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d6,Piercing)" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="AOE:ApplyStatus(GRISLY_GROWTHS_CHECK,100,0);TARGET:ApplyStatus(GRISLY_GROWTHS_CHECK,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -20633,12 +20630,19 @@
         <field name="UUID" type="IdTableFieldDefinition" value="635d5e66-a46a-4786-8090-23919f4f50d7" />
         <field name="Name" type="NameTableFieldDefinition" value="GrislyGrowths_Rank6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="dcc764dc-bd6c-47b1-b747-c5fb2bffd966" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(12d6,Piercing,Magical);IF(not SaveCrit()):DealDamage((12d6)*2,Piercing,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage((12d6)/2,Piercing,Magical);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="TARGET:IF(not SaveCrit()):DealDamage(12d6,Piercing,Magical);TARGET:IF(SaveCrit()):DealDamage((12d6)*2,Piercing,Magical);TARGET:ApplyStatus(GRISLY_GROWTHS,100,1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="TARGET:IF(not SaveCritMiss('Fort')):DealDamage((12d6)/2,Piercing,Magical);TARGET:IF(not SaveCritMiss('Fort')):ApplyStatus(GRISLY_GROWTHS,100,1);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(12d6,Piercing)" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:6" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_GrislyGrowths_Rank5" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="6" />
+      </fields>
+    </stat_object>
+    <stat_object color="#FFFFA500" is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="28e29209-0eb7-4455-bcd2-59d7e2948841" />
+        <field name="Name" type="NameTableFieldDefinition" value="NEEDS VISUALS" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="554a18f7-952e-494a-b301-7702a85d4bc9,,;,,;3e441d3f-11f9-432d-877c-c0ba4d92c74a,,;8b7ae969-2a04-4720-9685-3bde54c18ffe,,;22dfbbf4-f417-4c84-b39e-2039315961e6,,;,,;1715b877-4512-472e-9bd0-fd568a112e90,,;,,;,," />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -26079,7 +26083,7 @@
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_HideousLaughter" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="4" />
         <field name="Level" type="IntegerTableFieldDefinition" value="4" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_4,100,10);DealDamage(8d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_4,100,10);DealDamage(8d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED_2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Will')):DealDamage(8d4,Psychic,Magical,NonLethal);" />
       </fields>
     </stat_object>
@@ -26092,7 +26096,7 @@
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_HideousLaughter" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="5" />
         <field name="Level" type="IntegerTableFieldDefinition" value="5" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_5,100,10);DealDamage(10d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_5,100,10);DealDamage(10d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED_2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Will')):DealDamage(10d4,Psychic,Magical,NonLethal);" />
       </fields>
     </stat_object>
@@ -26105,7 +26109,7 @@
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_HideousLaughter" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="6" />
         <field name="Level" type="IntegerTableFieldDefinition" value="6" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_6,100,10);DealDamage(12d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_6,100,10);DealDamage(12d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED_2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Will')):DealDamage(12d4,Psychic,Magical,NonLethal);" />
       </fields>
     </stat_object>
@@ -26116,7 +26120,7 @@
         <field name="Level" type="IntegerTableFieldDefinition" value="1" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="12" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Wisdom, SourceSpellDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_1,100,10);DealDamage(2d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_1,100,10);DealDamage(2d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED_2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Enchantment_Tasha'sHideousLaughter" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf69bfe32gcd5dgd5ffg2be8g0f1de787a31c" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8c480dd9g17a1g6acag5accg4d9ef184347a" version="2" />
@@ -26157,7 +26161,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h68014303g782fg2dc2gad9egd9d1a254e785" version="2" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc7ee8496g301dgab50g7d11ge57d2f6b407b" version="2" />
         <field name="Level" type="IntegerTableFieldDefinition" value="2" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_2,100,10);DealDamage(4d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_2,100,10);DealDamage(4d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED_2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Will')):DealDamage(4d4,Psychic,Magical,NonLethal);" />
       </fields>
     </stat_object>
@@ -26172,7 +26176,7 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h36efe758gcbf6g0528gaa8dga0b545b92506" version="2" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h458eedcbgff38g2222g2e34ge4311f5432db" version="2" />
         <field name="Level" type="IntegerTableFieldDefinition" value="3" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_3,100,10);DealDamage(6d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="ApplyStatus(PhantomPainStatus_3,100,10);DealDamage(6d4,Psychic,Magical,NonLethal);IF(not SaveCrit()):ApplyStatus(SICKENED,100,-1);IF(SaveCrit()):ApplyStatus(SICKENED_2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Will')):DealDamage(6d4,Psychic,Magical,NonLethal);" />
       </fields>
     </stat_object>

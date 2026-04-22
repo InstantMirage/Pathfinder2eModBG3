@@ -1,0 +1,56 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// We need to start a timer to trigger the secondary effect,
+// as otherwise the engine won't be able to detect the result
+// of the primary save.
+IF
+StatusApplied((GUIDSTRING)_Target, "GRISLY_GROWTHS", _, _)
+THEN
+TimerLaunch("GrislyGrowthsSequence", 100);
+
+IF
+StatusApplied((GUIDSTRING)_Target, "GRISLY_GROWTHS_SAVE", _, _)
+THEN
+DB_GrislyGrowthsSave(_Target);
+
+IF
+StatusApplied((GUIDSTRING)_Target, "GRISLY_GROWTHS_FAIL", (GUIDSTRING)_Cause, _)
+THEN
+DB_GrislyGrowthsFail(_Target, _Cause);
+
+IF
+StatusApplied((GUIDSTRING)_Target, "GRISLY_GROWTHS_CRIT", (GUIDSTRING)_Cause, _)
+THEN
+DB_GrislyGrowthsCrit(_Target, _Cause);
+
+IF
+TimerFinished("GrislyGrowthsSequence")
+AND
+DB_GrislyGrowthsSave((GUIDSTRING)_Target)
+THEN
+NOT DB_GrislyGrowthsSave(_Target);
+ApplyStatus(_Target, "GRISLY_GROWTHS_IMMUNE", -1.0);
+
+IF
+TimerFinished("GrislyGrowthsSequence")
+AND
+DB_GrislyGrowthsFail((GUIDSTRING)_Target, (GUIDSTRING)_Cause)
+THEN
+ApplyStatus(_Target, "SICKENED", -1.0, 0, _Cause);
+NOT DB_GrislyGrowthsFail(_Target, _Cause);
+ApplyStatus(_Target, "GRISLY_GROWTHS_IMMUNE", -1.0);
+
+IF
+TimerFinished("GrislyGrowthsSequence")
+AND
+DB_GrislyGrowthsCrit((GUIDSTRING)_Target, (GUIDSTRING)_Cause)
+THEN
+ApplyStatus(_Target, "SICKENED_2", -1.0, 0, _Cause);
+NOT DB_GrislyGrowthsCrit(_Target, _Cause);
+ApplyStatus(_Target, "GRISLY_GROWTHS_IMMUNE", -1.0);
+EXITSECTION
+
+ENDEXITSECTION
