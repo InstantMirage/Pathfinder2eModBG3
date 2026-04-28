@@ -1,0 +1,459 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_DCTrackingStatuses("CHECK_DCS");
+DB_DCTrackingStatuses("DEX_TRACKER");
+DB_DCTrackingStatuses("STR_TRACKER");
+DB_DCTrackingStatuses("UNARMED_TRACKER");
+DB_DCTrackingStatuses("SPELL_DC_TRACKER");
+DB_DCTrackingStatuses("AC_TRACKER");
+DB_DCTrackingStatuses("TO_HIT_TRACKER");
+
+DB_DCTrackingArmorStatuses("ARMOR_11_4", 11.0, 4.0);
+DB_DCTrackingArmorStatuses("ARMOR_11_3", 11.0, 3.0);
+DB_DCTrackingArmorStatuses("ARMOR_12_3", 12.0, 3.0);
+DB_DCTrackingArmorStatuses("ARMOR_13_2", 13.0, 2.0);
+DB_DCTrackingArmorStatuses("ARMOR_13_0", 13.0, 0.0);
+DB_DCTrackingArmorStatuses("ARMOR_14_1", 14.0, 1.0);
+DB_DCTrackingArmorStatuses("ARMOR_15_1", 15.0, 1.0);
+DB_DCTrackingArmorStatuses("ARMOR_15_0", 15.0, 0.0);
+DB_DCTrackingArmorStatuses("ARMOR_16_0", 16.0, 0.0);
+
+DB_DCTrackingACStatuses("CircumstanceBonus1AC", 1.0);
+DB_DCTrackingACStatuses("CircumstanceBonus2AC", 2.0);
+DB_DCTrackingACStatuses("CircumstancePenalty1AC", -1.0);
+DB_DCTrackingACStatuses("CircumstancePenalty2AC", -2.0);
+DB_DCTrackingACStatuses("ItemBonus1AC", 1.0);
+DB_DCTrackingACStatuses("ItemBonus2AC", 2.0);
+DB_DCTrackingACStatuses("StatusBonus1AC", 1.0);
+DB_DCTrackingACStatuses("StatusBonus2AC", 2.0);
+DB_DCTrackingACStatuses("StatusPenalty1AC", -1.0);
+DB_DCTrackingACStatuses("StatusPenalty2AC", -2.0);
+DB_DCTrackingACStatuses("StatusPenalty3AC", -3.0);
+// Note that these statuses will only ever be applied to
+// characters with the base passives, so no check for
+// those passives is necessary.
+DB_DCTrackingACStatuses("MountainStrongholdBonus", 1.0);
+DB_DCTrackingACStatuses("ArmorInEarthExtra", 1.0);
+
+DB_DCTrackingACNPCPassives("NPCBoostAC1", 1.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC2", 2.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC3", 3.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC4", 4.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC5", 5.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC6", 6.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC7", 7.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC8", 8.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC9", 9.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC10", 10.0);
+DB_DCTrackingACNPCPassives("NPCBoostAC11", 11.0);
+DB_DCTrackingACNPCPassives("NPCPenAC1", -1.0);
+DB_DCTrackingACNPCPassives("NPCPenAC2", -2.0);
+DB_DCTrackingACNPCPassives("NPCPenAC3", -3.0);
+DB_DCTrackingACNPCPassives("NPCPenAC4", -4.0);
+DB_DCTrackingACNPCPassives("NPCPenAC5", -5.0);
+
+DB_DCTrackingACOverrideStatuses("MountainStanceStatus", 14.0, 1);
+DB_DCTrackingACOverrideStatuses("ArmorInEarthStatus", 15.0, 1);
+DB_DCTrackingACOverrideStatuses("HardwoodArmorStatus", 15.0, 1);
+DB_DCTrackingACOverrideStatuses("MetalCarapaceStatus", 15.0, 1);
+DB_DCTrackingACOverrideStatuses("AnimalSkinBonus", 14.0, 1);
+
+DB_DCTrackingACOverridePassives("PestFormBoosts", 15.0, 0);
+DB_DCTrackingACOverridePassives("AnimalFormBoosts", 16.0, 0);
+KBSECTION
+// There are some contexts where it is difficult to get the DC
+// of the source character. This is particularly true in Osiris,
+// where we have no access to ability scores directly, nor
+// spellcasting DCs. We can also use similar techniques to
+// calculate AC and keep it tracked as a status on each character.
+
+// First, whenever any status that is not a tracking status is
+// applied or removed from a character, we want to recheck that
+// character's DCs. This requires a delay for the boosts from
+// those statuses to resolve.
+IF
+StatusApplied((GUIDSTRING)_Character, (STRING)_Status, _, _)
+AND
+IsCharacter(_Character, 1)
+AND
+NOT DB_DCTrackingStatuses(_Status)
+THEN
+RealtimeObjectTimerLaunch(_Character, "DC_Tracker_Check_Event", 30);
+
+IF
+StatusRemoved((GUIDSTRING)_Character, (STRING)_Status, _, _)
+AND
+IsCharacter(_Character, 1)
+AND
+NOT DB_DCTrackingStatuses(_Status)
+THEN
+RealtimeObjectTimerLaunch(_Character, "DC_Tracker_Check_Event", 30);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Character, "DC_Tracker_Check_Event")
+THEN
+ApplyStatus(_Character, "CHECK_DCS", 0.0);
+
+// The check status will cause a number of statuses to be applied
+// to the character, with durations equal to the appropriate stat.
+// For many of these, no further action is necessary.
+
+//REGION Efficient Applying
+// The proc for testing these stats are quite regular, so it is
+// worth trying to be more efficient and only applying statuses
+// if the value has actually changed.
+PROC
+PROC_DCTrackingApplyStatus((GUIDSTRING)_Character, (STRING)_Status, (REAL)_Value)
+AND
+HasActiveStatus(_Character, _Status, 1)
+AND
+GetStatusCurrentLifetime(_Character, _Status, (REAL)_OldValue)
+AND
+_Value != _OldValue
+THEN
+ApplyStatus(_Character, _Status, _Value);
+
+PROC
+PROC_DCTrackingApplyStatus((GUIDSTRING)_Character, (STRING)_Status, (REAL)_Value)
+AND
+HasActiveStatus(_Character, _Status, 0)
+THEN
+ApplyStatus(_Character, _Status, _Value);
+
+//END_REGION
+
+//REGION AC
+// To calculate AC, we need to check a number of things. We start
+// by grabbing our character's dexterity ability modifier.
+IF
+StatusApplied((GUIDSTRING)_Character, "DEX_TRACKER", _, _)
+AND
+GetStatusCurrentLifetime(_Character, "DEX_TRACKER", (REAL)_DexModSecondsPlusTen)
+AND
+RealSubtract(_DexModSecondsPlusTen, 60.0, (REAL)_DexModSeconds)
+AND
+RealDivide(_DexModSeconds, 6.0, (REAL)_DexMod)
+AND
+DB_DCTrackingArmorStatuses((STRING)_Status, (REAL)_ArmorAC, (REAL)_DexCap)
+AND
+HasActiveStatus(_Character, _Status, 1)
+AND
+RealMin(_DexCap, _DexMod, (REAL)_DexArmorBonus)
+AND
+RealSum(_ArmorAC, _DexArmorBonus, (REAL)_BaseAC)
+THEN
+DB_RTN_ACBonusCheck(_Character, _BaseAC);
+PROC_ACOverridePassiveCheck(_Character, _BaseAC);
+PROC_ACOverrideStatusCheck(_Character, _BaseAC);
+PROC_ACStatusCheck(_Character);
+PROC_ACProficiencyCheck(_Character);
+PROC_ACNPCPassivesCheck(_Character);
+PROC_ACTrackerApply(_Character);
+DB_DCTrackingUnarmoredBlock(_Character);
+
+// For characters not currently wearing armor.
+IF
+StatusApplied((GUIDSTRING)_Character, "DEX_TRACKER", _, _)
+AND
+GetStatusCurrentLifetime(_Character, "DEX_TRACKER", (REAL)_DexModSecondsPlusTen)
+AND
+RealSubtract(_DexModSecondsPlusTen, 60.0, (REAL)_DexModSeconds)
+AND
+RealDivide(_DexModSeconds, 6.0, (REAL)_DexMod)
+AND
+NOT DB_DCTrackingUnarmoredBlock(_Character)
+AND
+RealSum(10.0, _DexMod, (REAL)_BaseAC)
+THEN
+DB_RTN_ACBonusCheck(_Character, _BaseAC);
+PROC_ACOverridePassiveCheck(_Character, _BaseAC);
+PROC_ACOverrideStatusCheck(_Character, _BaseAC);
+PROC_ACStatusCheck(_Character);
+PROC_ACUnarmoredProficiencyCheck(_Character);
+PROC_ACNPCPassivesCheck(_Character);
+PROC_ACTrackerApply(_Character);
+
+// Flag cleanup
+IF
+StatusApplied((GUIDSTRING)_Character, "DEX_TRACKER", _, _)
+AND
+DB_DCTrackingUnarmoredBlock(_Character)
+THEN
+NOT DB_DCTrackingUnarmoredBlock(_Character);
+
+// Check if the character has a passive that gives an AC override.
+// Note that we pass the base AC here as separate passives will
+// override each other.
+PROC
+PROC_ACOverridePassiveCheck((GUIDSTRING)_Character, (REAL)_BaseAC)
+AND
+DB_DCTrackingACOverridePassives((STRING)_Passive, (REAL)_NewBase, (INTEGER)_BonusesEnabled)
+AND
+HasPassive(_Character, _Passive, 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_OldBase)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _OldBase);
+DB_RTN_ACBonusCheck(_Character, _NewBase);
+DB_ACBonusDisabled(_Character, _BonusesEnabled);
+
+// Check if the character has a status that gives an AC override
+PROC
+PROC_ACOverrideStatusCheck((GUIDSTRING)_Character, (REAL)_BaseAC)
+AND
+DB_DCTrackingACOverrideStatuses((STRING)_Status, (REAL)_NewBase, (INTEGER)_BonusesEnabled)
+AND
+HasActiveStatus(_Character, _Status, 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_OldBase)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _OldBase);
+DB_RTN_ACBonusCheck(_Character, _NewBase);
+DB_ACBonusDisabled(_Character, _BonusesEnabled);
+
+// For each relevant stacking status, add or remove AC
+PROC
+PROC_ACStatusCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+DB_DCTrackingACStatuses((STRING)_Status, (REAL)_Bonus)
+AND
+HasActiveStatus(_Character, _Status, 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, _Bonus, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// If the character is proficient with their equipped armor, +2
+PROC
+PROC_ACProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+GetEquippedItem((CHARACTER)_Character, "Breast", (ITEM)_Armor)
+AND
+IsProficientWith(_Character, _Armor, 1)
+AND
+DB_RTN_ACBonusCheck((GUIDSTRING)_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// If the character is proficient with their equipped armor and
+// has expertise, +2 again.
+PROC
+PROC_ACProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+GetEquippedItem((CHARACTER)_Character, "Breast", (ITEM)_Armor)
+AND
+IsProficientWith(_Character, _Armor, 1)
+AND
+HasPassive((GUIDSTRING)_Character, "ACExpert", 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// If the character is proficient with their equipped armor and
+// has mastery, +2 again.
+PROC
+PROC_ACProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+GetEquippedItem((CHARACTER)_Character, "Breast", (ITEM)_Armor)
+AND
+IsProficientWith(_Character, _Armor, 1)
+AND
+HasPassive((GUIDSTRING)_Character, "ACMaster", 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// If the character is proficient with their equipped armor and
+// has legend, +2 again.
+PROC
+PROC_ACProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+GetEquippedItem((CHARACTER)_Character, "Breast", (ITEM)_Armor)
+AND
+IsProficientWith(_Character, _Armor, 1)
+AND
+HasPassive((GUIDSTRING)_Character, "ACLegend", 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// If the character is unarmored, +2
+PROC
+PROC_ACUnarmoredProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+DB_RTN_ACBonusCheck((GUIDSTRING)_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// If the character is unarmored and has expertise, +2 again.
+PROC
+PROC_ACUnarmoredProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+HasPassive((GUIDSTRING)_Character, "ACExpert", 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// If the character is unarmored and has mastery, +2 again.
+PROC
+PROC_ACUnarmoredProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+HasPassive((GUIDSTRING)_Character, "ACMaster", 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// If the character is unarmored and has legend, +2 again.
+PROC
+PROC_ACUnarmoredProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+HasPassive((GUIDSTRING)_Character, "ACLegend", 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+
+// If the character is unarmored and has Monk unarmored expertise, +2 again.
+PROC
+PROC_ACUnarmoredProficiencyCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+HasPassive((GUIDSTRING)_Character, "UnarmoredDefense_Monk", 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, 2.0, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+// NPC AC can be increased without any particlar cause.
+// This code detects that.
+PROC
+PROC_ACNPCPassivesCheck((GUIDSTRING)_Character)
+AND
+NOT DB_ACBonusDisabled(_Character, 0)
+AND
+DB_DCTrackingACNPCPassives((STRING)_Passive, (REAL)_Bonus)
+AND
+HasPassive((GUIDSTRING)_Character, _Passive, 1)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealSum(_AC, _Bonus, (REAL)_NewAC)
+THEN
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+DB_RTN_ACBonusCheck(_Character, _NewAC);
+
+PROC
+PROC_ACTrackerApply((GUIDSTRING)_Character)
+AND
+DB_RTN_ACBonusCheck(_Character, (REAL)_AC)
+AND
+RealProduct(_AC, 6.0, (REAL)_Duration)
+THEN
+PROC_DCTrackingApplyStatus(_Character, "AC_TRACKER", _Duration);
+NOT DB_RTN_ACBonusCheck(_Character, _AC);
+
+PROC
+PROC_ACTrackerApply((GUIDSTRING)_Character)
+AND
+DB_ACBonusDisabled(_Character, (INTEGER)_Value)
+THEN
+NOT DB_ACBonusDisabled(_Character, _Value);
+
+//END_REGION
+
+//REGION To Hit Bonus
+// Note that the main purpose of this stat is to faciliate
+// reactive strike, and as such will not give any regard to
+// MAP. It is also difficult to account for bonuses like
+// flanking, so we do not.
+// Clear out the DB before starting.
+IF
+StatusApplied((GUIDSTRING)_Character, "DEX_TRACKER", _, _)
+AND
+DB_DCToHitTrackerDex(_Character, (REAL)_DexModSecondsPlusTen)
+THEN
+NOT DB_DCToHitTrackerDex(_Character, _DexModSecondsPlusTen);
+
+// Dex modifier is applied first in stats.
+IF
+StatusApplied((GUIDSTRING)_Character, "DEX_TRACKER", _, _)
+AND
+GetStatusCurrentLifetime(_Character, "DEX_TRACKER", (REAL)_DexModSecondsPlusTen)
+THEN
+DB_DCToHitTrackerDex(_Character, _DexModSecondsPlusTen);
+
+// Str modifier is applied second. If larger than dex, it
+// is chosen as our to hit bonus, makign the assumption
+// that the character is reasonably built.
+IF
+StatusApplied((GUIDSTRING)_Character, "STR_TRACKER", _, _)
+AND
+GetStatusCurrentLifetime(_Character, "STR_TRACKER", (REAL)_StrModSecondsPlusTen)
+AND
+DB_DCToHitTrackerDex(_Character, (REAL)_DexModSecondsPlusTen)
+AND
+RealMax(_StrModSecondsPlusTen, _DexModSecondsPlusTen, (REAL)_ToHitModSecondsPlusTen)
+THEN
+NOT DB_DCToHitTrackerDex(_Character, _DexModSecondsPlusTen);
+PROC_DCTrackingApplyStatus(_Character, "TO_HIT_TRACKER", _ToHitModSecondsPlusTen);
+
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
