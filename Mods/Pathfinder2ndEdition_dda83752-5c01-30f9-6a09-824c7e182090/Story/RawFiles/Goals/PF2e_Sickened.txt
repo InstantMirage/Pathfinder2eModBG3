@@ -1,0 +1,54 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_SickenedStatus("SICKENED", "SICKENED_DC");
+DB_SickenedStatus("SICKENED_2", "SICKENED_DC");
+KBSECTION
+// If the character does not already have a sickened DC, apply one
+// by grabbing the spell DC of the cause.
+IF
+StatusApplied((GUIDSTRING)_Target, (STRING)_Status, (GUIDSTRING)_Source, _)
+AND
+DB_SickenedStatus(_Status, (STRING)_DCStatus)
+AND
+HasActiveStatus(_Source, "SPELL_DC_TRACKER", 1)
+AND
+GetStatusCurrentLifetime(_Source, "SPELL_DC_TRACKER", (REAL)_DCSeconds)
+AND
+HasActiveStatus(_Source, _DCStatus, 0)
+THEN
+ApplyStatus(_Target, _DCStatus, _DCSeconds, 0, _Source);
+
+// If they already have a sickened DC, apply the new one only if
+// greater.
+IF
+StatusApplied((GUIDSTRING)_Target, (STRING)_Status, (GUIDSTRING)_Source, _)
+AND
+DB_SickenedStatus(_Status, (STRING)_DCStatus)
+AND
+HasActiveStatus(_Source, "SPELL_DC_TRACKER", 1)
+AND
+GetStatusCurrentLifetime(_Source, "SPELL_DC_TRACKER", (REAL)_DCSeconds)
+AND
+HasActiveStatus(_Source, _DCStatus, 1)
+AND
+GetStatusCurrentLifetime(_Source, _DCStatus, (REAL)_OldDCSeconds)
+AND
+_DCSeconds > _OldDCSeconds
+THEN
+ApplyStatus(_Target, _DCStatus, _DCSeconds, 0, _Source);
+
+// If we can't find the source DC, just use 15.
+IF
+StatusApplied((GUIDSTRING)_Target, (STRING)_Status, (GUIDSTRING)_Source, _)
+AND
+DB_SickenedStatus(_Status, (STRING)_DCStatus)
+AND
+HasActiveStatus(_Source, "SPELL_DC_TRACKER", 0)
+AND
+HasActiveStatus(_Source, _DCStatus, 0)
+THEN
+ApplyStatus(_Target, _DCStatus, 90.0, 0, _Source);
+EXITSECTION
+
+ENDEXITSECTION
