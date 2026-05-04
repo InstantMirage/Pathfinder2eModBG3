@@ -1,0 +1,37 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_OutsideCheckStatuses("LIGHTNING_STORM_CHECK_OUTSIDE", "LIGHTNING_STORM_OUTSIDE", 6.0);
+KBSECTION
+IF
+StatusApplied((GUIDSTRING)_Character, (STRING)_CheckStatus, _, _)
+AND
+DB_OutsideCheckStatuses(_CheckStatus, (STRING)_SuccessStatus, (REAL)_Duration)
+AND
+GetPosition(_Character, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+RealSum(_Y, 100.0, (REAL)_NY)
+AND
+CreateAt((GUIDSTRING)Helper_Invisible_A_4cc75168-a81e-4a5c-85cd-1bab8d7bb641, _X, _NY, _Z, 1, 0, "OutsideCheckSummon", (GUIDSTRING)_Summon)
+THEN
+DB_OutsideCheckSummon(_Summon, _Character, _SuccessStatus, _Duration);
+
+IF
+EntityEvent(_Summon, "OutsideCheckSummon")
+AND
+DB_OutsideCheckSummon(_Summon, (GUIDSTRING)_Character, (STRING)_SuccessStatus, (REAL)_Duration)
+AND
+HasLineOfSight(_Summon, _Character, 1)
+THEN
+ApplyStatus(_Character, _SuccessStatus, _Duration);
+RequestDeleteTemporary((CHARACTER)_Summon);
+
+IF
+EntityEvent(_Summon, "OutsideCheckSummon")
+AND
+DB_OutsideCheckSummon(_Summon, (GUIDSTRING)_Character, (STRING)_SuccessStatus, (REAL)_Duration)
+THEN
+NOT DB_OutsideCheckSummon(_Summon, _Character, _SuccessStatus, _Duration);
+EXITSECTION
+
+ENDEXITSECTION

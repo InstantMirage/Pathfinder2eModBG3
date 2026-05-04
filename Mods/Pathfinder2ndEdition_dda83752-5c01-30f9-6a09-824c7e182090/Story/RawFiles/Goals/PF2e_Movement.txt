@@ -77,13 +77,18 @@ THEN
 RemoveStatus(_Char, "DEBUG_RESET_MOVE");
 ApplyStatus(_Char, "DEBUG_RESET_MOVE", -1.0, 0);
 
-// Also need to catch failed casts
+// Also need to catch failed casts, but we need to filter that to
+// only catch failed casts where the caster began caster the
+// spell, as opposed to only previewing. We can do this by
+// checking the Story ID is not 0.
 IF
-CastSpellFailed((CHARACTER)_Char, (STRING)_Spell, _, _, _)
+CastSpellFailed((CHARACTER)_Char, (STRING)_Spell, _, _, (INTEGER)_StoryID)
 AND
 NOT DB_MovementSpell(_Spell)
 AND
 NOT QRY_ExplorationMode(_Char)
+AND
+_StoryID != 0
 THEN
 RemoveStatus(_Char, "DEBUG_RESET_MOVE");
 ApplyStatus(_Char, "DEBUG_RESET_MOVE", -1.0, 0);

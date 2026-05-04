@@ -7,9 +7,28 @@ DB_MovableSpells("FLOATING_FLAME_3_AURA", 4.0, "Target_FlamingSphere_3", "Target
 DB_MovableSpells("FLOATING_FLAME_4_AURA", 4.0, "Target_FlamingSphere_4", "Target_FlamingSphere_4_Sustain", (GUIDSTRING)FlamingSphere_Helper_78c92145-a08a-4e62-a958-aade4abf7932, (EFFECTRESOURCE)VFX_Spell_FloatingFlame_Position_c043a0f5-1cc0-54eb-ae5a-1da49a7eab6d);
 DB_MovableSpells("FLOATING_FLAME_5_AURA", 4.0, "Target_FlamingSphere_5", "Target_FlamingSphere_5_Sustain", (GUIDSTRING)FlamingSphere_Helper_78c92145-a08a-4e62-a958-aade4abf7932, (EFFECTRESOURCE)VFX_Spell_FloatingFlame_Position_c043a0f5-1cc0-54eb-ae5a-1da49a7eab6d);
 DB_MovableSpells("FLOATING_FLAME_6_AURA", 4.0, "Target_FlamingSphere_6", "Target_FlamingSphere_6_Sustain", (GUIDSTRING)FlamingSphere_Helper_78c92145-a08a-4e62-a958-aade4abf7932, (EFFECTRESOURCE)VFX_Spell_FloatingFlame_Position_c043a0f5-1cc0-54eb-ae5a-1da49a7eab6d);
+
+DB_SnapMoveSpells("INVOKE_SPIRITS_SUMMON", "INVOKE_SPIRITS_SUSTAIN", "Target_InvokeSpirits_Rank5", "Target_InvokeSpirits_Sustain", (GUIDSTRING)InvokeSpirits_Helper_c27f8a36-400f-46ce-b7e0-359617787cb6, (EFFECTRESOURCE)NULL_00000000-0000-0000-0000-000000000000);
+DB_SnapMoveSpells("INVOKE_SPIRITS_SUMMON", "INVOKE_SPIRITS_SUSTAIN", "Target_InvokeSpirits_Rank6", "Target_InvokeSpirits_Sustain", (GUIDSTRING)InvokeSpirits_Helper_c27f8a36-400f-46ce-b7e0-359617787cb6, (EFFECTRESOURCE)NULL_00000000-0000-0000-0000-000000000000);
+DB_SnapMoveSpells("LIGHTNING_STORM_SUMMON", "LIGHTNING_STORM_SUSTAIN", "Target_LightningStorm_Rank5", "Dummy_LightningStorm", (GUIDSTRING)LightningStorm_Helper_6f8da5c8-1c9f-435a-9c6b-ac5e668f5470, (EFFECTRESOURCE)NULL_00000000-0000-0000-0000-000000000000);
+DB_SnapMoveSpells("LIGHTNING_STORM_SUMMON", "LIGHTNING_STORM_SUSTAIN", "Target_LightningStorm_Rank6", "Dummy_LightningStorm", (GUIDSTRING)LightningStorm_Helper_6f8da5c8-1c9f-435a-9c6b-ac5e668f5470, (EFFECTRESOURCE)NULL_00000000-0000-0000-0000-000000000000);
+DB_SnapMoveSpells("LIGHTNING_STORM_BONUS_SUMMON", "LIGHTNING_STORM_BONUS_SUSTAIN", "Target_LightningStorm_Bonus", "Dummy_LightningStormBonus", (GUIDSTRING)LightningStorm_Helper_6f8da5c8-1c9f-435a-9c6b-ac5e668f5470, (EFFECTRESOURCE)NULL_00000000-0000-0000-0000-000000000000);
 KBSECTION
+//REGION Movable spells
+// This code controls spells where the summoned object
+// moves to the new location, hitting targets that it
+// passes. 
 IF
 UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_MovableSpells(_, _, _Spell, _, _, _)
+THEN
+DB_MovableSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Owner, (GUIDSTRING)_Target, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
 AND
 DB_MovableSpells(_, _, _Spell, _, _, _)
 THEN
@@ -85,6 +104,140 @@ AND
 DB_QRYRTN_VectorABByDistance((REAL)_XSN, (REAL)_YSN, (REAL)_ZSN)
 THEN
 UseSpellAtPosition(_Summon, "Projectile_Fly", _XSN, _YSN, _ZSN, 1);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Owner, (GUIDSTRING)_Target, (STRING)_Sustain, _, _, _)
+AND
+GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+DB_ActiveMovableSpells((GUIDSTRING)_Summon, _Owner, _Sustain)
+AND
+DB_MovableSpells(_, (REAL)_Range, _, _Sustain, _, _)
+AND
+GetPosition(_Summon, (REAL)_XS, (REAL)_YS, (REAL)_ZS)
+AND
+QRY_VectorABByDistance(_XS, _YS, _ZS, _XT, _YT, _ZT, _Range)
+AND
+DB_QRYRTN_VectorABByDistance((REAL)_XSN, (REAL)_YSN, (REAL)_ZSN)
+THEN
+UseSpellAtPosition(_Summon, "Projectile_Fly", _XSN, _YSN, _ZSN, 1);
+//END_REGION
+
+//REGION Snap-Move Spells
+// Some spells still require the old position
+// be considered when sustaining, but do not
+// hit targets they pass as they move. This is
+// largely the same code as above, but instead
+// of casting fly we can just remove the old
+// summon.
+IF
+UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_SnapMoveSpells(_, _, _Spell, _, _, _)
+THEN
+DB_SnapMoveSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Owner, (GUIDSTRING)_Target, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+DB_SnapMoveSpells(_, _, _Spell, _, _, _)
+THEN
+DB_SnapMoveSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
+
+IF
+UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Sustain, _, _, (INTEGER)_StoryID)
+AND
+DB_SnapMoveSpells(_, _, _, _Sustain, _, _)
+THEN
+DB_SnapMoveSpellsSummonSequence(_StoryID, _Owner, _Sustain, _XT, _YT, _ZT);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Owner, (GUIDSTRING)_Target, (STRING)_Sustain, _, _, (INTEGER)_StoryID)
+AND
+GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+DB_SnapMoveSpells(_, _, _, _Sustain, _, _)
+THEN
+DB_SnapMoveSpellsSummonSequence(_StoryID, _Owner, _Sustain, _XT, _YT, _ZT);
+
+IF
+CastSpell((GUIDSTRING)_Owner, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_SnapMoveSpellsSummonSequence(_StoryID, _Owner, _Spell, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+DB_SnapMoveSpells((STRING)_Aura, _, _Spell, _, (GUIDSTRING)_Template, (EFFECTRESOURCE)_VFX)
+AND
+CreateAt(_Template, _XT, _YT, _ZT, 1, 0, "SnapMoveSpellSpawnComplete", (GUIDSTRING)_Summon)
+THEN
+NOT DB_MovableSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
+PlayEffectAtPosition(_VFX, _XT, _YT, _ZT);
+ApplyStatus(_Summon, _Aura, 60.0, 0, _Owner);
+
+// Check for sustain spells also
+IF
+CastSpell((GUIDSTRING)_Owner, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_SnapMoveSpellsSummonSequence(_StoryID, _Owner, _Spell, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+DB_SnapMoveSpells((STRING)_Aura, _, _, _Spell, (GUIDSTRING)_Template, (EFFECTRESOURCE)_VFX)
+AND
+CreateAt(_Template, _XT, _YT, _ZT, 1, 0, "SnapMoveSpellSpawnComplete", (GUIDSTRING)_Summon)
+THEN
+NOT DB_MovableSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
+PlayEffectAtPosition(_VFX, _XT, _YT, _ZT);
+ApplyStatus(_Summon, _Aura, 60.0, 0, _Owner);
+
+IF
+StatusApplied(_, (STRING)_Status, (GUIDSTRING)_Owner, _)
+AND
+DB_SnapMoveSpells(_Status, _, _, (STRING)_Sustain, _, _)
+AND
+DB_ActiveSnapMoveSpells((GUIDSTRING)_OldSummon, _Owner, _Sustain)
+THEN
+NOT DB_ActiveSnapMoveSpells(_OldSummon, _Owner, _Sustain);
+RemoveStatus(_OldSummon, _Status);
+
+IF
+StatusApplied((GUIDSTRING)_Summon, (STRING)_Status, (GUIDSTRING)_Owner, _)
+AND
+DB_SnapMoveSpells(_Status, _, _, (STRING)_Sustain, _, _)
+THEN
+DB_ActiveSnapMoveSpells(_Summon, _Owner, _Sustain);
+
+IF
+StatusRemoved((GUIDSTRING)_Owner, (STRING)_SustainStatus, _, _)
+AND
+DB_SnapMoveSpells((STRING)_Status, _SustainStatus, _, (STRING)_Sustain, _, _)
+AND
+DB_ActiveSnapMoveSpells((GUIDSTRING)_Summon, _Owner, _Sustain)
+THEN
+RemoveStatus(_Summon, _Status);
+
+IF
+StatusRemoved((GUIDSTRING)_OldSummon, (STRING)_Status, _, _)
+AND
+DB_SnapMoveSpells(_Status, _, _, _, _, _)
+THEN
+TimerLaunch("SnapMoveSpellCleanup", 2000);
+DB_SnapMoveSpellCleanup(_OldSummon);
+
+IF
+TimerFinished("SnapMoveSpellCleanup")
+AND
+DB_SnapMoveSpellCleanup((GUIDSTRING)_Summon)
+THEN
+RequestDeleteTemporary((CHARACTER)_Summon);
+
+IF
+TimerFinished("SnapMoveSpellCleanup")
+AND
+DB_SnapMoveSpellCleanup((GUIDSTRING)_Summon)
+THEN
+NOT DB_SnapMoveSpellCleanup(_Summon);
+
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

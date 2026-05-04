@@ -259,7 +259,7 @@
         <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Loop" />
         <field name="CinematicArenaFlags" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="CinematicArenaFlags" version="1" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Stealth,NPCHideGetDC(context.Source));" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:ApplyStatus(HIDDEN_NPC,100,-1);AI_ONLY:IF(ConditionResult(NPCHideGetDC(context.Source) &lt; (context.Target.GetPassiveSkill(Skill.Stealth) + 3)) and IsHidingSensible()):ApplyStatus(SELF,AI_HELPER_BUFF_SMALL, 100, 3);AI_ONLY:IF(ConditionResult(NPCHideGetDC(context.Source) &lt; context.Target.GetPassiveSkill(Skill.Stealth)) and IsHidingSensible()):ApplyStatus(SELF,AI_HELPER_BUFF, 100, 3);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:ApplyStatus(HIDDEN_NPC,100,-1);AI_ONLY:IF(ConditionResult(NPCHideGetDC(context.Source) &lt; (context.Target.GetPassiveSkill(Skill.Stealth) + 3)) and IsHidingSensible()):GainTemporaryHitPoints(SELF,20);AI_ONLY:IF(ConditionResult(NPCHideGetDC(context.Source) &lt; context.Target.GetPassiveSkill(Skill.Stealth)) and IsHidingSensible()):GainTemporaryHitPoints(SELF,20);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -272,7 +272,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h805552cbg4e0dg145fg33b0g0ae84bae928d" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7949558agff05gb1f0ge85fg3bae7c92a500" version="1" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerShortRest" enumeration_type_name="CooldownType" version="1" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:ApplyStatus(HIDDEN_NPC,100,-1);AI_ONLY:IF(ConditionResult(NPCCreateDiversionGetDC(context.Source) &lt; (context.Target.GetPassiveSkill(Skill.Deception) + 3)) and IsHidingSensible()):ApplyStatus(SELF,AI_HELPER_BUFF_SMALL, 100, 3);AI_ONLY:IF(ConditionResult(NPCCreateDiversionGetDC(context.Source) &lt; context.Target.GetPassiveSkill(Skill.Deception)) and IsHidingSensible()):ApplyStatus(SELF,AI_HELPER_BUFF, 100, 3);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:ApplyStatus(HIDDEN_NPC,100,-1);AI_ONLY:IF(ConditionResult(NPCCreateDiversionGetDC(context.Source) &lt; (context.Target.GetPassiveSkill(Skill.Deception) + 3)) and IsHidingSensible()):GainTemporaryHitPoints(SELF,20);AI_ONLY:IF(ConditionResult(NPCCreateDiversionGetDC(context.Source) &lt; context.Target.GetPassiveSkill(Skill.Deception)) and IsHidingSensible()):GainTemporaryHitPoints(SELF,20);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -417,7 +417,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="40f7d004-63b8-4b9c-a37f-f4add0df4e94" />
         <field name="Name" type="NameTableFieldDefinition" value="BonMotRetort" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_IGNORE:RemoveStatus(SELF,BON_MOT_2);AI_IGNORE:RemoveStatus(SELF,BON_MOT_3);AI_ONLY:RegainHitPoints(20);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_IGNORE:RemoveStatus(SELF,BON_MOT_2);AI_IGNORE:RemoveStatus(SELF,BON_MOT_3);AI_ONLY:GainTemporaryHitPoints(SELF,20);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Self() and ConcentrateSpell();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Bard_CuttingWords" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h34f8f2a5gb982g9916g81e9g0f10052bd8b6" version="1" />
@@ -443,7 +443,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="40ea6aec-2184-432d-9f06-74efcb1b8f0b" />
         <field name="Name" type="NameTableFieldDefinition" value="DirtyTrickRemove" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="40f7d004-63b8-4b9c-a37f-f4add0df4e94" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_IGNORE:RemoveStatus(SELF,CLUMSY_DIRTY_TRICK);AI_ONLY:RegainHitPoints(20);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="AI_IGNORE:RemoveStatus(SELF,CLUMSY_DIRTY_TRICK);AI_ONLY:GainTemporaryHitPoints(SELF,20);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_TossACoin" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3cf2f5c4g2199g8841gc064g29b538c69423" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h6ce39153gcef2g2f46gbaa1gea7950152dde" version="1" />
@@ -470,7 +470,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="40ea6aec-2184-432d-9f06-74efcb1b8f0b" />
         <field name="SpellProperties" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SavingThrow(Ability.Constitution, GetDCStatusDuration('SICKENED_DC'));" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:RemoveStatus(SELF,SICKENED);AI_IGNORE:RemoveStatus(SELF,SICKENED_DC);AI_ONLY:GainTemporaryHitPoints(40);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:RemoveStatus(SELF,SICKENED);AI_IGNORE:RemoveStatus(SELF,SICKENED_DC);AI_ONLY:GainTemporaryHitPoints(SELF,40);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_StinkingCloud" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h20de5d35ge429g32d1gf628g66cf5c6e12f2" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h65785e6cg1e3ag985dg6b64g35c0feb1f1f0" version="1" />
@@ -490,7 +490,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Sickened2Remove" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="f9b4a801-9ebd-457b-8c02-737901eacfb5" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="RemoveStatus(SELF,SICKENED_2);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:ApplyStatus(SELF,SICKENED,100,-1);AI_IGNORE:RemoveStatus(SELF,SICKENED_2);AI_ONLY:GainTemporaryHitPoints(40);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:ApplyStatus(SELF,SICKENED,100,-1);AI_IGNORE:RemoveStatus(SELF,SICKENED_2);AI_ONLY:GainTemporaryHitPoints(SELF,40);" />
       </fields>
     </stat_object>
     <stat_object color="#FFFF0000" is_substat="false">
@@ -8066,6 +8066,56 @@
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="0ed6eeea-fb80-45e5-a190-d72579f7e3d6" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Melee" enumeration_type_name="SpellSheathing" version="1" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasShieldEquipped(context.Source)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="34dd88bc-ebf8-4edb-b2a4-abe96f9ae653" />
+        <field name="Name" type="NameTableFieldDefinition" value="ImpalingSpikeEscape" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="f9b4a801-9ebd-457b-8c02-737901eacfb5" />
+        <field name="ContainerSpells" type="StringTableFieldDefinition" value="Shout_ImpalingSpikeEscape_Athletics;Shout_ImpalingSpikeEscape_Acrobatics;" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,GetDCStatusDuration('IMPALING_SPIKE_DC'));" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_TransmutationStone" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h69c0c519g8604g24c7g6e0cgb60e0745bb97" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h75ade30egd9a5g131dg7f2eg5b62994f02e0" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="RemoveStatus(SELF,IMPALING_SPIKE);" />
+        <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="Temporary;IsLinkedSpellContainer" enumeration_type_name="SpellFlagList" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="17ab0141-3d16-4434-bd0f-d1be938d9e44" />
+        <field name="Name" type="NameTableFieldDefinition" value="ImpalingSpikeEscape_Athletics" />
+        <field name="SpellContainerID" type="StringTableFieldDefinition" value="Shout_ImpalingSpikeEscape" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,GetDCStatusDuration('IMPALING_SPIKE_DC'));" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="AI_IGNORE:RemoveStatus(SELF,IMPALING_SPIKE);AI_IGNORE:RemoveStatus(SELF,IMPALING_SPIKE_CRIT);AI_IGNORE:RemoveStatus(SELF,IMPALING_SPIKE_DC);AI_ONLY:GainTemporaryHitPoints(SELF,40);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Self() and AttackSpell();" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Shove" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h007a57b1g4dfcg320dg7236g715e35dca2e7" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8839271bg397ag3179gf07eg9fb1142c457f" version="1" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="RemoveStatus(SELF,IMPALING_SPIKE);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Start" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Generic_GeneralAction_Loop" />
+        <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_Shove" />
+        <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
+        <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1;" />
+        <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="0319ca29-4024-4649-9278-3c1f20c5f023,,;a71e11ca-95ab-463d-a4bf-fe8094126b61,,;352c3a89-f99c-4472-8424-58c0ffb15e55,,;a57fc614-ed20-4574-936b-bdcc6cebd36a,,;b24b3f23-6d3a-43ce-ae3a-abfb44d26082,,;200ab854-a989-4a6a-8ac9-4b20aecaccda,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
+        <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
+        <field name="SpellActionType" type="EnumerationTableFieldDefinition" value="Dismiss" enumeration_type_name="SpellActionType" version="1" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="c512042e-a04f-4a02-af7a-16f30e11ed95" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="3fdf3e73-59a3-4518-9521-35f40374d048" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2cdd088a-de9c-44c0-b538-5e65b98a10d2" />
+        <field name="Name" type="NameTableFieldDefinition" value="ImpalingSpikeEscape_Acrobatics" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="17ab0141-3d16-4434-bd0f-d1be938d9e44" />
+        <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Acrobatics,GetDCStatusDuration('IMPALING_SPIKE_DC'));" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_SupremeSneak" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h09c2dbc6g8cd5g75b6g6d7cg59f17332b690" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf31a922ag86a4gd683g41b6gb19a5483b400" version="1" />
       </fields>
     </stat_object>
     <stat_object color="#FF0000FF" is_substat="false">
