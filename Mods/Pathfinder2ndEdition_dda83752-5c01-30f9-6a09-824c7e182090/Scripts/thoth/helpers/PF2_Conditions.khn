@@ -329,6 +329,11 @@ function AttackSpell()
 	return ConditionResult(true)
 end
 
+function SpellIgnoresRestrained()
+	-- Spells with this flag can be cast while restrained (mostly escape variants).
+	return ConditionResult(true)
+end
+
 -- Weapons
 
 function WeaponDieSizeNum(num)
@@ -1573,8 +1578,9 @@ function SkillCheckStatusDuration()
 	return math.ceil(GetStatusDuration("SKILL_CHECK_DC"))
 end
 
-function GetDCStatusDuration(skill)
-	return math.ceil(GetStatusDuration(skill))
+function GetDCStatusDuration(skill, target)
+	target = target or context.Source
+	return math.ceil(GetStatusDuration(skill, target))
 end
 
 function IsIntelligent(entity)
@@ -1812,7 +1818,7 @@ function CounterPerformanceCrit()
 end
 
 function RestrainedBlockSpells()
-	local r1 = ~(SpellId('Target_EscapeGrapple_Athletics') | SpellId('Target_EscapeGrapple_Acrobatics') | SpellId('Target_EscapeGrapple_UnarmedAttack'))
+	local r1 = ~HasStringInSpellConditions('SpellIgnoresRestrained')
 	local r2 = HasStringInSpellRoll('Attack')
 	local r3 = HasSpellFlag(SpellFlags.Somatic)
 	local r4 = HasStringInSpellConditions('AttackSpell')
@@ -1943,4 +1949,41 @@ end
 
 function InitiativeSneakGT(greaterThan)
 	return ConditionResult((context.Source.Stealth - context.Source.Perception) > greaterThan)
+end
+
+function PreferredSaveForTarget(DC, fortitude, reflex, will)
+	target = context.Target
+	local fortitudeScore = FortitudeDC(target)
+	if HasPassive('CritConvert_Juggernaut', target) then
+		fortitudeScore = fortitudeScore + 3
+	end
+	if not fortitude then
+		fortitudeScore = fortitudeScore - 20
+	end
+
+	local reflexScore = ReflexDC(target)
+	if HasPassive('CritConvert_Evasion', target) then
+		reflexScore = reflexScore + 3
+	end
+	if not reflex then
+		reflexScore = reflexScore - 20
+	end
+
+	local willScore = WillDC(target)
+	if HasPassive('CritConvert_Resolve', target) then
+		willScore = willScore + 3
+	end
+	if not will then
+		willScore = willScore - 20
+	end
+
+	if (reflexScore >= willScore) and (reflexScore >= fortitudeScore) then
+		return SavingThrow(Ability.Dexterity, DC)
+	end
+	if (fortitudeScore >= willScore) and (fortitudeScore >= reflexScore) then
+		return SavingThrow(Ability.Constitution, DC)
+	end
+	if (willScore >= reflexScore) and (willScore >= fortitudeScore) then
+		return SavingThrow(Ability.Wisdom, DC)
+	end
 end
