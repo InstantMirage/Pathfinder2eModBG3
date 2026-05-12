@@ -1,0 +1,25 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ArrowSalvoStatuses("ARROW_SALVO_PROC", "ARROW_SALVO_DAMAGE");
+DB_ArrowSalvoStatuses("ARROW_SALVO_PROC_SAVE", "ARROW_SALVO_DAMAGE_SAVE");
+DB_ArrowSalvoStatuses("ARROW_SALVO_PROC_CRIT", "ARROW_SALVO_DAMAGE_CRIT");
+KBSECTION
+IF
+StatusApplied((GUIDSTRING)_Target, (STRING)_Status, (GUIDSTRING)_Cause, _)
+AND
+DB_ArrowSalvoStatuses(_Status, (STRING)_Followup)
+THEN
+RealtimeObjectTimerLaunch(_Target, "ArrowSalvoTimer", 1600);
+DB_ArrowSalvoTimerSequence(_Target, _Followup, _Cause);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Target, "ArrowSalvoTimer")
+AND
+DB_ArrowSalvoTimerSequence(_Target, (STRING)_Followup, (GUIDSTRING)_Cause)
+THEN
+ApplyStatus(_Target, _Followup, 0.0, 0, _Cause);
+NOT DB_ArrowSalvoTimerSequence(_Target, _Followup, _Cause);
+EXITSECTION
+
+ENDEXITSECTION
