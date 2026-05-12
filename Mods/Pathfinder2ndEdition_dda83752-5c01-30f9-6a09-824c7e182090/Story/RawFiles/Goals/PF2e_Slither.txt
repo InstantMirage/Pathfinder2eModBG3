@@ -1,0 +1,208 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_SlitherProcStatuses("SLITHER_GRABBED_PROC", "Target_Grapple_SlitherTentacle");
+DB_SlitherProcStatuses("SLITHER_RESTRAINED_PROC", "Target_Grapple_SlitherTentacle_Crit");
+
+DB_SlitherTentacleTemplates((GUIDSTRING)Slither_Tentacle_7f9620ea-236d-40ec-b367-b8ee9c746d06);
+KBSECTION
+// Remove old slither summons as new ones are made (not the tentacles,
+// just the aura helpers.
+IF
+StatusApplied((GUIDSTRING)_Helper, "SLITHER_AURA", (GUIDSTRING)_Summoner, _)
+AND
+DB_SlitherSummons(_Summoner, (GUIDSTRING)_OldHelper)
+THEN
+NOT DB_SlitherSummons(_Summoner, _OldHelper);
+RemoveStatus(_OldHelper, "SLITHER_AURA");
+
+// Pass the spell DC of the caster to the aura helper.
+IF
+StatusApplied((GUIDSTRING)_Helper, "SLITHER_AURA", (GUIDSTRING)_Summoner, _)
+AND
+HasActiveStatus(_Summoner, "SPELL_DC_TRACKER", 1)
+AND
+GetStatusCurrentLifetime(_Summoner, "SPELL_DC_TRACKER", (REAL)_DCSeconds)
+AND
+GetFaction(_Summoner, (FACTION)_Faction)
+THEN
+ApplyStatus(_Helper, "SPELL_DC_TRACKER", _DCSeconds, 0, _Summoner);
+SetFaction(_Helper, _Faction);
+DB_SlitherSummons(_Summoner, _Helper);
+
+// If a dismiss is cast, remove the active helper.
+IF
+CastedSpell((GUIDSTRING)_Caster, "Shout_Slither_Dismiss", _, _, _)
+AND
+DB_SlitherSummons(_Caster, (GUIDSTRING)_Helper)
+THEN
+RemoveStatus(_Helper, "SLITHER_AURA");
+ApplyStatus(_Helper, "SLITHER_CLEANUP", 0.0);
+RemoveStatus(_Caster, "SLITHER_DISMISS");
+NOT DB_SlitherSummons(_Caster, _Helper);
+
+// If a target failed a save against Slither, spawn a tentacle.
+IF
+StatusApplied((GUIDSTRING)_Target, (STRING)_Status, (GUIDSTRING)_Cause, _)
+AND
+DB_SlitherProcStatuses(_Status, (STRING)_Spell)
+AND
+GetStatusCurrentLifetime(_Cause, "SPELL_DC_TRACKER", (REAL)_DCSeconds)
+AND
+CreateAtObject((GUIDSTRING)Slither_Tentacle_7f9620ea-236d-40ec-b367-b8ee9c746d06, _Target, 1, 1, "SlitherTentacleSpawnComplete", 0, (GUIDSTRING)_Tentacle)
+AND
+GetFaction(_Cause, (FACTION)_Faction)
+THEN
+ApplyStatus(_Tentacle, "SLITHER_SUMMON", -1.0, 0, _Cause);
+ApplyStatus(_Tentacle, "SPELL_DC_TRACKER", _DCSeconds, 0, _Cause);
+PROC_SlitherApplyACBonus(_Tentacle, _DCSeconds, _Cause);
+SetFaction(_Tentacle, _Faction);
+DB_SlitherTentacleSummonSequence(_Tentacle, _Target, _Spell);
+
+// Apply a bonus to the tentacle's AC such that it matches
+// the caster's DC.
+PROC
+PROC_SlitherApplyACBonus((GUIDSTRING)_Tentacle, (REAL)_DCSeconds, (GUIDSTRING)_Cause)
+AND
+RealSubtract(_DCSeconds, 60.0, (REAL)_ACBonusSeconds)
+AND
+_ACBonusSeconds > 0
+THEN
+ApplyStatus(_Tentacle, "SPELL_AC_BONUS", _ACBonusSeconds, 0, _Cause);
+
+// Once spawned, have it cast its grabbed spell, for the animation.
+IF
+EntityEvent((GUIDSTRING)_Tentacle, "SlitherTentacleSpawnComplete")
+AND
+DB_SlitherTentacleSummonSequence(_Tentacle, (GUIDSTRING)_Target, (STRING)_Spell)
+THEN
+UseSpell(_Tentacle, _Spell, _Target);
+NOT DB_SlitherTentacleSummonSequence(_Tentacle, _Target, _Spell);
+
+// Dead tentacles should disappear.
+IF
+Dying((CHARACTER)_Tentacle)
+AND
+GetTemplate((GUIDSTRING)_Tentacle, (GUIDSTRING)_Template)
+AND
+DB_SlitherTentacleTemplates(_Template)
+THEN
+RealtimeObjectTimerLaunch(_Tentacle, "SlitherDeathTimer", 500);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Tentacle, "SlitherDeathTimer")
+THEN
+RequestDeleteTemporary((CHARACTER)_Tentacle);
+
+//REGION Grabbed Tracking
+// When a target is grabbed, track which tentacle did it.
+IF
+StatusApplied((GUIDSTRING)_Target, "SLITHER_GRABBED", (GUIDSTRING)_Tentacle, _)
+THEN
+DB_SlitherTentaclesGrabbed(_Tentacle, _Target);
+
+// If a target loses their grabbed condition, remove it from
+// their tentacle.
+IF
+StatusRemoved((GUIDSTRING)_Target, "SLITHER_GRABBED", _, _)
+AND
+DB_SlitherTentaclesGrabbed((GUIDSTRING)_Tentacle, _Target)
+THEN
+RemoveStatus(_Tentacle, "SLITHER_GRAPPLING", _Target);
+NOT DB_SlitherTentaclesGrabbed(_Tentacle, _Target);
+
+// If a tenacle loses their grappling condition, remove it from
+// their target.
+IF
+StatusRemoved((GUIDSTRING)_Tentacle, "SLITHER_GRAPPLING", _, _)
+AND
+DB_SlitherTentaclesGrabbed(_Tentacle, (GUIDSTRING)_Target)
+THEN
+RemoveStatus(_Target, "SLITHER_GRABBED", _Tentacle);
+NOT DB_SlitherTentaclesGrabbed(_Tentacle, _Target);
+
+// If a tentacle dies, clear the condition on its target.
+IF
+Died((CHARACTER)_Tentacle)
+AND
+DB_SlitherTentaclesGrabbed((GUIDSTRING)_Tentacle, _Target)
+THEN
+RemoveStatus(_Target, "SLITHER_GRABBED", _Tentacle);
+NOT DB_SlitherTentaclesGrabbed(_Tentacle, _Target);
+
+// If a target dies, vica versa.
+IF
+Died((CHARACTER)_Target)
+AND
+DB_SlitherTentaclesGrabbed(_Tentacle, (GUIDSTRING)_Target)
+THEN
+RemoveStatus(_Tentacle, "SLITHER_GRAPPLING", _Target);
+NOT DB_SlitherTentaclesGrabbed(_Tentacle, _Target);
+//END_REGION
+
+//REGION Restrained Tracking
+// When a target is restrained, track which tentacle did it.
+IF
+StatusApplied((GUIDSTRING)_Target, "SLITHER_RESTRAINED", (GUIDSTRING)_Tentacle, _)
+THEN
+DB_SlitherTentaclesRestrained(_Tentacle, _Target);
+
+// If a target loses their restrained condition, remove it from
+// their tentacle.
+IF
+StatusRemoved((GUIDSTRING)_Target, "SLITHER_RESTRAINED", _, _)
+AND
+DB_SlitherTentaclesRestrained((GUIDSTRING)_Tentacle, _Target)
+THEN
+RemoveStatus(_Tentacle, "SLITHER_GRAPPLING", _Target);
+NOT DB_SlitherTentaclesRestrained(_Tentacle, _Target);
+
+// If a tenacle loses their grappling condition, remove it from
+// their target.
+IF
+StatusRemoved((GUIDSTRING)_Tentacle, "SLITHER_GRAPPLING", _, _)
+AND
+DB_SlitherTentaclesRestrained(_Tentacle, (GUIDSTRING)_Target)
+THEN
+RemoveStatus(_Target, "SLITHER_RESTRAINED", _Tentacle);
+NOT DB_SlitherTentaclesRestrained(_Tentacle, _Target);
+
+// If a tentacle dies, clear the condition on its target.
+IF
+Died((CHARACTER)_Tentacle)
+AND
+DB_SlitherTentaclesRestrained((GUIDSTRING)_Tentacle, _Target)
+THEN
+RemoveStatus(_Target, "SLITHER_RESTRAINED", _Tentacle);
+NOT DB_SlitherTentaclesRestrained(_Tentacle, _Target);
+
+// If a target dies, vica versa.
+IF
+Died((CHARACTER)_Target)
+AND
+DB_SlitherTentaclesRestrained(_Tentacle, (GUIDSTRING)_Target)
+THEN
+RemoveStatus(_Tentacle, "SLITHER_GRAPPLING", _Target);
+NOT DB_SlitherTentaclesRestrained(_Tentacle, _Target);
+//END_REGION
+
+
+//REGION Restrained Animation
+// If a target gets restrained, start the animation loop to make things
+// look nice (because for some reason Larian didn't set this up in the
+// enumeration).
+IF
+StatusApplied((GUIDSTRING)_Target, "SLITHER_RESTRAINED", _, _)
+THEN
+PlayLoopingAnimation(_Target, NULL_00000000-0000-0000-0000-000000000000, STAT_Grabbed_01_Loop_7dd68613-7f2b-4e98-8ef8-2a4c36aacd9c, NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000, NULL_00000000-0000-0000-0000-000000000000);
+
+// If a tenacle loses their grappling condition, remove it from
+// their target.
+IF
+StatusRemoved((GUIDSTRING)_Target, "SLITHER_RESTRAINED", _, _)
+THEN
+StopAnimation(_Target, 0);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION

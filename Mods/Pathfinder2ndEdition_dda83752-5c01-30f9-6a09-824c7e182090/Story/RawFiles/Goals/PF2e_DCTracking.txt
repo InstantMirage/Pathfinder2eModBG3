@@ -77,18 +77,22 @@ StatusApplied((GUIDSTRING)_Character, (STRING)_Status, _, _)
 AND
 IsCharacter(_Character, 1)
 AND
+IsDead((CHARACTER)_Character, 0)
+AND
 NOT DB_DCTrackingStatuses(_Status)
 THEN
-RealtimeObjectTimerLaunch(_Character, "DC_Tracker_Check_Event", 30);
+RealtimeObjectTimerLaunch((GUIDSTRING)_Character, "DC_Tracker_Check_Event", 30);
 
 IF
 StatusRemoved((GUIDSTRING)_Character, (STRING)_Status, _, _)
 AND
 IsCharacter(_Character, 1)
 AND
+IsDead((CHARACTER)_Character, 0)
+AND
 NOT DB_DCTrackingStatuses(_Status)
 THEN
-RealtimeObjectTimerLaunch(_Character, "DC_Tracker_Check_Event", 30);
+RealtimeObjectTimerLaunch((GUIDSTRING)_Character, "DC_Tracker_Check_Event", 30);
 
 IF
 ObjectTimerFinished((GUIDSTRING)_Character, "DC_Tracker_Check_Event")
