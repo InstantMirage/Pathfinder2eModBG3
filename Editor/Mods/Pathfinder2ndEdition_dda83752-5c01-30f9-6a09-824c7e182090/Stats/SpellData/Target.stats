@@ -1931,8 +1931,8 @@
         <field name="Name" type="NameTableFieldDefinition" value="AdvantageousAssault" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="fb0f3d26-29e5-453e-8931-d98e3c8eec83" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon+2);ExecuteWeaponFunctors(MainHand);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage(2,MainMeleeWeaponDamageType)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(HasWeaponDamageDice1() and not FightingStyle_GreatWeapon()):DealDamage(MainMeleeWeapon+1);IF( (HasWeaponDamageDice1() and FightingStyle_GreatWeapon()) or (HasWeaponDamageDice2() and not FightingStyle_GreatWeapon()) ):DealDamage(MainMeleeWeapon+2);IF(HasWeaponDamageDice2() and FightingStyle_GreatWeapon()):DealDamage(MainMeleeWeapon+4);IF(HasWeaponDamageDice3() and not FightingStyle_GreatWeapon()):DealDamage(MainMeleeWeapon+3);IF(HasWeaponDamageDice3() and not FightingStyle_GreatWeapon()):DealDamage(MainMeleeWeapon+6);ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(HasWeaponDamageDice1() and not FightingStyle_GreatWeapon()):DealDamage(1,MainMeleeWeaponDamageType);IF( (HasWeaponDamageDice1() and FightingStyle_GreatWeapon()) or (HasWeaponDamageDice2() and not FightingStyle_GreatWeapon()) ):DealDamage(2,MainMeleeWeaponDamageType);IF(HasWeaponDamageDice2() and FightingStyle_GreatWeapon()):DealDamage(4,MainMeleeWeaponDamageType);IF(HasWeaponDamageDice3() and not FightingStyle_GreatWeapon()):DealDamage(3,MainMeleeWeaponDamageType);IF(HasWeaponDamageDice3() and not FightingStyle_GreatWeapon()):DealDamage(6,MainMeleeWeaponDamageType);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead() and (HasStatus('SG_Prone') or HasStatus('Grappled'))" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Smash" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_MenacingAttack" />
@@ -5460,6 +5460,10 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:5" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_MagicWeapon" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="5" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(Item()):ApplyStatus(MAGIC_WEAPON_4,100,10);IF(not Item()):ApplyEquipmentStatus(MainHand,MAGIC_WEAPON_4,100,10);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Item() or (Ally() and HasWeaponInMainHand()) and ConcentrateSpell();" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(MAGIC_WEAPON_4,100,10)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -5474,6 +5478,8 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:6" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_MagicWeapon" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="6" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Item() or (Ally() and HasWeaponInMainHand()) and ConcentrateSpell();" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

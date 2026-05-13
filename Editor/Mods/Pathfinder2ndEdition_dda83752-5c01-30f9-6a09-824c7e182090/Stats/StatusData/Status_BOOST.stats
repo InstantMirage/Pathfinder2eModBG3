@@ -5756,7 +5756,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="2fec7578-e70d-491e-a602-bd8efe66692d" />
         <field name="Name" type="NameTableFieldDefinition" value="SLAM_DOWN_CRIT_DAMAGE" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3c387642gd0d2g2c37g293cg0605a15ba9b3" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) or IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) or not HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)) or not HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d8, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d10, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d12, Bludgeoning);" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(IsWeaponDamageDieD4() or IsWeaponDamageDieD6() or not HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)) or not HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD8() and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d8, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD10() and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d10, Bludgeoning);&#xD;&#xA;IF(IsWeaponDamageDieD12() and HasPassive('CrashingSlam',context.Source) and HasWeaponProperty(WeaponProperties.Twohanded,GetAttackWeapon(context.Source)):DealDamage(1d12, Bludgeoning);" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -6609,7 +6609,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="MAGIC_WEAPON" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);WeaponAttackRollBonus(1);IF(IsWeaponDamageDieD4()):WeaponDamageDieOverride(2d4);IF(IsWeaponDamageDieD6()):WeaponDamageDieOverride(2d6);IF(IsWeaponDamageDieD8()):WeaponDamageDieOverride(2d8);IF(IsWeaponDamageDieD10()):WeaponDamageDieOverride(2d10);IF(IsWeaponDamageDieD12()):WeaponDamageDieOverride(2d12);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);Tag(WPN_RUNE_STRIKING);IF(not HasAnyTags({'WPN_RUNE_1','WPN_RUNE_2'})):WeaponEnchantment(1);IF(IsWeaponDamageDieD4(context.Source)):WeaponDamageDieOverride(2d4);IF(IsWeaponDamageDieD6(context.Source)):WeaponDamageDieOverride(2d6);IF(IsWeaponDamageDieD8(context.Source)):WeaponDamageDieOverride(2d8);IF(IsWeaponDamageDieD10(context.Source)):WeaponDamageDieOverride(2d10);IF(IsWeaponDamageDieD12(context.Source)):WeaponDamageDieOverride(2d12);" />
         <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="6994e8dc-14ac-48a5-9c8e-c1925031e852" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="359918c9-0c9a-4714-a032-0deac359d00b" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_MagicWeapon" />
@@ -6621,11 +6621,21 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e9604a28-3acf-4d91-9f92-6218f73c1cf8" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAGIC_WEAPON_4" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="0dfaec7d-fb0e-4bd6-82cc-2d713e3169a2" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);Tag(WPN_RUNE_STRIKING);IF(Tagged('WPN_RUNE_1') and not Tagged('WPN_RUNE_2')):WeaponEnchantment(1);IF(not HasAnyTags({'WPN_RUNE_1','WPN_RUNE_2'})):WeaponEnchantment(2);IF(IsWeaponDamageDieD4(context.Source)):WeaponDamageDieOverride(2d4-2);IF(IsWeaponDamageDieD6(context.Source)):WeaponDamageDieOverride(2d6-2);IF(IsWeaponDamageDieD8(context.Source)):WeaponDamageDieOverride(2d8-2);IF(IsWeaponDamageDieD10(context.Source)):WeaponDamageDieOverride(2d10-2);IF(IsWeaponDamageDieD12(context.Source)):WeaponDamageDieOverride(2d12-2);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="fbbcbaad-c93a-463e-84ab-9dd562ea124a" />
         <field name="Name" type="NameTableFieldDefinition" value="MAGIC_WEAPON_6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="0dfaec7d-fb0e-4bd6-82cc-2d713e3169a2" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);WeaponAttackRollBonus(2);IF(IsWeaponDamageDieD4()):WeaponDamageDieOverride(3d4);IF(IsWeaponDamageDieD6()):WeaponDamageDieOverride(3d6);IF(IsWeaponDamageDieD8()):WeaponDamageDieOverride(3d8);IF(IsWeaponDamageDieD10()):WeaponDamageDieOverride(3d10);IF(IsWeaponDamageDieD12()):WeaponDamageDieOverride(3d12);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponProperty(Magical);Tag(WPN_RUNE_STRIKING_GREATER);IF(Tagged('WPN_RUNE_1') and not Tagged('WPN_RUNE_2')):WeaponEnchantment(1);IF(not HasAnyTags({'WPN_RUNE_1','WPN_RUNE_2'})):WeaponEnchantment(2);IF(IsWeaponDamageDieD4()):WeaponDamageDieOverride(3d4-2);IF(IsWeaponDamageDieD6()):WeaponDamageDieOverride(3d6-2);IF(IsWeaponDamageDieD8()):WeaponDamageDieOverride(3d8-2);IF(IsWeaponDamageDieD10()):WeaponDamageDieOverride(3d10-2);IF(IsWeaponDamageDieD12()):WeaponDamageDieOverride(3d12-2);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14731,6 +14741,42 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="b9395dc8-b5de-4c2f-83cd-bb80222f8bf6" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h25096bbcg37a4g899eg73abgfc5c0950d9d7" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(1d12,Piercing,,,0,,,,,true)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1aceb255-984c-455c-bc23-5346a0d633da" />
+        <field name="Name" type="NameTableFieldDefinition" value="VERSATILE_B" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="901970ac-e664-4f90-9d2c-d70e814c56e0" />
+        <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Physical" />
+        <field name="StackId" type="StringTableFieldDefinition" value="VERSATILE" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponDamageTypeOverride(Bludgeoning);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not IsEquipped()" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfbcf0270gef14gf9f3g0b53gbb4ad9a67429" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7c169fe1g6dbdg5354g9c1egbb491b0ecd61" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(,Bludgeoning)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6fc03fd6-c652-4b15-90d5-65be93326d2c" />
+        <field name="Name" type="NameTableFieldDefinition" value="VERSATILE_P" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1aceb255-984c-455c-bc23-5346a0d633da" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(,Piercing)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponDamageTypeOverride(Piercing);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6be93d50-bc3f-4988-8b6b-1172f6426f1e" />
+        <field name="Name" type="NameTableFieldDefinition" value="VERSATILE_S" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1aceb255-984c-455c-bc23-5346a0d633da" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(,Slashing)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="WeaponDamageTypeOverride(Slashing);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
