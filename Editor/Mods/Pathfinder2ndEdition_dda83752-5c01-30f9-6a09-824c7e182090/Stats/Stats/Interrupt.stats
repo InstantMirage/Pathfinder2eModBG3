@@ -255,7 +255,7 @@
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Self(context.Target,context.Observer) and Enemy(context.Source, context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Target,context.Observer) and HasStatus('CHAMPION_AURA_STATUS',context.Source,context.Observer) and not AnyEntityIsItem();" />
-        <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,-(LevelMapValue(CharacterLevel)+2));ApplyStatus(OBSERVER_TARGET,WAR_GODS_BLESSING,100,0);ApplyStatus(OBSERVER_SOURCE,ENFEEBLED_2,100,1);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="AdjustRoll(OBSERVER_TARGET,-(LevelMapValue(CharacterLevel)+2));ApplyStatus(OBSERVER_TARGET,WAR_GODS_BLESSING,100,0);ApplyStatus(OBSERVER_SOURCE,ENFEEBLED_2_APPLY,100,1);" />
         <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableCondition" type="StringTableFieldDefinition" value="(HasStatus('CHAMPION_AURA') or not Combat()) and not HasAnyStatus({'SG_Polymorph','SG_Blinded'}) or Tagged('MINDFLAYER') or HasStatus('SG_Disguise');" />
@@ -827,7 +827,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4d3d156eg3542gb388gca66g051294dc7e1f" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3ded00b3g372bg8262g3d17ga4ebe508cb92" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Sentinel_Attack" />
-        <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(ENFEEBLED,100,2)" />
+        <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(ENFEEBLED_APPLY,100,2);" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(ENFEEBLED,100,2)" />
       </fields>
     </stat_object>
@@ -1911,6 +1911,56 @@
         <field name="Conditions" type="StringTableFieldDefinition" value="IsAbleToReact(context.Observer) and not Item() and Self(context.Source,context.Observer) and HasInterruptedAttack() and LuckOfTheFarRealmCheck() and not CheckCriticalTen(10) and not HasStatus('ForcedCritImmune',context.Target) and not AnyEntityIsItem();" />
         <field name="Properties" type="StringTableFieldDefinition" value="SetRoll(20);ApplyStatus(ForcedCritImmune);" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerRest" enumeration_type_name="CooldownType" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3ce7f0f7-fce7-4ffa-841a-37a96e91d192" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_NecrotizeBones" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb164131cgb7e7g6b27g2408gcbe0e16b225a" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7b4cc56cg0dc2g500agc71ag3aa66cdbac12" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Necromancy_Harm" />
+        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="InterruptContext" version="1" />
+        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Far" enumeration_type_name="InterruptContextScope" version="1" />
+        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('NECROTIZE_CRIT_PROC',context.Target,context.Observer) and not HasStatus('NECROTIZE_BONES',context.Target);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(NECROTIZE_BONES,100,-1);RemoveStatus(OBSERVER_OBSERVER,NECROTIZE_CRIT_CASTER);" />
+        <field name="Stack" type="StringTableFieldDefinition" value="Necrotize" />
+        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
+        <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7d53a2fc-1bde-44e4-b5bb-90f581006e77" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_NecrotizeJoints" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3ce7f0f7-fce7-4ffa-841a-37a96e91d192" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h54a54960gdab8g2b0ag0269gff165d0aaad3" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h920f1a4dge2b6g18f5g684ag851d782c2441" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('NECROTIZE_CRIT_PROC',context.Target,context.Observer) and not HasStatus('NECROTIZE_JOINTS',context.Target);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(NECROTIZE_JOINTS,100,-1);RemoveStatus(OBSERVER_OBSERVER,NECROTIZE_CRIT_CASTER);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="44223935-5f90-47a6-90cf-7aca1e92a7c7" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_NecrotizeLegs" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3ce7f0f7-fce7-4ffa-841a-37a96e91d192" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9f1fd0aagc415gf2e3gec70gae789542e8be" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="heca10009gc7bag94d9g09f4gc8fc16dce80f" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('NECROTIZE_CRIT_PROC',context.Target,context.Observer) and not HasStatus('NECROTIZE_LEGS',context.Target);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(NECROTIZE_LEGS,100,-1);RemoveStatus(OBSERVER_OBSERVER,NECROTIZE_CRIT_CASTER);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="64617b94-b127-42b7-b962-0f0a3bddf3bb" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_NecrotizeMuscles" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3ce7f0f7-fce7-4ffa-841a-37a96e91d192" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd568cd2fgf35bgb673g2f84ga960ff06d0f0" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="haa575553g637egd428g8a3agda75dcca83e6" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasStatus('NECROTIZE_CRIT_PROC',context.Target,context.Observer) and not HasStatus('NECROTIZE_MUSCLES',context.Target);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(NECROTIZE_MUSCLES,100,-1);RemoveStatus(OBSERVER_OBSERVER,NECROTIZE_CRIT_CASTER);" />
       </fields>
     </stat_object>
   </stat_objects>

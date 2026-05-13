@@ -1,0 +1,54 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_NecrotizeStatuses("NECROTIZE_BONES");
+DB_NecrotizeStatuses("NECROTIZE_JOINTS");
+DB_NecrotizeStatuses("NECROTIZE_LEGS");
+DB_NecrotizeStatuses("NECROTIZE_MUSCLES");
+KBSECTION
+// Apply a random necrotize status.
+IF
+StatusApplied((GUIDSTRING)_Target, "NECROTIZE", (GUIDSTRING)_Cause, _)
+AND
+QRY_GetRandom("DB_NecrotizeStatuses", 1, "DB_NecrotizeChosenStatus")
+AND
+DB_NecrotizeChosenStatus((STRING)_NewStatus)
+THEN
+ApplyStatus(_Target, _NewStatus, -1.0, 0, _Cause);
+NOT DB_NecrotizeChosenStatus(_NewStatus);
+
+// Dummy to hide warning about unused DB.
+IF
+StatusApplied(_, "NECROTIZE", _, _)
+AND
+DB_NecrotizeStatuses("DUMMY")
+THEN
+DB_NOOP(1);
+
+// On a crit, wait until the spell is finished, then apply
+// a status to trigger the interupt.
+// Cleanup old casts first
+IF
+StatusApplied(_, "NECROTIZE_CRIT", (GUIDSTRING)_Cause, _)
+AND
+DB_NecrotizeCritSequence(_Cause, (GUIDSTRING)_OldTarget, (INTEGER)_OldStoryID)
+THEN
+NOT DB_NecrotizeCritSequence(_Cause, _OldTarget, _OldStoryID);
+
+// Grab the story ID that applied the status.
+IF
+StatusApplied((GUIDSTRING)_Target, "NECROTIZE_CRIT", (GUIDSTRING)_Cause, (INTEGER)_StoryID)
+THEN
+DB_NecrotizeCritSequence(_Cause, _Target, _StoryID);
+
+// Once cast is complete, trigger the interrupt via status.
+IF
+CastedSpell((GUIDSTRING)_Cause, "Target_Necrotize", _, _, (INTEGER)_StoryID)
+AND
+DB_NecrotizeCritSequence(_Cause, (GUIDSTRING)_Target, _StoryID)
+THEN
+ApplyStatus(_Target, "NECROTIZE_CRIT_PROC", 0.0, 0, _Cause);
+NOT DB_NecrotizeCritSequence(_Cause, _Target, _StoryID);
+EXITSECTION
+
+ENDEXITSECTION
