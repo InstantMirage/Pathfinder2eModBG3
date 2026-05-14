@@ -10982,42 +10982,79 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="5a967923-75af-494a-a1e7-2dd97c603ed1" />
         <field name="Name" type="NameTableFieldDefinition" value="Trait_Backswing" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc1dec7degb698gd2f8g4585gd184590eb05e" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h0a3f88fbg4582g8e8fgeddcg02e61dd5cba4" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsMiss() and AttackedWithPassiveSourceWeapon() and (IsCurrentTurnInCombat(context.Source) or not Combat());" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,BACKSWING_OWNER);IF(IsMainHandAttack()):ApplyEquipmentStatus(SELF,MainHand,BACKSWING_WEAPON);IF(IsOffHandAttack()):ApplyEquipmentStatus(SELF,OffHand,BACKSWING_WEAPON)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="09a3ba03-c8e0-491c-8d5a-45d33b71dec2" />
         <field name="Name" type="NameTableFieldDefinition" value="Trait_Backstabber" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hae8bece1ge851g72b7gdfbdg7475670b57c0" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h919867feg2a6fgc8fdgbe7agdca6d05fed3d" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsHit() and AttackedWithPassiveSourceWeapon() and OffGuard() and CanPrecisionDamage();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(1,MainRangedWeaponDamageType,,,0,,true,true)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c433874a-1234-4a0d-8e4a-32040323c753" />
+        <field name="Name" type="NameTableFieldDefinition" value="Trait_Backstabber_Slashing" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="09a3ba03-c8e0-491c-8d5a-45d33b71dec2" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(1,Slashing,,,0,,true,true)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="4109f2d3-e1b6-48e0-a2e2-2a9c93690f35" />
         <field name="Name" type="NameTableFieldDefinition" value="Trait_Forceful" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0ea52175g5ba3g1213g7545g5df52c42ea67" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcedd5751g08c9g7ce9ge9aegbb8858804b80" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="AttackedWithPassiveSourceWeapon() and (IsCurrentTurnInCombat(context.Source) or not Combat()) and not ConditionResult(GetStatusDuration('FORCEFUL', GetAttackWeapon()) &gt; 1);" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,FORCEFUL_OWNER);IF(IsMainHandAttack()):ApplyEquipmentStatus(SELF,MainHand,FORCEFUL);IF(IsOffHandAttack()):ApplyEquipmentStatus(SELF,OffHand,FORCEFUL)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="f36aede3-2fdd-4c43-bd79-ac114820bd25" />
         <field name="Name" type="NameTableFieldDefinition" value="Trait_Sweep" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcc732e27ge65fgc708g83ccg8ccf650cf6cc" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb62b504cga210gc0beg0a22gda95cde5bae1" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="AttackedWithPassiveSourceWeapon();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,SWEEP_OWNER);IF(SweepStart() and IsMainHandAttack()):ApplyStatus(SWEEP_TARGET_MAIN);IF(SweepStart() and IsMainHandAttack()):ApplyEquipmentStatus(SELF,MainHand,SWEEP_WEAPON_MAIN); IF(SweepStart() and IsOffHandAttack()):ApplyStatus(SWEEP_TARGET_OFF);IF(SweepStart() and IsOffHandAttack()):ApplyEquipmentStatus(SELF,OffHand,SWEEP_WEAPON_OFF); IF(SweepFinish() and IsMainHandAttack()):ApplyEquipmentStatus(SELF,MainHand,SWEEP_WEAPON_ANY);IF(SweepFinish() and IsOffHandAttack()):ApplyEquipmentStatus(SELF,OffHand,SWEEP_WEAPON_ANY);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="407a65a8-428b-4dc3-b6de-c9c80e07e350" />
         <field name="Name" type="NameTableFieldDefinition" value="Trait_Disarm" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h60515597gf9f1g53e6g1075g4e5fcdb05719" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7d7b0601ga76cgf22fgbb4cgb397be410a02" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="55550d30-82a5-4ebb-8345-cacc7a8b2138" />
         <field name="Name" type="NameTableFieldDefinition" value="Trait_Trip" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="407a65a8-428b-4dc3-b6de-c9c80e07e350" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfc14acf2g1974g9777g31efgaecdd70375a0" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5291292egad33g5334g48b5g13acf0c05162" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="c59e6add-f241-44a2-acc7-23b6ca6b576d" />
         <field name="Name" type="NameTableFieldDefinition" value="Trait_Shove" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="407a65a8-428b-4dc3-b6de-c9c80e07e350" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc421fa2bgb551g4b98ga1dbge75c463c2d50" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h88362bd8ga4c2ga39cg38afge81deea50643" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

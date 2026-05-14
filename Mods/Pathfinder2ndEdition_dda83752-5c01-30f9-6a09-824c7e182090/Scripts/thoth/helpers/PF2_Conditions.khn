@@ -826,6 +826,31 @@ function Press()
 	return HasStatus('MAP_PENALTY_2ND') | HasStatus('MAP_PENALTY_3RD')
 end
 
+-- If a Sweep combo should be started
+function SweepStart()
+	return HasAnyStatus({},{},{'SWEEP_WEAPON_MAIN','SWEEP_WEAPON_OFF','SWEEP_WEAPON_ANY'},GetAttackWeapon())
+end
+
+-- If two targets have been hit with the same Sweep
+function SweepFinish()
+	local mainhand_combo = HasStatus('SWEEP_WEAPON_MAIN', GetAttackWeapon()) & ~HasStatus('SWEEP_TARGET_MAIN',context.Target,context.Source)
+	local offhand_combo = HasStatus('SWEEP_WEAPON_OFF', GetAttackWeapon()) & ~HasStatus('SWEEP_TARGET_OFF',context.Target,context.Source)
+	return mainhand_combo | offhand_combo
+end
+
+-- If a given attack gets the Sweep bonus
+function SweepAttackBonus(weapon)
+	local target = context.Target
+	local source = context.Source
+	local weapon = weapon or GetAttackWeapon() --GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand, context.Source)
+	
+	local mainhand_combo = HasStatus('SWEEP_WEAPON_MAIN', weapon) & ~HasStatus('SWEEP_TARGET_MAIN',target,source)
+	local offhand_combo = HasStatus('SWEEP_WEAPON_OFF', weapon) &  ~HasStatus('SWEEP_TARGET_OFF',target,source)
+	local combo = mainhand_combo|offhand_combo|HasStatus('SWEEP_WEAPON_ANY', weapon)
+	
+	return ~HasAnyTags({'CIRC_BON_1ATTACK','CIRC_BON_2ATTACK'},source) & combo
+end
+
 function ReactableSpellTooltip()
 	return (HasSpellFlag(SpellFlags.Spell) & HasSpellFlag(SpellFlags.Somatic)) | HasStringInSpellRoll('Ranged')
 end
@@ -1496,7 +1521,8 @@ end
 
 function IsWeaponDamageDieTwoHand(weapon)
 	local owner = GetOwner(weapon)
-	return ~(DualWielder(owner) | HasShieldEquipped(owner))
+	
+	return HasWeaponProperty(WeaponProperties.Versatile, weapon) & ~(DualWielder(owner) | HasShieldEquipped(owner))
 end
 
 function IsWeaponDamageDieD4(weapon)
@@ -1551,7 +1577,7 @@ end
 function HasWeaponDamageDice1(weapon)
 	local weapon = weapon or GetAttackWeapon(context.Source)
 	
-	return ~HasAnyTags({'WPN_RUNE_STRIKING','WPN_RUNE_STRIKING_GREATER'},weapon)
+	return HasNoTags({'WPN_RUNE_STRIKING','WPN_RUNE_STRIKING_GREATER'},weapon)
 end
 
 function HasWeaponDamageDice2(weapon)
