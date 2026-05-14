@@ -361,6 +361,12 @@ function HasFreeHand()
 	return ConditionResult(result,{ConditionError('FreeHand')})
 end
 
+function SkillActionFreeHand(weapon_passive)
+	local source = context.Source
+	-- Needs a free hand, the right weapon trait, or in a melee stance
+	return HasFreeHand() | HasPassive(weapon_passive,source) | HasPassive('Block_NonUnarmedStrike',source)
+end
+
 function GiantRage()
 	return HasWeaponProperty(WeaponProperties.Twohanded,GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand, context.Source));
 end
@@ -848,7 +854,7 @@ function SweepAttackBonus(weapon)
 	local offhand_combo = HasStatus('SWEEP_WEAPON_OFF', weapon) &  ~HasStatus('SWEEP_TARGET_OFF',target,source)
 	local combo = mainhand_combo|offhand_combo|HasStatus('SWEEP_WEAPON_ANY', weapon)
 	
-	return ~HasAnyTags({'CIRC_BON_1ATTACK','CIRC_BON_2ATTACK'},source) & combo
+	return HasNoTags({'CIRC_BON_1ATTACK','CIRC_BON_2ATTACK'},source) & combo
 end
 
 function ReactableSpellTooltip()
@@ -884,8 +890,13 @@ function FlurryOfManeuvers()
 	return HasPassive('FlurryOfManuevers',context.Source) & (SpellId('Target_Shove_Linked') | SpellId('Target_Grapple') | SpellId('Target_Trip') | SpellId('Target_SkillActions'))
 end
 
-function NonUnarmedStrikeCheck()
-	return HasStringInSpellRoll('WeaponAttack') | HasStringInSpellRoll('RangedUnarmedAttack') | HasStringInSpellRoll('ThrowAttack')
+function NonUnarmedStrikeCheck(stance)
+	return HasStringInSpellRoll('WeaponAttack') | HasStringInSpellRoll('RangedUnarmedAttack') | HasStringInSpellRoll('ThrowAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist')
+end
+
+-- Whether to replace the unarmed attack with a stance attack
+function ReplaceUnarmed()
+	return HasWeaponProperty(WeaponProperties.Melee,GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand))
 end
 
 function NonBowStrikeCheck()
@@ -899,6 +910,11 @@ end
 function QiSpellsInitiate(source)
 	local source = context.Source or source
 	return (HasPassive('InnerUpheaval',source) | HasPassive('QiRush',source))
+end
+
+-- Has attacked the same creature twice and hit at least once, and has not already made a Flurry of Blows
+function StunningBlowsFinish()
+	return (IsHit() & HasStatus('StunningBlowTarget',context.Target,context.Source)) | HasStatus('StunningBlowHit',context.Target,context.Source)
 end
 
 --Ranger
