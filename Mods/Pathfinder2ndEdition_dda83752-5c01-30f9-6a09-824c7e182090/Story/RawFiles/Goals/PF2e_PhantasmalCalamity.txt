@@ -1,0 +1,27 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+StatusApplied((GUIDSTRING)_Target, "PHANTASMAL_CALAMITY_CRIT", (GUIDSTRING)_Caster, _)
+THEN
+DB_PhantasmalCalamityCrit(_Target, _Caster);
+
+IF
+StatusApplied((GUIDSTRING)_Target, "PHANTASMAL_CALAMITY_PROC", _, _)
+AND
+DB_PhantasmalCalamityCrit(_Target, (GUIDSTRING)_Caster)
+THEN
+ApplyStatus(_Target, "STUNNED_PHANTASMAL_CALAMITY", 60.0, 0, _Caster);
+NOT DB_PhantasmalCalamityCrit(_Target, _Caster);
+
+IF
+StatusApplied((GUIDSTRING)_Target, "PHANTASMAL_CALAMITY_FAIL", _, _)
+AND
+DB_PhantasmalCalamityCrit(_Target, (GUIDSTRING)_Caster)
+THEN
+NOT DB_PhantasmalCalamityCrit(_Target, _Caster);
+EXITSECTION
+
+ENDEXITSECTION
