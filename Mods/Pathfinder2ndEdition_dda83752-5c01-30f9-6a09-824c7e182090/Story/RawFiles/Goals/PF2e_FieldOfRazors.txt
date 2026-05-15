@@ -1,0 +1,35 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_FieldOfRazorsStatuses("FIELD_OF_RAZORS_1", "FIELD_OF_RAZORS_2");
+DB_FieldOfRazorsStatuses("FIELD_OF_RAZORS_2", "FIELD_OF_RAZORS_3");
+DB_FieldOfRazorsStatuses("FIELD_OF_RAZORS_3", "FIELD_OF_RAZORS_4");
+DB_FieldOfRazorsStatuses("FIELD_OF_RAZORS_4", "FIELD_OF_RAZORS_5");
+KBSECTION
+IF
+StatusApplied(_, "FIELD_OF_RAZORS_1", (GUIDSTRING)_Caster, _)
+AND
+DB_FieldOfRazorsSummon(_Caster, (GUIDSTRING)_OldSummon)
+THEN
+NOT DB_FieldOfRazorsSummon(_Caster, _OldSummon);
+
+IF
+StatusApplied((GUIDSTRING)_Summon, "FIELD_OF_RAZORS_1", (GUIDSTRING)_Caster, _)
+THEN
+DB_FieldOfRazorsSummon(_Caster, _Summon);
+
+IF
+ReactionInterruptUsed((GUIDSTRING)_Caster, "Interrupt_FieldOfRazors", _)
+AND
+DB_FieldOfRazorsSummon(_Caster, (GUIDSTRING)_Summon)
+AND
+DB_FieldOfRazorsStatuses((STRING)_CurrentStatus, (STRING)_NewStatus)
+AND
+HasActiveStatus(_Summon, _CurrentStatus, 1)
+AND
+GetStatusCurrentLifetime(_Summon, _CurrentStatus, (REAL)_Duration)
+THEN
+ApplyStatus(_Summon, _NewStatus, _Duration, 0, _Caster);
+EXITSECTION
+
+ENDEXITSECTION
