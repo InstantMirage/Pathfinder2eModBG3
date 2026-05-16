@@ -6797,16 +6797,75 @@
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="b6dc1348-892f-4765-9679-f2eb2a3afb6c" />
-        <field name="Name" type="NameTableFieldDefinition" value="FieldOfLifeAura" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIELD_OF_LIFE_AURA" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h802ab2cbg06f8gd461g4f1dg99f010ca3d20" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd2c43654g0a33g5191g24dag6b6d046e7276" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Divination_Guidance" />
-        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Yellow" enumeration_type_name="FormatStringColor" version="1" />
-        <field name="StackId" type="StringTableFieldDefinition" value="FieldOfLifeAura" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd2c43654g0a33g5191g24dag6b6d046e7276" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_MagicCircle" />
+        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Healing" enumeration_type_name="FormatStringColor" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FIELD_OF_LIFE_AURA" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="8" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="RegainHitPoints(1d8);DealDamage(1d8,Radiant)" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="ApplyStatus(FIELD_OF_LIFE_HEAL,100,0)" />
+        <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems" enumeration_type_name="AuraFlags" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('FIELD_OF_LIFE_CLEANUP',context.Source)" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSourceStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="Unsummon()" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="1d5c66f0-2f81-433a-b72b-5274643609d5" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b8f886a2-41f2-406d-be1d-23b8cd60e674" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIELD_OF_LIFE_HEAL" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc04e5524gc956gd9b1g4edbg38102a988559" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc770b9ccg3e97g2f27g803dg14be8606c43e" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="RegainHitPoints(1d8);DealDamage(1d8,Radiant)" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_MagicCircle" />
+        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Healing" enumeration_type_name="FormatStringColor" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FIELD_OF_LIFE_HEAL" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
-        <field name="TooltipDamage" type="StringTableFieldDefinition" value="RegainHitPoints(1d8)" />
+        <field name="TooltipDamage" type="StringTableFieldDefinition" value="RegainHitPoints(1d8);" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not Tagged('UNDEAD')):RegainHitPoints(1d8);IF(Tagged('UNDEAD')):DealDamage(1d8,Radiant,Magical);" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="227fc692-f83f-4bd2-8fcc-6cb5545738e6" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1d0faaa8-dfdc-42b3-b477-3a320ec29d3f" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIELD_OF_LIFE_CASTER" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FIELD_OF_LIFE_CASTER" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('FIELD_OF_LIFE_SUSTAIN_NEEDED')):RemoveStatus(FIELD_OF_LIFE_CASTER);IF(not HasStatus('FIELD_OF_LIFE_SUSTAIN_NEEDED')):ApplyStatus(FIELD_OF_LIFE_SUSTAIN_NEEDED,100,2)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FIELD_OF_LIFE_CLEANUP,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5dfb1228-7c83-417a-b673-b44ef5cae28f" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIELD_OF_LIFE_SUSTAIN_NEEDED" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FIELD_OF_LIFE_SUSTAIN_NEEDED" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_FieldOfLife_Sustain);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="499fab3f-23f8-45db-87b7-7a3d88206a09" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIELD_OF_LIFE_CLEANUP" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(FIELD_OF_LIFE_SUSTAIN_NEEDED)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
