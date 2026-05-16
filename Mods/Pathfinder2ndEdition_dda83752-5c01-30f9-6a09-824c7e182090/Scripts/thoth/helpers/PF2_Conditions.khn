@@ -366,6 +366,12 @@ function HasFreeHand()
 	return ConditionResult(result,{ConditionError('FreeHand')})
 end
 
+function SkillActionFreeHand(weapon_passive)
+	local source = context.Source
+	-- Needs a free hand, the right weapon trait, or in a melee stance
+	return HasFreeHand() | HasPassive(weapon_passive,source) | HasPassive('Block_NonUnarmedStrike',source)
+end
+
 function GiantRage()
 	return HasWeaponProperty(WeaponProperties.Twohanded,GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand, context.Source));
 end
@@ -831,6 +837,31 @@ function Press()
 	return HasStatus('MAP_PENALTY_2ND') | HasStatus('MAP_PENALTY_3RD')
 end
 
+-- If a Sweep combo should be started
+function SweepStart()
+	return HasAnyStatus({},{},{'SWEEP_WEAPON_MAIN','SWEEP_WEAPON_OFF','SWEEP_WEAPON_ANY'},GetAttackWeapon())
+end
+
+-- If two targets have been hit with the same Sweep
+function SweepFinish()
+	local mainhand_combo = HasStatus('SWEEP_WEAPON_MAIN', GetAttackWeapon()) & ~HasStatus('SWEEP_TARGET_MAIN',context.Target,context.Source)
+	local offhand_combo = HasStatus('SWEEP_WEAPON_OFF', GetAttackWeapon()) & ~HasStatus('SWEEP_TARGET_OFF',context.Target,context.Source)
+	return mainhand_combo | offhand_combo
+end
+
+-- If a given attack gets the Sweep bonus
+function SweepAttackBonus(weapon)
+	local target = context.Target
+	local source = context.Source
+	local weapon = weapon or GetAttackWeapon() --GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand, context.Source)
+	
+	local mainhand_combo = HasStatus('SWEEP_WEAPON_MAIN', weapon) & ~HasStatus('SWEEP_TARGET_MAIN',target,source)
+	local offhand_combo = HasStatus('SWEEP_WEAPON_OFF', weapon) &  ~HasStatus('SWEEP_TARGET_OFF',target,source)
+	local combo = mainhand_combo|offhand_combo|HasStatus('SWEEP_WEAPON_ANY', weapon)
+	
+	return HasNoTags({'CIRC_BON_1ATTACK','CIRC_BON_2ATTACK'},source) & combo
+end
+
 function ReactableSpellTooltip()
 	return (HasSpellFlag(SpellFlags.Spell) & HasSpellFlag(SpellFlags.Somatic)) | HasStringInSpellRoll('Ranged')
 end
@@ -864,8 +895,13 @@ function FlurryOfManeuvers()
 	return HasPassive('FlurryOfManuevers',context.Source) & (SpellId('Target_Shove_Linked') | SpellId('Target_Grapple') | SpellId('Target_Trip') | SpellId('Target_SkillActions'))
 end
 
-function NonUnarmedStrikeCheck()
-	return HasStringInSpellRoll('WeaponAttack') | HasStringInSpellRoll('RangedUnarmedAttack') | HasStringInSpellRoll('ThrowAttack')
+function NonUnarmedStrikeCheck(stance)
+	return HasStringInSpellRoll('WeaponAttack') | HasStringInSpellRoll('RangedUnarmedAttack') | HasStringInSpellRoll('ThrowAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist')
+end
+
+-- Whether to replace the unarmed attack with a stance attack
+function ReplaceUnarmed()
+	return HasWeaponProperty(WeaponProperties.Melee,GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand))
 end
 
 function NonBowStrikeCheck()
@@ -879,6 +915,11 @@ end
 function QiSpellsInitiate(source)
 	local source = context.Source or source
 	return (HasPassive('InnerUpheaval',source) | HasPassive('QiRush',source))
+end
+
+-- Has attacked the same creature twice and hit at least once, and has not already made a Flurry of Blows
+function StunningBlowsFinish()
+	return (IsHit() & HasStatus('StunningBlowTarget',context.Target,context.Source)) | HasStatus('StunningBlowHit',context.Target,context.Source)
 end
 
 --Ranger
@@ -1454,7 +1495,7 @@ function SaveCritMiss(save_type)
 				return ConditionResult(true)
 			elseif save_type == 'Reflex' and (HasPassive('CritConvert_Evasion',target) | HasPassive('PathToPerfectionFort',target) | HasPassive('PathToPerfectionWill',target)).Result then
 				return ConditionResult(true)
-			elseif save_type == 'Fear' and (HasPassive('CritConvert_Bravery',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
+			elseif save_type == 'Fear' and (HasPassive('CritConvert_Bravery',target) | HasPassive('Halfling_Brave',target) | HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
 				return ConditionResult(true)
 			elseif save_type == 'Will' and (HasPassive('CritConvert_Resolve',target) | HasPassive('PathToPerfectionWill',target)).Result then
 				return ConditionResult(true)
@@ -1499,31 +1540,77 @@ function LastConditionRollValues(conditionRollType)
 	return conditionRoll.Total, conditionRoll.Difficulty
 end
 
-function IsWeaponDamageDieD4(weapon)
-	local weapon = weapon or context.Source
+function IsWeaponDamageDieTwoHand(weapon)
 	local owner = GetOwner(weapon)
-	return IsWeaponOfProficiencyGroup('Daggers|Sickles', weapon) | (IsWeaponOfProficiencyGroup('Quarterstaffs', weapon) & (DualWielder(owner) | HasShieldEquipped(owner)))
+	
+	return HasWeaponProperty(WeaponProperties.Versatile, weapon) & ~(DualWielder(owner) | HasShieldEquipped(owner))
+end
+
+function IsWeaponDamageDieD4(weapon)
+	local weapon = weapon or GetAttackWeapon(context.Source)
+	--return IsWeaponOfProficiencyGroup('Daggers|Sickles', weapon) | (IsWeaponOfProficiencyGroup('Quarterstaffs', weapon) & (DualWielder(owner) | HasShieldEquipped(owner)))
+	
+	local base = Tagged('WPN_D4',weapon)
+	local bigger_twohand = HasAnyTags({'WPN_D8_TWOHAND','WPN_D10_TWOHAND','WPN_D12_TWOHAND'},weapon) & IsWeaponDamageDieTwoHand(weapon)
+	
+	return base & ~bigger_twohand
 end
 
 function IsWeaponDamageDieD6(weapon)
-	local weapon = weapon or context.Source
-	return IsWeaponOfProficiencyGroup('Clubs|Flails|LightHammers|Maces|Morningstars|HandCrossbows|Javelins|Warpicks|Rapiers|Shortbows|Shortswords|Spears|Handaxes|Scimitars', weapon)
+	local weapon = weapon or GetAttackWeapon(context.Source)
+	--return IsWeaponOfProficiencyGroup('Clubs|Flails|LightHammers|Maces|Morningstars|HandCrossbows|Javelins|Warpicks|Rapiers|Shortbows|Shortswords|Spears|Handaxes|Scimitars', weapon)
+	
+	local base = Tagged('WPN_D6',weapon)
+	local bigger_twohand = HasAnyTags({'WPN_D8_TWOHAND','WPN_D10_TWOHAND','WPN_D12_TWOHAND'},weapon) & IsWeaponDamageDieTwoHand(weapon)
+	
+	return base & ~bigger_twohand
 end
 
 function IsWeaponDamageDieD8(weapon)
-	local weapon = weapon or context.Source
-	local owner = GetOwner(weapon)
-	return IsWeaponOfProficiencyGroup('Greatclubs|Warhammers|LightCrossbows|Longbows|Tridents|Battleaxes|Glaives|Longswords', weapon) | (IsWeaponOfProficiencyGroup('Quarterstaffs', weapon) & ~(DualWielder(owner) | HasShieldEquipped(owner)))
+	local weapon = weapon or GetAttackWeapon(context.Source)
+	--return IsWeaponOfProficiencyGroup('Greatclubs|Warhammers|LightCrossbows|Longbows|Tridents|Battleaxes|Glaives|Longswords', weapon) | (IsWeaponOfProficiencyGroup('Quarterstaffs', weapon) & ~(DualWielder(owner) | HasShieldEquipped(owner)))
+	
+	local base = Tagged('WPN_D8',weapon)
+	local twohand = Tagged('WPN_D8_TWOHAND',weapon) & IsWeaponDamageDieTwoHand(weapon)
+	local bigger_twohand = HasAnyTags({'WPN_D10_TWOHAND','WPN_D12_TWOHAND'},weapon) & IsWeaponDamageDieTwoHand(weapon)
+	
+	return ( base | twohand ) & ~bigger_twohand
 end
 
 function IsWeaponDamageDieD10(weapon)
-	local weapon = weapon or context.Source
-	return IsWeaponOfProficiencyGroup('HeavyCrossbows|Halberds|Pikes', weapon)
+	local weapon = weapon or GetAttackWeapon(context.Source)
+	--return IsWeaponOfProficiencyGroup('HeavyCrossbows|Halberds|Pikes', weapon)
+	
+	local base = Tagged('WPN_D10',weapon)
+	local twohand = Tagged('WPN_D10_TWOHAND',weapon) & IsWeaponDamageDieTwoHand(weapon)
+	local bigger_twohand = Tagged('WPN_D12_TWOHAND',weapon) & IsWeaponDamageDieTwoHand(weapon)
+	
+	return ( base | twohand ) & ~bigger_twohand
 end
 
 function IsWeaponDamageDieD12(weapon)
-	local weapon = weapon or context.Source
-	return IsWeaponOfProficiencyGroup('Mauls|Greataxes|Greatswords', weapon)
+	local weapon = weapon or GetAttackWeapon(context.Source)
+	--return IsWeaponOfProficiencyGroup('Mauls|Greataxes|Greatswords', weapon)
+	
+	return Tagged('WPN_D12',weapon) | ( Tagged('WPN_D12_TWOHAND',weapon) & IsWeaponDamageDieTwoHand(weapon) )
+end
+
+function HasWeaponDamageDice1(weapon)
+	local weapon = weapon or GetAttackWeapon(context.Source)
+	
+	return HasNoTags({'WPN_RUNE_STRIKING','WPN_RUNE_STRIKING_GREATER'},weapon)
+end
+
+function HasWeaponDamageDice2(weapon)
+	local weapon = weapon or GetAttackWeapon(context.Source)
+	
+	return Tagged('WPN_RUNE_STRIKING',weapon) & ~Tagged('WPN_RUNE_STRIKING_GREATER',weapon)
+end
+
+function HasWeaponDamageDice3(weapon)
+	local weapon = weapon or GetAttackWeapon(context.Source)
+	
+	return Tagged('WPN_RUNE_STRIKING_GREATER',weapon)
 end
 
 function CheckCriticalTen(max, entity)
