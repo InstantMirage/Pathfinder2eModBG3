@@ -20625,7 +20625,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Geyser_Rank5" />
         <field name="Level" type="IntegerTableFieldDefinition" value="5" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Evocation" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 1,,,,GEYSER_AURA);GROUND:CreateSurface(4,10,Water);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 1,,,,GEYSER_AURA);GROUND:CreateSurface(4,0,Water);GROUND:CreateSurface(4,1,WaterCloud);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="200" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="4" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC());" />
@@ -20669,7 +20669,6 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:6" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_Geyser_Rank5" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="6" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 1,,,,GEYSER_AURA);GROUND:CreateSurface(4,10,Water);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -21973,7 +21972,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e1b34c88-6cb2-4988-b0da-9c2b971988fb" />
         <field name="Name" type="NameTableFieldDefinition" value="ScorchingColumn" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="ff736f9d-3563-4d2f-a343-16a3cf33230c" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:SurfaceChange(Melt);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);GROUND:CreateSurface(4,10,Fire);GROUND:IF(CharacterLevelGreaterThan(6)):Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 10,,,,AshCloudAura_Rank2);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:SurfaceChange(Melt);GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);GROUND:CreateSurface(4,10,Fire);GROUND:IF(CharacterLevelGreaterThan(6)):Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 10,,,,AshCloudAura_Rank2);" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('FireJunction',context.Source) and not SaveCrit()):DealDamage(LevelMapValue(ScorchingColumnDamage),Fire,Magical);IF(not HasPassive('FireJunction',context.Source) and SaveCrit()):DealDamage((LevelMapValue(ScorchingColumnDamage))*2,Fire,Magical);IF(HasPassive('FireJunction',context.Source) and not SaveCrit()):DealDamage(LevelMapValue(ScorchingColumnDamageJunction),Fire,Magical);IF(HasPassive('FireJunction',context.Source) and SaveCrit()):DealDamage((LevelMapValue(ScorchingColumnDamageJunction))*2,Fire,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not HasPassive('FireJunction',context.Source) and not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(ScorchingColumnDamage)/2,Fire,Magical);IF(HasPassive('FireJunction',context.Source) and not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(ScorchingColumnDamageJunction)/2,Fire,Magical);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbbb329b7g80d3g62f3gad5dgd1db58a36abb" version="1" />
@@ -21987,9 +21986,13 @@
         <field name="SpellPrepareCost" type="IntegerTableFieldDefinition" value="0" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Fire" enumeration_type_name="Damage Type" version="1" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and RageConcentrateSpell();" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Dead() and RageConcentrateSpell();" />
         <field name="CycleConditions" type="StringTableFieldDefinition" value="Enemy() and not Dead()" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(KineticistOverflow,100,1);" />
+        <field name="PrepareSound" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="PrepareLoopSound" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="fdbf8e88-c3a5-4151-a81d-429985de422c" />
+        <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="69aaec35-fb5f-489e-a4cc-47310f4377e9" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -22016,8 +22019,8 @@
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="4" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC());" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D8Cantrip),Bludgeoning,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D8Cantrip))*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(LevelMapValue(D8Cantrip)/2,Bludgeoning,Magical);ApplyStatus(SELF,KineticistOverflow,100,0);" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):DealDamage(LevelMapValue(D8Cantrip)/2,Bludgeoning,Magical);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Dead() and RageConcentrateSpell();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_SpikeGrowth" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6198ab41gc7bcg14cage840g47ed307d29a6" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h15016896g4534g0b95g8203gda130aaeef46" version="1" />
@@ -22044,13 +22047,13 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="d0660526-3fac-4284-b36a-950d644a8c93" />
         <field name="Name" type="NameTableFieldDefinition" value="WintersClutch" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:CreateSurface(4,10,Ice);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Freeze);GROUND:CreateSurface(4,10,Ice);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="4" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC());" />
         <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(D4AoeCantrip),Cold,Magical);IF(SaveCrit()):DealDamage((LevelMapValue(D4AoeCantrip))*2,Cold,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(LevelMapValue(D4AoeCantrip)/2,Cold,Magical);" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell() and ((Ally() and not HasPassive('SculptSpells',context.Source)) or Enemy());" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="not Dead() and RageConcentrateSpell();" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Cold" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h91ec8477g4afag0ac1gffb1g62c1bf4a54e5" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hbf0283a1gd042g1575g601eg6ae50155762a" version="1" />
@@ -23294,7 +23297,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="39cf45fb-2d08-4186-a7cb-aed9e2ee7377" />
         <field name="Name" type="NameTableFieldDefinition" value="DrivingRain" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 1,,,,DRIVING_RAIN_AURA);ApplyStatus(WET,100, 5);GROUND:CreateSurface(6,0, Water);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, 1,,,,DRIVING_RAIN_AURA);ApplyStatus(WET,100, 5);GROUND:CreateSurface(6,0, Water);GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="6" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood') and RageConcentrateSpell();" />
@@ -23330,7 +23333,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="602e4fda-8caa-4986-bcdd-a693267f9600" />
         <field name="Name" type="NameTableFieldDefinition" value="ImpenetrableFog" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, -1,,,,ImpenetrableFogAura);GROUND:ApplyStatus(SELF,ImpenetrableFog_Owner,100,2);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(0ba4af65-19d0-4a31-9a42-2c365462841b, -1,,,,ImpenetrableFogAura);GROUND:ApplyStatus(SELF,ImpenetrableFog_Owner,100,2);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="4" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Water') and RageConcentrateSpell();" />
@@ -23360,7 +23363,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e63c2325-a809-4a71-9f65-3bf8ea2b88b4" />
         <field name="Name" type="NameTableFieldDefinition" value="SolarDetonation" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Evocation" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:SurfaceChange(Ignite);GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="10" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Fire') and RageConcentrateSpell();" />
@@ -23396,7 +23399,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="9b3a008a-75f0-40aa-8f4e-1b84dbd3dfa6" />
         <field name="Name" type="NameTableFieldDefinition" value="StormSpiral" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Evocation" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);GROUND:IF(HasStatus('AIR_JUNCTION',context.Source)):ApplyStatus(DISENGAGE_USESTEP,100,1);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);GROUND:IF(HasStatus('AIR_JUNCTION',context.Source)):ApplyStatus(DISENGAGE_USESTEP,100,1);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="10" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Air') and RageConcentrateSpell();" />
@@ -23433,7 +23436,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="d158592f-81fd-4e6f-9863-f6be5341fa03" />
         <field name="Name" type="NameTableFieldDefinition" value="GlacialPrison" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);IF(HasStatus('WATER_JUNCTION',context.Source)):Force(-4, OriginToEntity, Neutral, false, true);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Water') and RageConcentrateSpell();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, IncapSpellSlotDC());" />
@@ -23466,7 +23469,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="HedgeMaze" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerCombat" enumeration_type_name="CooldownType" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(9004c1ab-342d-4da2-9a28-cc1313863529, 10);GROUND:CreateSurface(4,10,Mud);GROUND:IF(HasStatus('WOOD_JUNCTION',context.Source)):ApplyStatus(SELF,WoodTempJunction);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:Summon(9004c1ab-342d-4da2-9a28-cc1313863529, 10);GROUND:CreateSurface(4,10,Mud);GROUND:IF(HasStatus('WOOD_JUNCTION',context.Source)):ApplyStatus(SELF,WoodTempJunction);GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="48" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood') and RageConcentrateSpell();" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="RageConcentrateSpell();" />
@@ -23494,7 +23497,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="3d92edd1-e2a4-482c-b5c0-5da2cc5bc47c" />
         <field name="Name" type="NameTableFieldDefinition" value="RainofRazors" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:CreateSurface(10,10,SpikeGrowth,true);GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);GROUND:IF(HasStatus('METAL_JUNCTION',context.Source)):ApplyStatus(SELF,MetalJunctionStatus);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:CreateSurface(10,10,SpikeGrowth,true);GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);GROUND:IF(HasStatus('METAL_JUNCTION',context.Source)):ApplyStatus(SELF,MetalJunctionStatus);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="10" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Metal') and RageConcentrateSpell();" />
@@ -23527,7 +23530,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="66bf8610-42a7-4f9e-8d61-1a3a4fbc0d95" />
         <field name="Name" type="NameTableFieldDefinition" value="WitchwoodSeed" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,0);GROUND:IF(HasStatus('WOOD_JUNCTION',context.Source)):ApplyStatus(SELF,WoodTempJunction);RemoveStatus(SELF,ChannelElementsStatusAir);RemoveStatus(SELF,ChannelElementsStatusEarth);RemoveStatus(SELF,ChannelElementsStatusFire);RemoveStatus(SELF,ChannelElementsStatusWater);RemoveStatus(SELF,ChannelElementsStatusMetal);RemoveStatus(SELF,ChannelElementsStatusWood);RemoveStatus(SELF,ChannelingStatus);RemoveStatus(SELF,ThermalNimbusAura_Fire);RemoveStatus(SELF,ThermalNimbusAura_Cold);RemoveStatus(SELF,RavelOfThorns_Aura);RemoveStatus(SELF,RavelOfThorns_DamageAura);RemoveStatus(SELF,ShattershieldsStatus);RemoveStatus(SELF,SeaGlassGuardiansStatus);RemoveStatus(SELF,GhostsintheStormStatus);RemoveStatus(SELF,DriftingPollenStatus);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:ApplyStatus(SELF,KineticistOverflow,100,1);GROUND:IF(HasStatus('WOOD_JUNCTION',context.Source)):ApplyStatus(SELF,WoodTempJunction);" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="2" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanCastImpulse('Wood') and RageConcentrateSpell();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC());" />
