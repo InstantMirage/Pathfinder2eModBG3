@@ -6815,7 +6815,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="f061ff57-94e8-4d80-bac3-f6ba6014e370" />
         <field name="Name" type="NameTableFieldDefinition" value="ToxicCloudAura_Rank5" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h55eb78c4g3fe0g4979g66f2g7c23514afe57" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he87b352bg1d2cg4de6g8c1eg8b6ce7156516" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he87b352bg1d2cg4de6g8c1eg8b6ce7156516" version="3" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(6d8,Poison)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Poisoned" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Poison" enumeration_type_name="FormatStringColor" version="1" />
@@ -6827,9 +6827,11 @@
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="8" />
         <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(ToxicCloudStatus_Rank5);" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartRound" enumeration_type_name="TickType" version="1" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
         <field name="IsUnique" type="BoolTableFieldDefinition" value="False" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="5c3e0856-b205-418c-8450-8068d8034122" />
+        <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems" enumeration_type_name="AuraFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6847,7 +6849,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="b44d0756-b609-40c0-bc7e-fe9929f1d0c7" />
         <field name="Name" type="NameTableFieldDefinition" value="ToxicCloudStatus_Rank5" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2b373ecegbef4g108cgf526g60283489ab4b" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc12b29e3g5beag5749g4d2fgea6e4f074ced" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc12b29e3g5beag5749g4d2fgea6e4f074ced" version="3" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(6d8,Poison)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Poisoned" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Poison" enumeration_type_name="FormatStringColor" version="1" />
@@ -6861,7 +6863,9 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(6d8,Poison)" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(6d8,Poison,Magical)" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(6d8,Poison,Magical);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="DownedStatus(DEATH_EFFECT_DOWNED,50);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6872,7 +6876,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(7d8,Poison)" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(7d8,Poison)" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(7d8,Poison,Magical)" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(7d8,Poison,Magical);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6947,6 +6951,14 @@
         <field name="Name" type="NameTableFieldDefinition" value="FIELD_OF_LIFE_CLEANUP" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(FIELD_OF_LIFE_SUSTAIN_NEEDED)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e3b2599d-5bce-4435-a06e-4cc35605859d" />
+        <field name="Name" type="NameTableFieldDefinition" value="RIP_THE_SPIRIT" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="DownedStatus(DEATH_EFFECT_DOWNED,50);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator;ApplyToDead" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14379,7 +14391,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="NEVER_MIND" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="NullifyAbilityScore(Charisma);NullifyAbilityScore(Intelligence);NullifyAbilityScore(Wisdom);BlockSpellCast();Tag(CANTSPEAK);VoicebarkBlock();" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="NullifyAbilityScore(Charisma);NullifyAbilityScore(Intelligence);NullifyAbilityScore(Wisdom);BlockSpellCast();Tag(CANTSPEAK);VoicebarkBlock();DialogueBlock();" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Cursed;SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="179433a5-0aea-462f-9b77-90ea24d1965e" />
