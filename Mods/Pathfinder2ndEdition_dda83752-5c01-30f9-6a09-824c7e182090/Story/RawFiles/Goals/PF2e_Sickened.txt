@@ -7,6 +7,8 @@ DB_SickenedStatus("IMPALING_SPIKE", "IMPALING_SPIKE_DC");
 DB_SickenedStatus("IMPALING_SPIKE_CRIT", "IMPALING_SPIKE_DC");
 DB_SickenedStatus("SLITHER_GRABBED", "SLITHER_DC");
 DB_SickenedStatus("SLITHER_RESTRAINED", "SLITHER_DC");
+DB_SickenedStatus("ToxicCloudStatus_Rank5", "TOXIC_CLOUD_DC");
+DB_SickenedStatus("ToxicCloudStatus_Rank6", "TOXIC_CLOUD_DC");
 KBSECTION
 // If the character does not already have a sickened DC, apply one
 // by grabbing the spell DC of the cause.
@@ -19,7 +21,7 @@ HasActiveStatus(_Source, "SPELL_DC_TRACKER", 1)
 AND
 GetStatusCurrentLifetime(_Source, "SPELL_DC_TRACKER", (REAL)_DCSeconds)
 AND
-HasActiveStatus(_Source, _DCStatus, 0)
+HasActiveStatus(_Target, _DCStatus, 0)
 THEN
 ApplyStatus(_Target, _DCStatus, _DCSeconds, 0, _Source);
 
@@ -34,9 +36,9 @@ HasActiveStatus(_Source, "SPELL_DC_TRACKER", 1)
 AND
 GetStatusCurrentLifetime(_Source, "SPELL_DC_TRACKER", (REAL)_DCSeconds)
 AND
-HasActiveStatus(_Source, _DCStatus, 1)
+HasActiveStatus(_Target, _DCStatus, 1)
 AND
-GetStatusCurrentLifetime(_Source, _DCStatus, (REAL)_OldDCSeconds)
+GetStatusCurrentLifetime(_Target, _DCStatus, (REAL)_OldDCSeconds)
 AND
 _DCSeconds > _OldDCSeconds
 THEN

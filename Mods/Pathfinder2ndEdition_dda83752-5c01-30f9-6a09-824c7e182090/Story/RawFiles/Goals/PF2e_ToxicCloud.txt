@@ -1,0 +1,76 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ToxicCloudSummonStatuses("ToxicCloudAura_Rank5");
+DB_ToxicCloudSummonStatuses("ToxicCloudAura_Rank6");
+KBSECTION
+// Pass the caster spell DC to the invisible helper. Also
+// calculate and store the vector by which we need to move
+// the cloud each round.
+IF
+StatusApplied((GUIDSTRING)_Helper, (STRING)_Status, (GUIDSTRING)_Summoner, _)
+AND
+DB_ToxicCloudSummonStatuses(_Status)
+AND
+HasActiveStatus(_Summoner, "SPELL_DC_TRACKER", 1)
+AND
+GetStatusCurrentLifetime(_Summoner, "SPELL_DC_TRACKER", (REAL)_DCSeconds)
+AND
+GetPosition(_Summoner, (REAL)_AX, (REAL)_AY, (REAL)_AZ)
+AND
+GetPosition(_Helper, (REAL)_BX, (REAL)_BY, (REAL)_BZ)
+AND
+QRY_VectorABByDistance(_AX, _AY, _AZ, _BX, _BY, _BZ, 4.0)
+AND
+DB_QRYRTN_VectorABByDistance((REAL)_CX, (REAL)_CY, (REAL)_CZ)
+AND
+RealSubtract(_CX, _AX, (REAL)_DX)
+AND
+RealSubtract(_CY, _AY, (REAL)_DY)
+AND
+RealSubtract(_CZ, _AZ, (REAL)_DZ)
+THEN
+ApplyStatus(_Helper, "SPELL_DC_TRACKER", _DCSeconds, 0, _Summoner);
+DB_ActiveToxicClouds(_Helper, _Summoner, _DX, _DY, _DZ);
+
+IF
+StatusApplied(_Helper, "TOXIC_CLOUD_MOVE", _, _)
+AND
+DB_ActiveToxicClouds(_Helper, _, (REAL)_DX, (REAL)_DY, (REAL)_DZ)
+AND
+GetPosition(_Helper, (REAL)_AX, (REAL)_AY, (REAL)_AZ)
+AND
+RealSum(_AX, _DX, (REAL)_NX)
+AND
+RealSum(_AY, _DY, (REAL)_NY)
+AND
+RealSum(_AZ, _DZ, (REAL)_NZ)
+AND
+FindValidPosition(_NX, _NY, _NZ, 2.0, _Helper, 0, (REAL)_X, (REAL)_Y, (REAL)_Z)
+THEN
+ItemMoveToPosition((ITEM)_Helper, _X, _Y, _Z, 4.0, 6.0, "ToxicCloudMoveComplete");
+
+IF
+StatusRemoved((GUIDSTRING)_Helper, (STRING)_Status, _, _)
+AND
+DB_ToxicCloudSummonStatuses(_Status)
+AND
+DB_ActiveToxicClouds(_Helper, (GUIDSTRING)_Summoner, (REAL)_DX, (REAL)_DY, (REAL)_DZ)
+THEN
+NOT DB_ActiveToxicClouds(_Helper, _Summoner, _DX, _DY, _DZ);
+
+// If a dismiss is cast, remove the active helper.
+IF
+CastedSpell((GUIDSTRING)_Caster, "Shout_ToxicCloud_Dismiss", _, _, _)
+AND
+DB_ActiveToxicClouds((GUIDSTRING)_Helper, _Caster, _, _, _)
+AND
+DB_ToxicCloudSummonStatuses((STRING)_Status)
+AND
+HasActiveStatus(_Helper, _Status, 1)
+THEN
+RemoveStatus(_Helper, _Status);
+RemoveStatus(_Caster, "TOXIC_CLOUD_CASTER");
+EXITSECTION
+
+ENDEXITSECTION

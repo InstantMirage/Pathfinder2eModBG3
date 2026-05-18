@@ -1223,7 +1223,7 @@ end
 -- Witch
 
 function OngoingMisery()
-	return HasAnyStatus({'OFF_BALANCED','Grappled','FEINT_ROUND','POISONED','Dazzled','BLINDED','CLUMSY','CLUMSY2','CLUMSY3','STUNNED1','STUNNED2','Stupefied1','Stupefied2','Stupefied4','ENFEEBLED','ENFEEBLED_2','ENFEEBLED_3'}, {}, {},context.Target)
+	return HasAnyStatus({'OFF_BALANCED','Grappled','FEINT_ROUND','POISONED','Dazzled','BLINDED','CLUMSY_APPLY','CLUMSY_2_APPLY','CLUMSY_3_APPLY','STUNNED1','STUNNED2','Stupefied1','Stupefied2','Stupefied4','ENFEEBLED_APPLY','ENFEEBLED_2_APPLY','ENFEEBLED_3_APPLY'}, {}, {},context.Target)
 end
 
 function OwnerCanSustain(status)
@@ -2074,4 +2074,13 @@ function PreferredSaveForTarget(DC, fortitude, reflex, will)
 	if (willScore >= reflexScore) and (willScore >= fortitudeScore) then
 		return SavingThrow(Ability.Wisdom, DC)
 	end
+end
+
+function FieldOfRazorsDamage(damageType)
+	if (damageType == DamageType.Slashing
+		or damageType == DamageType.Piercing
+	) then
+		return ConditionResult(true)
+	end
+	return ConditionResult(false)
 end
