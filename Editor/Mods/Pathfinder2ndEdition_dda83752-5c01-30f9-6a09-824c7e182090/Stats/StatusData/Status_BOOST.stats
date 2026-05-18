@@ -6815,7 +6815,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="f061ff57-94e8-4d80-bac3-f6ba6014e370" />
         <field name="Name" type="NameTableFieldDefinition" value="ToxicCloudAura_Rank5" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h55eb78c4g3fe0g4979g66f2g7c23514afe57" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he87b352bg1d2cg4de6g8c1eg8b6ce7156516" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he87b352bg1d2cg4de6g8c1eg8b6ce7156516" version="4" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(6d8,Poison)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Poisoned" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Poison" enumeration_type_name="FormatStringColor" version="1" />
@@ -6825,13 +6825,14 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="8" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(ToxicCloudStatus_Rank5);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and not Tagged('UNDEAD') and not Tagged('CONSTRUCT')):ApplyStatus(ToxicCloudStatus_Rank5);" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartRound" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
         <field name="IsUnique" type="BoolTableFieldDefinition" value="False" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="5c3e0856-b205-418c-8450-8068d8034122" />
         <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems" enumeration_type_name="AuraFlags" version="1" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(TOXIC_CLOUD_MOVE,100,0)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6841,7 +6842,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="f061ff57-94e8-4d80-bac3-f6ba6014e370" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(7d8,Poison)" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(ToxicCloudStatus_Rank6);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and not Tagged('UNDEAD') and not Tagged('CONSTRUCT')):ApplyStatus(ToxicCloudStatus_Rank6);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6849,7 +6850,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="b44d0756-b609-40c0-bc7e-fe9929f1d0c7" />
         <field name="Name" type="NameTableFieldDefinition" value="ToxicCloudStatus_Rank5" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2b373ecegbef4g108cgf526g60283489ab4b" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc12b29e3g5beag5749g4d2fgea6e4f074ced" version="3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc12b29e3g5beag5749g4d2fgea6e4f074ced" version="4" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(6d8,Poison)" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Poisoned" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Poison" enumeration_type_name="FormatStringColor" version="1" />
@@ -6863,9 +6864,12 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(6d8,Poison)" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(6d8,Poison,Magical);" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="DownedStatus(DEATH_EFFECT_DOWNED,50);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="TooltipSave" type="StringTableFieldDefinition" value="Constitution" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(TOXIC_CLOUD_DC)" />
+        <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Constitution, GetDCStatusDuration('TOXIC_CLOUD_DC', context.Target))" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):ApplyStatus(TOXIC_CLOUD_FAIL_5,100,0);IF(SaveCrit()):ApplyStatus(TOXIC_CLOUD_CRIT_5,100,0);" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):ApplyStatus(TOXIC_CLOUD_SAVE_5,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6876,7 +6880,85 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(7d8,Poison)" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
         <field name="TooltipDamage" type="StringTableFieldDefinition" value="DealDamage(7d8,Poison)" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(7d8,Poison,Magical);" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):ApplyStatus(TOXIC_CLOUD_FAIL_6,100,0);IF(SaveCrit()):ApplyStatus(TOXIC_CLOUD_CRIT_6,100,0);" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):ApplyStatus(TOXIC_CLOUD_SAVE_6,100,0);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="920411ae-aa63-474c-a28e-40572d7f8b51" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_CASTER" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h89b0df57gced4g4135gebdegbf5ac97fa1be" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h41bee863g29b5g0f81gc811g8aadff2b4da2" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Poisoned" />
+        <field name="StackId" type="StringTableFieldDefinition" value="TOXIC_CLOUD_CASTER" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_ToxicCloud_Dismiss);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="02077a8d-14ce-4805-806a-c028b3403dca" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_DC" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="9b68e3d9-faaa-47f5-8e26-ca2b0895e80d" />
+        <field name="StackId" type="StringTableFieldDefinition" value="TOXIC_CLOUD_DC" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e40aa0bf-5fd0-4b0e-a7d5-d0fcba7f3572" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_MOVE" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="35981bc2-10ce-4c4b-be03-e0fc8e132808" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_FAIL_5" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="DownedStatus(DEATH_EFFECT_DOWNED,50);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(6d8,Poison,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6f085173-44c3-43cf-a41c-107c6ddab8ad" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_CRIT_5" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="35981bc2-10ce-4c4b-be03-e0fc8e132808" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage((6d8*2),Poison,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b7fdb8ef-7ca8-446b-ae40-99abb0cb1602" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_SAVE_5" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="35981bc2-10ce-4c4b-be03-e0fc8e132808" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage((6d8/2),Poison,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3ef5b9a9-937b-4409-9273-35b86afef272" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_FAIL_6" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="35981bc2-10ce-4c4b-be03-e0fc8e132808" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(7d8,Poison,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5da37cd2-e298-4f69-82be-6024548f0e26" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_CRIT_6" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="6f085173-44c3-43cf-a41c-107c6ddab8ad" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage((7d8*2),Poison,Magical);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f2a93429-ed83-4d01-888a-d9dbc95ecaf6" />
+        <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_SAVE_6" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="b7fdb8ef-7ca8-446b-ae40-99abb0cb1602" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage((7d8/2),Poison,Magical);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6897,7 +6979,7 @@
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('FIELD_OF_LIFE_CLEANUP',context.Source)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSourceStatusApplied" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="Unsummon()" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="1d5c66f0-2f81-433a-b72b-5274643609d5" />
       </fields>
     </stat_object>
