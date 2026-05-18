@@ -4122,7 +4122,7 @@
         <field name="DynamicAnimationTag" type="GuidObjectTableFieldDefinition" value="c4598bdb-fc07-40dd-a62c-90cc138bd76f" />
         <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="73c08de0-7999-41ec-9968-df81908d42fe" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and IsHit() and IsCritical() and HasStatus('TigerStanceStatus',context.Source) and not SpellId('Target_TigerSlash');" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and IsHit() and IsCritical() and HasStatus('TigerStanceStatus',context.Source) and not (IsDefaultFist() or SpellId('Target_TigerSlash'));" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(BLEEDING_D4,100,10);" />
       </fields>
     </stat_object>
@@ -4185,8 +4185,8 @@
         <field name="DynamicAnimationTag" type="GuidObjectTableFieldDefinition" value="c4598bdb-fc07-40dd-a62c-90cc138bd76f" />
         <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="73c08de0-7999-41ec-9968-df81908d42fe" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and HasStatus('CobraStanceStatus',context.Source) and not SpellId('Target_CobraEnvenom');" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(11)):ApplyStatus(PersistentPoisonDamage_1,100,10);&#xD;&#xA;IF(CharacterLevelGreaterThan(12)):ApplyStatus(PersistentPoisonDamage_2,100,10);" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and HasStatus('CobraStanceStatus',context.Source) and and not (IsDefaultFist() or SpellId('Target_CobraEnvenom'));" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(11)):ApplyStatus(PersistentPoisonDamage_1,100,10);IF(CharacterLevelGreaterThan(12)):ApplyStatus(PersistentPoisonDamage_2,100,10);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4424,7 +4424,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Stance_DeadlyD8" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="adbb4c09-f02a-4784-8da3-39901107a2e1" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and IsCritical();" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and not IsDefaultFist() and IsCritical();" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4470,6 +4470,19 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="09a3ba03-c8e0-491c-8d5a-45d33b71dec2" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF( OffGuard() and CanPrecisionDamage() ):CharacterUnarmedDamage(1);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5cd863a1-e51c-4369-9c40-b3e59da27ba0" />
+        <field name="Name" type="NameTableFieldDefinition" value="Stance_Backswing" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="5a967923-75af-494a-a1e7-2dd97c603ed1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsMiss() and not IsDefaultFist() and (IsCurrentTurnInCombat(context.Source) or not Combat());" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,BACKSWING_MONK)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4478,7 +4491,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="Stance_Forceful" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="4109f2d3-e1b6-48e0-a2e2-2a9c93690f35" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('MAP_PENALTY_2ND',context.Source) and not HasStatus('MAP_PENALTY_3RD',context.Source)):CharacterUnarmedDamage(LevelMapValue(ForcefulInfusion));IF(HasStatus('MAP_PENALTY_3RD',context.Source)):CharacterUnarmedDamage(LevelMapValue(ForcefulInfusion_2));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('MAP_PENALTY_2ND',context.Source) and not HasStatus('MAP_PENALTY_3RD',context.Source) and not IsDefaultFist()):CharacterUnarmedDamage(LevelMapValue(ForcefulInfusion));IF(HasStatus('MAP_PENALTY_3RD',context.Source) and not IsDefaultFist()):CharacterUnarmedDamage(LevelMapValue(ForcefulInfusion_2));" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
@@ -4489,7 +4502,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="8e343a7b-52ed-4127-95b2-aaf341de925b" />
         <field name="Name" type="NameTableFieldDefinition" value="Stance_Sweep" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="f36aede3-2fdd-4c43-bd79-ac114820bd25" />
-        <field name="Conditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not IsDefaultFist();" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('SWEEP_MONK',context.Source)):ApplyStatus(SELF,SWEEP_TARGET_MAIN); ApplyStatus(SELF,SWEEP_MONK); IF( not HasStatus('SWEEP_MONK',context.Source)):ApplyStatus(SWEEP_TARGET_MAIN);" />
       </fields>
     </stat_object>
@@ -7251,6 +7264,12 @@
         <field name="UUID" type="IdTableFieldDefinition" value="cf324821-b3bd-431b-bc22-85c34cbf2244" />
         <field name="Name" type="NameTableFieldDefinition" value="WIZARD" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(FreecastCheck(),ModifyUseCosts(Replace,SpellSlotsGroup,0,-1,SpellSlotsGroup),ModifyUseCosts(Replace,KiPoint,0,0,KiPoint),ModifyUseCosts(Replace,BardicInspiration,0,0,BardicInspiration),ModifyUseCosts(Replace,ChannelDivinity,0,0,ChannelDivinity),ModifyUseCosts(Replace,TidesOfChaos,0,0,TidesOfChaos));" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3808aa24-792a-48b8-90fe-b947be139199" />
+        <field name="EnabledConditions" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsToggled;ToggledDefaultOn" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="ToggleOnFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DEBUG_SPELL_SLOTS,100,-1)" />
+        <field name="ToggleOffFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(DEBUG_SPELL_SLOTS)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

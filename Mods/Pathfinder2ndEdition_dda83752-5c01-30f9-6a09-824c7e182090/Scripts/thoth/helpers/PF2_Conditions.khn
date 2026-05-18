@@ -366,10 +366,10 @@ function HasFreeHand()
 	return ConditionResult(result,{ConditionError('FreeHand')})
 end
 
-function SkillActionFreeHand(weapon_passive)
+function SkillActionFreeHand(weapon_passive,stance_passive)
 	local source = context.Source
 	-- Needs a free hand, the right weapon trait, or in a melee stance
-	return HasFreeHand() | HasPassive(weapon_passive,source) | HasPassive('Block_NonUnarmedStrike',source)
+	return HasFreeHand() | HasPassive(weapon_passive,source) | HasPassive(stance_passive,source) | HasPassive('Block_NonUnarmedStrike',source)
 end
 
 function GiantRage()
@@ -895,13 +895,14 @@ function FlurryOfManeuvers()
 	return HasPassive('FlurryOfManuevers',context.Source) & (SpellId('Target_Shove_Linked') | SpellId('Target_Grapple') | SpellId('Target_Trip') | SpellId('Target_SkillActions'))
 end
 
+-- Used by some stances to block default attacks
 function NonUnarmedStrikeCheck(stance)
-	return HasStringInSpellRoll('WeaponAttack') | HasStringInSpellRoll('RangedUnarmedAttack') | HasStringInSpellRoll('ThrowAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist')
+	return HasStringInSpellRoll('WeaponAttack') | HasStringInSpellRoll('RangedUnarmedAttack') | HasStringInSpellRoll('ThrowAttack') | IsDefaultFist()
 end
 
--- Whether to replace the unarmed attack with a stance attack
-function ReplaceUnarmed()
-	return HasWeaponProperty(WeaponProperties.Melee,GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand))
+-- So stance traits only affect special attacks
+function IsDefaultFist()
+	return SpellId('Target_UnarmedAttack') | SpellId('Target_BasicFist') | SpellId('Target_IronFist')
 end
 
 function NonBowStrikeCheck()
