@@ -366,6 +366,11 @@ function HasFreeHand()
 	return ConditionResult(result,{ConditionError('FreeHand')})
 end
 
+function BothHandsFree()
+	local result = Unarmed(context.Source) | HasPassive('Block_NonUnarmedStrike',context.Source)
+	return ConditionResult(result.Result,{ConditionError('BothHandsFree')})
+end
+
 function SkillActionFreeHand(weapon_passive,stance_passive)
 	local source = context.Source
 	-- Needs a free hand, the right weapon trait, or in a melee stance
