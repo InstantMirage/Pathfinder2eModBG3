@@ -12417,7 +12417,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="8c85655e-e1a4-4f6a-b7ac-f6ac39d431c3" />
         <field name="Owner" type="CommentTableFieldDefinition" value="Some NPCs already start with MAGE_ARMOR!" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatStarted;OnTurn;OnCreate;OnLongRest" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus('MysticArmorStatus_Rank_1',100,-1)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(MysticArmorStatus_Rank_1,100,-1)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -12463,6 +12463,55 @@
         <field name="Name" type="NameTableFieldDefinition" value="FieldOfRazorsMovementNoReact" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="edf49f08-7d3b-4cbf-bc2c-b45d5c815ab1" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,FIELD_OF_RAZORS_DAMAGE,100,0);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="190c08b9-8dc1-4d67-b2b7-65cb85c5aeb8" />
+        <field name="Name" type="NameTableFieldDefinition" value="DeathSavingThrows" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h84e41265g561eg66afgdc47gb36a291d5ece" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('DOWNED_DISABLED')):DownedStatus(DOWNED_2E_1,10);" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hfac543d0g19e6g7976g5088g4e17c2f1621d" version="1" />
+        <field name="ExtraDescription" type="TranslatedStringTableFieldDefinition" handle="haf474fb6g7ddfgb480g1043g56e2d786fcff" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9211f5ac-f00c-4dea-8e51-bf6167af13e9" />
+        <field name="Name" type="NameTableFieldDefinition" value="WoundedRest" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnLongRest" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(WOUNDED_1);RemoveStatus(WOUNDED_2);RemoveStatus(WOUNDED_3);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="cc0dea98-05dc-4fa6-9523-678f74b46794" />
+        <field name="Name" type="NameTableFieldDefinition" value="WoundedShortRest" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnShortRest" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasMaxHPWithoutTemporaryHP(context.Source);" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(WOUNDED_1);RemoveStatus(WOUNDED_2);RemoveStatus(WOUNDED_3);" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1be92298-bb10-4c6c-8356-7103cc690690" />
+        <field name="Name" type="NameTableFieldDefinition" value="DyingDamage" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamaged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DYING_INCREASE,100,0)" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not IsCritical();" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="87009706-591b-4b6e-b6c5-fc10f3647fbe" />
+        <field name="Name" type="NameTableFieldDefinition" value="DyingDamageCrit" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1be92298-bb10-4c6c-8356-7103cc690690" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsCritical();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DYING_INCREASE_2,100,0)" />
       </fields>
     </stat_object>
   </stat_objects>

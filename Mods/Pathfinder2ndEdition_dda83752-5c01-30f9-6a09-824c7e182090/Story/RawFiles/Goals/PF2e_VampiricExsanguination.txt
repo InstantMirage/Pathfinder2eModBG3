@@ -1,0 +1,54 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// Pre-cleanup
+IF
+UsingSpell((GUIDSTRING)_Caster, "Zone_VampiricExsanguination", _, _, _)
+AND
+DB_VampiricExsanguinationSpell(_Caster, (INTEGER)_OldStoryID, (INTEGER)_OldHighest)
+THEN
+NOT DB_VampiricExsanguinationSpell(_Caster, _OldStoryID, _OldHighest);
+
+// When using the spell, note the story ID down
+IF
+UsingSpell((GUIDSTRING)_Caster, "Zone_VampiricExsanguination", _, _, (INTEGER)_StoryID)
+THEN
+DB_VampiricExsanguinationSpell(_Caster, _StoryID, 0);
+
+// When a creature is damaged by the spell, and it was
+// for greater damage that is currently recorded, replace
+// the value stored in a DB.
+IF
+AttackedBy((GUIDSTRING)_Target, _, (GUIDSTRING)_Caster, _, (INTEGER)_Damage, "Attack", (INTEGER)_StoryID)
+AND
+DB_VampiricExsanguinationSpell(_Caster, _StoryID, (INTEGER)_OldHighest)
+AND
+_Damage > _OldHighest
+THEN
+NOT DB_VampiricExsanguinationSpell(_Caster, _StoryID, _OldHighest);
+DB_VampiricExsanguinationSpell(_Caster, _StoryID, _Damage);
+
+// When casting finishes, apply the temp HP status. A failed
+// cast can be ignored.
+IF
+CastedSpell((GUIDSTRING)_Caster, "Zone_VampiricExsanguination", _, _, (INTEGER)_StoryID)
+AND
+DB_VampiricExsanguinationSpell(_Caster, _StoryID, (INTEGER)_Highest)
+AND
+_Highest > 0
+AND
+IntegerToReal(_Highest, (REAL)_Duration)
+THEN
+ApplyStatus(_Caster, "VAMPIRIC_EXSANGUINATION_TEMP_HP", _Duration, 0, _Caster);
+
+IF
+CastedSpell((GUIDSTRING)_Caster, "Zone_VampiricExsanguination", _, _, (INTEGER)_StoryID)
+AND
+DB_VampiricExsanguinationSpell(_Caster, _StoryID, (INTEGER)_Highest)
+THEN
+NOT DB_VampiricExsanguinationSpell(_Caster, _StoryID, _Highest);
+EXITSECTION
+
+ENDEXITSECTION

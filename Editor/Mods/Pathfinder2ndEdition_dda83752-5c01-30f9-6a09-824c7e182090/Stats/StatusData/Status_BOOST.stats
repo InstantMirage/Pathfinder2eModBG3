@@ -593,7 +593,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="862b8fd4-8875-4ff0-8fc5-d4bf2098b1ee" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8fea5debgc692gdd9eg833egcd242a474afe" version="1" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('STAT_PEN_3SAVES') and not Tagged('STAT_PEN_2SAVES') and not Tagged('STAT_PEN_1SAVES') ):RollBonus(SavingThrow,-3,Constitution);IF(HasStatus('StatusPenalty2Saves')):RollBonus(SavingThrow,-1,Constitution);IF(HasStatus('StatusPenalty1Saves')):RollBonus(SavingThrow,-2,Constitution);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('STAT_PEN_2SAVES') and not Tagged('STAT_PEN_1SAVES') ):RollBonus(SavingThrow,-3,Constitution);IF(HasStatus('StatusPenalty2Saves')):RollBonus(SavingThrow,-1,Constitution);IF(HasStatus('StatusPenalty1Saves')):RollBonus(SavingThrow,-2,Constitution);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_3FORT')" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_2FORT')):ApplyStatus(StatusPenalty2FortSaves,100,-1);IF(Tagged('STAT_PEN_1FORT') and not Tagged('STAT_PEN_2FORT')):ApplyStatus(StatusPenalty1FortSaves,100,-1)" />
       </fields>
@@ -630,7 +630,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="b72b055a-22ba-4395-85c1-0252a26db28e" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcd847007g92f0g181ag0f26g334369c26ccb" version="1" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('STAT_PEN_3SAVES') and not Tagged('STAT_PEN_2SAVES') and not Tagged('STAT_PEN_1SAVES') ):RollBonus(SavingThrow,-3,Wisdom);IF(HasStatus('StatusPenalty2Saves')):RollBonus(SavingThrow,-1,Wisdom);IF(HasStatus('StatusPenalty1Saves')):RollBonus(SavingThrow,-2,Wisdom);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('STAT_PEN_2SAVES') and not Tagged('STAT_PEN_1SAVES') ):RollBonus(SavingThrow,-3,Wisdom);IF(HasStatus('StatusPenalty2Saves')):RollBonus(SavingThrow,-1,Wisdom);IF(HasStatus('StatusPenalty1Saves')):RollBonus(SavingThrow,-2,Wisdom);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_3WILL')" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_2WILL')):ApplyStatus(StatusPenalty2WillSaves,100,-1);IF(Tagged('STAT_PEN_1WILL') and not Tagged('STAT_PEN_2WILL')):ApplyStatus(StatusPenalty1WillSaves,100,-1)" />
       </fields>
@@ -666,7 +666,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="b1539f46-3b9a-4508-ad0e-4b974fc05831" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3348f613g5b0cgb6cdg9cb8ge2b46a96d040" version="1" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('STAT_PEN_3SAVES') and not Tagged('STAT_PEN_2SAVES') and not Tagged('STAT_PEN_1SAVES') ):RollBonus(SavingThrow,-3,Dexterity);IF(HasStatus('StatusPenalty2Saves')):RollBonus(SavingThrow,-1,Dexterity);IF(HasStatus('StatusPenalty1Saves')):RollBonus(SavingThrow,-2,Dexterity);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('STAT_PEN_2SAVES') and not Tagged('STAT_PEN_1SAVES') ):RollBonus(SavingThrow,-3,Dexterity);IF(HasStatus('StatusPenalty2Saves')):RollBonus(SavingThrow,-1,Dexterity);IF(HasStatus('StatusPenalty1Saves')):RollBonus(SavingThrow,-2,Dexterity);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not Tagged('STAT_PEN_3REFLEX')" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('STAT_PEN_2REFLEX')):ApplyStatus(StatusPenalty2ReflexSaves,100,-1);IF(Tagged('STAT_PEN_1REFLEX') and not Tagged('STAT_PEN_2REFLEX')):ApplyStatus(StatusPenalty1ReflexSaves,100,-1)" />
       </fields>
@@ -3778,6 +3778,7 @@
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="ceeda0ca-0739-4588-a449-d024389f0c2a" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('SICKENED_2')):RemoveStatus(SICKENED); ApplyStatus(SICKENED_DC,100,15)" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not Combat(context.Target)):RemoveStatus(SICKENED)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3789,6 +3790,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="SICKENED_2" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SICKENED); ApplyStatus(SICKENED_DC,100,15)" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not Combat(context.Target)):RemoveStatus(SICKENED_2)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4043,6 +4045,120 @@
         <field name="UUID" type="IdTableFieldDefinition" value="71587e69-20f4-41f4-b03f-f711e3b555b3" />
         <field name="Name" type="NameTableFieldDefinition" value="SHOVE_TRIGGER" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1b6c6904g080ag7617gad51g2e750b0c476b" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="03e10456-b654-4c74-a16b-ee9aed240436" />
+        <field name="Name" type="NameTableFieldDefinition" value="WOUNDED_INCREASE" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="ApplyToDead;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('WOUNDED_2')):ApplyStatus(WOUNDED_3,100,-1);IF(HasStatus('WOUNDED_2')):RemoveStatus(WOUNDED_2);IF(HasStatus('WOUNDED_1')):ApplyStatus(WOUNDED_2,100,-1);IF(HasStatus('WOUNDED_1')):RemoveStatus(WOUNDED_1);IF(not HasStatus('WOUNDED_3') and not HasStatus('WOUNDED_2') and not HasStatus('WOUNDED_1')):ApplyStatus(WOUNDED_1,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="bfc9be0b-6bd8-4f66-a78e-e594c54bd05e" />
+        <field name="Name" type="NameTableFieldDefinition" value="WOUNDED_DECREASE" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="ApplyToDead;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('WOUNDED_1')):RemoveStatus(WOUNDED_1);IF(HasStatus('WOUNDED_2')):ApplyStatus(WOUNDED_1,100,-1);IF(HasStatus('WOUNDED_2')):RemoveStatus(WOUNDED_2);IF(HasStatus('WOUNDED_3')):ApplyStatus(WOUNDED_2,100,-1);IF(HasStatus('WOUNDED_3')):RemoveStatus(WOUNDED_3);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e91a0eff-e620-43b8-82a6-c59aecdac070" />
+        <field name="Name" type="NameTableFieldDefinition" value="WOUNDED_1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h00dfda10g6bf4g025fg7119g7fe67d09929a" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h86d97d23gd041ga476gd8e5g1523ca825bb3" version="2" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Exhausted_1" />
+        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Warrior" enumeration_type_name="FormatStringColor" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="WOUNDED_1" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="ApplyToDead;IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="Passives" type="StringTableFieldDefinition" value="WoundedRest;WoundedShortRest;" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('DOWNED_DISABLED')):DownedStatus(DOWNED_2E_2,30);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f1cada69-2273-4764-89a1-0d567b268c9b" />
+        <field name="Name" type="NameTableFieldDefinition" value="WOUNDED_2" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e91a0eff-e620-43b8-82a6-c59aecdac070" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h99bd74cag51a9gc04ag6007g0acceba19892" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Exhausted_2" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('DOWNED_DISABLED')):DownedStatus(DOWNED_2E_3,40);" />
+        <field name="StackId" type="StringTableFieldDefinition" value="WOUNDED_2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc1114052g6187g34c2g7c44ge3b6675f5300" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4e75162b-6f83-4a87-b639-b96c5982a40d" />
+        <field name="Name" type="NameTableFieldDefinition" value="WOUNDED_3" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="f1cada69-2273-4764-89a1-0d567b268c9b" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0f83d588g32fegc86ega7b7gab296c3bea21" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Exhausted_3" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not Tagged('DOWNED_DISABLED')):DownedStatus(DEATH_EFFECT_DOWNED,50);" />
+        <field name="StackId" type="StringTableFieldDefinition" value="WOUNDED_3" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf400f302g5a60g1865g506ag422255406f44" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="de98ddef-d169-4ced-b5ca-2d9225390150" />
+        <field name="Name" type="NameTableFieldDefinition" value="DYING_INCREASE" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="ApplyToDead;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('DYING_2E_3')):Kill();IF(HasStatus('DYING_2E_2')):ApplyStatus(DYING_2E_3,100,-1);IF(HasStatus('DYING_2E_2')):RemoveStatus(DYING_2E_2);IF(HasStatus('DYING_2E_1')):ApplyStatus(DYING_2E_2,100,-1);IF(HasStatus('DYING_2E_1')):RemoveStatus(DYING_2E_1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0b9b8c11-65e1-46df-8676-cfc10572925d" />
+        <field name="Name" type="NameTableFieldDefinition" value="DYING_INCREASE_2" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="de98ddef-d169-4ced-b5ca-2d9225390150" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('DYING_2E_3')):Kill();IF(HasStatus('DYING_2E_2')):Kill();IF(HasStatus('DYING_2E_1')):ApplyStatus(DYING_2E_3,100,-1);IF(HasStatus('DYING_2E_1')):RemoveStatus(DYING_2E_1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7ae841ac-033b-4241-b12d-3caa255d669c" />
+        <field name="Name" type="NameTableFieldDefinition" value="DYING_2E_1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h57409013g34bage250g2d29g30de2aae5eca" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Downed" />
+        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Warrior" enumeration_type_name="FormatStringColor" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="ApplyToDead" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,11)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="RegainHitPoints(1);RemoveStatus(DYING_2E_1);RemoveStatus(DOWNED_2E_1);RemoveStatus(DOWNED_2E_2);RemoveStatus(DOWNED_2E_3);" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="RemoveStatus(DYING_2E_1);ApplyStatus(DYING_2E_2,100,-1);" />
+        <field name="Passives" type="StringTableFieldDefinition" value="DyingDamage;DyingDamageCrit;" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4ba751c6g33eegf304g8837g91d3e7d9128d" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="fc58805f-8087-4d0e-a51c-e39a8c9927d1" />
+        <field name="Name" type="NameTableFieldDefinition" value="DYING_2E_2" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7ae841ac-033b-4241-b12d-3caa255d669c" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd9d4a454gdba8g2282g2866gb3d5d3030227" version="1" />
+        <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,12)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="RemoveStatus(DYING_2E_2);ApplyStatus(DYING_2E_1,100,-1)" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="RemoveStatus(DYING_2E_2);ApplyStatus(DYING_2E_3,100,-1);" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hd8af5526gd869g981cg8cb5gb0c3ed9a7ac1" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="cf0c97ba-ce13-4fa3-87ea-def1109068f3" />
+        <field name="Name" type="NameTableFieldDefinition" value="DYING_2E_3" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="fc58805f-8087-4d0e-a51c-e39a8c9927d1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h397f0e19g98a7gef7agd09dg1c44ea4ce647" version="1" />
+        <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,13)" />
+        <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" value="RemoveStatus(DYING_2E_3);ApplyStatus(DYING_2E_2,100,-1)" />
+        <field name="OnTickFail" type="FunctorsTableFieldDefinition" value="RemoveStatus(DYING_2E_3);Kill()" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hebd109fag4546g3228ga208g8549f108a698" version="1" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -6916,7 +7032,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="35981bc2-10ce-4c4b-be03-e0fc8e132808" />
         <field name="Name" type="NameTableFieldDefinition" value="TOXIC_CLOUD_FAIL_5" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="DownedStatus(DEATH_EFFECT_DOWNED,50);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(Player() or Party()):DownedStatus(DEATH_EFFECT_DOWNED,50);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(6d8,Poison,Magical);" />
       </fields>
@@ -7039,7 +7155,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="e3b2599d-5bce-4435-a06e-4cc35605859d" />
         <field name="Name" type="NameTableFieldDefinition" value="RIP_THE_SPIRIT" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="DownedStatus(DEATH_EFFECT_DOWNED,50);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(Player() or Party()):DownedStatus(DEATH_EFFECT_DOWNED,50);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator;ApplyToDead" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
@@ -11358,6 +11474,7 @@
         <field name="DescriptionParams" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="12" />
         <field name="Boosts" type="StringTableFieldDefinition" value="TemporaryHP(12d6);" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Deprecated" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -11366,6 +11483,35 @@
         <field name="Name" type="NameTableFieldDefinition" value="DrainLifeTemp" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="12d48fde-1235-4e44-ba69-8b0b5ed895a9" />
         <field name="Boosts" type="StringTableFieldDefinition" value="TemporaryHP(LevelMapValue(D4Bonus));" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5c7bacf4-f5d6-4b2c-b7c9-8877e9f8cb2b" />
+        <field name="Name" type="NameTableFieldDefinition" value="VAMPIRIC_EXSANGUINATION_TEMP_HP" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="12d48fde-1235-4e44-ba69-8b0b5ed895a9" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf3f00cceg6156ga2a9g00a7gdb774d7bc1da" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4c945df1g9ac4g5806g9332gac36cf2e8795" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_PlanarBinding" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="13" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="TemporaryHP(6);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="MultiplyEffectsByDuration;FreezeDuration;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="SetStatusDuration(VAMPIRIC_EXSANGUINATION_TIMER,10);ApplyStatus(VAMPIRIC_EXSANGUINATION_TIMER,100,10);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f3c5814c-3349-4a68-b095-d1e01ee1a3d3" />
+        <field name="Name" type="NameTableFieldDefinition" value="VAMPIRIC_EXSANGUINATION_TIMER" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h82fb469dg0ebdgece7gfb77ge0a51bc791d6" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2ce2c6bcg819cg0874gace7g63d079cb3109" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_PlanarBinding" />
+        <field name="StackId" type="StringTableFieldDefinition" value="VAMPIRIC_EXSANGUINATION_TIMER" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(VAMPIRIC_EXSANGUINATION_TEMP_HP)" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasTemporaryHP()" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
