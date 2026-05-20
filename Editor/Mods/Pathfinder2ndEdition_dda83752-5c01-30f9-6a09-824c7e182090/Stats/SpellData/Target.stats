@@ -262,7 +262,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="681e9ae8-5e47-4cb1-924d-3f4ce4ae8868" />
         <field name="Name" type="NameTableFieldDefinition" value="Disarm" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Athletics,DisarmDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(SkillCrit()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);AI_ONLY:IF(HasStatus('FLANKED') and not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and HasHPPercentageMoreThan(50,context.Target) and HasAllyWithinRange('SG_Incapacitated',9) and HasActionResource('ActionPoint', 2, 0, false, false, context.Source)):DealDamage((LevelMapValue(CharacterLevel))*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and HasHPPercentageMoreThan(50,context.Target) and HasAllyWithinRange('SG_Incapacitated',9) and HasActionResource('ActionPoint', 2, 0, false, false, context.Source)):DealDamage((LevelMapValue(CharacterLevel))*2, Bludgeoning);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(SkillCrit()):ApplyStatus(DISARM, 100, 1);IF(not SkillCrit()):ApplyStatus(HINDERED,100,1);AI_ONLY:IF(HasStatus('FLANKED') and not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and HasHPPercentageMoreThan(50,context.Target) and HasAllyWithinRange('SG_Incapacitated',9) and HasActionResource('ActionPoint', 2, 0, false, false, context.Source)):DealDamage((LevelMapValue(CharacterLevel))*2, MainMeleeWeaponDamageType);AI_ONLY:IF(HasStatus('FLANKED') and not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source) and HasHPPercentageMoreThan(50,context.Target) and HasAllyWithinRange('SG_Incapacitated',9) and HasActionResource('ActionPoint', 2, 0, false, false, context.Source)):DealDamage((LevelMapValue(CharacterLevel))*2, Bludgeoning);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and HasWeaponInMainHand() and DisarmTargetSensible() and AttackSpell();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_HinderingStrike" />
@@ -496,8 +496,8 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e38549b5-0d0b-40c1-a46d-7a4cdb92e490" />
         <field name="Name" type="NameTableFieldDefinition" value="Help" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="2" />
-        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SG_Prone);RemoveStatus(PRONE);RemoveStatus(PRONE_PF2);RemoveStatus(SG_Sleeping);RemoveStatus(SLEEPING);RemoveStatus(SLEEP);" />
-        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and (not Enemy() or Player()) and HasHelpableCondition()" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SG_Prone);RemoveStatus(PRONE);RemoveStatus(PRONE_PF2);RemoveStatus(SG_Sleeping);RemoveStatus(SLEEPING);RemoveStatus(SLEEP);RemoveStatus(UNCONSCIOUS);" />
+        <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and (not Enemy() or Player()) and (HasHelpableCondition() or HasStatus('UNCONSCIOUS'));" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Help" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0c061df2g0bcaga2b6g4874ge6b0828535a5" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3a2cf1d3g54f1g7449g108fg8c1846e7b53c" version="2" />
@@ -519,7 +519,7 @@
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Utility" enumeration_type_name="VerbalIntent" version="1" />
         <field name="Owner" type="CommentTableFieldDefinition" value="Administer First Aid / Assisted Recovery" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="SkillCheck(Skill.Medicine,16);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RemoveStatus(SG_Helpable_Condition);RemoveStatus(BURNING);RemoveStatus(BLEEDING);RemoveStatus(SG_Restrained);RemoveStatus(ENSNARING_STRIKE);RemoveStatus(WEB);IF(IsDowned()):RegainHitPoints(1);RemoveStatus(HYPNOTIC_PATTERN);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="RemoveStatus(SG_Helpable_Condition);RemoveStatus(BURNING);RemoveStatus(BLEEDING);RemoveStatus(SG_Restrained);RemoveStatus(ENSNARING_STRIKE);RemoveStatus(WEB);RemoveStatus(HYPNOTIC_PATTERN);" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="16" />
       </fields>
     </stat_object>
