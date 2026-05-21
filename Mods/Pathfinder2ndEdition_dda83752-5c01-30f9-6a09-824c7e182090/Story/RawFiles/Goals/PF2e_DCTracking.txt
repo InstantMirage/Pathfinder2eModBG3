@@ -182,6 +182,8 @@ PROC_ACTrackerApply(_Character);
 IF
 StatusApplied((GUIDSTRING)_Character, "DEX_TRACKER", _, _)
 AND
+IsCharacter(_Character, 1)
+AND
 DB_DCTrackingUnarmoredBlock(_Character)
 THEN
 NOT DB_DCTrackingUnarmoredBlock(_Character);
@@ -430,6 +432,8 @@ NOT DB_ACBonusDisabled(_Character, _Value);
 IF
 StatusApplied((GUIDSTRING)_Character, "DEX_TRACKER", _, _)
 AND
+IsCharacter(_Character, 1)
+AND
 DB_DCToHitTrackerDex(_Character, (REAL)_DexModSecondsPlusTen)
 THEN
 NOT DB_DCToHitTrackerDex(_Character, _DexModSecondsPlusTen);
@@ -437,6 +441,8 @@ NOT DB_DCToHitTrackerDex(_Character, _DexModSecondsPlusTen);
 // Dex modifier is applied first in stats.
 IF
 StatusApplied((GUIDSTRING)_Character, "DEX_TRACKER", _, _)
+AND
+IsCharacter(_Character, 1)
 AND
 GetStatusCurrentLifetime(_Character, "DEX_TRACKER", (REAL)_DexModSecondsPlusTen)
 THEN
@@ -447,6 +453,8 @@ DB_DCToHitTrackerDex(_Character, _DexModSecondsPlusTen);
 // that the character is reasonably built.
 IF
 StatusApplied((GUIDSTRING)_Character, "STR_TRACKER", _, _)
+AND
+IsCharacter(_Character, 1)
 AND
 GetStatusCurrentLifetime(_Character, "STR_TRACKER", (REAL)_StrModSecondsPlusTen)
 AND
