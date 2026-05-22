@@ -4185,8 +4185,8 @@
         <field name="DynamicAnimationTag" type="GuidObjectTableFieldDefinition" value="c4598bdb-fc07-40dd-a62c-90cc138bd76f" />
         <field name="TooltipPermanentWarnings" type="StringTableFieldDefinition" value="73c08de0-7999-41ec-9968-df81908d42fe" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and HasStatus('CobraStanceStatus',context.Source) and and not (IsDefaultFist() or SpellId('Target_CobraEnvenom'));" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(11)):ApplyStatus(PersistentPoisonDamage_1,100,10);IF(CharacterLevelGreaterThan(12)):ApplyStatus(PersistentPoisonDamage_2,100,10);" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and HasStatus('CobraStanceStatus',context.Source) and not (IsDefaultFist() or SpellId('Target_CobraEnvenom'));" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(11)):ApplyStatus(PersistentPoisonDamage_1,100,-1);IF(CharacterLevelGreaterThan(11)):ApplyStatus(PersistentPoisonDamage_2,100,-1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -4421,10 +4421,11 @@
     <stat_object is_substat="false">
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="cbd7b82e-69ba-49ee-8cf3-2a78af511985" />
-        <field name="Name" type="NameTableFieldDefinition" value="Stance_DeadlyD8" />
-        <field name="Using" type="BaseClassTableFieldDefinition" value="adbb4c09-f02a-4784-8da3-39901107a2e1" />
+        <field name="Name" type="NameTableFieldDefinition" value="Stance_DeadlyD10" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="0f778fb2-9241-4cfa-bd86-1317689ed521" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsMeleeUnarmedAttack() and not IsDefaultFist() and IsCritical();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not CharacterLevelGreaterThan(11)):ApplyStatus(DEADLYD10,100,0);IF(CharacterLevelGreaterThan(11)):ApplyStatus(DEADLYD10_GS,100,0)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -11003,11 +11004,11 @@
         <field name="UUID" type="IdTableFieldDefinition" value="45d38fa6-9451-4a54-bd21-c418b274add8" />
         <field name="Name" type="NameTableFieldDefinition" value="DeadlyD6" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5ac7cf15g8604gd48cg0c5cg1919e39251d6" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4f0534fagcf33g34aeg2dedg285b73106543" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4f0534fagcf33g34aeg2dedg285b73106543" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="1d6" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsWeaponAttack() and AttackedWithPassiveSourceWeapon() and IsCritical();" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DEADLYD6,100,0)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasWeaponDamageDice3()):ApplyStatus(DEADLYD6,100,0);IF(HasWeaponDamageDice3()):ApplyStatus(DEADLYD6_GS,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -11017,7 +11018,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="45d38fa6-9451-4a54-bd21-c418b274add8" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1c8328bagd360g35b6g2ae6ge58466293ba0" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="1d8" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DEADLYD8,100,0)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasWeaponDamageDice3()):ApplyStatus(DEADLYD8,100,0);IF(HasWeaponDamageDice3()):ApplyStatus(DEADLYD8_GS,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -11025,7 +11026,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="8210396c-6c8d-49eb-8500-4a01e965f98e" />
         <field name="Name" type="NameTableFieldDefinition" value="DeadlyD8_Slashing" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="adbb4c09-f02a-4784-8da3-39901107a2e1" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DEADLYD8_Slashing,100,0)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasWeaponDamageDice3()):ApplyStatus(DEADLYD8_Slashing,100,0);IF(HasWeaponDamageDice3()):ApplyStatus(DEADLYD8_Slashing_GS,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -11035,7 +11036,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="45d38fa6-9451-4a54-bd21-c418b274add8" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5c59c880g224ag0063gd6f4gb8f9096522d8" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="1d10" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DEADLYD10,100,0)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasWeaponDamageDice3()):ApplyStatus(DEADLYD10,100,0);IF(HasWeaponDamageDice3()):ApplyStatus(DEADLYD10_GS,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -11045,7 +11046,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="45d38fa6-9451-4a54-bd21-c418b274add8" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hce999d12gcfbcg8a39gd912gea3703c9eab0" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="1d12" />
-        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(DEADLYD12,100,0)" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasWeaponDamageDice3()):ApplyStatus(DEADLYD12,100,0);IF(HasWeaponDamageDice3()):ApplyStatus(DEADLYD12_GS,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
