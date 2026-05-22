@@ -19,6 +19,13 @@ KBSECTION
 // moves to the new location, hitting targets that it
 // passes. 
 IF
+UsingSpell(_, _, _, _, _)
+AND
+DB_MovableSpellsSummonSequence((INTEGER)_StoryID, (GUIDSTRING)_Owner, (STRING)_Spell, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+THEN
+NOT DB_MovableSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
+
+IF
 UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Spell, _, _, (INTEGER)_StoryID)
 AND
 DB_MovableSpells(_, _, _Spell, _, _, _)

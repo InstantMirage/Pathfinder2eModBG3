@@ -2005,6 +2005,12 @@ function HasMovableSpellInRange(status, range)
 			end
 		end
 	end
+	-- Also checks if the caster has the status, as they are not their own ally.
+	if HasStatus(status, context.Source, context.Source).Result then
+		if DistanceToEntityHitBounds(context.TargetPosition,context.Source) <= range then
+			result = true
+		end
+	end
 	return ConditionResult(result, {ConditionError("MovableSpellRange")}, {ConditionError("NoMovableSpellRange")})
 end
 
