@@ -4342,7 +4342,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="af1a9bf5-e6b3-4577-a70b-89d4017398a5" />
         <field name="Name" type="NameTableFieldDefinition" value="CobraPoison" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h581f4df0gc976g2ec6g6941g49c685cdd0b4" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h764a13ebg9c70g3f3bgd7f5gadb7e5b02c9c" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h764a13ebg9c70g3f3bgd7f5gadb7e5b02c9c" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(AnimalSecondaryFrog), Poison)" />
         <field name="Icon" type="StringTableFieldDefinition" value="GenericIcon_DamageType_Poison" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StatusAnimationType" version="1" />
@@ -6175,10 +6175,10 @@
         <field name="Name" type="NameTableFieldDefinition" value="CobraStanceStatus" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="9ef00628-cf8e-43d2-996f-8d8e905c10c8" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h85154251gace0g264dg56f3g8e151baa3fef" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4a01e173g93b6g6e2bgaee2g5adc5efaac64" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4a01e173g93b6g6e2bgaee2g5adc5efaac64" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_StarryForm_Dragon" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="AttackSpellOverride(Target_CobraFang, Target_MainHandAttack);AttackSpellOverride(Target_CobraFang, Target_UnarmedAttack);UnlockSpell(Shout_DismissStance);MonkWeaponDamageDiceOverride(LevelMapValue(AnimalSecondaryFrog));Tag(CIRC_BON_1FORT);" />
-        <field name="Passives" type="StringTableFieldDefinition" value="Stance_DeadlyD8;Block_NonUnarmedStrike;" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="AttackSpellOverride(Target_CobraFang, Target_MainHandAttack);AttackSpellOverride(Target_CobraFang, Target_UnarmedAttack);UnlockSpell(Shout_DismissStance);MonkWeaponDamageDiceOverride(LevelMapValue(AnimalSecondaryFrog));Tag(CIRC_BON_1FORT);DamageReduction(Poison,Flat,LevelMapValue(H1Plus1));" />
+        <field name="Passives" type="StringTableFieldDefinition" value="Stance_DeadlyD10;Block_NonUnarmedStrike;" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8939,7 +8939,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="GRAVITY_WEAPON_ACTIVE" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="b196a385-f936-4d7f-b92e-b09f38178ae8" />
         <field name="StackId" type="StringTableFieldDefinition" value="GRAVITY_WEAPON_READY" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsWeaponAttack()):DamageBonus(2)" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(((IsWeaponAttack() and HasWeaponDamageDice1()) or (IsRangedUnarmedAttack() and IsWeapon(context.HitDescription.ThrownObject) and HasWeaponDamageDice1(context.HitDescription.ThrownObject)))):DamageBonus(2);IF(((IsWeaponAttack() and HasWeaponDamageDice2()) or (IsRangedUnarmedAttack() and IsWeapon(context.HitDescription.ThrownObject) and HasWeaponDamageDice2(context.HitDescription.ThrownObject)))):DamageBonus(4);IF(((IsWeaponAttack() and HasWeaponDamageDice3()) or (IsRangedUnarmedAttack() and IsWeapon(context.HitDescription.ThrownObject) and HasWeaponDamageDice3(context.HitDescription.ThrownObject)))):DamageBonus(6);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="IsWeaponAttack()" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnAttack" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
@@ -15690,6 +15690,46 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="b9395dc8-b5de-4c2f-83cd-bb80222f8bf6" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h25096bbcg37a4g899eg73abgfc5c0950d9d7" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(1d12,Piercing,,,0,,,,,true)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e8f8fd87-0ee2-4228-b0f4-1955260d5459" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEADLYD6_GS" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="b9395dc8-b5de-4c2f-83cd-bb80222f8bf6" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(2d6,Piercing,,,0,,,,,true)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6aa1370d-5209-4c4e-8640-ecf46e9e164c" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEADLYD8_GS" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="1b84a69f-26ff-4fcd-b0e5-d88587ac7f2f" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(2d8,Piercing,,,0,,,,,true)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="93f89bb6-bea4-45a4-b64b-cb18d193f6a7" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEADLYD8_Slashing_GS" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3ffd7bda-bbfd-4014-ab58-f9e527f3e708" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(2d8,Slashing,,,0,,,,,true)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d9686f16-2469-4fc0-ac48-954bd451f4b6" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEADLYD10_GS" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a2f504d0-eea2-4f0b-b484-2d465b83c5ea" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(2d10,Piercing,,,0,,,,,true)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="66fa8576-7a64-4f9e-9580-f4b8809d128a" />
+        <field name="Name" type="NameTableFieldDefinition" value="DEADLYD12_GS" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="79d77759-ed26-4dc9-b731-521b3a7da014" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(2d12,Piercing,,,0,,,,,true)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
