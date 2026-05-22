@@ -1486,13 +1486,13 @@
         <field name="TargetFloor" type="StringTableFieldDefinition" value="-1" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="24" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.RangedSpellAttack)" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D4Cantrip),Piercing,Magical)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D4Cantrip),Piercing,Magical);IF(IsCritical() and not CharacterLevelGreaterThan(2)):ApplyStatus(BLEEDING,100,-1);IF(IsCritical() and CharacterLevelGreaterThan(2) and not CharacterLevelGreaterThan(4)):ApplyStatus(BLEEDING_2,100,-1);IF(IsCritical() and CharacterLevelGreaterThan(4) and not CharacterLevelGreaterThan(6)):ApplyStatus(BLEEDING_3,100,-1);IF(IsCritical() and CharacterLevelGreaterThan(6) and not CharacterLevelGreaterThan(8)):ApplyStatus(BLEEDING_4,100,-1);IF(IsCritical() and CharacterLevelGreaterThan(8) and not CharacterLevelGreaterThan(10)):ApplyStatus(BLEEDING_5,100,-1);IF(IsCritical() and CharacterLevelGreaterThan(10)):ApplyStatus(BLEEDING_6,100,-1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead() and ConcentrateSpell();" />
         <field name="ProjectileCount" type="StringTableFieldDefinition" value="1" />
         <field name="Trajectories" type="StringTableFieldDefinition" value="544a1f47-4edb-4269-b6de-a12bc34263e3" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_HailOfThorns" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h15883836gfac4g5386gddb9ga5e93eb8d296" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb466b5d7g8da4g6171g8fabgad0fbac70250" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb466b5d7g8da4g6171g8fabgad0fbac70250" version="3" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(D4Cantrip), Piercing)" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="RangedSpellAttack" />
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Damage_Physical_Gen_L1to3" />
@@ -1505,11 +1505,13 @@
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="3ff87abf-1ea1-4c32-aadf-c822d74c7dc0,,;,,;49fe22cb-4b9f-4480-b7ce-050942c420bb,,;3eeccdd5-70cb-41aa-91c5-549c8d81a9de,,;d8925ce4-d6d9-400c-92f5-ad772ef7f178,,;,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
         <field name="VerbalIntent" type="EnumerationTableFieldDefinition" value="Damage" enumeration_type_name="VerbalIntent" version="1" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent;HasSomaticComponent;IsSpell;HasHighGroundRangeExtension;RangeIgnoreVerticalThreshold;IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
-        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalDamage_External" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="PhysicalDamage" enumeration_type_name="HitAnimationType" version="1" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="153bd5cf-0c67-4cb3-9847-27019d659ab0" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="fa32df5a-2f3a-41ee-b199-09922eb7abc9" />
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Piercing" enumeration_type_name="Damage Type" version="1" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
+        <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
+        <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Somatic" enumeration_type_name="SpellSheathing" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
