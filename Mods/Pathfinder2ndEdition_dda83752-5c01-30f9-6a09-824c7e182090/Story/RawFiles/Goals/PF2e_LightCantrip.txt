@@ -1,0 +1,306 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_LightCantripSpells("Target_Light");
+DB_LightCantripSpells("Target_Light_Sustain");
+DB_LightCantripSpells("Target_DancingLights");
+DB_LightCantripSpells("Target_DancingLights_DeepRothe");
+DB_LightCantripSpells("SHA_SeluneBlessing_Moonfire");
+DB_LightCantripSpells("DEN_DancingLights_Arabella_Locket");
+DB_LightCantripSpells("LOW_CastPortal");
+DB_LightCantripSpells("LOW_EastwayWizards_DancingLights");
+
+DB_LightCantripSpellsNoSustain("Target_Light");
+DB_LightCantripSpellsNoSustain("Target_DancingLights");
+DB_LightCantripSpellsNoSustain("Target_DancingLights_DeepRothe");
+DB_LightCantripSpellsNoSustain("SHA_SeluneBlessing_Moonfire");
+DB_LightCantripSpellsNoSustain("DEN_DancingLights_Arabella_Locket");
+DB_LightCantripSpellsNoSustain("LOW_CastPortal");
+DB_LightCantripSpellsNoSustain("LOW_EastwayWizards_DancingLights");
+KBSECTION
+// Very similar to movable spells, but has to run on
+// its own system to accomodate the attaching to a
+// creature mechanic. 
+
+// Using spell is the only time we get to query
+// the spell's target/position. Store for Cast
+// trigger later.
+IF
+UsingSpell(_, _, _, _, _)
+AND
+DB_LightPositionSequence((INTEGER)_StoryID, (GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+THEN
+NOT DB_LightPositionSequence(_StoryID, _Owner, _XT, _YT, _ZT);
+
+IF
+UsingSpell(_, _, _, _, _)
+AND
+DB_LightCreatureSequence((INTEGER)_StoryID, (GUIDSTRING)_Owner, (GUIDSTRING)_Target)
+THEN
+NOT DB_LightCreatureSequence(_StoryID, _Owner, _Target);
+
+IF
+UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_LightCantripSpells(_Spell)
+THEN
+DB_LightPositionSequence(_StoryID, _Owner, _XT, _YT, _ZT);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Owner, (GUIDSTRING)_Target, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_LightCantripSpells(_Spell)
+THEN
+DB_LightCreatureSequence(_StoryID, _Owner, _Target);
+
+// When casting a Light spell at a position, create
+// an invisible helper. Check if a light must expire.
+IF
+CastSpell((GUIDSTRING)_Owner, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_LightCantripSpellsNoSustain(_Spell)
+AND
+DB_LightPositionSequence(_StoryID, _Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+CreateAt((GUIDSTRING)Helper_Spell_Light_d29d13fd-8d03-4423-9862-a2c165af7cf3, _XT, _YT, _ZT, 1, 0, "LightCantripSpawnComplete", (GUIDSTRING)_Summon)
+THEN
+NOT DB_LightPositionSequence(_StoryID, _Owner, _XT, _YT, _ZT);
+PROC_AddLightAndPrune(_Summon, _Owner);
+DB_LightSummonDelay(_Summon, _Owner);
+RealtimeObjectTimerLaunch(_Summon, "SummonDelayLightTimer", 200);
+
+// A small delay is needed here for VFX reasons.
+IF
+ObjectTimerFinished((GUIDSTRING)_Summon, "SummonDelayLightTimer")
+AND
+DB_LightSummonDelay(_Summon, (GUIDSTRING)_Owner)
+THEN
+ApplyStatus(_Summon, "LIGHT_PF2", -1.0, 0, _Owner);
+NOT DB_LightSummonDelay(_Summon, _Owner);
+
+// When casting a light spell on a character, apply
+// the status. Check if a light must expire.
+IF
+CastSpell((GUIDSTRING)_Owner, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_LightCantripSpellsNoSustain(_Spell)
+AND
+DB_LightCreatureSequence(_StoryID, _Owner, (GUIDSTRING)_Target)
+THEN
+NOT DB_LightCreatureSequence(_StoryID, _Owner, _Target);
+ApplyStatus(_Target, "LIGHT_PF2", -1.0, 0, _Owner);
+PROC_AddLightAndPrune(_Target, _Owner);
+
+// When casting a Light sustain at a position, create
+// an invisible helper. Find the nearest light and 
+// remove it.
+IF
+CastSpell((GUIDSTRING)_Owner, "Target_Light_Sustain", _, _, (INTEGER)_StoryID)
+AND
+DB_LightPositionSequence(_StoryID, _Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+CreateAt((GUIDSTRING)LightCantrip_Helper_f7022e4f-0e9e-412b-a05d-768c968b7fb6, _XT, _YT, _ZT, 1, 0, "LightCantripSpawnComplete", (GUIDSTRING)_Summon)
+THEN
+NOT DB_LightPositionSequence(_StoryID, _Owner, _XT, _YT, _ZT);
+PROC_AddLightAndPruneNearest(_Summon, _Owner);
+DB_LightSummonDelay(_Summon, _Owner);
+RealtimeObjectTimerLaunch(_Summon, "SummonDelayLightTimer", 200);
+
+// When casting a light sustain on a character, apply
+// the status. Find the nearest light and remove it.
+IF
+CastSpell((GUIDSTRING)_Owner, "Target_Light_Sustain", _, _, (INTEGER)_StoryID)
+AND
+DB_LightCreatureSequence(_StoryID, _Owner, (GUIDSTRING)_Target)
+THEN
+NOT DB_LightCreatureSequence(_StoryID, _Owner, _Target);
+ApplyStatus(_Target, "LIGHT_PF2", -1.0, 0, _Owner);
+PROC_AddLightAndPruneNearest(_Target, _Owner);
+
+PROC
+PROC_AddLightAndPrune((GUIDSTRING)_Entity, (GUIDSTRING)_Owner)
+AND
+DB_LightSummonCount(_Owner, (INTEGER)_Count, _)
+AND
+_Count > 3
+AND
+QRY_GetOldestLightCast(_Owner)
+AND
+DB_QRYRTN_GetOldestLightCast((GUIDSTRING)_OldLight)
+THEN
+PROC_AddLightCastToList(_Entity, _Owner);
+RemoveStatus(_OldLight, "LIGHT_PF2", _Owner);
+
+PROC
+PROC_AddLightAndPrune((GUIDSTRING)_Entity, (GUIDSTRING)_Owner)
+AND
+DB_LightSummonCount(_Owner, (INTEGER)_Count, _)
+AND
+_Count < 4
+THEN
+PROC_AddLightCastToList(_Entity, _Owner);
+
+PROC
+PROC_AddLightAndPrune((GUIDSTRING)_Entity, (GUIDSTRING)_Owner)
+AND
+NOT DB_LightSummonCount(_Owner, _, _)
+THEN
+PROC_AddLightCastToList(_Entity, _Owner);
+
+// Used for sustain casts.
+PROC
+PROC_AddLightAndPruneNearest((GUIDSTRING)_Entity, (GUIDSTRING)_Owner)
+AND
+QRY_GetNearestLightCast(_Entity, _Owner)
+AND
+DB_QRYRTN_GetNearestLightCast((GUIDSTRING)_OldLight)
+THEN
+PROC_AddLightCastToList(_Entity, _Owner);
+RemoveStatus(_OldLight, "LIGHT_PF2", _Owner);
+
+// If the LIGHT_PF2 status is ever removed from
+// an entity, remove it from our list.
+IF
+StatusRemoved((GUIDSTRING)_Entity, "LIGHT_PF2", _, _)
+THEN
+PROC_RemoveLightCastFromList(_Entity);
+
+// The following procs maintain a list and count of
+// a character's active light spells. Includes a way
+// to pop the oldest entity in the list.
+
+// Ensure count is set to 0 if currently not initialised.
+PROC
+PROC_AddLightCastToList((GUIDSTRING)_Entity, (GUIDSTRING)_Owner)
+AND
+NOT DB_LightSummonCount(_Owner, _, _)
+THEN
+DB_LightSummonCount(_Owner, 0, 0);
+
+// Increase the count and ticker, and add entity to list.
+// Note that whilst count can be reduced, ticker will never
+// decrease, and serves as an age marker. Hopefully nobody
+// ever manages to keep a light spell active for 2^31 casts.
+PROC
+PROC_AddLightCastToList((GUIDSTRING)_Entity, (GUIDSTRING)_Owner)
+AND
+DB_LightSummonCount(_Owner, (INTEGER)_Count, (INTEGER)_Ticker)
+AND
+IntegerSum(_Count, 1, (INTEGER)_NewCount)
+AND
+IntegerSum(_Ticker, 1, (INTEGER)_NewTicker)
+THEN
+NOT DB_LightSummonCount(_Owner, _Count, _Ticker);
+DB_LightSummonCount(_Owner, _NewCount, _NewTicker);
+DB_LightSummonList(_Owner, _Entity, _Ticker);
+
+// Remove a light cast from the list and decrease the count.
+PROC
+PROC_RemoveLightCastFromList((GUIDSTRING)_Entity)
+AND
+DB_LightSummonList((GUIDSTRING)_Owner, _Entity, (INTEGER)_Birthday)
+AND
+DB_LightSummonCount(_Owner, (INTEGER)_Count, (INTEGER)_Ticker)
+AND
+IntegerSubtract(_Count, 1, (INTEGER)_NewCount)
+THEN
+NOT DB_LightSummonCount(_Owner, _Count, _Ticker);
+DB_LightSummonCount(_Owner, _NewCount, _Ticker);
+NOT DB_LightSummonList(_Owner, _Entity, _Birthday);
+
+// Get the oldest light cast by a caster.
+// Init first.
+QRY
+QRY_GetOldestLightCast((GUIDSTRING)_Owner)
+THEN
+DB_GetOldestLightCastBirthdayLowest(NULL_00000000-0000-0000-0000-000000000000, 10000000);
+
+QRY
+QRY_GetOldestLightCast((GUIDSTRING)_Owner)
+AND
+DB_QRYRTN_GetOldestLightCast((GUIDSTRING)_OldEntity)
+THEN
+NOT DB_QRYRTN_GetOldestLightCast(_OldEntity);
+
+// Iterate entities for the caster and keep track of
+// which had the earliest birthday.
+QRY
+QRY_GetOldestLightCast((GUIDSTRING)_Owner)
+AND
+DB_LightSummonList(_Owner, (GUIDSTRING)_Entity, (INTEGER)_Birthday)
+AND
+DB_GetOldestLightCastBirthdayLowest((GUIDSTRING)_OldLowestEntity, (INTEGER)_OldLowest)
+AND
+_Birthday < _Oldlowest
+THEN
+NOT DB_GetOldestLightCastBirthdayLowest(_OldLowestEntity, _OldLowest);
+DB_GetOldestLightCastBirthdayLowest(_Entity, _Birthday);
+
+// Return the earliest born entity.
+QRY
+QRY_GetOldestLightCast((GUIDSTRING)_Owner)
+AND
+DB_GetOldestLightCastBirthdayLowest((GUIDSTRING)_Entity, (INTEGER)_Birthday)
+AND
+_Birthday < 10000000
+THEN
+DB_QRYRTN_GetOldestLightCast(_Entity);
+
+// Cleanup
+QRY
+QRY_GetOldestLightCast((GUIDSTRING)_Owner)
+AND
+DB_GetOldestLightCastBirthdayLowest((GUIDSTRING)_Entity, (INTEGER)_Birthday)
+THEN
+NOT DB_GetOldestLightCastBirthdayLowest(_Entity, _Birthday);
+
+// Get the nearest light cast by a caster.
+// Init first.
+QRY
+QRY_GetNearestLightCast((GUIDSTRING)_NewEntity, (GUIDSTRING)_Owner)
+THEN
+DB_GetNearestLightCastDistanceLowest(NULL_00000000-0000-0000-0000-000000000000, 100.0);
+
+QRY
+QRY_GetNearestLightCast((GUIDSTRING)_NewEntity, (GUIDSTRING)_Owner)
+AND
+DB_QRYRTN_GetNearestLightCast((GUIDSTRING)_OldEntity)
+THEN
+NOT DB_QRYRTN_GetNearestLightCast(_OldEntity);
+
+// Iterate entities for the caster and keep track of
+// which had the earliest birthday.
+QRY
+QRY_GetNearestLightCast((GUIDSTRING)_NewEntity, (GUIDSTRING)_Owner)
+AND
+DB_LightSummonList(_Owner, (GUIDSTRING)_TestEntity, _)
+AND
+DB_GetNearestLightCastDistanceLowest((GUIDSTRING)_OldLowestEntity, (REAL)_OldLowest)
+AND
+GetInnerDistanceTo(_NewEntity, _TestEntity, (REAL)_Distance)
+AND
+_Distance < _Oldlowest
+THEN
+NOT DB_GetNearestLightCastDistanceLowest(_OldLowestEntity, _OldLowest);
+DB_GetNearestLightCastDistanceLowest(_TestEntity, _Distance);
+
+// Return the earliest born entity.
+QRY
+QRY_GetNearestLightCast((GUIDSTRING)_NewEntity, (GUIDSTRING)_Owner)
+AND
+DB_GetNearestLightCastDistanceLowest((GUIDSTRING)_Entity, (REAL)_Distance)
+AND
+_Distance < 100.0
+THEN
+DB_QRYRTN_GetNearestLightCast(_Entity);
+
+// Cleanup
+QRY
+QRY_GetNearestLightCast((GUIDSTRING)_NewEntity, (GUIDSTRING)_Owner)
+AND
+DB_GetNearestLightCastDistanceLowest((GUIDSTRING)_Entity, (REAL)_Distance)
+THEN
+NOT DB_GetNearestLightCastDistanceLowest(_Entity, _Distance);
+EXITSECTION
+
+ENDEXITSECTION

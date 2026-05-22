@@ -366,6 +366,11 @@ function HasFreeHand()
 	return ConditionResult(result,{ConditionError('FreeHand')})
 end
 
+function BothHandsFree()
+	local result = Unarmed(context.Source) | HasPassive('Block_NonUnarmedStrike',context.Source)
+	return ConditionResult(result.Result,{ConditionError('BothHandsFree')})
+end
+
 function SkillActionFreeHand(weapon_passive,stance_passive)
 	local source = context.Source
 	-- Needs a free hand, the right weapon trait, or in a melee stance
@@ -1998,6 +2003,12 @@ function HasMovableSpellInRange(status, range)
 					break
 				end
 			end
+		end
+	end
+	-- Also checks if the caster has the status, as they are not their own ally.
+	if HasStatus(status, context.Source, context.Source).Result then
+		if DistanceToEntityHitBounds(context.TargetPosition,context.Source) <= range then
+			result = true
 		end
 	end
 	return ConditionResult(result, {ConditionError("MovableSpellRange")}, {ConditionError("NoMovableSpellRange")})
