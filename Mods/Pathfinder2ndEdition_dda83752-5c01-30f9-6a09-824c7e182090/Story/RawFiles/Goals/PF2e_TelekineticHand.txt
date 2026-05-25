@@ -1,0 +1,215 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// Move the object up to carrying height and disable its
+// gravity. When this is done, our floating animation
+// sequence begins. We also summon a helper to allow for
+// sustain to measure distance from original cast.
+IF
+StatusApplied((GUIDSTRING)_Object, "TELEKINETIC_HAND", (GUIDSTRING)_Owner, _)
+AND
+GetPosition(_Object, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+RealSum(_Y, 1.2, (REAL)_NewY)
+AND
+CreateAt((GUIDSTRING)TelekineticHand_Helper_5ac2e6b8-9432-4e2c-9291-4465f0045a7a, _X, _Y, _Z, 1, 0, "TelekineticHandHelperSpawn", (GUIDSTRING)_Helper)
+THEN
+SetGravity((ITEM)_Object, GRAVITYTYPE.Disabled);
+ApplyStatus(_Helper, "TELEKINETIC_HAND_HELPER", -1.0, 0, _Owner);
+ItemMoveToPosition(_Object, _X, _NewY, _Z, 2.0, 1.0, "TelekineticHandFloatAnimationDown");
+DB_TelekineticHandHelper(_Object, _Owner, _Helper);
+
+// If the object loses the TKH status, re-enable its
+// gravity, and remove its helper.
+IF
+StatusRemoved((GUIDSTRING)_Object, "TELEKINETIC_HAND", _, _)
+AND
+DB_TelekineticHandHelper((ITEM)_Object, (GUIDSTRING)_Owner, (GUIDSTRING)_Helper)
+THEN
+SetGravity(_Object, GRAVITYTYPE.Enabled);
+RemoveStatus(_Helper, "TELEKINETIC_HAND_HELPER");
+NOT DB_TelekineticHandHelper(_Object, _Owner, _Helper);
+
+// And then move it to a safe floor position.
+IF
+StatusRemoved((GUIDSTRING)_Object, "TELEKINETIC_HAND", _, _)
+AND
+GetPosition(_Object, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+FindValidPosition(_X, _Y, _Z, 3.0, _Object, 0, (REAL)_NewX, (REAL)_NewY, (REAL)_NewZ)
+THEN
+ItemMoveToPosition((ITEM)_Object, _NewX, _NewY, _NewZ, 2.0, 1.0, "TelekineticHandDrop");
+
+// If the caster loses their sustain status, remove
+// the status from the object.
+IF
+StatusRemoved((GUIDSTRING)_Owner, "TELEKINETIC_HAND_SUSTAIN", _, _)
+AND
+DB_TelekineticHandHelper((ITEM)_Object, _Owner, _)
+THEN
+RemoveStatus((GUIDSTRING)_Object, "TELEKINETIC_HAND");
+
+// If the helper loses their status, delete.
+IF
+StatusRemoved((GUIDSTRING)_Helper, "TELEKINETIC_HAND_HELPER", _, _)
+THEN
+RequestDeleteTemporary((CHARACTER)_Helper);
+
+// If an owner casts TKH, remove the satus to clean
+// up old casts (at Using instead of Cast trigger for
+// timing).
+IF
+UsingSpell((GUIDSTRING)_Owner, "Target_TelekineticHand", _, _, _)
+AND
+HasActiveStatus(_Owner, "TELEKINETIC_HAND_SUSTAIN", 1)
+THEN
+RemoveStatus(_Owner, "TELEKINETIC_HAND_SUSTAIN");
+
+// As long as the TKH status is active, repeatedly
+// move the item up and down.
+IF
+EntityEvent((GUIDSTRING)_Object, "TelekineticHandFloatAnimationDown")
+AND
+HasActiveStatus(_Object, "TELEKINETIC_HAND", 1)
+AND
+GetPosition(_Object, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+RealSum(_Y, -0.1, (REAL)_NewY)
+THEN
+SetGravity((ITEM)_Object, GRAVITYTYPE.Disabled);
+ItemMoveToPosition(_Object, _X, _NewY, _Z, 0.02, 0.1, "TelekineticHandFloatAnimationUp");
+
+IF
+EntityEvent((GUIDSTRING)_Object, "TelekineticHandFloatAnimationUp")
+AND
+HasActiveStatus(_Object, "TELEKINETIC_HAND", 1)
+AND
+GetPosition(_Object, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+RealSum(_Y, 0.1, (REAL)_NewY)
+THEN
+SetGravity((ITEM)_Object, GRAVITYTYPE.Disabled);
+ItemMoveToPosition(_Object, _X, _NewY, _Z, 0.02, 0.1, "TelekineticHandFloatAnimationDown");
+
+// Whenever an item is added to an inventory, clear
+// the TKH status from it.
+IF
+AddedTo((GUIDSTRING)_Object, _, _)
+AND
+HasActiveStatus(_Object, "TELEKINETIC_HAND", 1)
+THEN
+RemoveStatus(_Object, "TELEKINETIC_HAND");
+
+// Whenever the sustain spell is cast, move the item to
+// the new position with its helper. We use another
+// temporary helper to allow us to check for line of sight
+// between the two points, to avoid the hand being able
+// to carry items through walls.
+IF
+UsingSpell(_, _, _, _, _)
+AND
+DB_TelekineticHandSequence((INTEGER)_StoryID, (GUIDSTRING)_Owner, (ITEM)_Object, (GUIDSTRING)_Helper, (GUIDSTRING)_TargetHelper, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+THEN
+NOT DB_TelekineticHandSequence(_StoryID, _Owner, _Object, _Helper, _TargetHelper, _XT, _YT, _ZT);
+
+IF
+UsingSpellAtPosition((GUIDSTRING)_Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT, "Target_TelekineticHand_Sustain", _, _, (INTEGER)_StoryID)
+AND
+DB_TelekineticHandHelper((ITEM)_Object, _Owner, (GUIDSTRING)_Helper)
+AND
+CreateAt((GUIDSTRING)TelekineticHand_Helper_5ac2e6b8-9432-4e2c-9291-4465f0045a7a, _XT, _YT, _ZT, 1, 0, "TelekineticHandVisionSpawn", (GUIDSTRING)_TargetHelper)
+THEN
+DB_TelekineticHandSequence(_StoryID, _Owner, _Object, _Helper, _TargetHelper, _XT, _YT, _ZT);
+
+IF
+CastSpell((GUIDSTRING)_Owner, "Target_TelekineticHand_Sustain", _, _, (INTEGER)_StoryID)
+AND
+DB_TelekineticHandSequence(_StoryID, _Owner, (ITEM)_Object, (GUIDSTRING)_Helper, (GUIDSTRING)_TargetHelper, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+RealSum(_YT, 1.2, (REAL)_NewY)
+AND
+HasLineOfSight(_Helper, _TargetHelper, 1)
+THEN
+ItemMoveToPosition(_Object, _XT, _NewY, _ZT, 2.0, 1.0, "TelekineticHandFloatAnimationDown");
+TeleportToPosition(_Helper, _XT, _YT, _ZT, "TelekineticHandHelperMove", 0, 0, 0, 0, 1);
+
+IF
+CastSpell((GUIDSTRING)_Owner, "Target_TelekineticHand_Sustain", _, _, (INTEGER)_StoryID)
+AND
+DB_TelekineticHandSequence(_StoryID, _Owner, (ITEM)_Object, (GUIDSTRING)_Helper, (GUIDSTRING)_TargetHelper, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+THEN
+RequestDeleteTemporary((CHARACTER)_TargetHelper);
+
+IF
+CastSpell((GUIDSTRING)_Owner, "Target_TelekineticHand_Sustain", _, _, (INTEGER)_StoryID)
+AND
+DB_TelekineticHandSequence(_StoryID, _Owner, (ITEM)_Object, (GUIDSTRING)_Helper, (GUIDSTRING)_TargetHelper, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+THEN
+NOT DB_TelekineticHandSequence(_StoryID, _Owner, _Object, _Helper, _TargetHelper, _XT, _YT, _ZT);
+
+// This status is applied to usable puzzle objects,
+// which can't be moved but can be activated by the
+// TKH.
+IF
+StatusApplied(_, "TELEKINETIC_HAND_USE", (GUIDSTRING)_Owner, _)
+AND
+DB_TelekineticHandUse((GUIDSTRING)_Object, _Owner, (GUIDSTRING)_Helper)
+THEN
+NOT DB_TelekineticHandUse(_Object, _Owner, _Helper);
+
+IF
+StatusApplied((GUIDSTRING)_Object, "TELEKINETIC_HAND_USE", (GUIDSTRING)_Owner, _)
+AND
+GetPosition(_Object, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+RealSum(_Y, 1.3, (REAL)_OffsetY)
+AND
+CreateAt((GUIDSTRING)TelekineticHand_VisibleHelper_35469f00-a31d-48bf-a50c-9264b41b21ba, _X, _Y, _Z, 1, 0, "TelekineticHandUseHelperSpawn", (GUIDSTRING)_Helper)
+THEN
+DB_TelekineticHandUse(_Object, _Owner, _Helper);
+PlayEffectAtPosition((EFFECTRESOURCE)VFX_Spell_TelekineticHand_Interactable_DismissFX_74233e9c-1ae8-1438-a186-3d0e244640ea, _X, _OffsetY, _Z, 1.0);
+
+// Whenever the sustain spell is cast on a puzzle item,
+// we just need to use it. We don't actually need the
+// cast target data as we have DB going.
+IF
+CastSpell((GUIDSTRING)_Owner, "Target_TelekineticHand_Sustain", _, _, _)
+AND
+DB_TelekineticHandUse((GUIDSTRING)_Object, _Owner, (GUIDSTRING)_Helper)
+THEN
+Use((CHARACTER)_Helper, (ITEM)_Object, 1, 1, "TelekineticHandDummyUse");
+
+// When the caster loses their sustain status, clear
+// the status from the object.
+IF
+StatusRemoved((GUIDSTRING)_Owner, "TELEKINETIC_HAND_SUSTAIN", _, _)
+AND
+DB_TelekineticHandUse((GUIDSTRING)_Object, _Owner, (GUIDSTRING)_Helper)
+THEN
+RemoveStatus((GUIDSTRING)_Object, "TELEKINETIC_HAND_USE");
+
+// When the item loses their use status, clear the DB and
+// kill the helper.
+IF
+StatusRemoved((GUIDSTRING)_Object, "TELEKINETIC_HAND_USE", _, _)
+AND
+DB_TelekineticHandUse(_Object, (GUIDSTRING)_Owner, (GUIDSTRING)_Helper)
+AND
+GetPosition(_Helper, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+RealSum(_Y, 1.3, (REAL)_OffsetY)
+THEN
+RequestDeleteTemporary((CHARACTER)_Helper);
+PlayEffectAtPosition((EFFECTRESOURCE)VFX_Spell_TelekineticHand_Interactable_DismissFX_74233e9c-1ae8-1438-a186-3d0e244640ea, _X, _OffsetY, _Z, 1.0);
+
+IF
+StatusRemoved((GUIDSTRING)_Object, "TELEKINETIC_HAND_USE", _, _)
+AND
+DB_TelekineticHandUse(_Object, (GUIDSTRING)_Owner, (GUIDSTRING)_Helper)
+THEN
+NOT DB_TelekineticHandUse(_Object, _Owner, _Helper);
+EXITSECTION
+
+ENDEXITSECTION
