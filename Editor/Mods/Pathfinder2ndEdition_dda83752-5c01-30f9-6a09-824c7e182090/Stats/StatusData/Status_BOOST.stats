@@ -3598,8 +3598,6 @@
         <field name="Icon" type="StringTableFieldDefinition" value="statIcons_OffBalanced" />
         <field name="StackId" type="StringTableFieldDefinition" value="CLUMSY" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_1AC);Tag(STAT_PEN_1REFLEX);Tag(STAT_PEN_1ACROBATICS);Tag(STAT_PEN_1STEALTH);Tag(STAT_PEN_1SLEIGHTOFHAND);" />
-        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StatusAnimationType" version="1" />
-        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="WEAK" enumeration_type_name="SoundVocalType" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoreResting" enumeration_type_name="StatusPropertyFlags" version="1" />
@@ -3636,8 +3634,6 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h31c39af2gd505gccccg2082g12e5e4344cdc" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8dfdb964gbe1bg60a6g4199g4eeb99016aba" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Downed" />
-        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StatusAnimationType" version="1" />
-        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="WEAK" enumeration_type_name="SoundVocalType" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="ENFEEBLED" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
@@ -3677,8 +3673,6 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h59ff55dcga0afg0859gd578gafb9417ade1c" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h43ea0cd0g8d69ge381g23d8gdfb44f84fa7d" version="1" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Astarion_Weak" />
-        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StatusAnimationType" version="1" />
-        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="WEAK" enumeration_type_name="SoundVocalType" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="DRAINED" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
@@ -3709,6 +3703,8 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CLUMSY);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="BringIntoCombat;InitiateCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StillAnimPriority" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3733,6 +3729,8 @@
         <field name="Name" type="NameTableFieldDefinition" value="ENFEEBLED_APPLY" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="7c2949dc-d442-4dff-9c26-4a4d34be20fe" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(ENFEEBLED);" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StillAnimPriority" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3766,6 +3764,8 @@
         <field name="Name" type="NameTableFieldDefinition" value="DRAINED_APPLY" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="7c2949dc-d442-4dff-9c26-4a4d34be20fe" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(DRAINED);" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Weakened" enumeration_type_name="StillAnimPriority" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6530,12 +6530,16 @@
         <field name="Name" type="NameTableFieldDefinition" value="SHIELD" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="0ad845d2-5373-4279-b207-6ffd132089ac" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CIRC_BON_1AC); UnlockInterrupt(Interrupt_Shield_Wizard); IF( HasStatus('SHIELD_SPELL_BROKEN') and IsSpellChildOrVariantFromContext('Projectile_MagicMissile')):DamageReduction(Force,Flat,LevelMapValue(Shield_Spell));" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CIRC_BON_1AC);UnlockInterrupt(Interrupt_Shield_Wizard);IF( HasStatus('SHIELD_SPELL_BROKEN') and IsSpellChildOrVariantFromContext('Projectile_MagicMissile')):DamageReduction(Force,Flat,LevelMapValue(Shield_Spell));" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('SHIELD_SPELL_BROKEN')" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:ApplyStatus(CircumstanceBonus1AC,100,1)" />
         <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="235ac2cc-6c6c-4866-8646-8b4a7c6a7f09" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="68b9c85e-e954-4449-84a5-975024aaa4df" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3c84956dgc14dg2008g81c6gc18a902fac5f" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h06739094gcf04g6d0dgca37g869cb60a438e" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(Shield_Cantrip)" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6550,6 +6554,8 @@
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not TurnBased()):RemoveStatus(SHIELD_SPELL_BROKEN)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="haa9cab3bge8f6gb3e4g7a71g496eed6b3689" version="1" />
+        <field name="StackId" type="StringTableFieldDefinition" value="SHIELD_SPELL_BROKEN" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -7251,6 +7257,8 @@
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="182f5ddc-a4ec-470c-88ad-5a33b9fa1f4e" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CLUMSY_3);" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StillAnimPriority" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -17378,6 +17386,8 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StillAnimPriority" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -18161,6 +18171,81 @@
         <field name="UUID" type="IdTableFieldDefinition" value="eaaf05af-26f5-44c5-9943-fdcd6b4d804f" />
         <field name="Name" type="NameTableFieldDefinition" value="TELEKINETIC_HAND_HELPER" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="97a1e436-0dd7-4b88-9c81-18071601f180" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIGMENT" />
+        <field name="AuraRadius" type="IntegerTableFieldDefinition" value="6" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(FIGMENT_DISBELIEVE_APPLY,100,0)" />
+        <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems" enumeration_type_name="AuraFlags" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FIGMENT_CLEANUP,100,0)" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="IsUnique" type="BoolTableFieldDefinition" value="True" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="f6c2b8e2-2bb4-4087-88e6-13f3857456cc" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b20f35d5-1794-45a6-aa00-5b6a4ced434f" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIGMENT_DISBELIEVE_APPLY" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FIGMENT_DISBELIEVE_APPLY" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(FIGMENT_DISBELIEVE,100,-1)" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="HitAnimationType" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="44a34138-f576-4128-86a5-8805fe2b3ffc" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIGMENT_DISBELIEVE" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FIGMENT_DISBELIEVE" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="MagicalDamage_Psychic" enumeration_type_name="HitAnimationType" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="700c4134-ea98-420d-8181-388a415c04dd" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIGMENT_CLEANUP" />
+        <field name="AuraRadius" type="IntegerTableFieldDefinition" value="100" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(FIGMENT_CLEANUP_REMOVE,100,0)" />
+        <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems" enumeration_type_name="AuraFlags" version="1" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="HitAnimationType" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(MOVABLE_SPELL_CLEANUP,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c18cabac-eaa2-4d85-a99e-5304898efcc0" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIGMENT_CLEANUP_REMOVE" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(FIGMENT_DISBELIEVE)" />
+        <field name="HitAnimationType" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="HitAnimationType" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6a3fecfc-1370-485b-b837-6357ae74709d" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIGMENT_SUSTAIN" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="4b2df55b-ba66-4a5f-b1ae-b9cd4d2a3591" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbefc50ffgdc9fgeec4g7215gcad7fa4f980b" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h02d57289g9a57g95a9g79c9g70aeccce332e" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FIGMENT_SUSTAIN" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_Figment_Sustain);" />
+        <field name="Passives" type="StringTableFieldDefinition" value="FigmentCombatEnded;" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF((Combat() or TurnBased()) and not HasStatus('FIGMENT_SUSTAINED')):RemoveStatus(FIGMENT_SUSTAIN);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="164b706f-d7cd-4db8-9f98-1160be4e2c10" />
+        <field name="Name" type="NameTableFieldDefinition" value="FIGMENT_SUSTAINED" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7b99f6bf-49e8-4a9d-9be0-b790093f845b" />
+        <field name="StackId" type="StringTableFieldDefinition" value="FIGMENT_SUSTAINED" />
       </fields>
     </stat_object>
   </stat_objects>

@@ -1,0 +1,128 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// Reuses much of the same code as Create a Dviersion.
+IF
+UsingSpellAtPosition(_, _, _, _, _, _, _, _)
+AND
+DB_FigmentSequence((GUIDSTRING)_Cause, (INTEGER)_StoryID, (REAL)_X, (REAL)_Y, (REAL)_Z)
+THEN
+NOT DB_FigmentSequence(_Cause, _StoryID, _X, _Y, _Z);
+
+IF
+UsingSpellAtPosition((GUIDSTRING)_Cause, (REAL)_X, (REAL)_Y, (REAL)_Z, "Target_MinorIllusion", _, _, (INTEGER)_StoryID)
+THEN
+DB_FigmentSequence(_Cause, _StoryID, _X, _Y, _Z);
+
+IF
+UsingSpell((GUIDSTRING)_Cause, "Target_MinorIllusion", _, _, (INTEGER)_StoryID)
+AND
+DB_FigmentSummon(_Cause, (GUIDSTRING)_Cat)
+THEN
+NOT DB_FigmentSummon(_Cause, _Cat);
+
+IF
+CastSpell((GUIDSTRING)_Cause, "Target_MinorIllusion", _, _, (INTEGER)_StoryID)
+AND
+DB_FigmentSequence(_Cause, _StoryID, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+TimerExists("FigmentCheckTimer", 0)
+AND
+CreateAt((GUIDSTRING)Figment_VisibleHelper_6ecb9873-776a-4d89-9bbb-c571ef433ebf, _X, _Y, _Z, 1, 0, "FigmentSpawn", (GUIDSTRING)_Cat)
+THEN
+TimerLaunch("FigmentCheckTimer", 30);
+ApplyStatus(_Cat, "FIGMENT", -1.0, 0, _Cause);
+DB_FigmentSummon(_Cause, _Cat);
+DB_DiversionLocation(_Cat);
+NOT DB_FigmentSequence(_Cause, _StoryID, _X, _Y, _Z);
+
+// Create a Diversion always checks against every enemy, and does
+// not care about line of sight. Note that figment grants a +2 to
+// the check, so we subtract only 8 from our passive deception.
+IF
+TimerFinished("FigmentCheckTimer")
+AND
+DB_HideCheckSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+CalculatePassiveSkill(_Cause, "Deception", (INTEGER)_PassiveSkill)
+AND
+IntegerSubtract(_PassiveSkill, 8, (INTEGER)_ModifierSkill)
+AND
+GetStatusTurns(_Cause, "DIVERSION_CHECK_RESULT", (INTEGER)_Roll)
+AND
+IntegerSum(_Roll, _ModifierSkill, (INTEGER)_TotalRoll)
+AND
+DB_DiversionLocation((GUIDSTRING)_Helper)
+AND
+HasActiveStatus(_Character, "FIGMENT_DISBELIEVE", 0)
+THEN
+PROC_ApplyHiddenDiversion(_Character, _Cause, _TotalRoll, _Roll);
+PROC_ApplyDisbelieveFigment(_Character, _Cause, _TotalRoll, _Roll);
+
+// Cleanup and apply the stale status to debuff future attempts.
+IF
+TimerFinished("FigmentCheckTimer")
+AND
+DB_HideCheckSchedule((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+DB_DiversionLocation((GUIDSTRING)_Helper)
+THEN
+NOT DB_HideCheckSchedule(_Character, _Cause);
+ApplyStatus(_Cause, "DIVERSION_STALE", 60.0, 1, _Character);
+NOT DB_DiversionLocation(_Helper);
+
+// A check of the roll against perception DC, on failure,
+// disbelieve the Figment.
+PROC
+PROC_ApplyDisbelieveFigment((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_Raw)
+AND
+HasActiveStatus(_Character, "DIVERSION_STALE", 0)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+AND
+_Roll < _PassivePerception
+AND
+_Raw != 20
+THEN
+ApplyStatus(_Character, "FIGMENT_DISBELIEVE", -1.0, 0, _Cause);
+
+PROC
+PROC_ApplyDisbelieveFigment((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_Raw)
+AND
+HasActiveStatus(_Cause, "DIVERSION_STALE", 1)
+AND
+CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
+AND
+IntegerSum(_PassivePerception, 4, (INTEGER)_PerceptionDC)
+AND
+_Roll < _PerceptionDC
+AND
+_Raw != 20
+THEN
+ApplyStatus(_Character, "FIGMENT_DISBELIEVE", -1.0, 0, _Cause);
+
+// When the sustain is cast, do basically the same thing.
+IF
+CastSpell((GUIDSTRING)_Cause, "Shout_Figment_Sustain", _, _, _)
+AND
+DB_FigmentSummon(_Cause, (GUIDSTRING)_Cat)
+AND
+TimerExists("FigmentCheckTimer", 0)
+THEN
+TimerLaunch("FigmentCheckTimer", 30);
+DB_DiversionLocation(_Cat);
+
+// If the caster loses their sustain status, remove the
+// status from the summon, destroying it.
+IF
+StatusRemoved((GUIDSTRING)_Caster, "FIGMENT_SUSTAIN", _, _)
+AND
+DB_FigmentSummon(_Caster, (GUIDSTRING)_Cat)
+THEN
+RemoveStatus(_Cat, "FIGMENT", _Caster);
+NOT DB_FigmentSummon(_Caster, _Cat);
+EXITSECTION
+
+ENDEXITSECTION
