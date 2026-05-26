@@ -4615,7 +4615,7 @@
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Combat()):ApplyStatus(RAGE_HP_COOLDOWN,100,10);RemoveStatus(RAGE_MUTE);RemoveStatus(RAGE_STOP_REMOVE);RemoveStatus(RAGE_NO_HEAVY_ARMOUR_VFX);IF(RemoveCause(StatusRemoveCause.TimeOut) or RemoveCause(StatusRemoveCause.Condition)):ApplyStatus(RAGE_ENDED,100,1);IF(RemoveCause(StatusRemoveCause.TimeOut) or RemoveCause(StatusRemoveCause.Condition)):UseSpell(Shout_EndRage,true,true,true)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded;OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
-        <field name="Passives" type="StringTableFieldDefinition" value="Rage_Rage_Boosts;Rage_Rage_Unarmed;Rage_Rage_Boosts_Thrown;" />
+        <field name="Passives" type="StringTableFieldDefinition" value="Rage_Rage_Boosts;Rage_Rage_Boosts_Unarmed;Rage_Rage_Boosts_Thrown;" />
         <field name="StackId" type="StringTableFieldDefinition" value="RAGE" />
         <field name="SoundLoop" type="StringTableFieldDefinition" value="Spell_Status_Rage" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(RageDamage)" />
@@ -4748,7 +4748,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="f9068431-422a-4667-9c82-483e69537f31" />
         <field name="Name" type="NameTableFieldDefinition" value="RAGE_ANIMAL" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="855fb809-8a50-44a1-98fc-911b67ed0f33" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(VFX_RAGE);Attribute(ForceMainhandAlternativeEquipBones);IF(SpellId('Target_FuriousFinish')):CharacterUnarmedDamage(RAGE_ANIMAL.Duration);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(VFX_RAGE);Attribute(ForceMainhandAlternativeEquipBones);IF(SpellId('Target_FuriousFinish')):DamageBonus(RAGE_ANIMAL.Duration);" />
         <field name="Passives" type="StringTableFieldDefinition" value="Rage_Rage_Boosts;Block_NonUnarmedStrike" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h1ebacf4agb4beg4a0ega6a3g9fa7719e3f4e" version="1" />
       </fields>
@@ -5840,7 +5840,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="eeaac353-3c9f-4dd5-a189-a34c7ceddd3b" />
         <field name="Name" type="NameTableFieldDefinition" value="AURA_OF_COURAGE_BUFF" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="5a33a3a2-2fd9-486a-b7a3-d88c23c43c94" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha76f2206g6ff8ga75bgd1f0g274a85440108" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h84c8fb6dg1395gb023g05d4g2898ee406e56" version="2" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('FRIGHTENED')):SetStatusDuration(FRIGHTENED,-1,Add); IF(HasStatus('FRIGHTENED')):ApplyStatus(PASSIVE_TRUE_STRIKE,100,0)" />
@@ -13842,7 +13842,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="82232d5c-36c8-47f7-b382-2ba61e5990e0" />
         <field name="Name" type="NameTableFieldDefinition" value="POTION_OF_THE_GIANT" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="0aeeb4a6-1f18-4dc2-bca5-2ab328a48824" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_BON_1ATHLETICS);Tag(STAT_BON_1FORT);CharacterWeaponDamage(1d4);ObjectSize(+1);ScaleMultiplier(1.33);CharacterUnarmedDamage(1d4);Tag(CLUMSY);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_BON_1ATHLETICS);Tag(STAT_BON_1FORT);IF(IsMeleeUnarmedAttack() or IsWeaponAttack()):DamageBonus(1d4);CharacterWeaponDamage(1d4);CharacterUnarmedDamage(1d4);ObjectSize(+1);ScaleMultiplier(1.33);Tag(CLUMSY);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -16528,7 +16528,7 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he32ab8f0gbaaeg749ag83d6g75002015ef32" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h4c9362ccg77e7g443ag4ad6g5ea6b88dfce8" version="1" />
         <field name="Passives" type="StringTableFieldDefinition" value="BackswingInfusion;" />
       </fields>
     </stat_object>
@@ -18131,6 +18131,69 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h178d25f6gb084g77f6g922eg5eff9c5052d4" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="Distance(16)" />
         <field name="StackId" type="StringTableFieldDefinition" value="LIGHT_PF2" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f7a52f14-726d-4a1d-84db-f122ef216b76" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_GITHBORN_COMBAT_HAND_BUFF" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="afd9688a-a354-4f64-83dd-e45195952b04" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h039c7e68gae64gffbfgb17cgf0c6fd6b5e65" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StackId" type="StringTableFieldDefinition" value="MAG_GITHBORN_COMBAT_HAND_BUFF" />
+        <field name="AuraRadius" type="IntegerTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Resistance(All, Resistant);RedirectDamage(1);IF(IsMeleeUnarmedAttack()):DamageBonus(1d4, Force);UnlockSpell(Target_MAG_HoldPerson);" />
+        <field name="Passives" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="4421ad64-41fb-42c4-9d4a-c442090bfa57" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_SHA_SELUNE_BLESSING_MOONMOTE_ALLY" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h879196e4g0f00ge816gb9f2gea3fda0db74c" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h59cdde0eg0013g7e02gba26g9ff75f291cb3" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(1d4, Radiant)" />
+        <field name="StackId" type="StringTableFieldDefinition" value="MAG_SHA_SELUNE_BLESSING_MOONMOTE_ALLY" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="CharacterWeaponDamage(1d4, Radiant);IF(IsMeleeUnarmedAttack()):DamageBonus(1d4, Radiant);" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="b54eae98-4749-44ed-840f-6687f95f5b57" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5ab3c3cf-5ee6-4a3e-9655-ad6521fb771d" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_GIANT_SLAYER_LEGENDARY_ENLRAGE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="9dff998f-0cb3-4ce2-abb3-74d7c63ab673" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h7d32c0dfga6eega818g01e4g71a87edd429b" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h892a598ag44f8gb1a6g2b73g717a46f7e571" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="1d6;GainTemporaryHitPoints(27);2" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="RollBonus(RawAbility, 2, Strength);RollBonus(SkillCheck, 2, Athletics);Tag(ITEM_BON_2FORT);CharacterWeaponDamage(1d6);IF(IsMeleeUnarmedAttack()):DamageBonus(1d6);ObjectSize(+1);WeightCategory(+1);ScaleMultiplier(1.33);" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(MAG_GIANT_SLAYER_GIANT_TEMP_HP, 100, -1)" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(MAG_GIANT_SLAYER_GIANT_TEMP_HP)" />
+        <field name="StatusGroups" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusGroupFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="175fed76-31e6-419f-8de8-5fb755ce7384" />
+        <field name="Name" type="NameTableFieldDefinition" value="WYR_GORTASH_BANE_BUFF" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h46137d5bge854g3d7agac56gc4df2e508095" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5c708a04g3ba7g1afcgd323g3aa6baeb014f" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Action_Barbarian_Rage" />
+        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="Gold" enumeration_type_name="FormatStringColor" version="1" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="9dff998f-0cb3-4ce2-abb3-74d7c63ab673" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Ability(Strength,4);TemporaryHP(150);Advantage(Ability, Strength);Advantage(SavingThrow, Strength);ScaleMultiplier(1.5);IF(IsMeleeUnarmedAttack()):DamageBonus(1d4);UnlockSpell(Target_WYR_CrushingFist_Gortash);UnlockSpell(Shout_WYR_ChainsOfTyranny_Gortash);AttackSpellOverride(Target_WYR_UnarmedAttack_Bane_Gortash, Target_MainHandAttack);AiArchetypeOverride(act3_WYR_Gortash_melee,1);Resistance(Fire, Immune);Resistance(Thunder, Immune);Resistance(Force, Immune);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="GainTemporaryHitPoints(150)" />
+        <field name="StackId" type="StringTableFieldDefinition" value="WYR_GORTASH_BANE_BUFF" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RestoreResource(ActionPoint,100%,0); RestoreResource(BonusActionPoint,100%,0); RestoreResource(Movement,100%,0)" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="66769569-4bc9-4ded-8217-d2a564dc32c6" />
+        <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="ATTACK" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="SoundStart" type="StringTableFieldDefinition" value="Misc_Status_GortashBane_Start" />
+        <field name="SoundLoop" type="StringTableFieldDefinition" value="Misc_Status_GortashBane_Start" />
+        <field name="SoundStop" type="StringTableFieldDefinition" value="Misc_Status_GortashBane_Start" />
+        <field name="Passives" type="StringTableFieldDefinition" value="EnlargeWeightMedium;EnlargeWeightLarge;ExtraAttack" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(WYR_GORTASH_GORTANE)" />
       </fields>
     </stat_object>
   </stat_objects>
