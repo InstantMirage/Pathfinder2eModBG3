@@ -168,7 +168,7 @@
         <field name="SpellContainerID" type="StringTableFieldDefinition" value="Target_SkillActions" />
         <field name="CastSound" type="StringTableFieldDefinition" value="CrSpell_Cast_Meazel_Garrote" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="f13da615-33ae-412e-8314-4ac4fc560dbf,,;c1df9aea-8be9-4de3-bcbc-4e4c1e44dc37,,;722df2d7-7898-4b0b-b930-5a850b55ccf0,,;a693a7c3-e7e7-4edb-98dd-db5fd700663f,,;f28943e2-f5e6-4133-80ef-8c7c4f628920,,;35f5cba8-3706-46d5-9a1e-2def9ba22473,,;a6ff21b9-291e-44c8-bf87-8de3703c5e97,,;,,;,," />
-        <field name="RequirementConditions" type="StringTableFieldDefinition" value="SkillActionFreeHand('Trait_Shove','Stance_Shove');" />
+        <field name="RequirementConditions" type="StringTableFieldDefinition" value="SkillActionFreeHand('Trait_Grapple','Stance_Grapple') and GrappleSensible('Athletics','Strength');" />
         <field name="TooltipSpellDCAbilities" type="EnumerationListTableFieldDefinition" value="Strength" enumeration_type_name="AbilityFlags" version="1" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="RemoveStatus(SLEEP);RemoveStatus(SLEEPING);RemoveStatus(SG_Sleeping);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and IsMovable() and Character() and OffGuardTargetSensible() and not Tagged('GASEOUS_FORM') and not Tagged('CANT_SHOVE_THROW') and TargetSizeGrapple() and AttackSpell();" />
@@ -1218,7 +1218,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="1cb2930a-54ec-478c-a02e-0b10896b5067" />
         <field name="Name" type="NameTableFieldDefinition" value="MageHunter" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="18c99986-55b1-4a66-a13c-d34b178b4e9d" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(STUPEFIED_1,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(STUPEFIED_1,100,1);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hae69771egae43g1a84g39eag828ff98b5a29" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc5f4df2agb5b5g2df5g8bf9gd12a712cb67d" version="2" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(STUPEFIED_1,100,1)" />
@@ -1243,7 +1243,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasStatus('SG_Rage');" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack)" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(SkillCheck(Skill.Athletics,ReflexDC())):ApplyStatus(HINDERED, 100, 1);IF(SkillCrit()):ApplyStatus(DISARM, 100, 1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);IF(SkillCheck(Skill.Athletics,ReflexDC())):ApplyStatus(HINDERED, 100, 1);IF(SkillCrit()):ApplyStatus(DISARM, 100, 1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and not Dead();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Bear_StickyPaws" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6d3fdfdbg095cg5b78gd354g9835c3c0c6f7" version="1" />
@@ -1687,12 +1687,11 @@
         <field name="UUID" type="IdTableFieldDefinition" value="206b0a3f-f6cb-4874-8a55-0063fdabdb8c" />
         <field name="Name" type="NameTableFieldDefinition" value="SnaggingStrike" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ApplyStatus(OFF_BALANCED,100,1);ExecuteWeaponFunctors(MainHand);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED,100,1);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Crab_CripplingPinch" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd1c93f3dg79c4g3c25ge10fg6fd24ab9f0da" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h121c2e85g24d5g9398gaed2g0ddf98cd460e" version="1" />
-        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType); " />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(OFF_BALANCED, 100, 1)" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_OpeningAttack" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Action_Impact_OpeningAttack" />
@@ -1745,7 +1744,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="BrutishShove" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED, 100, 1);ApplyStatus(SHOVE_REACT,100,0);IF(not IsCritical()):Force(2,OriginToEntity,Aggressive);IF(IsCritical()):Force(4,OriginToEntity,Aggressive);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED, 100, 1);ApplyStatus(SHOVE_REACT,100,0);IF(not IsCritical()):Force(2,OriginToEntity,Aggressive);IF(IsCritical()):Force(4,OriginToEntity,Aggressive);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(OFF_BALANCED, 100, 1)" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_HeartStopper" />
@@ -1824,12 +1823,11 @@
         <field name="Name" type="NameTableFieldDefinition" value="CombatGrab" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);AI_IGNORE:IF(not SkillCrit()):ApplyStatus(GRABBED,100,2);AI_IGNORE:ApplyStatus(SELF,GRAPPLE_SOURCE,100,2);AI_IGNORE:SetStatusDuration(SELF,GRAPPLE_SOURCE,2,ForceSet);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);AI_IGNORE:IF(not SkillCrit()):ApplyStatus(GRABBED,100,2);AI_IGNORE:ApplyStatus(SELF,GRAPPLE_SOURCE,100,2);AI_IGNORE:SetStatusDuration(SELF,GRAPPLE_SOURCE,2,ForceSet);AI_ONLY:IF(HasStatus('FLANKED') and FightingStyle_Dueling()):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_EnsnaringStrikeMelee" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h49f4cecag0c36g62c3gbf02g41b786694998" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="heb2701bcg806dg390fgb03dg3487f1341711" version="2" />
-        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType); " />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(GRABBED,100,2)" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_Physical_EnsnaringStrike_L1to3" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Damage_Physical_EnsnaringStrike_L1to3" />
@@ -1852,13 +1850,12 @@
         <field name="Name" type="NameTableFieldDefinition" value="DraggingStrike" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ApplyStatus(OFF_BALANCED,100,1);ExecuteWeaponFunctors(MainHand);TARGET:IF(not Grounded() and TargetSizeEqualOrSmaller(Size.Large)):Force(-3, OriginToEntity, Neutral, false, true);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED,100,1);TARGET:IF(not Grounded() and TargetSizeEqualOrSmaller(Size.Large)):Force(-3, OriginToEntity, Neutral, false, true);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(OFF_BALANCED, 100, 1)" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_PostureBreaker" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h23ffc4f1gfdcfgd279g7663ga026bc94f42c" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h57b541d5g4fc2gccfegbcfeg0b361579a0f4" version="1" />
-        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType); " />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_OpeningAttack" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Action_Impact_OpeningAttack" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
@@ -1879,12 +1876,11 @@
         <field name="Name" type="NameTableFieldDefinition" value="IntimidatingStrike" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(not IsCritical())ApplyStatus(FRIGHTENED,100,1);IF(IsCritical())ApplyStatus(FRIGHTENED,100,2);AI_ONLY:IF(HasStatus('FLANKED')):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);IF(not IsCritical())ApplyStatus(FRIGHTENED,100,1);IF(IsCritical())ApplyStatus(FRIGHTENED,100,2);AI_ONLY:IF(HasStatus('FLANKED')):DealDamage((MainMeleeWeapon)*2, MainMeleeWeaponDamageType);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_MenacingAttack_Melee" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0082fb69g8ca5g1697g7a2cg3b8e69323402" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h372d6f24ga9b9ga84fg2116ge4bb3393ac86" version="2" />
-        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType); " />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(FRIGHTENED,100,1)" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_MenacingAttack" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Action_Impact_MenacingAttack" />
@@ -1905,15 +1901,14 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="fb0f3d26-29e5-453e-8931-d98e3c8eec83" />
         <field name="Name" type="NameTableFieldDefinition" value="Lunge" />
-        <field name="TargetRadius" type="StringTableFieldDefinition" value="3" />
+        <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_PiercingThrust" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2baf0137g1efcg0367g6443gf08b7ef0f705" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5bd2d4d1g2c41g4c75g874cgf56314617c03" version="1" />
-        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType); " />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_PiercingThrust" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Action_Impact_PiercingThrust" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
@@ -1959,14 +1954,13 @@
         <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead()" />
         <field name="AmountOfTargets" type="StringTableFieldDefinition" value="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_ExtraAttack" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h6c68e38cg2990g11feg6815g70fc8d4a5991" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7025ffd0g5e69g7a51g3a31gd4cbbd48838e" version="1" />
-        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType)" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1;Flourish:1" />
         <field name="WeaponType" type="EnumerationListTableFieldDefinition" value="Melee" enumeration_type_name="WeaponFlags" version="1" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsHarmful;IgnorePreviouslyPickedEntities" enumeration_type_name="SpellFlagList" version="1" />
@@ -2006,7 +2000,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="6d7dff78-bf2c-4ba7-a092-7f191758a7c6" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="None" enumeration_type_name="CooldownType" version="1" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4d7921fbg4e25gc81bg895bg6289f3b848c9" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc6f33e7bgfcfcg8e57g4b9agd0106d0915a6" version="1" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType)" />
@@ -2054,12 +2048,11 @@
         <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ApplyStatus(OFF_BALANCED,100,1);ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and HasStatus('SG_Frightened')" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_MenacingAttack_Melee" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfc6e0e80g991cgae11gdac5g209330ab14fe" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hbf06fb62g690fg3db4g06adga8b4f344b388" version="1" />
-        <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType)" />
         <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(OFF_BALANCED, 100, 1)" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Action_Cast_MenacingAttack" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Action_Impact_MenacingAttack" />
@@ -2105,7 +2098,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="2e2c7a60-cfe1-455e-837a-ef8653045d53" />
         <field name="Name" type="NameTableFieldDefinition" value="CertainStrike" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="65d781f1-abf9-474c-b3af-d6cba16b5285" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="DealDamage(StrengthModifier);ExecuteWeaponFunctors(MainHand);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_PrecisionAttack" />
@@ -2311,7 +2304,7 @@
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Piercing" enumeration_type_name="Damage Type" version="1" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="MeleeUnarmedAttack" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="85c2d091-d84a-44c1-8361-20c5ce7149f1,,;1f9a253f-8846-4384-a4a7-cb2a80b4c8e3,,;a22ad7c5-8341-4efb-957b-54874af62a49,,;5b7ab241-191e-48d5-a063-5ac788609674,,;c70b4b2a-0a53-47e2-a455-b8cf2e7cd862,,;,,;992158f7-2b13-4519-95de-868325b57443,,;,,;,," />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PersistentPoisonDamage_1,100,10)" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(PersistentPoisonDamage_1,100,-1)" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful;IsMelee;DisableBlood;IsAttack" enumeration_type_name="SpellFlagList" version="1" />
       </fields>
     </stat_object>
@@ -2583,11 +2576,11 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="7f21d19c-cd8c-4804-8202-43189eb86664" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerCombat" enumeration_type_name="CooldownType" version="1" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="3" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(AnimalSecondaryFrog)+StrengthModifier, Piercing, Magical);ApplyStatus(CobraPoison,100,-1);IF(IsCritical()):ApplyStatus(DEADLYD10,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(LevelMapValue(AnimalSecondaryFrog)+StrengthModifier, Piercing, Magical);ApplyStatus(CobraPoison,100,-1);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he06c6029gc136g21ffg9032g020bc41724d5" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h8eec024egaffdgc855ga2d1ge6df7ed28da7" version="1" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="MeleeUnarmedAttack" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(CobraPoison,100,10)" />
+        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(CobraPoison,100,-1)" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="AgileSpell() and Character() and not Self() and not Dead();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_DivineStrike_Poison_Ranged" />
@@ -26465,7 +26458,7 @@
         <field name="HitCosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsMelee;IsHarmful;IsEnemySpell" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellProperties" type="StringTableFieldDefinition" value="GROUND:DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType);GROUND:ExecuteWeaponFunctors(MainHand);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(IsCritical()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);IF(IsCritical()):ApplyStatus(DISARM, 100, 1);ApplyStatus(HINDERED,100,1);IF(HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(not HasStatus('MAP_PENALTY_3RD', context.Source) and not HasStatus('MAP_PENALTY_2ND', context.Source)):ApplyStatus(SELF,MAP_PENALTY_2ND,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self()" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h227e49deg94d2g996dg385agd5bcf14798a4" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc7078369g6ed4g3e01g1892g7bff5077f364" version="1" />
@@ -26485,7 +26478,7 @@
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerCombat" enumeration_type_name="CooldownType" version="1" />
         <field name="HitCosts" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="AnimationIntentType" type="EnumerationTableFieldDefinition" value="Aggressive" enumeration_type_name="SpellAnimationIntentType" version="1" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(FRIGHTENED,100,1)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(FRIGHTENED,100,1);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb749fbe6gfcb3g4d83g2671gacb6d45bf5b6" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h44c0102bg9241g801eg3b1egf07558bd18b2" version="1" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="MeleeWeaponAttack" />
@@ -26761,7 +26754,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+1d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+2d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+1d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+2d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+1d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+2d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+1d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+2d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+1d12, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and CharacterLevelGreaterThan(9)):DealDamage(MainMeleeWeapon+2d12, MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('FuriousFocus',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(IsWeaponDamageDieD4()):DealDamage(MainMeleeWeapon+LevelMapValue(D4BonusLv10), MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6()):DealDamage(MainMeleeWeapon+LevelMapValue(D6BonusLv10), MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8()):DealDamage(MainMeleeWeapon+LevelMapValue(D8BonusLv10), MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10()):DealDamage(MainMeleeWeapon+LevelMapValue(D10BonusLv10), MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12()):DealDamage(MainMeleeWeapon+LevelMapValue(D12BonusLv10), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('FuriousFocus',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);AI_ONLY:IF(HasStatus('FLANKED')):DealDamage((MainMeleeWeapon)*3, MainMeleeWeaponDamageType);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not HasPassive('FuriousFocus',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self() and not Dead();" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="MeleeWeaponAttack" />
@@ -26794,7 +26787,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED, 100, 1);ApplyStatus(SHOVE_REACT,100,0);IF(not IsCritical()):Force(2,OriginToEntity,Aggressive);IF(IsCritical()):Force(4,OriginToEntity,Aggressive);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED, 100, 1);ApplyStatus(SHOVE_REACT,100,0);IF(not IsCritical()):Force(2,OriginToEntity,Aggressive);IF(IsCritical()):Force(4,OriginToEntity,Aggressive);IF(HasPassive('ShoveDown',context.Source) and not Ally()):ApplyStatus(SELF,ShoveDownStatus,100,1);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(OFF_BALANCED, 100, 1)" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead();" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hf2711a1cg40aag6593g3a4cg52352e98cb80" version="1" />
@@ -26835,7 +26828,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);ApplyStatus(FRIGHTENED,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(FRIGHTENED,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead() and FearSpell() and EmotionSpell() and MentalSpell();" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9ef9ddb0g8b6dgcccag673agc17d27cb1615" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb70410d6g9e7ege1cbga695g7aa9bb7084a3" version="1" />
@@ -26875,7 +26868,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasFreeHand();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ApplyStatus(OFF_BALANCED,100,1);ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead();" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hae8ba043g1f6egef8bg0a0fg80784a3f39e6" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h3f507f1cgf6e4gfec2g9340g768b0f418a9b" version="1" />
@@ -26915,7 +26908,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="Press() and CanUseWeaponActions();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ApplyStatus(OFF_BALANCED,100,1);ExecuteWeaponFunctors(MainHand);TARGET:IF(not Grounded() and TargetSizeEqualOrSmaller(Size.Large)):Force(-4, OriginToEntity, Neutral, false, true);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED,100,1);TARGET:IF(not Grounded() and TargetSizeEqualOrSmaller(Size.Large)):Force(-4, OriginToEntity, Neutral, false, true);" />
         <field name="SpellFail" type="StringTableFieldDefinition" value="ApplyStatus(OFF_BALANCED, 100, 1)" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead();" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h41719d78gcaf6gb724gcdeeg6b36f32f7353" version="1" />
@@ -27008,7 +27001,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="CanUseWeaponActions() and IsProficientWithEquippedWeapon();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('CrashingSlam',context.Source) and Character() and not SavingThrow(Ability.Dexterity, ClassDC())):ApplyStatus(PRONE_PF2,100,-1);IF(HasPassive('CrashingSlam',context.Source)):ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFF_BALANCED,100,1);DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('CrashingSlam',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d12, MainMeleeWeaponDamageType);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not HasPassive('CrashingSlam',context.Source) and Character() and not SavingThrow(Ability.Dexterity, ClassDC())):ApplyStatus(PRONE_PF2,100,-1);IF(HasPassive('CrashingSlam',context.Source)):ApplyStatus(PRONE_PF2,100,-1);ApplyStatus(OFF_BALANCED,100,1);DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);IF(not HasPassive('CrashingSlam',context.Source)):ApplyStatus(SELF,MAP_PENALTY_3RD,100,2);IF(IsWeaponDamageDieD4(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d4, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD6(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d6, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD8(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d8, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD10(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d10, MainMeleeWeaponDamageType);IF(IsWeaponDamageDieD12(GetAttackWeapon(context.Source)) and not CharacterLevelGreaterThan(9) and HasPassive('CrashingSlam',context.Source)):DealDamage(1d12, MainMeleeWeaponDamageType);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="Character() and not Self() and not HasStatus('SG_Prone')" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h71f7e78bgb18ag7a0dgfc8bgf1c6c4bafef7" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc0d94106g1c7ag584ega4b3g62482b61401e" version="1" />
@@ -27049,7 +27042,7 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="HasFreeHand();" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack);" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ApplyStatus(OFF_BALANCED,100,1);ExecuteWeaponFunctors(MainHand);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);ApplyStatus(OFF_BALANCED,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() or Item()) and not Self() and not Dead()" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9d92b230g5f93g1bc2g51b6g86954be6af6b" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9a202f3fgd87dgc121g79d0g5502f6eb2fc6" version="1" />
@@ -27126,7 +27119,7 @@
         <field name="TargetFloor" type="StringTableFieldDefinition" value=".25" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="MeleeMainWeaponRange" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Attack2e(AttackType.MeleeWeaponAttack)" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(MainMeleeWeapon);ExecuteWeaponFunctors(MainHand);AI_ONLY:ApplyStatus(DISARM, 100, 1);ApplyStatus(DISARMING_ASSAULT,100,1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(max(1,MainMeleeWeapon), MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);AI_ONLY:ApplyStatus(DISARM, 100, 1);ApplyStatus(DISARMING_ASSAULT,100,1);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not Self()" />
         <field name="Icon" type="StringTableFieldDefinition" value="Action_Bear_StickyPaws" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2ddb4834gae5dg84ffgb938g64201e8c09c8" version="1" />
