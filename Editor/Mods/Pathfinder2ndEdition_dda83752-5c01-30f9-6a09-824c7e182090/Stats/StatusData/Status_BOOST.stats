@@ -6533,13 +6533,13 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CIRC_BON_1AC);UnlockInterrupt(Interrupt_Shield_Wizard);IF( HasStatus('SHIELD_SPELL_BROKEN') and IsSpellChildOrVariantFromContext('Projectile_MagicMissile')):DamageReduction(Force,Flat,LevelMapValue(Shield_Spell));" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('SHIELD_SPELL_BROKEN')" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage" enumeration_type_name="StatusEvent" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:ApplyStatus(CircumstanceBonus1AC,100,1)" />
-        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="235ac2cc-6c6c-4866-8646-8b4a7c6a7f09" />
-        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="68b9c85e-e954-4449-84a5-975024aaa4df" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:ApplyStatus(CircumstanceBonus1AC,100,1);ApplyStatus(SHIELD_VFX,100,-1)" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3c84956dgc14dg2008g81c6gc18a902fac5f" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h06739094gcf04g6d0dgca37g869cb60a438e" version="1" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(Shield_Cantrip)" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SHIELD_VFX);ApplyStatus(SHIELD_SPELL_BROKEN,100,-1);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6556,6 +6556,67 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="haa9cab3bge8f6gb3e4g7a71g496eed6b3689" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="SHIELD_SPELL_BROKEN" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SHIELD_VFX);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="9e4fbbb5-354b-4cfd-86e0-7c2bd9da6475" />
+        <field name="Name" type="NameTableFieldDefinition" value="SHIELD_VFX" />
+        <field name="StackId" type="StringTableFieldDefinition" value="SHIELD_VFX" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="235ac2cc-6c6c-4866-8646-8b4a7c6a7f09" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="68b9c85e-e954-4449-84a5-975024aaa4df" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f2ff47ce-7b3b-469f-b66f-7fe1efee7348" />
+        <field name="Name" type="NameTableFieldDefinition" value="GLASS_SHIELD" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="a0be1665-3391-4290-92de-6b54125fae17" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h5a5158fag2b87g2490ga13dg74b465e5f81c" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he472038ag060eg4bd8g8989g319709d03b1c" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(Glass_Shield_Hardness);Distance(2);DealDamage(LevelMapValue(Glass_Shield_Damage),Piercing)" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Divination_ArcaneEye" />
+        <field name="StackId" type="StringTableFieldDefinition" value="GLASS_SHIELD" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CIRC_BON_1AC);UnlockInterrupt(Interrupt_Shield_Glass);IF( HasStatus('GLASS_SHIELD_SPELL_BROKEN') and IsSpellChildOrVariantFromContext('Projectile_MagicMissile')):DamageReduction(Force,Flat,LevelMapValue(Glass_Shield_Hardness));" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('GLASS_SHIELD_SPELL_BROKEN')" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:ApplyStatus(CircumstanceBonus1AC,100,1);ApplyStatus(GLASS_SHIELD_VFX,100,-1)" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GLASS_SHIELD_VFX);ApplyStatus(GLASS_SHIELD_SPELL_BROKEN,100,-1);" />
+        <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" clear_inherited_value="true" value="" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="72fb05f8-9a67-41ab-b4ec-7554055d0fa9" />
+        <field name="Name" type="NameTableFieldDefinition" value="GLASS_SHIELD_SPELL_BROKEN" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="8019babf-5ae2-45d5-af13-cc53b161c33e" />
+        <field name="StackId" type="StringTableFieldDefinition" value="GLASS_SHIELD_SPELL_BROKEN" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GLASS_SHIELD_VFX);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="729c26ab-16c9-4b0b-85d4-bfc89e863f93" />
+        <field name="Name" type="NameTableFieldDefinition" value="GLASS_SHIELD_VFX" />
+        <field name="StackId" type="StringTableFieldDefinition" value="GLASS_SHIELD_VFX" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="b3f4cc9f-da2d-4b85-8a76-c0c2f2c89b93" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="970a2fc2-4871-4c09-9e75-1b34ba7fac52" />
+        <field name="Name" type="NameTableFieldDefinition" value="GLASS_SHIELD_REACTION" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC())" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(LevelMapValue(Glass_Shield_Damage),Piercing);IF(SaveCrit()):DealDamage(LevelMapValue(Glass_Shield_Damage)*2,Piercing);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage(OBSERVER_SOURCE,LevelMapValue(Glass_Shield_Damage)/2,Piercing);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
