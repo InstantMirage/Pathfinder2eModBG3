@@ -9252,7 +9252,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="OtherworldlyMagic_MageHand" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h08076207ga186ge2a4g8144gcc347e631cdb" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h01475d8ag2e81g2177gd090g0cdbb4eac4b1" version="2" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_MageHand,,,,Charisma);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_TelekineticHand,,,,Charisma);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_MageHand" />
       </fields>
     </stat_object>
@@ -9380,10 +9380,10 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="5ad984c0-2422-4a48-a5fa-cb3535cbc81a" />
         <field name="Name" type="NameTableFieldDefinition" value="WildbornMagic_Resistance" />
-        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0d6d1817gbfc9g80bfg2933g00c420585a85" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0d6d1817gbfc9g80bfg2933g00c420585a85" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h580d9feege262g8abag1de6gb1b9cb85c5eb" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_Resistance,,,,Charisma);" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Abjuration_Resistance" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_RousingSplash,,,,Charisma);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_WildMagic_LightBolt" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -12517,11 +12517,28 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="23bfb0c8-ab38-4dbf-902e-8cc53c7ed85a" />
+        <field name="Name" type="NameTableFieldDefinition" value="TelekineticHandCombatEnded" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="SetStatusDuration(SELF,TELEKINETIC_HAND_SUSTAIN,5,ForceSet)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="30cb2eb5-fa41-47bc-8b23-a68ea9c85642" />
         <field name="Name" type="NameTableFieldDefinition" value="Karlach_Infernal_Fury" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h0d224848g5f30gae4egedf2g1eed39a7a6dc" version="1" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF((IsMeleeUnarmedAttack() or IsWeaponAttack()) and HasStatus('SG_Rage', context.Source)):DamageBonus(1d4,Fire);IF((IsMeleeUnarmedAttack() or IsWeaponAttack()) and HasHPPercentageLessThan(25,context.Source)):DamageBonus(1d4,Fire);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="cc9afd9f-8618-4e2d-82f3-1a809ac5908b" />
+        <field name="Name" type="NameTableFieldDefinition" value="FigmentCombatEnded" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="23bfb0c8-ab38-4dbf-902e-8cc53c7ed85a" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="SetStatusDuration(SELF,FIGMENT_SUSTAIN,5,ForceSet)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -12536,11 +12553,35 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="fab46bdc-48ab-45b4-beeb-3de5e031b072" />
+        <field name="Name" type="NameTableFieldDefinition" value="MAG_Githborn_MageHandSupport_Gloves_Passive" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h9a36bb8dga2edg37fag22efgbab75c7c5d5e" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h2f1427ffg2e95gf76agbf0eg73fe712ff77c" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpellVariant(SpellId('Target_TelekineticHand'), ModifyUseCosts(Replace,ActionPoint,1,0,ActionPoint));" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="fb1f8d8f-f32a-4075-89b5-66d10420324e" />
         <field name="Name" type="NameTableFieldDefinition" value="MAG_UnarmedEnchantment_2_Passive" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="8dddcb38-4d90-4295-b095-2ae2b78a52b9" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="2" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(IsMeleeUnarmedAttack()):RollBonus(Attack, 2);IF(IsMeleeUnarmedAttack()):DamageBonus(2);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="24b5154f-118c-4fd0-87ed-3f73668607d2" />
+        <field name="Name" type="NameTableFieldDefinition" value="Guidance_Active" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc1bbf302g14c4gd254g43a1g7f44ababcb1c" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h0130266ag42afg6a64g2fe5gda42342f593b" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsToggled;ToggledDefaultOn;ToggledDefaultAddToHotbar;Temporary;Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="ToggleOnFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GUIDANCE_BUFF,100,-1)" />
+        <field name="ToggleOffFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GUIDANCE_BUFF)" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Divination_Guidance" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCastResolved" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="HasStringInSpellRoll('Attack2e') or HasStringInSpellRoll('SkillCheck');" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GUIDANCE)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

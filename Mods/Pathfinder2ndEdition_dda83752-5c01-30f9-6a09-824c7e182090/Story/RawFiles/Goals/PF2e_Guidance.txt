@@ -1,0 +1,40 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// Handles a few types of roll that can't be detected
+// using stats, and removes the guidance condition
+// after them.
+IF
+RollResult(_, (CHARACTER)_Roller, _, (INTEGER)_RollType, _, _)
+AND
+HasActiveStatus((GUIDSTRING)_Roller, "GUIDANCE_BUFF", 1)
+AND
+_RollType != 2
+THEN
+RemoveStatus(_Roller, "GUIDANCE");
+
+IF
+DialogRollResult((CHARACTER)_Roller, _, _, _, _)
+AND
+HasActiveStatus((GUIDSTRING)_Roller, "GUIDANCE_BUFF", 1)
+THEN
+RemoveStatus(_Roller, "GUIDANCE");
+
+PROC
+PROC_RollResult("GAMEPLAY_LockPicking", (CHARACTER)_Roller, _, _)
+AND
+HasActiveStatus((GUIDSTRING)_Roller, "GUIDANCE_BUFF", 1)
+THEN
+RemoveStatus(_Roller, "GUIDANCE");
+
+PROC
+PROC_RollResult(_, (CHARACTER)_Roller, _, _)
+AND
+HasActiveStatus((GUIDSTRING)_Roller, "GUIDANCE_BUFF", 1)
+THEN
+RemoveStatus(_Roller, "GUIDANCE");
+EXITSECTION
+
+ENDEXITSECTION
