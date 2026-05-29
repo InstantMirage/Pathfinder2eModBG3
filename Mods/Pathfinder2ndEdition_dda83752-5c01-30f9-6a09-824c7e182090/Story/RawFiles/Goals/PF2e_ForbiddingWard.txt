@@ -1,0 +1,86 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// If the caster casts the spell again, remove the statuses
+// from the previous trio.
+IF
+UsingSpell((GUIDSTRING)_Caster, "Target_ForbiddingWard", _, _, _)
+AND
+DB_ForbiddingWardTrio((GUIDSTRING)_Ally, (GUIDSTRING)_Enemy, _Caster)
+THEN
+RemoveStatus(_Caster, "FORBIDDING_WARD_SUSTAIN");
+RemoveStatus(_Ally, "FORBIDDING_WARD");
+RemoveStatus(_Enemy, "FORBIDDING_WARD_MARK");
+NOT DB_ForbiddingWardTrio(_Ally, _Enemy, _Caster);
+
+IF
+UsingSpell((GUIDSTRING)_Caster, "Target_ForbiddingWard", _, _, _)
+AND
+DB_ForbiddingWardAlly((GUIDSTRING)_Ally, _Caster, (INTEGER)_StoryID)
+THEN
+NOT DB_ForbiddingWardAlly(_Ally, _Caster, _StoryID);
+
+IF
+UsingSpell((GUIDSTRING)_Caster, "Target_ForbiddingWard", _, _, _)
+AND
+DB_ForbiddingWardEnemy((GUIDSTRING)_Enemy, _Caster, (INTEGER)_StoryID)
+THEN
+NOT DB_ForbiddingWardEnemy(_Enemy, _Caster, _StoryID);
+
+// Applying the status to the ally starts a timer, which
+// will check that an enemy was also selected.
+IF
+StatusApplied((GUIDSTRING)_Ally, "FORBIDDING_WARD_ALLY_PROC", (GUIDSTRING)_Caster, (INTEGER)_StoryID)
+THEN
+DB_ForbiddingWardAlly(_Ally, _Caster, _StoryID);
+RealtimeObjectTimerLaunch(_Ally, "ForbiddingWardTimer", 100);
+
+IF
+StatusApplied((GUIDSTRING)_Enemy, "FORBIDDING_WARD_ENEMY_PROC", (GUIDSTRING)_Caster, (INTEGER)_StoryID)
+THEN
+DB_ForbiddingWardEnemy(_Enemy, _Caster, _StoryID);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Ally, "ForbiddingWardTimer")
+AND
+DB_ForbiddingWardAlly(_Ally, (GUIDSTRING)_Caster, (INTEGER)_StoryID)
+AND
+DB_ForbiddingWardEnemy((GUIDSTRING)_Enemy, _Caster, _StoryID)
+THEN
+DB_ForbiddingWardTrio(_Ally, _Enemy, _Caster);
+ApplyStatus(_Ally, "FORBIDDING_WARD", -1.0, 0, _Caster);
+ApplyStatus(_Enemy, "FORBIDDING_WARD_MARK", -1.0, 0, _Ally);
+
+// If any character in the trio loses its status, remove
+// the other two statuses.
+IF
+StatusRemoved((GUIDSTRING)_Caster, "FORBIDDING_WARD_SUSTAIN", _, _)
+AND
+DB_ForbiddingWardTrio((GUIDSTRING)_Ally, (GUIDSTRING)_Enemy, _Caster)
+THEN
+RemoveStatus(_Ally, "FORBIDDING_WARD");
+RemoveStatus(_Enemy, "FORBIDDING_WARD_MARK");
+NOT DB_ForbiddingWardTrio(_Ally, _Enemy, _Caster);
+
+IF
+StatusRemoved((GUIDSTRING)_Ally, "FORBIDDING_WARD_SUSTAIN", _, _)
+AND
+DB_ForbiddingWardTrio(_Ally, (GUIDSTRING)_Enemy, (GUIDSTRING)_Caster)
+THEN
+RemoveStatus(_Caster, "FORBIDDING_WARD_SUSTAIN");
+RemoveStatus(_Enemy, "FORBIDDING_WARD_MARK");
+NOT DB_ForbiddingWardTrio(_Ally, _Enemy, _Caster);
+
+IF
+StatusRemoved((GUIDSTRING)_Enemy, "FORBIDDING_WARD_MARK", _, _)
+AND
+DB_ForbiddingWardTrio((GUIDSTRING)_Ally, _Enemy, (GUIDSTRING)_Caster)
+THEN
+RemoveStatus(_Caster, "FORBIDDING_WARD_SUSTAIN");
+RemoveStatus(_Ally, "FORBIDDING_WARD");
+NOT DB_ForbiddingWardTrio(_Ally, _Enemy, _Caster);
+EXITSECTION
+
+ENDEXITSECTION
