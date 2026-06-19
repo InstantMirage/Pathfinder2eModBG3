@@ -3054,7 +3054,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Blinded" />
         <field name="StackId" type="StringTableFieldDefinition" value="BLINDED" />
         <field name="Boosts" type="StringTableFieldDefinition" value="SightRangeMaximum(4);ActionResourceConsumeMultiplier(Movement, 2,0);Tag(STAT_PEN_3PERC);Tag(OFF_GUARD);" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;Blind" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;Blind;TickingWithSource" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Blinded;SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StillAnimPriority" version="1" />
@@ -3068,6 +3068,7 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(DAZZLED);RemoveStatus(DAZZLED_APPLY);" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(Tagged('DAZZLED')):ApplyStatus(DAZZLED, 100, -1)" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -6572,7 +6573,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(CIRC_BON_1AC);UnlockInterrupt(Interrupt_Shield_Glass);IF( HasStatus('GLASS_SHIELD_SPELL_BROKEN') and IsSpellChildOrVariantFromContext('Projectile_MagicMissile')):DamageReduction(Force,Flat,LevelMapValue(Glass_Shield_Hardness));" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="HasStatus('GLASS_SHIELD_SPELL_BROKEN')" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="AI_ONLY:ApplyStatus(CircumstanceBonus1AC,100,1);ApplyStatus(GLASS_SHIELD_VFX,100,-1)" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GLASS_SHIELD_VFX);ApplyStatus(GLASS_SHIELD_SPELL_BROKEN,100,-1);" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GLASS_SHIELD_VFX);" />
         <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" clear_inherited_value="true" value="" />
       </fields>
@@ -6584,6 +6585,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="8019babf-5ae2-45d5-af13-cc53b161c33e" />
         <field name="StackId" type="StringTableFieldDefinition" value="GLASS_SHIELD_SPELL_BROKEN" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(GLASS_SHIELD_VFX);" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not TurnBased()):RemoveStatus(GLASS_SHIELD_SPELL_BROKEN)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -9621,7 +9623,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="RousingSplash_Rank1" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hbaeec3b6gdebdgfe93g8e27g2443be2e8d2d" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h08d5aeddg9200g0f2cg8fd1ge489b647c22c" version="2" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_WildMagic_LightBolt" />
+        <field name="Icon" type="StringTableFieldDefinition" value="statIcons_MAG_TemporaryHP" />
         <field name="StackId" type="StringTableFieldDefinition" value="TEMPORARY_HP" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="3" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
@@ -12453,7 +12455,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('FORBIDDING_WARD_MARK',context.Source,context.Target) and not Tagged('STAT_BON_1WILL',context.Target) and not Tagged('STAT_BON_2WILL',context.Target)):RollBonus(SavingThrow,-(context.Target.LevelMapValue(ForbiddingWard)),Wisdom);IF(HasStatus('FORBIDDING_WARD_MARK',context.Source,context.Target) and not Tagged('STAT_BON_1REFLEX',context.Target) and not Tagged('STAT_BON_2REFLEX',context.Target)):RollBonus(SavingThrow,-(context.Target.LevelMapValue(ForbiddingWard)),Dexterity);IF(HasStatus('FORBIDDING_WARD_MARK',context.Source,context.Target) and not Tagged('STAT_BON_1FORT',context.Target) and not Tagged('STAT_BON_2FORT',context.Target)):RollBonus(SavingThrow,-(context.Target.LevelMapValue(ForbiddingWard)),Constitution);IF(HasStatus('FORBIDDING_WARD_MARK',context.Source,context.Target) and Tagged('STAT_BON_1WILL',context.Target) and not Tagged('STAT_BON_2WILL',context.Target)):RollBonus(SavingThrow,-(context.Target.LevelMapValue(ForbiddingWard)-1),Wisdom);IF(HasStatus('FORBIDDING_WARD_MARK',context.Source,context.Target) and Tagged('STAT_BON_1REFLEX',context.Target) and not Tagged('STAT_BON_2REFLEX',context.Target)):RollBonus(SavingThrow,-(context.Target.LevelMapValue(ForbiddingWard)-1),Dexterity);IF(HasStatus('FORBIDDING_WARD_MARK',context.Source,context.Target) and Tagged('STAT_BON_1FORT',context.Target) and not Tagged('STAT_BON_2FORT',context.Target)):RollBonus(SavingThrow,-(context.Target.LevelMapValue(ForbiddingWard)-1),Constitution);" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf5925831g3b45g6a2bg8de8g20ad07332faf" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(ForbiddingWard)" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Illusion_GreaterInvisibility" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_Light" />
         <field name="StackId" type="StringTableFieldDefinition" value="FORBIDDING_WARD" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
@@ -12470,7 +12472,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('FORBIDDING_WARD_MARK',context.Source,context.Target) and not Tagged('STAT_PEN_1AC',context.Target) and not Tagged('STAT_PEN_2AC',context.Target) and not Tagged('STAT_PEN_3AC',context.Target)):RollBonus(Attack, -(context.Target.LevelMapValue(ForbiddingWard)));IF(HasStatus('FORBIDDING_WARD_MARK',context.Source,context.Target) and Tagged('STAT_PEN_1AC',context.Target) and not Tagged('STAT_PEN_2AC',context.Target) and not Tagged('STAT_PEN_3AC',context.Target)):RollBonus(Attack, -(context.Target.LevelMapValue(ForbiddingWard) - 1));" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h493397bbg9072gbb22g9870g11e4327bf95d" version="2" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="LevelMapValue(ForbiddingWard)" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Illusion_GreaterInvisibility" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_Light" />
         <field name="StackId" type="StringTableFieldDefinition" value="FORBIDDING_WARD_MARK" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
@@ -12486,7 +12488,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="6a3fecfc-1370-485b-b837-6357ae74709d" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h872e9195gc65eg4d99g8c59g3ee7ff07e724" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h33c8c3b7g6d13gf086ge51cg5fb3668b7ef4" version="1" />
-        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Illusion_GreaterInvisibility" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_Light" />
         <field name="StackId" type="StringTableFieldDefinition" value="FORBIDDING_WARD_SUSTAIN" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_ForbiddingWard_Sustain);" />
         <field name="Passives" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
@@ -15693,12 +15695,13 @@
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h50c38d18g2e13g0f55g0e2eg54e0609d909d" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="KineticistArmor" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ACOverrideFormula(15,true);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ACOverrideFormula(15,true);UnlockSpell(Shout_RaiseShield_HardwoodArmor);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="WearingArmor(context.Source)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnEquip;OnStatusRemoved" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="e5fc8f24-6939-4a5d-b627-27cf45040265" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
-        <field name="Passives" type="StringTableFieldDefinition" value="RemoveArmorKineticist" />
+        <field name="Passives" type="StringTableFieldDefinition" value="ShieldBlock;RemoveArmorKineticist;" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_Barkskin" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15716,6 +15719,7 @@
         <field name="ApplyEffect" type="GuidObjectTableFieldDefinition" value="0c3f3375-681f-4253-9432-24450007e464" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="698752b6-55fb-4448-8bb6-f7fdb510ac93" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_HeatMetal" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
