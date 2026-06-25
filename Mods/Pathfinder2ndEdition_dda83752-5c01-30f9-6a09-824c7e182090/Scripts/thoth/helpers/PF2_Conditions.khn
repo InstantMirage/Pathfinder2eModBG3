@@ -1557,7 +1557,7 @@ function IsWeaponDamageDieD4(weapon)
 	--return IsWeaponOfProficiencyGroup('Daggers|Sickles', weapon) | (IsWeaponOfProficiencyGroup('Quarterstaffs', weapon) & (DualWielder(owner) | HasShieldEquipped(owner)))
 	
 	local base = Tagged('WPN_D4',weapon)
-	local bigger_twohand = HasAnyTags({'WPN_D8_TWOHAND','WPN_D10_TWOHAND','WPN_D12_TWOHAND'},weapon) & IsWeaponDamageDieTwoHand(weapon)
+	local bigger_twohand = HasAnyTags({'WPN_D6_TWOHAND','WPN_D8_TWOHAND','WPN_D10_TWOHAND','WPN_D12_TWOHAND'},weapon) & IsWeaponDamageDieTwoHand(weapon)
 	
 	return base & ~bigger_twohand
 end
@@ -1567,9 +1567,10 @@ function IsWeaponDamageDieD6(weapon)
 	--return IsWeaponOfProficiencyGroup('Clubs|Flails|LightHammers|Maces|Morningstars|HandCrossbows|Javelins|Warpicks|Rapiers|Shortbows|Shortswords|Spears|Handaxes|Scimitars', weapon)
 	
 	local base = Tagged('WPN_D6',weapon)
+	local twohand = Tagged('WPN_D6_TWOHAND',weapon) & IsWeaponDamageDieTwoHand(weapon)
 	local bigger_twohand = HasAnyTags({'WPN_D8_TWOHAND','WPN_D10_TWOHAND','WPN_D12_TWOHAND'},weapon) & IsWeaponDamageDieTwoHand(weapon)
 	
-	return base & ~bigger_twohand
+	return ( base | twohand ) & ~bigger_twohand
 end
 
 function IsWeaponDamageDieD8(weapon)
