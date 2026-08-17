@@ -10,12 +10,11 @@
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Prone" />
         <field name="FormatColor" type="EnumerationTableFieldDefinition" value="White" enumeration_type_name="FormatStringColor" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(OFF_GUARD);DetectDisturbancesBlock(false)" />
-        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoredByImmobilized;InitiateCombat;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoredByImmobilized;InitiateCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(TurnBased()):ApplyStatus(DEBUG_RESET_MOVE); AI_IGNORE:IF(RemoveCause(StatusRemoveCause.Condition) and TurnBased() and not HasPassive('Athlete_StandUp')):UseActionResource(ActionPoint, 1, 0); AI_ONLY:ApplyStatus(AI_HELPER_PRONE,100,2)" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Prone;SG_Condition;SG_Unconscious;SG_Helpable_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="KO" enumeration_type_name="StillAnimPriority" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(SNEAKING);RemoveStatus(SLEEP);RemoveStatus(SG_Sleeping); AI_ONLY:ApplyStatus(AI_HELPER_HUNTERSMARK,100,1)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(PRONE);" />
         <field name="UseLyingPickingState" type="EnumerationTableFieldDefinition" value="Yes" enumeration_type_name="YesNo" version="1" />
         <field name="SplatterDirtAmount" type="FloatTableFieldDefinition" value="0.1" />
         <field name="Sheathing" type="EnumerationTableFieldDefinition" value="Sheathed" enumeration_type_name="StatusSheathing" version="1" />
@@ -29,6 +28,124 @@
         <field name="Name" type="NameTableFieldDefinition" value="TWN_DISTILLERY_DRUNK_03" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="43efd2ef-8e87-4146-851b-2ecff52bc1b5" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(OFF_GUARD);DetectDisturbancesBlock(false);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="05a002c8-ddbd-4f97-b3a3-befef74e6d1e" />
+        <field name="Name" type="NameTableFieldDefinition" value="PRONE_GREASE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e186ded8-ae25-4ba8-8ffc-f7f6830486bc" />
+        <field name="SplatterDirtAmount" type="FloatTableFieldDefinition" value="0.2" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(PRONE_GREASE);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="0a1598ed-28d7-4398-bcc2-d64beb5abb49" />
+        <field name="Name" type="NameTableFieldDefinition" value="PRONE_SEWER" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="05a002c8-ddbd-4f97-b3a3-befef74e6d1e" />
+        <field name="SplatterDirtAmount" type="FloatTableFieldDefinition" value="0.7" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(PRONE_SEWER);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="25976506-98bc-4878-9f4e-eb2f69c81020" />
+        <field name="Name" type="NameTableFieldDefinition" value="PRONE_ICE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e186ded8-ae25-4ba8-8ffc-f7f6830486bc" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(PRONE_ICE);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="b3cbc6f7-dab5-4ecd-baf2-31e79a39def7" />
+        <field name="Name" type="NameTableFieldDefinition" value="PRONE_FALLEN" />
+        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="White" enumeration_type_name="FormatStringColor" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoredByImmobilized;InitiateCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e186ded8-ae25-4ba8-8ffc-f7f6830486bc" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="KO_Fallen" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="SplatterDirtAmount" type="FloatTableFieldDefinition" value="0.2" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="KO_Fallen" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(PRONE_FALLEN);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="cbe12b32-5e46-4add-b47d-f44f13ab88b1" />
+        <field name="Name" type="NameTableFieldDefinition" value="KNOCKED_DOWN" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfa61df3fgeddag39f7g8d64gc3bae141c4b5" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h43b3aebbgc573g8aefg140egbc28264f8b50" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Prone" />
+        <field name="FormatColor" type="EnumerationTableFieldDefinition" value="White" enumeration_type_name="FormatStringColor" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(KNOCKED_DOWN);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e186ded8-ae25-4ba8-8ffc-f7f6830486bc" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(KNOCKED_DOWN);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="59bdbebc-ade7-4df6-acb5-9a25c018332f" />
+        <field name="Name" type="NameTableFieldDefinition" value="HIDEOUS_LAUGHTER" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e186ded8-ae25-4ba8-8ffc-f7f6830486bc" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h074df975g2819g8be8ga1cfg404ec0ee4517" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h628c1996g1337g8044gbc7cg9c89039fbd2f" version="1" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="SavingThrow(Ability.Wisdom, SourceSpellDC())" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage;OnTurn" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="SoundVocalStart" type="EnumerationTableFieldDefinition" value="NONE" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="b89b7538-2cb3-400f-b1c9-378f61070abb" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="TooltipSave" type="StringTableFieldDefinition" value="Wisdom" />
+        <field name="SplatterDirtAmount" type="FloatTableFieldDefinition" value="0" />
+        <field name="SoundVocalLoop" type="EnumerationTableFieldDefinition" value="LAUGHTERMANIACAL" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="SoundVocalEnd" type="EnumerationTableFieldDefinition" value="RECOVER" enumeration_type_name="SoundVocalType" version="1" />
+        <field name="SoundStart" type="StringTableFieldDefinition" value="Misc_Status_HideousLaughter,HEAD;" />
+        <field name="SoundStop" type="StringTableFieldDefinition" value="Misc_Status_HideousLaughter_Stop,HEAD;" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Laughing_Hideous" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Shouting" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Disadvantage(SavingThrow, Strength);Disadvantage(SavingThrow, Dexterity);IF(not DistanceToTargetGreaterThan(3)):Advantage(AttackTarget);DetectDisturbancesBlock(true);" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(HIDEOUS_LAUGHTER);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="00089887-ff49-492c-a355-3d17ec7ecdd1" />
+        <field name="Name" type="NameTableFieldDefinition" value="COMMAND_GROVEL" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="cbe12b32-5e46-4add-b47d-f44f13ab88b1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h892c9d43gd827g575cg71e5gf56f29a1d095" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he7f015bcg5f9dgf625gb751g30f6b8fe27eb" version="1" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="66787c98-d470-45a0-b82d-263de495d938" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Enchantment_CommandDrop" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="KO_Fallen" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="KO_Fallen" enumeration_type_name="StillAnimPriority" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(COMMAND_GROVEL);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e31aff17-2370-4b86-b5ed-ea674ca0504a" />
+        <field name="Name" type="NameTableFieldDefinition" value="SHOCKWAVE" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he9314886g9741g800cgb36eg291c63937559" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoredByImmobilized;InitiateCombat;BringIntoCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(SHOCKWAVE);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="DetectDisturbancesBlock(false);" />
+        <field name="SplatterDirtAmount" type="FloatTableFieldDefinition" value="0.1" />
+        <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="KO" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="KO" enumeration_type_name="StillAnimPriority" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="5739459d-24a0-42e0-925a-301bae49c5b1" />
+        <field name="Name" type="NameTableFieldDefinition" value="PRONE_THUNDEROUS_SMITE" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="e186ded8-ae25-4ba8-8ffc-f7f6830486bc" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(PRONE_PF2,100,-1);RemoveStatus(PRONE_THUNDEROUS_SMITE);" />
       </fields>
     </stat_object>
   </stat_objects>

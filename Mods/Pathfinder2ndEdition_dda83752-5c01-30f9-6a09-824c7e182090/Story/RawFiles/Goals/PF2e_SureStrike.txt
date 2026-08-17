@@ -1,0 +1,70 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// Removing sure strike via Osiris ensures that it gets removed
+// after the attack roll has been calculated, whereas stats would
+// always trigger before.
+IF
+AttackedBy(_, _, (GUIDSTRING)_Attacker, _, _, _, _)
+AND
+HasActiveStatus(_Attacker, "SURE_STRIKE", 1)
+THEN
+RemoveStatus(_Attacker, "SURE_STRIKE");
+
+// Disabling the circumstance penalties requires some Osiris.
+// Firstly, if Sure Strike is applied, and the character is already
+// affected by a circumstance penalty to attacks, remove the status.
+// Note that removing 2 can sometimes apply 1, so we do them in this
+// order.
+IF
+StatusApplied((GUIDSTRING)_Character, "SURE_STRIKE", _, _)
+AND
+IsTagged(_Character, (TAG)CIRC_PEN_2ATTACK_be2e1f72-546b-4ee5-bd2c-2140dfc3daca, 1)
+THEN
+RemoveStatus(_Character, "CircumstancePenalty2Attack");
+
+IF
+StatusApplied((GUIDSTRING)_Character, "SURE_STRIKE", _, _)
+AND
+IsTagged(_Character, (TAG)CIRC_PEN_1ATTACK_01978f5e-6f76-4070-a15a-8a425664eb3c, 1)
+THEN
+RemoveStatus(_Character, "CircumstancePenalty1Attack");
+
+// If Sure Strike is removed, and we are tagged, we want to reapply
+// the penalty status. Stacking behaviour will sort out the overlap.
+IF
+StatusRemoved((GUIDSTRING)_Character, "SURE_STRIKE", _, _)
+AND
+IsTagged(_Character, (TAG)CIRC_PEN_1ATTACK_01978f5e-6f76-4070-a15a-8a425664eb3c, 1)
+THEN
+ApplyStatus(_Character, "CircumstancePenalty1Attack", -1.0);
+
+IF
+StatusRemoved((GUIDSTRING)_Character, "SURE_STRIKE", _, _)
+AND
+IsTagged(_Character, (TAG)CIRC_PEN_2ATTACK_be2e1f72-546b-4ee5-bd2c-2140dfc3daca, 1)
+THEN
+ApplyStatus(_Character, "CircumstancePenalty2Attack", -1.0);
+
+// If the penalty tags are applied while we are already under the
+// Sure Strike effect, we need to remove the status immediately. 
+// Note that this code only works because it occurs after BonusStacking 
+// due to alphabetical execution order.
+IF
+TagSet((GUIDSTRING)_Character, (TAG)CIRC_PEN_1ATTACK_01978f5e-6f76-4070-a15a-8a425664eb3c)
+AND
+HasActiveStatus(_Character, "SURE_STRIKE", 1)
+THEN
+RemoveStatus(_Character, "CircumstancePenalty1Attack");
+
+IF
+TagSet((GUIDSTRING)_Character, (TAG)CIRC_PEN_2ATTACK_be2e1f72-546b-4ee5-bd2c-2140dfc3daca)
+AND
+HasActiveStatus(_Character, "SURE_STRIKE", 1)
+THEN
+RemoveStatus(_Character, "CircumstancePenalty2Attack");
+EXITSECTION
+
+ENDEXITSECTION
