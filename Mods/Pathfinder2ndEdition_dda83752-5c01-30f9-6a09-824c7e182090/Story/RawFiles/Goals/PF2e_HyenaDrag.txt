@@ -1,0 +1,61 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_HyenaDragSpells("Target_HyenaDrag");
+KBSECTION
+IF
+StatusApplied((GUIDSTRING)_Character, "HYENA_DRAG_TARGET", (GUIDSTRING)_Caster, _)
+THEN
+DB_HyenaDragPair(_Caster, _Character);
+
+IF
+StatusRemoved((GUIDSTRING)_Character, "HYENA_DRAG_TARGET", _, _)
+AND
+DB_HyenaDragPair((GUIDSTRING)_Caster, _Character)
+THEN
+NOT DB_HyenaDragPair(_Caster, _Character);
+
+IF
+UsingSpellAtPosition((GUIDSTRING)_Caster, (REAL)_X, (REAL)_Y, (REAL)_Z, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_HyenaDragSpells(_Spell)
+AND
+DB_HyenaDragPair(_Caster, (GUIDSTRING)_Character)
+THEN
+RemoveStatus(_Character, "PRONE_PF2");
+ApplyStatus(_Character, "INTERRUPT_FREE_MOVEMENT", 1.0);
+
+// Walk the target to the same position, offset by their current offset to the caster.
+IF
+UsingSpellAtPosition((GUIDSTRING)_Caster, (REAL)_X, (REAL)_Y, (REAL)_Z, (STRING)_Spell, _, _, (INTEGER)_StoryID)
+AND
+DB_HyenaDragSpells(_Spell)
+AND
+DB_HyenaDragPair(_Caster, (GUIDSTRING)_Character)
+AND
+GetPosition(_Caster, (REAL)_XS, (REAL)_YS, (REAL)_ZS)
+AND
+GetPosition(_Character, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+AND
+QRY_VectorAB(_XS, _YS, _ZS, _XT, _YT, _ZT)
+AND
+DB_QRYRTN_VectorAB((REAL)_XO, (REAL)_YO, (REAL)_ZO)
+AND
+RealSum(_X, _XO, (REAL)_XD)
+AND
+RealSum(_Y, _YO, (REAL)_YD)
+AND
+RealSum(_Z, _ZO, (REAL)_ZD)
+THEN
+CharacterMoveToPosition((CHARACTER)_Caster, _X, _Y, _Z, "Run", "DummyEvent");
+CharacterMoveToPosition((CHARACTER)_Character, _XD, _YD, _ZD, "Walk", "HyenaDragCleanup");
+
+IF
+EntityEvent((GUIDSTRING)_Character, "HyenaDragCleanup")
+THEN
+RemoveStatus(_Character, "STRIDE");
+RemoveStatus(_Character, "INTERRUPT_FREE_MOVEMENT");
+ApplyStatus(_Character, "PRONE_PF2", -1.0);
+EXITSECTION
+
+ENDEXITSECTION

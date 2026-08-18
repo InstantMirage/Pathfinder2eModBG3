@@ -46,7 +46,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h09fe9c5dg708cg9f1cgd621gbc0937e031bf" version="2" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h89beb024g9d49g119ag5062gaf2a6ebade13" version="3" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Far" enumeration_type_name="InterruptContextScope" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="(FlatCheckFailed(5, context.Source) and not SpellIgnoresConcealed() and Self(context.Target,context.Observer) and not Self(context.Observer, context.Source) and IsConcealedTo(context.Target, context.Source, false) and not (HasStringInSpellConditions('AuditorySpell') or HasStringInSpellConditions('OlfactorySpell') or HasStringInSpellConditions('VisualSpell')) and not HasAoEConditions() and Enemy(context.Observer, context.Source) and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile)));" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="FlatCheckFailed(5, context.Source) and not SpellIgnoresConcealed() and Self(context.Target,context.Observer) and not Self(context.Observer, context.Source) and IsConcealedTo(context.Target, context.Source, false) and not HasAoEConditions() and Enemy(context.Observer, context.Source) and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile)) and not (HasStatus('SURE_STRIKE', context.Source) and HasStringInSpellRoll('Attack2e'));" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Portent_5" />
         <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
         <field name="Properties" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,FLAT_CHECK_IMMUNITY_APPLY,100,0);ApplyStatus(OBSERVER_SOURCE,FLAT_CHECK_OVERHEAD,100,0);" />
@@ -75,7 +75,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he8199ab7gbac7g17c5g62d3gd9dcce7aba13" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h444d9b9dg29ecg4c52g2574g8795167ec4de" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Portent_11" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="FlatCheckFailed(11, context.Source) and Self(context.Observer, context.Target) and not Self(context.Observer, context.Source) and Enemy(context.Observer, context.Source) and not HasAoEConditions() and (HasStatus('HIDDEN_FROM', context.Source, context.Observer) or HasStatus('HIDDEN_NPC', context.Observer))  and not SpellIgnoresHidden() and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile)) and not (HasStringInSpellConditions('AuditorySpell') or HasStringInSpellConditions('OlfactorySpell') or HasStringInSpellConditions('VisualSpell'));" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="FlatCheckFailed(11, context.Source) and Self(context.Observer, context.Target) and not Self(context.Observer, context.Source) and Enemy(context.Observer, context.Source) and not HasAoEConditions() and (HasStatus('HIDDEN_FROM', context.Source, context.Observer) or HasStatus('HIDDEN_NPC', context.Observer)) and not SpellIgnoresHidden() and (SpellTypeIs(SpellType.Target) or SpellTypeIs(SpellType.Throw) or SpellTypeIs(SpellType.Projectile)) and not (HasStatus('SURE_STRIKE', context.Source) and HasStringInSpellRoll('Attack2e'));" />
         <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Nearby" enumeration_type_name="InterruptContextScope" version="1" />
       </fields>
     </stat_object>
@@ -2008,6 +2008,40 @@
         <field name="Properties" type="StringTableFieldDefinition" value="RemoveStatus(OBSERVER_OBSERVER,GUIDANCE);" />
         <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
         <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="43cfadeb-0936-4a3c-9c30-0efb37cc4678" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_GiantCrabScuttle" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd51f1eacg380fg22afg3bf6gc2b4520774da" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h48bac7f1ge3e3g241ag9096g51b8d80b6a55" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_UnarmoredMovement" />
+        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnPostRoll" enumeration_type_name="InterruptContext" version="1" />
+        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Self" enumeration_type_name="InterruptContextScope" version="1" />
+        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Target, context.Observer) and IsAbleToReact(context.Observer) and HasStringInSpellRoll('Attack2e') and not HasStatus('PRONE_PF2',context.Observer);" />
+        <field name="Properties" type="StringTableFieldDefinition" value="IF(not Tagged('CIRC_BON_1AC',context.Observer) and not Tagged('CIRC_BON_2AC',context.Observer)):AdjustRoll(-2);IF(Tagged('CIRC_BON_1AC',context.Observer) and not Tagged('CIRC_BON_2AC',context.Observer)):AdjustRoll(-1);UseSpell(SWAP, Target_GiantCrabScuttle, true, true, true);" />
+        <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1;" />
+        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled;Ask" enumeration_type_name="InterruptDefaultValue" version="1" />
+        <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="37dba5a8-d509-44ae-85d3-ee6d3029c161" />
+        <field name="Name" type="NameTableFieldDefinition" value="Interrupt_GentleLanding" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h170644eagbad3gb4ffgf6abge7bca6897474" version="1" />
+        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="InterruptContext" version="1" />
+        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Far" enumeration_type_name="InterruptContextScope" version="1" />
+        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
+        <field name="Properties" type="StringTableFieldDefinition" value="RemoveStatus(OBSERVER_TARGET,GENTLE_LANDING_ENABLE);RemoveStatus(OBSERVER_TARGET,GENTLE_LANDING_TRIGGER);ApplyStatus(OBSERVER_TARGET,GENTLE_LANDING,100,1);" />
+        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Ask;Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not HasSpellCastBlocked(context.Observer) and IsAbleToReact(context.Observer) and HasStatus('GENTLE_LANDING_ENABLE',context.Target)  and not DistanceToEntityGreaterThan(24, context.ObserverPosition, context.Target);" />
+        <field name="Cost" type="StringTableFieldDefinition" value="ReactionActionPoint:1;SpellSlotsGroup:1:1:1;" />
+        <field name="Stack" type="StringTableFieldDefinition" value="GentleLanding" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_FeatherFall" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h91183f92gb8dag5277g2c65g81a61945039d" version="1" />
       </fields>
     </stat_object>
   </stat_objects>

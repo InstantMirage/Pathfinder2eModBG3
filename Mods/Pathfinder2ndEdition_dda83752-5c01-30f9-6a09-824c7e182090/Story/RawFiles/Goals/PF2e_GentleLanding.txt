@@ -1,0 +1,38 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// Detect sources of falling
+IF
+Falling((GUIDSTRING)_Character, _)
+THEN
+ApplyStatus(_Character, "GENTLE_LANDING_ENABLE", 1.0, 1, _Character);
+
+IF
+StatusApplied((GUIDSTRING)_Character, "FORCE_DETECTION", _, _)
+THEN
+RealtimeObjectTimerLaunch(_Character, "FallingTrigger", 50);
+
+IF
+CastSpell((GUIDSTRING)_Character, (STRING)_Spell, "Projectile", _, _)
+AND
+SpellHasSpellFlag(_Spell, "IsJump", 1)
+THEN
+RealtimeObjectTimerLaunch(_Character, "FallingTrigger", 50);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Character, "FallingTrigger")
+THEN
+ApplyStatus(_Character, "GENTLE_LANDING_ENABLE", 1.0, 1, _Character);
+
+// Cast a fake spell for the VFX, but only if casting on someone else.
+IF
+StatusApplied((GUIDSTRING)_Faller, "GENTLE_LANDING", (GUIDSTRING)_Caster, _)
+AND
+_Faller != _Caster
+THEN
+UseSpell(_Caster, "Target_GentleLandingVFX", _Faller, NULL_00000000-0000-0000-0000-000000000000, 1);
+EXITSECTION
+
+ENDEXITSECTION

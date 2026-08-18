@@ -84,6 +84,9 @@
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="BreakConcentration();IF(HasStatus('SG_Prone')):ApplyStatus(SLEEP_PRONE,100,SLEEP.Duration);" />
         <field name="Owner" type="CommentTableFieldDefinition" value="Upright sleeping, stays armed (Sleep 1)" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Dazed" enumeration_type_name="StatusAnimationType" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h80142682g81d6g2f01gcf53g2a097cac1472" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he977618fg5b07gabaage8b9g8b354759e71c" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="OverheadOnTurn" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -107,15 +110,17 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="6e732ff9-b27d-4385-a1cf-217db19b7159" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h618b939eg9695g2b7bgd468g36a913fc040f" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="Tag(STAT_PEN_3REFLEX);Tag(STAT_PEN_3AC);Tag(STAT_PEN_3PERC);Tag(OFF_GUARD);DetectDisturbancesBlock(true);SightRangeOverride(0);" />
-        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="IsStatusEvent(StatusEvent.OnHeal)" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="TotalDamageDoneGreaterThan(0) or IsStatusEvent(StatusEvent.OnHeal)" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="DisarmWeapon();BreakConcentration();RemoveStatus(SG_Prone)" />
         <field name="Owner" type="CommentTableFieldDefinition" value="Prone, disarmed, no perception save, continues sleeping (Sleep 4)" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="KO" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="TooltipSave" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Unconscious;SG_Condition;SG_Sleeping;SG_Sleeping_Magical" enumeration_type_name="StatusGroupFlags" version="1" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(RemoveCause(StatusRemoveCause.TimeOut)):ApplyStatus(SLEEPING,100,10)" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(RemoveCause(StatusRemoveCause.TimeOut)):ApplyStatus(SLEEP_PRONE,100,10)" />
         <field name="OnTickRoll" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="OnTickSuccess" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="ha2917b25g6ed0g2543gf3c5g1c0119669994" version="1" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnDamage;OnStatusApplied;OnHeal" enumeration_type_name="StatusEvent" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

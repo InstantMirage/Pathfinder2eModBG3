@@ -2096,3 +2096,37 @@ function FieldOfRazorsDamage(damageType)
 	end
 	return ConditionResult(false)
 end
+
+function HasXAlliesWithinRange(distance, target, source, number)
+    distance = distance or 2.0
+    target = target or context.Target
+    source = source or context.Source
+    number = number or 2
+    count = 0
+
+    local allies = GetAlliesWithinRange(distance, target, source)
+    if allies ~= nil then
+        for _, entity in ipairs(allies.Allies) do
+        	count = count + 1
+        end
+    end
+
+    if count >= number then
+    	return ConditionResult(true)
+    end
+
+    return ConditionResult(false)
+end
+
+function ThunderstrikeDC(target)
+	target = target or context.Target
+	DC = SourceSpellDC()
+
+	if HasMetalArmor(context.Target).Result or IsMetalCharacter(context.Target).Result then
+		if not HasAnyTags({'CIRC_PEN_1REFLEX','CIRC_PEN_2REFLEX','CIRC_PEN_3REFLEX'}, target).Result then
+			DC = DC + 1
+		end
+	end
+
+	return DC
+end

@@ -129,7 +129,7 @@
         <field name="HitRadius" type="FloatTableFieldDefinition" value="1.5" />
         <field name="MovementSpeed" type="IntegerTableFieldDefinition" value="40000" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="Dead() or SkillCheck(Skill.Athletics,math.max(context.Target.GetPassiveSkill(Skill.Athletics),context.Target.GetPassiveSkill(Skill.Acrobatics)))" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Ally()):Force(ShoveDistance,OriginToEntity,Aggressive);IF(Ally()):Force(ShoveDistance,OriginToEntity,Friendly)" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Ally()):Force(ShoveDistance,OriginToEntity,Aggressive);IF(Ally()):Force(ShoveDistance,OriginToEntity,Friendly);ApplyStatus(FORCE_DETECTION,100,0);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="(Character() and not Dead()) or Item() and DistanceToTargetGreaterThan(3.0) and CanShoveWeight() and IsMovable() and not Grounded()" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h48e0be6cg35dcg195eg081bg451b7541f1bb" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h383e9463g28e2gde21g2a3egb16aeb9c5b0d" version="1" />
@@ -518,7 +518,7 @@
         <field name="AIFlags" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="AIFlags" version="1" />
         <field name="TargetRadius" type="StringTableFieldDefinition" value="16" />
         <field name="Cooldown" type="EnumerationTableFieldDefinition" value="OncePerTurn" enumeration_type_name="CooldownType" version="1" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(4d8+UnarmedMeleeAbilityModifier,Piercing);IF(not SavingThrow(Ability.Constitution,14)):ApplyStatus(PRONE,100,2);AI_IGNORE:Force(2);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="DealDamage(4d8+UnarmedMeleeAbilityModifier,Piercing);IF(not SavingThrow(Ability.Constitution,14)):ApplyStatus(PRONE,100,2);AI_IGNORE:Force(2);ApplyStatus(FORCE_DETECTION,100,0);" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="not DistanceToTargetLessThan(4.5) and not Ally()" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:1;Movement:Distance" />
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="IsHarmful;AddFallDamageOnLand;IsEnemySpell" enumeration_type_name="SpellFlagList" version="1" />
