@@ -109,15 +109,91 @@ StatusApplied((GUIDSTRING)_Target, "SHOVE_REACT", (GUIDSTRING)_Caster, _)
 THEN
 DB_CurrentShoveAction(_Target, _Caster);
 
-// When a shove is finished, the shoved character loses this
-// status, and we have to apply another status that triggers
-// the interrupt, but we need Osiris to maintain cause data.
+// If the target is erased (chasm) or dies before follow can
+// resolve, drop tracking and never apply SHOVE_TRIGGER.
+// Applying a status or evaluating interrupt distance on a
+// deleted entity CTDs.
+IF
+EnteredChasm((GUIDSTRING)_Target, _, _, _, _, _)
+AND
+DB_CurrentShoveAction(_Target, (GUIDSTRING)_Caster)
+THEN
+PROC_ShoveFollowAbort(_Target, _Caster);
+
+IF
+Died((CHARACTER)_Target)
+AND
+DB_CurrentShoveAction(_Target, (GUIDSTRING)_Caster)
+THEN
+PROC_ShoveFollowAbort(_Target, _Caster);
+
+PROC
+PROC_ShoveFollowAbort((GUIDSTRING)_Target, (GUIDSTRING)_Caster)
+THEN
+NOT DB_CurrentShoveAction(_Target, _Caster);
+RemoveStatus(_Caster, "SHOVE_TRIGGER");
+
+QRY
+QRY_ShoveFollowTargetValid((GUIDSTRING)_Target)
+AND
+GetPosition(_Target, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+IsOnStage(_Target, 1)
+AND
+IsCharacter(_Target, 1)
+AND
+IsDead((CHARACTER)_Target, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+QRY_ShoveFollowTargetValid((GUIDSTRING)_Target)
+AND
+GetPosition(_Target, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+IsOnStage(_Target, 1)
+AND
+IsCharacter(_Target, 0)
+THEN
+DB_NOOP(1);
+
+// When a shove is finished, offer follow on the caster, not the
+// target, so interrupt evaluation never runs against a creature
+// that just fell into a chasm. Osiris keeps cause as the caster.
 IF
 StatusRemoved((GUIDSTRING)_Target, "SHOVE_REACT", _, _)
 AND
 DB_CurrentShoveAction(_Target, (GUIDSTRING)_Caster)
+AND
+QRY_ShoveFollowTargetValid(_Target)
+AND
+GetDistanceTo(_Caster, _Target, (REAL)_Dist)
+AND
+_Dist < 5.0
 THEN
-ApplyStatus(_Target, "SHOVE_TRIGGER", 0.0, 0, _Caster);
+ApplyStatus(_Caster, "SHOVE_TRIGGER", 0.0, 0, _Caster);
+
+IF
+StatusRemoved((GUIDSTRING)_Target, "SHOVE_REACT", _, _)
+AND
+DB_CurrentShoveAction(_Target, (GUIDSTRING)_Caster)
+AND
+NOT QRY_ShoveFollowTargetValid(_Target)
+THEN
+NOT DB_CurrentShoveAction(_Target, _Caster);
+
+IF
+StatusRemoved((GUIDSTRING)_Target, "SHOVE_REACT", _, _)
+AND
+DB_CurrentShoveAction(_Target, (GUIDSTRING)_Caster)
+AND
+QRY_ShoveFollowTargetValid(_Target)
+AND
+GetDistanceTo(_Caster, _Target, (REAL)_Dist)
+AND
+NOT _Dist < 5.0
+THEN
+NOT DB_CurrentShoveAction(_Target, _Caster);
 
 // When the shove follow interrupt awaits user input, we
 // find a safe place to stand near the target, and ping it.
@@ -168,6 +244,14 @@ EntityEvent((GUIDSTRING)_Caster, "ShoveReactionMove")
 THEN
 ApplyStatus(_Caster, "DEBUG_RESET_MOVE", -1.0, 1, _Caster);
 RemoveStatus(_Caster, "INTERRUPT_FREE_MOVEMENT");
+RemoveStatus(_Caster, "SHOVE_TRIGGER");
+
+IF
+EntityEvent((GUIDSTRING)_Caster, "ShoveReactionMove")
+AND
+DB_CurrentShoveAction((GUIDSTRING)_Target, _Caster)
+THEN
+NOT DB_CurrentShoveAction(_Target, _Caster);
 //END_REGION
 
 //REGION Move to Target fixed distance
