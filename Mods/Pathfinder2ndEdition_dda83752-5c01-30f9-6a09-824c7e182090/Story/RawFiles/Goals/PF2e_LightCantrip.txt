@@ -55,6 +55,9 @@ DB_LightCreatureSequence(_StoryID, _Owner, _Target);
 
 // When casting a Light spell at a position, create
 // an invisible helper. Check if a light must expire.
+// Use the character helper (same as sustain), not the
+// item Helper_Spell_Light: items don't update the light
+// grid, and HasMovableSpellInRange only sees allies.
 IF
 CastSpell((GUIDSTRING)_Owner, (STRING)_Spell, _, _, (INTEGER)_StoryID)
 AND
@@ -62,21 +65,11 @@ DB_LightCantripSpellsNoSustain(_Spell)
 AND
 DB_LightPositionSequence(_StoryID, _Owner, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
 AND
-CreateAt((GUIDSTRING)Helper_Spell_Light_d29d13fd-8d03-4423-9862-a2c165af7cf3, _XT, _YT, _ZT, 1, 0, "LightCantripSpawnComplete", (GUIDSTRING)_Summon)
+CreateAt((GUIDSTRING)LightCantrip_Helper_f7022e4f-0e9e-412b-a05d-768c968b7fb6, _XT, _YT, _ZT, 1, 0, "LightCantripSpawnComplete", (GUIDSTRING)_Summon)
 THEN
 NOT DB_LightPositionSequence(_StoryID, _Owner, _XT, _YT, _ZT);
-PROC_AddLightAndPrune(_Summon, _Owner);
-DB_LightSummonDelay(_Summon, _Owner);
-RealtimeObjectTimerLaunch(_Summon, "SummonDelayLightTimer", 200);
-
-// A small delay is needed here for VFX reasons.
-IF
-ObjectTimerFinished((GUIDSTRING)_Summon, "SummonDelayLightTimer")
-AND
-DB_LightSummonDelay(_Summon, (GUIDSTRING)_Owner)
-THEN
 ApplyStatus(_Summon, "LIGHT_PF2", -1.0, 0, _Owner);
-NOT DB_LightSummonDelay(_Summon, _Owner);
+PROC_AddLightAndPrune(_Summon, _Owner);
 
 // When casting a light spell on a character, apply
 // the status. Check if a light must expire.
@@ -102,9 +95,8 @@ AND
 CreateAt((GUIDSTRING)LightCantrip_Helper_f7022e4f-0e9e-412b-a05d-768c968b7fb6, _XT, _YT, _ZT, 1, 0, "LightCantripSpawnComplete", (GUIDSTRING)_Summon)
 THEN
 NOT DB_LightPositionSequence(_StoryID, _Owner, _XT, _YT, _ZT);
+ApplyStatus(_Summon, "LIGHT_PF2", -1.0, 0, _Owner);
 PROC_AddLightAndPruneNearest(_Summon, _Owner);
-DB_LightSummonDelay(_Summon, _Owner);
-RealtimeObjectTimerLaunch(_Summon, "SummonDelayLightTimer", 200);
 
 // When casting a light sustain on a character, apply
 // the status. Find the nearest light and remove it.
@@ -207,6 +199,19 @@ THEN
 NOT DB_LightSummonCount(_Owner, _Count, _Ticker);
 DB_LightSummonCount(_Owner, _NewCount, _Ticker);
 NOT DB_LightSummonList(_Owner, _Entity, _Birthday);
+
+PROC
+PROC_RemoveLightCastFromList((GUIDSTRING)_Entity)
+AND
+DB_LightSummonList((GUIDSTRING)_Owner, _Entity, (INTEGER)_Birthday)
+AND
+DB_LightSummonCount(_Owner, (INTEGER)_Count, (INTEGER)_Ticker)
+AND
+IntegerSubtract(_Count, 1, (INTEGER)_NewCount)
+AND
+_NewCount < 1
+THEN
+RemoveStatus(_Owner, "LIGHT_PF2_CASTER");
 
 // Get the oldest light cast by a caster.
 // Init first.
