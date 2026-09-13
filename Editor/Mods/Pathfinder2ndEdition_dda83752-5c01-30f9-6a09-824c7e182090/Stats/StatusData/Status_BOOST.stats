@@ -2547,7 +2547,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="DISPLAY_HIDDEN" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('HIDDEN_NPC',context.Target)):Advantage(AttackTarget);IF(HasStatus('HIDDEN_NPC',context.Target)):Disadvantage(AllSavingThrows);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(HasStatus('HIDDEN_NPC',context.Target) or IsBlindedViewer(context.Source)):Advantage(AttackTarget);IF(HasStatus('HIDDEN_NPC',context.Target) or IsBlindedViewer(context.Source)):Disadvantage(AllSavingThrows);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="IgnoreResting;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
@@ -2558,7 +2558,7 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="25f8426b-b125-45ba-80a0-e5851a729d0b" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h4e95a00cg8842g639fg9177ga6d32151c164" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="DISPLAY_CONCEALED" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not HasStatus('HIDDEN_NPC', context.Target) and not (IsSpell() and HasAnyStatus({'STUPEFIED_1','STUPEFIED_2','STUPEFIED_3','STUPEFIED_4'}, {}, {},context.Source)) and IsConcealedTo(context.Target, context.Source, false)):Advantage(AttackTarget);IF(not HasStatus('HIDDEN_NPC', context.Target) and not (IsSpell() and HasAnyStatus({'STUPEFIED_1','STUPEFIED_2','STUPEFIED_3','STUPEFIED_4'}, {}, {},context.Source)) and IsConcealedTo(context.Target, context.Source, false))::Disadvantage(AllSavingThrows);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="IF(not HasStatus('HIDDEN_NPC', context.Target) and not IsBlindedViewer(context.Source) and not (IsSpell() and HasAnyStatus({'STUPEFIED_1','STUPEFIED_2','STUPEFIED_3','STUPEFIED_4'}, {}, {},context.Source)) and IsConcealedTo(context.Target, context.Source, false)):Advantage(AttackTarget);IF(not HasStatus('HIDDEN_NPC', context.Target) and not IsBlindedViewer(context.Source) and not (IsSpell() and HasAnyStatus({'STUPEFIED_1','STUPEFIED_2','STUPEFIED_3','STUPEFIED_4'}, {}, {},context.Source)) and IsConcealedTo(context.Target, context.Source, false))::Disadvantage(AllSavingThrows);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3063,7 +3063,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="8cc0e13c-ea75-4f4c-b1ba-9b245e22f2bb" />
         <field name="Name" type="NameTableFieldDefinition" value="BLINDED" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h95d70712g5e0fg677dg3143ge087fca6dfec" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcdfb0b1eg4e17g394fg05f6gfbc3961a17bb" version="4" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hcdfb0b1eg4e17g394fg05f6gfbc3961a17bb" version="5" />
         <field name="Icon" type="StringTableFieldDefinition" value="Status_Blinded" />
         <field name="StackId" type="StringTableFieldDefinition" value="BLINDED" />
         <field name="Boosts" type="StringTableFieldDefinition" value="SightRangeMaximum(4);ActionResourceConsumeMultiplier(Movement, 2,0);Tag(STAT_PEN_3PERC);Tag(OFF_GUARD);" />

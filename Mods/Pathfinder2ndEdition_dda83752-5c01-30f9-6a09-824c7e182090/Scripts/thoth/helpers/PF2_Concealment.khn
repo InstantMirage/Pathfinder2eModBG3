@@ -88,9 +88,6 @@ function IsConcealedTo(source, target, hide)
 	if HasStatus('DAZZLED', target).Result then
 		return resultTrue
 	end
-	if HasStatus('SG_Blind', target).Result then
-		return resultTrue
-	end
 	if HasStatus('INVISIBLE', source).Result then
 		return resultTrue
 	end
@@ -98,6 +95,15 @@ function IsConcealedTo(source, target, hide)
 		return resultTrue
 	end
 	return resultFalse
+end
+
+-- Blinded treats creatures as hidden (DC 11), not concealed (DC 5).
+function IsBlindedViewer(entity)
+	entity = entity or context.Source
+	if Tagged('BLINDSIGHT', entity).Result then
+		return ConditionResult(false)
+	end
+	return HasStatus('SG_Blinded', entity)
 end
 
 function NPCHideGetDC(entity)
