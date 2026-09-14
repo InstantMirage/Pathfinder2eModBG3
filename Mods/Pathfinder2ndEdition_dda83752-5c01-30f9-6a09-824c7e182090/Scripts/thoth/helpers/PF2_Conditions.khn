@@ -1675,6 +1675,14 @@ function HasWeaponDamageDice3(weapon)
 	return Tagged('WPN_RUNE_STRIKING_GREATER',weapon)
 end
 
+function WouldBeCriticalHit()
+	-- ponytail: engine nat-20 sets RollCritical before CheckCriticalTen can see +10; IsCritical covers guaranteed crits.
+	if context.InterruptedRoll ~= nil and context.InterruptedRoll.RollCritical == RollCritical.Success then
+		return ConditionResult(true)
+	end
+	return CheckCriticalTen(10) | IsCritical()
+end
+
 function CheckCriticalTen(max, entity)
 	local entity = entity or context.Target
 	local max = max or 0

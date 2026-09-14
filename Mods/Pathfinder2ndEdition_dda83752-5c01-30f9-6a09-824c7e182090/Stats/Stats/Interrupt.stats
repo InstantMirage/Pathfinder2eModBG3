@@ -1796,5 +1796,22 @@
         <field name="Roll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC(10,context.Observer,Ability.Wisdom))" />
       </fields>
     </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7c4e2a91-5b18-4d6a-9e21-8f3a0c1d4b55" />
+        <field name="Name" type="NameTableFieldDefinition" value="GreaterFortificationInterrupt" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3f7a1c82g6b04g4d91g8e2ag91c4b7d03e55" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h9d2e8b14g0c55g4a18gbf67g2e8f1a0c9d44" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_HeavyArmorMaster" />
+        <field name="InterruptContext" type="EnumerationListTableFieldDefinition" value="OnPostRoll" enumeration_type_name="InterruptContext" version="1" />
+        <field name="InterruptContextScope" type="EnumerationListTableFieldDefinition" value="Self;Nearby;Far" enumeration_type_name="InterruptContextScope" version="1" />
+        <field name="Container" type="StringTableFieldDefinition" value="YesNoDecision" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="Self(context.Observer,context.Target) and not Self(context.Observer,context.Source) and HasInterruptedAttack() and WouldBeCriticalHit() and not HasStatus('GREATER_FORTIFICATION_NEGATE',context.Observer);" />
+        <field name="Roll" type="StringTableFieldDefinition" value="RollDieAgainstDC(DiceType.d20,14)" />
+        <field name="Success" type="StringTableFieldDefinition" value="ApplyStatus(OBSERVER_SOURCE,GREATER_FORTIFICATION_NEGATE,100,0);ApplyStatus(OBSERVER_OBSERVER,GREATER_FORTIFICATION_NEGATE,100,0);ApplyStatus(OBSERVER_OBSERVER,GREATER_FORTIFICATION_OVERHEAD,100,0);" />
+        <field name="InterruptDefaultValue" type="EnumerationListTableFieldDefinition" value="Enabled" enumeration_type_name="InterruptDefaultValue" version="1" />
+        <field name="EnableContext" type="EnumerationListTableFieldDefinition" value="OnStatusApplied;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+      </fields>
+    </stat_object>
   </stat_objects>
 </stats>
