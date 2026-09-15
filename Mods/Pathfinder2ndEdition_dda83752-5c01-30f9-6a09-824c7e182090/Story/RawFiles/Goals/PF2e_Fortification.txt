@@ -1,0 +1,37 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+// Pre-roll the wearer's DC 14 flat check when they are targeted, using the
+// same duration-as-roll trick as FLAT_CHECK_ROLL so the interrupt sees one value.
+IF
+UsingSpellOnTarget((GUIDSTRING)_Caster, (GUIDSTRING)_Target, _, _, _, _)
+AND
+ObjectIsCharacter(_Target, 1)
+AND
+HasPassive((CHARACTER)_Target, "GreaterFortification", 1)
+AND
+Random(19, (INTEGER)_RollMinusOne)
+AND
+IntegerSum(_RollMinusOne, 1, (INTEGER)_Roll)
+AND
+IntegerProduct(_Roll, 6, _Duration)
+AND
+IntegerToReal(_Duration, (REAL)_DurationReal)
+THEN
+ApplyStatus(_Target, "GREATER_FORTIFICATION_ROLL", _DurationReal, 1, _Target);
+
+// Log the actual d20 vs DC 14 when fortification resolves against a crit.
+IF
+ReactionInterruptUsed((GUIDSTRING)_Character, "GreaterFortificationInterrupt", _)
+AND
+GetStatusTurns(_Character, "GREATER_FORTIFICATION_ROLL", (INTEGER)_Roll)
+AND
+ConcatenateInteger("GREATER_FORTIFICATION_D20_", _Roll, (STRING)_Status)
+THEN
+ApplyStatus(_Character, _Status, 0.0, 1, _Character);
+
+EXITSECTION
+
+ENDEXITSECTION

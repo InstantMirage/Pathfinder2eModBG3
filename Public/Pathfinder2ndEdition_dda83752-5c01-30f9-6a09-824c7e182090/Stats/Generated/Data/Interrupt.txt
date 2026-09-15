@@ -1652,7 +1652,6 @@ data "InterruptContext" "OnPostRoll"
 data "InterruptContextScope" "Self;Nearby;Far"
 data "Container" "YesNoDecision"
 data "Conditions" "Self(context.Observer,context.Target) and not Self(context.Observer,context.Source) and HasInterruptedAttack() and WouldBeCriticalHit() and not HasStatus('GREATER_FORTIFICATION_NEGATE',context.Observer);"
-data "Roll" "RollDieAgainstDC(DiceType.d20,14)"
-data "Success" "ApplyStatus(OBSERVER_SOURCE,GREATER_FORTIFICATION_NEGATE,100,0);ApplyStatus(OBSERVER_OBSERVER,GREATER_FORTIFICATION_NEGATE,100,0);ApplyStatus(OBSERVER_OBSERVER,GREATER_FORTIFICATION_OVERHEAD,100,0);"
+data "Properties" "IF(GreaterFortificationSucceeded()):ApplyStatus(OBSERVER_SOURCE,GREATER_FORTIFICATION_NEGATE,100,0);IF(GreaterFortificationSucceeded()):ApplyStatus(OBSERVER_OBSERVER,GREATER_FORTIFICATION_NEGATE,100,0);IF(GreaterFortificationSucceeded()):ApplyStatus(OBSERVER_OBSERVER,GREATER_FORTIFICATION_OVERHEAD,100,0);"
 data "InterruptDefaultValue" "Enabled"
 
