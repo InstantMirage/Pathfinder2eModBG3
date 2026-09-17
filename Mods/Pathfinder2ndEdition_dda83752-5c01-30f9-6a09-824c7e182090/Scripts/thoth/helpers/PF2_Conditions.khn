@@ -1688,6 +1688,34 @@ function GreaterFortificationSucceeded()
 	return ConditionResult(roll >= 14)
 end
 
+-- ponytail: OnPostRoll CriticalHit Never is too late; SetRoll demotes like Mirror Image. Ceiling: KeepHit only covers the nat-20 exact-hit clamp.
+function FortificationDesiredFace()
+	local roll = context.InterruptedRoll
+	local mods = roll.Total - roll.NaturalRoll
+	local desired = roll.Difficulty - mods
+	if desired > 19 then
+		desired = 19
+	elseif desired < 2 then
+		desired = 2
+	end
+	return desired
+end
+
+function FortificationSetRoll(n)
+	if context.InterruptedRoll == nil then
+		return ConditionResult(false)
+	end
+	return ConditionResult(FortificationDesiredFace() == n)
+end
+
+function FortificationKeepHit()
+	if context.InterruptedRoll == nil then
+		return ConditionResult(false)
+	end
+	local mods = context.InterruptedRoll.Total - context.InterruptedRoll.NaturalRoll
+	return ConditionResult((context.InterruptedRoll.Difficulty - mods) > 19)
+end
+
 function CheckCriticalTen(max, entity)
 	local entity = entity or context.Target
 	local max = max or 0
