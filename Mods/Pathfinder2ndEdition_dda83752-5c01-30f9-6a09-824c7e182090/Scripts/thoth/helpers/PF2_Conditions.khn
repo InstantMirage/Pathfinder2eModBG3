@@ -334,6 +334,17 @@ function SpellIgnoresRestrained()
 	return ConditionResult(true)
 end
 
+function EscapeHoldTarget()
+	-- Grab/restrain store a status source, so pair victim -> holder.
+	-- Vanilla garrote/ensnare do not (no TickingWithSource), so source-paired
+	-- HasAnyStatus always fails and the UI shows CE_Status_GRABBED_False.
+	local grabbed = HasAnyStatus({'GRABBED','RESTRAINED_2E'}, {}, {}, context.Source, context.Target)
+	local garroted = HasAnyStatus({'GARROTE_TARGET','GARROTE_TARGET_HUMANOID','GARROTE_TARGET_RESTRAINED','MAG_GARROTE_TARGET','MAG_GARROTE_TARGET_HUMANOID'}, {}, {}, context.Source)
+	local garroting = HasAnyStatus({'GARROTE_SOURCE','GARROTE_SOURCE_HUMANOID','MAG_GARROTE_SOURCE'}, {}, {}, context.Target)
+	local snared = HasAnyStatus({'ENSNARED','ENSNARING_STRIKE','ENSNARING_STRIKE_2','ENSNARING_STRIKE_3','BOLA','NET'}, {}, {}, context.Source)
+	return ConditionResult((grabbed | (garroted & garroting) | snared).Result)
+end
+
 -- Weapons
 
 function WeaponDieSizeNum(num)
