@@ -1,0 +1,36 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_CloudCleanupStatuses("MistAura");
+DB_CloudCleanupStatuses("AshCloudAura_Rank2");
+DB_CloudCleanupStatuses("AshCloudAura_Rank3");
+DB_CloudCleanupStatuses("AshCloudAura_Rank4");
+DB_CloudCleanupStatuses("AshCloudAura_Rank5");
+DB_CloudCleanupStatuses("AshCloudAura_Rank6");
+DB_CloudCleanupStatuses("SanguineMistAura_4");
+DB_CloudCleanupStatuses("SanguineMistAura_5");
+DB_CloudCleanupStatuses("SanguineMistAura_6");
+DB_CloudCleanupStatuses("PetalStorm_Aura_Rank4");
+DB_CloudCleanupStatuses("PetalStorm_Aura_Rank6");
+DB_CloudCleanupStatuses("RustCloudAura_Rank4");
+DB_CloudCleanupStatuses("RustCloudAura_Rank6");
+DB_CloudCleanupStatuses("ToxicCloudAura_Rank5");
+DB_CloudCleanupStatuses("ToxicCloudAura_Rank6");
+DB_CloudCleanupStatuses("ImpenetrableFogAura");
+KBSECTION
+IF
+StatusApplied((GUIDSTRING)_Helper, "CLOUD_CLEANUP", _, _)
+AND
+DB_CloudCleanupStatuses((STRING)_Status)
+AND
+HasActiveStatus(_Helper, _Status, 1)
+THEN
+RemoveStatus(_Helper, _Status);
+
+IF
+StatusApplied((GUIDSTRING)_Helper, "CLOUD_CLEANUP", _, _)
+THEN
+DebugText(_Helper, "Helper");
+EXITSECTION
+
+ENDEXITSECTION

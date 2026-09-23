@@ -171,6 +171,29 @@ THEN
 UseSpell(_Char,"Shout_ReactToManipulate",_Char,_Char,0);
 
 //END_REGION
+
+//REGION Stop Movement
+// Status to apply that performs a teleport to current position,
+// killing movement.
+IF
+StatusApplied((GUIDSTRING)_Character, "STOP_MOVEMENT", _, _)
+AND
+GetPosition(_Character, _X, _Y, _Z)
+AND
+RealSum(_X, 0.01, _NewX)
+THEN
+TeleportToPosition(_Character, _NewX, _Y, _Z, "PF2e_StopMovement", 0, 0, 0, 0, 1);
+
+// Same again, but this status doesn't waste the remaining speed.
+IF
+StatusApplied((GUIDSTRING)_Character, "PAUSE_MOVEMENT", _, _)
+AND
+GetPosition(_Character, _X, _Y, _Z)
+AND
+RealSum(_X, 0.01, _NewX)
+THEN
+TeleportToPosition(_Character, _NewX, _Y, _Z, "PF2e_StopMovement", 0, 0, 0, 0, 1);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

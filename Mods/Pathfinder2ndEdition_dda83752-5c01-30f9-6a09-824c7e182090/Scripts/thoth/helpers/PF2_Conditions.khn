@@ -1496,7 +1496,13 @@ end
 -- Critical hits for non-attack spells
 
 function SaveCrit(save_type)
-	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
+	local total, difficulty, natural = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
+	if natural == 1 then
+		total = total - 10
+	end
+	if natural == 20 then
+		total = total + 10
+	end
 	local thresholdtotal = 10 + total
 	
 	if difficulty >= thresholdtotal then
@@ -1506,7 +1512,13 @@ function SaveCrit(save_type)
 end
 
 function SaveCritMiss(save_type)
-	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
+	local total, difficulty, natural = LastConditionRollValues(ConditionRollType.ConditionSavingThrow)
+	if natural == 1 then
+		total = total - 10
+	end
+	if natural == 20 then
+		total = total + 10
+	end
 	local thresholdtotal = total - 10
 	
 	-- Basic critical conversion prevents damage on a miss
@@ -1542,7 +1554,13 @@ function DehydrateDC(target,source)
 end
 
 function SkillCrit()
-	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
+	local total, difficulty, natural = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
+	if natural == 1 then
+		total = total - 10
+	end
+	if natural == 20 then
+		total = total + 10
+	end
 	local thresholdtotal = total - 10
 	
 	if difficulty <= thresholdtotal then
@@ -1552,7 +1570,13 @@ function SkillCrit()
 end
 
 function SkillCritMiss()
-	local total, difficulty = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
+	local total, difficulty, natural = LastConditionRollValues(ConditionRollType.ConditionSkillCheck)
+	if natural == 1 then
+		total = total - 10
+	end
+	if natural == 20 then
+		total = total + 10
+	end
 	local thresholdtotal = 10 + total
 	
 	if difficulty > thresholdtotal then
@@ -1566,12 +1590,12 @@ function LastConditionRollValues(conditionRollType)
 		conditionRoll = context.HitDescription.GetLastConditionRoll(conditionRollType)
 	catch e then
 		if ls.CheckType(e, ls.error.UnsupportedAttributeType) or ls.CheckType(e, ls.error.NotFound) then
-			return 10, 10
+			return 10, 10, 10
 		else
-			return 10, 10
+			return 10, 10, 10
 		end
 	end
-	return conditionRoll.Total, conditionRoll.Difficulty
+	return conditionRoll.Total, conditionRoll.Difficulty, conditionRoll.NaturalRoll
 end
 
 function IsWeaponDamageDieTwoHand(weapon)
