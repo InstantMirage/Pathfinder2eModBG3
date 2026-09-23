@@ -5585,7 +5585,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="ha5a0fcd6g151dg82ecg5d3cg42531b4780ed" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h7a5bc9c1g2439gefacg531ag7cd16f12c990" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_GustOfWind" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_PushingGust);ActionResource(KiPoint,1,0);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Zone_GustOfWind_Pathfinder,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Zone_LightningBolt_Rank3,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Projectile_ChainLightning,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_PushingGust);ActionResource(KiPoint,1,0);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Zone_GustOfWind,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Zone_LightningBolt_Rank3,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);IF(HasPassive('DivineAccess',context.Source)):UnlockSpell(Projectile_ChainLightning,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);" />
         <field name="TooltipUseCosts" type="StringTableFieldDefinition" value="KiPoint:1" />
       </fields>
     </stat_object>
@@ -8448,7 +8448,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc22f2a5ag84a8g3666g2ba5g62dd642c784d" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h438e40f3ga25bg5340gd6f2gbc4a11eca278" version="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_AbsorbElements" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_ElementalBetrayal_Container);UnlockSpell(Zone_BurningHands,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);UnlockSpell(Zone_GustOfWind_Pathfinder,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);UnlockSpell(Projectile_HydraulicPush_1,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);UnlockSpell(Zone_PummelingRubble_1,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);ActionResource(KiPoint,1,0);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Target_ElementalBetrayal_Container);UnlockSpell(Zone_BurningHands,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);UnlockSpell(Zone_GustOfWind,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);UnlockSpell(Projectile_HydraulicPush_1,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);UnlockSpell(Zone_PummelingRubble_1,AddChildren,d136c5d9-0ff0-43da-acce-a74a07f8d6bf);ActionResource(KiPoint,1,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -12774,6 +12774,16 @@
         <field name="Conditions" type="StringTableFieldDefinition" value="StatusId('GENTLE_LANDING_ENABLE');" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GENTLE_LANDING_TRIGGER,100,1)" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="51cb7744-7c38-4f88-8a94-72b2d4397d40" />
+        <field name="Name" type="NameTableFieldDefinition" value="GustOfWindMoveBlock" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnTurn;OnMovedDistance;OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="IsCurrentTurnInCombat();" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,GUST_OF_WIND_WALL_UPDATE,100,0)" />
       </fields>
     </stat_object>
   </stat_objects>

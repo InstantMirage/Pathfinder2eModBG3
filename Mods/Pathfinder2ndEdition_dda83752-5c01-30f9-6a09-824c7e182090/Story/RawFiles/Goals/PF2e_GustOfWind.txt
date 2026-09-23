@@ -2,6 +2,17 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 DB_GustOfWindSpells("Zone_GustOfWind");
+DB_GustOfWindSpells("Zone_GustOfWind_Pathfinder");
+DB_GustOfWindSpells("Zone_GustOfWind_Rank2");
+DB_GustOfWindSpells("Zone_GustOfWind_Rank3");
+DB_GustOfWindSpells("Zone_GustOfWind_Rank4");
+DB_GustOfWindSpells("Zone_GustOfWind_Rank5");
+DB_GustOfWindSpells("Zone_GustOfWind_Rank6");
+DB_GustOfWindSpells("Zone_GustOfWind_3");
+DB_GustOfWindSpells("Zone_GustOfWind_4");
+DB_GustOfWindSpells("Zone_GustOfWind_5");
+DB_GustOfWindSpells("Zone_GustOfWind_6");
+DB_GustOfWindSpells("MAG_WindRider_GustOfWind");
 
 DB_GustOfWindSummonDistances(-10.0);
 // We start at 1.5 to avoid hitting the caster.
@@ -28,27 +39,6 @@ DB_GustOfWindSummonDistances(20.0);
 DB_GustOfWindSummonDistances(21.0);
 DB_GustOfWindSummonDistances(22.0);
 DB_GustOfWindSummonDistances(23.0);
-
-DB_GustOfWindCloudStatuses("RustCloudAura_Rank4");
-DB_GustOfWindCloudStatuses("RustCloudAura_Rank5");
-DB_GustOfWindCloudStatuses("RustCloudAura_Rank6");
-DB_GustOfWindCloudStatuses("PetalStorm_Aura_Rank4");
-DB_GustOfWindCloudStatuses("PetalStorm_Aura_Rank6");
-DB_GustOfWindCloudStatuses("MistAura");
-DB_GustOfWindCloudStatuses("AshCloudAura_Rank2");
-DB_GustOfWindCloudStatuses("AshCloudAura_Rank3");
-DB_GustOfWindCloudStatuses("AshCloudAura_Rank4");
-DB_GustOfWindCloudStatuses("AshCloudAura_Rank5");
-DB_GustOfWindCloudStatuses("AshCloudAura_Rank6");
-DB_GustOfWindCloudStatuses("SanguineMistAura_4");
-DB_GustOfWindCloudStatuses("SanguineMistAura_5");
-DB_GustOfWindCloudStatuses("SanguineMistAura_6");
-DB_GustOfWindCloudStatuses("FLOATING_FLAME_AURA");
-DB_GustOfWindCloudStatuses("FLOATING_FLAME_3_AURA");
-DB_GustOfWindCloudStatuses("FLOATING_FLAME_4_AURA");
-DB_GustOfWindCloudStatuses("FLOATING_FLAME_5_AURA");
-DB_GustOfWindCloudStatuses("FLOATING_FLAME_6_AURA");
-DB_GustOfWindCloudStatuses("GEYSER_AURA");
 KBSECTION
 IF
 UsingSpell(_, _, _, _, _)
@@ -114,12 +104,13 @@ QRY_VectorABByDistance(_XO, _YO, _ZO, _XT, _YT, _ZT, _Distance)
 AND
 DB_QRYRTN_VectorABByDistance((REAL)_XS, (REAL)_YS, (REAL)_ZS)
 AND
-CreateAt((GUIDSTRING)GustOfWindHelper_74557a4c-6c00-44ea-8d42-30eec8010fa2, _XS, _YS, _ZS, 1, 0, "GustOfWindSummonStep", (GUIDSTRING)_Source)
+CreateAt((GUIDSTRING)GustOfWind_Helper_74557a4c-6c00-44ea-8d42-30eec8010fa2, _XS, _YS, _ZS, 1, 0, "GustOfWindDummy", (GUIDSTRING)_Source)
 THEN
 NOT DB_GustOfWindCurrentSummon(_Distance);
 DB_GustOfWindSpellsSource(_Source, _Owner);
 DB_GustOfWindCurrentIndex(1);
 ApplyStatus(_Source, "GUST_OF_WIND_SOURCE", 6.0, 0, _Owner);
+RealtimeObjectTimerLaunch(_Source, "GustOfWindSummonStep", 100);
 
 // Once the last helper is summoned, use the index value and
 // add 1 to find the next distance in the DB. Do this until
@@ -127,9 +118,9 @@ ApplyStatus(_Source, "GUST_OF_WIND_SOURCE", 6.0, 0, _Owner);
 // previous summon to its ideal co-ordinates, as the create
 // at command puts it at the nearest empty space on the grid instead.
 IF
-EntityEvent((GUIDSTRING)_LastSummon, "GustOfWindSummonStep")
+ObjectTimerFinished((GUIDSTRING)_LastSummon, "GustOfWindSummonStep")
 AND
-DB_GustOfWindSpellsSummonSequence(_StoryID, _Owner, _Spell, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
+DB_GustOfWindSpellsSummonSequence((INTEGER)_StoryID, (GUIDSTRING)_Owner, (STRING)_Spell, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
 AND
 DB_GustOfWindSpells(_Spell)
 AND
@@ -159,21 +150,39 @@ QRY_VectorABByDistance(_XO, _YO, _ZO, _XT, _YT, _ZT, _PreviousDistance)
 AND
 DB_QRYRTN_VectorABByDistance((REAL)_XP, (REAL)_YP, (REAL)_ZP)
 AND
-CreateAt((GUIDSTRING)GustOfWindHelper_74557a4c-6c00-44ea-8d42-30eec8010fa2, _XS, _YS, _ZS, 1, 0, "GustOfWindSummonStep", (GUIDSTRING)_Summon)
+QRY_VectorGetFlatAngle(_XO, _YO, _ZO, _XT, _YT, _ZT)
+AND
+DB_QRYRTN_VectorGetFlatAngle((REAL)_Angle)
+AND
+RealSum(_Angle, 90.0, (REAL)_RotatedAngle)
+AND
+RealSubtract(0.0, _RotatedAngle, (REAL)_WallAngle)
+AND
+RealToString(_Angle, _AngleText)
+AND
+CreateAt((GUIDSTRING)GustOfWind_InvisibleWall_d1018ae5-62a9-4cc8-a93e-544c645d2e41, _XS, _YS, _ZS, 1, 0, "GustOfWindDummy", (GUIDSTRING)_Summon)
 AND
 DB_GustOfWindSpellsSource((GUIDSTRING)_Source, _Owner)
 THEN
 NOT DB_GustOfWindCurrentIndex(_Index);
 DB_GustOfWindCurrentIndex(_NewIndex);
 NOT DB_GustOfWindCurrentSummon(_Distance);
-DB_GustOfWindSpellsSummons(_Summon, _Owner, _Source);
+DB_GustOfWindSpellsSummons(_Summon, _Owner, _Source, _Distance);
 NOT DB_GustOfWindPreviousSummon(_PreviousDistance);
 ApplyStatus(_Summon, "GUST_OF_WIND_AURA", 6.0, 0, _Owner);
 TeleportToPosition(_LastSummon, _XP, _YP, _ZP, "GustOfWindSummonAdjust", 0, 0, 0, 0, 0);
+PROC_GustOfWindRotate(_Summon, _WallAngle);
+PROC_GustOfWindRotate(_LastSummon, _WallAngle);
+RealtimeObjectTimerLaunch(_Summon, "GustOfWindSummonStep", 100);
+
+PROC
+PROC_GustOfWindRotate((GUIDSTRING)_Summon, (REAL)_Angle)
+THEN
+ItemRotateYToAngle((ITEM)_Summon, _Angle, 1000.0);
 
 // If we hit the end of the DB, cleanup.
 IF
-EntityEvent((GUIDSTRING)_LastSummon, "GustOfWindSummonStep")
+ObjectTimerFinished((GUIDSTRING)_LastSummon, "GustOfWindSummonStep")
 AND
 DB_GustOfWindSpellsSummonSequence(_StoryID, _Owner, _Spell, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
 AND
@@ -194,19 +203,19 @@ NOT DB_GustOfWindSpellsSummonSequence(_StoryID, _Owner, _Spell, _XT, _YT, _ZT);
 IF
 StatusRemoved((GUIDSTRING)_Summon, "GUST_OF_WIND_AURA", _, _)
 THEN
-RequestDeleteTemporary((CHARACTER)_Summon);
+RequestDelete((ITEM)_Summon);
 
 IF
 StatusRemoved((GUIDSTRING)_Summon, "GUST_OF_WIND_AURA", _, _)
 AND
-DB_GustOfWindSpellsSummons(_Summon, (GUIDSTRING)_Owner, (GUIDSTRING)_Source)
+DB_GustOfWindSpellsSummons(_Summon, (GUIDSTRING)_Owner, (GUIDSTRING)_Source, (REAL)_Distance)
 THEN
-NOT DB_GustOfWindSpellsSummons(_Summon, _Owner, _Source);
+NOT DB_GustOfWindSpellsSummons(_Summon, _Owner, _Source, _Distance);
 
 IF
 StatusRemoved((GUIDSTRING)_Source, "GUST_OF_WIND_SOURCE", _, _)
 THEN
-RequestDeleteTemporary((CHARACTER)_Source);
+RequestDelete((ITEM)_Source);
 
 IF
 StatusRemoved((GUIDSTRING)_Source, "GUST_OF_WIND_SOURCE", _, _)
@@ -220,7 +229,7 @@ NOT DB_GustOfWindSpellsSource(_Source, _Owner);
 IF
 StatusApplied((GUIDSTRING)_Character, "GUST_OF_WIND_TRIGGER", (GUIDSTRING)_Summon, _)
 AND
-DB_GustOfWindSpellsSummons(_Summon, (GUIDSTRING)_Owner, (GUIDSTRING)_Source)
+DB_GustOfWindSpellsSummons(_Summon, (GUIDSTRING)_Owner, (GUIDSTRING)_Source, (REAL)_Distance)
 AND
 HasActiveStatus(_Character, "GUST_OF_WIND_BLOCK", 0)
 THEN
@@ -247,14 +256,273 @@ THEN
 ApplyStatus(_Character, "STOP_MOVEMENT", 0.0);
 RemoveStatus(_Character, "GUST_OF_WIND_PROC");
 
-// If an invisible helper enters the auras, remove cloud-
-// related statuses from it.
+//REGION Unwalkable wind logic
+// When a character does not critically succeed against
+// gust of wind, they cannot walk into the wind until
+// the end of their turn. We have to do some nasty stuff
+// to add and remove statuses that make walls walkable
+// to achieve this.
+
+// We have to track where each character received the
+// block status from. THey can receive it from multiple
+// sources, but we assume each caster only has 1 active
+// wall.
 IF
-StatusApplied((GUIDSTRING)_Helper, "GUST_OF_WIND_CLOUD_CLEANUP", _, _)
-AND
-DB_GustOfWindCloudStatuses((STRING)_Status)
+StatusApplied((GUIDSTRING)_Character, "GUST_OF_WIND_MOVE_BLOCK", (GUIDSTRING)_Source, (INTEGER)_StoryID)
 THEN
-RemoveStatus(_Helper, _Status);
+DB_GustOfWindActiveBlockStatus(_Character, _Source, _StoryID);
+
+IF
+StatusRemoved((GUIDSTRING)_Character, "GUST_OF_WIND_MOVE_BLOCK", _, (INTEGER)_StoryID)
+AND
+DB_GustOfWindActiveBlockStatus(_Character, (GUIDSTRING)_Source, _StoryID)
+THEN
+NOT DB_GustOfWindActiveBlockStatus(_Character, _Source, _StoryID);
+
+// Periodic timer to check active player.
+IF
+StatusApplied((GUIDSTRING)_Character, "GUST_OF_WIND_MOVE_BLOCK", (GUIDSTRING)_Source, (INTEGER)_StoryID)
+AND
+TimerExists("GustOfWindActivePlayerCheck", 0)
+THEN
+TimerLaunch("GustOfWindActivePlayerCheck", 500);
+DebugText(_Character, "Timer Start");
+
+IF
+TimerFinished("GustOfWindActivePlayerCheck")
+AND
+DB_GustOfWindActiveBlockStatus((GUIDSTRING)_Character, (GUIDSTRING)_Source, (INTEGER)_StoryID)
+THEN
+TimerLaunch("GustOfWindActivePlayerCheck", 500);
+
+// Whenever the active character changes, clear all walls, and
+// trigger an update if the new character has the MOVE_BLOCK
+// status and it is their turn.
+IF
+TimerFinished("GustOfWindActivePlayerCheck")
+THEN
+NOT DB_GustOfWindActiveCharacterFoundFlag(1);
+
+IF
+TimerFinished("GustOfWindActivePlayerCheck")
+AND
+DB_GustOfWindActiveBlockStatus((GUIDSTRING)_Character, (GUIDSTRING)_Source, (INTEGER)_StoryID)
+AND
+IsPlayer((CHARACTER)_Character, 1)
+AND
+GetReservedUserID(_Character, (INTEGER)_User)
+AND
+GetCurrentCharacter(_User, (CHARACTER)_CurrentCharacter)
+AND
+_Character == _CurrentCharacter
+THEN
+PROC_GustOfWindCurrentPlayerUpdate(_Character);
+DB_GustOfWindActiveCharacterFoundFlag(1);
+
+// If the active character is not found amongst those with
+// the status, clear walls.
+IF
+TimerFinished("GustOfWindActivePlayerCheck")
+AND
+NOT DB_GustOfWindActiveCharacterFoundFlag(1)
+THEN
+PROC_GustOfWindClearWalls();
+
+// If the active character is not found amongst those with
+// the status, reset the active player tracker.
+IF
+TimerFinished("GustOfWindActivePlayerCheck")
+AND
+NOT DB_GustOfWindActiveCharacterFoundFlag(1)
+AND
+DB_GustOfWindOldPlayer((GUIDSTRING)_Character)
+THEN
+NOT DB_GustOfWindOldPlayer(_Character);
+
+// Check if the character is the old active. If not, store.
+PROC
+PROC_GustOfWindCurrentPlayerUpdate((GUIDSTRING)_Character)
+AND
+NOT DB_GustOfWindOldPlayer(_Character)
+THEN
+DB_GustOfWindNewPlayer(_Character);
+
+// If active character changed, remove old active.
+PROC
+PROC_GustOfWindCurrentPlayerUpdate((GUIDSTRING)_Character)
+AND
+DB_GustOfWindNewPlayer(_Character)
+AND
+DB_GustOfWindOldPlayer((GUIDSTRING)_Old)
+THEN
+NOT DB_GustOfWindOldPlayer(_Old);
+
+// Do updates if the character changed. Note that the force update
+// status only makes an update if it is the character's turn.
+PROC
+PROC_GustOfWindCurrentPlayerUpdate((GUIDSTRING)_Character)
+AND
+DB_GustOfWindNewPlayer(_Character)
+THEN
+PROC_GustOfWindClearWalls();
+ApplyStatus(_Character, "GUST_OF_WIND_FORCE_UPDATE", 0.0);
+
+// Remove the new character form storage ready for next change.
+PROC
+PROC_GustOfWindCurrentPlayerUpdate((GUIDSTRING)_Character)
+AND
+DB_GustOfWindNewPlayer(_Character)
+THEN
+DB_GustOfWindOldPlayer(_Character);
+NOT DB_GustOfWindNewPlayer(_Character);
+
+// On any turn start, clear out all walls. A passive will trigger
+// further updates.
+IF
+TurnStarted(_)
+THEN
+PROC_GustOfWindClearWalls();
+
+// The status is only applied if it is the character's
+// turn in combat. We only need to check that PCs are
+// actively being controlled. NPCs just pass through.
+// We trigger on status loss so that this always occurs
+// after the turn start clear.
+IF
+StatusRemoved((GUIDSTRING)_Character, "GUST_OF_WIND_WALL_UPDATE", _, _)
+AND
+IsPlayer((CHARACTER)_Character, 0)
+AND
+DB_GustOfWindActiveBlockStatus((GUIDSTRING)_Character, (GUIDSTRING)_Source, _)
+THEN
+PROC_GustOfWindUpdateWalls(_Character, _Source);
+
+// A PC gains the status while they are the active
+// character triggers an update.
+IF
+StatusRemoved((GUIDSTRING)_Character, "GUST_OF_WIND_WALL_UPDATE", _, _)
+AND
+IsPlayer((CHARACTER)_Character, 1)
+AND
+GetReservedUserID(_Character, (INTEGER)_User)
+AND
+GetCurrentCharacter(_User, (CHARACTER)_CurrentCharacter)
+AND
+_Character == _CurrentCharacter
+AND
+DB_GustOfWindActiveBlockStatus(_Character, (GUIDSTRING)_Source, _)
+THEN
+PROC_GustOfWindUpdateWalls((GUIDSTRING)_Character, _Source);
+
+// Whenever an update is triggered...
+// Clear the current walls DB, for the relevent source.
+PROC
+PROC_GustOfWindUpdateWalls((GUIDSTRING)_Character, (GUIDSTRING)_Source)
+AND
+DB_GustOfWindCurrentSolidWalls(_Source, (GUIDSTRING)_Summon)
+THEN
+NOT DB_GustOfWindCurrentSolidWalls(_Source, _Summon);
+
+// Identify which walls are closer to the source than
+// the triggering character. We essentially work out
+// how far away the character is in the axis of the
+// spell, and subtract how far off-axis they are. Any
+// wall that is closer than that to the source (which
+// is 10m behind the original cast) becomes unwalkable.
+PROC
+PROC_GustOfWindUpdateWalls((GUIDSTRING)_Character, (GUIDSTRING)_Source)
+AND
+GetPosition(_Character, (REAL)_XC, (REAL)_YC, (REAL)_ZC)
+AND
+DB_GustOfWindSpellsSummons((GUIDSTRING)_Summon, _Source, (GUIDSTRING)_SpellSource, (REAL)_Distance)
+AND
+GetPosition(_SpellSource, (REAL)_XS, (REAL)_YS, (REAL)_ZS)
+AND
+RealSubtract(_XC, _XS, (REAL)_XA)
+AND
+RealSubtract(_YC, _YS, (REAL)_YA)
+AND
+RealSubtract(_ZC, _ZS, (REAL)_ZA)
+AND
+GetPosition(_Summon, (REAL)_XSu, (REAL)_YSu, (REAL)_ZSu)
+AND
+RealSubtract(_XSu, _XS, (REAL)_XB)
+AND
+RealSubtract(_YSu, _YS, (REAL)_YB)
+AND
+RealSubtract(_ZSu, _ZS, (REAL)_ZB)
+AND
+QRY_VectorProjection(_XA, _YA, _ZA, _XB, _YB, _ZB)
+AND
+DB_QRYRTN_VectorProjection((REAL)_Projection)
+AND
+QRY_VectorRejection(_XA, _YA, _ZA, _XB, _YB, _ZB)
+AND
+DB_QRYRTN_VectorRejection((REAL)_Rejection)
+AND
+RealSubtract(_Projection, _Rejection, (REAL)_DistanceScore)
+AND
+// Add an extra 1 here so that walls we are standing in are walkable.
+RealSum(_Distance, 11.0, (REAL)_SummonDistance)
+AND
+_DistanceScore > _SummonDistance
+THEN
+DB_GustOfWindCurrentSolidWalls(_Source, _Summon);
+DebugText(_Summon, "Closer");
+
+// Add the unwalkable status top any new walls.
+PROC
+PROC_GustOfWindUpdateWalls((GUIDSTRING)_Character, (GUIDSTRING)_Source)
+AND
+DB_GustOfWindCurrentSolidWalls(_Source, (GUIDSTRING)_Summon)
+AND
+NOT DB_GustOfWindOldSolidWalls(_Source, _Summon)
+THEN
+ApplyStatus(_Summon, "GUST_OF_WIND_UNWALKABLE", -1.0);
+
+// Remove the unwalkable status from any old walls.
+PROC
+PROC_GustOfWindUpdateWalls((GUIDSTRING)_Character, (GUIDSTRING)_Source)
+AND
+DB_GustOfWindOldSolidWalls(_Source, (GUIDSTRING)_Summon)
+AND
+NOT DB_GustOfWindCurrentSolidWalls(_Source, _Summon)
+THEN
+RemoveStatus(_Summon, "GUST_OF_WIND_UNWALKABLE");
+
+// After, clear out the old walls DB.
+PROC
+PROC_GustOfWindUpdateWalls((GUIDSTRING)_Character, (GUIDSTRING)_Source)
+AND
+DB_GustOfWindOldSolidWalls(_Source, (GUIDSTRING)_Summon)
+THEN
+NOT DB_GustOfWindOldSolidWalls(_Source, _Summon);
+
+// Repopulate the old walls DB with the contents of the
+// new walls DB, to use next time.
+PROC
+PROC_GustOfWindUpdateWalls((GUIDSTRING)_Character, (GUIDSTRING)_Source)
+AND
+DB_GustOfWindCurrentSolidWalls(_Source, (GUIDSTRING)_Summon)
+THEN
+DB_GustOfWindOldSolidWalls(_Source, _Summon);
+
+// Clear out all walls
+PROC
+PROC_GustOfWindClearWalls()
+AND
+DB_GustOfWindCurrentSolidWalls((GUIDSTRING)_Source, (GUIDSTRING)_Summon)
+THEN
+RemoveStatus(_Summon, "GUST_OF_WIND_UNWALKABLE");
+NOT DB_GustOfWindCurrentSolidWalls(_Source, _Summon);
+
+PROC
+PROC_GustOfWindClearWalls()
+AND
+DB_GustOfWindOldSolidWalls((GUIDSTRING)_Source, (GUIDSTRING)_Summon)
+THEN
+NOT DB_GustOfWindOldSolidWalls(_Source, _Summon);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

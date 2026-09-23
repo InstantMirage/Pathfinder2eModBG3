@@ -19452,10 +19452,10 @@
         <field name="UUID" type="IdTableFieldDefinition" value="000ad217-e717-4eee-a5a5-15e12789e93e" />
         <field name="Name" type="NameTableFieldDefinition" value="GUST_OF_WIND_AURA" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="1" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and not HasStatus('GUST_OF_WIND_BLOCK') and not Item()):ApplyStatus(GUST_OF_WIND_TRIGGER,100,0);IF(Tagged('INVISIBLE_HELPER')):ApplyStatus(GUST_OF_WIND_CLOUD_CLEANUP,100,0))" />
-        <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="DangerousForPathfinding" enumeration_type_name="AuraFlags" version="1" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') and not HasStatus('GUST_OF_WIND_BLOCK') and not Item() and TargetSizeEqualOrSmaller(Size.Large)):ApplyStatus(GUST_OF_WIND_TRIGGER,100,0);" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="TickingWithSource;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -19464,6 +19464,8 @@
         <field name="Name" type="NameTableFieldDefinition" value="GUST_OF_WIND_SOURCE" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="TickingWithSource;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="7fc8a25b-022f-4430-8d8b-951d9c84bc36" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -19472,7 +19474,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="GUST_OF_WIND_TRIGGER" />
         <field name="StackId" type="StringTableFieldDefinition" value="GUST_OF_WIND_TRIGGER" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
-        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
@@ -19485,9 +19487,12 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(GUST_OF_WIND_BLOCK,100,1)" />
         <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="not SavingThrow(Ability.Constitution, SourceSpellDC())" />
-        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(STOP_MOVEMENT,100,0);IF(not SaveCrit() and not Tagged('CHASM_IMMUNE_FLY',context.Target)):ApplyStatus(PRONE_PF2,100,-1);IF(SaveCrit() or Tagged('CHASM_IMMUNE_FLY',context.Target)):DealDamage(2d6,Bludgeoning,Magical);IF(SaveCrit() or Tagged('CHASM_IMMUNE_FLY',context.Target)):ApplyStatus(GUST_OF_WIND_PROC,100,1);IF(SaveCrit() or Tagged('CHASM_IMMUNE_FLY',context.Target)):ApplyStatus(FORCE_DETECTION,100,0);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):ApplyStatus(STOP_MOVEMENT,100,0);" />
+        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(GUST_OF_WIND_MOVE_BLOCK,100,1);ApplyStatus(STOP_MOVEMENT,100,0);IF(not SaveCrit() and not Tagged('CHASM_IMMUNE_FLY',context.Target)):ApplyStatus(GREASE_APPLY,100,-1);IF(SaveCrit() or Tagged('CHASM_IMMUNE_FLY',context.Target)):DealDamage(2d6,Bludgeoning,Magical);IF(SaveCrit() or Tagged('CHASM_IMMUNE_FLY',context.Target)):ApplyStatus(GUST_OF_WIND_PROC,100,1);IF(SaveCrit() or Tagged('CHASM_IMMUNE_FLY',context.Target)):ApplyStatus(FORCE_DETECTION,100,0);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="IF(not SaveCritMiss('Fort')):ApplyStatus(GUST_OF_WIND_MOVE_BLOCK,100,1);IF(not SaveCritMiss('Fort')):ApplyStatus(PAUSE_MOVEMENT,100,0);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h2b59a228gfb42g3b87geb53g96a9ad0f383c" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h5ebc2ffdgc509ga7ceg3c22g72f1f9815122" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_GustOfWind" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -19519,12 +19524,71 @@
     </stat_object>
     <stat_object is_substat="false">
       <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="f5e8f20c-3bcb-41ec-8115-affeb03c37ff" />
+        <field name="Name" type="NameTableFieldDefinition" value="GUST_OF_WIND_UNWALKABLE" />
+        <field name="StackId" type="StringTableFieldDefinition" value="GUST_OF_WIND_WALKABLE" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="CanWalkThrough(False);" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="c1d7810c-1eb8-470d-8caf-b2b99b8d1872" />
+        <field name="Name" type="NameTableFieldDefinition" value="GUST_OF_WIND_MOVE_BLOCK" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(IsCurrentTurnInCombat()):ApplyStatus(GUST_OF_WIND_WALL_UPDATE,100,0)" />
+        <field name="Passives" type="StringTableFieldDefinition" value="GustOfWindMoveBlock;" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hcef84141g1845g3e8fgf1d8gb9f362c15930" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he2d4a80eg8684gce97ga93agd6a1bf44cefe" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_GustOfWind" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="cede404b-06bb-4e1a-a108-38d5098fc4a4" />
+        <field name="Name" type="NameTableFieldDefinition" value="GUST_OF_WIND_WALL_UPDATE" />
+        <field name="StackId" type="StringTableFieldDefinition" value="GUST_OF_WIND_WALL_UPDATE" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="13710265-b535-4027-8f77-fe61629bdf9b" />
+        <field name="Name" type="NameTableFieldDefinition" value="GUST_OF_WIND_FORCE_UPDATE" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(IsCurrentTurnInCombat()):ApplyStatus(GUST_OF_WIND_WALL_UPDATE,100,0)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="df35fa41-d5de-4c52-8172-a09877c25447" />
+        <field name="Name" type="NameTableFieldDefinition" value="CLOUD_CLEANUP" />
+        <field name="Owner" type="CommentTableFieldDefinition" value="Osiris picks this up and removes any cloud spell aura from the entity." />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="7f18580b-7fb7-4ab5-a130-81570a2f21a8" />
         <field name="Name" type="NameTableFieldDefinition" value="STOP_MOVEMENT" />
         <field name="Owner" type="CommentTableFieldDefinition" value="Osiris picks this up (PF2e_Movement) and kills any current move." />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('DEBUG_MOVE_READY')):UseActionResource(Movement,100%,0,true);" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('DEBUG_MOVE_READY')):ApplyStatus(DEBUG_RESET_MOVE,100,-1)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="22f153d8-bb13-4ce0-8a34-860ac5af5c22" />
+        <field name="Name" type="NameTableFieldDefinition" value="PAUSE_MOVEMENT" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7f18580b-7fb7-4ab5-a130-81570a2f21a8" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
       </fields>
     </stat_object>
   </stat_objects>
