@@ -1,0 +1,157 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+StatusApplied((GUIDSTRING)_Mover, "COMMAND_APPROACH_2E", (GUIDSTRING)_Target, _)
+THEN
+DB_2eCommandApproach(_Mover, _Target);
+
+IF
+StatusRemoved((GUIDSTRING)_Mover, "COMMAND_APPROACH_2E", _, _)
+AND
+DB_2eCommandApproach(_Mover, (GUIDSTRING)_Target)
+THEN
+NOT DB_2eCommandApproach(_Mover, _Target);
+PROC_MoveToTargetXDistance(_Mover, _Target, 10.0);
+
+IF
+StatusApplied((GUIDSTRING)_Mover, "COMMAND_APPROACH_2E_CRIT", (GUIDSTRING)_Target, _)
+THEN
+DB_2eCommandApproachCrit(_Mover, _Target);
+
+IF
+StatusRemoved((GUIDSTRING)_Mover, "COMMAND_APPROACH_2E_CRIT", _, _)
+AND
+DB_2eCommandApproachCrit(_Mover, (GUIDSTRING)_Target)
+THEN
+NOT DB_2eCommandApproachCrit(_Mover, _Target);
+PROC_MoveToTargetXDistance(_Mover, _Target, 30.0);
+
+//REGION Drop
+// Crits log what weapon was dropped as to block pickups.
+IF
+StatusRemoved((GUIDSTRING)_Target, "COMMAND_DROP_2E_CRIT", _, _)
+AND
+GetEquippedWeapon((CHARACTER)_Target, (ITEM)_Item)
+THEN
+DB_2eCommandDroppedWeapon((GUIDSTRING)_Target, (GUIDSTRING)_Item);
+
+IF
+StatusRemoved((GUIDSTRING)_Target, "COMMAND_DROP_2E_CRIT", _, _)
+AND
+GetEquippedWeapon((CHARACTER)_Target, (ITEM)_Main)
+AND
+IsRangedWeapon(_Main, 0, 0)
+AND
+GetEquippedItem(_Target, "Melee Offhand Weapon", (ITEM)_Item)
+THEN
+DB_2eCommandDroppedWeapon((GUIDSTRING)_Target, (GUIDSTRING)_Item);
+
+IF
+StatusRemoved((GUIDSTRING)_Target, "COMMAND_DROP_2E_CRIT", _, _)
+AND
+GetEquippedWeapon((CHARACTER)_Target, (ITEM)_Main)
+AND
+IsRangedWeapon(_Main, 0, 1)
+AND
+GetEquippedItem(_Target, "Melee Ranged Weapon", (ITEM)_Item)
+THEN
+DB_2eCommandDroppedWeapon((GUIDSTRING)_Target, (GUIDSTRING)_Item);
+
+// Then, for both crits and non-crits, drop the active
+// main hand weapon, and check the corresponding off hand
+// once the weapon has been dropped (with delay to allow
+// it to land).
+IF
+StatusRemoved((GUIDSTRING)_Target, "COMMAND_DROP_2E", _, _)
+AND
+GetEquippedWeapon((CHARACTER)_Target, (ITEM)_Item)
+AND
+IsRangedWeapon(_Item, 0, 0)
+THEN
+Debugtext((GUIDSTRING)_Target, "Melee");
+DB_CommandDropSequenceMelee(_Target);
+Drop(_Item);
+
+IF
+StatusRemoved((GUIDSTRING)_Target, "COMMAND_DROP_2E", _, _)
+AND
+GetEquippedWeapon((CHARACTER)_Target, (ITEM)_Item)
+AND
+IsRangedWeapon(_Item, 0, 1)
+THEN
+Debugtext((GUIDSTRING)_Target, "Ranged");
+DB_CommandDropSequenceRanged(_Target);
+Drop(_Item);
+
+IF
+StatusRemoved((GUIDSTRING)_Target, "COMMAND_DROP_2E_CRIT", _, _)
+AND
+GetEquippedWeapon((CHARACTER)_Target, (ITEM)_Item)
+AND
+IsRangedWeapon(_Item, 0, 0)
+THEN
+Debugtext((GUIDSTRING)_Target, "Melee");
+DB_CommandDropSequenceMelee(_Target);
+Drop(_Item);
+
+IF
+StatusRemoved((GUIDSTRING)_Target, "COMMAND_DROP_2E_CRIT", _, _)
+AND
+GetEquippedWeapon((CHARACTER)_Target, (ITEM)_Item)
+AND
+IsRangedWeapon(_Item, 0, 1)
+THEN
+Debugtext((GUIDSTRING)_Target, "Ranged");
+DB_CommandDropSequenceRanged(_Target);
+Drop(_Item);
+
+IF
+DroppedBy(_, (CHARACTER)_Target)
+AND
+DB_CommandDropSequenceMelee((GUIDSTRING)_Target)
+AND
+GetEquippedItem((CHARACTER)_Target, "Melee Offhand Weapon", (ITEM)_Item)
+THEN
+NOT DB_CommandDropSequenceMelee((GUIDSTRING)_Target);
+RealtimeObjectTimerLaunch((GUIDSTRING)_Item, "CommandDrop", 800);
+
+IF
+DroppedBy(_, (CHARACTER)_Target)
+AND
+DB_CommandDropSequenceRanged((GUIDSTRING)_Target)
+AND
+GetEquippedItem((CHARACTER)_Target, "Ranged Offhand Weapon", (ITEM)_Item)
+THEN
+NOT DB_CommandDropSequenceRanged((GUIDSTRING)_Target);
+RealtimeObjectTimerLaunch((GUIDSTRING)_Item, "CommandDrop", 800);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Item, "CommandDrop")
+THEN
+Drop((ITEM)_Item);
+
+// If a pickup is attempted of the dropped weapon following
+// a crit, deny it.
+IF
+RequestCanPickup((CHARACTER)_Character, (GUIDSTRING)_Item, (INTEGER)_RequestID)
+AND
+HasActiveStatus((GUIDSTRING)_Character, "COMMAND_DROP_2E_CRIT_LINGERING", 1)
+AND
+DB_2eCommandDroppedWeapon(_Character, _Item)
+THEN
+RequestProcessed((CHARACTER)_Character, _RequestID, 0);
+
+// CLeanup as lingering effect removed.
+IF
+StatusRemoved((GUIDSTRING)_Character, "COMMAND_DROP_2E_CRIT_LINGERING", _, _)
+AND
+DB_2eCommandDroppedWeapon(_Character, (GUIDSTRING)_Item)
+THEN
+NOT DB_2eCommandDroppedWeapon(_Character, _Item);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION

@@ -1400,7 +1400,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="3a1603f1-fb53-4c10-b254-e5ca772bdf67" />
         <field name="Name" type="NameTableFieldDefinition" value="PF2e_CritSuccess" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hc0eb54f4gd566gbd92g0ba1g81830a8bdfdd" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf084cd94g6dccgd496gfa78g0fe33ad54113" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hf084cd94g6dccgd496gfa78g0fe33ad54113" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Indomitable" />
       </fields>
     </stat_object>
@@ -1428,7 +1428,16 @@
         <field name="Name" type="NameTableFieldDefinition" value="PF2e_CritFail" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="3a1603f1-fb53-4c10-b254-e5ca772bdf67" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3737a8bbga3cdg0417gaccdg8c20cadf45cd" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h42977c22gcd7cgd2begdb4agba2a785e99cc" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h42977c22gcd7cgd2begdb4agba2a785e99cc" version="2" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="d0d78dc6-7c1c-4cd2-846c-7f71f65c0be8" />
+        <field name="Name" type="NameTableFieldDefinition" value="PF2e_Incap" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="3a1603f1-fb53-4c10-b254-e5ca772bdf67" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hfaf64f3bg8a71g7213g6bc9g675a736f4920" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h193a1290g1b9bg5e7cgeafag91c7e72c8332" version="1" />
       </fields>
     </stat_object>
     <stat_object color="#FFA52A2A" is_substat="false">
@@ -12784,6 +12793,64 @@
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnTurn;OnMovedDistance;OnCast" enumeration_type_name="StatsFunctorContext" version="1" />
         <field name="Conditions" type="StringTableFieldDefinition" value="IsCurrentTurnInCombat();" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,GUST_OF_WIND_WALL_UPDATE,100,0)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3ed999c2-b734-41b3-bf4c-160e43b552ae" />
+        <field name="Name" type="NameTableFieldDefinition" value="ShadowyRetreat" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="haaf9f0f7g2636g3cb4g9a46g86f440c4e5e9" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h1c3c37f4ge94dg923ag64d2g20d0d192d969" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="(((context.HasContextFlag(StatsFunctorContext.OnMovedDistance)) and (not HasObscuredState(ObscuredState.Clear,context.Source) or HasObscuredState(ObscuredState.HeavilyObscured,context.Source) or HasObscuredState(ObscuredState.LightlyObscured,context.Source)) and not HasStatus('SHADOWBLEND', context.Source) and Combat(context.Source)) or (context.HasContextFlag(StatsFunctorContext.OnObscurityChanged) and (not HasObscuredState(ObscuredState.Clear) or HasObscuredState(ObscuredState.HeavilyObscured) or HasObscuredState(ObscuredState.LightlyObscured)) and not HasStatus('SHADOWBLEND') and Combat())) and not HasStatus('SEE_INVISIBILITY_2E_REVEAL') and not HasStatus('FAERIE_FIRE') and not HasStatus('BRANDING_SMITE');" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(context.HasContextFlag(StatsFunctorContext.OnMovedDistance)):ApplyStatus(SELF,SHADOWBLEND,100,-1);IF(context.HasContextFlag(StatsFunctorContext.OnMovedDistance)):ApplyStatus(SELF,SHADOWBLEND_REMOVE_HELPER,100,-1);IF(context.HasContextFlag(StatsFunctorContext.OnObscurityChanged)):ApplyStatus(SHADOWBLEND,100,-1);IF(context.HasContextFlag(StatsFunctorContext.OnObscurityChanged)):ApplyStatus(SHADOWBLEND_REMOVE_HELPER,100,-1);CreateExplosion(Projectile_Shadowblend_Effect);" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnMovedDistance;OnObscurityChanged" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Generic_Invisibility" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="caaf1be6-47b9-4d2b-9256-a973f8f61966" />
+        <field name="Name" type="NameTableFieldDefinition" value="FOR_SpiderQueen_SeeInvis" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb716f917g59e2g37b3g725bg2e1e2e70ac6a" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h96a28f57g027eg0708gb404g3a94d951e085" version="1" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCreate" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not HasStatus('SEE_INVISIBILITY_2E');" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SEE_INVISIBILITY_2E,100,-1)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="3b0fdaf8-8a26-4ce4-b9d2-bc5608eb8b1f" />
+        <field name="Name" type="NameTableFieldDefinition" value="CAMP_Volo_ErsatzEye" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3dc33b29ga6ecg8d90g7de1g5408fd9c4d66" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h74fd5e76gdecbg8017g9353g0123d764de08" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnCreate;OnStatusRemoved" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="IF(context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('DYING')):ApplyStatus(MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING, 100, -1); IF(not HasStatus('MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING')): ApplyStatus(MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING, 100, -1);" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Item_DEN_VoloOperation_ErsatzEye" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="e5f4e7d8-5866-4b7f-8fb0-de2a57a3968f" />
+        <field name="Name" type="NameTableFieldDefinition" value="LOW_OskarsBeloved_Poltergeists_Invisible" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="habff34d9g0be4g54feg3e54gff6022a11673" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h634a9680gcebbg7489g59f0ge7f0112270b5" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnStatusRemove;OnTurn" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not HasStatus('WET') and not HasStatus('FAERIE_FIRE') and not HasStatus('BRANDING_SMITE') and not HasStatus('SEE_INVISIBILITY_2E_REVEAL') and not HasStatus('LOW_POLTERGEIST_INVISIBLE') and not HasStatus('POLTERGEIST_SEEINVIS_CHECK_TRUE') and not HasStatus('SPIRIT_GUARDIANS_RADIANT');" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(LOW_POLTERGEIST_INVISIBLE, 100, -1)" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="Highlighted" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_Generic_Invisibility" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="434af9cc-260a-46f3-9f9c-3d1dab568ae3" />
+        <field name="Name" type="NameTableFieldDefinition" value="InterruptMovementCounter" />
+        <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
+        <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnMovedDistance" enumeration_type_name="StatsFunctorContext" version="1" />
+        <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SELF,INTERRUPT_MOVEMENT_COUNTER,100,0)" />
       </fields>
     </stat_object>
   </stat_objects>
