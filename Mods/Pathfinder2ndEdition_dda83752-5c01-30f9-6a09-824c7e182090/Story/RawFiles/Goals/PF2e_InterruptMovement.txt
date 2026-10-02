@@ -169,6 +169,87 @@ THEN
 ApplyStatus(_Caster, "DEBUG_RESET_MOVE", -1.0, 1, _Caster);
 RemoveStatus(_Caster, "INTERRUPT_FREE_MOVEMENT");
 //END_REGION
+
+//REGION Move to Target fixed distance
+PROC
+PROC_MoveToTargetXDistance((GUIDSTRING)_Mover, (GUIDSTRING)_Target, (REAL)_Distance)
+THEN
+ApplyStatus(_Mover, "INTERRUPT_MOVEMENT_ACTIVE", 6.0);
+
+PROC
+PROC_MoveToTargetXDistance((GUIDSTRING)_Mover, (GUIDSTRING)_Target, (REAL)_Distance)
+AND
+Random(10000, (INTEGER)_ID)
+AND
+GetPosition(_Mover, (REAL)_X, (REAL)_Y, (REAL)_Z)
+THEN
+DB_ActiveMoveToTargetXDistance((CHARACTER)_Mover, _X, _Y, _Z, 0.0, _Distance, _ID);
+CharacterMoveTo(_Mover, _Target, "Run", "MoveToTargetXDistanceComplete", _ID);
+
+IF
+StatusApplied((CHARACTER)_Mover, "INTERRUPT_MOVEMENT_COUNTER", _, _)
+AND
+DB_ActiveMoveToTargetXDistance(_Mover, (REAL)_X, (REAL)_Y, (REAL)_Z, (REAL)_Count, (REAL)_Distance, (INTEGER)_ID)
+AND
+RealSum(_Count, 2.5, (REAL)_NewCount)
+THEN
+NOT DB_ActiveMoveToTargetXDistance(_Mover, _X, _Y, _Z, _Count, _Distance, _ID);
+DB_ActiveMoveToTargetXDistance(_Mover, _X, _Y, _Z, _NewCount, _Distance, _ID);
+
+IF
+StatusApplied((CHARACTER)_Mover, "INTERRUPT_MOVEMENT_COUNTER", _, _)
+AND
+DB_ActiveMoveToTargetXDistance(_Mover, (REAL)_X, (REAL)_Y, (REAL)_Z, (REAL)_NewCount, (REAL)_Distance, (INTEGER)_ID)
+AND
+_NewCount >= _Distance
+THEN
+ApplyStatus((GUIDSTRING)_Mover, "STOP_MOVEMENT", 0.0);
+
+IF
+StatusApplied((CHARACTER)_Mover, "INTERRUPT_MOVEMENT_COUNTER", _, _)
+AND
+DB_ActiveMoveToTargetXDistance(_Mover, (REAL)_X, (REAL)_Y, (REAL)_Z, (REAL)_NewCount, (REAL)_Distance, (INTEGER)_ID)
+AND
+_NewCount >= _Distance
+THEN
+NOT DB_ActiveMoveToTargetXDistance(_Mover, _X, _Y, _Z, _NewCount, _Distance, _ID);
+PROC_RemoveInterruptMovementStatus(_Mover);
+
+// Safety catches
+IF
+CharacterMoveToCancelled((CHARACTER)_Mover, (INTEGER)_ID)
+AND
+DB_ActiveMoveToTargetXDistance(_Mover, (REAL)_X, (REAL)_Y, (REAL)_Z, (REAL)_Count, (REAL)_Distance, _ID)
+THEN
+NOT DB_ActiveMoveToTargetXDistance(_Mover, _X, _Y, _Z, _Count, _Distance, _ID);
+PROC_RemoveInterruptMovementStatus(_Mover);
+
+// If no move triggers occurred before the move completed,
+// the mover likely teleported due to a lack of pathing
+// options, so we teleport them back
+IF
+EntityEvent((CHARACTER)_Mover, "MoveToTargetXDistanceComplete")
+AND
+DB_ActiveMoveToTargetXDistance(_Mover, (REAL)_X, (REAL)_Y, (REAL)_Z, (REAL)_Count, (REAL)_Distance, (INTEGER)_ID)
+AND
+_Count < 0.1
+THEN
+TeleportToPosition((GUIDSTRING)_Mover, _X, _Y, _Z, "MoveToTargetXDistanceUndo", 0, 0, 0, 0, 1);
+
+IF
+EntityEvent((CHARACTER)_Mover, "MoveToTargetXDistanceComplete")
+AND
+DB_ActiveMoveToTargetXDistance(_Mover, (REAL)_X, (REAL)_Y, (REAL)_Z, (REAL)_Count, (REAL)_Distance, (INTEGER)_ID)
+THEN
+NOT DB_ActiveMoveToTargetXDistance(_Mover, _X, _Y, _Z, _Count, _Distance, _ID);
+PROC_RemoveInterruptMovementStatus(_Mover);
+
+PROC
+PROC_RemoveInterruptMovementStatus((CHARACTER)_Mover)
+THEN
+RemoveStatus((GUIDSTRING)_Mover, "INTERRUPT_MOVEMENT_ACTIVE");
+
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
