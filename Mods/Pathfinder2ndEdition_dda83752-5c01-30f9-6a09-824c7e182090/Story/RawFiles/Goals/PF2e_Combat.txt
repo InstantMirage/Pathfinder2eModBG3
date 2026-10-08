@@ -584,6 +584,22 @@ DB_PotentialFlanker(_Cause, _Target)
 THEN
 NOT DB_PotentialFlanker(_Cause, _Target);
 
+// FLANK_REMOVE never fires when a summon/spawn dies or is destroyed, so stale
+// pairs pile up over a playthrough and the matrix check below goes quadratic on them.
+IF
+Died(_Char)
+AND
+DB_PotentialFlanker((GUIDSTRING)_Char, (GUIDSTRING)_Target)
+THEN
+NOT DB_PotentialFlanker(_Char, _Target);
+
+IF
+Died(_Char)
+AND
+DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Char)
+THEN
+NOT DB_PotentialFlanker(_Source, _Char);
+
 // Run a periodic timer whenever the game is running.
 IF
 LevelGameplayReady(_, _)
@@ -603,6 +619,34 @@ AND
 DB_RemoveFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
 THEN
 NOT DB_RemoveFlanking(_Source, _Target);
+
+// Purge pairs whose characters were destroyed or died before the Died cleanup existed.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+Exists(_Source, 0)
+THEN
+NOT DB_PotentialFlanker(_Source, _Target);
+
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+Exists(_Target, 0)
+THEN
+NOT DB_PotentialFlanker(_Source, _Target);
+
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+IsDead((CHARACTER)_Source, 1)
+THEN
+NOT DB_PotentialFlanker(_Source, _Target);
 
 // Copy previous results to a DB of statuses to remove, and clear
 // out old results.
@@ -640,11 +684,14 @@ DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Target)
 AND
 NOT DB_IsFlanking(_Source, _Target)
 AND
-DB_PotentialFlanker((GUIDSTRING)_Ally, _Target)
-AND
+// Per-pair lookups before the ally join so they run once per pair, not once per ally.
 GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
 AND
 GetInnerDistanceToPosition(_Source, _XT, _YT, _ZT, (REAL)_ST)
+AND
+DB_PotentialFlanker((GUIDSTRING)_Ally, _Target)
+AND
+_Ally != _Source
 AND
 GetInnerDistanceToPosition(_Ally, _XT, _YT, _ZT, (REAL)_TA)
 AND
