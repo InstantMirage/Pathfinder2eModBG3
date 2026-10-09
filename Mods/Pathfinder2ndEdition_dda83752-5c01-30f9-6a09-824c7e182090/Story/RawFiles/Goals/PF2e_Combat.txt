@@ -566,14 +566,17 @@ ApplyStatus(_Character, "RELOAD_CHECKER", -1.0);
 //END_REGION
 
 //REGION Flanking
-// On every character with the flanking aura, track every enemy
-// that is in that aura in a DB
+// DB_PotentialFlanker(Source, Target): Source's FLANK_AURA covers enemy Target.
+// DB_FlankDirty(Target): Target's flankers moved or changed, recheck it this tick.
+// DB_FlankPos(Char, X, Z): last ground-plane position used for flank math.
+// Only dirty targets are recomputed, so stationary fights cost one GetPosition per pair per tick.
 IF
 StatusApplied((GUIDSTRING)_Target, "FLANK_TARGET", (GUIDSTRING)_Cause, _)
 AND
 NOT DB_PotentialFlanker(_Cause, _Target)
 THEN
 DB_PotentialFlanker(_Cause, _Target);
+DB_FlankDirty(_Target);
 
 // A remove functor on FLANK_TARGET applies a SWAP status, so
 // we can track removal. This status has 0 duration.
@@ -583,15 +586,17 @@ AND
 DB_PotentialFlanker(_Cause, _Target)
 THEN
 NOT DB_PotentialFlanker(_Cause, _Target);
+DB_FlankDirty(_Target);
 
 // FLANK_REMOVE never fires when a summon/spawn dies or is destroyed, so stale
-// pairs pile up over a playthrough and the matrix check below goes quadratic on them.
+// pairs would pile up over a playthrough.
 IF
 Died(_Char)
 AND
 DB_PotentialFlanker((GUIDSTRING)_Char, (GUIDSTRING)_Target)
 THEN
 NOT DB_PotentialFlanker(_Char, _Target);
+DB_FlankDirty(_Target);
 
 IF
 Died(_Char)
@@ -599,6 +604,7 @@ AND
 DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Char)
 THEN
 NOT DB_PotentialFlanker(_Source, _Char);
+DB_FlankDirty(_Char);
 
 // Run a periodic timer whenever the game is running.
 IF
@@ -612,7 +618,7 @@ TimerFinished("FlankingUpdate")
 THEN
 TimerLaunch("FlankingUpdate", 500);
 
-// Remove old list of old flanks.
+// Legacy DB from the old every-tick recompute; empty after the first tick on old saves.
 IF
 TimerFinished("FlankingUpdate")
 AND
@@ -629,6 +635,7 @@ AND
 Exists(_Source, 0)
 THEN
 NOT DB_PotentialFlanker(_Source, _Target);
+DB_FlankDirty(_Target);
 
 IF
 TimerFinished("FlankingUpdate")
@@ -638,6 +645,7 @@ AND
 Exists(_Target, 0)
 THEN
 NOT DB_PotentialFlanker(_Source, _Target);
+DB_FlankDirty(_Target);
 
 IF
 TimerFinished("FlankingUpdate")
@@ -647,24 +655,254 @@ AND
 IsDead((CHARACTER)_Source, 1)
 THEN
 NOT DB_PotentialFlanker(_Source, _Target);
+DB_FlankDirty(_Target);
 
-// Copy previous results to a DB of statuses to remove, and clear
-// out old results.
+// Movement detection, in three passes so a character shared by several pairs
+// is compared against its old position before that position is overwritten.
+// 1) Collect everyone in a pair who moved more than 5cm (or has no stored position).
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+THEN
+PROC_PF2E_FlankCheckMoved(_Source);
+PROC_PF2E_FlankCheckMoved(_Target);
+
+PROC
+PROC_PF2E_FlankCheckMoved((GUIDSTRING)_Char)
+AND
+NOT DB_FlankPos(_Char, _, _)
+THEN
+DB_FlankMoved(_Char);
+
+PROC
+PROC_PF2E_FlankCheckMoved((GUIDSTRING)_Char)
+AND
+DB_FlankPos(_Char, (REAL)_OldX, (REAL)_OldZ)
+AND
+GetPosition(_Char, (REAL)_X, _, (REAL)_Z)
+AND
+RealSubtract(_X, _OldX, (REAL)_DX)
+AND
+RealSubtract(_Z, _OldZ, (REAL)_DZ)
+AND
+RealProduct(_DX, _DX, (REAL)_DX2)
+AND
+RealProduct(_DZ, _DZ, (REAL)_DZ2)
+AND
+RealSum(_DX2, _DZ2, (REAL)_Dist2)
+AND
+_Dist2 > 0.0025
+THEN
+DB_FlankMoved(_Char);
+
+// 2) Any pair touching a moved character makes its target dirty.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Target)
+AND
+DB_FlankMoved(_Source)
+THEN
+DB_FlankDirty(_Target);
+
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_PotentialFlanker(_, (GUIDSTRING)_Target)
+AND
+DB_FlankMoved(_Target)
+THEN
+DB_FlankDirty(_Target);
+
+// 3) Store the new positions.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankMoved((GUIDSTRING)_Char)
+AND
+DB_FlankPos(_Char, (REAL)_OldX, (REAL)_OldZ)
+THEN
+NOT DB_FlankPos(_Char, _OldX, _OldZ);
+
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankMoved((GUIDSTRING)_Char)
+AND
+GetPosition(_Char, (REAL)_X, _, (REAL)_Z)
+THEN
+DB_FlankPos(_Char, _X, _Z);
+NOT DB_FlankMoved(_Char);
+
+// Positions of characters no longer in any pair.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankPos((GUIDSTRING)_Char, (REAL)_X, (REAL)_Z)
+AND
+NOT DB_PotentialFlanker(_Char, _)
+AND
+NOT DB_PotentialFlanker(_, _Char)
+THEN
+NOT DB_FlankPos(_Char, _X, _Z);
+
+// Recompute dirty targets: remember last results, then clear them.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankDirty((GUIDSTRING)_Target)
+AND
+DB_IsFlanking((GUIDSTRING)_Source, _Target)
+THEN
+DB_FlankWas(_Source, _Target);
+NOT DB_IsFlanking(_Source, _Target);
+
+// Allowed miss distance of the Source-Ally line from the target's centre, squared.
+// GetInnerDistanceToPosition from 10m out gives 10 - the target's bounds radius.
+// ponytail: 0.5 x bounds radius assumes BG3 medium radius ~0.5m, i.e. 0.33 of a PF2e
+// half-square (0.25m), tight enough that one flanker can't serve two adjacent allies. Tune here.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankDirty((GUIDSTRING)_Target)
+AND
+DB_FlankPos(_Target, (REAL)_TX, (REAL)_TZ)
+AND
+GetPosition(_Target, _, (REAL)_TY, _)
+AND
+RealSum(_TX, 10.0, (REAL)_FarX)
+AND
+GetInnerDistanceToPosition(_Target, _FarX, _TY, _TZ, (REAL)_Inner)
+AND
+RealSubtract(10.0, _Inner, (REAL)_Radius)
+AND
+RealProduct(_Radius, 0.5, (REAL)_Tol)
+AND
+RealProduct(_Tol, _Tol, (REAL)_Tol2)
+THEN
+DB_FlankTol2(_Target, _Tol2);
+
+// Flank when the target lies between Source and Ally (dot < 0) and the line
+// between their centres passes within Tol of the target's centre:
+// cross(U,V)^2 < Tol^2 * |V-U|^2, with U = Source - Target and V = Ally - Target.
+// Centres only, so facing/pose (which follows the cursor) can't change the result.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankDirty((GUIDSTRING)_Target)
+AND
+DB_PotentialFlanker((GUIDSTRING)_Source, _Target)
+AND
+NOT DB_IsFlanking(_Source, _Target)
+AND
+DB_FlankTol2(_Target, (REAL)_Tol2)
+AND
+DB_FlankPos(_Target, (REAL)_TX, (REAL)_TZ)
+AND
+DB_FlankPos(_Source, (REAL)_SX, (REAL)_SZ)
+AND
+RealSubtract(_SX, _TX, (REAL)_UX)
+AND
+RealSubtract(_SZ, _TZ, (REAL)_UZ)
+AND
+DB_PotentialFlanker((GUIDSTRING)_Ally, _Target)
+AND
+_Ally != _Source
+AND
+DB_FlankPos(_Ally, (REAL)_AX, (REAL)_AZ)
+AND
+RealSubtract(_AX, _TX, (REAL)_VX)
+AND
+RealSubtract(_AZ, _TZ, (REAL)_VZ)
+AND
+RealProduct(_UX, _VX, (REAL)_DotX)
+AND
+RealProduct(_UZ, _VZ, (REAL)_DotZ)
+AND
+RealSum(_DotX, _DotZ, (REAL)_Dot)
+AND
+_Dot < 0.0
+AND
+RealProduct(_UX, _VZ, (REAL)_CrossA)
+AND
+RealProduct(_UZ, _VX, (REAL)_CrossB)
+AND
+RealSubtract(_CrossA, _CrossB, (REAL)_Cross)
+AND
+RealProduct(_Cross, _Cross, (REAL)_Cross2)
+AND
+RealSubtract(_VX, _UX, (REAL)_LineX)
+AND
+RealSubtract(_VZ, _UZ, (REAL)_LineZ)
+AND
+RealProduct(_LineX, _LineX, (REAL)_LineX2)
+AND
+RealProduct(_LineZ, _LineZ, (REAL)_LineZ2)
+AND
+RealSum(_LineX2, _LineZ2, (REAL)_Line2)
+AND
+RealProduct(_Tol2, _Line2, (REAL)_Limit)
+AND
+_Cross2 < _Limit
+THEN
+DB_IsFlanking(_Source, _Target);
+DB_IsFlanking(_Ally, _Target);
+
+// Flanks that broke: drop the statuses.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankDirty((GUIDSTRING)_Target)
+AND
+DB_FlankWas((GUIDSTRING)_Source, _Target)
+AND
+NOT DB_IsFlanking(_Source, _Target)
+THEN
+RemoveStatus(_Target, "FLANKED_PF2E", _Source);
+RemoveStatus(_Target, "FLANKED_DISPLAY", _Source);
+
+// New flanks: apply the status that stats conditions check for.
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankDirty((GUIDSTRING)_Target)
+AND
+DB_IsFlanking((GUIDSTRING)_Source, _Target)
+AND
+NOT DB_FlankWas(_Source, _Target)
+THEN
+ApplyStatus(_Target, "FLANKED_PF2E", -1.0, 1, _Source);
+
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankDirty((GUIDSTRING)_Target)
+AND
+DB_FlankWas((GUIDSTRING)_Source, _Target)
+THEN
+NOT DB_FlankWas(_Source, _Target);
+
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankTol2((GUIDSTRING)_Target, (REAL)_Tol2)
+THEN
+NOT DB_FlankTol2(_Target, _Tol2);
+
+IF
+TimerFinished("FlankingUpdate")
+AND
+DB_FlankDirty((GUIDSTRING)_Target)
+THEN
+NOT DB_FlankDirty(_Target);
+
+// The display status follows the selected character, which can change without
+// anyone moving, so it is checked every tick (cheap: one row per active flank).
 IF
 TimerFinished("FlankingUpdate")
 AND
 DB_IsFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
-THEN
-DB_RemoveFlanking(_Source, _Target);
-NOT DB_IsFlanking(_Source, _Target);
-
-// Go through previous list of flanks, and remove the display status
-// in any case where the flanker is not the active character for
-// that user.
-IF
-TimerFinished("FlankingUpdate")
-AND
-DB_RemoveFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
 AND
 GetReservedUserID((CHARACTER)_Source, (INTEGER)_User)
 AND
@@ -674,63 +912,6 @@ _Source != _CurrentCharacter
 THEN
 RemoveStatus(_Target, "FLANKED_DISPLAY", (GUIDSTRING)_Source);
 
-// Periodically, check the matrix of flankers to see if any of
-// them meet the criteria for flanking. Create a DB that serves
-// as a loop break if an ally is found in an acceptable position.
-IF
-TimerFinished("FlankingUpdate")
-AND
-DB_PotentialFlanker((GUIDSTRING)_Source, (GUIDSTRING)_Target)
-AND
-NOT DB_IsFlanking(_Source, _Target)
-AND
-// Per-pair lookups before the ally join so they run once per pair, not once per ally.
-GetPosition(_Target, (REAL)_XT, (REAL)_YT, (REAL)_ZT)
-AND
-GetInnerDistanceToPosition(_Source, _XT, _YT, _ZT, (REAL)_ST)
-AND
-DB_PotentialFlanker((GUIDSTRING)_Ally, _Target)
-AND
-_Ally != _Source
-AND
-GetInnerDistanceToPosition(_Ally, _XT, _YT, _ZT, (REAL)_TA)
-AND
-GetInnerDistanceTo(_Ally, _Source, (REAL)_AS)
-AND
-RealSum(_ST, _TA, (REAL)_STA)
-AND
-// This constant value can be tuned to control flanking angle.
-RealProduct(_AS, 1.015, (REAL)_Threshold)
-AND
-_STA < _Threshold
-THEN
-DB_IsFlanking(_Source, _Target);
-
-// Remove statuses from characters that are no longer flanked.
-IF
-TimerFinished("FlankingUpdate")
-AND
-DB_RemoveFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
-AND
-NOT DB_IsFlanking(_Source, _Target)
-THEN
-RemoveStatus(_Target, "FLANKED_PF2E", _Source);
-
-// After all flanking characters are found, use that DB to
-// apply a status to the target from each of those characters,
-// which we can check for later in stats.
-IF
-TimerFinished("FlankingUpdate")
-AND
-DB_IsFlanking((GUIDSTRING)_Source, (GUIDSTRING)_Target)
-AND
-NOT DB_RemoveFlanking(_Source, _Target)
-THEN
-ApplyStatus(_Target, "FLANKED_PF2E", -1.0, 1, _Source);
-
-// After applying the FLANKED_PF2E status, we also need to
-// apply a display status if the actively selected character
-// is flanking the target.
 IF
 TimerFinished("FlankingUpdate")
 AND
