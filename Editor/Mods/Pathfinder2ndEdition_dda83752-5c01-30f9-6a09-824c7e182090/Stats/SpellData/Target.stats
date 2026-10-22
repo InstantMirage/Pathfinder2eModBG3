@@ -6312,6 +6312,7 @@
         <field name="ExtraDescriptionParams" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="ConcentrationSpellID" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="FollowUpOriginalSpell" type="StringTableFieldDefinition" value="Target_HeatMetal" />
+        <field name="AIFlags" type="EnumerationListTableFieldDefinition" value="CanNotUse" enumeration_type_name="AIFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14636,8 +14637,8 @@
         <field name="TargetRadius" type="StringTableFieldDefinition" value="12" />
         <field name="AreaRadius" type="IntegerTableFieldDefinition" value="2" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(2d6,Piercing,Magical);IF(SaveCrit()):DealDamage((2d6)*2,Piercing,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((2d6)/2,Piercing,Magical);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit() and SacredBeastsGodsCheck('Piercing')):DealDamage(2d6,Piercing,Magical);IF(SaveCrit() and SacredBeastsGodsCheck('Piercing')):DealDamage((2d6)*2,Piercing,Magical);IF(not SaveCrit() and SacredBeastsGodsCheck('Slashing')):DealDamage(2d6,Slashing,Magical);IF(SaveCrit() and SacredBeastsGodsCheck('Slashing')):DealDamage((2d6)*2,Slashing,Magical);IF(not SaveCrit() and SacredBeastsGodsCheck('Bludgeoning')):DealDamage(2d6,Bludgeoning,Magical);IF(SaveCrit() and SacredBeastsGodsCheck('Bludgeoning')):DealDamage((2d6)*2,Bludgeoning,Magical);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex') and SacredBeastsGodsCheck('Piercing')):DealDamage((2d6)/2,Piercing,Magical);IF(not SaveCritMiss('Reflex') and SacredBeastsGodsCheck('Slashing')):DealDamage((2d6)/2,Slashing,Magical);IF(not SaveCritMiss('Reflex') and SacredBeastsGodsCheck('Bludgeoning')):DealDamage((2d6)/2,Bludgeoning,Magical);" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_ConjureAnimals" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h40c9466ag655dgc2d8g93c4g76bd17fca50c" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h60e7dcf9g84fcg7743gd566g84dec2ef15bf" version="3" />
@@ -14660,12 +14661,12 @@
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Piercing" enumeration_type_name="Damage Type" version="1" />
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_RangerDebuff_L1to3_01" />
         <field name="TargetEffect" type="GuidObjectTableFieldDefinition" value="037dc8e8-15e0-439f-ae4d-ad6a93e85cfd" />
-        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="a344b210-8c67-4cf9-8baf-360e6e692587" />
+        <field name="PositionEffect" type="GuidObjectTableFieldDefinition" value="5c0f3e12-0f29-429b-9b16-fd4c3318f8db" />
         <field name="SpellSchool" type="EnumerationTableFieldDefinition" value="Conjuration" enumeration_type_name="SpellSchool" version="1" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
         <field name="TargetConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
         <field name="TooltipUpcastDescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d6,Piercing);" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d6,Piercing);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d6,Piercing);DealDamage(2d6,Slashing);DealDamage(2d6,Bludgeoning);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14679,7 +14680,7 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:2" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_SacredBeasts_Rank1" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="2" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(4d6,Piercing);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(4d6,Piercing);DealDamage(4d6,Slashing);DealDamage(4d6,Bludgeoning);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14693,7 +14694,7 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:3" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_SacredBeasts_Rank1" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="3" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(6d6,Piercing);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(6d6,Piercing);DealDamage(6d6,Slashing);DealDamage(6d6,Bludgeoning);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14707,7 +14708,7 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:4" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_SacredBeasts_Rank1" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="4" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(8d6,Piercing);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(8d6,Piercing);DealDamage(8d6,Slashing);DealDamage(8d6,Bludgeoning);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14721,7 +14722,7 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:5" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_SacredBeasts_Rank1" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="5" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(10d6,Piercing);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(10d6,Piercing);DealDamage(10d6,Slashing);DealDamage(10d6,Bludgeoning);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -14735,7 +14736,7 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:6" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_SacredBeasts_Rank1" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="6" />
-        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(12d6,Piercing);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(12d6,Piercing);DealDamage(12d6,Slashing);DealDamage(12d6,Bludgeoning);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -25371,7 +25372,7 @@
         <field name="TargetConditions" type="StringTableFieldDefinition" value="IsMetalItem() or HasMetalWeaponInAnyHand() or HasMetalArmor() or IsMetalCharacter() and ConcentrateSpell();" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Transmutation_HeatMetal" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd72e355egccfcg69b2g8ed9gbbd42c91e2b7" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hce798ed8gd34fg3da0g0c34gddbb676573c3" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hce798ed8gd34fg3da0g0c34gddbb676573c3" version="3" />
         <field name="CastTextEvent" type="StringTableFieldDefinition" value="Cast" />
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:2" />
         <field name="SpellAnimation" type="CastAnimationsTableFieldDefinition" value="3ff87abf-1ea1-4c32-aadf-c822d74c7dc0,,;,,;d30d2b40-c45a-45bd-94d7-9b2baaf0f77b,,;a601b33c-5320-455d-b4d4-74d6dc35b757,,;d8925ce4-d6d9-400c-92f5-ad772ef7f178,,;,,;eadedcce-d01b-4fbb-a1ae-d218f13aa5d6,,;,,;,," />
@@ -25379,11 +25380,10 @@
         <field name="SpellFlags" type="EnumerationListTableFieldDefinition" value="HasVerbalComponent;HasSomaticComponent;IsSpell;IsHarmful" enumeration_type_name="SpellFlagList" version="1" />
         <field name="SpellPrepareCost" type="IntegerTableFieldDefinition" value="1" />
         <field name="TooltipAttackSave" type="StringTableFieldDefinition" value="Dexterity" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(HeatMetal_Rank2,100,-1);" />
         <field name="CastSound" type="StringTableFieldDefinition" value="Spell_Cast_Damage_HeatMetal_L1to3" />
         <field name="TargetSound" type="StringTableFieldDefinition" value="Spell_Impact_Damage_HeatMetal_L1to3" />
         <field name="SpellRoll" type="StringTableFieldDefinition" value="not SavingThrow(Ability.Dexterity, SourceSpellDC());" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(4d6,Fire,Magical);IF(SaveCrit()):DealDamage((4d6)*2,Fire,Magical);IF(not SaveCrit()):ApplyStatus(HeatMetal_Rank2,100,-1);IF(SaveCrit()):ApplyStatus(HeatMetal__Double_Rank2,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCrit()):ApplyStatus(HEAT_METAL_PROC_2,100,0);IF(not Item() and SaveCrit()):ApplyStatus(HEAT_METAL_PROC_2_CRIT,100,0);IF((HasMetalArmor() or IsMetalCharacter()) and not SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_2,100,-1);IF((HasMetalArmor() or IsMetalCharacter()) and SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_2_CRIT,100,-1);IF(not Item() and SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
         <field name="TooltipDamageList" type="StringTableFieldDefinition" value="DealDamage(4d6,Fire)" />
         <field name="PrepareEffect" type="GuidObjectTableFieldDefinition" value="c88e9cfa-df92-477a-ae75-cbfb932350b4" />
         <field name="CastEffect" type="GuidObjectTableFieldDefinition" value="7a2115d5-e9b2-4fc2-9201-767275c47f43" />
@@ -25391,10 +25391,14 @@
         <field name="DamageType" type="EnumerationTableFieldDefinition" value="Fire" enumeration_type_name="Damage Type" version="1" />
         <field name="PrepareSound" type="StringTableFieldDefinition" value="Spell_Prepare_Damage_Fire_Gen_L1to3" />
         <field name="PrepareLoopSound" type="StringTableFieldDefinition" value="Spell_Prepare_Damage_Fire_Gen_L1to3_Loop" />
-        <field name="TooltipUpcastDescription" type="GuidObjectTableFieldDefinition" value="66388a6f-44dd-4c9f-a9e7-910c50e70755" />
-        <field name="TooltipUpcastDescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d6,Fire)" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((4d6)/2,Fire,Magical);" />
+        <field name="TooltipUpcastDescription" type="GuidObjectTableFieldDefinition" value="5f3e75ef-5efb-47a3-b6ac-1b838cbe7bc3" />
+        <field name="TooltipUpcastDescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d6,Fire);DealDamage(2d4,Fire)" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCritMiss('Reflex')):ApplyStatus(HEAT_METAL_PROC_2_SAVE,100,0);" />
         <field name="RequirementConditions" type="StringTableFieldDefinition" value="ConcentrateSpell();" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(IsMetalItem()):ApplyStatus(HEAT_METAL_ITEM_2,100,-1);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(4d6,Fire);DealDamage(2d4,Fire)" />
+        <field name="PreviewCursor" type="EnumerationTableFieldDefinition" value="Cast" enumeration_type_name="CursorMode" version="1" />
+        <field name="CycleConditions" type="StringTableFieldDefinition" value="Enemy() and not Dead()" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -25406,10 +25410,10 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:3" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_HeatMetal" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="3" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(HeatMetal_Rank3,100,-1);" />
-        <field name="Level" type="IntegerTableFieldDefinition" value="3" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(6d6,Fire,Magical);IF(SaveCrit()):DealDamage((6d6)*2,Fire,Magical);IF(not SaveCrit()):ApplyStatus(HeatMetal_Rank3,100,-1);IF(SaveCrit()):ApplyStatus(HeatMetal__Double_Rank3,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((6d6)/2,Fire,Magical);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCrit()):ApplyStatus(HEAT_METAL_PROC_3,100,0);IF(not Item() and SaveCrit()):ApplyStatus(HEAT_METAL_PROC_3_CRIT,100,0);IF((HasMetalArmor() or IsMetalCharacter()) and not SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_3,100,-1);IF((HasMetalArmor() or IsMetalCharacter()) and SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_3_CRIT,100,-1);IF(not Item() and SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCritMiss('Reflex')):ApplyStatus(HEAT_METAL_PROC_3_SAVE,100,0);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(IsMetalItem()):ApplyStatus(HEAT_METAL_ITEM_3,100,-1);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(6d6,Fire);DealDamage(4d4,Fire)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -25421,10 +25425,10 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:4" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_HeatMetal" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="4" />
-        <field name="Level" type="IntegerTableFieldDefinition" value="4" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(8d6,Fire,Magical);IF(SaveCrit()):DealDamage((8d6)*2,Fire,Magical);IF(not SaveCrit()):ApplyStatus(HeatMetal_Rank4,100,-1);IF(SaveCrit()):ApplyStatus(HeatMetal__Double_Rank4,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((8d6)/2,Fire,Magical);" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(HeatMetal_Rank4,100,-1);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCrit()):ApplyStatus(HEAT_METAL_PROC_4,100,0);IF(not Item() and SaveCrit()):ApplyStatus(HEAT_METAL_PROC_4_CRIT,100,0);IF((HasMetalArmor() or IsMetalCharacter()) and not SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_4,100,-1);IF((HasMetalArmor() or IsMetalCharacter()) and SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_4_CRIT,100,-1);IF(not Item() and SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCritMiss('Reflex')):ApplyStatus(HEAT_METAL_PROC_4_SAVE,100,0);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(IsMetalItem()):ApplyStatus(HEAT_METAL_ITEM_4,100,-1);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(8d6,Fire);DealDamage(6d4,Fire)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -25436,10 +25440,10 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:5" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_HeatMetal" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="5" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(HeatMetal_Rank5,100,-1);" />
-        <field name="Level" type="IntegerTableFieldDefinition" value="5" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(10d6,Fire,Magical);IF(SaveCrit()):DealDamage((10d6)*2,Fire,Magical);IF(not SaveCrit()):ApplyStatus(HeatMetal_Rank5,100,-1);IF(SaveCrit()):ApplyStatus(HeatMetal__Double_Rank5,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((10d6)/2,Fire,Magical);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCrit()):ApplyStatus(HEAT_METAL_PROC_5,100,0);IF(not Item() and SaveCrit()):ApplyStatus(HEAT_METAL_PROC_5_CRIT,100,0);IF((HasMetalArmor() or IsMetalCharacter()) and not SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_5,100,-1);IF((HasMetalArmor() or IsMetalCharacter()) and SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_5_CRIT,100,-1);IF(not Item() and SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCritMiss('Reflex')):ApplyStatus(HEAT_METAL_PROC_5_SAVE,100,0);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(IsMetalItem()):ApplyStatus(HEAT_METAL_ITEM_5,100,-1);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(10d6,Fire);DealDamage(8d4,Fire)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -25451,10 +25455,10 @@
         <field name="UseCosts" type="StringTableFieldDefinition" value="ActionPoint:2;SpellSlotsGroup:1:1:6" />
         <field name="RootSpellID" type="StringTableFieldDefinition" value="Target_HeatMetal" />
         <field name="PowerLevel" type="IntegerTableFieldDefinition" value="6" />
-        <field name="TooltipStatusApply" type="StringTableFieldDefinition" value="ApplyStatus(HeatMetal_Rank6,100,-1);" />
-        <field name="Level" type="IntegerTableFieldDefinition" value="6" />
-        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not SaveCrit()):DealDamage(12d6,Fire,Magical);IF(SaveCrit()):DealDamage((12d6)*2,Fire,Magical);IF(not SaveCrit()):ApplyStatus(HeatMetal_Rank6,100,-1);IF(SaveCrit()):ApplyStatus(HeatMetal__Double_Rank6,100,-1);IF(SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
-        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not SaveCritMiss('Reflex')):DealDamage((12d6)/2,Fire,Magical);" />
+        <field name="SpellSuccess" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCrit()):ApplyStatus(HEAT_METAL_PROC_6,100,0);IF(not Item() and SaveCrit()):ApplyStatus(HEAT_METAL_PROC_6_CRIT,100,0);IF((HasMetalArmor() or IsMetalCharacter()) and not SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_6,100,-1);IF((HasMetalArmor() or IsMetalCharacter()) and SaveCrit()):ApplyStatus(HEAT_METAL_CHAR_6_CRIT,100,-1);IF(not Item() and SaveCrit()):ApplyStatus(CriticalFailureDisplay,100,0);" />
+        <field name="SpellFail" type="StringTableFieldDefinition" value="IF(not Item() and not SaveCritMiss('Reflex')):ApplyStatus(HEAT_METAL_PROC_6_SAVE,100,0);" />
+        <field name="SpellProperties" type="StringTableFieldDefinition" value="IF(IsMetalItem()):ApplyStatus(HEAT_METAL_ITEM_6,100,-1);" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(12d6,Fire);DealDamage(10d4,Fire)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

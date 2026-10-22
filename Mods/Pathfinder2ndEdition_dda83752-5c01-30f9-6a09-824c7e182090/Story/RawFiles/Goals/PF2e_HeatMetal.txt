@@ -1,0 +1,157 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_HeatMetalSpells("Target_HeatMetal");
+DB_HeatMetalSpells("Target_HeatMetal_3");
+DB_HeatMetalSpells("Target_HeatMetal_4");
+DB_HeatMetalSpells("Target_HeatMetal_5");
+DB_HeatMetalSpells("Target_HeatMetal_6");
+
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_2", "HeatMetalDamageApply_2", "HEAT_METAL_DAMAGE_2", "HEAT_METAL_DAMAGE_2_SAVE");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_2_CRIT", "HeatMetalDamageApply_2_Crit", "HEAT_METAL_DAMAGE_2_CRIT", "HEAT_METAL_DAMAGE_2");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_2_SAVE", "HeatMetalDamageApply_2_Save", "HEAT_METAL_DAMAGE_2_SAVE", "");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_3", "HeatMetalDamageApply_3", "HEAT_METAL_DAMAGE_3", "HEAT_METAL_DAMAGE_3_SAVE");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_3_CRIT", "HeatMetalDamageApply_3_Crit", "HEAT_METAL_DAMAGE_3_CRIT", "HEAT_METAL_DAMAGE_3");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_3_SAVE", "HeatMetalDamageApply_3_Save", "HEAT_METAL_DAMAGE_3_SAVE", "");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_4", "HeatMetalDamageApply_4", "HEAT_METAL_DAMAGE_4", "HEAT_METAL_DAMAGE_4_SAVE");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_4_CRIT", "HeatMetalDamageApply_4_Crit", "HEAT_METAL_DAMAGE_4_CRIT", "HEAT_METAL_DAMAGE_4");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_4_SAVE", "HeatMetalDamageApply_4_Save", "HEAT_METAL_DAMAGE_4_SAVE", "");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_5", "HeatMetalDamageApply_5", "HEAT_METAL_DAMAGE_5", "HEAT_METAL_DAMAGE_5_SAVE");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_5_CRIT", "HeatMetalDamageApply_5_Crit", "HEAT_METAL_DAMAGE_5_CRIT", "HEAT_METAL_DAMAGE_5");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_5_SAVE", "HeatMetalDamageApply_5_Save", "HEAT_METAL_DAMAGE_5_SAVE", "");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_6", "HeatMetalDamageApply_6", "HEAT_METAL_DAMAGE_6", "HEAT_METAL_DAMAGE_6_SAVE");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_6_CRIT", "HeatMetalDamageApply_6_Crit", "HEAT_METAL_DAMAGE_6_CRIT", "HEAT_METAL_DAMAGE_6");
+DB_HeatMetalProcStatuses("HEAT_METAL_PROC_6_SAVE", "HeatMetalDamageApply_6_Save", "HEAT_METAL_DAMAGE_6_SAVE", "");
+
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_2", "HEAT_METAL_ITEM_2", "HEAT_METAL_CHAR_2", "HEAT_METAL_ITEM_DAMAGE_2");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_2_CRIT", "HEAT_METAL_ITEM_2_CRIT", "HEAT_METAL_CHAR_2_CRIT", "HEAT_METAL_ITEM_DAMAGE_2_CRIT");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_3", "HEAT_METAL_ITEM_3", "HEAT_METAL_CHAR_3", "HEAT_METAL_ITEM_DAMAGE_3");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_3_CRIT", "HEAT_METAL_ITEM_3_CRIT", "HEAT_METAL_CHAR_3_CRIT", "HEAT_METAL_ITEM_DAMAGE_3_CRIT");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_4", "HEAT_METAL_ITEM_4", "HEAT_METAL_CHAR_4", "HEAT_METAL_ITEM_DAMAGE_4");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_4_CRIT", "HEAT_METAL_ITEM_4_CRIT", "HEAT_METAL_CHAR_4_CRIT", "HEAT_METAL_ITEM_DAMAGE_4_CRIT");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_5", "HEAT_METAL_ITEM_5", "HEAT_METAL_CHAR_5", "HEAT_METAL_ITEM_DAMAGE_5");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_5_CRIT", "HEAT_METAL_ITEM_5_CRIT", "HEAT_METAL_CHAR_5_CRIT", "HEAT_METAL_ITEM_DAMAGE_5_CRIT");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_6", "HEAT_METAL_ITEM_6", "HEAT_METAL_CHAR_6", "HEAT_METAL_ITEM_DAMAGE_6");
+DB_HeatMetalItemStatuses("HEAT_METAL_PROC_6_CRIT", "HEAT_METAL_ITEM_6_CRIT", "HEAT_METAL_CHAR_6_CRIT", "HEAT_METAL_ITEM_DAMAGE_6_CRIT");
+KBSECTION
+// Give a reaction to creatures in range of the caster when
+// the spell is previewed.
+IF
+StartedPreviewingSpell((GUIDSTRING)_Caster, (STRING)_Spell, _, _)
+AND
+DB_HeatMetalSpells(_Spell)
+THEN
+ApplyStatus(_Caster, "HEAT_METAL_REACT_AURA", -1.0);
+
+IF
+CastSpellFailed((GUIDSTRING)_Caster, (STRING)_Spell, _, _, _)
+AND
+DB_HeatMetalSpells(_Spell)
+THEN
+RemoveStatus(_Caster, "HEAT_METAL_REACT_AURA");
+
+IF
+CastedSpell((GUIDSTRING)_Caster, (STRING)_Spell, _, _, _)
+AND
+DB_HeatMetalSpells(_Spell)
+THEN
+RemoveStatus(_Caster, "HEAT_METAL_REACT_AURA");
+
+// Record which item the target has equipped before the
+// interrupt can drop it.
+IF
+UsingSpellOnTarget((GUIDSTRING)_Caster, (GUIDSTRING)_Target, (STRING)_Spell, _, _, _)
+AND
+DB_HeatMetalSpells(_Spell)
+AND
+DB_HeatMetalWeaponTracker(_Target, (GUIDSTRING)_Weapon)
+THEN
+NOT DB_HeatMetalWeaponTracker(_Target, _Weapon);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Caster, (GUIDSTRING)_Target, (STRING)_Spell, _, _, _)
+AND
+DB_HeatMetalSpells(_Spell)
+AND
+GetEquippedItem((CHARACTER)_Target, "Melee Main Weapon", (ITEM)_Weapon)
+AND
+IsTagged((GUIDSTRING)_Weapon, (TAG)METAL_abadcad5-9229-4999-8c7a-cd557ff2c95c, 1)
+THEN
+DB_HeatMetalWeaponTracker((GUIDSTRING)_Target, _Weapon);
+
+IF
+UsingSpellOnTarget((GUIDSTRING)_Caster, (GUIDSTRING)_Target, (STRING)_Spell, _, _, _)
+AND
+DB_HeatMetalSpells(_Spell)
+AND
+NOT DB_HeatMetalWeaponTracker(_Target, _)
+AND
+GetEquippedItem((CHARACTER)_Target, "Melee Offhand Weapon", (ITEM)_Weapon)
+AND
+IsTagged((GUIDSTRING)_Weapon, (TAG)METAL_abadcad5-9229-4999-8c7a-cd557ff2c95c, 1)
+THEN
+DB_HeatMetalWeaponTracker((GUIDSTRING)_Target, _Weapon);
+
+// We chuck a delay in here so there is time for the interrupt to resolve.
+IF
+StatusApplied((GUIDSTRING)_Character, (STRING)_Status, _, _)
+AND
+DB_HeatMetalProcStatuses(_Status, (STRING)_Event, _, _)
+THEN
+RealtimeObjectTimerLaunch(_Character, _Event, 200);
+RemoveStatus(_Character, _Status);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Character, (STRING)_Event)
+AND
+DB_HeatMetalProcStatuses((STRING)_Ignore, _Event, (STRING)_DamageStatus, (STRING)_Ignore2)
+AND
+HasActiveStatus(_Character, "HEAT_METAL_DROP", 0)
+THEN
+ApplyStatus(_Character, _DamageStatus, 0.0);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Character, (STRING)_Event)
+AND
+DB_HeatMetalProcStatuses((STRING)_Ignore, _Event, (STRING)_Ignore2, (STRING)_DamageStatus)
+AND
+HasActiveStatus(_Character, "HEAT_METAL_DROP", 1)
+THEN
+ApplyStatus(_Character, _DamageStatus, 0.0);
+RemoveStatus(_Character, "HEAT_METAL_DROP");
+
+// If the character does not have the character status, they
+// are not made of metal or in armor, so much apply the status
+// to their weapon.
+IF
+ObjectTimerFinished((GUIDSTRING)_Character, (STRING)_Event)
+AND
+DB_HeatMetalProcStatuses((STRING)_ProcStatus, _Event, (STRING)_Ignore, (STRING)_Ignore1)
+AND
+DB_HeatMetalItemStatuses(_ProcStatus, (STRING)_ItemStatus, (STRING)_CharStatus, (STRING)_DamageStatus)
+AND
+HasActiveStatus(_Character, _CharStatus, 0)
+AND
+DB_HeatMetalWeaponTracker(_Character, _Weapon)
+THEN
+ApplyStatus(_Weapon, _ItemStatus, -1.0);
+
+// If a character's turn ends, and they have the HOLDING status,
+// an aura caused by a heat metal item, we need to test if they
+// are holding it.
+IF
+TurnEnded((GUIDSTRING)_Character)
+AND
+HasActiveStatus(_Character, "HEAT_METAL_HOLDING", 1)
+AND
+GetItemByTagInInventory("HEAT_METAL_ITEM_c396b854-c605-4346-b91f-a5696fe31ef0", _Character, (ITEM)_HotItem)
+AND
+DB_HeatMetalItemStatuses((STRING)_Ignore, (STRING)_Status, (STRING)_Ignore2, (STRING)_DamageStatus)
+AND
+HasActiveStatus(_HotItem, _Status, 1)
+THEN
+ApplyStatus(_Character, _DamageStatus, 0.0);
+
+EXITSECTION
+
+ENDEXITSECTION
