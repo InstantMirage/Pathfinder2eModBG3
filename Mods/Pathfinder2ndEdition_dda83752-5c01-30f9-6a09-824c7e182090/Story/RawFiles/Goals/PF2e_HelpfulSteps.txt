@@ -1,0 +1,51 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ClearStatusOnShortRest("HELPFUL_STEPS_DURATION");
+KBSECTION
+// Small code here to remove the invisible helpers the spell produces
+// due to its wall template. If not removed, the helpers all get the
+// status effect and make sparkles.
+IF
+StatusApplied((GUIDSTRING)_Helper, "HELPFUL_STEPS", _, _)
+AND
+GetTemplate(_Helper, Helper_Spell_HelpfulStepsMarker_0c232eac-8a53-4a60-936a-cbc762d203f2)
+THEN
+SetOnStage(_Helper, 0);
+
+// When a helpful steps is dismissed, remove it from the stage after a delay.
+IF
+StatusRemoved((GUIDSTRING)_Steps, "HELPFUL_STEPS", _, _)
+AND
+GetTemplate(_Steps, Summon_HelpfulSteps_8b627bfd-f76a-4a21-ba48-231db16560f4)
+AND
+DB_HelpfulSteps((GUIDSTRING)_Source, _Steps)
+THEN
+RealtimeObjectTimerLaunch(_Steps, "HelpfulStepsDismiss", 500);
+NOT DB_HelpfulSteps(_Source, _Steps);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Steps, "HelpfulStepsDismiss")
+THEN
+SetOnStage(_Steps, 0);
+Die(_Steps, DEATHTYPE.None, 0);
+
+IF
+StatusApplied((GUIDSTRING)_Steps, "HELPFUL_STEPS", (GUIDSTRING)_Source, _)
+THEN
+DB_HelpfulSteps(_Source, _Steps);
+
+IF
+StatusRemoved((GUIDSTRING)_Source, "HELPFUL_STEPS_DURATION", _, _)
+THEN
+RealtimeObjectTimerLaunch(_Source, "HelpfulStepsDurationExpired", 1000);
+
+IF
+ObjectTimerFinished((GUIDSTRING)_Source, "HelpfulStepsDurationExpired")
+AND
+DB_HelpfulSteps(_Source, (GUIDSTRING)_Steps)
+THEN
+RemoveStatus(_Steps, "HELPFUL_STEPS");
+EXITSECTION
+
+ENDEXITSECTION
