@@ -4999,7 +4999,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveAction_WardingFlare" />
         <field name="Properties" type="EnumerationListTableFieldDefinition" value="IsHidden" enumeration_type_name="PassiveFlags" version="1" />
         <field name="StatsFunctorContext" type="EnumerationListTableFieldDefinition" value="OnDamaged" enumeration_type_name="StatsFunctorContext" version="1" />
-        <field name="Conditions" type="StringTableFieldDefinition" value="Tagged('UNDEAD') and not Self() and HasStatus('VITAL_LUMINANCE_LIT') and not HasStatus('VITAL_LUMINANCE_PULSE')" />
+        <field name="Conditions" type="StringTableFieldDefinition" value="not Self() and Tagged('UNDEAD',context.Source) and HasStatus('VITAL_LUMINANCE_LIT',context.Source) and not HasStatus('VITAL_LUMINANCE_PULSE',context.Source) and TotalDamageDoneGreaterThan(0)" />
         <field name="StatsFunctors" type="FunctorsTableFieldDefinition" value="DealDamage(SWAP,VITAL_LUMINANCE_RESERVOIR.Duration/2,Radiant,Magical);ApplyStatus(SWAP,VITAL_LUMINANCE_PULSE,100,1)" />
       </fields>
     </stat_object>
