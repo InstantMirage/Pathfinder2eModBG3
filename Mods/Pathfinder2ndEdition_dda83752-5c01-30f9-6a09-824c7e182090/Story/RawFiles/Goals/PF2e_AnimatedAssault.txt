@@ -1,0 +1,70 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_AnimatedAssaultStatuses("AnimatedAssault_Status_Aura");
+DB_AnimatedAssaultStatuses("AnimatedAssault_Status_Aura_Rank4");
+DB_AnimatedAssaultStatuses("AnimatedAssault_Status_Aura_Rank6");
+
+DB_AnimatedAssaultSustainStatuses("AnimatedAssault_Owner");
+DB_AnimatedAssaultSustainStatuses("AnimatedAssault_Owner_Rank4");
+DB_AnimatedAssaultSustainStatuses("AnimatedAssault_Owner_Rank6");
+KBSECTION
+// Multiple animated assaults by the same character
+// would be bad with the shout sustain, so we need
+// to clean those up.
+IF
+StatusApplied((GUIDSTRING)_Helper, (STRING)_Status, (GUIDSTRING)_Caster, _)
+AND
+DB_AnimatedAssaultStatuses(_Status)
+AND
+DB_CurrentAnimatedAssault((GUIDSTRING)_OldHelper, _Caster)
+THEN
+ApplyStatus(_OldHelper, "AnimatedAssault_Cleanup", 0.0);
+NOT DB_CurrentAnimatedAssault(_OldHelper, _Caster);
+
+
+IF
+StatusApplied((GUIDSTRING)_Helper, (STRING)_Status, (GUIDSTRING)_Caster, _)
+AND
+DB_AnimatedAssaultStatuses(_Status)
+AND
+GetPosition(_Helper, (REAL)_X, (REAL)_Y, (REAL)_Z)
+THEN
+DB_CurrentAnimatedAssault(_Helper, _Caster);
+CreateExplosionAtPosition(_X, _Y, _Z, "Projectile_AnimatedAssaultDummy", 1, _Caster);
+
+IF
+StatusRemoved((GUIDSTRING)_Helper, (STRING)_Status, _, _)
+AND
+DB_AnimatedAssaultStatuses(_Status)
+AND
+DB_CurrentAnimatedAssault(_Helper, (GUIDSTRING)_Caster)
+THEN
+NOT DB_CurrentAnimatedAssault(_Helper, _Caster);
+
+IF
+StatusApplied((GUIDSTRING)_Caster, "AnimatedAssault_Cleanup_Owner", _, _)
+AND
+DB_CurrentAnimatedAssault((GUIDSTRING)_Helper, _Caster)
+THEN
+ApplyStatus(_Helper, "AnimatedAssault_Cleanup", 0.0);
+NOT DB_CurrentAnimatedAssault(_Helper, _Caster);
+
+IF
+StatusApplied((GUIDSTRING)_Caster, "AnimatedAssault_Cleanup_Owner", _, _)
+AND
+DB_AnimatedAssaultSustainStatuses((STRING)_RemoveStatus)
+THEN
+RemoveStatus(_Caster, _RemoveStatus);
+
+IF
+StatusApplied((GUIDSTRING)_Caster, "AnimatedAssault_Sustained", _, _)
+AND
+DB_CurrentAnimatedAssault(_Helper, (GUIDSTRING)_Caster)
+AND
+GetPosition(_Helper, (REAL)_X, (REAL)_Y, (REAL)_Z)
+THEN
+CreateExplosionAtPosition(_X, _Y, _Z, "Projectile_AnimatedAssaultDummy", 1, _Caster);
+EXITSECTION
+
+ENDEXITSECTION

@@ -10885,10 +10885,11 @@
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="4" />
         <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER') ):ApplyStatus(AnimatedAssault_Status);IF(IsCurrentTurnInCombat(GetOwner(context.Source)) or not Combat()):ApplyStatus(ANIMATED_ASSAULT)" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndRound" enumeration_type_name="TickType" version="1" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('AnimatedAssault_Owner',GetOwner())):RemoveStatus(AnimatedAssault_Status_Aura)" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(AURA_CLEANUP)" />
-        <field name="IsUnique" type="BoolTableFieldDefinition" value="True" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="6f3bcb93-405b-4294-8564-39283bd8f7c6" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="StatusId('AnimatedAssault_Cleanup')" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusApplied" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10905,6 +10906,7 @@
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Blinded" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="a0f74dff-7074-45aa-a4d2-a131d7f328f5" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="2" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat;DisableCombatlog;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10914,7 +10916,6 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="5cdefd5a-7823-4a9f-b4fd-2d694067acf1" />
         <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(AnimatedAssault_Status_Rank4);IF(IsCurrentTurnInCombat(GetOwner(context.Source)) or not Combat()):ApplyStatus(ANIMATED_ASSAULT)" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d10,Bludgeoning)" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('AnimatedAssault_Owner_Rank4',GetOwner())):RemoveStatus(AnimatedAssault_Status_Aura_Rank4)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10936,7 +10937,6 @@
         <field name="Using" type="BaseClassTableFieldDefinition" value="5cdefd5a-7823-4a9f-b4fd-2d694067acf1" />
         <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('INVISIBLE_HELPER')):ApplyStatus(AnimatedAssault_Status_Rank6);IF(IsCurrentTurnInCombat(GetOwner(context.Source)) or not Combat()):ApplyStatus(ANIMATED_ASSAULT)" />
         <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(3d10,Bludgeoning)" />
-        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('AnimatedAssault_Owner_Rank6',GetOwner())):RemoveStatus(AnimatedAssault_Status_Aura_Rank6)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10956,11 +10956,15 @@
         <field name="UUID" type="IdTableFieldDefinition" value="0291bfa3-1647-4e68-9aff-575d92aabdaf" />
         <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Owner" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hee37d609gfdb3g2dbdg58c8gfce8fb4dc0e3" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc29d062cg9320gc648g5a9fg4b7ec4299094" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hc29d062cg9320gc648g5a9fg4b7ec4299094" version="2" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_CloudOfDaggers" />
         <field name="StackId" type="StringTableFieldDefinition" value="ANIMATED_ASSAULT_OWNER" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_AnimatedAssault_Sustain)" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(1d10,Bludgeoning)" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="TickFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('AnimatedAssault_Sustained')):ApplyStatus(AnimatedAssault_Cleanup_Owner)" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10969,6 +10973,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Owner_Rank4" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="0291bfa3-1647-4e68-9aff-575d92aabdaf" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_AnimatedAssault_Sustain_4)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(2d10,Bludgeoning)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -10977,6 +10982,29 @@
         <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Owner_Rank6" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="0291bfa3-1647-4e68-9aff-575d92aabdaf" />
         <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_AnimatedAssault_Sustain_6)" />
+        <field name="DescriptionParams" type="StringTableFieldDefinition" value="DealDamage(3d10,Bludgeoning)" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="1d75c4cb-0e7c-484c-8c5d-f003062b6be8" />
+        <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Sustained" />
+        <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="a0ad7023-ccac-432f-9236-2eea12440ef0" />
+        <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Cleanup" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="03a37ba5-d3ef-48e8-83e1-8eb36940c45e" />
+        <field name="Name" type="NameTableFieldDefinition" value="AnimatedAssault_Cleanup_Owner" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -16699,12 +16727,19 @@
         <field name="UUID" type="IdTableFieldDefinition" value="0e879fbc-8fcf-40dc-acc8-bd55954bc91a" />
         <field name="Name" type="NameTableFieldDefinition" value="DARKVISION" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h35f70df2g50a7g970fg20c2g06bd15966995" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h83f2aab6gef66g3ea8gb08fgd9ed10c0e3c1" version="2" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h83f2aab6gef66g3ea8gb08fgd9ed10c0e3c1" version="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Evocation_Darkvision" />
         <field name="StackId" type="StringTableFieldDefinition" value="DARKVISION" />
         <field name="Boosts" type="StringTableFieldDefinition" value="DarkvisionRangeMin(100);ActiveCharacterLight(051648e6-f05a-e41f-e398-ffd5cd148989);" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="4a00f418-fce5-463f-9436-d2a761a27907" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_RemoveOnRespec" enumeration_type_name="StatusGroupFlags" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="64bf6d1d-df59-4b51-835b-886e9876eafb" />
+        <field name="Name" type="NameTableFieldDefinition" value="DARKVISION_5" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="0e879fbc-8fcf-40dc-acc8-bd55954bc91a" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
