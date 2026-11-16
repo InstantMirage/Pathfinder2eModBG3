@@ -1,0 +1,77 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+TagSet((GUIDSTRING)_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795)
+THEN
+PROC_RecalculateInvisibilityStatus(_Character);
+
+IF
+TagCleared((GUIDSTRING)_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795)
+THEN
+PROC_RecalculateInvisibilityStatus(_Character);
+
+IF
+StatusApplied((GUIDSTRING)_Character, "FAERIE_FIRE", _, _)
+THEN
+PROC_RecalculateInvisibilityStatus(_Character);
+
+IF
+StatusRemoved((GUIDSTRING)_Character, "FAERIE_FIRE", _, _)
+THEN
+PROC_RecalculateInvisibilityStatus(_Character);
+
+IF
+StatusApplied((GUIDSTRING)_Character, "SEE_INVISIBILITY_2E_REVEAL", _, _)
+THEN
+PROC_RecalculateInvisibilityStatus(_Character);
+
+IF
+StatusRemoved((GUIDSTRING)_Character, "SEE_INVISIBILITY_2E_REVEAL", _, _)
+THEN
+PROC_RecalculateInvisibilityStatus(_Character);
+
+PROC
+PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
+AND
+IsTagged(_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795, 1)
+AND
+HasActiveStatus(_Character, "FAERIE_FIRE", 0)
+AND
+HasActiveStatus(_Character, "SEE_INVISIBILITY_2E_REVEAL", 0)
+THEN
+ApplyStatus(_Character, "INVISIBLE", -1.0);
+RemoveStatus(_Character, "INVISIBLE_FAERIE_FIRE");
+
+PROC
+PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
+AND
+IsTagged(_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795, 1)
+AND
+HasActiveStatus(_Character, "SEE_INVISIBILITY_2E_REVEAL", 1)
+THEN
+ApplyStatus(_Character, "INVISIBLE_FAERIE_FIRE", -1.0);
+RemoveStatus(_Character, "INVISIBLE");
+
+PROC
+PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
+AND
+IsTagged(_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795, 1)
+AND
+HasActiveStatus(_Character, "FAERIE_FIRE", 1)
+THEN
+ApplyStatus(_Character, "INVISIBLE_FAERIE_FIRE", -1.0);
+RemoveStatus(_Character, "INVISIBLE");
+
+PROC
+PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
+AND
+IsTagged(_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795, 0)
+THEN
+RemoveStatus(_Character, "INVISIBLE");
+RemoveStatus(_Character, "INVISIBLE_FAERIE_FIRE");
+EXITSECTION
+
+ENDEXITSECTION

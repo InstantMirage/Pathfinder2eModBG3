@@ -69,7 +69,7 @@ function IsConcealedTo(source, target, hide)
 	if Tagged('BLINDSIGHT', target).Result then
 		return resultFalse
 	end
-	if HasStatus('FAERIE_FIRE', source).Result then
+	if HasStatus('FAERIE_FIRE', source).Result and not Tagged('INVISIBLE_APPLY', source).Result then
 		return resultFalse
 	end
 
@@ -91,7 +91,7 @@ function IsConcealedTo(source, target, hide)
 	if HasStatus('SG_Blind', target).Result then
 		return resultTrue
 	end
-	if HasStatus('SG_Invisible', source).Result and not HasStatus('SEE_INVISIBILITY', target).Result then
+	if HasStatus('INVISIBLE', source).Result then
 		return resultTrue
 	end
 	if HasConditionalConcealed(source, target, hide).Result then

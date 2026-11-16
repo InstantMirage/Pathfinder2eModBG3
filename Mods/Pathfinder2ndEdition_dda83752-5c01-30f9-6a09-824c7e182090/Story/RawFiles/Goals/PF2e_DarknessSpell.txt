@@ -1,0 +1,119 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_TorchBurningTags((TAG)TORCH_a8139e1a-c593-4e0b-88cd-f703f888db83);
+DB_TorchBurningTags((TAG)CANDLE_489adf86-3f6c-4e2f-b3e8-7d30d3908896);
+DB_TorchBurningTags((TAG)CUSTOM_BURN_VFX_3e1e0629-2ded-4e27-8cbd-a6e92d3d3ed1);
+DB_TorchBurningTags((TAG)TORCH_BLUE_FX_11504ff6-abb5-4e18-867a-2bd2eb3d8388);
+DB_TorchBurningTags((TAG)TORCH_CURSED_FX_b25e76da-ae10-4922-ade3-975cf393e77e);
+DB_TorchBurningTags((TAG)TORCH_GREEN_FX_e749196a-3564-4420-9293-847bc2ee7cd2);
+DB_TorchBurningTags((TAG)TORCH_LANTERN_6d68eef3-1ad6-4954-8ab8-447002138df1);
+DB_TorchBurningTags((TAG)TORCH_PURPLE_FX_678d693a-75dc-4b40-95a4-d331ce849249);
+DB_TorchBurningTags((TAG)TORCH_REVOCATION_FX_6374d29f-eaed-4f95-8e1b-a9912190714c);
+DB_TorchBurningTags((TAG)TORCH_TRUE_FX_2db3999b-8662-4e13-aba9-e55ef26e8e7e);
+
+DB_DarknessStatuses("DARKNESS_STATUS");
+DB_DarknessStatuses("DARKNESS_STATUS_4");
+KBSECTION
+//REGION Torches
+// Whenever an object tagged as a torch enters the area,
+// it loses the burning status, but needs to get it back
+// when it leaves the aura.
+IF
+StatusApplied((GUIDSTRING)_Torch, (STRING)_Status, _, _)
+AND
+DB_DarknessStatuses(_Status)
+AND
+DB_TorchBurningTags((TAG)_Tag)
+AND
+IsTagged(_Torch, _Tag, 1)
+AND
+HasActiveStatus(_Torch, "BURNING", 1)
+THEN
+RemoveStatus(_Torch, "BURNING");
+DB_DarknessMutedTorches(_Torch);
+
+IF
+StatusRemoved((GUIDSTRING)_Torch, (STRING)_Status, _, _)
+AND
+DB_DarknessStatuses(_Status)
+AND
+DB_DarknessMutedTorches(_Torch)
+THEN
+ApplyStatus(_Torch, "BURNING", -1.0);
+NOT DB_DarknessMutedTorches(_Torch);
+
+// Torches that become lit in the darkness are unlit
+// immediately.
+IF
+StatusApplied((GUIDSTRING)_Torch, "BURNING", _, _)
+AND
+DB_TorchBurningTags((TAG)_Tag)
+AND
+IsTagged(_Torch, _Tag, 1)
+AND
+DB_DarknessStatuses((STRING)_Status)
+AND
+HasActiveStatus(_Torch, _Status, 1)
+THEN
+RemoveStatus(_Torch, "BURNING");
+
+// We also do this process for torches carried in
+// inventories.
+IF
+StatusApplied((GUIDSTRING)_Holder, (STRING)_Status, _, _)
+AND
+DB_DarknessStatuses(_Status)
+THEN
+IterateInventory(_Holder, "DarknessInventoryCheck", "Dummy");
+
+IF
+EntityEvent((GUIDSTRING)_Torch, "DarknessInventoryCheck")
+AND
+DB_TorchBurningTags((TAG)_Tag)
+AND
+IsTagged(_Torch, _Tag, 1)
+AND
+HasActiveStatus(_Torch, "BURNING", 1)
+THEN
+RemoveStatus(_Torch, "BURNING");
+DB_DarknessMutedTorches(_Torch);
+
+IF
+StatusRemoved((GUIDSTRING)_Holder, (STRING)_Status, _, _)
+AND
+DB_DarknessStatuses(_Status)
+THEN
+IterateInventory(_Holder, "DarknessRemoveInventoryCheck", "Dummy");
+
+IF
+EntityEvent((GUIDSTRING)_Torch, "DarknessRemoveInventoryCheck")
+AND
+DB_DarknessMutedTorches(_Torch)
+THEN
+ApplyStatus(_Torch, "BURNING", -1.0);
+NOT DB_DarknessMutedTorches(_Torch);
+
+// Torches that become lit in the darkness are unlit
+// immediately.
+IF
+StatusApplied((GUIDSTRING)_Torch, "BURNING", _, _)
+AND
+DB_TorchBurningTags((TAG)_Tag)
+AND
+IsTagged(_Torch, _Tag, 1)
+AND
+GetInventoryOwner(_Torch, (GUIDSTRING)_Owner)
+AND
+DB_DarknessStatuses((STRING)_Status)
+AND
+HasActiveStatus(_Owner, _Status, 1)
+THEN
+RemoveStatus(_Torch, "BURNING");
+
+// Definitely some edge cases when in two separate darkness
+// auras of different ranks. Hard to fix, ignoring for now.
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
