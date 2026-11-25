@@ -2191,3 +2191,22 @@ function SacredBeastsGodsCheck(type)
 
 	return HasAnyTags(lists[type], context.Source)
 end
+
+-- PF2e Sanctuary: the DC comes from whoever cast it (the cause of the
+-- SANCTUARY status), found among the warded creature and its nearby allies.
+function SanctuaryDC(warded)
+	warded = warded or context.Observer
+	local caster = warded
+	if not HasStatus('SANCTUARY', warded, warded).Result then
+		local allies = GetAlliesWithinRange(50, warded, warded)
+		if allies ~= nil and allies.Allies ~= nil then
+			for _, ally in ipairs(allies.Allies) do
+				if HasStatus('SANCTUARY', warded, ally).Result then
+					caster = ally
+					break
+				end
+			end
+		end
+	end
+	return math.max(CalculateSpellDC(Ability.Wisdom, caster), CalculateSpellDC(Ability.Intelligence, caster), CalculateSpellDC(Ability.Charisma, caster))
+end
