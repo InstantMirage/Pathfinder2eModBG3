@@ -2694,7 +2694,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="HIDDEN" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(HIDDEN_CLEANUP,100,0);" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('HIDDEN_INVISIBLE')):ApplyStatus(HIDDEN_CLEANUP,100,0);" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Sneaking" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Sneaking" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="Boosts" type="StringTableFieldDefinition" value="IF(not (IsSkillMaster('Stealth', 'Dexterity') and HasPassive('SwiftSneak', context.Source))):ActionResourceConsumeMultiplier(Movement, 2,0);MovementSpeedLimit(Walk);Tag(VFX_SNEAKING);UnlockInterrupt(HiddenReaction);UnlockSpell(Shout_Unhide);" />
@@ -2713,6 +2713,31 @@
         <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and not HasStatus('HIDDEN_FROM', context.Target, context.Source) and Enemy()):ApplyStatus(HIDDEN_FROM_TECHNICAL,100,0);" />
         <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems" enumeration_type_name="AuraFlags" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(HIDDEN,100,-1);ApplyStatus(HIDE_CHECK_RESULT,100,2);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="2002c85f-fea1-459b-80c4-95628a670198" />
+        <field name="Name" type="NameTableFieldDefinition" value="HIDE_FREE_INVIS" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="7d334b59-0e7e-488b-b876-82cdad78e2d4" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and not HasStatus('HIDDEN_FROM', context.Target, context.Source) and not HasStatus('SEE_INVISIBILITY_2E', context.Target) and not HasStatus('ALCH_ELIXIR_SEE_INVISIBILITY_2E', context.Target) and not Tagged('BLINDSIGHT', context.Target) and Enemy()):ApplyStatus(HIDDEN_FROM_TECHNICAL,100,0);" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(HIDDEN_INVISIBLE,100,-1);ApplyStatus(HIDE_CHECK_RESULT,100,2);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="db600da4-5208-4f0e-adb9-af17e45d978e" />
+        <field name="Name" type="NameTableFieldDefinition" value="HIDDEN_INVISIBLE" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he35fbb70g664bg7d7bg94bege07a79a2cb3d" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Invisible" />
+        <field name="StackId" type="StringTableFieldDefinition" value="HIDDEN_INVISIBLE" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(HiddenReaction);UnlockSpellVariant(SpellId('Shout_Hide'),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint));" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasStatus('SG_Invisible',context.Source) or IsStatusEvent(StatusEvent.OnCombatEnded)" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('HIDDEN')):ApplyStatus(HIDDEN_CLEANUP,100,0);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -2980,7 +3005,23 @@
         <field name="UUID" type="IdTableFieldDefinition" value="c79d1387-da2c-4509-b5cc-50531910fe1b" />
         <field name="Name" type="NameTableFieldDefinition" value="HIDE_FREE_INVIS_NPC" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="fdd73fb3-aa7f-4099-b9d8-bf727704fb2c" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(HIDDEN_NPC,100,-1);" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(HIDDEN_INVISIBLE_NPC,100,-1);" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="8fade468-1239-4bef-aa0b-3d3a901467f7" />
+        <field name="Name" type="NameTableFieldDefinition" value="HIDDEN_INVISIBLE_NPC" />
+        <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hd132d890g5bc5gc6efg420ag6aac0ac80497" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="he3ae5f99gfb3bg2d6dg207dg1ba3ef67a571" version="1" />
+        <field name="Icon" type="StringTableFieldDefinition" value="Status_Invisible" />
+        <field name="StackId" type="StringTableFieldDefinition" value="HIDDEN_INVISIBLE_NPC" />
+        <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockInterrupt(HiddenReaction);" />
+        <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasStatus('SG_Invisible',context.Source) or IsStatusEvent(StatusEvent.OnCombatEnded)" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+        <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -17426,7 +17467,7 @@
         <field name="StackId" type="StringTableFieldDefinition" value="INVISIBILITY_APPLY" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(INVISIBLE_APPLY);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(INVISIBLE_APPLY);UnlockInterrupt(HiddenReaction);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(HasSpellFlag(SpellFlags.Harmful) or HasStringInSpellRoll('Attack')) and not HasSpellFlag(SpellFlags.Invisible)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSpellCast" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
@@ -17469,7 +17510,7 @@
         <field name="Icon" type="StringTableFieldDefinition" value="PassiveFeature_MistyEscape" />
         <field name="StackId" type="StringTableFieldDefinition" value="MISTY_ESCAPE_APPLY" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(INVISIBLE_APPLY);UnlockSpell(Target_MistyStep_Free);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(INVISIBLE_APPLY);UnlockInterrupt(HiddenReaction);UnlockSpell(Target_MistyStep_Free);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasSpellFlag(SpellFlags.Invisible)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSpellCast;OnEntityPickUp;OnEntityDrop;OnEntityDrag;OnLockpickingFinished;OnDisarmingFinished;OnTurn;OnMove;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
       </fields>
@@ -17554,7 +17595,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="b5171d53-f05c-41f0-ae00-154c14ac2346" />
         <field name="Name" type="NameTableFieldDefinition" value="INVISIBILITY_PANTHER" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="054f65fc-e741-4222-9668-39bf86941cd9" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(INVISIBLE_APPLY);Advantage(Skill, Stealth);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(INVISIBLE_APPLY);UnlockInterrupt(HiddenReaction);Advantage(Skill, Stealth);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(IsStatusEvent(StatusEvent.OnSpellCast) and (HasSpellFlag(SpellFlags.Harmful) or HasStringInSpellRoll('Attack')) and not HasSpellFlag(SpellFlags.Invisible)) or not HasStatus('WILDSHAPE_PANTHER_PLAYER')" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnSpellCast;OnStatusRemoved" enumeration_type_name="StatusEvent" version="1" />
       </fields>
@@ -17567,7 +17608,7 @@
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="hb491872cg96b0g4134g99d5g3f439e7c66bb" version="1" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb91c2818ge512g4415g9e54gf4a25e0218ea" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="INVISIBILITY" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(INVISIBLE_APPLY);UnlockSpell(Target_MistyEscape_ShadarKai_GloomWeaver);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="Tag(INVISIBLE_APPLY);UnlockInterrupt(HiddenReaction);UnlockSpell(Target_MistyEscape_ShadarKai_GloomWeaver);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">

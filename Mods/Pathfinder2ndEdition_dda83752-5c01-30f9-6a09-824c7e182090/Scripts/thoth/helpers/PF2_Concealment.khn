@@ -88,7 +88,11 @@ function IsConcealedTo(source, target, hide)
 	if HasStatus('DAZZLED', target).Result then
 		return resultTrue
 	end
-	if HasStatus('INVISIBLE', source).Result then
+	-- Invisible (engine INVISIBLE out of combat, or any SG_Invisible marker,
+	-- which covers the in-combat stand-in) = Concealed to everyone. Viewers
+	-- without See the Unseen also have it Hidden (DC 11, IsHiddenFromAttacker),
+	-- which takes priority over this DC 5 check.
+	if HasStatus('INVISIBLE', source).Result or HasStatus('SG_Invisible', source).Result then
 		return resultTrue
 	end
 	if HasConditionalConcealed(source, target, hide).Result then
@@ -104,6 +108,29 @@ function IsBlindedViewer(entity)
 		return ConditionResult(false)
 	end
 	return HasStatus('SG_Blinded', entity)
+end
+
+-- True when attacker must pass a DC 11 flat check to affect observer
+-- (observer is Hidden from attacker). Used by HiddenReaction, and to stop
+-- FlatCheckReaction (DC 5) from also firing on the same action.
+function IsHiddenFromAttacker(observer, attacker)
+	if HasStatus('HIDDEN_FROM', attacker, observer).Result then
+		return ConditionResult(true)
+	end
+	if HasStatus('HIDDEN_NPC', observer).Result then
+		return ConditionResult(true)
+	end
+	-- Invisible creatures are Hidden from anyone without See the Unseen or
+	-- Blindsight, whether or not See the Unseen revealed them to someone else.
+	-- Faerie Fire makes them merely Concealed for everyone.
+	if (HasStatus('SG_Invisible', observer).Result or HasStatus('HIDDEN_INVISIBLE_NPC', observer).Result)
+		and not HasStatus('FAERIE_FIRE', observer).Result
+		and not HasStatus('SEE_INVISIBILITY_2E', attacker).Result
+		and not HasStatus('ALCH_ELIXIR_SEE_INVISIBILITY_2E', attacker).Result
+		and not Tagged('BLINDSIGHT', attacker).Result then
+		return ConditionResult(true)
+	end
+	return ConditionResult(false)
 end
 
 function NPCHideGetDC(entity)
