@@ -41,8 +41,96 @@ StatusRemoved((GUIDSTRING)_Character, "SEE_INVISIBILITY_2E_REVEAL", _, _)
 THEN
 PROC_RecalculateInvisibilityStatus(_Character);
 
+// Combat decides which visible state an invisible creature gets. The combat
+// flag is passed in here rather than queried, in case IsInCombat lags the
+// event.
+IF
+EnteredCombat((GUIDSTRING)_Character, _)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
+THEN
+PROC_PF2_SetInvisibilityState(_Character, 1);
+
+IF
+LeftCombat((GUIDSTRING)_Character, _)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
+THEN
+PROC_PF2_SetInvisibilityState(_Character, 0);
+
 PROC
 PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
+AND
+IsInCombat(_Character, 1)
+THEN
+PROC_PF2_SetInvisibilityState(_Character, 1);
+
+PROC
+PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
+AND
+IsInCombat(_Character, 0)
+THEN
+PROC_PF2_SetInvisibilityState(_Character, 0);
+
+// Exactly one of the clauses below matches for any state.
+// Not invisible: clear everything this goal applies.
+PROC
+PROC_PF2_SetInvisibilityState((GUIDSTRING)_Character, (INTEGER)_InCombat)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 0)
+THEN
+RemoveStatus(_Character, "INVISIBLE");
+RemoveStatus(_Character, "INVISIBLE_FAERIE_FIRE");
+RemoveStatus(_Character, "INVISIBLE_COMBAT");
+
+// Faerie Fire, in or out of combat: drawn and merely Concealed (DC 5).
+PROC
+PROC_PF2_SetInvisibilityState((GUIDSTRING)_Character, (INTEGER)_InCombat)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "FAERIE_FIRE", 1)
+THEN
+ApplyStatus(_Character, "INVISIBLE_FAERIE_FIRE", -1.0);
+RemoveStatus(_Character, "INVISIBLE");
+RemoveStatus(_Character, "INVISIBLE_COMBAT");
+
+// In combat: drawn and targetable, but Hidden (DC 11, or DC 5 for attackers
+// with See the Unseen). A See the Unseen reveal changes nothing here.
+PROC
+PROC_PF2_SetInvisibilityState((GUIDSTRING)_Character, (INTEGER)_InCombat)
+AND
+_InCombat == 1
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "FAERIE_FIRE", 0)
+THEN
+ApplyStatus(_Character, "INVISIBLE_COMBAT", -1.0, 1, _Character);
+RemoveStatus(_Character, "INVISIBLE");
+RemoveStatus(_Character, "INVISIBLE_FAERIE_FIRE");
+
+// Out of combat, revealed by See the Unseen: drawn and Concealed.
+PROC
+PROC_PF2_SetInvisibilityState((GUIDSTRING)_Character, (INTEGER)_InCombat)
+AND
+_InCombat == 0
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "FAERIE_FIRE", 0)
+AND
+HasActiveStatus(_Character, "SEE_INVISIBILITY_2E_REVEAL", 1)
+THEN
+ApplyStatus(_Character, "INVISIBLE_FAERIE_FIRE", -1.0);
+RemoveStatus(_Character, "INVISIBLE");
+RemoveStatus(_Character, "INVISIBLE_COMBAT");
+
+// Out of combat, unrevealed: engine invisibility (undrawn, untargetable).
+PROC
+PROC_PF2_SetInvisibilityState((GUIDSTRING)_Character, (INTEGER)_InCombat)
+AND
+_InCombat == 0
 AND
 HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
 AND
@@ -52,34 +140,7 @@ HasActiveStatus(_Character, "SEE_INVISIBILITY_2E_REVEAL", 0)
 THEN
 ApplyStatus(_Character, "INVISIBLE", -1.0);
 RemoveStatus(_Character, "INVISIBLE_FAERIE_FIRE");
-
-PROC
-PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
-AND
-HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
-AND
-HasActiveStatus(_Character, "SEE_INVISIBILITY_2E_REVEAL", 1)
-THEN
-ApplyStatus(_Character, "INVISIBLE_FAERIE_FIRE", -1.0);
-RemoveStatus(_Character, "INVISIBLE");
-
-PROC
-PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
-AND
-HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
-AND
-HasActiveStatus(_Character, "FAERIE_FIRE", 1)
-THEN
-ApplyStatus(_Character, "INVISIBLE_FAERIE_FIRE", -1.0);
-RemoveStatus(_Character, "INVISIBLE");
-
-PROC
-PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
-AND
-HasActiveStatusWithGroup(_Character, "SG_Invisible", 0)
-THEN
-RemoveStatus(_Character, "INVISIBLE");
-RemoveStatus(_Character, "INVISIBLE_FAERIE_FIRE");
+RemoveStatus(_Character, "INVISIBLE_COMBAT");
 EXITSECTION
 
 ENDEXITSECTION
