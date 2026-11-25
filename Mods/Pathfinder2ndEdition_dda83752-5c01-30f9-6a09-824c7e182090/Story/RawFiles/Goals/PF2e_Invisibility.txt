@@ -3,13 +3,21 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+// Invisibility is decided by the SG_Invisible markers (INVISIBILITY_APPLY and
+// every status built on it). Several can be active at once, so react to any of
+// them coming or going and check the group, not the shared INVISIBLE_APPLY tag:
+// losing one marker must not drop the invisibility another one still grants.
 IF
-TagSet((GUIDSTRING)_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795)
+StatusApplied((GUIDSTRING)_Character, (STRING)_Status, _, _)
+AND
+IsStatusFromGroup(_Status, "SG_Invisible", 1)
 THEN
 PROC_RecalculateInvisibilityStatus(_Character);
 
 IF
-TagCleared((GUIDSTRING)_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795)
+StatusRemoved((GUIDSTRING)_Character, (STRING)_Status, _, _)
+AND
+IsStatusFromGroup(_Status, "SG_Invisible", 1)
 THEN
 PROC_RecalculateInvisibilityStatus(_Character);
 
@@ -36,7 +44,7 @@ PROC_RecalculateInvisibilityStatus(_Character);
 PROC
 PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
 AND
-IsTagged(_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795, 1)
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
 AND
 HasActiveStatus(_Character, "FAERIE_FIRE", 0)
 AND
@@ -48,7 +56,7 @@ RemoveStatus(_Character, "INVISIBLE_FAERIE_FIRE");
 PROC
 PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
 AND
-IsTagged(_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795, 1)
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
 AND
 HasActiveStatus(_Character, "SEE_INVISIBILITY_2E_REVEAL", 1)
 THEN
@@ -58,7 +66,7 @@ RemoveStatus(_Character, "INVISIBLE");
 PROC
 PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
 AND
-IsTagged(_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795, 1)
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
 AND
 HasActiveStatus(_Character, "FAERIE_FIRE", 1)
 THEN
@@ -68,7 +76,7 @@ RemoveStatus(_Character, "INVISIBLE");
 PROC
 PROC_RecalculateInvisibilityStatus((GUIDSTRING)_Character)
 AND
-IsTagged(_Character, (TAG)INVISIBLE_APPLY_f98057b6-4b90-4808-b38f-668201413795, 0)
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 0)
 THEN
 RemoveStatus(_Character, "INVISIBLE");
 RemoveStatus(_Character, "INVISIBLE_FAERIE_FIRE");
