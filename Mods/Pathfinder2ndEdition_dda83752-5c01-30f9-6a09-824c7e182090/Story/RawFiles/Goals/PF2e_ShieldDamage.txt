@@ -381,6 +381,25 @@ PROC_CheckShieldBreak(_Shield, _Shield, _Player);
 PROC_CheckShieldDestroy(_Shield, _Shield, _Player, _Player);
 //END_REGION
 
+//REGION Short rest repair
+// Tabletop assumes downtime repairs; restore tracked shield HP on a short rest.
+IF
+ShortRested(_Char)
+AND
+DB_PartyMembers(_Char)
+AND
+DB_ShieldDamage((ITEM)_Shield, (INTEGER)_Damage, (INTEGER)_BT, (INTEGER)_HP, (INTEGER)_Difficulty)
+AND
+_Damage > 0
+THEN
+NOT DB_ShieldDamage(_Shield, _Damage, _BT, _HP, _Difficulty);
+DB_ShieldDamage(_Shield, 0, _BT, _HP, _Difficulty);
+PROC_RemoveShieldStatuses(_Shield);
+PROC_ApplyNewShieldStatus(_Shield, _Shield, _Char);
+PROC_CheckShieldDamaged(_Shield);
+PROC_CheckShieldBreak(_Shield, _Shield, _Char);
+//END_REGION
+
 //REGION Testing Tools
 // Status to damage a shield for testing
 IF
