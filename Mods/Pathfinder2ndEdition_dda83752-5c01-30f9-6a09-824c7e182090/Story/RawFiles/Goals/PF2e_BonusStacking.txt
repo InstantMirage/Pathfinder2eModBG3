@@ -924,6 +924,34 @@ PROC_SubtractResistance(_Type,_Char,_InputValue);
 //END_REGION
 
 //END_REGION
+
+//REGION Drained decreases by 1 after each long rest
+
+IF
+LongRestFinished()
+AND
+DB_Players((CHARACTER)_Char)
+THEN
+PROC_PF2_ReduceDrained(_Char);
+
+PROC
+PROC_PF2_ReduceDrained((CHARACTER)_Char)
+AND
+HasActiveStatus(_Char, "DRAINED_APPLY", 1)
+AND
+HasActiveStatus(_Char, "DRAINED_2_APPLY", 0)
+THEN
+RemoveStatus(_Char, "DRAINED_APPLY");
+
+PROC
+PROC_PF2_ReduceDrained((CHARACTER)_Char)
+AND
+HasActiveStatus(_Char, "DRAINED_2_APPLY", 1)
+THEN
+RemoveStatus(_Char, "DRAINED_2_APPLY");
+ApplyStatus(_Char, "DRAINED_APPLY", -1.0, 1);
+
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
