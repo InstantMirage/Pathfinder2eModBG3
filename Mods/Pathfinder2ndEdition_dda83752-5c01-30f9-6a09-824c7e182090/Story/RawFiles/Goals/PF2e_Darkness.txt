@@ -223,7 +223,8 @@ IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
 THEN
 DB_CheckConditionsForHideResult(_Character, _Cause);
 
-// Cause is Invisible
+// Cause is Invisible: invisibility makes you Hidden, but Sneaking still
+// needs the Stealth check to beat this observer's Perception DC.
 PROC
 PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
 AND
@@ -234,6 +235,8 @@ AND
 HasActiveStatus(_Character, "MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING", 0)
 AND
 HasActiveStatus(_Character, "ALCH_ELIXIR_SEE_INVISIBILITY_2E", 0)
+AND
+_Roll >= _PassivePerception
 THEN
 DB_CheckConditionsForHideResult(_Character, _Cause);
 
@@ -284,7 +287,6 @@ THEN
 NOT DB_SneakCheckSchedule(_Character, _Cause);
 NOT DB_CheckConditionsForHideResult(_Character, _Cause);
 PROC_CheckConditionsForHide(_Character, _Cause, _TotalRoll, _PassivePerception);
-ApplyStatus(_Cause, "UNDETECTED_CLEANUP", 0.0, 0, _Cause);
 PROC_ApplyUndetectedFromConditional(_Character, _Cause, _Roll);
 PROC_CritFailRemoveHidden(_Character, _Cause, _TotalRoll, _PassivePerception, _Roll);
 NOT DB_HideCheckConcealed(_Character, _Cause);
