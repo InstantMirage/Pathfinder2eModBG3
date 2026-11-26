@@ -2982,7 +2982,7 @@
         <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceConsumeMultiplier(Movement, 2,0);MovementSpeedLimit(Walk);Tag(VFX_SNEAKING);UnlockInterrupt(HiddenReaction);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="(not HasStatus('SG_Invisible',context.Source) and not HasSpellFlag(SpellFlags.Stealth, context.Source)) or IsStatusEvent(StatusEvent.OnCombatEnded)" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnAttack;OnSpellCast;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
-        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(UNDETECTED_NPC);" />
+        <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="RemoveStatus(UNDETECTED_NPC);RemoveStatus(UNDETECTED);" />
         <field name="Passives" type="StringTableFieldDefinition" value="SneakingRulesNPC;" />
         <field name="AuraRadius" type="IntegerTableFieldDefinition" value="100" />
         <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(Player()):ApplyStatus(HIDDEN_NPC_AURA,100,0)" />
@@ -3059,15 +3059,14 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="cbec0adf-f238-4815-ab68-3e50dfa9cfae" />
         <field name="Name" type="NameTableFieldDefinition" value="SNEAK_CHECK_NPC" />
-        <field name="OnApplyConditions" type="StringTableFieldDefinition" value="not HasStatus('SNEAK_IN_PROGRESS_NPC', context.Source)" />
         <field name="StackId" type="StringTableFieldDefinition" value="SNEAK_CHECK_NPC" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
-        <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
+        <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
+        <field name="AuraRadius" type="IntegerTableFieldDefinition" value="100" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(Enemy() and Combat(context.Target) and not Tagged('CROWDSYS_NPC', context.Target)):ApplyStatus(SNEAK_TECHNICAL,100,0);IF(Enemy() and Combat(context.Target) and not Tagged('CROWDSYS_NPC', context.Target) and IsConcealedTo(context.Source, context.Target, true)):ApplyStatus(HIDE_CHECK_CONCEALED,100,0);" />
+        <field name="AuraFlags" type="EnumerationListTableFieldDefinition" value="IgnoreItems" enumeration_type_name="AuraFlags" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableImmunityOverhead;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(SNEAK_IN_PROGRESS_NPC,100,1)" />
-        <field name="OnApplyRoll" type="RollConditionsTableFieldDefinition" value="SkillCheck(Skill.Stealth,NPCHideGetDC(context.Target))" />
-        <field name="OnApplySuccess" type="FunctorsTableFieldDefinition" value="ApplyStatus(UNDETECTED_NPC,100,-1)" />
-        <field name="OnApplyFail" type="FunctorsTableFieldDefinition" value="RemoveStatus(UNDETECTED_NPC);IF(IsCriticalMissSkill()):RemoveStatus(HIDDEN_NPC);" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(not HasStatus('SNEAK_IN_PROGRESS_NPC')):ApplyStatus(SELF,HIDE_CHECK_RESULT,100,1d20);ApplyStatus(SNEAK_IN_PROGRESS_NPC,100,1);ApplyStatus(UNDETECTED,100,-1);" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="h3021a41ag89f2gd5bfg3de5g4e80329c750a" version="1" />
       </fields>
     </stat_object>
@@ -3090,7 +3089,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="c3de9873-738f-44d5-a677-792309a0ae74" />
         <field name="Name" type="NameTableFieldDefinition" value="SNEAK_RECHECK_NPC" />
         <field name="OnApplyConditions" type="StringTableFieldDefinition" value="HasStatus('SNEAK_IN_PROGRESS_NPC', context.Source)" />
-        <field name="StackId" type="StringTableFieldDefinition" value="SNEAK_CHECK_NPC" />
+        <field name="StackId" type="StringTableFieldDefinition" value="SNEAK_RECHECK_NPC" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableImmunityOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />

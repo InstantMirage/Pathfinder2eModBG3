@@ -249,6 +249,15 @@ TimerExists("SneakCheckTimer", 0)
 THEN
 TimerLaunch("SneakCheckTimer", 30);
 
+// Enemies Sneak the same way: SNEAK_CHECK_NPC marks each player-side
+// observer with SNEAK_TECHNICAL, and the NPC's roll is checked per observer.
+IF
+StatusApplied((GUIDSTRING)_Cause, "SNEAK_CHECK_NPC", _, _)
+AND
+TimerExists("SneakCheckTimer", 0)
+THEN
+TimerLaunch("SneakCheckTimer", 30);
+
 // Marked characters are saved for after the timer expires.
 IF
 StatusApplied((GUIDSTRING)_Character, "SNEAK_TECHNICAL", (GUIDSTRING)_Cause, _)
@@ -278,6 +287,7 @@ PROC_CheckConditionsForHide(_Character, _Cause, _TotalRoll, _PassivePerception);
 ApplyStatus(_Cause, "UNDETECTED_CLEANUP", 0.0, 0, _Cause);
 PROC_ApplyUndetectedFromConditional(_Character, _Cause, _Roll);
 PROC_CritFailRemoveHidden(_Character, _Cause, _TotalRoll, _PassivePerception, _Roll);
+NOT DB_HideCheckConcealed(_Character, _Cause);
 
 PROC
 PROC_ApplyUndetectedFromConditional((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll)
@@ -375,12 +385,24 @@ ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
 // be removed. Applying it through a proxy like this fixes that. Sadly
 // Osiris can't detect the cause of an existing status, so A and B work
 // in tandem to make that condition check.
+// Only while the hider is still Undetected (sneaking): if it attacked or
+// stopped hiding before the helper landed, an UNDETECTED_FROM applied now
+// would never be cleaned up.
+IF
+StatusApplied((GUIDSTRING)_Character, "UNDETECTED_FROM_HELPER_B", _, _)
+AND
+DB_UndetectedHelperSchedule(_Character, (GUIDSTRING)_Cause)
+AND
+HasActiveStatus(_Cause, "UNDETECTED", 1)
+THEN
+ApplyStatus(_Character, "UNDETECTED_FROM", -1.0, 0, _Cause);
+NOT DB_UndetectedHelperSchedule(_Character, _Cause);
+
 IF
 StatusApplied((GUIDSTRING)_Character, "UNDETECTED_FROM_HELPER_B", _, _)
 AND
 DB_UndetectedHelperSchedule(_Character, (GUIDSTRING)_Cause)
 THEN
-ApplyStatus(_Character, "UNDETECTED_FROM", -1.0, 0, _Cause);
 NOT DB_UndetectedHelperSchedule(_Character, _Cause);
 //END_REGION
 
