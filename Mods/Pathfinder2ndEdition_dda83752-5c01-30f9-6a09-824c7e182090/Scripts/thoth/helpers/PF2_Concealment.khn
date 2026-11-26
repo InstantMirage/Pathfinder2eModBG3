@@ -110,6 +110,12 @@ function IsBlindedViewer(entity)
 	return HasStatus('SG_Blinded', entity)
 end
 
+-- See the Unseen in any form: the spell, the elixir, or an item that grants it
+-- (e.g. Volo's ersatz eye: MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING).
+function SeesInvisible(entity)
+	return HasAnyStatus({'SEE_INVISIBILITY_2E','MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING','ALCH_ELIXIR_SEE_INVISIBILITY_2E'}, {}, {}, entity)
+end
+
 -- True when attacker must pass a DC 11 flat check to affect observer
 -- (observer is Hidden from attacker). Used by HiddenReaction, and to stop
 -- FlatCheckReaction (DC 5) from also firing on the same action.
@@ -125,8 +131,7 @@ function IsHiddenFromAttacker(observer, attacker)
 	-- Faerie Fire makes them merely Concealed for everyone.
 	if (HasStatus('SG_Invisible', observer).Result or HasStatus('HIDDEN_INVISIBLE_NPC', observer).Result)
 		and not HasStatus('FAERIE_FIRE', observer).Result
-		and not HasStatus('SEE_INVISIBILITY_2E', attacker).Result
-		and not HasStatus('ALCH_ELIXIR_SEE_INVISIBILITY_2E', attacker).Result
+		and not SeesInvisible(attacker).Result
 		and not Tagged('BLINDSIGHT', attacker).Result then
 		return ConditionResult(true)
 	end

@@ -2720,7 +2720,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="2002c85f-fea1-459b-80c4-95628a670198" />
         <field name="Name" type="NameTableFieldDefinition" value="HIDE_FREE_INVIS" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="7d334b59-0e7e-488b-b876-82cdad78e2d4" />
-        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and not HasStatus('HIDDEN_FROM', context.Target, context.Source) and not HasStatus('SEE_INVISIBILITY_2E', context.Target) and not HasStatus('ALCH_ELIXIR_SEE_INVISIBILITY_2E', context.Target) and not Tagged('BLINDSIGHT', context.Target) and Enemy()):ApplyStatus(HIDDEN_FROM_TECHNICAL,100,0);" />
+        <field name="AuraStatuses" type="StringTableFieldDefinition" value="IF(not Tagged('CROWDSYS_NPC', context.Target) and Combat(context.Source) and Combat(context.Target) and not HasStatus('HIDDEN_FROM', context.Target, context.Source) and not SeesInvisible(context.Target) and not Tagged('BLINDSIGHT', context.Target) and Enemy()):ApplyStatus(HIDDEN_FROM_TECHNICAL,100,0);" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(HIDDEN_INVISIBLE,100,-1);ApplyStatus(HIDE_CHECK_RESULT,100,2);" />
       </fields>
     </stat_object>
@@ -2824,7 +2824,7 @@
       <fields>
         <field name="UUID" type="IdTableFieldDefinition" value="7b3c063e-d8a3-4be8-8957-2e808a2c728e" />
         <field name="Name" type="NameTableFieldDefinition" value="HIDE_RECHECK" />
-        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('HIDDEN_FROM',context.Target,context.Source) and (HasStatus('SEE_INVISIBILITY_2E',context.Target) or not HasStatus('SG_Invisible',context.Source)) and not IsConcealedTo(context.Source, context.Target, true)):ApplyStatus(SWAP,HIDDEN_FROM_REMOVE,100,0)" />
+        <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" value="IF(HasStatus('HIDDEN_FROM',context.Target,context.Source) and (SeesInvisible(context.Target) or not HasStatus('SG_Invisible',context.Source)) and not IsConcealedTo(context.Source, context.Target, true)):ApplyStatus(SWAP,HIDDEN_FROM_REMOVE,100,0)" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he4fd9a4dg20dag9e63ge865g100609e13868" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
       </fields>

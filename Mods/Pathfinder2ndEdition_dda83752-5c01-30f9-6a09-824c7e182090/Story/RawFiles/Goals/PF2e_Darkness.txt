@@ -230,6 +230,10 @@ AND
 HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
 AND
 HasActiveStatus(_Character, "SEE_INVISIBILITY_2E", 0)
+AND
+HasActiveStatus(_Character, "MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING", 0)
+AND
+HasActiveStatus(_Character, "ALCH_ELIXIR_SEE_INVISIBILITY_2E", 0)
 THEN
 DB_CheckConditionsForHideResult(_Character, _Cause);
 
@@ -345,6 +349,24 @@ AND
 HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
 AND
 HasActiveStatus(_Character, "SEE_INVISIBILITY_2E", 1)
+THEN
+ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+
+PROC
+PROC_ApplyHiddenFrom((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING", 1)
+THEN
+ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+
+PROC
+PROC_ApplyHiddenFrom((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "ALCH_ELIXIR_SEE_INVISIBILITY_2E", 1)
 THEN
 ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
 
@@ -503,6 +525,10 @@ AND
 HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
 AND
 HasActiveStatus(_Character, "SEE_INVISIBILITY_2E", 0)
+AND
+HasActiveStatus(_Character, "MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING", 0)
+AND
+HasActiveStatus(_Character, "ALCH_ELIXIR_SEE_INVISIBILITY_2E", 0)
 THEN
 NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
 DB_HideCalculationNPC(_Cause, 1, _HideDCString, _HideFinalString);
