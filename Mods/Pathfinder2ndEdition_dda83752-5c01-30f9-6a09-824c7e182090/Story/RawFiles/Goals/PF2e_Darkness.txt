@@ -57,8 +57,17 @@ TagCleared((GUIDSTRING)_Character, DAZZLED_5453990a-f917-4b7e-a324-b1de320de33e)
 THEN
 RemoveStatus(_Character, "DAZZLED");
 
+// Only out of combat, and only when no SG_Invisible marker is on: markers
+// are handled by PF2e_Invisibility (in combat they get a drawn stand-in, not
+// INVISIBLE). INVISIBLE grants this tag itself, so without the guard this
+// re-applied INVISIBLE on top of the goal's own; putting INVISIBLE on and
+// pulling it off in the same tick in combat crashed the game.
 IF
 TagSet((GUIDSTRING)_Character, INVISIBLE_457ab381-7903-463c-9507-8b7db47ac016)
+AND
+IsInCombat(_Character, 0)
+AND
+HasActiveStatusWithGroup(_Character, "SG_Invisible", 0)
 THEN
 ApplyStatus(_Character, "INVISIBLE", -1.0);
 
@@ -81,17 +90,6 @@ THEN
 RemoveStatus((GUIDSTRING)_Character, "SNEAKING");
 UseSpell(_Character, "Shout_Hide", _Character);
 
-// Whenever a character enters combat while invisible, immediately trigger 
-// a hide check.
-IF
-EnteredCombat((GUIDSTRING)_Character, _)
-AND
-HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
-AND
-IsPlayer((CHARACTER)_Character, 1)
-THEN
-UseSpell((GUIDSTRING)_Character, "Shout_Hide", _Character);
-
 // Repeat for NPCs
 IF
 EnteredCombat((GUIDSTRING)_Character, _)
@@ -103,14 +101,9 @@ THEN
 RemoveStatus((GUIDSTRING)_Character, "SNEAKING");
 UseSpell(_Character, "Shout_Hide_NPC", _Character);
 
-IF
-EnteredCombat((GUIDSTRING)_Character, _)
-AND
-HasActiveStatusWithGroup(_Character, "SG_Invisible", 1)
-AND
-IsPlayer((CHARACTER)_Character, 0)
-THEN
-UseSpell((GUIDSTRING)_Character, "Shout_Hide_NPC", _Character);
+// Invisible characters entering combat become Hidden (without sneaking)
+// when PF2e_Invisibility gives them INVISIBLE_COMBAT (its OnApplyFunctors
+// apply HIDE_FREE_INVIS / HIDE_FREE_INVIS_NPC).
 
 // When combat ends, the character needs to sneak again if it
 // was hidden
@@ -230,13 +223,38 @@ IsTagged(_Character, (TAG)BLINDSIGHT_a49c94ac-6903-408e-8b05-86371fd865c0, 0)
 THEN
 DB_CheckConditionsForHideResult(_Character, _Cause);
 
-// Cause is Invisible
+// Cause is Invisible: Hiding while invisible always makes you Hidden.
 PROC
 PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
 AND
+NOT DB_SneakCheckActive(_Character, _Cause)
+AND
 HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
 AND
-HasActiveStatus(_Character, "SEE_INVISIBILITY", 0)
+HasActiveStatus(_Character, "SEE_INVISIBILITY_2E", 0)
+AND
+HasActiveStatus(_Character, "MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING", 0)
+AND
+HasActiveStatus(_Character, "ALCH_ELIXIR_SEE_INVISIBILITY_2E", 0)
+THEN
+DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// Sneaking while invisible still needs the Stealth check to beat this
+// observer's Perception DC.
+PROC
+PROC_CheckConditionsForHide((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll, (INTEGER)_PassivePerception)
+AND
+DB_SneakCheckActive(_Character, _Cause)
+AND
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "SEE_INVISIBILITY_2E", 0)
+AND
+HasActiveStatus(_Character, "MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING", 0)
+AND
+HasActiveStatus(_Character, "ALCH_ELIXIR_SEE_INVISIBILITY_2E", 0)
+AND
+_Roll >= _PassivePerception
 THEN
 DB_CheckConditionsForHideResult(_Character, _Cause);
 
@@ -247,6 +265,15 @@ DB_CheckConditionsForHideResult(_Character, _Cause);
 // checks on all entities the aura marked.
 IF
 StatusApplied((GUIDSTRING)_Cause, "SNEAK_CHECK", _, _)
+AND
+TimerExists("SneakCheckTimer", 0)
+THEN
+TimerLaunch("SneakCheckTimer", 30);
+
+// Enemies Sneak the same way: SNEAK_CHECK_NPC marks each player-side
+// observer with SNEAK_TECHNICAL, and the NPC's roll is checked per observer.
+IF
+StatusApplied((GUIDSTRING)_Cause, "SNEAK_CHECK_NPC", _, _)
 AND
 TimerExists("SneakCheckTimer", 0)
 THEN
@@ -277,10 +304,13 @@ CalculatePassiveSkill(_Character, "Perception", (INTEGER)_PassivePerception)
 THEN
 NOT DB_SneakCheckSchedule(_Character, _Cause);
 NOT DB_CheckConditionsForHideResult(_Character, _Cause);
+DB_SneakCheckActive(_Character, _Cause);
 PROC_CheckConditionsForHide(_Character, _Cause, _TotalRoll, _PassivePerception);
-ApplyStatus(_Cause, "UNDETECTED_CLEANUP", 0.0, 0, _Cause);
+NOT DB_SneakCheckActive(_Character, _Cause);
+PROC_SneakFailLoseUndetected(_Character, _Cause, _Roll);
 PROC_ApplyUndetectedFromConditional(_Character, _Cause, _Roll);
 PROC_CritFailRemoveHidden(_Character, _Cause, _TotalRoll, _PassivePerception, _Roll);
+NOT DB_HideCheckConcealed(_Character, _Cause);
 
 PROC
 PROC_ApplyUndetectedFromConditional((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll)
@@ -292,6 +322,26 @@ THEN
 ApplyStatus(_Character, "UNDETECTED_FROM_HELPER_A", 0.0, 0, _Cause);
 DB_UndetectedHelperSchedule(_Character, _Cause);
 NOT DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// A new Sneak that fails against an observer the hider was Undetected to
+// drops it back to Hidden for that observer (nat 1 always fails).
+PROC
+PROC_SneakFailLoseUndetected((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll)
+AND
+NOT DB_CheckConditionsForHideResult(_Character, _Cause)
+AND
+HasActiveStatus(_Character, "UNDETECTED_FROM", 1)
+THEN
+ApplyStatus(_Cause, "UNDETECTED_FROM_REMOVE", 0.0, 0, _Character);
+
+PROC
+PROC_SneakFailLoseUndetected((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll)
+AND
+_Roll <= 1
+AND
+HasActiveStatus(_Character, "UNDETECTED_FROM", 1)
+THEN
+ApplyStatus(_Cause, "UNDETECTED_FROM_REMOVE", 0.0, 0, _Character);
 
 // Critical failure without cover buff. To selectively remove hidden, we
 // apply a status on the hider caused by the target we want to remove it
@@ -351,7 +401,25 @@ PROC_ApplyHiddenFrom((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
 AND
 HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
 AND
-HasActiveStatus(_Character, "SEE_INVISIBILITY", 1)
+HasActiveStatus(_Character, "SEE_INVISIBILITY_2E", 1)
+THEN
+ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+
+PROC
+PROC_ApplyHiddenFrom((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING", 1)
+THEN
+ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
+
+PROC
+PROC_ApplyHiddenFrom((GUIDSTRING)_Character, (GUIDSTRING)_Cause)
+AND
+HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
+AND
+HasActiveStatus(_Character, "ALCH_ELIXIR_SEE_INVISIBILITY_2E", 1)
 THEN
 ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
 
@@ -360,13 +428,103 @@ ApplyStatus(_Cause, "HIDDEN_FROM_REMOVE", 0.0, 0, _Character);
 // be removed. Applying it through a proxy like this fixes that. Sadly
 // Osiris can't detect the cause of an existing status, so A and B work
 // in tandem to make that condition check.
+// Only while the hider is still Undetected (sneaking): if it attacked or
+// stopped hiding before the helper landed, an UNDETECTED_FROM applied now
+// would never be cleaned up.
+IF
+StatusApplied((GUIDSTRING)_Character, "UNDETECTED_FROM_HELPER_B", _, _)
+AND
+DB_UndetectedHelperSchedule(_Character, (GUIDSTRING)_Cause)
+AND
+HasActiveStatus(_Cause, "UNDETECTED", 1)
+THEN
+ApplyStatus(_Character, "UNDETECTED_FROM", -1.0, 0, _Cause);
+NOT DB_UndetectedHelperSchedule(_Character, _Cause);
+
 IF
 StatusApplied((GUIDSTRING)_Character, "UNDETECTED_FROM_HELPER_B", _, _)
 AND
 DB_UndetectedHelperSchedule(_Character, (GUIDSTRING)_Cause)
 THEN
-ApplyStatus(_Character, "UNDETECTED_FROM", -1.0, 0, _Cause);
 NOT DB_UndetectedHelperSchedule(_Character, _Cause);
+//END_REGION
+
+//REGION Undetected on back-to-back turns
+// UNDETECTED_FROM makes the hider engine-invisible (UNDETECTED_ON_TURN) only
+// on that viewer's turn. When two viewers act back to back, the next turn
+// starts before the previous one ends, so the previous viewer's turn end
+// strips the status the next viewer needs. Track whose turn it is and who
+// the hider is Undetected to, and put it back.
+IF
+StatusApplied((GUIDSTRING)_Viewer, "UNDETECTED_FROM", (GUIDSTRING)_Hider, _)
+THEN
+DB_PF2_UndetectedFrom(_Viewer, _Hider);
+
+// Lost Undetected during this viewer's own turn (a successful Seek): end the
+// hider's per-turn invisibility now, so the viewer can act on it this turn.
+// Must come before the rule below, which forgets the entries. StatusRemoved
+// may not name the hider, so this ends it for all of this viewer's hiders.
+IF
+StatusRemoved((GUIDSTRING)_Viewer, "UNDETECTED_FROM", _, _)
+AND
+DB_PF2_CurrentTurn(_Viewer)
+AND
+DB_PF2_UndetectedFrom(_Viewer, (GUIDSTRING)_Hider)
+THEN
+NOT DB_PF2_UndetectedFrom(_Viewer, _Hider);
+RemoveStatus(_Hider, "UNDETECTED_ON_TURN");
+
+// StatusRemoved may not name the hider, so forget all of this viewer's
+// entries; any hider still Undetected keeps its normal per-turn status.
+IF
+StatusRemoved((GUIDSTRING)_Viewer, "UNDETECTED_FROM", _, _)
+AND
+DB_PF2_UndetectedFrom(_Viewer, (GUIDSTRING)_Hider)
+THEN
+NOT DB_PF2_UndetectedFrom(_Viewer, _Hider);
+
+IF
+TurnStarted((GUIDSTRING)_Character)
+AND
+DB_PF2_CurrentTurn((GUIDSTRING)_Previous)
+AND
+_Previous != _Character
+THEN
+NOT DB_PF2_CurrentTurn(_Previous);
+
+IF
+TurnStarted((GUIDSTRING)_Character)
+THEN
+DB_PF2_CurrentTurn(_Character);
+
+// Hide the hider as the viewer's turn starts, before its AI plans; the
+// UNDETECTED_FROM tick lands later and the AI then re-plans mid-turn.
+IF
+TurnStarted((GUIDSTRING)_Viewer)
+AND
+DB_PF2_UndetectedFrom(_Viewer, (GUIDSTRING)_Hider)
+THEN
+ApplyStatus(_Hider, "UNDETECTED_ON_TURN", 6.0, 0, _Viewer);
+
+IF
+TurnEnded((GUIDSTRING)_Character)
+AND
+DB_PF2_CurrentTurn(_Character)
+THEN
+NOT DB_PF2_CurrentTurn(_Character);
+
+// The causee is the viewer whose turn just ended; skip it so the current
+// viewer's own turn end can't re-apply the status to itself.
+IF
+StatusRemoved((GUIDSTRING)_Hider, "UNDETECTED_ON_TURN", (GUIDSTRING)_Causee, _)
+AND
+DB_PF2_CurrentTurn((GUIDSTRING)_Viewer)
+AND
+_Viewer != _Causee
+AND
+DB_PF2_UndetectedFrom(_Viewer, _Hider)
+THEN
+ApplyStatus(_Hider, "UNDETECTED_ON_TURN", 6.0, 0, _Viewer);
 //END_REGION
 
 //REGION Hide Rechecking
@@ -389,6 +547,13 @@ ApplyStatus(_Character, "HIDE_RECHECK", 0.0, 0, _Cause);
 //REGION Free Hide
 IF
 StatusApplied((GUIDSTRING)_Character, "HIDE_FREE", (GUIDSTRING)_Cause, _)
+AND
+TimerExists("HideCheckTimer", 0)
+THEN
+TimerLaunch("HideCheckTimer", 30);
+
+IF
+StatusApplied((GUIDSTRING)_Character, "HIDE_FREE_INVIS", (GUIDSTRING)_Cause, _)
 AND
 TimerExists("HideCheckTimer", 0)
 THEN
@@ -502,7 +667,11 @@ DB_HideCalculationNPC((GUIDSTRING)_Cause, (INTEGER)_Current, _HideDCString, (STR
 AND
 HasActiveStatusWithGroup(_Cause, "SG_Invisible", 1)
 AND
-HasActiveStatus(_Character, "SEE_INVISIBILITY", 0)
+HasActiveStatus(_Character, "SEE_INVISIBILITY_2E", 0)
+AND
+HasActiveStatus(_Character, "MAG_SEE_INVISIBILITY_2E_HIDDEN_IGNORE_RESTING", 0)
+AND
+HasActiveStatus(_Character, "ALCH_ELIXIR_SEE_INVISIBILITY_2E", 0)
 THEN
 NOT DB_HideCalculationNPC(_Cause, _Current, _HideDCString, _HideFinalString);
 DB_HideCalculationNPC(_Cause, 1, _HideDCString, _HideFinalString);
