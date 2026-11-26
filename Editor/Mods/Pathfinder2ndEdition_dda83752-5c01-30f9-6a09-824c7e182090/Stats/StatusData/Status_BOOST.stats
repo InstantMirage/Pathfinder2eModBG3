@@ -2485,6 +2485,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="ForestStoppedStatus" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="f4078f78-c7be-4bea-b449-a173313bbb38" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn;OnAttack;OnSpellCast;OnMove;OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -3257,12 +3258,13 @@
         <field name="UUID" type="IdTableFieldDefinition" value="e248b105-1148-4498-b741-239c36b77a97" />
         <field name="Name" type="NameTableFieldDefinition" value="WEB" />
         <field name="DisplayName" type="TranslatedStringTableFieldDefinition" handle="he552003fg6a6dga0beg1241g0148654e68b0" version="1" />
-        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb2abca1ag5becgd435g434agc9b3815861b1" version="1" />
+        <field name="Description" type="TranslatedStringTableFieldDefinition" handle="hb2abca1ag5becgd435g434agc9b3815861b1" version="3" />
         <field name="Icon" type="StringTableFieldDefinition" value="Spell_Conjuration_Web" />
         <field name="StackId" type="StringTableFieldDefinition" value="WEB" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);UnlockSpell(Shout_WebEscape_Athletics);" />
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="0" />
         <field name="OnRemoveFunctors" type="FunctorsTableFieldDefinition" value="ApplyStatus(WEB_IMMUNE,100,0)" />
+        <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnMove" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Surface;SG_Restrained" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StillAnimPriority" version="1" />
@@ -3411,7 +3413,7 @@
         <field name="StillAnimationType" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StatusAnimationType" version="1" />
         <field name="StillAnimationPriority" type="EnumerationTableFieldDefinition" value="Snared" enumeration_type_name="StillAnimPriority" version="1" />
         <field name="StackId" type="StringTableFieldDefinition" value="ENSNARED" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded);UnlockSpell(Target_EscapeGrapple_Container);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded);UnlockSpell(Shout_HoldEscape);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="SavingThrow(Ability.Strength, SourceSpellDC(),AdvantageOnRestrained(),DisadvantageOnRestrained());" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnTurn" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Restrained;SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
@@ -3851,6 +3853,30 @@
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="FreezeDuration;DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnCombatEnded" enumeration_type_name="StatusEvent" version="1" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="011204ae-f777-4f4b-870a-934d129a3ad9" />
+        <field name="Name" type="NameTableFieldDefinition" value="TANGLE_VINE_DC" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="db4fd76f-47c4-4fe7-a4d1-dae8793cc219" />
+        <field name="StackId" type="StringTableFieldDefinition" value="TANGLE_VINE_DC" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="7413a628-33e8-4885-a5c6-0a78fc87e83b" />
+        <field name="Name" type="NameTableFieldDefinition" value="WEB_DC" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="db4fd76f-47c4-4fe7-a4d1-dae8793cc219" />
+        <field name="StackId" type="StringTableFieldDefinition" value="WEB_DC" />
+      </fields>
+    </stat_object>
+    <stat_object is_substat="false">
+      <fields>
+        <field name="UUID" type="IdTableFieldDefinition" value="6be45813-e12d-46bc-87ec-1dd3e8598099" />
+        <field name="Name" type="NameTableFieldDefinition" value="HOLD_ESCAPE_DC" />
+        <field name="Using" type="BaseClassTableFieldDefinition" value="db4fd76f-47c4-4fe7-a4d1-dae8793cc219" />
+        <field name="StackId" type="StringTableFieldDefinition" value="HOLD_ESCAPE_DC" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8182,7 +8208,7 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Ignore" enumeration_type_name="StatusStackType" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="EndTurn" enumeration_type_name="TickType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded);UnlockSpell(Shout_ImpalingSpikeEscape);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded);UnlockSpell(Shout_ImpalingSpikeEscape_Athletics);" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableCombatlog;DisableOverhead" enumeration_type_name="StatusPropertyFlags" version="1" />
         <field name="StatusGroups" type="EnumerationListTableFieldDefinition" value="SG_Condition" enumeration_type_name="StatusGroupFlags" version="1" />
         <field name="StatusEffect" type="GuidObjectTableFieldDefinition" value="a874ad68-ccc7-453d-bf5a-9872f7c85050" />
@@ -8194,7 +8220,7 @@
         <field name="Name" type="NameTableFieldDefinition" value="IMPALING_SPIKE_CRIT" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="e3a42e3a-760a-405b-85b4-9cccdc002041" />
         <field name="Description" type="TranslatedStringTableFieldDefinition" handle="h42a02633g835bge811g79f2ge28502f427ac" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded);UnlockSpell(Shout_ImpalingSpikeEscape);Tag(OFF_GUARD);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded);UnlockSpell(Shout_ImpalingSpikeEscape_Athletics);Tag(OFF_GUARD);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8853,6 +8879,7 @@
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
         <field name="TooltipSave" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="InitiateCombat;BringIntoCombat" enumeration_type_name="StatusPropertyFlags" version="1" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded)" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -8863,7 +8890,7 @@
         <field name="StackPriority" type="IntegerTableFieldDefinition" value="1" />
         <field name="StackType" type="EnumerationTableFieldDefinition" value="Overwrite" enumeration_type_name="StatusStackType" version="1" />
         <field name="TickType" type="EnumerationTableFieldDefinition" value="StartTurn" enumeration_type_name="TickType" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_TangleVineEscape);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="UnlockSpell(Shout_TangleVineEscape_Athletics);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" value="not HasStatus('TANGLE_VINE') and not HasStatus('TANGLE_VINE_CRIT')" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" value="OnStatusRemoved" enumeration_type_name="StatusEvent" version="1" />
         <field name="StatusPropertyFlags" type="EnumerationListTableFieldDefinition" value="DisableOverhead;DisableCombatlog;DisablePortraitIndicator" enumeration_type_name="StatusPropertyFlags" version="1" />
@@ -13302,7 +13329,7 @@
         <field name="UUID" type="IdTableFieldDefinition" value="deb455d0-47ce-4fcc-b372-ba11f1e207c8" />
         <field name="Name" type="NameTableFieldDefinition" value="GRABBED_MAGIC" />
         <field name="Using" type="BaseClassTableFieldDefinition" value="f4078f78-c7be-4bea-b449-a173313bbb38" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded);Tag(OFF_GUARD);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Attribute(Grounded);Tag(OFF_GUARD);UnlockSpell(Shout_HoldEscape);" />
       </fields>
     </stat_object>
     <stat_object is_substat="false">
@@ -15329,7 +15356,7 @@
         <field name="AuraRadius" type="IntegerTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="AuraStatuses" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="AuraFlags" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="AuraFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Tag(OFF_GUARD);UnlockSpell(Target_EscapeSlither_Container);IF(not Player()):UnlockSpell(Shout_EscapeSlither_NPC_Athletics);IF(not Player()):UnlockSpell(Shout_EscapeSlither_NPC_Acrobatics);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Tag(OFF_GUARD);UnlockSpell(Shout_EscapeSlither_NPC_Athletics);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />
@@ -15354,7 +15381,7 @@
         <field name="AuraRadius" type="IntegerTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="AuraStatuses" type="StringTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="AuraFlags" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="AuraFlags" version="1" />
-        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Tag(OFF_GUARD);UnlockSpell(Target_EscapeSlither_Container);UnlockSpellVariant(RestrainedBlockSpells(),ModifyUseCosts(Add,RestrainedDisable,1,0));IF(not Player()):UnlockSpell(Shout_EscapeSlither_NPC_Athletics);IF(not Player()):UnlockSpell(Shout_EscapeSlither_NPC_Acrobatics);" />
+        <field name="Boosts" type="StringTableFieldDefinition" value="ActionResourceBlock(Movement);Tag(OFF_GUARD);UnlockSpellVariant(RestrainedBlockSpells(),ModifyUseCosts(Add,RestrainedDisable,1,0));UnlockSpell(Shout_EscapeSlither_NPC_Athletics);" />
         <field name="RemoveConditions" type="RollConditionsTableFieldDefinition" clear_inherited_value="true" value="" />
         <field name="RemoveEvents" type="EnumerationListTableFieldDefinition" clear_inherited_value="true" value="" enumeration_type_name="StatusEvent" version="1" />
         <field name="OnApplyFunctors" type="FunctorsTableFieldDefinition" clear_inherited_value="true" value="" />

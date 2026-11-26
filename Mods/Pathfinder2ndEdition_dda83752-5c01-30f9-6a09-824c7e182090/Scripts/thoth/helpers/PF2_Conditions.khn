@@ -844,6 +844,54 @@ function GetBestSkillCheck(dc)
 	return SkillCheck(Skill[preferred_skill],dc)
 end
 
+-- PF2e Escape: Athletics, Acrobatics, or unarmed strike modifier; use the highest.
+function UnarmedStrikeModifier(source)
+	source = source or context.Source
+	local bonus = source.ProficiencyBonus + math.max(GetModifier(source.Strength), GetModifier(source.Dexterity))
+	if HasPassive('WeaponLegend', source).Result then
+		bonus = bonus + 6
+	elseif HasPassive('WeaponMaster', source).Result then
+		bonus = bonus + 4
+	elseif HasPassive('WeaponExpert', source).Result then
+		bonus = bonus + 2
+	end
+	if HasPassive('UnarmedABP_Rank2', source).Result then
+		bonus = bonus + 2
+	elseif HasPassive('UnarmedABP', source).Result and source.Level > 1 then
+		bonus = bonus + 1
+	end
+	if Tagged('STAT_BON_2ATTACK', source).Result then
+		bonus = bonus + 2
+	elseif Tagged('STAT_BON_1ATTACK', source).Result then
+		bonus = bonus + 1
+	end
+	if Tagged('STAT_PEN_2ATTACK', source).Result then
+		bonus = bonus - 2
+	elseif Tagged('STAT_PEN_1ATTACK', source).Result then
+		bonus = bonus - 1
+	end
+	-- ponytail: skips wrap/item RollBonus that only applies to unarmed attack spells; fold those in if Escape underperforms vs a fist Strike.
+	return bonus
+end
+
+function EscapeCheck(dc)
+	local source = context.Source
+	local athletics = source.GetPassiveSkill(Skill.Athletics)
+	local acrobatics = source.GetPassiveSkill(Skill.Acrobatics)
+	local unarmed = UnarmedStrikeModifier(source)
+	local skill_name = 'Athletics'
+	local skill_mod = athletics
+	if acrobatics > athletics then
+		skill_name = 'Acrobatics'
+		skill_mod = acrobatics
+	end
+	if unarmed > skill_mod then
+		-- SkillCheck cannot roll unarmed; equivalent to d20+unarmed vs original DC.
+		return SkillCheck(Skill[skill_name], dc - (unarmed - skill_mod))
+	end
+	return SkillCheck(Skill[skill_name], dc)
+end
+
 function WeaponSpec(passive)
 	return IsWeaponAttack() & IsProficientWith(context.Source, GetAttackWeapon()) & HasPassive(passive,context.Source)
 end

@@ -9,7 +9,26 @@ DB_SickenedStatus("SLITHER_GRABBED", "SLITHER_DC");
 DB_SickenedStatus("SLITHER_RESTRAINED", "SLITHER_DC");
 DB_SickenedStatus("ToxicCloudStatus_Rank5", "TOXIC_CLOUD_DC");
 DB_SickenedStatus("ToxicCloudStatus_Rank6", "TOXIC_CLOUD_DC");
+DB_SickenedStatus("ENSNARED", "HOLD_ESCAPE_DC");
+DB_SickenedStatus("ENSNARED_VINES", "HOLD_ESCAPE_DC");
+DB_SickenedStatus("GRABBED_MAGIC", "HOLD_ESCAPE_DC");
+DB_SickenedStatus("VampiricMaiden", "HOLD_ESCAPE_DC");
+DB_SickenedStatus("WEB", "WEB_DC");
+DB_SickenedStatus("TANGLE_VINE", "TANGLE_VINE_DC");
+DB_SickenedStatus("TANGLE_VINE_CRIT", "TANGLE_VINE_DC");
 KBSECTION
+// INITSECTION doesn't rerun on existing saves, so re-add the escape DC statuses
+IF
+SavegameLoaded()
+THEN
+DB_SickenedStatus("ENSNARED", "HOLD_ESCAPE_DC");
+DB_SickenedStatus("ENSNARED_VINES", "HOLD_ESCAPE_DC");
+DB_SickenedStatus("GRABBED_MAGIC", "HOLD_ESCAPE_DC");
+DB_SickenedStatus("VampiricMaiden", "HOLD_ESCAPE_DC");
+DB_SickenedStatus("WEB", "WEB_DC");
+DB_SickenedStatus("TANGLE_VINE", "TANGLE_VINE_DC");
+DB_SickenedStatus("TANGLE_VINE_CRIT", "TANGLE_VINE_DC");
+
 // If the character does not already have a sickened DC, apply one
 // by grabbing the spell DC of the cause.
 IF
