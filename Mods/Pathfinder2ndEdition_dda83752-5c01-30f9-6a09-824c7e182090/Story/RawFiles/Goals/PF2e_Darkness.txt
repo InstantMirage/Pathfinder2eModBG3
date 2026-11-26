@@ -307,6 +307,7 @@ NOT DB_CheckConditionsForHideResult(_Character, _Cause);
 DB_SneakCheckActive(_Character, _Cause);
 PROC_CheckConditionsForHide(_Character, _Cause, _TotalRoll, _PassivePerception);
 NOT DB_SneakCheckActive(_Character, _Cause);
+PROC_SneakFailLoseUndetected(_Character, _Cause, _Roll);
 PROC_ApplyUndetectedFromConditional(_Character, _Cause, _Roll);
 PROC_CritFailRemoveHidden(_Character, _Cause, _TotalRoll, _PassivePerception, _Roll);
 NOT DB_HideCheckConcealed(_Character, _Cause);
@@ -321,6 +322,26 @@ THEN
 ApplyStatus(_Character, "UNDETECTED_FROM_HELPER_A", 0.0, 0, _Cause);
 DB_UndetectedHelperSchedule(_Character, _Cause);
 NOT DB_CheckConditionsForHideResult(_Character, _Cause);
+
+// A new Sneak that fails against an observer the hider was Undetected to
+// drops it back to Hidden for that observer (nat 1 always fails).
+PROC
+PROC_SneakFailLoseUndetected((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll)
+AND
+NOT DB_CheckConditionsForHideResult(_Character, _Cause)
+AND
+HasActiveStatus(_Character, "UNDETECTED_FROM", 1)
+THEN
+ApplyStatus(_Cause, "UNDETECTED_FROM_REMOVE", 0.0, 0, _Character);
+
+PROC
+PROC_SneakFailLoseUndetected((GUIDSTRING)_Character, (GUIDSTRING)_Cause, (INTEGER)_Roll)
+AND
+_Roll <= 1
+AND
+HasActiveStatus(_Character, "UNDETECTED_FROM", 1)
+THEN
+ApplyStatus(_Cause, "UNDETECTED_FROM_REMOVE", 0.0, 0, _Character);
 
 // Critical failure without cover buff. To selectively remove hidden, we
 // apply a status on the hider caused by the target we want to remove it
