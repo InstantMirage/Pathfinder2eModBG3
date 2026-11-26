@@ -120,7 +120,8 @@ end
 -- (observer is Hidden from attacker). Used by HiddenReaction, and to stop
 -- FlatCheckReaction (DC 5) from also firing on the same action.
 function IsHiddenFromAttacker(observer, attacker)
-	if HasStatus('HIDDEN_FROM', attacker, observer).Result then
+	-- Undetected implies at least Hidden (e.g. targeted on the hider's own turn).
+	if HasStatus('HIDDEN_FROM', attacker, observer).Result or HasStatus('UNDETECTED_FROM', attacker, observer).Result then
 		return ConditionResult(true)
 	end
 	if HasStatus('HIDDEN_NPC', observer).Result then
