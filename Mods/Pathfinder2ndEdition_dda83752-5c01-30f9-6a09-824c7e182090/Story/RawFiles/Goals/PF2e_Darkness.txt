@@ -428,6 +428,61 @@ THEN
 NOT DB_UndetectedHelperSchedule(_Character, _Cause);
 //END_REGION
 
+//REGION Undetected on back-to-back turns
+// UNDETECTED_FROM makes the hider engine-invisible (UNDETECTED_ON_TURN) only
+// on that viewer's turn. When two viewers act back to back, the next turn
+// starts before the previous one ends, so the previous viewer's turn end
+// strips the status the next viewer needs. Track whose turn it is and who
+// the hider is Undetected to, and put it back.
+IF
+StatusApplied((GUIDSTRING)_Viewer, "UNDETECTED_FROM", (GUIDSTRING)_Hider, _)
+THEN
+DB_PF2_UndetectedFrom(_Viewer, _Hider);
+
+// StatusRemoved may not name the hider, so forget all of this viewer's
+// entries; any hider still Undetected keeps its normal per-turn status.
+IF
+StatusRemoved((GUIDSTRING)_Viewer, "UNDETECTED_FROM", _, _)
+AND
+DB_PF2_UndetectedFrom(_Viewer, (GUIDSTRING)_Hider)
+THEN
+NOT DB_PF2_UndetectedFrom(_Viewer, _Hider);
+
+IF
+TurnStarted((GUIDSTRING)_Character)
+AND
+DB_PF2_CurrentTurn((GUIDSTRING)_Previous)
+AND
+_Previous != _Character
+THEN
+NOT DB_PF2_CurrentTurn(_Previous);
+
+IF
+TurnStarted((GUIDSTRING)_Character)
+THEN
+DB_PF2_CurrentTurn(_Character);
+
+IF
+TurnEnded((GUIDSTRING)_Character)
+AND
+DB_PF2_CurrentTurn(_Character)
+THEN
+NOT DB_PF2_CurrentTurn(_Character);
+
+// The causee is the viewer whose turn just ended; skip it so the current
+// viewer's own turn end can't re-apply the status to itself.
+IF
+StatusRemoved((GUIDSTRING)_Hider, "UNDETECTED_ON_TURN", (GUIDSTRING)_Causee, _)
+AND
+DB_PF2_CurrentTurn((GUIDSTRING)_Viewer)
+AND
+_Viewer != _Causee
+AND
+DB_PF2_UndetectedFrom(_Viewer, _Hider)
+THEN
+ApplyStatus(_Hider, "UNDETECTED_ON_TURN", 6.0, 0, _Viewer);
+//END_REGION
+
 //REGION Hide Rechecking
 // When a character sees another character, we check to see if that has
 // any impact upon the hidden condition. At this stage, we can't check if
