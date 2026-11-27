@@ -747,7 +747,7 @@ end
 
 function DemoralizeDC()
 	local willDC = WillDC(context.Target)
-	if (LinguisticSpell(context.Target).Result or LinguisticSpell(context.Source).Result) and not (HasPassive('IntimidatingProwess',context.Source).Result or HasPassive('IntimidatingGlare',context.Source).Result) then
+	if not (LinguisticSpell(context.Target).Result and LinguisticSpell(context.Source).Result) and not (HasPassive('IntimidatingProwess',context.Source).Result or HasPassive('IntimidatingGlare',context.Source).Result) then
 		willDC = willDC + 4
 	end
 	return willDC
@@ -2190,4 +2190,23 @@ function SacredBeastsGodsCheck(type)
 	local lists = { ["Piercing"] = {'BAHAMUT', 'BHAAL', 'KELEMVOR', 'LADUGUER', 'LOLTH', 'MIELIKKI', 'MYRKUL', 'OGHMA', 'SELUNE', 'SHAR', 'TALOS', 'DRUID'}, ["Slashing"] = {'BANE', 'GRUUMSH', 'TEMPUS', 'TIAMAT', 'TYR', 'UMBERLEE_PRIESTEST', 'VLAAKITH'}, ["Bludgeoning"] = {'CORELLONLARETHIAN', 'EILISTRAEE', 'GARLGLITTERGOLD', 'HELM', 'ILMATER', 'LATHANDER', 'MORADIN', 'MYSTRA', 'TYMORA', 'YONDALLA'}}
 
 	return HasAnyTags(lists[type], context.Source)
+end
+
+-- PF2e Sanctuary: the DC comes from whoever cast it (the cause of the
+-- SANCTUARY status), found among the warded creature and its nearby allies.
+function SanctuaryDC(warded)
+	warded = warded or context.Observer
+	local caster = warded
+	if not HasStatus('SANCTUARY', warded, warded).Result then
+		local allies = GetAlliesWithinRange(50, warded, warded)
+		if allies ~= nil and allies.Allies ~= nil then
+			for _, ally in ipairs(allies.Allies) do
+				if HasStatus('SANCTUARY', warded, ally).Result then
+					caster = ally
+					break
+				end
+			end
+		end
+	end
+	return math.max(CalculateSpellDC(Ability.Wisdom, caster), CalculateSpellDC(Ability.Intelligence, caster), CalculateSpellDC(Ability.Charisma, caster))
 end
